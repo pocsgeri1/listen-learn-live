@@ -994,7 +994,7 @@ let mastered = new Set();
 let openedToday = new Set();
 
 function getCatCount(cat) {
-  return UNIQUE_CONCEPTS.filter(c => cat === 'all' || c.cat === cat).length;
+  return UNIQUE_CONCEPTS.filter(c => cat === 'all' || c.category === cat).length;
 }
 
 function buildCats() {
@@ -1017,8 +1017,8 @@ function buildSrc() {
 
 function filtered() {
   return UNIQUE_CONCEPTS.filter(c => {
-    const mc = activeCat === 'all' || c.cat === activeCat;
-    const ms = activeSrc === 'all' || c.src === activeSrc;
+    const mc = activeCat === 'all' || c.category === activeCat;
+    const ms = activeSrc === 'all' || c.source === activeSrc;
     const q = searchQ.toLowerCase();
     const mq = !q || c.term.toLowerCase().includes(q) || c.hook.toLowerCase().includes(q) || c.plain.toLowerCase().includes(q);
     return mc && ms && mq;
@@ -1031,14 +1031,14 @@ function buildGrid() {
   const grid = document.getElementById('conceptsGrid');
   if (!list.length) { grid.innerHTML = '<div class="empty">No concepts match your search.</div>'; return; }
   grid.innerHTML = list.map((c, i) => {
-    const color = CAT_COLOR[c.cat] || '#e8d5a3';
+    const color = CAT_COLOR[c.category] || '#e8d5a3';
     const isMastered = mastered.has(c.id);
     return `
     <div class="concept-card${isMastered?' mastered':''}" id="cc${c.id}" style="--cat-color:${color}; animation-delay:${Math.min(i,20)*0.03}s">
       <div class="card-front" onclick="toggleCard(${c.id})">
         <div class="card-meta">
           <span class="card-num">#${String(c.id).padStart(3,'0')}</span>
-          <span class="card-src">${SRC_LABEL[c.src]}</span>
+          <span class="card-src">${SRC_LABEL[c.source]}</span>
           <span class="mastered-badge">✓ mastered</span>
         </div>
         <div class="card-term">${c.term}</div>
@@ -1053,7 +1053,7 @@ function buildGrid() {
         <div class="back-section-label">Reflect & Use It</div>
         <div class="back-prompt">
           <div class="prompt-icon">💬</div>
-          <p>${getPrompt(c.cat)}</p>
+          <p>${getPrompt(c.category)}</p>
         </div>
         <div class="card-actions">
           <button class="btn-master" onclick="toggleMaster(event,${c.id})">${isMastered?'✓ Mastered':'Mark as Mastered'}</button>
