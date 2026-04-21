@@ -984,7 +984,7 @@ async function loadConcepts() {
 
 // Deduplicate by id
 const seen = new Set();
-const UNIQUE_CONCEPTS = CONCEPTS.filter(c => { if(seen.has(c.id)) return false; seen.add(c.id); return true; });
+const CONCEPTS = CONCEPTS.filter(c => { if(seen.has(c.id)) return false; seen.add(c.id); return true; });
 
 const SRC_LABEL = { core:'Foundational', cw:'Modern Wisdom', ah:'Alex Hormozi', dk:'Dan Koe' };
 const CAT_COLOR = { all:'#e8d5a3', finance:'#6b9fc4', psychology:'#a08fd4', thinking:'#7aaf8a', power:'#d4715a', relationships:'#c47a9f', language:'#5abfaf', business:'#e0a060' };
@@ -994,7 +994,7 @@ let mastered = new Set();
 let openedToday = new Set();
 
 function getCatCount(cat) {
-  return UNIQUE_CONCEPTS.filter(c => cat === 'all' || c.category === cat).length;
+  return CONCEPTS.filter(c => cat === 'all' || c.category === cat).length;
 }
 
 function buildCats() {
@@ -1016,7 +1016,7 @@ function buildSrc() {
 }
 
 function filtered() {
-  return UNIQUE_CONCEPTS.filter(c => {
+  return CONCEPTS.filter(c => {
     const mc = activeCat === 'all' || c.category === activeCat;
     const ms = activeSrc === 'all' || c.source === activeSrc;
     const q = searchQ.toLowerCase();
@@ -1086,7 +1086,7 @@ function toggleMaster(e, id) {
 
 function shareCard(e, id) {
   e.stopPropagation();
-  const c = UNIQUE_CONCEPTS.find(x => x.id === id);
+  const c = CONCEPTS.find(x => x.id === id);
   if (!c) return;
   const text = `"${c.term}" — ${c.hook}\n\nListen. Learn. Live.`;
   if (navigator.share) { navigator.share({ title: c.term, text }); }
@@ -1094,9 +1094,9 @@ function shareCard(e, id) {
 }
 
 function updateProgress() {
-  const pct = Math.round((mastered.size / UNIQUE_CONCEPTS.length) * 100);
+  const pct = Math.round((mastered.size / CONCEPTS.length) * 100);
   document.getElementById('progressFill').style.width = pct + '%';
-  document.getElementById('progressCount').textContent = mastered.size + ' / ' + UNIQUE_CONCEPTS.length + ' mastered';
+  document.getElementById('progressCount').textContent = mastered.size + ' / ' + CONCEPTS.length + ' mastered';
 }
 
 function updateDailyGoal() {
