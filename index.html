@@ -984,7 +984,6 @@ async function loadConcepts() {
 
 // Deduplicate by id
 const seen = new Set();
-const CONCEPTS = CONCEPTS.filter(c => { if(seen.has(c.id)) return false; seen.add(c.id); return true; });
 
 const SRC_LABEL = { core:'Foundational', cw:'Modern Wisdom', ah:'Alex Hormozi', dk:'Dan Koe' };
 const CAT_COLOR = { all:'#e8d5a3', finance:'#6b9fc4', psychology:'#a08fd4', thinking:'#7aaf8a', power:'#d4715a', relationships:'#c47a9f', language:'#5abfaf', business:'#e0a060' };
