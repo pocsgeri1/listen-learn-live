@@ -988,6 +988,10 @@ const seen = new Set();
 const SRC_LABEL = { core:'Foundational', cw:'Modern Wisdom', ah:'Alex Hormozi', dk:'Dan Koe' };
 const CAT_COLOR = { all:'#e8d5a3', finance:'#6b9fc4', psychology:'#a08fd4', thinking:'#7aaf8a', power:'#d4715a', relationships:'#c47a9f', language:'#5abfaf', business:'#e0a060' };
 
+let activeCat = 'all', activeSrc = 'all', searchQ = '';
+let mastered = new Set();
+let openedToday = new Set();
+  
 // ---------- STORAGE HELPERS ----------
 // All talk-to-localStorage logic lives here. If we ever move to a real
 // database (Phase 3 Pro tier), only this block changes.
