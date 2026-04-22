@@ -988,9 +988,64 @@ const seen = new Set();
 const SRC_LABEL = { core:'Foundational', cw:'Modern Wisdom', ah:'Alex Hormozi', dk:'Dan Koe' };
 const CAT_COLOR = { all:'#e8d5a3', finance:'#6b9fc4', psychology:'#a08fd4', thinking:'#7aaf8a', power:'#d4715a', relationships:'#c47a9f', language:'#5abfaf', business:'#e0a060' };
 
-let activeCat = 'all', activeSrc = 'all', searchQ = '';
-let mastered = new Set();
-let openedToday = new Set();
+// ---------- STORAGE HELPERS ----------
+// All talk-to-localStorage logic lives here. If we ever move to a real
+// database (Phase 3 Pro tier), only this block changes.
+
+const STORAGE_KEYS = {
+  mastered: 'lll_mastered_v1',
+  dailyGoal: 'lll_daily_goal_v1'
+};
+
+function saveMastered() {
+  try {
+    const asArray = Array.from(mastered);
+    localStorage.setItem(STORAGE_KEYS.mastered, JSON.stringify(asArray));
+  } catch (e) {
+    console.warn('Could not save mastered concepts:', e);
+  }
+}
+
+function loadMastered() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEYS.mastered);
+    if (!raw) return new Set();
+    const arr = JSON.parse(raw);
+    if (!Array.isArray(arr)) return new Set();
+    return new Set(arr);
+  } catch (e) {
+    console.warn('Could not load mastered concepts:', e);
+    return new Set();
+  }
+}
+
+function saveDailyGoal() {
+  try {
+    const today = new Date().toISOString().slice(0, 10); // "2026-04-22"
+    const payload = { date: today, ids: Array.from(openedToday) };
+    localStorage.setItem(STORAGE_KEYS.dailyGoal, JSON.stringify(payload));
+  } catch (e) {
+    console.warn('Could not save daily goal:', e);
+  }
+}
+
+function loadDailyGoal() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEYS.dailyGoal);
+    if (!raw) return new Set();
+    const payload = JSON.parse(raw);
+    const today = new Date().toISOString().slice(0, 10);
+    // If the saved date isn't today, ignore it — it's stale. New day, fresh start.
+    if (!payload || payload.date !== today || !Array.isArray(payload.ids)) {
+      return new Set();
+    }
+    return new Set(payload.ids);
+  } catch (e) {
+    console.warn('Could not load daily goal:', e);
+    return new Set();
+  }
+}
+// ---------- END STORAGE HELPERS ----------
 
 function getCatCount(cat) {
   return CONCEPTS.filter(c => cat === 'all' || c.category === cat).length;
@@ -1071,6 +1126,7 @@ function toggleCard(id) {
   el.classList.toggle('open');
   if (!wasOpen) {
     openedToday.add(id);
+    saveDailyGoal();     // <-- NEW: persist today's opened cards
     updateDailyGoal();
   }
 }
@@ -1079,6 +1135,7 @@ function toggleMaster(e, id) {
   e.stopPropagation();
   if (mastered.has(id)) mastered.delete(id);
   else mastered.add(id);
+  saveMastered();        // <-- NEW: persist to localStorage
   buildGrid();
   updateProgress();
 }
@@ -1110,6 +1167,11 @@ function setCat(cat) { activeCat = cat; render(); }
 function setSrc(src) { activeSrc = src; render(); }
 
 document.getElementById('search').addEventListener('input', e => { searchQ = e.target.value; buildGrid(); });
+
+// Restore saved progress BEFORE loading concepts, so the first render
+// already shows the correct mastered state.
+mastered = loadMastered();
+openedToday = loadDailyGoal();
 
 loadConcepts();
 </script>
