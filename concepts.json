@@ -1608,5 +1608,15 @@
     "plain": "Limbic capitalism is when companies deliberately engineer their products to hijack the reward centres of your brain — the parts that crave pleasure, novelty, and relief. It's not accidental. The addiction is the business model.",
     "analogy": "A slot machine doesn't pay out every time because that would be boring — it pays out just often enough to keep you pulling the lever. Instagram, fast food, and gambling apps all use the same principle.",
     "prompt": "Pick one app or habit you return to daily. Is the reward coming from you — or is it being manufactured for you?"
+  },
+  {
+    "id": 162,
+    "term": "Test Concept Bravo",
+    "category": "thinking",
+    "source": "core",
+    "hook": "The second end-to-end test of the full publishing pipeline.",
+    "plain": "A concept added manually in Airtable to test that the Make.com scenario fires on status change, calls the serverless function, and results in a new card on the live site.",
+    "analogy": "Like pressing play on a Rube Goldberg machine — one tap here, ten things happen in sequence, and the last domino lands on your website.",
+    "prompt": "If one small action in your work triggered five downstream effects, which action would you pick?"
   }
 ]
