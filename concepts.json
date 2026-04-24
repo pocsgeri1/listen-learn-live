@@ -1608,5 +1608,15 @@
     "plain": "Limbic capitalism is when companies deliberately engineer their products to hijack the reward centres of your brain — the parts that crave pleasure, novelty, and relief. It's not accidental. The addiction is the business model.",
     "analogy": "A slot machine doesn't pay out every time because that would be boring — it pays out just often enough to keep you pulling the lever. Instagram, fast food, and gambling apps all use the same principle.",
     "prompt": "Pick one app or habit you return to daily. Is the reward coming from you — or is it being manufactured for you?"
+  },
+  {
+    "id": 162,
+    "term": "Test Concept Alpha",
+    "category": "thinking",
+    "source": "core",
+    "hook": "A placeholder to verify the publish pipeline works end to end.",
+    "plain": "This is a test concept used only to confirm that the serverless function receives a POST request, appends it to concepts.json, and commits it to GitHub. It will be deleted after testing.",
+    "analogy": "Like a tracer dye in plumbing — pour it in at one end, see where it comes out.",
+    "prompt": "If you saw this card on the live site, what would you do next?"
   }
 ]
