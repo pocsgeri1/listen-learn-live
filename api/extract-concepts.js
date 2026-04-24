@@ -215,9 +215,9 @@ async function createConceptRow(concept, episodeRefLabel, episodeUrl) {
     throw new Error(`Missing required fields (term: ${concept.term})`);
   }
 
-  const fields = {
+   const fields = {
     'Status': 'PENDING',
-    'Term': concept.term,
+    'Term': toTitleCase(concept.term),
     'Category': category,
     'Source': source,
     'Hook': concept.hook,
@@ -267,4 +267,20 @@ async function updateIntakeStatus(recordId, status, conceptsCreated, errorMessag
     },
     body: JSON.stringify({ fields, typecast: true }),
   });
+}
+
+function toTitleCase(str) {
+  if (!str) return str;
+  const minorWords = new Set([
+    'a', 'an', 'the', 'and', 'but', 'or', 'nor', 'for', 'so', 'yet',
+    'at', 'by', 'in', 'of', 'on', 'to', 'up', 'as', 'is', 'if', 'vs'
+  ]);
+  const words = str.toLowerCase().trim().split(/\s+/);
+  return words.map((word, i) => {
+    if (i === 0 || i === words.length - 1) {
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    }
+    if (minorWords.has(word)) return word;
+    return word.charAt(0).toUpperCase() + word.slice(1);
+  }).join(' ');
 }
