@@ -63,8 +63,69 @@ QUALITY CHECKS — reject concepts that fail any of these:
 - Hook must work as a standalone tweet and feel punchy
 - Analogy must use a concrete real-world scenario, not "it's like a machine"
 - Plain explanation must pass the "smart 25-year-old who never heard this term" test
-- Prompt must be specific and actionable today
 - Composite score must be 6.0 or above to be included in output
+- Prompt must pass all rules in the dedicated PROMPT FIELD section below
+
+PROMPT FIELD — RULES AND EXAMPLES
+---------------------------------
+The "prompt" field is the most-failed field in this extraction. Treat it with more care than any other. A great prompt makes a card 10x more valuable; a generic prompt undermines the whole concept.
+
+A great prompt does ALL of the following:
+
+1. FORCES SPECIFICITY
+   The user must surface a specific person, decision, moment, resource, or sentence — not "an area of your life" or "a situation."
+
+2. CAPTURES THE CONCEPT'S DEFINING MECHANISM
+   The prompt should be reverse-engineerable to the concept. If you stripped the concept name and showed someone only the prompt, they should be able to guess what concept it came from.
+
+3. USES PERMISSION-GIVING OR DIAGNOSTIC LANGUAGE
+   Lower the bar for action. "Smallest, ugliest version" beats "minimum viable approach." "What would the conversation actually sound like" beats "consider having the conversation."
+
+4. ANSWERABLE IN UNDER 2 MINUTES
+   No "write a 10-year plan" prompts. The user should be able to think through it during a coffee break.
+
+5. NEVER USES THESE OPENERS
+   - "Have you ever..."  (most overused; banned)
+   - "Think about how this applies..."  (lazy; banned)
+   - "Reflect on..."  (vague; banned)
+
+6. AVOIDS TEMPLATE OVERUSE WITHIN THE BATCH
+   No more than 3 prompts in any single extraction batch may begin with the same first 4 words. If you find yourself starting a prompt with "Where in your life..." for the 4th time — vary it.
+
+ANTI-PATTERNS — NEVER PRODUCE PROMPTS LIKE THESE
+------------------------------------------------
+REJECT and rewrite if any prompt:
+- Starts with "Where in your life are you [verb-ing]..." for the 4th+ time in a single batch
+- Uses the structure "In your most important [X] — are you [A] or [B]?"
+- Could fit 3+ different concepts (the "swappable prompt" failure)
+- Restates the concept's definition rather than applying it
+- Asks the user to "think about" something without forcing a concrete answer
+- Ends with "...would serve you better?" or similar generic closing
+- Borrows known thinking-tropes from elsewhere (e.g. "10 years on repeat," "if a friend asked you...") UNLESS the concept genuinely is about that trope
+
+Examples of prompts to AVOID (real failures from prior batches):
+
+  ✗ "Where in your life are you accepting treatment you wouldn't accept if you valued yourself more?"  (could fit Self-Worth, People-Pleasing, Codependency, Boundaries — too generic)
+
+  ✗ "Where in your life are you stuck in the moderate middle — not safe enough to be protected, not bold enough to break through — when an extreme in either direction would serve you better?"  (template prompt that gestures at the concept instead of using it)
+
+  ✗ "Think of a recent conflict. What emotion was driving the other person that you didn't fully acknowledge in the moment?"  (template "Think of a recent X — what Y you didn't fully acknowledge")
+
+SELF-CHECK BEFORE RETURNING OUTPUT
+----------------------------------
+Before finalizing the JSON array, run these checks across all extracted prompts as a group:
+
+1. OPENER VARIETY: Count first-4-word openings. If any phrase appears more than 3 times across the batch, rewrite the duplicates.
+
+2. SEMANTIC OVERLAP: Read all prompts in sequence. If any two prompts could be swapped between concepts and still make sense — rewrite the weaker one. Prompts must be concept-specific, not generic.
+
+3. STRUCTURAL CLONES: Watch for "In your most important X..." and "Where in your life are you Y..." appearing more than twice each. These are template tells.
+
+4. CONCRETENESS PASS: Each prompt should reference at least one of: a specific person, a specific decision, a specific time window (this week, last year, in the next 48 hours), or a specific resource. If a prompt is fully abstract, rewrite it.
+
+5. THE REVERSE TEST: For each prompt, ask: "If I removed the concept name, could a reader guess which concept this prompt came from?" If no — it's not concept-specific enough.
+
+If any prompt fails the self-check, fix it before returning the array.
 
 CATEGORY ASSIGNMENT RULES
 finance:       money, investing, economics, wealth, risk capital
