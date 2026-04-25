@@ -1,0 +1,44 @@
+[
+  {
+    "id": 1,
+    "title": "Foundations: Mental Models",
+    "type": "curated",
+    "description": "The core thinking frameworks every intelligent person should know.",
+    "categories": ["thinking", "psychology"]
+  },
+  {
+    "id": 2,
+    "title": "Foundations: Money & Risk",
+    "type": "curated",
+    "description": "The financial concepts that separate people who build wealth from people who don't.",
+    "categories": ["finance"]
+  },
+  {
+    "id": 3,
+    "title": "Foundations: Power & Influence",
+    "type": "curated",
+    "description": "How influence, status, and control actually work — and how to navigate them.",
+    "categories": ["power", "relationships"]
+  },
+  {
+    "id": 4,
+    "title": "Foundations: Language & Expression",
+    "type": "curated",
+    "description": "The vocabulary and rhetorical tools that make you sound sharper in any room.",
+    "categories": ["language"]
+  },
+  {
+    "id": 5,
+    "title": "Foundations: Identity & Self",
+    "type": "curated",
+    "description": "Who you are, how you see yourself, and how to change both.",
+    "categories": ["identity", "philosophy"]
+  },
+  {
+    "id": 6,
+    "title": "Foundations: Business & Building",
+    "type": "curated",
+    "description": "The ideas behind how businesses actually work — and how to build one.",
+    "categories": ["business"]
+  }
+]
