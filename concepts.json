@@ -107,17 +107,17 @@
     "hook": "Believing there's never enough — for you.",
     "plain": "A mental mode where you focus so much on what's lacking that it affects your decisions, relationships, and ambitions — often causing you to act against your own interests.",
     "analogy": "Eating too fast at a buffet because you're afraid it'll run out — even when there's clearly more than enough for everyone.",
-    "prompt": "Where in your life are you operating from scarcity — protecting, hoarding, or shrinking — when abundance would serve you better?"
+    "prompt": "Pick the one resource you most fear running out of — money, time, love, opportunities. What are you currently doing to \"protect\" it that's actually shrinking it further?"
   },
   {
     "id": 12,
     "term": "Emotional Intelligence (EQ)",
     "category": "relationships",
     "source": "core",
-    "hook": "Being smart about feelings — yours and theirs.",
+    "hook": "Reading yourself first, then everyone else.",
     "plain": "The ability to recognize, understand, manage, and respond to emotions effectively in yourself and others. Often matters more than IQ in relationships and leadership.",
     "analogy": "A good driver doesn't just know the rules — they read traffic, anticipate others' moves, and stay calm when things go wrong.",
-    "prompt": "Think of a recent conflict. What emotion was driving the other person that you didn't fully acknowledge in the moment?"
+    "prompt": "When you last lost your temper or shut down emotionally — what was the underlying feeling beneath the surface reaction? Anger and silence are usually masks for something else."
   },
   {
     "id": 13,
@@ -197,7 +197,7 @@
     "hook": "The rules you set for how people may treat you.",
     "plain": "Clearly defined limits on what behavior you accept from others — in relationships, work, and family. Not walls to keep people out, but lines that protect your self-respect.",
     "analogy": "A property fence. It doesn't mean you hate your neighbor — it just shows where your land ends and theirs begins.",
-    "prompt": "Where in your life are you accepting treatment you wouldn't accept if you valued yourself more?"
+    "prompt": "Think of one person whose behavior toward you regularly leaves you feeling smaller. What's the specific behavior — and what would actually change if you named it out loud to them?"
   },
   {
     "id": 21,
@@ -597,7 +597,7 @@
     "hook": "Do you believe life happens to you — or because of you?",
     "plain": "Internal locus: you believe you control your outcomes through your choices. External locus: you believe external forces control your life. The internal is strongly linked to resilience and long-term success.",
     "analogy": "Two people get rejected for the same job. One thinks 'I need to improve my interview skills.' The other thinks 'the system is rigged.' Same event — different trajectories.",
-    "prompt": "In the area of your life where you feel most stuck — are you taking responsibility for what you can control, or waiting for external circumstances to change?"
+    "prompt": "Listen to how you describe your current biggest frustration. Do your sentences start with \"I\" or with \"they/he/she/it\"? What does that tell you about where you're locating the cause?"
   },
   {
     "id": 62,
@@ -777,7 +777,7 @@
     "hook": "What would have happened if things had gone differently?",
     "plain": "Mentally simulating alternate versions of events — used to learn from mistakes, assess decisions properly, and avoid the bad reasoning of 'it worked out, so it was the right decision.'",
     "analogy": "'We launched and it succeeded.' But what if we'd launched 6 months earlier or later? Counterfactual thinking forces you to ask those questions seriously.",
-    "prompt": "Think of a recent success. What counterfactual factors — luck, timing, other people's actions — contributed that you haven't fully acknowledged?"
+    "prompt": "Think of a decision you're proud of. If a friend had made the exact same decision and the outcome had gone badly — would you still call it a smart decision? What does that tell you about how you judge your own past choices?"
   },
   {
     "id": 81,
@@ -867,7 +867,7 @@
     "hook": "Chasing happiness is the wrong goal. Meaning is harder but longer lasting.",
     "plain": "Happiness is a feeling — temporary and hedonic. Meaning comes from pursuing something bigger than yourself, which often involves discomfort, sacrifice, and delayed reward.",
     "analogy": "Raising a child is exhausting, expensive, and stressful — not 'happy' in any simple sense. But parents consistently rate it as the most meaningful thing they've ever done.",
-    "prompt": "In the areas of your life where you're most pursuing comfort and happiness — are you trading away the possibility of something more meaningful?"
+    "prompt": "Name something genuinely hard you've taken on in the last year — a project, a relationship, a sacrifice. Did it make you \"happy\" in the moment? Did it make your life feel more meaningful? What does the gap between those two answers tell you?"
   },
   {
     "id": 90,
@@ -977,7 +977,7 @@
     "hook": "Don't sit in the middle — go to both extremes.",
     "plain": "From Nassim Taleb: instead of a moderate approach to everything, deliberately operate at two extremes — very safe in one area and very bold in another. Avoid the mushy, mediocre middle.",
     "analogy": "80% of your money in ultra-safe assets, 20% in high-risk high-upside bets. Or: work deeply for 6 focused hours, then fully switch off. No lukewarm half-measures.",
-    "prompt": "Where in your life are you stuck in the moderate middle — not safe enough to be protected, not bold enough to break through — when an extreme in either direction would serve you better?"
+    "prompt": "Pick one area of your life — money, work, energy, relationships. Are you running it as a barbell (extreme safe + extreme bold) or as a mushy middle? If middle, what would the two extremes actually look like?"
   },
   {
     "id": 101,
@@ -1057,7 +1057,7 @@
     "hook": "The talk you're avoiding is usually the most important one.",
     "plain": "The discomfort of a necessary conversation is almost always smaller than the long-term cost of not having it. Postponed hard conversations compound in damage over time.",
     "analogy": "The slight awkwardness of telling a friend they're wrong costs you 10 minutes of discomfort. Not telling them costs you the friendship over the following months.",
-    "prompt": "What conversation have you been postponing for more than two weeks? What is that delay actually costing you or the other person?"
+    "prompt": "Picture the one person you'd most dread having to be honest with right now. What's the conversation — and what's the actual worst case if you have it? Is it really worse than what's happening by avoiding it?"
   },
   {
     "id": 109,
@@ -1187,7 +1187,7 @@
     "hook": "The person who acts fastest on a good idea usually wins.",
     "plain": "Execution velocity matters above almost everything else. Most people have ideas. The differentiator is how fast you move from idea to real-world action and feedback.",
     "analogy": "Two people hear the same insight in the same podcast. One tests it Tuesday. The other is still planning it three months later. The first person already has data.",
-    "prompt": "What idea have you been sitting on for more than two weeks that you could test — imperfectly — within the next 48 hours?"
+    "prompt": "Think of one idea you've been \"researching\" or \"planning\" for over a month. What's the smallest, ugliest version of it you could ship by the end of this weekend?"
   },
   {
     "id": 122,
