@@ -186,7 +186,290 @@
     text-decoration: none;
   }
   .hero-cta:hover { background: #f0e0b0; transform: translateY(-1px); }
-  .hero-cta svg { width: 16px; height: 16px; }
+  .hero-cta svg { width: 16px; height: 16px; }/* ============================================
+     CONCEPT OF THE DAY — MODAL
+     ============================================ */
+
+  .cotd-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: rgba(13, 13, 13, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    display: none;
+    align-items: flex-start;
+    justify-content: center;
+    overflow-y: auto;
+    padding: 6vh 1.5rem 4vh;
+    animation: cotdFadeIn 0.4s ease both;
+  }
+
+  .cotd-overlay.active { display: flex; }
+
+  @keyframes cotdFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .cotd-card {
+    position: relative;
+    width: 100%;
+    max-width: 640px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 40px 44px 36px;
+    margin: auto 0;
+    animation: cotdSlideUp 0.45s ease both;
+  }
+
+  @keyframes cotdSlideUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .cotd-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 100%;
+    background: var(--cotd-accent, var(--accent));
+    border-radius: 14px 0 0 14px;
+    opacity: 0.7;
+  }
+
+  .cotd-close {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    width: 32px;
+    height: 32px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted2);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    line-height: 1;
+  }
+  .cotd-close:hover {
+    border-color: var(--border-hover);
+    color: var(--text);
+  }
+
+  .cotd-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 28px;
+  }
+  .cotd-eyebrow-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: cotdPulse 2s infinite;
+  }
+  .cotd-eyebrow-date {
+    color: var(--muted);
+    margin-left: auto;
+  }
+
+  @keyframes cotdPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .cotd-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 18px;
+  }
+  .cotd-meta-rule {
+    flex: 0 0 32px;
+    height: 1px;
+    background: var(--border-hover);
+  }
+  .cotd-meta-cat {
+    color: var(--cotd-accent, var(--accent));
+  }
+
+  .cotd-term {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 2.8rem);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    margin-bottom: 12px;
+    color: var(--text);
+  }
+
+  .cotd-hook {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 1.15rem;
+    line-height: 1.5;
+    color: var(--cotd-accent, var(--accent));
+    margin-bottom: 28px;
+  }
+
+  .cotd-divider {
+    width: 36px;
+    height: 1px;
+    background: var(--cotd-accent, var(--accent));
+    opacity: 0.5;
+    margin: 0 0 24px;
+  }
+
+  .cotd-section {
+    margin-bottom: 22px;
+  }
+
+  .cotd-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .cotd-body {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    font-size: 0.95rem;
+    line-height: 1.65;
+    color: var(--text);
+  }
+
+  .cotd-body--soft {
+    color: var(--muted2);
+    font-style: italic;
+  }
+
+  .cotd-use-today {
+    background: rgba(232, 213, 163, 0.04);
+    border: 1px solid rgba(232, 213, 163, 0.12);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 26px;
+  }
+  .cotd-use-today .cotd-label {
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .cotd-use-today .cotd-body {
+    color: var(--text);
+  }
+
+  .cotd-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 28px;
+    flex-wrap: wrap;
+  }
+
+  .cotd-btn {
+    flex: 1;
+    min-width: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 13px 18px;
+    border-radius: 999px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.15s;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text);
+  }
+  .cotd-btn:hover {
+    border-color: var(--border-hover);
+  }
+  .cotd-btn--primary {
+    background: var(--accent);
+    color: #0d0d0d;
+    border-color: var(--accent);
+  }
+  .cotd-btn--primary:hover {
+    background: #f0e0b0;
+    border-color: #f0e0b0;
+    transform: translateY(-1px);
+  }
+  .cotd-btn--primary.is-marked {
+    background: var(--green);
+    border-color: var(--green);
+    color: #0d0d0d;
+  }
+
+  .cotd-footer {
+    text-align: center;
+    margin-top: 22px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .cotd-footer a {
+    color: var(--muted2);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 2px;
+    transition: all 0.15s;
+  }
+  .cotd-footer a:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  /* Lock body scroll while modal is open */
+  body.cotd-open {
+    overflow: hidden;
+  }
+
+  /* MOBILE */
+  @media (max-width: 600px) {
+    .cotd-overlay { padding: 3vh 1rem 3vh; }
+    .cotd-card { padding: 30px 24px 28px; border-radius: 12px; }
+    .cotd-close { top: 14px; right: 14px; }
+    .cotd-eyebrow { font-size: 0.6rem; margin-bottom: 22px; }
+    .cotd-term { font-size: 1.9rem; }
+    .cotd-hook { font-size: 1.02rem; margin-bottom: 22px; }
+    .cotd-actions { flex-direction: column; }
+    .cotd-btn { width: 100%; }
+    .cotd-use-today { padding: 14px 16px; }
+  }
+
+  /* ============================================
+     END CONCEPT OF THE DAY
+     ============================================ */
   /* NEWSLETTER */
   .newsletter {
     position: relative;
@@ -906,7 +1189,57 @@
     <div class="nav-dot"></div>
     160 concepts · Free
   </div>
-</nav>
+</nav><!-- CONCEPT OF THE DAY — MODAL -->
+<div class="cotd-overlay" id="cotdOverlay" role="dialog" aria-modal="true" aria-labelledby="cotdTerm">
+  <div class="cotd-card" id="cotdCard">
+    <button class="cotd-close" id="cotdClose" aria-label="Close concept of the day">✕</button>
+
+    <div class="cotd-eyebrow">
+      <span class="cotd-eyebrow-dot"></span>
+      <span>Today's Concept</span>
+      <span class="cotd-eyebrow-date" id="cotdDate"></span>
+    </div>
+
+    <div class="cotd-meta">
+      <span class="cotd-meta-rule"></span>
+      <span id="cotdConceptNum">Concept 000</span>
+      <span>·</span>
+      <span class="cotd-meta-cat" id="cotdCategory">Category</span>
+    </div>
+
+    <h2 class="cotd-term" id="cotdTerm">—</h2>
+    <p class="cotd-hook" id="cotdHook">—</p>
+
+    <div class="cotd-divider"></div>
+
+    <div class="cotd-section">
+      <div class="cotd-label">The Idea</div>
+      <p class="cotd-body" id="cotdPlain">—</p>
+    </div>
+
+    <div class="cotd-section">
+      <div class="cotd-label">The Picture</div>
+      <p class="cotd-body cotd-body--soft" id="cotdAnalogy">—</p>
+    </div>
+
+    <div class="cotd-use-today">
+      <div class="cotd-label">Use it today</div>
+      <p class="cotd-body" id="cotdPrompt">—</p>
+    </div>
+
+    <div class="cotd-actions">
+      <button class="cotd-btn cotd-btn--primary" id="cotdMarkBtn">
+        <span id="cotdMarkLabel">✓ Mark Internalized</span>
+      </button>
+      <button class="cotd-btn" id="cotdNextBtn">→ Try Another</button>
+    </div>
+
+    <div class="cotd-footer">
+      <a href="#app" id="cotdLibraryLink">Continue to library →</a>
+    </div>
+  </div>
+</div>
+<!-- /CONCEPT OF THE DAY -->
 
 <!-- HERO -->
 <section class="hero">
@@ -1383,7 +1716,209 @@ mastered = loadMastered();
 openedToday = loadDailyGoal();
 updateDailyGoal();
 
-loadConcepts();
+// Load concepts, then show concept of the day once they're ready
+loadConcepts().then(() => {
+  initConceptOfTheDay();
+});
+
+// ============================================
+// CONCEPT OF THE DAY
+// ============================================
+
+const COTD_STORAGE_KEY = 'lll_cotd_dismissed_v1';
+
+const CAT_NAME = {
+  finance: 'Finance', psychology: 'Psychology', thinking: 'Thinking',
+  power: 'Power', relationships: 'Relationships', language: 'Language',
+  business: 'Business', creativity: 'Creativity', health: 'Health',
+  identity: 'Identity', philosophy: 'Philosophy', science: 'Science',
+  society: 'Society', 'tech-ai': 'Tech & AI'
+};
+
+// Pick a concept deterministically based on date.
+// Same calendar day = same concept for everyone, every reload.
+function pickTodaysConcept(pool) {
+  if (!pool || pool.length === 0) return null;
+
+  const today = new Date();
+  const seed = today.getFullYear() * 10000
+             + (today.getMonth() + 1) * 100
+             + today.getDate();
+  const index = seed % pool.length;
+  return pool[index];
+}
+
+// Pick a random different concept (for "Try Another" button)
+function pickRandomConcept(pool, excludeId) {
+  if (!pool || pool.length === 0) return null;
+  if (pool.length === 1) return pool[0];
+
+  let candidate;
+  let safety = 0;
+  do {
+    candidate = pool[Math.floor(Math.random() * pool.length)];
+    safety++;
+  } while (candidate.id === excludeId && safety < 50);
+
+  return candidate;
+}
+
+// Format today's date as "April 26"
+function formatTodayLabel() {
+  const months = ['January','February','March','April','May','June',
+                  'July','August','September','October','November','December'];
+  const d = new Date();
+  return months[d.getMonth()] + ' ' + d.getDate();
+}
+
+// Get today's date as YYYY-MM-DD (used for dismissal tracking)
+function todayISO() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+// Has user already dismissed today's card? Check localStorage.
+function isDismissedToday() {
+  try {
+    const raw = localStorage.getItem(COTD_STORAGE_KEY);
+    if (!raw) return false;
+    const data = JSON.parse(raw);
+    return data && data.date === todayISO();
+  } catch (e) {
+    return false;
+  }
+}
+
+// Mark today's card as dismissed (so it stays closed until tomorrow)
+function markDismissedToday() {
+  try {
+    localStorage.setItem(
+      COTD_STORAGE_KEY,
+      JSON.stringify({ date: todayISO() })
+    );
+  } catch (e) {
+    console.warn('Could not save COTD dismissal:', e);
+  }
+}
+
+// Render a concept into the modal markup
+function renderCotd(concept) {
+  if (!concept) return;
+
+  const catColor = CAT_COLOR[concept.category] || 'var(--accent)';
+  const catName = CAT_NAME[concept.category] || concept.category;
+  const idPadded = String(concept.id).padStart(3, '0');
+
+  // Set the per-card accent color via CSS variable
+  const card = document.getElementById('cotdCard');
+  card.style.setProperty('--cotd-accent', catColor);
+
+  document.getElementById('cotdDate').textContent = formatTodayLabel();
+  document.getElementById('cotdConceptNum').textContent = 'Concept ' + idPadded;
+  document.getElementById('cotdCategory').textContent = catName;
+  document.getElementById('cotdTerm').textContent = concept.term;
+  document.getElementById('cotdHook').textContent = concept.hook;
+  document.getElementById('cotdPlain').textContent = concept.plain;
+  document.getElementById('cotdAnalogy').textContent = concept.analogy;
+  document.getElementById('cotdPrompt').textContent = concept.prompt;
+
+  // Update mark button to reflect mastered state
+  const markBtn = document.getElementById('cotdMarkBtn');
+  const markLabel = document.getElementById('cotdMarkLabel');
+  if (mastered.has(concept.id)) {
+    markBtn.classList.add('is-marked');
+    markLabel.textContent = '✓ Internalized';
+  } else {
+    markBtn.classList.remove('is-marked');
+    markLabel.textContent = '✓ Mark Internalized';
+  }
+
+  // Wire mark button to current concept
+  markBtn.onclick = function() {
+    if (mastered.has(concept.id)) {
+      mastered.delete(concept.id);
+    } else {
+      mastered.add(concept.id);
+      // Also count it toward today's daily goal
+      if (!openedToday.has(concept.id)) {
+        openedToday.add(concept.id);
+        saveDailyGoal();
+        updateDailyGoal();
+      }
+    }
+    saveMastered();
+    renderCotd(concept); // refresh button state
+    // Refresh main grid if it's already rendered
+    if (typeof render === 'function' && CONCEPTS.length > 0) {
+      try { render(); } catch (e) { /* grid may not exist yet, fine */ }
+    }
+  };
+}
+
+function openCotd() {
+  const overlay = document.getElementById('cotdOverlay');
+  overlay.classList.add('active');
+  document.body.classList.add('cotd-open');
+}
+
+function closeCotd(persist) {
+  const overlay = document.getElementById('cotdOverlay');
+  overlay.classList.remove('active');
+  document.body.classList.remove('cotd-open');
+  if (persist) markDismissedToday();
+}
+
+function initConceptOfTheDay() {
+  if (!CONCEPTS || CONCEPTS.length === 0) {
+    console.warn('COTD: no concepts loaded');
+    return;
+  }
+
+  if (isDismissedToday()) {
+    return; // already seen and closed today, don't show
+  }
+
+  const concept = pickTodaysConcept(CONCEPTS);
+  if (!concept) return;
+
+  renderCotd(concept);
+  openCotd();
+
+  // Wire close button — persists dismissal until tomorrow
+  document.getElementById('cotdClose').onclick = function() {
+    closeCotd(true);
+  };
+
+  // Wire "Try Another" — picks a random different concept (no dismissal)
+  document.getElementById('cotdNextBtn').onclick = function() {
+    const current = parseInt(
+      document.getElementById('cotdConceptNum').textContent.replace(/\D/g, ''),
+      10
+    );
+    const next = pickRandomConcept(CONCEPTS, current);
+    renderCotd(next);
+  };
+
+  // Wire footer link — also closes & persists
+  document.getElementById('cotdLibraryLink').onclick = function() {
+    closeCotd(true);
+  };
+
+  // Click outside the card to close
+  document.getElementById('cotdOverlay').addEventListener('click', function(e) {
+    if (e.target === this) closeCotd(true);
+  });
+
+  // Esc key to close
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' &&
+        document.getElementById('cotdOverlay').classList.contains('active')) {
+      closeCotd(true);
+    }
+  });
+}
+// ============================================
+// END CONCEPT OF THE DAY
+// ============================================
   // NEWSLETTER FORM HANDLER
 (function() {
   const form = document.getElementById('newsletterForm');
