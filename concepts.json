@@ -117,7 +117,7 @@
     "hook": "Believing there's never enough — for you.",
     "plain": "A mental mode where you focus so much on what's lacking that it affects your decisions, relationships, and ambitions — often causing you to act against your own interests.",
     "analogy": "Eating too fast at a buffet because you're afraid it'll run out — even when there's clearly more than enough for everyone.",
-    "prompt": "Pick the one resource you most fear running out of — money, time, love, opportunities. What are you currently doing to \"protect\" it that's actually shrinking it further?",
+    "prompt": "Where in your life are you operating from scarcity — protecting, hoarding, or shrinking — when abundance would serve you better?",
     "collection_id": null
   },
   {
@@ -125,10 +125,10 @@
     "term": "Emotional Intelligence (EQ)",
     "category": "relationships",
     "source": "core",
-    "hook": "Reading yourself first, then everyone else.",
+    "hook": "Being smart about feelings — yours and theirs.",
     "plain": "The ability to recognize, understand, manage, and respond to emotions effectively in yourself and others. Often matters more than IQ in relationships and leadership.",
     "analogy": "A good driver doesn't just know the rules — they read traffic, anticipate others' moves, and stay calm when things go wrong.",
-    "prompt": "When you last lost your temper or shut down emotionally — what was the underlying feeling beneath the surface reaction? Anger and silence are usually masks for something else.",
+    "prompt": "Think of a recent conflict. What emotion was driving the other person that you didn't fully acknowledge in the moment?",
     "collection_id": null
   },
   {
@@ -216,7 +216,7 @@
     "hook": "The rules you set for how people may treat you.",
     "plain": "Clearly defined limits on what behavior you accept from others — in relationships, work, and family. Not walls to keep people out, but lines that protect your self-respect.",
     "analogy": "A property fence. It doesn't mean you hate your neighbor — it just shows where your land ends and theirs begins.",
-    "prompt": "Think of one person whose behavior toward you regularly leaves you feeling smaller. What's the specific behavior — and what would actually change if you named it out loud to them?",
+    "prompt": "Where in your life are you accepting treatment you wouldn't accept if you valued yourself more?",
     "collection_id": null
   },
   {
@@ -233,7 +233,7 @@
   {
     "id": 22,
     "term": "Non-Zero Impact",
-    "category": "language",
+    "category": "thinking",
     "source": "core",
     "hook": "It's not nothing — it matters, even if small.",
     "plain": "Used to say that an action has a real, measurable effect — however small. The opposite of dismissing something as pointless. Every non-zero contribution adds up.",
@@ -277,7 +277,7 @@
   {
     "id": 26,
     "term": "Skin in the Game",
-    "category": "language",
+    "category": "philosophy",
     "source": "core",
     "hook": "You only have credibility if you share the risk.",
     "plain": "If you give advice but bear none of the consequences if it goes wrong — your advice is cheap. Real credibility requires having something meaningful to lose.",
@@ -343,7 +343,7 @@
   {
     "id": 32,
     "term": "Agency",
-    "category": "language",
+    "category": "philosophy",
     "source": "core",
     "hook": "The power and freedom to act and choose.",
     "plain": "Having agency means you're the one making conscious decisions about your life — not being passively moved by others, systems, or circumstances.",
@@ -409,7 +409,7 @@
   {
     "id": 38,
     "term": "Tribalism",
-    "category": "psychology",
+    "category": "society",
     "source": "core",
     "hook": "Us vs them — wired deep into every human.",
     "plain": "The instinct to form in-groups and view out-groups with suspicion or hostility. It drives politics, sports fandom, nationalism, and office politics — often without people realizing it.",
@@ -464,7 +464,7 @@
   {
     "id": 43,
     "term": "Polarization",
-    "category": "language",
+    "category": "society",
     "source": "core",
     "hook": "When the middle disappears and sides harden.",
     "plain": "A process where a group or society splits into two extreme opposing camps with no middle ground — each side becoming more extreme as the divide grows.",
@@ -508,7 +508,7 @@
   {
     "id": 47,
     "term": "Entropy",
-    "category": "language",
+    "category": "thinking",
     "source": "core",
     "hook": "Everything tends toward disorder without energy.",
     "plain": "A physics concept used broadly: systems naturally decay and become chaotic unless effort is continuously put in to maintain them. Applies to relationships, businesses, and health.",
@@ -563,7 +563,7 @@
   {
     "id": 52,
     "term": "Diminishing Returns",
-    "category": "finance",
+    "category": "thinking",
     "source": "core",
     "hook": "More input stops producing more output.",
     "plain": "After a certain point, each additional unit of effort, money, or resource produces less and less gain. Knowing when you've hit this point is critical to efficiency.",
@@ -591,6 +591,17 @@
     "plain": "People exert less effort in a group than when working alone. Everyone assumes someone else will pick up the slack — so collectively, less gets done.",
     "analogy": "A tug-of-war team: each person pulls less hard than they would alone. The rope doesn't lie — but nobody feels individually responsible.",
     "prompt": "Where in your work or personal life are you relying on a group — and secretly doing less than you would if you were the only one responsible?",
+    "collection_id": null
+  },
+  {
+    "id": 55,
+    "term": "Manufactured Consent",
+    "category": "power",
+    "source": "core",
+    "hook": "When you think you chose freely — but the options were curated.",
+    "plain": "The idea that public opinion can be shaped through media, framing, and limited choices so that people 'freely' support what those in power already wanted.",
+    "analogy": "A referendum with two choices — both written by the same group. You vote, but the real outcome was already shaped before you entered the booth.",
+    "prompt": "Where in your life are you choosing between options that someone else pre-selected — without questioning whether those were ever the only options?",
     "collection_id": null
   },
   {
@@ -640,7 +651,7 @@
   {
     "id": 60,
     "term": "Meritocracy (myth of)",
-    "category": "power",
+    "category": "society",
     "source": "core",
     "hook": "Success isn't purely earned — context matters enormously.",
     "plain": "The belief that outcomes are purely based on talent and hard work, ignoring structural advantages like inherited wealth, network, geography, timing, and luck.",
@@ -656,13 +667,13 @@
     "hook": "Do you believe life happens to you — or because of you?",
     "plain": "Internal locus: you believe you control your outcomes through your choices. External locus: you believe external forces control your life. The internal is strongly linked to resilience and long-term success.",
     "analogy": "Two people get rejected for the same job. One thinks 'I need to improve my interview skills.' The other thinks 'the system is rigged.' Same event — different trajectories.",
-    "prompt": "Listen to how you describe your current biggest frustration. Do your sentences start with \"I\" or with \"they/he/she/it\"? What does that tell you about where you're locating the cause?",
+    "prompt": "In the area of your life where you feel most stuck — are you taking responsibility for what you can control, or waiting for external circumstances to change?",
     "collection_id": null
   },
   {
     "id": 62,
     "term": "Paradigm Shift",
-    "category": "language",
+    "category": "thinking",
     "source": "core",
     "hook": "A complete change in how everyone sees something.",
     "plain": "When the dominant mental model or framework of a field or society changes so fundamentally that old ways of thinking become obsolete almost overnight.",
@@ -695,7 +706,7 @@
   {
     "id": 65,
     "term": "Externalities",
-    "category": "finance",
+    "category": "society",
     "source": "core",
     "hook": "The costs or benefits your actions dump on others.",
     "plain": "When your actions have consequences — positive or negative — for people who weren't part of the decision. Companies often privatize profits while externalizing costs onto society.",
@@ -706,7 +717,7 @@
   {
     "id": 66,
     "term": "Epistemic Humility",
-    "category": "language",
+    "category": "philosophy",
     "source": "core",
     "hook": "Knowing that you might be wrong — and acting accordingly.",
     "plain": "Acknowledging the limits of your own knowledge and being genuinely open to being wrong. Rare, valuable, and the foundation of good reasoning and real wisdom.",
@@ -717,12 +728,23 @@
   {
     "id": 67,
     "term": "Groupthink",
-    "category": "psychology",
+    "category": "society",
     "source": "core",
     "hook": "When harmony becomes more important than truth.",
     "plain": "When a group suppresses dissent and critical thinking in order to maintain consensus and avoid conflict — often leading to catastrophically bad decisions that nobody individually wanted.",
     "analogy": "Every meeting attendee agreed the product launch was ready. Nobody wanted to be the one to delay it again. It launched and failed.",
     "prompt": "In your team or close social group — what uncomfortable truth is nobody saying out loud because the social cost of saying it feels too high?",
+    "collection_id": null
+  },
+  {
+    "id": 68,
+    "term": "Defensive Pessimism",
+    "category": "thinking",
+    "source": "core",
+    "hook": "Imagining failure in advance to prepare for it — not to fear it.",
+    "plain": "A strategy of mentally rehearsing worst-case scenarios not out of negativity, but to build concrete plans and reduce anxiety by addressing what could go wrong before it does.",
+    "analogy": "Before a big presentation, you mentally play through every tech failure, tough question, and awkward silence — then prepare a response for each one.",
+    "prompt": "What upcoming high-stakes situation could you improve by spending 20 minutes imagining every way it could go wrong — and preparing for each?",
     "collection_id": null
   },
   {
@@ -739,7 +761,7 @@
   {
     "id": 70,
     "term": "Regulatory Capture",
-    "category": "power",
+    "category": "society",
     "source": "core",
     "hook": "When the watchdog becomes the pet of what it's watching.",
     "plain": "When regulatory agencies meant to protect the public gradually become controlled or heavily influenced by the very industries they're supposed to regulate.",
@@ -750,7 +772,7 @@
   {
     "id": 71,
     "term": "Narrative Identity",
-    "category": "language",
+    "category": "identity",
     "source": "core",
     "hook": "The story you tell yourself about who you are.",
     "plain": "The internal autobiography we construct to make sense of our lives. It shapes our beliefs, choices, and self-worth — and crucially, it can be consciously rewritten.",
@@ -805,7 +827,7 @@
   {
     "id": 76,
     "term": "Abstraction",
-    "category": "language",
+    "category": "thinking",
     "source": "core",
     "hook": "Zooming out from the details to the bigger idea.",
     "plain": "Moving from specific, concrete things to general concepts. Useful for thinking clearly, communicating big ideas, and seeing patterns that repeat across different domains.",
@@ -816,7 +838,7 @@
   {
     "id": 77,
     "term": "Tipping Point",
-    "category": "language",
+    "category": "thinking",
     "source": "core",
     "hook": "The moment a small change triggers an enormous shift.",
     "plain": "The critical threshold at which something — a trend, a disease, an idea, a social movement — goes from slow, invisible build to rapid, unstoppable spread.",
@@ -854,13 +876,13 @@
     "hook": "What would have happened if things had gone differently?",
     "plain": "Mentally simulating alternate versions of events — used to learn from mistakes, assess decisions properly, and avoid the bad reasoning of 'it worked out, so it was the right decision.'",
     "analogy": "'We launched and it succeeded.' But what if we'd launched 6 months earlier or later? Counterfactual thinking forces you to ask those questions seriously.",
-    "prompt": "Think of a decision you're proud of. If a friend had made the exact same decision and the outcome had gone badly — would you still call it a smart decision? What does that tell you about how you judge your own past choices?",
+    "prompt": "Think of a recent success. What counterfactual factors — luck, timing, other people's actions — contributed that you haven't fully acknowledged?",
     "collection_id": null
   },
   {
     "id": 81,
     "term": "Parental Attribution Error",
-    "category": "psychology",
+    "category": "identity",
     "source": "cw",
     "hook": "You blame your parents for your flaws but claim your strengths as your own.",
     "plain": "A double standard buried in how we think about our upbringing: we externalize the bad (it's their fault) but internalize the good (that's just me). Both actually came from the same source.",
@@ -871,7 +893,7 @@
   {
     "id": 82,
     "term": "Atlas Complex",
-    "category": "psychology",
+    "category": "identity",
     "source": "cw",
     "hook": "When everything goes wrong, it's somehow always your fault.",
     "plain": "A pattern — named after the Greek titan — where you compulsively absorb blame for other people's failures in order to maintain harmony, even when it clearly wasn't your fault.",
@@ -904,7 +926,7 @@
   {
     "id": 85,
     "term": "Toxic Stoicism",
-    "category": "psychology",
+    "category": "identity",
     "source": "cw",
     "hook": "The hollowed-out kind of strength that teaches you to be proud of feeling nothing.",
     "plain": "Real stoicism is about managing emotions wisely. Toxic stoicism uses emotional shutdown as an identity — mistaking numbness, detachment, and 'I don't care' for strength.",
@@ -915,7 +937,7 @@
   {
     "id": 86,
     "term": "Modern Bravery",
-    "category": "language",
+    "category": "identity",
     "source": "cw",
     "hook": "Being sincere in a world that rewards irony.",
     "plain": "In an online culture that rewards detachment, sarcasm, and ironic distance, genuinely caring about something and openly showing it is actually the most courageous act available.",
@@ -926,7 +948,7 @@
   {
     "id": 87,
     "term": "Performative Authenticity",
-    "category": "language",
+    "category": "identity",
     "source": "cw",
     "hook": "Appearing raw and real — but it's all engineered.",
     "plain": "When people construct a carefully curated 'no-filter' persona online or in life. The stripped-back, behind-the-scenes look that is actually meticulously designed to appear natural.",
@@ -937,7 +959,7 @@
   {
     "id": 88,
     "term": "Civilizational Anxiety",
-    "category": "psychology",
+    "category": "society",
     "source": "cw",
     "hook": "A vague dread that the world is deteriorating and you can't stop it.",
     "plain": "The low-level existential unease many people feel about societal direction — decline in institutions, culture wars, technology acceleration — that compounds personal stress without a clear target.",
@@ -948,12 +970,12 @@
   {
     "id": 89,
     "term": "Meaning vs Happiness",
-    "category": "thinking",
+    "category": "philosophy",
     "source": "cw",
     "hook": "Chasing happiness is the wrong goal. Meaning is harder but longer lasting.",
     "plain": "Happiness is a feeling — temporary and hedonic. Meaning comes from pursuing something bigger than yourself, which often involves discomfort, sacrifice, and delayed reward.",
     "analogy": "Raising a child is exhausting, expensive, and stressful — not 'happy' in any simple sense. But parents consistently rate it as the most meaningful thing they've ever done.",
-    "prompt": "Name something genuinely hard you've taken on in the last year — a project, a relationship, a sacrifice. Did it make you \"happy\" in the moment? Did it make your life feel more meaningful? What does the gap between those two answers tell you?",
+    "prompt": "In the areas of your life where you're most pursuing comfort and happiness — are you trading away the possibility of something more meaningful?",
     "collection_id": null
   },
   {
@@ -981,7 +1003,7 @@
   {
     "id": 92,
     "term": "Status Anxiety",
-    "category": "psychology",
+    "category": "society",
     "source": "cw",
     "hook": "The constant low-grade fear of being judged as unsuccessful.",
     "plain": "The chronic worry about how you rank in others' estimation — your career, wealth, appearance, relationships. Named and explored by philosopher Alain de Botton.",
@@ -1003,7 +1025,7 @@
   {
     "id": 94,
     "term": "The Status Game",
-    "category": "power",
+    "category": "society",
     "source": "cw",
     "hook": "Almost everything humans do can be explained by status competition.",
     "plain": "From Will Storr: human behavior — careers, consumption, political opinions, social media — is largely driven by the desire to raise or maintain status within our tribal group.",
@@ -1014,7 +1036,7 @@
   {
     "id": 95,
     "term": "Male Loneliness Epidemic",
-    "category": "relationships",
+    "category": "society",
     "source": "cw",
     "hook": "Men have fewer close friendships than any generation before — and it's killing them.",
     "plain": "Men are increasingly isolated, with fewer deep friendships and weakening social structures. Social disconnection is one of the strongest predictors of poor mental and physical health outcomes.",
@@ -1036,7 +1058,7 @@
   {
     "id": 97,
     "term": "Intentional Living",
-    "category": "thinking",
+    "category": "philosophy",
     "source": "cw",
     "hook": "Designing your life on purpose rather than defaulting into it.",
     "plain": "The active, deliberate construction of a life around your actual values — rather than drifting into the job, relationship, habits, and location that just happened to appear.",
@@ -1074,7 +1096,7 @@
     "hook": "Don't sit in the middle — go to both extremes.",
     "plain": "From Nassim Taleb: instead of a moderate approach to everything, deliberately operate at two extremes — very safe in one area and very bold in another. Avoid the mushy, mediocre middle.",
     "analogy": "80% of your money in ultra-safe assets, 20% in high-risk high-upside bets. Or: work deeply for 6 focused hours, then fully switch off. No lukewarm half-measures.",
-    "prompt": "Pick one area of your life — money, work, energy, relationships. Are you running it as a barbell (extreme safe + extreme bold) or as a mushy middle? If middle, what would the two extremes actually look like?",
+    "prompt": "Where in your life are you stuck in the moderate middle — not safe enough to be protected, not bold enough to break through — when an extreme in either direction would serve you better?",
     "collection_id": null
   },
   {
@@ -1091,7 +1113,7 @@
   {
     "id": 102,
     "term": "Attention Economy",
-    "category": "power",
+    "category": "society",
     "source": "cw",
     "hook": "Your attention is the product being sold.",
     "plain": "The competitive market where apps, media, and platforms compete for your focus — because your attention is what gets monetized. The more hooked you are, the more valuable you are to them.",
@@ -1113,7 +1135,7 @@
   {
     "id": 104,
     "term": "Radical Acceptance",
-    "category": "psychology",
+    "category": "philosophy",
     "source": "cw",
     "hook": "Accepting reality as it is — not as you wish it were.",
     "plain": "From DBT therapy: fully accepting circumstances without denial or resistance — not because you agree with them, but because fighting reality adds suffering on top of pain.",
@@ -1124,7 +1146,7 @@
   {
     "id": 105,
     "term": "Identity-Based Habits",
-    "category": "psychology",
+    "category": "identity",
     "source": "cw",
     "hook": "Don't set goals. Become the person who does the thing.",
     "plain": "From James Clear: instead of 'I want to run a marathon,' shift to 'I am a runner.' Behavior follows identity — change the self-concept and the actions follow naturally.",
@@ -1135,7 +1157,7 @@
   {
     "id": 106,
     "term": "Neuroplasticity",
-    "category": "psychology",
+    "category": "health",
     "source": "cw",
     "hook": "Your brain physically changes in response to what you repeatedly do.",
     "plain": "The brain's ability to rewire itself throughout life based on experience. You're not stuck with your current patterns — behaviors, thoughts, and habits literally reshape neural structure over time.",
@@ -1162,13 +1184,13 @@
     "hook": "The talk you're avoiding is usually the most important one.",
     "plain": "The discomfort of a necessary conversation is almost always smaller than the long-term cost of not having it. Postponed hard conversations compound in damage over time.",
     "analogy": "The slight awkwardness of telling a friend they're wrong costs you 10 minutes of discomfort. Not telling them costs you the friendship over the following months.",
-    "prompt": "Picture the one person you'd most dread having to be honest with right now. What's the conversation — and what's the actual worst case if you have it? Is it really worse than what's happening by avoiding it?",
+    "prompt": "What conversation have you been postponing for more than two weeks? What is that delay actually costing you or the other person?",
     "collection_id": null
   },
   {
     "id": 109,
     "term": "The Body Keeps the Score",
-    "category": "psychology",
+    "category": "health",
     "source": "cw",
     "hook": "Trauma isn't just in your head — it lives in your nervous system.",
     "plain": "From Bessel van der Kolk: unprocessed trauma doesn't disappear — it gets stored in the body as chronic tension, posture, anxiety, and physical symptoms that persist long after the event.",
@@ -1305,7 +1327,7 @@
     "hook": "The person who acts fastest on a good idea usually wins.",
     "plain": "Execution velocity matters above almost everything else. Most people have ideas. The differentiator is how fast you move from idea to real-world action and feedback.",
     "analogy": "Two people hear the same insight in the same podcast. One tests it Tuesday. The other is still planning it three months later. The first person already has data.",
-    "prompt": "Think of one idea you've been \"researching\" or \"planning\" for over a month. What's the smallest, ugliest version of it you could ship by the end of this weekend?",
+    "prompt": "What idea have you been sitting on for more than two weeks that you could test — imperfectly — within the next 48 hours?",
     "collection_id": null
   },
   {
@@ -1333,7 +1355,7 @@
   {
     "id": 124,
     "term": "The Discipline Paradox",
-    "category": "thinking",
+    "category": "identity",
     "source": "ah",
     "hook": "The more you treat discipline as a chore, the less of it you have.",
     "plain": "Self-discipline isn't a muscle you force. It's an expression of identity. When you genuinely identify as someone disciplined, the actions follow naturally — without the constant internal battle.",
@@ -1366,7 +1388,7 @@
   {
     "id": 127,
     "term": "Self-Actualize → Self-Monetize → Self-Transcend",
-    "category": "thinking",
+    "category": "philosophy",
     "source": "dk",
     "hook": "First become excellent. Then make money from it. Then use it to serve something larger.",
     "plain": "Dan Koe's three-stage framework: pursue mastery because you genuinely care → turn that mastery into income → use your platform and resources to grow beyond your own interests.",
@@ -1410,7 +1432,7 @@
   {
     "id": 131,
     "term": "Sovereign Individual",
-    "category": "thinking",
+    "category": "philosophy",
     "source": "dk",
     "hook": "The person who has escaped dependency on any single income, employer, or location.",
     "plain": "A person who controls their own time, income streams, and location — not dependent on any one employer, system, or geography. Made possible in a new way by the internet and digital work.",
@@ -1553,7 +1575,7 @@
   {
     "id": 144,
     "term": "Manufactured Consent",
-    "category": "power",
+    "category": "society",
     "source": "core",
     "hook": "When the system makes you think you chose freely.",
     "plain": "Noam Chomsky's concept: mass media and institutional framing can shape what people believe and want in ways that serve those in power — while people feel they arrived at their views independently.",
@@ -1575,7 +1597,7 @@
   {
     "id": 146,
     "term": "Ingroup Favoritism",
-    "category": "psychology",
+    "category": "society",
     "source": "cw",
     "hook": "You don't just prefer your group — you automatically disadvantage the other.",
     "plain": "People don't just reward those in their group more — they systematically disadvantage outsiders, often without realizing it. It operates beneath conscious awareness in hiring, friendship, and trust.",
@@ -1586,7 +1608,7 @@
   {
     "id": 147,
     "term": "Ego vs Self-Esteem",
-    "category": "psychology",
+    "category": "identity",
     "source": "cw",
     "hook": "Ego needs to be better than others. Self-esteem needs nothing.",
     "plain": "Ego is fragile because it depends entirely on comparison — the moment someone surpasses you, your ego suffers. Genuine self-esteem is stable because it doesn't require external validation or superiority.",
@@ -1597,7 +1619,7 @@
   {
     "id": 148,
     "term": "Chronotype",
-    "category": "thinking",
+    "category": "health",
     "source": "cw",
     "hook": "Your natural sleep-wake timing is biology, not character.",
     "plain": "Whether you're a morning person or night owl is largely determined by genetics. Fighting your chronotype costs you performance, health, and cognitive function — it's not a moral failing to overcome.",
@@ -1663,7 +1685,7 @@
   {
     "id": 154,
     "term": "Negative Visualization",
-    "category": "thinking",
+    "category": "philosophy",
     "source": "core",
     "hook": "Imagine losing what you have — then appreciate it properly.",
     "plain": "A Stoic practice of deliberately imagining the loss of things you value — health, relationships, work — to counteract hedonic adaptation and cultivate genuine gratitude.",
@@ -1707,7 +1729,7 @@
   {
     "id": 158,
     "term": "Overton Window",
-    "category": "power",
+    "category": "society",
     "source": "core",
     "hook": "The range of ideas a society currently considers acceptable.",
     "plain": "At any given moment, there's a window of politically and socially acceptable positions. Ideas outside it are dismissed as extreme — but the window moves over time as culture shifts.",
@@ -1740,7 +1762,7 @@
   {
     "id": 161,
     "term": "Limbic Capitalism",
-    "category": "psychology",
+    "category": "society",
     "source": "core",
     "hook": "Your brain is the product they're selling to itself.",
     "plain": "Limbic capitalism is when companies deliberately engineer their products to hijack the reward centres of your brain — the parts that crave pleasure, novelty, and relief. It's not accidental. The addiction is the business model.",
@@ -1750,7 +1772,7 @@
   },
   {
     "id": 162,
-    "term": "Thin Slice Jealousy",
+    "term": "Thin slice jealousy",
     "category": "psychology",
     "source": "core",
     "hook": "You envy someone's highlight reel — you ignore their horror show.",
