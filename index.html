@@ -507,7 +507,7 @@
   /* CATEGORY GRID */
   .cat-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
     gap: 8px;
     margin-bottom: 2.5rem;
   }
@@ -556,41 +556,20 @@
   }
 
   .cat-card[data-cat="all"] { color: var(--accent); }
-  .cat-card[data-cat="finance"] { color: var(--blue); }
-  .cat-card[data-cat="psychology"] { color: var(--purple); }
-  .cat-card[data-cat="thinking"] { color: var(--green); }
-  .cat-card[data-cat="power"] { color: var(--red); }
-  .cat-card[data-cat="relationships"] { color: var(--pink); }
-  .cat-card[data-cat="language"] { color: var(--teal); }
   .cat-card[data-cat="business"] { color: #e0a060; }
-
-  /* SOURCE FILTER */
-  .source-filters {
-    display: flex;
-    gap: 6px;
-    margin-bottom: 2rem;
-    flex-wrap: wrap;
-  }
-
-  .src-btn {
-    padding: 5px 14px;
-    font-size: 0.7rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    background: none;
-    color: var(--muted2);
-    cursor: pointer;
-    transition: all 0.15s;
-    font-family: 'DM Sans', sans-serif;
-  }
-
-  .src-btn:hover, .src-btn.active {
-    border-color: var(--border-hover);
-    color: var(--text);
-    background: var(--surface2);
-  }
+  .cat-card[data-cat="creativity"] { color: #d4a574; }
+  .cat-card[data-cat="finance"] { color: var(--blue); }
+  .cat-card[data-cat="health"] { color: #8ab87a; }
+  .cat-card[data-cat="identity"] { color: #b89878; }
+  .cat-card[data-cat="language"] { color: var(--teal); }
+  .cat-card[data-cat="philosophy"] { color: #9a8fb8; }
+  .cat-card[data-cat="power"] { color: var(--red); }
+  .cat-card[data-cat="psychology"] { color: var(--purple); }
+  .cat-card[data-cat="relationships"] { color: var(--pink); }
+  .cat-card[data-cat="science"] { color: #6ab0c4; }
+  .cat-card[data-cat="society"] { color: #7090a8; }
+  .cat-card[data-cat="tech-ai"] { color: #b8a07a; }
+  .cat-card[data-cat="thinking"] { color: var(--green); }
 
   /* CONCEPTS GRID */
   .concepts-grid {
@@ -639,16 +618,6 @@
     font-family: 'DM Mono', monospace;
     font-size: 0.6rem;
     color: var(--muted);
-  }
-
-  .card-src {
-    font-size: 0.6rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    padding: 2px 8px;
-    border-radius: 999px;
-    border: 1px solid var(--border);
-    color: var(--muted2);
   }
 
   .mastered-badge {
@@ -893,7 +862,7 @@
   <div class="nav-logo">Listen. <span>Learn.</span> Live.</div>
   <div class="nav-pill">
     <div class="nav-dot"></div>
-    160 concepts · Free
+    <span id="navConceptCount">…</span> concepts · Free
   </div>
 </nav>
 
@@ -904,11 +873,11 @@
   <p class="hero-sub">You consume podcasts and articles — but how much do you actually retain? Learn 5 key concepts a day. Understand them. Use them. Change how you think and communicate.</p>
   <div class="hero-stats">
     <div class="stat">
-      <div class="stat-num">160</div>
+      <div class="stat-num" id="heroConceptCount">…</div>
       <div class="stat-label">Concepts</div>
     </div>
     <div class="stat">
-      <div class="stat-num">8</div>
+      <div class="stat-num">14</div>
       <div class="stat-label">Categories</div>
     </div>
     <div class="stat">
@@ -957,7 +926,7 @@
     <div class="step">
       <div class="step-num">01</div>
       <h3>Pick a Category</h3>
-      <p>Choose from Finance, Psychology, Power, Thinking, Relationships, Language, and Business. Or browse all 160.</p>
+      <p>Choose from 14 categories — Language, Thinking, Identity, Business, Health, and more. Or browse all of them.</p>
     </div>
     <div class="step">
       <div class="step-num">02</div>
@@ -990,14 +959,11 @@
     <div class="progress-track">
       <div class="progress-fill" id="progressFill" style="width:0%"></div>
     </div>
-    <div class="progress-count" id="progressCount">0 / 160 mastered</div>
+    <div class="progress-count" id="progressCount">0 / 0 mastered</div>
   </div>
 
   <!-- CATEGORIES -->
   <div class="cat-grid" id="catGrid"></div>
-
-  <!-- SOURCE FILTERS -->
-  <div class="source-filters" id="srcFilters"></div>
 
   <!-- COUNT -->
   <div class="results-count" id="resultCount"></div>
@@ -1022,22 +988,22 @@
 <script>
 const CATEGORIES = [
   { id:'all', name:'All', icon:'◈', color:'#e8d5a3' },
-  { id:'finance', name:'Finance', icon:'◎', color:'#6b9fc4' },
-  { id:'psychology', name:'Psychology', icon:'◐', color:'#a08fd4' },
-  { id:'thinking', name:'Thinking', icon:'◇', color:'#7aaf8a' },
-  { id:'power', name:'Power', icon:'◆', color:'#d4715a' },
-  { id:'relationships', name:'Relationships', icon:'◑', color:'#c47a9f' },
-  { id:'language', name:'Language', icon:'◉', color:'#5abfaf' },
   { id:'business', name:'Business', icon:'◈', color:'#e0a060' },
+  { id:'creativity', name:'Creativity', icon:'◊', color:'#d4a574' },
+  { id:'finance', name:'Finance', icon:'◎', color:'#6b9fc4' },
+  { id:'health', name:'Health', icon:'◍', color:'#8ab87a' },
+  { id:'identity', name:'Identity', icon:'◉', color:'#b89878' },
+  { id:'language', name:'Language', icon:'◉', color:'#5abfaf' },
+  { id:'philosophy', name:'Philosophy', icon:'◐', color:'#9a8fb8' },
+  { id:'power', name:'Power', icon:'◆', color:'#d4715a' },
+  { id:'psychology', name:'Psychology', icon:'◐', color:'#a08fd4' },
+  { id:'relationships', name:'Relationships', icon:'◑', color:'#c47a9f' },
+  { id:'science', name:'Science', icon:'◯', color:'#6ab0c4' },
+  { id:'society', name:'Society', icon:'◒', color:'#7090a8' },
+  { id:'tech-ai', name:'Tech & AI', icon:'◇', color:'#b8a07a' },
+  { id:'thinking', name:'Thinking', icon:'◇', color:'#7aaf8a' },
 ];
 
-const SOURCES = [
-  { id:'all', label:'All Sources' },
-  { id:'core', label:'Foundational' },
-  { id:'cw', label:'Modern Wisdom' },
-  { id:'ah', label:'Alex Hormozi' },
-  { id:'dk', label:'Dan Koe' },
-];
 
 const PROMPTS = {
   finance: [
@@ -1167,10 +1133,9 @@ async function loadConcepts() {
 // Deduplicate by id
 const seen = new Set();
 
-const SRC_LABEL = { core:'Foundational', cw:'Modern Wisdom', ah:'Alex Hormozi', dk:'Dan Koe' };
-const CAT_COLOR = { all:'#e8d5a3', finance:'#6b9fc4', psychology:'#a08fd4', thinking:'#7aaf8a', power:'#d4715a', relationships:'#c47a9f', language:'#5abfaf', business:'#e0a060' };
+const CAT_COLOR = { all:'#e8d5a3', business:'#e0a060', creativity:'#d4a574', finance:'#6b9fc4', health:'#8ab87a', identity:'#b89878', language:'#5abfaf', philosophy:'#9a8fb8', power:'#d4715a', psychology:'#a08fd4', relationships:'#c47a9f', science:'#6ab0c4', society:'#7090a8', 'tech-ai':'#b8a07a', thinking:'#7aaf8a' };
 
-let activeCat = 'all', activeSrc = 'all', searchQ = '';
+let activeCat = 'all', searchQ = '';
 let mastered = new Set();
 let openedToday = new Set();
   
@@ -1248,20 +1213,12 @@ function buildCats() {
   `).join('');
 }
 
-function buildSrc() {
-  const el = document.getElementById('srcFilters');
-  el.innerHTML = SOURCES.map(s => `
-    <button class="src-btn${activeSrc===s.id?' active':''}" onclick="setSrc('${s.id}')">${s.label}</button>
-  `).join('');
-}
-
 function filtered() {
   return CONCEPTS.filter(c => {
     const mc = activeCat === 'all' || c.category === activeCat;
-    const ms = activeSrc === 'all' || c.source === activeSrc;
     const q = searchQ.toLowerCase();
     const mq = !q || c.term.toLowerCase().includes(q) || c.hook.toLowerCase().includes(q) || c.plain.toLowerCase().includes(q);
-    return mc && ms && mq;
+    return mc && mq;
   });
 }
 
@@ -1278,7 +1235,6 @@ function buildGrid() {
       <div class="card-front" onclick="toggleCard(${c.id})">
         <div class="card-meta">
           <span class="card-num">#${String(c.id).padStart(3,'0')}</span>
-          <span class="card-src">${SRC_LABEL[c.source]}</span>
           <span class="mastered-badge">✓ mastered</span>
         </div>
         <div class="card-term">${c.term}</div>
@@ -1304,7 +1260,17 @@ function buildGrid() {
   }).join('');
 }
 
-function render() { buildCats(); buildSrc(); buildGrid(); updateProgress(); }
+function render() { buildCats(); buildGrid(); updateProgress(); updateNavPill(); updateHeroStat(); }
+
+function updateNavPill() {
+  const el = document.getElementById('navConceptCount');
+  if (el) el.textContent = CONCEPTS.length;
+}
+
+function updateHeroStat() {
+  const el = document.getElementById('heroConceptCount');
+  if (el) el.textContent = CONCEPTS.length;
+}
 
 function toggleCard(id) {
   const el = document.getElementById('cc'+id);
@@ -1350,7 +1316,6 @@ function updateDailyGoal() {
 }
 
 function setCat(cat) { activeCat = cat; render(); }
-function setSrc(src) { activeSrc = src; render(); }
 
 document.getElementById('search').addEventListener('input', e => { searchQ = e.target.value; buildGrid(); });
 
