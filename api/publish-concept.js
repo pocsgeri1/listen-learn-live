@@ -23,6 +23,7 @@ export default async function handler(req, res) {
     plain,
     analogy,
     prompt,
+    collection_id,
   } = req.body || {};
 
   // Validate required fields
@@ -41,7 +42,7 @@ export default async function handler(req, res) {
   }
 
   // Validate category and source against allowed values
-  const allowedCategories = ['finance', 'psychology', 'thinking', 'power', 'relationships', 'language', 'business'];
+  const allowedCategories = ['finance', 'psychology', 'thinking', 'power', 'relationships', 'language', 'business', 'identity', 'health', 'philosophy', 'society', 'creativity', 'science', 'tech-ai'];
   const allowedSources = ['core', 'cw', 'ah', 'dk'];
 
   if (!allowedCategories.includes(category)) {
@@ -114,7 +115,17 @@ export default async function handler(req, res) {
       });
     }
 
-    // Step 4: build new concept object matching the exact 8-field schema
+    // Step 4: build new concept object matching the exact 9-field schema.
+    // Normalize collection_id: accept integer, null, undefined, empty string, or 0 (Make.com null workaround).
+    // Anything that isn't a positive integer becomes null.
+    let normalizedCollectionId = null;
+    if (collection_id !== undefined && collection_id !== null && collection_id !== '' && collection_id !== 0 && collection_id !== '0') {
+      const parsed = parseInt(collection_id, 10);
+      if (Number.isInteger(parsed) && parsed > 0) {
+        normalizedCollectionId = parsed;
+      }
+    }
+
     const newConcept = {
       id: nextId,
       term: term.trim(),
@@ -124,6 +135,7 @@ export default async function handler(req, res) {
       plain: plain.trim(),
       analogy: analogy.trim(),
       prompt: prompt.trim(),
+      collection_id: normalizedCollectionId,
     };
 
     // Step 5: append and re-serialize with 2-space indentation to match existing file
