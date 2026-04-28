@@ -847,34 +847,6 @@
   .cat-card[data-cat="language"] { color: var(--teal); }
   .cat-card[data-cat="business"] { color: #e0a060; }
 
-  /* SOURCE FILTER */
-  .source-filters {
-    display: flex;
-    gap: 6px;
-    margin-bottom: 2rem;
-    flex-wrap: wrap;
-  }
-
-  .src-btn {
-    padding: 5px 14px;
-    font-size: 0.7rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    background: none;
-    color: var(--muted2);
-    cursor: pointer;
-    transition: all 0.15s;
-    font-family: 'DM Sans', sans-serif;
-  }
-
-  .src-btn:hover, .src-btn.active {
-    border-color: var(--border-hover);
-    color: var(--text);
-    background: var(--surface2);
-  }
-
   /* CONCEPTS GRID */
   .concepts-grid {
     display: grid;
@@ -1340,9 +1312,6 @@
   <!-- CATEGORIES -->
   <div class="cat-grid" id="catGrid"></div>
 
-  <!-- SOURCE FILTERS -->
-  <div class="source-filters" id="srcFilters"></div>
-
   <!-- COUNT -->
   <div class="results-count" id="resultCount"></div>
 
@@ -1380,14 +1349,6 @@ const CATEGORIES = [
   { id:'society',       name:'Society',       icon:'◒', color:'#7090a8' },
   { id:'tech-ai',       name:'Tech-AI',       icon:'◆', color:'#b8a07a' },
   { id:'thinking',      name:'Thinking',      icon:'◇', color:'#7aaf8a' },
-];
-
-const SOURCES = [
-  { id:'all', label:'All Sources' },
-  { id:'core', label:'Foundational' },
-  { id:'cw', label:'Modern Wisdom' },
-  { id:'ah', label:'Alex Hormozi' },
-  { id:'dk', label:'Dan Koe' },
 ];
 
 const PROMPTS = {
@@ -1519,7 +1480,6 @@ async function loadConcepts() {
 // Deduplicate by id
 const seen = new Set();
 
-const SRC_LABEL = { core:'Foundational', cw:'Modern Wisdom', ah:'Alex Hormozi', dk:'Dan Koe' };
 const CAT_COLOR = {
   all:'#e8d5a3', business:'#e0a060', creativity:'#d4a574', finance:'#6b9fc4',
   health:'#8ab87a', identity:'#b89878', language:'#5abfaf', philosophy:'#9a8fb8',
@@ -1527,7 +1487,7 @@ const CAT_COLOR = {
   society:'#7090a8', 'tech-ai':'#b8a07a', thinking:'#7aaf8a'
 };
 
-let activeCat = 'all', activeSrc = 'all', searchQ = '';
+let activeCat = 'all', searchQ = '';
 let mastered = new Set();
 let openedToday = new Set();
   
@@ -1605,20 +1565,12 @@ function buildCats() {
   `).join('');
 }
 
-function buildSrc() {
-  const el = document.getElementById('srcFilters');
-  el.innerHTML = SOURCES.map(s => `
-    <button class="src-btn${activeSrc===s.id?' active':''}" onclick="setSrc('${s.id}')">${s.label}</button>
-  `).join('');
-}
-
 function filtered() {
   return CONCEPTS.filter(c => {
     const mc = activeCat === 'all' || c.category === activeCat;
-    const ms = activeSrc === 'all' || c.source === activeSrc;
     const q = searchQ.toLowerCase();
     const mq = !q || c.term.toLowerCase().includes(q) || c.hook.toLowerCase().includes(q) || c.plain.toLowerCase().includes(q);
-    return mc && ms && mq;
+    return mc && mq;
   });
 }
 
@@ -1661,7 +1613,7 @@ function buildGrid() {
   }).join('');
 }
 
-function render() { buildCats(); buildSrc(); buildGrid(); updateProgress(); }
+function render() { buildCats(); buildGrid(); updateProgress(); }
 
 function toggleCard(id) {
   const el = document.getElementById('cc'+id);
@@ -1722,7 +1674,6 @@ function updateDailyGoal() {
 }
 
 function setCat(cat) { activeCat = cat; render(); }
-function setSrc(src) { activeSrc = src; render(); }
 
 document.getElementById('search').addEventListener('input', e => { searchQ = e.target.value; buildGrid(); });
 
