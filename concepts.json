@@ -594,17 +594,6 @@
     "collection_id": null
   },
   {
-    "id": 55,
-    "term": "Manufactured Consent",
-    "category": "power",
-    "source": "core",
-    "hook": "When you think you chose freely — but the options were curated.",
-    "plain": "The idea that public opinion can be shaped through media, framing, and limited choices so that people 'freely' support what those in power already wanted.",
-    "analogy": "A referendum with two choices — both written by the same group. You vote, but the real outcome was already shaped before you entered the booth.",
-    "prompt": "Where in your life are you choosing between options that someone else pre-selected — without questioning whether those were ever the only options?",
-    "collection_id": null
-  },
-  {
     "id": 56,
     "term": "Vested Interest",
     "category": "power",
@@ -734,17 +723,6 @@
     "plain": "When a group suppresses dissent and critical thinking in order to maintain consensus and avoid conflict — often leading to catastrophically bad decisions that nobody individually wanted.",
     "analogy": "Every meeting attendee agreed the product launch was ready. Nobody wanted to be the one to delay it again. It launched and failed.",
     "prompt": "In your team or close social group — what uncomfortable truth is nobody saying out loud because the social cost of saying it feels too high?",
-    "collection_id": null
-  },
-  {
-    "id": 68,
-    "term": "Defensive Pessimism",
-    "category": "thinking",
-    "source": "core",
-    "hook": "Imagining failure in advance to prepare for it — not to fear it.",
-    "plain": "A strategy of mentally rehearsing worst-case scenarios not out of negativity, but to build concrete plans and reduce anxiety by addressing what could go wrong before it does.",
-    "analogy": "Before a big presentation, you mentally play through every tech failure, tough question, and awkward silence — then prepare a response for each one.",
-    "prompt": "What upcoming high-stakes situation could you improve by spending 20 minutes imagining every way it could go wrong — and preparing for each?",
     "collection_id": null
   },
   {
