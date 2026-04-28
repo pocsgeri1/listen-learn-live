@@ -1351,49 +1351,6 @@ const CATEGORIES = [
   { id:'thinking',      name:'Thinking',      icon:'◇', color:'#7aaf8a' },
 ];
 
-const PROMPTS = {
-  finance: [
-    "Where in your life are you accepting a 'safe' option without calculating what it's actually costing you in missed upside?",
-    "Think of a recent financial decision. What was the opportunity cost you didn't consciously consider?",
-    "Is the thing you're saving for growing faster than inflation? If not, what's your plan?",
-  ],
-  psychology: [
-    "What's one belief you hold strongly that you've never seriously tried to disprove?",
-    "Think of someone whose behavior annoys you. What incentive might be driving them that you haven't considered?",
-    "Where in your life are you choosing comfort over the discomfort that would actually help you grow?",
-  ],
-  thinking: [
-    "What's a decision you've been postponing? Apply inversion — what would make it definitely fail?",
-    "Name one thing you're doing mainly because of sunk costs. What would you do if you started fresh today?",
-    "What's the 20% of your effort producing 80% of your results? Are you protecting that time?",
-  ],
-  power: [
-    "In your most important current negotiation (work, relationship, deal) — what's your BATNA? Have you strengthened it?",
-    "Whose advice are you following? What do they stand to gain if you take it?",
-    "Where are you operating without skin in the game, and where should you demand it from others?",
-  ],
-  relationships: [
-    "Who in your life do you owe a hard conversation? What's the cost of not having it?",
-    "Think of your closest friendship. When did you last make a deposit of genuine effort into it?",
-    "When you last felt misunderstood — did the other person genuinely misread you, or did you not express it clearly?",
-  ],
-  language: [
-    "Use this concept in your next conversation today — even just once. Notice if people respond differently.",
-    "Can you think of a recent news story or event that this concept explains perfectly?",
-    "Explain this concept to someone else without looking it up. Where do the gaps appear?",
-  ],
-  business: [
-    "Think of the last thing you bought. What was the real 'dream outcome' you were purchasing — not the product itself?",
-    "Where in your work are you trading time for money when you could be building something that scales?",
-    "What's one thing you know well enough to teach others? Who would pay to learn it from you specifically?",
-  ],
-};
-
-const getPrompt = (cat) => {
-  const pool = PROMPTS[cat] || PROMPTS.language;
-  return pool[Math.floor(Math.random() * pool.length)];
-};
-
 let CONCEPTS = [];
 
 async function loadConcepts() {
