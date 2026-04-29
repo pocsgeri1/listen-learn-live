@@ -1989,5 +1989,16 @@
     "analogy": "Think of it like training with a Michelin-star chef in their restaurant versus taking a culinary degree. One teaches you the theory; the other teaches you how to actually run a kitchen under pressure.",
     "prompt": "Name three entrepreneurs in your city with 5,000+ followers and a business model you admire. Which one could you email this week offering to work for free for 90 days?",
     "collection_id": 12
+  },
+  {
+    "id": 184,
+    "term": "Situational Model",
+    "category": "business",
+    "source": "core",
+    "hook": "Customers buy when you map: current state, desired state, obstacle, next step.",
+    "plain": "A situational model is the mental framework every buyer uses when making a decision. Four questions define it: Where am I now? Where do I want to be? What's stopping me? What's the easiest path forward? If your product or pitch doesn't address all four, you're leaving conversion on the table.",
+    "analogy": "Someone wants to lose 20 pounds. Current state: overweight, tired. Desired state: fit, energized. Obstacle: no time for the gym. Path forward: 15-minute home workouts. A product that speaks to all four will sell; one that only addresses 'desired state' will get ignored.",
+    "prompt": "Pick your best customer. Write out their situational model in four sentences — where they were, where they wanted to be, what blocked them, and why your solution was the path of least resistance.",
+    "collection_id": 12
   }
 ]
