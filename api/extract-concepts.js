@@ -34,7 +34,7 @@ FOR EACH EXTRACTED CONCEPT, RETURN THIS EXACT JSON STRUCTURE:
 {
   "id": null,
   "term": "[2-5 words, clear and memorable]",
-  "category": "[exactly one of: finance | psychology | thinking | power | relationships | language | business]",
+  "category": "[exactly one of: finance | psychology | thinking | power | relationships | language | business | identity | health | philosophy | society | creativity | science | tech-ai]",
   "source": "[exactly one of: cw | ah | dk | core based on who said it]",
   "hook": "[one sentence, max 12 words, format: observation — implication]",
   "plain": "[2-3 sentences, zero jargon, plain English only]",
@@ -51,6 +51,7 @@ FOR EACH EXTRACTED CONCEPT, RETURN THIS EXACT JSON STRUCTURE:
 }
 
 Leave "id" as null — the human reviewer assigns sequential IDs on approval.
+Do not output a "collection_id" field — it is assigned by the pipeline, not by you.
 
 SCORING RUBRIC
 --------------
@@ -128,25 +129,37 @@ Before finalizing the JSON array, run these checks across all extracted prompts 
 If any prompt fails the self-check, fix it before returning the array.
 
 CATEGORY ASSIGNMENT RULES
+-------------------------
 finance:       money, investing, economics, wealth, risk capital
-psychology:    mental patterns, biases, emotions, self-awareness
+psychology:    mental patterns, biases, emotions, self-awareness — individual level
 thinking:      reasoning, decision-making, frameworks, mental models
-power:         influence, status, politics, social structures
-relationships: connection, communication, trust, conflict
-language:      smart phrases, rhetorical tools, precise vocabulary
+power:         influence, status, negotiation, control
+relationships: connection, trust, conflict, interpersonal EQ
+language:      FLAGSHIP — vocabulary, rhetoric, framing, speaking, writing, precise expression
 business:      building, selling, scaling, strategy, offers
+identity:      self-concept, ego, values, personal narrative, who you are
+health:        physical performance, sleep, energy, body habits
+philosophy:    meaning, ethics, stoicism, existential questions
+society:       culture, systems, politics, group behaviour at scale
+creativity:    ideas, originality, taste, making things, creative thinking
+science:       evidence, empirical thinking, research literacy, how knowledge is made
+tech-ai:       technology, AI, digital systems — MUST pass the 15-year-old analogy test.
+               Analogy must be concrete and require zero technical background to follow.
+               If a curious 15-year-old couldn't understand it, rewrite it.
+
+When a concept could fit two categories, ask: where would someone most want to find this when searching the library?
 
 SOURCE ATTRIBUTION
-cw   = Chris Williamson / Modern Wisdom
-ah   = Alex Hormozi
-dk   = Dan Koe
-core = universal concept predating any one modern voice. When in doubt, use "core".
+cw   = Chris Williamson / Modern Wisdom (host or his framing)
+ah   = Alex Hormozi (or content from his books/episodes)
+dk   = Dan Koe (or content from his letters/videos)
+core = universal concept that predates any one modern voice, even if discussed in the episode (e.g. "opportunity cost", "loss aversion"). When in doubt, use "core".
 
 OUTPUT FORMAT
 -------------
 Return ONLY a valid JSON array. No preamble. No markdown code fences. No explanation text.
 Sort the array by composite score, highest first.
-If fewer than 20 concepts meet the threshold, return only those that genuinely qualify.`;
+If fewer than 20 concepts meet the threshold, return only those that genuinely qualify. Quantity is not the goal — editorial quality is.`;
 
 // ---- Main handler ---------------------------------------------------------
 
