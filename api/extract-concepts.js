@@ -361,21 +361,28 @@ function toTitleCase(str) {
   }).join(' ');
 }
 // ---- Collection creation (collections.json on GitHub) ----------------------
+// Owner/repo hardcoded to match the convention in publish-concept.js.
+// If we ever move both to env vars, do it in a dedicated infra session.
 
-const GH_OWNER = process.env.GITHUB_OWNER;
-const GH_REPO = process.env.GITHUB_REPO;
-const GH_BRANCH = process.env.GITHUB_BRANCH || 'main';
-const GH_TOKEN = process.env.GITHUB_TOKEN;
+const COLLECTIONS_REPO_OWNER = 'pocsgeri1';
+const COLLECTIONS_REPO_NAME = 'listen-learn-live';
+const COLLECTIONS_BRANCH = 'main';
 const COLLECTIONS_PATH = 'collections.json';
 
 async function createEpisodeCollection({ episodeTitle, people, episodeUrl }) {
+  const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
+  if (!GITHUB_TOKEN) {
+    throw new Error('GITHUB_TOKEN env var missing');
+  }
+
+  const apiUrl = `https://api.github.com/repos/${COLLECTIONS_REPO_OWNER}/${COLLECTIONS_REPO_NAME}/contents/${COLLECTIONS_PATH}?ref=${COLLECTIONS_BRANCH}`;
+
   // 1. Fetch current collections.json from GitHub (with sha for the commit).
-  const getUrl = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${encodeURIComponent(COLLECTIONS_PATH)}?ref=${GH_BRANCH}`;
-  const getResp = await fetch(getUrl, {
+  const getResp = await fetch(apiUrl, {
     headers: {
-      'Authorization': `Bearer ${GH_TOKEN}`,
+      'Authorization': `token ${GITHUB_TOKEN}`,
       'Accept': 'application/vnd.github+json',
-      'User-Agent': 'lll-extract-concepts',
+      'User-Agent': 'LLL-Publisher',
     },
   });
   if (!getResp.ok) {
@@ -428,22 +435,21 @@ async function createEpisodeCollection({ episodeTitle, people, episodeUrl }) {
   collections.push(newCollection);
 
   // 6. Commit back to GitHub. PUT with the sha.
-  const putUrl = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${encodeURIComponent(COLLECTIONS_PATH)}`;
   const newContent = Buffer.from(JSON.stringify(collections, null, 2) + '\n', 'utf-8').toString('base64');
 
-  const putResp = await fetch(putUrl, {
+  const putResp = await fetch(apiUrl, {
     method: 'PUT',
     headers: {
-      'Authorization': `Bearer ${GH_TOKEN}`,
+      'Authorization': `token ${GITHUB_TOKEN}`,
       'Accept': 'application/vnd.github+json',
       'Content-Type': 'application/json',
-      'User-Agent': 'lll-extract-concepts',
+      'User-Agent': 'LLL-Publisher',
     },
     body: JSON.stringify({
       message: `chore: add episode collection ${newId} (${String(episodeTitle).slice(0, 60)})`,
       content: newContent,
       sha: currentSha,
-      branch: GH_BRANCH,
+      branch: COLLECTIONS_BRANCH,
     }),
   });
 
