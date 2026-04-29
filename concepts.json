@@ -1813,5 +1813,16 @@
     "analogy": "A chef who keeps a notebook of every dish that blew their mind — not to copy them, but to understand what made them work and create variations.",
     "prompt": "Open a blank document right now titled 'Idea Museum' — what are three ideas from the last month that stuck with you, even if you can't explain why yet?",
     "collection_id": 11
+  },
+  {
+    "id": 168,
+    "term": "Performance Vs. Excitement Matrix",
+    "category": "creativity",
+    "source": "dk",
+    "hook": "Choose content at the intersection of 'will this work?' and 'do I care enough to make it great?'",
+    "plain": "Content succeeds when it balances two forces: performance (ideas that have proven potential to resonate with others) and excitement (ideas you genuinely care about exploring). Too much performance focus makes you a clickbait machine. Too much excitement without audience consideration means you're journaling in public. The sweet spot is where both overlap.",
+    "analogy": "A musician who only plays what the crowd wants becomes a cover band. One who only plays experimental self-indulgence plays empty rooms. The best find songs they love that audiences also love.",
+    "prompt": "List your last five content ideas — mark each as High/Low Performance and High/Low Excitement. How many fall in the top-right quadrant?",
+    "collection_id": 11
   }
 ]
