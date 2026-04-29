@@ -1824,5 +1824,16 @@
     "analogy": "A musician who only plays what the crowd wants becomes a cover band. One who only plays experimental self-indulgence plays empty rooms. The best find songs they love that audiences also love.",
     "prompt": "List your last five content ideas — mark each as High/Low Performance and High/Low Excitement. How many fall in the top-right quadrant?",
     "collection_id": 11
+  },
+  {
+    "id": 169,
+    "term": "Structure Over Novelty",
+    "category": "language",
+    "source": "dk",
+    "hook": "Ideas are cheap — how you articulate them determines whether anyone remembers or shares them.",
+    "plain": "You don't need endless new ideas. You need to master the art of structuring ideas so they land with impact. The same concept can perform wildly differently depending on whether it's framed as a story, a list, a question, or a contrast. Learning structures (hooks, frameworks, analogies) is more valuable than chasing novelty, because you can apply those structures to any idea.",
+    "analogy": "A comedian doesn't need new jokes every night — they refine the delivery, timing, and setup of five jokes until each one reliably kills.",
+    "prompt": "Take one idea you've shared recently that didn't land — now rewrite it using a completely different structure (e.g., turn a statement into a question, or a list into a story).",
+    "collection_id": 11
   }
 ]
