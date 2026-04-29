@@ -1868,5 +1868,16 @@
     "analogy": "Two restaurants with identical food — one empty, one with a line around the block. The difference isn't quality. It's attention.",
     "prompt": "List three products or creators you admire — how did you first hear about them, and what made you keep paying attention after that?",
     "collection_id": 11
+  },
+  {
+    "id": 173,
+    "term": "Systems Economy",
+    "category": "business",
+    "source": "dk",
+    "hook": "People don't want solutions anymore — they want your specific, opinionated process.",
+    "plain": "In a world where AI can generate generic answers to any problem, what becomes valuable is not the solution itself but the unique system someone built to solve it. A hyperspecific, opinionated, battle-tested process that works for a particular type of person. Products succeed when they reflect the creator's lived experience and worldview, not when they try to serve everyone.",
+    "analogy": "There are a thousand productivity apps, but people pay for the one that matches how their brain actually works — built by someone who struggled the same way they do.",
+    "prompt": "What's one recurring problem in your life that you've solved with a makeshift system — and who else do you know who's solving it the hard way right now?",
+    "collection_id": 11
   }
 ]
