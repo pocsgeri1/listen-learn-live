@@ -1890,5 +1890,16 @@
     "analogy": "Factory workers in the Industrial Revolution became extensions of machines. Knowledge workers scrolling through support tickets at a call center are doing the same thing, just digitally.",
     "prompt": "What task in your current work requires zero judgment from you and could be done by almost anyone — and what would it take to eliminate or automate it in the next 90 days?",
     "collection_id": 11
+  },
+  {
+    "id": 175,
+    "term": "Idea Density",
+    "category": "language",
+    "source": "dk",
+    "hook": "Quality content isn't clever writing — it's high-value insights per sentence.",
+    "plain": "Idea density measures how many genuinely useful, memorable concepts appear in a piece of content. High idea density means every paragraph offers something worth highlighting or revisiting. Low density is filler, fluff, and restatements. Building idea density over time — by curating better sources, refining your thinking, and cutting weak ideas — is what makes a brand worth following.",
+    "analogy": "A textbook with one useful insight per chapter has low density. A mentor who drops three frameworks in a ten-minute conversation has high density.",
+    "prompt": "Read the last thing you wrote or posted — count the number of sentences that contain a genuinely useful, non-obvious idea. What percentage is that?",
+    "collection_id": 11
   }
 ]
