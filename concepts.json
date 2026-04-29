@@ -1835,5 +1835,16 @@
     "analogy": "A comedian doesn't need new jokes every night — they refine the delivery, timing, and setup of five jokes until each one reliably kills.",
     "prompt": "Take one idea you've shared recently that didn't land — now rewrite it using a completely different structure (e.g., turn a statement into a question, or a list into a story).",
     "collection_id": 11
+  },
+  {
+    "id": 170,
+    "term": "Learning in Public",
+    "category": "language",
+    "source": "dk",
+    "hook": "Reframe learning as research — then share your notes as if they were ideas.",
+    "plain": "Instead of separating learning (private) from creating (public), treat your self-education as the foundation of your content. When you study something, take notes as if you'll teach it. When you discover an insight, share it immediately. This turns your natural curiosity into a business asset and removes the pressure to 'create content' — you're just synthesizing what you're already learning.",
+    "analogy": "A medical student who tweets their study notes builds an audience of future doctors. They're not creating extra work — they're just making their learning visible.",
+    "prompt": "What did you learn this week that genuinely surprised you — and how would you explain it to someone in two sentences?",
+    "collection_id": 11
   }
 ]
