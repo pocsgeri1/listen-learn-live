@@ -917,6 +917,25 @@
     color: var(--cat-color);
   }
 
+  .people-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 8px;
+  }
+
+  .people-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted2);
+  }
+
   .mastered-badge {
     margin-left: auto;
     font-size: 0.6rem;
@@ -1352,6 +1371,20 @@ const CATEGORIES = [
 ];
 
 let CONCEPTS = [];
+let COLLECTIONS_BY_ID = {};
+
+async function loadCollections() {
+  try {
+    const res = await fetch('./collections.json');
+    if (!res.ok) return;
+    const data = await res.json();
+    if (!Array.isArray(data)) return;
+    COLLECTIONS_BY_ID = {};
+    data.forEach(col => { if (col && typeof col.id !== 'undefined') COLLECTIONS_BY_ID[col.id] = col; });
+  } catch (e) {
+    console.warn('Could not load collections.json — pills will not render:', e);
+  }
+}
 
 async function loadConcepts() {
   const grid = document.getElementById('conceptsGrid');
@@ -1386,6 +1419,7 @@ async function loadConcepts() {
     }
 
     CONCEPTS = data;
+    await loadCollections();
     render();
     updateHeaderCounts();
 
@@ -1547,6 +1581,12 @@ function buildGrid() {
           <span class="card-cat">${(CATEGORIES.find(x => x.id === c.category) || {}).name || c.category}</span>
           <span class="mastered-badge">✓ mastered</span>
         </div>
+        ${(() => {
+          if (c.collection_id == null) return '';
+          const col = COLLECTIONS_BY_ID[c.collection_id];
+          if (!col || !Array.isArray(col.people) || col.people.length === 0) return '';
+          return '<div class="people-pills">' + col.people.map(p => `<span class="people-pill">${p}</span>`).join('') + '</div>';
+        })()}
         <div class="card-term">${c.term}</div>
         <div class="card-hook">${c.hook}</div>
         <div class="card-expand-icon">+</div>
