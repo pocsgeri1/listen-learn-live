@@ -1901,5 +1901,16 @@
     "analogy": "A textbook with one useful insight per chapter has low density. A mentor who drops three frameworks in a ten-minute conversation has high density.",
     "prompt": "Read the last thing you wrote or posted — count the number of sentences that contain a genuinely useful, non-obvious idea. What percentage is that?",
     "collection_id": 11
+  },
+  {
+    "id": 176,
+    "term": "Opinionated Creative Work",
+    "category": "creativity",
+    "source": "dk",
+    "hook": "AI creates information — humans create perspective, and perspective is what people follow.",
+    "plain": "As AI makes information abundant, what becomes scarce is a distinct point of view. Opinionated work is content or products that reflect a specific worldview, taste, and lived experience. It's not neutral or algorithmic — it's human, debatable, and impossible to replicate without walking the same path. This is what builds trust and loyalty in a saturated world.",
+    "analogy": "A book summary site gives you information. A newsletter from someone who actually read the book and disagrees with half of it gives you perspective.",
+    "prompt": "What's one widely accepted idea in your field that you privately disagree with — and what would it look like to share that disagreement publicly?",
+    "collection_id": 11
   }
 ]
