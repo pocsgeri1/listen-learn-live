@@ -40,5 +40,13 @@
     "type": "curated",
     "description": "The ideas behind how businesses actually work — and how to build one.",
     "categories": ["business"]
+  },
+  {
+    "id": 10,
+    "title": "TEST: People Pills Verification",
+    "type": "episode",
+    "description": "Test entry for D2 visual verification. Remove after D3.",
+    "categories": ["thinking"],
+    "people": ["Chris Williamson", "Naval Ravikant"]
   }
 ]
