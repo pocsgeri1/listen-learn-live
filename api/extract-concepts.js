@@ -161,7 +161,7 @@ export default async function handler(req, res) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
 
-  const { intakeRecordId, episodeTitle, host, episodeUrl, duration, transcript } = req.body || {};
+  const { intakeRecordId, episodeTitle, host, episodeUrl, duration, transcript, people } = req.body || {};
 
   if (!intakeRecordId || !transcript) {
     return res.status(400).json({ error: 'Missing intakeRecordId or transcript' });
@@ -185,14 +185,28 @@ export default async function handler(req, res) {
       return res.status(200).json({ ok: false, reason: 'no_concepts' });
     }
 
-    // 2. Write each concept to Airtable Concepts table as PENDING
+    // 2. Create episode-based collection in collections.json BEFORE writing concepts.
+    //    If this fails, we abort cleanly without writing any concept rows — no orphans.
+    let newCollectionId;
+    try {
+      newCollectionId = await createEpisodeCollection({
+        episodeTitle: episodeTitle || 'Untitled episode',
+        people,
+        episodeUrl,
+      });
+    } catch (err) {
+      await updateIntakeStatus(intakeRecordId, 'FAILED', 0, `Collection creation failed: ${String(err.message || err).slice(0, 500)}`);
+      return res.status(500).json({ error: 'Collection creation failed', detail: err.message });
+    }
+
+    // 3. Write each concept to Airtable Concepts table as PENDING, with collection_id pre-filled.
     const episodeRefLabel = episodeTitle ? `${episodeTitle} (${host || 'unknown host'})` : 'Unknown episode';
     let successCount = 0;
     const failures = [];
 
     for (const c of concepts) {
       try {
-        await createConceptRow(c, episodeRefLabel, episodeUrl);
+        await createConceptRow(c, episodeRefLabel, episodeUrl, newCollectionId);
         successCount++;
       } catch (err) {
         failures.push({ term: c?.term, error: err.message });
@@ -264,10 +278,10 @@ const AT_KEY = process.env.AIRTABLE_API_KEY;
 const CONCEPTS_TABLE = 'Concepts';
 const INTAKE_TABLE = 'Intake';
 
-const VALID_CATEGORIES = ['finance', 'psychology', 'thinking', 'power', 'relationships', 'language', 'business'];
+const VALID_CATEGORIES = ['finance', 'psychology', 'thinking', 'power', 'relationships', 'language', 'business', 'identity', 'health', 'philosophy', 'society', 'creativity', 'science', 'tech-ai'];
 const VALID_SOURCES = ['core', 'cw', 'ah', 'dk'];
 
-async function createConceptRow(concept, episodeRefLabel, episodeUrl) {
+async function createConceptRow(concept, episodeRefLabel, episodeUrl, collectionId) {
   const category = VALID_CATEGORIES.includes(concept.category) ? concept.category : null;
   const source = VALID_SOURCES.includes(concept.source) ? concept.source : 'core';
 
@@ -289,6 +303,7 @@ async function createConceptRow(concept, episodeRefLabel, episodeUrl) {
   };
 
   if (episodeUrl) fields['Episode URL'] = episodeUrl;
+  if (Number.isFinite(collectionId)) fields['Collection ID'] = collectionId;
 
   const s = concept.scores || {};
   if (typeof s.universality === 'number') fields['Universality Score'] = s.universality;
@@ -344,4 +359,98 @@ function toTitleCase(str) {
     if (minorWords.has(word)) return word;
     return word.charAt(0).toUpperCase() + word.slice(1);
   }).join(' ');
+}
+// ---- Collection creation (collections.json on GitHub) ----------------------
+
+const GH_OWNER = process.env.GITHUB_OWNER;
+const GH_REPO = process.env.GITHUB_REPO;
+const GH_BRANCH = process.env.GITHUB_BRANCH || 'main';
+const GH_TOKEN = process.env.GITHUB_TOKEN;
+const COLLECTIONS_PATH = 'collections.json';
+
+async function createEpisodeCollection({ episodeTitle, people, episodeUrl }) {
+  // 1. Fetch current collections.json from GitHub (with sha for the commit).
+  const getUrl = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${encodeURIComponent(COLLECTIONS_PATH)}?ref=${GH_BRANCH}`;
+  const getResp = await fetch(getUrl, {
+    headers: {
+      'Authorization': `Bearer ${GH_TOKEN}`,
+      'Accept': 'application/vnd.github+json',
+      'User-Agent': 'lll-extract-concepts',
+    },
+  });
+  if (!getResp.ok) {
+    const t = await getResp.text();
+    throw new Error(`GitHub GET collections.json failed ${getResp.status}: ${t.slice(0, 300)}`);
+  }
+  const fileData = await getResp.json();
+  const currentSha = fileData.sha;
+
+  let collections;
+  try {
+    const decoded = Buffer.from(fileData.content, 'base64').toString('utf-8');
+    collections = JSON.parse(decoded);
+  } catch (err) {
+    throw new Error(`collections.json is not valid JSON: ${err.message}`);
+  }
+  if (!Array.isArray(collections)) {
+    throw new Error('collections.json root is not an array');
+  }
+
+  // 2. Compute next collection ID. Episode-based collections start at 10.
+  const existingIds = collections.map(c => c.id).filter(n => Number.isFinite(n));
+  const maxExisting = existingIds.length ? Math.max(...existingIds) : 0;
+  const newId = Math.max(maxExisting + 1, 10);
+
+  // 3. Parse people field (comma-separated, host first then guests).
+  const peopleArray = (typeof people === 'string' && people.trim().length)
+    ? people.split(',').map(p => p.trim()).filter(Boolean)
+    : [];
+
+  // 4. Duplicate prevention: same episode_url already in collections.json?
+  if (episodeUrl) {
+    const dup = collections.find(c => c.episode_url && c.episode_url === episodeUrl);
+    if (dup) {
+      throw new Error(`Duplicate episode: episode_url already exists as collection id ${dup.id}`);
+    }
+  }
+
+  // 5. Build the new collection record.
+  const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+  const newCollection = {
+    id: newId,
+    title: String(episodeTitle).slice(0, 200),
+    type: 'episode',
+    people: peopleArray,
+    episode_url: episodeUrl || '',
+    created_date: today,
+  };
+
+  collections.push(newCollection);
+
+  // 6. Commit back to GitHub. PUT with the sha.
+  const putUrl = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${encodeURIComponent(COLLECTIONS_PATH)}`;
+  const newContent = Buffer.from(JSON.stringify(collections, null, 2) + '\n', 'utf-8').toString('base64');
+
+  const putResp = await fetch(putUrl, {
+    method: 'PUT',
+    headers: {
+      'Authorization': `Bearer ${GH_TOKEN}`,
+      'Accept': 'application/vnd.github+json',
+      'Content-Type': 'application/json',
+      'User-Agent': 'lll-extract-concepts',
+    },
+    body: JSON.stringify({
+      message: `chore: add episode collection ${newId} (${String(episodeTitle).slice(0, 60)})`,
+      content: newContent,
+      sha: currentSha,
+      branch: GH_BRANCH,
+    }),
+  });
+
+  if (!putResp.ok) {
+    const t = await putResp.text();
+    throw new Error(`GitHub PUT collections.json failed ${putResp.status}: ${t.slice(0, 300)}`);
+  }
+
+  return newId;
 }
