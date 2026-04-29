@@ -2000,5 +2000,16 @@
     "analogy": "Someone wants to lose 20 pounds. Current state: overweight, tired. Desired state: fit, energized. Obstacle: no time for the gym. Path forward: 15-minute home workouts. A product that speaks to all four will sell; one that only addresses 'desired state' will get ignored.",
     "prompt": "Pick your best customer. Write out their situational model in four sentences — where they were, where they wanted to be, what blocked them, and why your solution was the path of least resistance.",
     "collection_id": 12
+  },
+  {
+    "id": 185,
+    "term": "Demand Vs. Supply Thinking",
+    "category": "thinking",
+    "source": "core",
+    "hook": "Amateurs obsess over supply; pros test demand first.",
+    "plain": "Most people launching a business focus on the supply side — finding bottlers, getting certifications, perfecting the product. Professionals flip it: they test whether demand exists before building anything. You do this by selling the demo, running ads to a waitlist, or surveying potential buyers. If no one clicks, you saved yourself a year of wasted effort.",
+    "analogy": "Imagine spending 6 months developing a new app, only to find out no one wants it. Now imagine spending 2 weeks running Facebook ads with 50 different headlines to see which one gets 15% click-through. You'd know exactly what to build — and who to build it for.",
+    "prompt": "Take your next business idea. Before you spend a dollar on supply, design one test that would prove demand exists. What's the smallest version of that test?",
+    "collection_id": 12
   }
 ]
