@@ -1802,5 +1802,16 @@
     "analogy": "Test Concept Alpha",
     "prompt": "Test Concept Alpha",
     "collection_id": 1
+  },
+  {
+    "id": 167,
+    "term": "Test Concept Beta",
+    "category": "power",
+    "source": "ah",
+    "hook": "Test Concept Beta",
+    "plain": "Test Concept Beta",
+    "analogy": "Test Concept Beta",
+    "prompt": "Test Concept Beta",
+    "collection_id": null
   }
 ]
