@@ -32,15 +32,15 @@
     text-underline-offset: 3px;
   }
   .vault-row {
-    display: flex;
-    justify-content: flex-end;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
     margin-top: 0.6rem;
     margin-bottom: 2rem;
   }
 
   .vault-pill {
     font-family: 'DM Mono', monospace;
-    font-size: 0.6rem;
+    font-size: 0.69rem;
     font-weight: 500;
     letter-spacing: 0.2em;
     text-transform: uppercase;
@@ -51,6 +51,8 @@
     cursor: pointer;
     transition: all 0.2s;
     background: transparent;
+    text-align: center;
+    width: 100%;
   }
 
   .vault-pill:hover {
