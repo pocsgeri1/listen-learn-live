@@ -2182,39 +2182,6 @@ function buildEpisodes() {
       </div>`;
   }).join('');
 }
-    // Concepts belonging to this episode
-    const epConcepts = CONCEPTS.filter(c => c.collection_id === col.id);
-    const conceptCount = epConcepts.length;
-
-    // Category mix: count concepts per category
-    const catCounts = {};
-    epConcepts.forEach(c => {
-      catCounts[c.category] = (catCounts[c.category] || 0) + 1;
-    });
-    // Sort by count desc, build proportional segments
-    const sortedCats = Object.entries(catCounts).sort((a,b) => b[1]-a[1]);
-    const mixBar = conceptCount > 0
-      ? sortedCats.map(([cat, n]) => {
-          const pct = (n / conceptCount * 100).toFixed(1);
-          const color = CAT_COLOR[cat] || '#e8d5a3';
-          return `<div class="episode-mix-segment" style="width:${pct}%;background:${color}"></div>`;
-        }).join('')
-      : '';
-
-    // Thumbnail: dominant category color as background, initials
-    const dominantCat = sortedCats.length > 0 ? sortedCats[0][0] : 'all';
-    const thumbColor = CAT_COLOR[dominantCat] || '#3a3a3a';
-    const initials = (col.people || [])
-      .slice(0, 2)
-      .map(p => p.trim()[0] || '')
-      .join('');
-
-    // People pills
-    const peoplePills = (col.people || [])
-      .map(p => `<span class="episode-person-pill">${p}</span>`)
-      .join('');
-
-    const isActive = activeEpisode === col.id;
 
 let vaultActive = false;
 function toggleVault() {
