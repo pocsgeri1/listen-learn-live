@@ -2216,20 +2216,6 @@ function buildEpisodes() {
 
     const isActive = activeEpisode === col.id;
 
-    return `
-      <div class="episode-card${isActive ? ' ep-active' : ''}" onclick="setEpisode(${col.id})">
-        <div class="episode-thumb" style="background:${thumbColor}22; border-bottom: 1px solid ${thumbColor}44">
-          <span style="color:${thumbColor}">${initials || '◉'}</span>
-        </div>
-        <div class="episode-body">
-          <div class="episode-title">${col.title}</div>
-          <div class="episode-people-row">${peoplePills}</div>
-          <div class="episode-count">${conceptCount} concept${conceptCount !== 1 ? 's' : ''}</div>
-        </div>
-        <div class="episode-mix-bar">${mixBar}</div>
-      </div>`;
-  }).join('');
-}  
 let vaultActive = false;
 function toggleVault() {
   vaultActive = !vaultActive;
