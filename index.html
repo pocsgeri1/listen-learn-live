@@ -65,7 +65,113 @@
     border-color: var(--accent);
     background: rgba(232,213,163,0.06);
   }
-  
+  /* ============================================
+     EPISODES SECTION
+     ============================================ */
+  .episodes-section {
+    padding: 2rem 0 0;
+  }
+  .episodes-section-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted2);
+    margin-bottom: 1.2rem;
+    padding: 0 2rem;
+  }
+  .episodes-row {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    padding: 0.5rem 2rem 1.5rem;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .episodes-row::-webkit-scrollbar { display: none; }
+  .episode-card {
+    flex: 0 0 220px;
+    scroll-snap-align: start;
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.2s, transform 0.15s;
+    display: flex;
+    flex-direction: column;
+  }
+  .episode-card:hover {
+    border-color: var(--border-hover);
+    transform: translateY(-2px);
+  }
+  .episode-card.ep-active {
+    border-color: var(--accent);
+  }
+  .episode-thumb {
+    width: 100%;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    color: rgba(255,255,255,0.85);
+    letter-spacing: 0.04em;
+    flex-shrink: 0;
+  }
+  .episode-body {
+    padding: 0.85rem 0.9rem 0;
+    flex: 1;
+  }
+  .episode-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.82rem;
+    line-height: 1.35;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .episode-people-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 0.5rem;
+  }
+  .episode-person-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted2);
+    background: var(--surface2);
+    border-radius: 3px;
+    padding: 2px 6px;
+  }
+  .episode-count {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    margin-bottom: 0.7rem;
+  }
+  .episode-mix-bar {
+    height: 4px;
+    width: 100%;
+    display: flex;
+    border-radius: 0 0 8px 8px;
+    overflow: hidden;
+    flex-shrink: 0;
+    margin-top: auto;
+  }
+  .episode-mix-segment {
+    height: 100%;
+    flex-shrink: 0;
+  }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   html { scroll-behavior: smooth; }
@@ -1371,6 +1477,11 @@
   <div class="vault-pill" id="vaultPill" onclick="toggleVault()">YOUR VAULT</div>
 </div>
 
+  <!-- EPISODES SECTION — renders only when episode collections exist -->
+        <div id="episodesSection" class="episodes-section" style="display:none">
+          <div class="episodes-section-title">Episodes</div>
+          <div id="episodesRow" class="episodes-row"></div>
+        </div>
   <!-- CATEGORIES -->
   <div class="cat-grid" id="catGrid"></div>
 
@@ -1522,6 +1633,7 @@ const CAT_COLOR = {
 };
 
 let activeCat = 'all', searchQ = '';
+let activeEpisode = null; // collection_id of selected episode, or null  
 let mastered = new Set();
 let openedToday = new Set();
   
@@ -1602,6 +1714,7 @@ function buildCats() {
 function filtered() {
   return CONCEPTS.filter(c => {
     if (vaultActive && !mastered.has(c.id)) return false;
+    if (activeEpisode !== null && c.collection_id !== activeEpisode) return false;
     const mc = activeCat === 'all' || c.category === activeCat;
     const q = searchQ.toLowerCase();
     const mq = !q || c.term.toLowerCase().includes(q) || c.hook.toLowerCase().includes(q) || c.plain.toLowerCase().includes(q);
@@ -1654,7 +1767,7 @@ function buildGrid() {
   }).join('');
 }
 
-function render() { buildCats(); buildGrid(); updateProgress(); }
+function render() { buildCats(); buildGrid(); updateProgress(); buildEpisodes(); }
 
 function toggleCard(id) {
   const el = document.getElementById('cc'+id);
@@ -1716,6 +1829,87 @@ function updateDailyGoal() {
 }
 
 function setCat(cat) { activeCat = cat; render(); }
+function setEpisode(collectionId) {
+  if (activeEpisode === collectionId) {
+    // clicking active episode again clears the filter
+    activeEpisode = null;
+  } else {
+    activeEpisode = collectionId;
+    activeCat = 'all'; // reset category filter when browsing by episode
+    vaultActive = false;
+    document.getElementById('progressCount').classList.remove('vault-active');
+    document.getElementById('vaultPill').classList.remove('vault-active');
+  }
+  buildEpisodes(); // re-render to update active state
+  render();
+}
+
+function buildEpisodes() {
+  const episodeCollections = Object.values(COLLECTIONS_BY_ID)
+    .filter(col => col.type === 'episode')
+    .sort((a, b) => new Date(b.created_date) - new Date(a.created_date));
+
+  const section = document.getElementById('episodesSection');
+  const row = document.getElementById('episodesRow');
+
+  if (!section || !row) return;
+
+  if (episodeCollections.length === 0) {
+    section.style.display = 'none';
+    return;
+  }
+
+  section.style.display = 'block';
+
+  row.innerHTML = episodeCollections.map(col => {
+    // Concepts belonging to this episode
+    const epConcepts = CONCEPTS.filter(c => c.collection_id === col.id);
+    const conceptCount = epConcepts.length;
+
+    // Category mix: count concepts per category
+    const catCounts = {};
+    epConcepts.forEach(c => {
+      catCounts[c.category] = (catCounts[c.category] || 0) + 1;
+    });
+    // Sort by count desc, build proportional segments
+    const sortedCats = Object.entries(catCounts).sort((a,b) => b[1]-a[1]);
+    const mixBar = conceptCount > 0
+      ? sortedCats.map(([cat, n]) => {
+          const pct = (n / conceptCount * 100).toFixed(1);
+          const color = CAT_COLOR[cat] || '#e8d5a3';
+          return `<div class="episode-mix-segment" style="width:${pct}%;background:${color}"></div>`;
+        }).join('')
+      : '';
+
+    // Thumbnail: dominant category color as background, initials
+    const dominantCat = sortedCats.length > 0 ? sortedCats[0][0] : 'all';
+    const thumbColor = CAT_COLOR[dominantCat] || '#3a3a3a';
+    const initials = (col.people || [])
+      .slice(0, 2)
+      .map(p => p.trim()[0] || '')
+      .join('');
+
+    // People pills
+    const peoplePills = (col.people || [])
+      .map(p => `<span class="episode-person-pill">${p}</span>`)
+      .join('');
+
+    const isActive = activeEpisode === col.id;
+
+    return `
+      <div class="episode-card${isActive ? ' ep-active' : ''}" onclick="setEpisode(${col.id})">
+        <div class="episode-thumb" style="background:${thumbColor}22; border-bottom: 1px solid ${thumbColor}44">
+          <span style="color:${thumbColor}">${initials || '◉'}</span>
+        </div>
+        <div class="episode-body">
+          <div class="episode-title">${col.title}</div>
+          <div class="episode-people-row">${peoplePills}</div>
+          <div class="episode-count">${conceptCount} concept${conceptCount !== 1 ? 's' : ''}</div>
+        </div>
+        <div class="episode-mix-bar">${mixBar}</div>
+      </div>`;
+  }).join('');
+}  
 let vaultActive = false;
 function toggleVault() {
   vaultActive = !vaultActive;
