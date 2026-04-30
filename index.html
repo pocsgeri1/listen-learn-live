@@ -1562,7 +1562,7 @@ function filtered() {
     const q = searchQ.toLowerCase();
     const mq = !q || c.term.toLowerCase().includes(q) || c.hook.toLowerCase().includes(q) || c.plain.toLowerCase().includes(q);
     return mc && mq;
-  });
+  }).reverse();
 }
 
 function buildGrid() {
