@@ -31,7 +31,27 @@
     text-decoration: underline;
     text-underline-offset: 3px;
   }
+  .vault-row {
+  margin-bottom: 2rem;
+}
 
+.vault-pill {
+  display: inline-block;
+  padding: 4px 14px;
+  border-radius: 999px;
+  background: #39ff14;
+  color: #0d0d0d;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.vault-pill:hover { opacity: 0.85; }
+.vault-pill.vault-active { outline: 2px solid #39ff14; outline-offset: 2px; }
+  
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   html { scroll-behavior: smooth; }
@@ -1327,12 +1347,15 @@
 
   <!-- PROGRESS -->
   <div class="progress-bar">
-    <div class="progress-label">Overall progress</div>
-    <div class="progress-track">
-      <div class="progress-fill" id="progressFill" style="width:0%"></div>
-    </div>
-    <div class="progress-count" id="progressCount" onclick="toggleVault()" style="cursor:pointer;" title="Your Vault of Ideas">0 / 165 mastered</div>
+  <div class="progress-label">Overall progress</div>
+  <div class="progress-track">
+    <div class="progress-fill" id="progressFill" style="width:0%"></div>
   </div>
+  <div class="progress-count" id="progressCount" onclick="toggleVault()" style="cursor:pointer;">0 / 183</div>
+</div>
+<div class="vault-row">
+  <div class="vault-pill" id="vaultPill" onclick="toggleVault()">YOUR VAULT</div>
+</div>
 
   <!-- CATEGORIES -->
   <div class="cat-grid" id="catGrid"></div>
@@ -1652,7 +1675,7 @@ function updateProgress() {
   const pct = Math.round((mastered.size / CONCEPTS.length) * 100);
   document.getElementById('progressFill').style.width = pct + '%';
   const vaultEl = document.getElementById('progressCount');
-vaultEl.textContent = mastered.size + ' ideas in your Vault — ' + CONCEPTS.length + ' total';
+vaultEl.textContent = mastered.size + ' / ' + CONCEPTS.length;
 }
 
 function updateHeaderCounts() {
@@ -1683,6 +1706,7 @@ let vaultActive = false;
 function toggleVault() {
   vaultActive = !vaultActive;
   document.getElementById('progressCount').classList.toggle('vault-active', vaultActive);
+  document.getElementById('vaultPill').classList.toggle('vault-active', vaultActive);
   if (vaultActive) activeCat = 'all';
   buildGrid();
 }
