@@ -26,6 +26,12 @@
     --teal: #5abfaf;
   }
 
+  .progress-count.vault-active {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   html { scroll-behavior: smooth; }
@@ -1325,7 +1331,7 @@
     <div class="progress-track">
       <div class="progress-fill" id="progressFill" style="width:0%"></div>
     </div>
-    <div class="progress-count" id="progressCount">0 / 165 mastered</div>
+    <div class="progress-count" id="progressCount" onclick="toggleVault()" style="cursor:pointer;" title="Your Vault of Ideas">0 / 165 mastered</div>
   </div>
 
   <!-- CATEGORIES -->
@@ -1558,6 +1564,7 @@ function buildCats() {
 
 function filtered() {
   return CONCEPTS.filter(c => {
+    if (vaultActive && !mastered.has(c.id)) return false;
     const mc = activeCat === 'all' || c.category === activeCat;
     const q = searchQ.toLowerCase();
     const mq = !q || c.term.toLowerCase().includes(q) || c.hook.toLowerCase().includes(q) || c.plain.toLowerCase().includes(q);
@@ -1644,7 +1651,8 @@ function shareCard(e, id) {
 function updateProgress() {
   const pct = Math.round((mastered.size / CONCEPTS.length) * 100);
   document.getElementById('progressFill').style.width = pct + '%';
-  document.getElementById('progressCount').textContent = mastered.size + ' / ' + CONCEPTS.length + ' mastered';
+  const vaultEl = document.getElementById('progressCount');
+vaultEl.textContent = mastered.size + ' ideas in your Vault — ' + CONCEPTS.length + ' total';
 }
 
 function updateHeaderCounts() {
@@ -1671,6 +1679,13 @@ function updateDailyGoal() {
 }
 
 function setCat(cat) { activeCat = cat; render(); }
+let vaultActive = false;
+function toggleVault() {
+  vaultActive = !vaultActive;
+  document.getElementById('progressCount').classList.toggle('vault-active', vaultActive);
+  if (vaultActive) activeCat = 'all';
+  buildGrid();
+}
 
 document.getElementById('search').addEventListener('input', e => { searchQ = e.target.value; buildGrid(); });
 
