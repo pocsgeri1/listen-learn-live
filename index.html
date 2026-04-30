@@ -32,25 +32,37 @@
     text-underline-offset: 3px;
   }
   .vault-row {
-  margin-bottom: 2rem;
-}
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.6rem;
+    margin-bottom: 2rem;
+  }
 
-.vault-pill {
-  display: inline-block;
-  padding: 4px 14px;
-  border-radius: 999px;
-  background: #39ff14;
-  color: #0d0d0d;
-  font-family: 'DM Mono', monospace;
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 0.15em;
-  cursor: pointer;
-  transition: opacity 0.2s;
-}
+  .vault-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted2);
+    border: 0.5px solid var(--border-hover);
+    border-radius: 4px;
+    padding: 5px 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: transparent;
+  }
 
-.vault-pill:hover { opacity: 0.85; }
-.vault-pill.vault-active { outline: 2px solid #39ff14; outline-offset: 2px; }
+  .vault-pill:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .vault-pill.vault-active {
+    color: var(--accent);
+    border-color: var(--accent);
+    background: rgba(232,213,163,0.06);
+  }
   
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
