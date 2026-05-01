@@ -382,12 +382,20 @@
     padding: 0 2rem 1.5rem;
   }
   .nf-row::-webkit-scrollbar { display: none; }
-  .nf-row .card {
-    flex: 0 0 280px;
+  .nf-row .concept-card {
+    flex: 0 0 300px;
+    min-width: 300px;
     scroll-snap-align: start;
+    scroll-snap-stop: normal;
   }
   @media (max-width: 600px) {
-    .nf-row .card { flex: 0 0 88vw; }
+    .nf-row .concept-card { flex: 0 0 85vw; min-width: 85vw; }
+  }
+  .nf-row {
+    scroll-snap-type: none; /* disable snap during auto-scroll */
+  }
+  .nf-row:hover, .nf-row:focus-within {
+    animation-play-state: paused !important;
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -1997,8 +2005,52 @@ function buildGrid() {
 
   container.innerHTML = html || `<div style="padding:3rem 2rem;color:var(--muted);font-family:'DM Mono',monospace;font-size:0.75rem;letter-spacing:0.12em;text-transform:uppercase;text-align:center;">No concepts found</div>`;
   document.getElementById('resultCount').textContent = totalVisible > 0 ? `${totalVisible} concept${totalVisible !== 1 ? 's' : ''} shown` : '';
+  startRowAutoScroll();
 }
+function startRowAutoScroll() {
+  // Give the DOM a moment to render before measuring
+  setTimeout(() => {
+    document.querySelectorAll('.nf-row').forEach((row, index) => {
+      // Skip rows that don't overflow (nothing to scroll)
+      if (row.scrollWidth <= row.clientWidth + 10) return;
 
+      const direction = index % 2 === 0 ? 1 : -1; // alternate: even = left, odd = right
+      const speed = 0.4; // pixels per frame — slow drift
+      let paused = false;
+      let animFrame;
+
+      // Start odd rows at the end so they visibly scroll toward start
+      if (direction === -1) row.scrollLeft = row.scrollWidth - row.clientWidth;
+
+      function step() {
+        if (!paused) {
+          row.scrollLeft += speed * direction;
+
+          // Bounce: when reaching an end, reverse by restarting from opposite end
+          if (direction === 1 && row.scrollLeft >= row.scrollWidth - row.clientWidth - 1) {
+            row.scrollLeft = 0;
+          } else if (direction === -1 && row.scrollLeft <= 1) {
+            row.scrollLeft = row.scrollWidth - row.clientWidth;
+          }
+        }
+        animFrame = requestAnimationFrame(step);
+      }
+
+      // Pause on hover or touch
+      row.addEventListener('mouseenter', () => { paused = true; });
+      row.addEventListener('mouseleave', () => { paused = false; });
+      row.addEventListener('touchstart', () => { paused = true; }, { passive: true });
+      row.addEventListener('touchend', () => {
+        setTimeout(() => { paused = false; }, 2000); // 2s grace after touch
+      }, { passive: true });
+
+      animFrame = requestAnimationFrame(step);
+
+      // Store so we can cancel if grid rebuilds
+      row._autoScrollFrame = animFrame;
+    });
+  }, 300);
+}
 function render() { buildCats(); buildGrid(); updateProgress(); buildEpisodes(); }
 
 function toggleCard(id) {
