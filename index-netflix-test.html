@@ -1263,28 +1263,27 @@
  /* CATEGORY PILL ROW */
   .cat-grid {
     display: flex;
-    flex-wrap: nowrap;
-    gap: 6px;
-    overflow-x: auto;
-    scrollbar-width: none;
-    padding-bottom: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    padding: 0.5rem 0 1.75rem;
     margin-bottom: 0.5rem;
   }
-  .cat-grid::-webkit-scrollbar { display: none; }
 
   .cat-card {
     flex-shrink: 0;
     background: transparent;
     border: 0.5px solid var(--border);
     border-radius: 999px;
-    padding: 5px 14px;
+    padding: 6px 16px;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: border-color 0.2s, background 0.2s;
     white-space: nowrap;
+    will-change: transform;
   }
   .cat-card:hover { border-color: currentColor; }
   .cat-card.active {
-    background: rgba(255,255,255,0.05);
+    background: rgba(255,255,255,0.06);
     border-color: currentColor;
   }
 
@@ -1861,6 +1860,40 @@
 </div>
 
 <script>
+// MAGNETIC PILL EFFECT
+function initMagneticPills() {
+  const STRENGTH = 0.35;  // how far pills follow cursor (0 = none, 1 = full)
+  const RADIUS   = 80;    // px distance at which magnetism kicks in
+
+  document.querySelectorAll('.cat-card').forEach(pill => {
+    pill.addEventListener('mousemove', function(e) {
+      const rect = pill.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top  + rect.height / 2;
+      const dx = e.clientX - cx;
+      const dy = e.clientY - cy;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < RADIUS) {
+        const tx = dx * STRENGTH;
+        const ty = dy * STRENGTH;
+        pill.style.transform = `translate(${tx}px, ${ty}px)`;
+      }
+    });
+
+    pill.addEventListener('mouseleave', function() {
+      pill.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), border-color 0.2s, background 0.2s';
+      pill.style.transform = 'translate(0px, 0px)';
+      // Reset transition after spring so normal interactions stay snappy
+      setTimeout(() => {
+        pill.style.transition = 'border-color 0.2s, background 0.2s';
+      }, 400);
+    });
+
+    pill.addEventListener('mouseenter', function() {
+      pill.style.transition = 'transform 0.1s ease, border-color 0.2s, background 0.2s';
+    });
+  });
+}
 // HOW IT WORKS MODAL
 function openHiw() {
   document.getElementById('hiwOverlay').classList.add('open');
@@ -2171,7 +2204,7 @@ function startRowAutoScroll() {
     });
   }, 300);
 }
-function render() { buildCats(); buildGrid(); updateProgress(); buildEpisodes(); }
+function render() { buildCats(); initMagneticPills(); buildGrid(); updateProgress(); buildEpisodes(); }
 
 function toggleCard(id) {
   const el = document.getElementById('cc'+id);
