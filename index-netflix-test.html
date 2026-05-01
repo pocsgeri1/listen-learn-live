@@ -132,27 +132,43 @@
   }
   .episode-thumb {
     width: 100%;
-    height: 160px;
+    height: 170px;
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+    background: var(--surface2);
+  }
+  .episode-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+  .episode-card:hover .episode-thumb img {
+    transform: scale(1.04);
+  }
+  .episode-thumb-fallback {
+    width: 100%;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .episode-thumb-fallback-title {
     font-family: 'Playfair Display', serif;
-    font-size: 2.8rem;
+    font-size: 1rem;
     font-style: italic;
-    letter-spacing: 0.04em;
-    flex-shrink: 0;
-    position: relative;
-  }
-  .episode-mix-bar {
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 3px;
-    display: flex;
+    color: var(--muted2);
+    text-align: center;
+    padding: 0 1.5rem;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
     overflow: hidden;
-  }
-  .episode-mix-segment {
-    height: 100%;
-    flex-shrink: 0;
   }
   .episode-body {
     padding: 1rem 1.1rem 1.1rem;
@@ -2584,7 +2600,17 @@ document.addEventListener('keydown', function(e) {
     closeEpisodeDrawer();
   }
 });
-
+function getYouTubeId(url) {
+  if (!url) return null;
+  try {
+    const u = new URL(url);
+    // Standard: youtube.com/watch?v=VIDEO_ID
+    if (u.hostname.includes('youtube.com')) return u.searchParams.get('v');
+    // Short: youtu.be/VIDEO_ID
+    if (u.hostname === 'youtu.be') return u.pathname.slice(1);
+  } catch (e) {}
+  return null;
+}
 function buildEpisodes() {
   const episodeCollections = Object.values(COLLECTIONS_BY_ID)
     .filter(col => col.type === 'episode')
@@ -2616,20 +2642,25 @@ function buildEpisodes() {
         }).join('')
       : '';
 
-    // Thumbnail: dominant category color, italic initials
-    const dominantCat = sortedCats.length > 0 ? sortedCats[0][0] : 'all';
-    const thumbColor = CAT_COLOR[dominantCat] || '#3a3a3a';
-    const initials = (col.people || []).slice(0, 2).map(p => p.trim()[0] || '').join('');
+    // YouTube thumbnail or clean fallback
+    const ytId = getYouTubeId(col.episode_url);
+    const thumbHtml = ytId
+      ? `<img
+           src="https://img.youtube.com/vi/${ytId}/maxresdefault.jpg"
+           alt="${col.title.trim()}"
+           loading="lazy"
+           onerror="this.onerror=null;this.src='https://img.youtube.com/vi/${ytId}/hqdefault.jpg'"
+         />`
+      : `<div class="episode-thumb-fallback">
+           <div class="episode-thumb-fallback-title">${col.title.trim()}</div>
+         </div>`;
 
     const peoplePills = (col.people || [])
       .map(p => `<span class="episode-person-pill">${p}</span>`).join('');
 
     return `
       <div class="episode-card" onclick="openEpisodeDrawer(${col.id})">
-        <div class="episode-thumb" style="background:${thumbColor}18">
-          <span style="color:${thumbColor};opacity:0.9">${initials || '◉'}</span>
-          <div class="episode-mix-bar">${mixBar}</div>
-        </div>
+        <div class="episode-thumb">${thumbHtml}</div>
         <div class="episode-body">
           <div class="episode-title">${col.title.trim()}</div>
           <div class="episode-people-row">${peoplePills}</div>
