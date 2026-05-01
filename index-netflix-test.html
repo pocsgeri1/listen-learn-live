@@ -528,47 +528,154 @@
     position: fixed;
     top: 0; left: 0; right: 0;
     z-index: 100;
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
-    padding: 1.25rem 2rem;
+    padding: 0 2rem;
+    height: 64px;
     border-bottom: 1px solid var(--border);
-    background: rgba(13,13,13,0.85);
-    backdrop-filter: blur(20px);
+    background: rgba(13,13,13,0.88);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    transition: height 0.3s ease, border-color 0.3s ease;
+  }
+
+  nav.scrolled {
+    height: 52px;
+    border-color: rgba(255,255,255,0.05);
   }
 
   .nav-logo {
     font-family: 'Playfair Display', serif;
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     font-weight: 400;
     color: var(--text);
     letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+  .nav-logo span { color: var(--accent); font-style: italic; }
+
+  /* CENTER ISLAND */
+  .nav-island {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    background: var(--surface2);
+    border: 0.5px solid var(--border-hover);
+    border-radius: 999px;
+    padding: 4px;
   }
 
-  .nav-logo span { color: var(--accent); font-style: italic; }
+  .nav-link {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted2);
+    text-decoration: none;
+    padding: 5px 12px;
+    border-radius: 999px;
+    transition: color 0.2s, background 0.2s;
+    white-space: nowrap;
+    cursor: pointer;
+    background: none;
+    border: none;
+    will-change: transform;
+  }
+  .nav-link:hover { color: var(--text); background: rgba(255,255,255,0.06); }
+  .nav-link.nav-link--active { color: var(--accent); }
+
+  /* RIGHT CLUSTER */
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    justify-content: flex-end;
+  }
 
   .nav-pill {
     display: flex;
     align-items: center;
     gap: 6px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
+    background: transparent;
+    border: 0.5px solid var(--border);
     border-radius: 999px;
-    padding: 6px 14px;
-    font-size: 0.75rem;
-    color: var(--muted2);
+    padding: 5px 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--muted);
     letter-spacing: 0.08em;
     text-transform: uppercase;
+    white-space: nowrap;
   }
 
   .nav-dot {
-    width: 6px; height: 6px;
+    width: 5px; height: 5px;
     border-radius: 50%;
     background: var(--accent);
     animation: pulse 2s infinite;
+    flex-shrink: 0;
   }
 
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+  /* MOBILE NAV */
+  .nav-mobile-toggle {
+    display: none;
+    background: none;
+    border: 0.5px solid var(--border);
+    border-radius: 6px;
+    color: var(--muted2);
+    font-size: 1rem;
+    padding: 4px 10px;
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .nav-mobile-toggle:hover { color: var(--text); border-color: var(--border-hover); }
+
+  .nav-mobile-menu {
+    display: none;
+    position: fixed;
+    top: 64px;
+    left: 0; right: 0;
+    background: rgba(13,13,13,0.97);
+    backdrop-filter: blur(24px);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 2rem 1.5rem;
+    z-index: 99;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .nav-mobile-menu.open { display: flex; }
+
+  .nav-mobile-link {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted2);
+    text-decoration: none;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: color 0.2s;
+    background: none;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    text-align: left;
+    width: 100%;
+  }
+  .nav-mobile-link:last-child { border-bottom: none; }
+  .nav-mobile-link:hover { color: var(--accent); }
+
+  @media (max-width: 768px) {
+    nav { grid-template-columns: 1fr auto; }
+    .nav-island { display: none; }
+    .nav-pill { display: none; }
+    .nav-mobile-toggle { display: block; }
+    .nav-right { gap: 0.5rem; }
+  }
 
   /* HERO */
   .hero {
@@ -1647,16 +1754,36 @@
 <body>
 
 <!-- NAV -->
-<nav>
+<nav id="mainNav">
   <div class="nav-logo">Listen. <span>Learn.</span> Live.</div>
-  <div style="display:flex;align-items:center;gap:0.75rem;">
+
+  <div class="nav-island" id="navIsland">
+    <a class="nav-link" onclick="scrollToSection('app')">Concepts</a>
+    <a class="nav-link" onclick="scrollToSection('episodesSection')">Episodes</a>
+    <a class="nav-link" onclick="toggleVault();scrollToSection('app')">Vault</a>
+    <a class="nav-link" onclick="openCotd()">Today</a>
+    <a class="nav-link" onclick="scrollToSection('signup')">Sign up</a>
+  </div>
+
+  <div class="nav-right">
     <button class="hiw-trigger" onclick="openHiw()">How it works</button>
     <div class="nav-pill">
       <div class="nav-dot"></div>
-      <span id="navConceptCount">165</span> concepts · Free
+      <span id="navConceptCount">165</span> free
     </div>
+    <button class="nav-mobile-toggle" id="navToggle" onclick="toggleMobileNav()">≡</button>
   </div>
 </nav>
+
+<!-- MOBILE NAV MENU -->
+<div class="nav-mobile-menu" id="navMobileMenu">
+  <button class="nav-mobile-link" onclick="scrollToSection('app');closeMobileNav()">◈ Concepts</button>
+  <button class="nav-mobile-link" onclick="scrollToSection('episodesSection');closeMobileNav()">◎ Episodes</button>
+  <button class="nav-mobile-link" onclick="toggleVault();scrollToSection('app');closeMobileNav()">◆ Vault</button>
+  <button class="nav-mobile-link" onclick="openCotd();closeMobileNav()">◇ Today's Concept</button>
+  <button class="nav-mobile-link" onclick="scrollToSection('signup');closeMobileNav()">◉ Sign up — Free</button>
+  <button class="nav-mobile-link" onclick="openHiw();closeMobileNav()">◌ How it works</button>
+</div>
 
 <!-- HOW IT WORKS MODAL -->
 <div class="hiw-overlay" id="hiwOverlay" onclick="closeHiwOnBackdrop(event)">
@@ -1899,6 +2026,57 @@ function initMagneticPills() {
     });
   });
 }
+// NAV BEHAVIOUR
+function scrollToSection(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function toggleMobileNav() {
+  const menu = document.getElementById('navMobileMenu');
+  const toggle = document.getElementById('navToggle');
+  const open = menu.classList.toggle('open');
+  toggle.textContent = open ? '✕' : '≡';
+  document.body.style.overflow = open ? 'hidden' : '';
+}
+
+function closeMobileNav() {
+  const menu = document.getElementById('navMobileMenu');
+  const toggle = document.getElementById('navToggle');
+  menu.classList.remove('open');
+  toggle.textContent = '≡';
+  document.body.style.overflow = '';
+}
+
+// Shrink nav on scroll
+window.addEventListener('scroll', function() {
+  document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 40);
+}, { passive: true });
+
+// Magnetic effect on nav island links
+function initMagneticNav() {
+  document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('mousemove', function(e) {
+      const rect = link.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dx = (e.clientX - cx) * 0.25;
+      const dy = (e.clientY - cy) * 0.25;
+      link.style.transform = `translate(${dx}px, ${dy}px)`;
+    });
+    link.addEventListener('mouseleave', function() {
+      link.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), color 0.2s, background 0.2s';
+      link.style.transform = 'translate(0,0)';
+      setTimeout(() => { link.style.transition = 'color 0.2s, background 0.2s'; }, 400);
+    });
+    link.addEventListener('mouseenter', function() {
+      link.style.transition = 'transform 0.1s ease, color 0.2s, background 0.2s';
+    });
+  });
+}
+
+// Call after DOM ready
+document.addEventListener('DOMContentLoaded', initMagneticNav);
 // HOW IT WORKS MODAL
 function openHiw() {
   document.getElementById('hiwOverlay').classList.add('open');
