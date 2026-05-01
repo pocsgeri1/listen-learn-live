@@ -397,6 +397,108 @@
   .nf-row:hover, .nf-row:focus-within {
     animation-play-state: paused !important;
   }
+  /* ============================================
+     HOW IT WORKS MODAL
+     ============================================ */
+  .hiw-trigger {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    background: none;
+    border: 0.5px solid var(--border);
+    border-radius: 999px;
+    padding: 5px 14px;
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .hiw-trigger:hover { color: var(--accent); border-color: var(--accent); }
+
+  .hiw-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: 300;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+  .hiw-overlay.open {
+    opacity: 1;
+    pointer-events: all;
+  }
+  .hiw-modal {
+    background: var(--surface);
+    border: 1px solid var(--border-hover);
+    border-radius: 16px;
+    padding: 2.5rem;
+    max-width: 680px;
+    width: 100%;
+    position: relative;
+    transform: translateY(12px);
+    transition: transform 0.25s ease;
+  }
+  .hiw-overlay.open .hiw-modal {
+    transform: translateY(0);
+  }
+  .hiw-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+  .hiw-modal-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 400;
+    color: var(--text);
+  }
+  .hiw-modal-close {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 4px 8px;
+    transition: color 0.2s;
+  }
+  .hiw-modal-close:hover { color: var(--text); }
+  .hiw-steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+  .hiw-step-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--border-hover);
+    line-height: 1;
+    margin-bottom: 0.75rem;
+  }
+  .hiw-step h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 400;
+    margin-bottom: 0.4rem;
+    color: var(--text);
+  }
+  .hiw-step p {
+    font-size: 0.8rem;
+    color: var(--muted2);
+    line-height: 1.7;
+  }
+  @media (max-width: 600px) {
+    .hiw-steps { grid-template-columns: 1fr; gap: 1.2rem; }
+    .hiw-modal { padding: 1.75rem; }
+  }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   html { scroll-behavior: smooth; }
@@ -1547,11 +1649,43 @@
 <!-- NAV -->
 <nav>
   <div class="nav-logo">Listen. <span>Learn.</span> Live.</div>
-  <div class="nav-pill">
-    <div class="nav-dot"></div>
-    <span id="navConceptCount">165</span> concepts · Free
+  <div style="display:flex;align-items:center;gap:0.75rem;">
+    <button class="hiw-trigger" onclick="openHiw()">How it works</button>
+    <div class="nav-pill">
+      <div class="nav-dot"></div>
+      <span id="navConceptCount">165</span> concepts · Free
+    </div>
   </div>
-</nav><!-- CONCEPT OF THE DAY — MODAL -->
+</nav>
+
+<!-- HOW IT WORKS MODAL -->
+<div class="hiw-overlay" id="hiwOverlay" onclick="closeHiwOnBackdrop(event)">
+  <div class="hiw-modal">
+    <div class="hiw-modal-header">
+      <div class="hiw-modal-title">How it works</div>
+      <button class="hiw-modal-close" onclick="closeHiw()">✕</button>
+    </div>
+    <div class="hiw-steps">
+      <div class="hiw-step">
+        <div class="hiw-step-num">01</div>
+        <h3>Pick a Category</h3>
+        <p>Choose a category you want to explore — or browse the full library across all areas.</p>
+      </div>
+      <div class="hiw-step">
+        <div class="hiw-step-num">02</div>
+        <h3>Read the Clue Card</h3>
+        <p>Each concept has a hook, plain-language definition, and a memorable analogy. 5 minutes per concept — no more.</p>
+      </div>
+      <div class="hiw-step">
+        <div class="hiw-step-num">03</div>
+        <h3>Reflect & Use It</h3>
+        <p>A conversation prompt helps you apply the concept in real life. Mark it mastered when it clicks.</p>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /HOW IT WORKS MODAL -->
+<!-- CONCEPT OF THE DAY — MODAL -->
 <div class="cotd-overlay" id="cotdOverlay" role="dialog" aria-modal="true" aria-labelledby="cotdTerm">
   <div class="cotd-card" id="cotdCard">
     <button class="cotd-close" id="cotdClose" aria-label="Close concept of the day">✕</button>
@@ -1731,6 +1865,21 @@
 </div>
 
 <script>
+// HOW IT WORKS MODAL
+function openHiw() {
+  document.getElementById('hiwOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeHiw() {
+  document.getElementById('hiwOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function closeHiwOnBackdrop(e) {
+  if (e.target === document.getElementById('hiwOverlay')) closeHiw();
+}
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeHiw();
+});
 const CATEGORIES = [
   { id:'all',           name:'All',           icon:'◈', color:'#e8d5a3' },
   { id:'business',      name:'Business',      icon:'◈', color:'#e0a060' },
