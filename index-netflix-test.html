@@ -1,0 +1,2464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Listen. Learn. Live. — Master the concepts that shape intelligent conversation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0d0d;
+    --surface: #141414;
+    --surface2: #1c1c1c;
+    --border: rgba(255,255,255,0.07);
+    --border-hover: rgba(255,255,255,0.15);
+    --text: #f0ede8;
+    --muted: #6b6b6b;
+    --muted2: #9a9a9a;
+    --accent: #e8d5a3;
+    --accent2: #c4a96b;
+    --red: #d4715a;
+    --green: #7aaf8a;
+    --blue: #6b9fc4;
+    --purple: #a08fd4;
+    --pink: #c47a9f;
+    --teal: #5abfaf;
+  }
+
+  .progress-count.vault-active {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .vault-row {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.6rem;
+    margin-bottom: 2rem;
+  }
+
+  .vault-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.69rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted2);
+    border: 0.5px solid var(--border-hover);
+    border-radius: 4px;
+    padding: 5px 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: transparent;
+    text-align: center;
+    width: 140px;
+  }
+
+  .vault-pill:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .vault-pill.vault-active {
+    color: var(--accent);
+    border-color: var(--accent);
+    background: rgba(232,213,163,0.06);
+  }
+  /* ============================================
+     EPISODES SECTION
+     ============================================ */
+  .episodes-section {
+    padding: 2.5rem 0 0;
+  }
+  .episodes-section-header {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    padding: 0 2rem 1.4rem;
+  }
+  .episodes-section-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted2);
+    white-space: nowrap;
+  }
+  .episodes-section-rule {
+    flex: 1;
+    height: 0.5px;
+    background: var(--border);
+  }
+  .episodes-scroll-wrap {
+    position: relative;
+  }
+  .episodes-fade-right {
+    position: absolute;
+    top: 0; right: 0; bottom: 0;
+    width: 80px;
+    background: linear-gradient(to right, transparent, var(--bg));
+    pointer-events: none;
+    z-index: 2;
+  }
+  .episodes-row {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    padding: 0.25rem 2rem 1.8rem;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .episodes-row::-webkit-scrollbar { display: none; }
+  .episode-card {
+    flex: 0 0 300px;
+    scroll-snap-align: start;
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.25s, transform 0.2s;
+    display: flex;
+    flex-direction: column;
+  }
+  .episode-card:hover {
+    border-color: var(--border-hover);
+    transform: translateY(-3px);
+  }
+  .episode-card.ep-active {
+    border-color: var(--accent);
+  }
+  .episode-thumb {
+    width: 100%;
+    height: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 2.8rem;
+    font-style: italic;
+    letter-spacing: 0.04em;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .episode-mix-bar {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    display: flex;
+    overflow: hidden;
+  }
+  .episode-mix-segment {
+    height: 100%;
+    flex-shrink: 0;
+  }
+  .episode-body {
+    padding: 1rem 1.1rem 1.1rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+  .episode-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    color: var(--text);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .episode-people-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+  .episode-person-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted2);
+    background: var(--surface2);
+    border-radius: 3px;
+    padding: 3px 7px;
+  }
+  .episode-count {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    margin-top: auto;
+  }
+
+  /* ============================================
+     EPISODE DRAWER (bottom sheet overlay)
+     ============================================ */
+  .ep-drawer-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0);
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+    z-index: 200;
+    pointer-events: none;
+    transition: background 0.35s ease, backdrop-filter 0.35s ease;
+  }
+  .ep-drawer-backdrop.open {
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    pointer-events: all;
+  }
+  .ep-drawer {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    height: 88vh;
+    background: var(--surface);
+    border-top: 0.5px solid var(--border-hover);
+    border-radius: 16px 16px 0 0;
+    z-index: 201;
+    display: flex;
+    flex-direction: column;
+    transform: translateY(100%);
+    transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+    overflow: hidden;
+  }
+  .ep-drawer.open {
+    transform: translateY(0);
+  }
+  .ep-drawer-handle {
+    width: 36px; height: 4px;
+    background: var(--border-hover);
+    border-radius: 2px;
+    margin: 14px auto 0;
+    flex-shrink: 0;
+  }
+  .ep-drawer-header {
+    padding: 1.2rem 2rem 1rem;
+    border-bottom: 0.5px solid var(--border);
+    flex-shrink: 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .ep-drawer-meta { flex: 1; min-width: 0; }
+  .ep-drawer-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--text);
+    margin-bottom: 0.55rem;
+  }
+  .ep-drawer-pills {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+  }
+  .ep-drawer-person {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted2);
+    background: var(--surface2);
+    border-radius: 3px;
+    padding: 3px 8px;
+  }
+  .ep-drawer-count {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    padding: 3px 8px;
+    border: 0.5px solid rgba(232,213,163,0.3);
+    border-radius: 3px;
+  }
+  .ep-drawer-listen {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted2);
+    text-decoration: none;
+    border: 0.5px solid var(--border-hover);
+    border-radius: 3px;
+    padding: 3px 8px;
+    transition: color 0.2s, border-color 0.2s;
+    white-space: nowrap;
+  }
+  .ep-drawer-listen:hover { color: var(--accent); border-color: var(--accent); }
+  .ep-drawer-close {
+    background: none;
+    border: 0.5px solid var(--border-hover);
+    border-radius: 6px;
+    color: var(--muted2);
+    cursor: pointer;
+    font-size: 1rem;
+    width: 32px; height: 32px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .ep-drawer-close:hover { color: var(--text); border-color: var(--border-hover); }
+  .ep-drawer-mix {
+    height: 3px;
+    display: flex;
+    flex-shrink: 0;
+  }
+  .ep-drawer-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.5rem 2rem 2rem;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-hover) transparent;
+  }
+  .ep-drawer-body::-webkit-scrollbar { width: 4px; }
+  .ep-drawer-body::-webkit-scrollbar-track { background: transparent; }
+  .ep-drawer-body::-webkit-scrollbar-thumb { background: var(--border-hover); border-radius: 2px; }
+  .ep-drawer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+  .ep-empty {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    text-transform: uppercase;
+    text-align: center;
+    padding: 3rem 0;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* NOISE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 2rem;
+    border-bottom: 1px solid var(--border);
+    background: rgba(13,13,13,0.85);
+    backdrop-filter: blur(20px);
+  }
+
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: var(--text);
+    letter-spacing: 0.02em;
+  }
+
+  .nav-logo span { color: var(--accent); font-style: italic; }
+
+  .nav-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-size: 0.75rem;
+    color: var(--muted2);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .nav-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    padding: 160px 2rem 100px;
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+    z-index: 1;
+  }
+
+  .hero-eyebrow {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 2rem;
+    padding: 6px 16px;
+    border: 1px solid rgba(232,213,163,0.2);
+    border-radius: 999px;
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 7vw, 5.5rem);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--accent);
+    font-weight: 400;
+  }
+
+  .hero-sub {
+    font-size: 1.05rem;
+    color: var(--muted2);
+    line-height: 1.7;
+    max-width: 560px;
+    margin: 0 auto 3rem;
+    font-weight: 300;
+  }
+
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--accent);
+    color: #0d0d0d;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 14px 32px;
+    border-radius: 999px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+  .hero-cta:hover { background: #f0e0b0; transform: translateY(-1px); }
+  .hero-cta svg { width: 16px; height: 16px; }/* ============================================
+     CONCEPT OF THE DAY — MODAL
+     ============================================ */
+
+  .cotd-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: rgba(13, 13, 13, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    display: none;
+    align-items: flex-start;
+    justify-content: center;
+    overflow-y: auto;
+    padding: 6vh 1.5rem 4vh;
+    animation: cotdFadeIn 0.4s ease both;
+  }
+
+  .cotd-overlay.active { display: flex; }
+
+  @keyframes cotdFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .cotd-card {
+    position: relative;
+    width: 100%;
+    max-width: 640px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 40px 44px 36px;
+    margin: auto 0;
+    animation: cotdSlideUp 0.45s ease both;
+  }
+
+  @keyframes cotdSlideUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .cotd-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 100%;
+    background: var(--cotd-accent, var(--accent));
+    border-radius: 14px 0 0 14px;
+    opacity: 0.7;
+  }
+
+  .cotd-close {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    width: 32px;
+    height: 32px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted2);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    line-height: 1;
+  }
+  .cotd-close:hover {
+    border-color: var(--border-hover);
+    color: var(--text);
+  }
+
+  .cotd-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 28px;
+  }
+  .cotd-eyebrow-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: cotdPulse 2s infinite;
+  }
+  .cotd-eyebrow-date {
+    color: var(--muted);
+    margin-left: auto;
+  }
+
+  @keyframes cotdPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .cotd-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 18px;
+  }
+  .cotd-meta-rule {
+    flex: 0 0 32px;
+    height: 1px;
+    background: var(--border-hover);
+  }
+  .cotd-meta-cat {
+    color: var(--cotd-accent, var(--accent));
+  }
+
+  .cotd-term {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 2.8rem);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    margin-bottom: 12px;
+    color: var(--text);
+  }
+
+  .cotd-hook {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 1.15rem;
+    line-height: 1.5;
+    color: var(--cotd-accent, var(--accent));
+    margin-bottom: 28px;
+  }
+
+  .cotd-divider {
+    width: 36px;
+    height: 1px;
+    background: var(--cotd-accent, var(--accent));
+    opacity: 0.5;
+    margin: 0 0 24px;
+  }
+
+  .cotd-section {
+    margin-bottom: 22px;
+  }
+
+  .cotd-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .cotd-body {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    font-size: 0.95rem;
+    line-height: 1.65;
+    color: var(--text);
+  }
+
+  .cotd-body--soft {
+    color: var(--muted2);
+    font-style: italic;
+  }
+
+  .cotd-use-today {
+    background: rgba(232, 213, 163, 0.04);
+    border: 1px solid rgba(232, 213, 163, 0.12);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 26px;
+  }
+  .cotd-use-today .cotd-label {
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .cotd-use-today .cotd-body {
+    color: var(--text);
+  }
+
+  .cotd-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 28px;
+    flex-wrap: wrap;
+  }
+
+  .cotd-btn {
+    flex: 1;
+    min-width: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 13px 18px;
+    border-radius: 999px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.15s;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text);
+  }
+  .cotd-btn:hover {
+    border-color: var(--border-hover);
+  }
+  .cotd-btn--primary {
+    background: var(--accent);
+    color: #0d0d0d;
+    border-color: var(--accent);
+  }
+  .cotd-btn--primary:hover {
+    background: #f0e0b0;
+    border-color: #f0e0b0;
+    transform: translateY(-1px);
+  }
+  .cotd-btn--primary.is-marked {
+    background: var(--green);
+    border-color: var(--green);
+    color: #0d0d0d;
+  }
+
+  .cotd-footer {
+    text-align: center;
+    margin-top: 22px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .cotd-footer a {
+    color: var(--muted2);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 2px;
+    transition: all 0.15s;
+  }
+  .cotd-footer a:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  /* Lock body scroll while modal is open */
+  body.cotd-open {
+    overflow: hidden;
+  }
+
+  /* MOBILE */
+  @media (max-width: 600px) {
+    .cotd-overlay { padding: 3vh 1rem 3vh; }
+    .cotd-card { padding: 30px 24px 28px; border-radius: 12px; }
+    .cotd-close { top: 14px; right: 14px; }
+    .cotd-eyebrow { font-size: 0.6rem; margin-bottom: 22px; }
+    .cotd-term { font-size: 1.9rem; }
+    .cotd-hook { font-size: 1.02rem; margin-bottom: 22px; }
+    .cotd-actions { flex-direction: column; }
+    .cotd-btn { width: 100%; }
+    .cotd-use-today { padding: 14px 16px; }
+  }
+
+  /* ============================================
+     END CONCEPT OF THE DAY
+     ============================================ */
+  /* NEWSLETTER */
+  .newsletter {
+    position: relative;
+    z-index: 1;
+    padding: 80px 2rem 100px;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  
+  .newsletter-inner {
+    max-width: 620px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  
+  .newsletter-label {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+    padding: 6px 16px;
+    border: 1px solid rgba(232,213,163,0.2);
+    border-radius: 999px;
+  }
+  
+  .newsletter-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.25rem;
+    color: var(--text);
+  }
+  
+  .newsletter-heading em {
+    font-style: italic;
+    color: var(--accent);
+    font-weight: 400;
+  }
+  
+  .newsletter-sub {
+    font-size: 0.95rem;
+    color: var(--muted2);
+    line-height: 1.7;
+    max-width: 520px;
+    margin: 0 auto 2.5rem;
+    font-weight: 300;
+  }
+  
+  /* THE INLINE BAR */
+  .newsletter-form {
+    display: flex;
+    gap: 8px;
+    max-width: 460px;
+    margin: 0 auto 1rem;
+    align-items: stretch;
+  }
+  
+  .newsletter-input {
+    flex: 1;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 14px 22px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s;
+    min-width: 0;
+  }
+  
+  .newsletter-input::placeholder {
+    color: var(--muted);
+  }
+  
+  .newsletter-input:focus {
+    border-color: var(--accent);
+  }
+  
+  .newsletter-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--accent);
+    color: #0d0d0d;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 14px 26px;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+  
+  .newsletter-btn:hover:not(:disabled) {
+    background: #f0e0b0;
+    transform: translateY(-1px);
+  }
+  
+  .newsletter-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  .newsletter-btn .btn-arrow {
+    width: 14px;
+    height: 14px;
+  }
+  
+  /* STATES */
+  .newsletter-message {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    min-height: 1.5rem;
+    margin-bottom: 0.5rem;
+    transition: opacity 0.3s;
+  }
+  
+  .newsletter-message.success {
+    color: var(--accent);
+  }
+  
+  .newsletter-message.error {
+    color: #d4715a;
+  }
+  
+  .newsletter-trust {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  
+  /* MOBILE */
+  @media (max-width: 600px) {
+    .newsletter { padding: 60px 1.5rem 80px; }
+    
+    .newsletter-form {
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .newsletter-btn {
+      justify-content: center;
+    }
+  }
+  /* DIVIDER */
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: var(--border);
+    margin: 0;
+  }
+
+  /* HOW IT WORKS */
+  .how {
+    position: relative;
+    z-index: 1;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 80px 2rem;
+  }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 3rem;
+  }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+
+  .step {
+    background: var(--surface);
+    padding: 2rem;
+    border: 1px solid var(--border);
+  }
+
+  .step:first-child { border-radius: 12px 0 0 12px; }
+  .step:last-child { border-radius: 0 12px 12px 0; }
+
+  .step-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--border-hover);
+    line-height: 1;
+    margin-bottom: 1rem;
+  }
+
+  .step h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 400;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+  }
+
+  .step p {
+    font-size: 0.82rem;
+    color: var(--muted2);
+    line-height: 1.7;
+  }
+
+  /* MAIN APP */
+  .app {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2rem 120px;
+  }
+
+  .app-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .app-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 400;
+  }
+
+  .app-title em { font-style: italic; color: var(--accent); }
+
+  .search-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 14px;
+    min-width: 220px;
+  }
+
+  .search-wrap svg { width: 14px; height: 14px; color: var(--muted); flex-shrink: 0; }
+
+  .search-wrap input {
+    background: none;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    width: 100%;
+  }
+
+  .search-wrap input::placeholder { color: var(--muted); }
+
+  /* PROGRESS BAR */
+  .progress-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 2rem;
+    padding: 14px 18px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+
+  .progress-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .progress-track {
+    flex: 1;
+    height: 3px;
+    background: var(--border);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 999px;
+    transition: width 0.5s ease;
+  }
+
+  .progress-count {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+
+  /* CATEGORY GRID */
+  .cat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 8px;
+    margin-bottom: 2.5rem;
+  }
+
+  .cat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+  }
+
+  .cat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: currentColor;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .cat-card:hover { border-color: var(--border-hover); transform: translateY(-2px); }
+  .cat-card:hover::before { opacity: 1; }
+  .cat-card.active { border-color: var(--border-hover); }
+  .cat-card.active::before { opacity: 1; }
+
+  .cat-icon { font-size: 1.4rem; margin-bottom: 8px; display: block; }
+  .cat-name {
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text);
+    display: block;
+    margin-bottom: 4px;
+  }
+  .cat-count {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--muted);
+  }
+
+  .cat-card[data-cat="all"] { color: var(--accent); }
+  .cat-card[data-cat="finance"] { color: var(--blue); }
+  .cat-card[data-cat="psychology"] { color: var(--purple); }
+  .cat-card[data-cat="thinking"] { color: var(--green); }
+  .cat-card[data-cat="power"] { color: var(--red); }
+  .cat-card[data-cat="relationships"] { color: var(--pink); }
+  .cat-card[data-cat="language"] { color: var(--teal); }
+  .cat-card[data-cat="business"] { color: #e0a060; }
+
+  /* CONCEPTS GRID */
+  .concepts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 10px;
+  }
+
+  .concept-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .concept-card::after {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 2px;
+    background: var(--cat-color, var(--accent));
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .concept-card:hover { border-color: var(--border-hover); }
+  .concept-card:hover::after, .concept-card.open::after { opacity: 1; }
+  .concept-card.open { border-color: var(--border-hover); }
+  .concept-card.mastered { opacity: 0.5; }
+
+  .card-front {
+    padding: 18px 18px 18px 22px;
+  }
+
+  .card-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .card-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--muted);
+  }
+
+  .card-src {
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    color: var(--muted2);
+  }
+
+  .card-cat {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--cat-color) 10%, transparent);
+    color: var(--cat-color);
+  }
+
+  .people-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 8px;
+  }
+
+  .people-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted2);
+  }
+
+  .mastered-badge {
+    margin-left: auto;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: rgba(122,175,138,0.15);
+    color: var(--green);
+    display: none;
+  }
+
+  .concept-card.mastered .mastered-badge { display: block; }
+
+  .card-term {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+    line-height: 1.2;
+  }
+
+  .card-hook {
+    font-size: 0.8rem;
+    color: var(--muted2);
+    line-height: 1.5;
+    font-style: italic;
+  }
+
+  .card-expand-icon {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    font-size: 0.9rem;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+
+  .concept-card.open .card-expand-icon {
+    background: var(--surface2);
+    color: var(--text);
+    transform: translateY(-50%) rotate(45deg);
+  }
+
+  /* CARD BACK */
+  .card-back {
+    display: none;
+    padding: 0 22px 20px;
+    border-top: 1px solid var(--border);
+    margin-top: 0;
+  }
+
+  .concept-card.open .card-back { display: block; }
+
+  .back-section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 16px;
+    margin-bottom: 6px;
+  }
+
+  .back-text {
+    font-size: 0.82rem;
+    color: var(--muted2);
+    line-height: 1.7;
+  }
+
+  .back-analogy {
+    background: var(--surface2);
+    border-left: 2px solid var(--cat-color, var(--accent));
+    padding: 10px 14px;
+    border-radius: 0 6px 6px 0;
+    font-size: 0.8rem;
+    color: var(--muted2);
+    line-height: 1.6;
+    font-style: italic;
+  }
+
+  .back-prompt {
+    background: rgba(232,213,163,0.06);
+    border: 1px solid rgba(232,213,163,0.15);
+    border-radius: 8px;
+    padding: 12px 14px;
+  }
+
+  .prompt-icon { font-size: 0.9rem; margin-bottom: 4px; }
+
+  .back-prompt p {
+    font-size: 0.8rem;
+    color: var(--accent);
+    line-height: 1.6;
+  }
+
+  .card-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+  }
+
+  .btn-master {
+    flex: 1;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+    border: 1px solid var(--border);
+    background: none;
+    color: var(--muted2);
+  }
+
+  .btn-master:hover { border-color: var(--green); color: var(--green); }
+  .concept-card.mastered .btn-master { border-color: var(--green); color: var(--green); background: rgba(122,175,138,0.1); }
+
+  .btn-share {
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+    border: 1px solid var(--border);
+    background: none;
+    color: var(--muted2);
+  }
+
+  .btn-share:hover { border-color: var(--border-hover); color: var(--text); }
+
+  /* COUNT */
+  .results-count {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+  }
+
+  /* DAILY GOAL BAR */
+  .daily-goal {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: rgba(13,13,13,0.95);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid var(--border);
+    padding: 12px 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    z-index: 100;
+  }
+
+  .daily-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .daily-dots {
+    display: flex;
+    gap: 6px;
+  }
+
+  .daily-dot {
+    width: 28px;
+    height: 6px;
+    border-radius: 999px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    transition: all 0.3s;
+  }
+
+  .daily-dot.filled { background: var(--accent); border-color: var(--accent); }
+
+  .daily-msg {
+    font-size: 0.72rem;
+    color: var(--muted2);
+  }
+
+  .daily-msg strong { color: var(--accent); }
+
+  /* EMPTY STATE */
+  .empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .concept-card {
+    animation: fadeUp 0.35s ease both;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 600px) {
+    .steps { grid-template-columns: 1fr; }
+    .step:first-child { border-radius: 12px 12px 0 0; }
+    .step:last-child { border-radius: 0 0 12px 12px; }
+    .hero-stats { gap: 1.5rem; }
+    .app-header { flex-direction: column; align-items: flex-start; }
+    .search-wrap { width: 100%; }
+    .daily-goal { flex-wrap: wrap; gap: 0.5rem; justify-content: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Listen. <span>Learn.</span> Live.</div>
+  <div class="nav-pill">
+    <div class="nav-dot"></div>
+    <span id="navConceptCount">165</span> concepts · Free
+  </div>
+</nav><!-- CONCEPT OF THE DAY — MODAL -->
+<div class="cotd-overlay" id="cotdOverlay" role="dialog" aria-modal="true" aria-labelledby="cotdTerm">
+  <div class="cotd-card" id="cotdCard">
+    <button class="cotd-close" id="cotdClose" aria-label="Close concept of the day">✕</button>
+
+    <div class="cotd-eyebrow">
+      <span class="cotd-eyebrow-dot"></span>
+      <span>Today's Concept</span>
+      <span class="cotd-eyebrow-date" id="cotdDate"></span>
+    </div>
+
+    <div class="cotd-meta">
+      <span class="cotd-meta-rule"></span>
+      <span id="cotdConceptNum">Concept 000</span>
+      <span>·</span>
+      <span class="cotd-meta-cat" id="cotdCategory">Category</span>
+    </div>
+
+    <h2 class="cotd-term" id="cotdTerm">—</h2>
+    <p class="cotd-hook" id="cotdHook">—</p>
+
+    <div class="cotd-divider"></div>
+
+    <div class="cotd-section">
+      <div class="cotd-label">The Idea</div>
+      <p class="cotd-body" id="cotdPlain">—</p>
+    </div>
+
+    <div class="cotd-section">
+      <div class="cotd-label">The Picture</div>
+      <p class="cotd-body cotd-body--soft" id="cotdAnalogy">—</p>
+    </div>
+
+    <div class="cotd-use-today">
+      <div class="cotd-label">Use it today</div>
+      <p class="cotd-body" id="cotdPrompt">—</p>
+    </div>
+
+    <div class="cotd-actions">
+      <button class="cotd-btn cotd-btn--primary" id="cotdMarkBtn">
+        <span id="cotdMarkLabel">✓ Mark Internalized</span>
+      </button>
+      <button class="cotd-btn" id="cotdNextBtn">→ Try Another</button>
+    </div>
+
+    <div class="cotd-footer">
+      <a href="#app" id="cotdLibraryLink">Continue to library →</a>
+    </div>
+  </div>
+</div>
+<!-- /CONCEPT OF THE DAY -->
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">The Intelligence Toolkit</div>
+  <h1>The ideas shaping<br><em>smart conversation</em></h1>
+  <p class="hero-sub">You consume podcasts and articles — but how much do you actually retain? Learn 5 key concepts a day. Understand them. Use them. Change how you think and communicate.</p>
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-num" id="heroConceptCount">165</div>
+      <div class="stat-label">Concepts</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" id="heroCategoryCount">11</div>
+      <div class="stat-label">Categories</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">5/day</div>
+      <div class="stat-label">Daily Goal</div>
+    </div>
+  </div>
+  <a href="#app" class="hero-cta">
+    Start Learning
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M8 3l5 5-5 5"/></svg>
+  </a>
+</section>
+<!-- NEWSLETTER CAPTURE -->
+<section class="newsletter">
+  <div class="newsletter-inner">
+    <div class="newsletter-label">The Weekly Drop</div>
+    <h2 class="newsletter-heading">5 concepts. <em>Every Sunday.</em></h2>
+    <p class="newsletter-sub">Join ambitious readers who retain what they hear. No fluff, no filler — just the sharpest ideas from the week's best podcasts, delivered in under 3 minutes of reading.</p>
+    
+    <form class="newsletter-form" id="newsletterForm">
+      <input 
+        type="email" 
+        class="newsletter-input" 
+        id="newsletterEmail" 
+        placeholder="your@email.com" 
+        required 
+        aria-label="Email address"
+      />
+      <button type="submit" class="newsletter-btn" id="newsletterBtn">
+        <span class="btn-label">Subscribe</span>
+        <svg class="btn-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M8 3l5 5-5 5"/></svg>
+      </button>
+    </form>
+    
+    <div class="newsletter-message" id="newsletterMessage"></div>
+    <div class="newsletter-trust">No spam. Unsubscribe anytime. First email lands in minutes.</div>
+  </div>
+</section>
+<!-- /NEWSLETTER CAPTURE -->
+<div class="divider"></div>
+
+<!-- HOW IT WORKS -->
+<section class="how">
+  <div class="section-label">How it works</div>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <h3>Pick a Category</h3>
+      <p>Choose a category that you want to learn about — or browse the full library across all areas.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <h3>Read the Clue Card</h3>
+      <p>Each concept has a hook, plain-language definition, and a memorable analogy. 5 minutes per concept — no more.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <h3>Reflect & Use It</h3>
+      <p>A conversation prompt helps you apply the concept immediately in your real life. Mark it mastered when it clicks.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- APP -->
+<section class="app" id="app">
+  <div class="app-header">
+    <div class="app-title">Browse <em>concepts</em></div>
+    <div class="search-wrap">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M10 10l3.5 3.5"/></svg>
+      <input type="text" id="search" placeholder="Search concepts..." />
+    </div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-bar">
+  <div class="progress-label">Overall progress</div>
+  <div class="progress-track">
+    <div class="progress-fill" id="progressFill" style="width:0%"></div>
+  </div>
+  <div class="progress-count" id="progressCount" onclick="toggleVault()" style="cursor:pointer;">0 / 183</div>
+</div>
+<div class="vault-row">
+  <div class="vault-pill" id="vaultPill" onclick="toggleVault()">YOUR VAULT</div>
+</div>
+
+  <!-- EPISODES SECTION -->
+        <div id="episodesSection" class="episodes-section" style="display:none">
+          <div class="episodes-section-header">
+            <div class="episodes-section-title">Episodes</div>
+            <div class="episodes-section-rule"></div>
+          </div>
+          <div class="episodes-scroll-wrap">
+            <div class="episodes-fade-right"></div>
+            <div id="episodesRow" class="episodes-row"></div>
+          </div>
+        </div>
+
+        <!-- EPISODE DRAWER -->
+        <div class="ep-drawer-backdrop" id="epBackdrop" onclick="closeEpisodeDrawer()"></div>
+        <div class="ep-drawer" id="epDrawer">
+          <div class="ep-drawer-handle"></div>
+          <div class="ep-drawer-header">
+            <div class="ep-drawer-meta">
+              <div class="ep-drawer-title" id="epDrawerTitle"></div>
+              <div class="ep-drawer-pills" id="epDrawerPills"></div>
+            </div>
+            <button class="ep-drawer-close" onclick="closeEpisodeDrawer()">✕</button>
+          </div>
+          <div class="ep-drawer-mix" id="epDrawerMix"></div>
+          <div class="ep-drawer-body">
+            <div class="ep-drawer-grid" id="epDrawerGrid"></div>
+          </div>
+        </div>
+  <!-- CATEGORIES -->
+  <div class="cat-grid" id="catGrid"></div>
+
+  <!-- COUNT -->
+  <div class="results-count" id="resultCount"></div>
+
+  <!-- CONCEPTS -->
+  <div class="concepts-grid" id="conceptsGrid"></div>
+</section>
+
+<!-- DAILY GOAL BAR -->
+<div class="daily-goal">
+  <div class="daily-label">Today's goal</div>
+  <div class="daily-dots" id="dailyDots">
+    <div class="daily-dot"></div>
+    <div class="daily-dot"></div>
+    <div class="daily-dot"></div>
+    <div class="daily-dot"></div>
+    <div class="daily-dot"></div>
+  </div>
+  <div class="daily-msg" id="dailyMsg"><strong>0 of 5</strong> concepts opened today</div>
+</div>
+
+<script>
+const CATEGORIES = [
+  { id:'all',           name:'All',           icon:'◈', color:'#e8d5a3' },
+  { id:'business',      name:'Business',      icon:'◈', color:'#e0a060' },
+  { id:'creativity',    name:'Creativity',    icon:'◇', color:'#d4a574' },
+  { id:'finance',       name:'Finance',       icon:'◎', color:'#6b9fc4' },
+  { id:'health',        name:'Health',        icon:'◓', color:'#8ab87a' },
+  { id:'identity',      name:'Identity',      icon:'◍', color:'#b89878' },
+  { id:'language',      name:'Language',      icon:'◉', color:'#5abfaf' },
+  { id:'philosophy',    name:'Philosophy',    icon:'◌', color:'#9a8fb8' },
+  { id:'power',         name:'Power',         icon:'◆', color:'#d4715a' },
+  { id:'psychology',    name:'Psychology',    icon:'◐', color:'#a08fd4' },
+  { id:'relationships', name:'Relationships', icon:'◑', color:'#c47a9f' },
+  { id:'science',       name:'Science',       icon:'◉', color:'#6ab0c4' },
+  { id:'society',       name:'Society',       icon:'◒', color:'#7090a8' },
+  { id:'tech-ai',       name:'Tech-AI',       icon:'◆', color:'#b8a07a' },
+  { id:'thinking',      name:'Thinking',      icon:'◇', color:'#7aaf8a' },
+];
+
+let CONCEPTS = [];
+let COLLECTIONS_BY_ID = {};
+
+async function loadCollections() {
+  try {
+    const res = await fetch('./collections.json');
+    if (!res.ok) return;
+    const data = await res.json();
+    if (!Array.isArray(data)) return;
+    COLLECTIONS_BY_ID = {};
+    data.forEach(col => { if (col && typeof col.id !== 'undefined') COLLECTIONS_BY_ID[col.id] = col; });
+  } catch (e) {
+    console.warn('Could not load collections.json — pills will not render:', e);
+  }
+}
+
+async function loadConcepts() {
+  const grid = document.getElementById('conceptsGrid');
+  const count = document.getElementById('resultCount');
+
+  if (grid) {
+    grid.innerHTML = `
+      <div style="
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 3rem 2rem;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      ">
+        Loading concepts...
+      </div>`;
+  }
+
+  try {
+    const response = await fetch('./concepts.json');
+
+    if (!response.ok) {
+      throw new Error('Could not load concepts.json — status: ' + response.status);
+    }
+
+    const data = await response.json();
+
+    if (!Array.isArray(data) || data.length === 0) {
+      throw new Error('concepts.json is empty or not a valid array');
+    }
+
+    CONCEPTS = data;
+    await loadCollections();
+    render();
+    updateHeaderCounts();
+
+  } catch (error) {
+    console.error('Failed to load concepts:', error);
+
+    if (grid) {
+      grid.innerHTML = `
+        <div style="
+          grid-column: 1 / -1;
+          text-align: center;
+          padding: 3rem 2rem;
+        ">
+          <div style="
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text);
+            margin-bottom: 8px;
+          ">Could not load concepts</div>
+          <div style="
+            font-size: 0.78rem;
+            color: var(--muted);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+          ">
+            If you're viewing this file directly from your desktop,<br>
+            open it through your Vercel URL instead.
+          </div>
+          <button onclick="loadConcepts()" style="
+            padding: 8px 20px;
+            font-size: 0.75rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            border: 0.5px solid var(--border-hover);
+            border-radius: 6px;
+            background: none;
+            color: var(--muted2);
+            cursor: pointer;
+          ">Try again</button>
+        </div>`;
+    }
+
+    if (count) {
+      count.textContent = 'Failed to load concepts';
+    }
+  }
+}
+
+// Deduplicate by id
+const seen = new Set();
+
+const CAT_COLOR = {
+  all:'#e8d5a3', business:'#e0a060', creativity:'#d4a574', finance:'#6b9fc4',
+  health:'#8ab87a', identity:'#b89878', language:'#5abfaf', philosophy:'#9a8fb8',
+  power:'#d4715a', psychology:'#a08fd4', relationships:'#c47a9f', science:'#6ab0c4',
+  society:'#7090a8', 'tech-ai':'#b8a07a', thinking:'#7aaf8a'
+};
+
+let activeCat = 'all', searchQ = ''; 
+let mastered = new Set();
+let openedToday = new Set();
+  
+// ---------- STORAGE HELPERS ----------
+// All talk-to-localStorage logic lives here. If we ever move to a real
+// database (Phase 3 Pro tier), only this block changes.
+
+const STORAGE_KEYS = {
+  mastered: 'lll_mastered_v1',
+  dailyGoal: 'lll_daily_goal_v1'
+};
+
+function saveMastered() {
+  try {
+    const asArray = Array.from(mastered);
+    localStorage.setItem(STORAGE_KEYS.mastered, JSON.stringify(asArray));
+  } catch (e) {
+    console.warn('Could not save mastered concepts:', e);
+  }
+}
+
+function loadMastered() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEYS.mastered);
+    if (!raw) return new Set();
+    const arr = JSON.parse(raw);
+    if (!Array.isArray(arr)) return new Set();
+    return new Set(arr);
+  } catch (e) {
+    console.warn('Could not load mastered concepts:', e);
+    return new Set();
+  }
+}
+
+function saveDailyGoal() {
+  try {
+    const today = new Date().toISOString().slice(0, 10); // "2026-04-22"
+    const payload = { date: today, ids: Array.from(openedToday) };
+    localStorage.setItem(STORAGE_KEYS.dailyGoal, JSON.stringify(payload));
+  } catch (e) {
+    console.warn('Could not save daily goal:', e);
+  }
+}
+
+function loadDailyGoal() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEYS.dailyGoal);
+    if (!raw) return new Set();
+    const payload = JSON.parse(raw);
+    const today = new Date().toISOString().slice(0, 10);
+    // If the saved date isn't today, ignore it — it's stale. New day, fresh start.
+    if (!payload || payload.date !== today || !Array.isArray(payload.ids)) {
+      return new Set();
+    }
+    return new Set(payload.ids);
+  } catch (e) {
+    console.warn('Could not load daily goal:', e);
+    return new Set();
+  }
+}
+// ---------- END STORAGE HELPERS ----------
+
+function getCatCount(cat) {
+  return CONCEPTS.filter(c => cat === 'all' || c.category === cat).length;
+}
+
+function buildCats() {
+  const grid = document.getElementById('catGrid');
+  grid.innerHTML = CATEGORIES.map(cat => `
+    <div class="cat-card${activeCat===cat.id?' active':''}" data-cat="${cat.id}" onclick="setCat('${cat.id}')" style="color:${cat.color}">
+      <span class="cat-icon">${cat.icon}</span>
+      <span class="cat-name">${cat.name}</span>
+      <span class="cat-count">${getCatCount(cat.id)} concepts</span>
+    </div>
+  `).join('');
+}
+
+function filtered() {
+  return CONCEPTS.filter(c => {
+    if (vaultActive && !mastered.has(c.id)) return false;
+    const mc = activeCat === 'all' || c.category === activeCat;
+    const q = searchQ.toLowerCase();
+    const mq = !q || c.term.toLowerCase().includes(q) || c.hook.toLowerCase().includes(q) || c.plain.toLowerCase().includes(q);
+    return mc && mq;
+  }).reverse();
+}
+
+function buildGrid() {
+  const list = filtered();
+  document.getElementById('resultCount').textContent = list.length + ' concept' + (list.length!==1?'s':'') + ' shown';
+  const grid = document.getElementById('conceptsGrid');
+  if (!list.length) { grid.innerHTML = '<div class="empty">No concepts match your search.</div>'; return; }
+  grid.innerHTML = list.map((c, i) => {
+    const color = CAT_COLOR[c.category] || '#e8d5a3';
+    const isMastered = mastered.has(c.id);
+    return `
+    <div class="concept-card${isMastered?' mastered':''}" id="cc${c.id}" style="--cat-color:${color}; animation-delay:${Math.min(i,20)*0.03}s">
+      <div class="card-front" onclick="toggleCard(${c.id})">
+        <div class="card-meta">
+          <span class="card-num">#${String(c.id).padStart(3,'0')}</span>
+          <span class="card-cat">${(CATEGORIES.find(x => x.id === c.category) || {}).name || c.category}</span>
+          <span class="mastered-badge">✓ mastered</span>
+        </div>
+        ${(() => {
+          if (c.collection_id == null) return '';
+          const col = COLLECTIONS_BY_ID[c.collection_id];
+          if (!col || !Array.isArray(col.people) || col.people.length === 0) return '';
+          return '<div class="people-pills">' + col.people.map(p => `<span class="people-pill">${p}</span>`).join('') + '</div>';
+        })()}
+        <div class="card-term">${c.term}</div>
+        <div class="card-hook">${c.hook}</div>
+        <div class="card-expand-icon">+</div>
+      </div>
+      <div class="card-back">
+        <div class="back-section-label">What it means</div>
+        <div class="back-text">${c.plain}</div>
+        <div class="back-section-label">Analogy</div>
+        <div class="back-analogy">${c.analogy}</div>
+        <div class="back-section-label">Reflect & Use It</div>
+        <div class="back-prompt">
+          <div class="prompt-icon">💬</div>
+          <p>${c.prompt}</p>
+        </div>
+        <div class="card-actions">
+          <button class="btn-master" onclick="toggleMaster(event,${c.id})">${isMastered?'✓ Mastered':'Mark as Mastered'}</button>
+          <button class="btn-share" onclick="shareCard(event,${c.id})">Share</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function render() { buildCats(); buildGrid(); updateProgress(); buildEpisodes(); }
+
+function toggleCard(id) {
+  const el = document.getElementById('cc'+id);
+  const wasOpen = el.classList.contains('open');
+  el.classList.toggle('open');
+  if (!wasOpen) {
+    openedToday.add(id);
+    saveDailyGoal();     // <-- NEW: persist today's opened cards
+    updateDailyGoal();
+  }
+}
+
+function toggleMaster(e, id) {
+  e.stopPropagation();
+  if (mastered.has(id)) mastered.delete(id);
+  else mastered.add(id);
+  saveMastered();        // <-- NEW: persist to localStorage
+  buildGrid();
+  updateProgress();
+}
+
+function shareCard(e, id) {
+  e.stopPropagation();
+  const c = CONCEPTS.find(x => x.id === id);
+  if (!c) return;
+  const text = `"${c.term}" — ${c.hook}\n\nListen. Learn. Live.`;
+  if (navigator.share) { navigator.share({ title: c.term, text }); }
+  else if (navigator.clipboard) { navigator.clipboard.writeText(text); }
+}
+
+function updateProgress() {
+  const pct = Math.round((mastered.size / CONCEPTS.length) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  const vaultEl = document.getElementById('progressCount');
+vaultEl.textContent = mastered.size + ' / ' + CONCEPTS.length;
+}
+
+function updateHeaderCounts() {
+  // Count categories that actually have at least one concept (skip 'all').
+  const usedCategories = new Set(CONCEPTS.map(c => c.category));
+  const categoryCount = usedCategories.size;
+
+  const navEl = document.getElementById('navConceptCount');
+  if (navEl) navEl.textContent = CONCEPTS.length;
+
+  const heroConceptEl = document.getElementById('heroConceptCount');
+  if (heroConceptEl) heroConceptEl.textContent = CONCEPTS.length;
+
+  const heroCatEl = document.getElementById('heroCategoryCount');
+  if (heroCatEl) heroCatEl.textContent = categoryCount;
+}
+
+function updateDailyGoal() {
+  const n = Math.min(openedToday.size, 5);
+  document.querySelectorAll('.daily-dot').forEach((d,i) => { d.classList.toggle('filled', i < n); });
+  const msg = document.getElementById('dailyMsg');
+  if (n >= 5) msg.innerHTML = '<strong>🎉 Goal complete!</strong> Come back tomorrow for 5 more.';
+  else msg.innerHTML = '<strong>' + n + ' of 5</strong> concepts opened today';
+}
+
+function setCat(cat) { activeCat = cat; render(); }
+function openEpisodeDrawer(collectionId) {
+  const col = COLLECTIONS_BY_ID[collectionId];
+  if (!col) return;
+
+  const epConcepts = CONCEPTS.filter(c => c.collection_id === collectionId).reverse();
+
+  // Header
+  document.getElementById('epDrawerTitle').textContent = col.title.trim();
+
+  // Pills: people + concept count + listen link
+  const pills = document.getElementById('epDrawerPills');
+  const peoplePills = (col.people || []).map(p =>
+    `<span class="ep-drawer-person">${p}</span>`).join('');
+  const countPill = `<span class="ep-drawer-count">${epConcepts.length} concept${epConcepts.length !== 1 ? 's' : ''}</span>`;
+  const listenLink = col.episode_url
+    ? `<a class="ep-drawer-listen" href="${col.episode_url}" target="_blank" rel="noopener">↗ Listen</a>`
+    : '';
+  pills.innerHTML = peoplePills + countPill + listenLink;
+
+  // Category mix bar
+  const catCounts = {};
+  epConcepts.forEach(c => { catCounts[c.category] = (catCounts[c.category] || 0) + 1; });
+  const sortedCats = Object.entries(catCounts).sort((a,b) => b[1]-a[1]);
+  const mixBar = document.getElementById('epDrawerMix');
+  mixBar.innerHTML = epConcepts.length > 0
+    ? sortedCats.map(([cat, n]) => {
+        const pct = (n / epConcepts.length * 100).toFixed(1);
+        return `<div class="episode-mix-segment" style="width:${pct}%;background:${CAT_COLOR[cat]||'#e8d5a3'}"></div>`;
+      }).join('')
+    : '';
+
+  // Concept cards — reuse the same card markup as the main grid
+  const grid = document.getElementById('epDrawerGrid');
+  if (!epConcepts.length) {
+    grid.innerHTML = '<div class="ep-empty">No concepts yet in this episode</div>';
+  } else {
+    grid.innerHTML = epConcepts.map((c, i) => {
+      const color = CAT_COLOR[c.category] || '#e8d5a3';
+      const isMastered = mastered.has(c.id);
+      return `
+      <div class="concept-card${isMastered?' mastered':''}" id="epcc${c.id}" style="--cat-color:${color}; animation-delay:${Math.min(i,20)*0.03}s">
+        <div class="card-front" onclick="toggleEpCard(${c.id})">
+          <div class="card-meta">
+            <span class="card-num">#${String(c.id).padStart(3,'0')}</span>
+            <span class="card-cat">${(CATEGORIES.find(x => x.id === c.category)||{}).name||c.category}</span>
+            <span class="mastered-badge">✓ mastered</span>
+          </div>
+          <div class="card-term">${c.term}</div>
+          <div class="card-hook">${c.hook}</div>
+          <div class="card-expand-icon">+</div>
+        </div>
+        <div class="card-back">
+          <div class="back-section-label">What it means</div>
+          <div class="back-text">${c.plain}</div>
+          <div class="back-section-label">Analogy</div>
+          <div class="back-analogy">${c.analogy}</div>
+          <div class="back-section-label">Reflect & Use It</div>
+          <div class="back-prompt">
+            <div class="prompt-icon">💬</div>
+            <p>${c.prompt}</p>
+          </div>
+          <div class="card-actions">
+            <button class="btn-master" onclick="toggleEpMaster(event,${c.id})">${isMastered?'✓ Mastered':'Mark as Mastered'}</button>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  // Open
+  document.getElementById('epBackdrop').classList.add('open');
+  document.getElementById('epDrawer').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeEpisodeDrawer() {
+  document.getElementById('epBackdrop').classList.remove('open');
+  document.getElementById('epDrawer').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function toggleEpCard(id) {
+  const el = document.getElementById('epcc'+id);
+  if (!el) return;
+  el.classList.toggle('open');
+  if (!openedToday.has(id)) {
+    openedToday.add(id);
+    saveDailyGoal();
+    updateDailyGoal();
+  }
+}
+
+function toggleEpMaster(e, id) {
+  e.stopPropagation();
+  if (mastered.has(id)) mastered.delete(id);
+  else mastered.add(id);
+  saveMastered();
+  // Refresh both the drawer card and the main grid card if visible
+  const epCard = document.getElementById('epcc'+id);
+  if (epCard) {
+    epCard.classList.toggle('mastered', mastered.has(id));
+    epCard.querySelector('.btn-master').textContent = mastered.has(id) ? '✓ Mastered' : 'Mark as Mastered';
+  }
+  updateProgress();
+  // Silently refresh main grid without closing drawer
+  if (typeof buildGrid === 'function') buildGrid();
+}
+
+// Esc key closes drawer
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape' && document.getElementById('epDrawer').classList.contains('open')) {
+    closeEpisodeDrawer();
+  }
+});
+
+function buildEpisodes() {
+  const episodeCollections = Object.values(COLLECTIONS_BY_ID)
+    .filter(col => col.type === 'episode')
+    .sort((a, b) => new Date(b.created_date || 0) - new Date(a.created_date || 0));
+
+  const section = document.getElementById('episodesSection');
+  const row = document.getElementById('episodesRow');
+  if (!section || !row) return;
+
+  if (episodeCollections.length === 0) {
+    section.style.display = 'none';
+    return;
+  }
+
+  section.style.display = 'block';
+
+  row.innerHTML = episodeCollections.map(col => {
+    const epConcepts = CONCEPTS.filter(c => c.collection_id === col.id);
+    const conceptCount = epConcepts.length;
+
+    // Category mix
+    const catCounts = {};
+    epConcepts.forEach(c => { catCounts[c.category] = (catCounts[c.category] || 0) + 1; });
+    const sortedCats = Object.entries(catCounts).sort((a,b) => b[1]-a[1]);
+    const mixBar = conceptCount > 0
+      ? sortedCats.map(([cat, n]) => {
+          const pct = (n / conceptCount * 100).toFixed(1);
+          return `<div class="episode-mix-segment" style="width:${pct}%;background:${CAT_COLOR[cat]||'#e8d5a3'}"></div>`;
+        }).join('')
+      : '';
+
+    // Thumbnail: dominant category color, italic initials
+    const dominantCat = sortedCats.length > 0 ? sortedCats[0][0] : 'all';
+    const thumbColor = CAT_COLOR[dominantCat] || '#3a3a3a';
+    const initials = (col.people || []).slice(0, 2).map(p => p.trim()[0] || '').join('');
+
+    const peoplePills = (col.people || [])
+      .map(p => `<span class="episode-person-pill">${p}</span>`).join('');
+
+    return `
+      <div class="episode-card" onclick="openEpisodeDrawer(${col.id})">
+        <div class="episode-thumb" style="background:${thumbColor}18">
+          <span style="color:${thumbColor};opacity:0.9">${initials || '◉'}</span>
+          <div class="episode-mix-bar">${mixBar}</div>
+        </div>
+        <div class="episode-body">
+          <div class="episode-title">${col.title.trim()}</div>
+          <div class="episode-people-row">${peoplePills}</div>
+          <div class="episode-count">${conceptCount} concept${conceptCount !== 1 ? 's' : ''}</div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+let vaultActive = false;
+function toggleVault() {
+  vaultActive = !vaultActive;
+  document.getElementById('progressCount').classList.toggle('vault-active', vaultActive);
+  document.getElementById('vaultPill').classList.toggle('vault-active', vaultActive);
+  if (vaultActive) activeCat = 'all';
+  buildGrid();
+}
+
+document.getElementById('search').addEventListener('input', e => { searchQ = e.target.value; buildGrid(); });
+
+// Restore saved progress BEFORE loading concepts, so the first render
+// already shows the correct mastered state.
+mastered = loadMastered();
+openedToday = loadDailyGoal();
+updateDailyGoal();
+
+// Load concepts, then show concept of the day once they're ready
+loadConcepts().then(() => {
+  initConceptOfTheDay();
+});
+
+// ============================================
+// CONCEPT OF THE DAY
+// ============================================
+
+const COTD_STORAGE_KEY = 'lll_cotd_dismissed_v1';
+
+const CAT_NAME = {
+  finance: 'Finance', psychology: 'Psychology', thinking: 'Thinking',
+  power: 'Power', relationships: 'Relationships', language: 'Language',
+  business: 'Business', creativity: 'Creativity', health: 'Health',
+  identity: 'Identity', philosophy: 'Philosophy', science: 'Science',
+  society: 'Society', 'tech-ai': 'Tech & AI'
+};
+
+// Pick a concept deterministically based on date.
+// Same calendar day = same concept for everyone, every reload.
+function pickTodaysConcept(pool) {
+  if (!pool || pool.length === 0) return null;
+
+  const today = new Date();
+  const seed = today.getFullYear() * 10000
+             + (today.getMonth() + 1) * 100
+             + today.getDate();
+  const index = seed % pool.length;
+  return pool[index];
+}
+
+// Pick a random different concept (for "Try Another" button)
+function pickRandomConcept(pool, excludeId) {
+  if (!pool || pool.length === 0) return null;
+  if (pool.length === 1) return pool[0];
+
+  let candidate;
+  let safety = 0;
+  do {
+    candidate = pool[Math.floor(Math.random() * pool.length)];
+    safety++;
+  } while (candidate.id === excludeId && safety < 50);
+
+  return candidate;
+}
+
+// Format today's date as "April 26"
+function formatTodayLabel() {
+  const months = ['January','February','March','April','May','June',
+                  'July','August','September','October','November','December'];
+  const d = new Date();
+  return months[d.getMonth()] + ' ' + d.getDate();
+}
+
+// Get today's date as YYYY-MM-DD (used for dismissal tracking)
+function todayISO() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+// Has user already dismissed today's card? Check localStorage.
+function isDismissedToday() {
+  try {
+    const raw = localStorage.getItem(COTD_STORAGE_KEY);
+    if (!raw) return false;
+    const data = JSON.parse(raw);
+    return data && data.date === todayISO();
+  } catch (e) {
+    return false;
+  }
+}
+
+// Mark today's card as dismissed (so it stays closed until tomorrow)
+function markDismissedToday() {
+  try {
+    localStorage.setItem(
+      COTD_STORAGE_KEY,
+      JSON.stringify({ date: todayISO() })
+    );
+  } catch (e) {
+    console.warn('Could not save COTD dismissal:', e);
+  }
+}
+
+// Render a concept into the modal markup
+function renderCotd(concept) {
+  if (!concept) return;
+
+  const catColor = CAT_COLOR[concept.category] || 'var(--accent)';
+  const catName = CAT_NAME[concept.category] || concept.category;
+  const idPadded = String(concept.id).padStart(3, '0');
+
+  // Set the per-card accent color via CSS variable
+  const card = document.getElementById('cotdCard');
+  card.style.setProperty('--cotd-accent', catColor);
+
+  document.getElementById('cotdDate').textContent = formatTodayLabel();
+  document.getElementById('cotdConceptNum').textContent = 'Concept ' + idPadded;
+  document.getElementById('cotdCategory').textContent = catName;
+  document.getElementById('cotdTerm').textContent = concept.term;
+  document.getElementById('cotdHook').textContent = concept.hook;
+  document.getElementById('cotdPlain').textContent = concept.plain;
+  document.getElementById('cotdAnalogy').textContent = concept.analogy;
+  document.getElementById('cotdPrompt').textContent = concept.prompt;
+
+  // Update mark button to reflect mastered state
+  const markBtn = document.getElementById('cotdMarkBtn');
+  const markLabel = document.getElementById('cotdMarkLabel');
+  if (mastered.has(concept.id)) {
+    markBtn.classList.add('is-marked');
+    markLabel.textContent = '✓ Internalized';
+  } else {
+    markBtn.classList.remove('is-marked');
+    markLabel.textContent = '✓ Mark Internalized';
+  }
+
+  // Wire mark button to current concept
+  markBtn.onclick = function() {
+    if (mastered.has(concept.id)) {
+      mastered.delete(concept.id);
+    } else {
+      mastered.add(concept.id);
+      // Also count it toward today's daily goal
+      if (!openedToday.has(concept.id)) {
+        openedToday.add(concept.id);
+        saveDailyGoal();
+        updateDailyGoal();
+      }
+    }
+    saveMastered();
+    renderCotd(concept); // refresh button state
+    // Refresh main grid if it's already rendered
+    if (typeof render === 'function' && CONCEPTS.length > 0) {
+      try { render(); } catch (e) { /* grid may not exist yet, fine */ }
+    }
+  };
+}
+
+function openCotd() {
+  const overlay = document.getElementById('cotdOverlay');
+  overlay.classList.add('active');
+  document.body.classList.add('cotd-open');
+}
+
+function closeCotd(persist) {
+  const overlay = document.getElementById('cotdOverlay');
+  overlay.classList.remove('active');
+  document.body.classList.remove('cotd-open');
+  if (persist) markDismissedToday();
+}
+
+function initConceptOfTheDay() {
+  if (!CONCEPTS || CONCEPTS.length === 0) {
+    console.warn('COTD: no concepts loaded');
+    return;
+  }
+
+  if (isDismissedToday()) {
+    return; // already seen and closed today, don't show
+  }
+
+  const concept = pickTodaysConcept(CONCEPTS);
+  if (!concept) return;
+
+  renderCotd(concept);
+  openCotd();
+
+  // Wire close button — persists dismissal until tomorrow
+  document.getElementById('cotdClose').onclick = function() {
+    closeCotd(true);
+  };
+
+  // Wire "Try Another" — picks a random different concept (no dismissal)
+  document.getElementById('cotdNextBtn').onclick = function() {
+    const current = parseInt(
+      document.getElementById('cotdConceptNum').textContent.replace(/\D/g, ''),
+      10
+    );
+    const next = pickRandomConcept(CONCEPTS, current);
+    renderCotd(next);
+  };
+
+  // Wire footer link — also closes & persists
+  document.getElementById('cotdLibraryLink').onclick = function() {
+    closeCotd(true);
+  };
+
+  // Click outside the card to close
+  document.getElementById('cotdOverlay').addEventListener('click', function(e) {
+    if (e.target === this) closeCotd(true);
+  });
+
+  // Esc key to close
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' &&
+        document.getElementById('cotdOverlay').classList.contains('active')) {
+      closeCotd(true);
+    }
+  });
+}
+// ============================================
+// END CONCEPT OF THE DAY
+// ============================================
+  // NEWSLETTER FORM HANDLER
+(function() {
+  const form = document.getElementById('newsletterForm');
+  const emailInput = document.getElementById('newsletterEmail');
+  const btn = document.getElementById('newsletterBtn');
+  const btnLabel = btn ? btn.querySelector('.btn-label') : null;
+  const message = document.getElementById('newsletterMessage');
+
+  if (!form) return;
+
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const email = emailInput.value.trim();
+    
+    if (!email || !email.includes('@')) {
+      showMessage('Please enter a valid email.', 'error');
+      return;
+    }
+    
+    btn.disabled = true;
+    btnLabel.textContent = 'Sending...';
+    message.textContent = '';
+    message.className = 'newsletter-message';
+    
+    try {
+      const response = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email })
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok) {
+        showMessage('You\'re in. Check your inbox — first concepts on the way.', 'success');
+        emailInput.value = '';
+        btnLabel.textContent = 'Subscribed';
+      } else {
+        showMessage(data.error || 'Something went wrong. Try again.', 'error');
+        btnLabel.textContent = 'Subscribe';
+        btn.disabled = false;
+      }
+    } catch (error) {
+      console.error('Subscribe error:', error);
+      showMessage('Network error. Please try again.', 'error');
+      btnLabel.textContent = 'Subscribe';
+      btn.disabled = false;
+    }
+  });
+
+  function showMessage(text, type) {
+    message.textContent = text;
+    message.className = 'newsletter-message ' + type;
+  }
+})();
+</script>
+</body>
+</html>
