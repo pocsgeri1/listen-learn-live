@@ -1260,56 +1260,45 @@
     white-space: nowrap;
   }
 
-  /* CATEGORY GRID */
+ /* CATEGORY PILL ROW */
   .cat-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 8px;
-    margin-bottom: 2.5rem;
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 1.5rem;
+    margin-bottom: 0.5rem;
   }
+  .cat-grid::-webkit-scrollbar { display: none; }
 
   .cat-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 16px 14px;
+    flex-shrink: 0;
+    background: transparent;
+    border: 0.5px solid var(--border);
+    border-radius: 999px;
+    padding: 5px 14px;
     cursor: pointer;
     transition: all 0.2s;
-    position: relative;
-    overflow: hidden;
-    text-align: center;
+    white-space: nowrap;
+  }
+  .cat-card:hover { border-color: currentColor; }
+  .cat-card.active {
+    background: rgba(255,255,255,0.05);
+    border-color: currentColor;
   }
 
-  .cat-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: currentColor;
-    opacity: 0;
-    transition: opacity 0.2s;
-  }
-
-  .cat-card:hover { border-color: var(--border-hover); transform: translateY(-2px); }
-  .cat-card:hover::before { opacity: 1; }
-  .cat-card.active { border-color: var(--border-hover); }
-  .cat-card.active::before { opacity: 1; }
-
-  .cat-icon { font-size: 1.4rem; margin-bottom: 8px; display: block; }
+  .cat-icon { display: none; }
   .cat-name {
-    font-size: 0.72rem;
-    font-weight: 500;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--text);
-    display: block;
-    margin-bottom: 4px;
-  }
-  .cat-count {
     font-family: 'DM Mono', monospace;
-    font-size: 0.62rem;
-    color: var(--muted);
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: currentColor;
+    display: inline;
   }
+  .cat-count { display: none; }
 
   .cat-card[data-cat="all"] { color: var(--accent); }
   .cat-card[data-cat="finance"] { color: var(--blue); }
@@ -1319,6 +1308,13 @@
   .cat-card[data-cat="relationships"] { color: var(--pink); }
   .cat-card[data-cat="language"] { color: var(--teal); }
   .cat-card[data-cat="business"] { color: #e0a060; }
+  .cat-card[data-cat="creativity"] { color: #d4a574; }
+  .cat-card[data-cat="health"] { color: #8ab87a; }
+  .cat-card[data-cat="identity"] { color: #b89878; }
+  .cat-card[data-cat="philosophy"] { color: #9a8fb8; }
+  .cat-card[data-cat="science"] { color: #6ab0c4; }
+  .cat-card[data-cat="society"] { color: #7090a8; }
+  .cat-card[data-cat="tech-ai"] { color: #b8a07a; }
 
   /* CONCEPTS GRID */
   .concepts-grid {
@@ -2034,9 +2030,7 @@ function buildCats() {
   const grid = document.getElementById('catGrid');
   grid.innerHTML = CATEGORIES.map(cat => `
     <div class="cat-card${activeCat===cat.id?' active':''}" data-cat="${cat.id}" onclick="setCat('${cat.id}')" style="color:${cat.color}">
-      <span class="cat-icon">${cat.icon}</span>
       <span class="cat-name">${cat.name}</span>
-      <span class="cat-count">${getCatCount(cat.id)} concepts</span>
     </div>
   `).join('');
 }
