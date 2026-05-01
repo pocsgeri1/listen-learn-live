@@ -1781,22 +1781,11 @@ async function loadCollections() {
 }
 
 async function loadConcepts() {
-  const grid = document.getElementById('conceptsGrid');
+  const grid = document.getElementById('netflixRows');
   const count = document.getElementById('resultCount');
 
   if (grid) {
-    grid.innerHTML = `
-      <div style="
-        grid-column: 1 / -1;
-        text-align: center;
-        padding: 3rem 2rem;
-        color: var(--muted);
-        font-size: 0.85rem;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-      ">
-        Loading concepts...
-      </div>`;
+    grid.innerHTML = `<div style="padding:3rem 2rem;color:var(--muted);font-family:'DM Mono',monospace;font-size:0.75rem;letter-spacing:0.12em;text-transform:uppercase;text-align:center;">Loading concepts...</div>`;
   }
 
   try {
@@ -1821,39 +1810,7 @@ async function loadConcepts() {
     console.error('Failed to load concepts:', error);
 
     if (grid) {
-      grid.innerHTML = `
-        <div style="
-          grid-column: 1 / -1;
-          text-align: center;
-          padding: 3rem 2rem;
-        ">
-          <div style="
-            font-size: 0.85rem;
-            font-weight: 500;
-            color: var(--text);
-            margin-bottom: 8px;
-          ">Could not load concepts</div>
-          <div style="
-            font-size: 0.78rem;
-            color: var(--muted);
-            margin-bottom: 1.5rem;
-            line-height: 1.6;
-          ">
-            If you're viewing this file directly from your desktop,<br>
-            open it through your Vercel URL instead.
-          </div>
-          <button onclick="loadConcepts()" style="
-            padding: 8px 20px;
-            font-size: 0.75rem;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            border: 0.5px solid var(--border-hover);
-            border-radius: 6px;
-            background: none;
-            color: var(--muted2);
-            cursor: pointer;
-          ">Try again</button>
-        </div>`;
+      grid.innerHTML = `<div style="padding:3rem 2rem;color:var(--muted);font-family:'DM Mono',monospace;font-size:0.75rem;letter-spacing:0.12em;text-transform:uppercase;text-align:center;">Could not load concepts — open via Vercel URL</div>`;
     }
 
     if (count) {
@@ -1964,10 +1921,9 @@ function buildGrid() {
   const container = document.getElementById('netflixRows');
   if (!container) return;
 
-  const q = (document.getElementById('search')?.value || '').toLowerCase().trim();
-  const isVault = vaultMode;
+  const q = searchQ.toLowerCase();
+  const isVault = vaultActive;
 
-  // Determine which categories to show (all active ones, or just the selected one)
   const catsToShow = activeCat === 'all'
     ? CATEGORIES.filter(c => c.id !== 'all')
     : CATEGORIES.filter(c => c.id === activeCat);
@@ -1977,40 +1933,70 @@ function buildGrid() {
 
   catsToShow.forEach(cat => {
     let cards = CONCEPTS.filter(c => c.category === cat.id);
-
-    // Apply vault filter
     if (isVault) cards = cards.filter(c => mastered.has(c.id));
-
-    // Apply search filter
     if (q) cards = cards.filter(c =>
       c.term.toLowerCase().includes(q) ||
       c.hook.toLowerCase().includes(q) ||
       (c.plain && c.plain.toLowerCase().includes(q))
     );
-
-    if (cards.length === 0) return; // skip empty rows
-
+    cards = cards.reverse();
+    if (cards.length === 0) return;
     totalVisible += cards.length;
 
     html += `
       <div class="nf-section" id="nf-row-${cat.id}">
         <div class="nf-section-header">
-          <div class="nf-section-title" style="color:${cat.color}">${cat.name}</div>
+          <div class="nf-section-title" style="color:${cat.color}">${cat.name} <span style="color:var(--muted);font-size:0.65rem;">&middot; ${cards.length}</span></div>
           <div class="nf-section-rule"></div>
         </div>
         <div class="nf-scroll-wrap">
           <div class="nf-fade-right"></div>
           <div class="nf-row">
-            ${cards.map((c, i) => renderCard(c, i)).join('')}
+            ${cards.map((c, i) => {
+              const color = CAT_COLOR[c.category] || '#e8d5a3';
+              const isMastered = mastered.has(c.id);
+              return `
+              <div class="concept-card${isMastered?' mastered':''}" id="cc${c.id}" style="--cat-color:${color}; animation-delay:${Math.min(i,20)*0.03}s">
+                <div class="card-front" onclick="toggleCard(${c.id})">
+                  <div class="card-meta">
+                    <span class="card-num">#${String(c.id).padStart(3,'0')}</span>
+                    <span class="card-cat">${(CATEGORIES.find(x => x.id === c.category)||{}).name||c.category}</span>
+                    <span class="mastered-badge">✓ mastered</span>
+                  </div>
+                  ${(() => {
+                    if (c.collection_id == null) return '';
+                    const col = COLLECTIONS_BY_ID[c.collection_id];
+                    if (!col || !Array.isArray(col.people) || col.people.length === 0) return '';
+                    return '<div class="people-pills">' + col.people.map(p => `<span class="people-pill">${p}</span>`).join('') + '</div>';
+                  })()}
+                  <div class="card-term">${c.term}</div>
+                  <div class="card-hook">${c.hook}</div>
+                  <div class="card-expand-icon">+</div>
+                </div>
+                <div class="card-back">
+                  <div class="back-section-label">What it means</div>
+                  <div class="back-text">${c.plain}</div>
+                  <div class="back-section-label">Analogy</div>
+                  <div class="back-analogy">${c.analogy}</div>
+                  <div class="back-section-label">Reflect & Use It</div>
+                  <div class="back-prompt">
+                    <div class="prompt-icon">💬</div>
+                    <p>${c.prompt}</p>
+                  </div>
+                  <div class="card-actions">
+                    <button class="btn-master" onclick="toggleMaster(event,${c.id})">${isMastered?'✓ Mastered':'Mark as Mastered'}</button>
+                    <button class="btn-share" onclick="shareCard(event,${c.id})">Share</button>
+                  </div>
+                </div>
+              </div>`;
+            }).join('')}
           </div>
         </div>
       </div>`;
   });
 
-  container.innerHTML = html || `<div style="padding:3rem 2rem;color:var(--muted);font-family:'DM Mono',monospace;font-size:0.75rem;letter-spacing:0.12em;text-transform:uppercase;">No concepts found</div>`;
-
-  const countEl = document.getElementById('resultCount');
-  if (countEl) countEl.textContent = totalVisible > 0 ? `${totalVisible} concept${totalVisible !== 1 ? 's' : ''}` : '';
+  container.innerHTML = html || `<div style="padding:3rem 2rem;color:var(--muted);font-family:'DM Mono',monospace;font-size:0.75rem;letter-spacing:0.12em;text-transform:uppercase;text-align:center;">No concepts found</div>`;
+  document.getElementById('resultCount').textContent = totalVisible > 0 ? `${totalVisible} concept${totalVisible !== 1 ? 's' : ''} shown` : '';
 }
 
 function render() { buildCats(); buildGrid(); updateProgress(); buildEpisodes(); }
