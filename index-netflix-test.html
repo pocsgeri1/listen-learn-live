@@ -2350,48 +2350,63 @@ function buildGrid() {
   startRowAutoScroll();
 }
 function startRowAutoScroll() {
-  // Give the DOM a moment to render before measuring
   setTimeout(() => {
     document.querySelectorAll('.nf-row').forEach((row, index) => {
-      // Skip rows that don't overflow (nothing to scroll)
-      if (row.scrollWidth <= row.clientWidth + 10) return;
+      // Cancel any previous animation on this row
+      if (row._autoScrollRAF) cancelAnimationFrame(row._autoScrollRAF);
 
-      const direction = index % 2 === 0 ? 1 : -1; // alternate: even = left, odd = right
-      const speed = 0.4; // pixels per frame — slow drift
+      const maxScroll = row.scrollWidth - row.clientWidth;
+      if (maxScroll < 10) return; // row doesn't overflow, skip
+
+      // Even rows scroll left→right, odd rows scroll right→left
+      const goRight = index % 2 === 0;
+      if (!goRight) row.scrollLeft = maxScroll; // start odd rows at the end
+
+      const speed = 0.5;
       let paused = false;
-      let animFrame;
+      let lastTime = null;
 
-      // Start odd rows at the end so they visibly scroll toward start
-      if (direction === -1) row.scrollLeft = row.scrollWidth - row.clientWidth;
+      function step(ts) {
+        if (!lastTime) lastTime = ts;
+        const delta = ts - lastTime;
+        lastTime = ts;
 
-      function step() {
         if (!paused) {
-          row.scrollLeft += speed * direction;
+          const move = speed * (delta / 16); // normalize to 60fps
+          const current = row.scrollLeft;
 
-          // Bounce: when reaching an end, reverse by restarting from opposite end
-          if (direction === 1 && row.scrollLeft >= row.scrollWidth - row.clientWidth - 1) {
-            row.scrollLeft = 0;
-          } else if (direction === -1 && row.scrollLeft <= 1) {
-            row.scrollLeft = row.scrollWidth - row.clientWidth;
+          if (goRight) {
+            row.scrollLeft = current + move;
+            // Seamless loop: snap back to start when reaching end
+            if (row.scrollLeft >= maxScroll - 1) row.scrollLeft = 0;
+          } else {
+            row.scrollLeft = current - move;
+            // Seamless loop: snap to end when reaching start
+            if (row.scrollLeft <= 1) row.scrollLeft = maxScroll;
           }
         }
-        animFrame = requestAnimationFrame(step);
+
+        row._autoScrollRAF = requestAnimationFrame(step);
       }
 
-      // Pause on hover or touch
-      row.addEventListener('mouseenter', () => { paused = true; });
-      row.addEventListener('mouseleave', () => { paused = false; });
-      row.addEventListener('touchstart', () => { paused = true; }, { passive: true });
+      // Pause on hover (desktop)
+      row.addEventListener('mouseenter', () => { paused = true; }, { passive: true });
+      row.addEventListener('mouseleave', () => { paused = false; }, { passive: true });
+
+      // Pause on touch, resume after 2.5s grace
+      let touchTimer;
+      row.addEventListener('touchstart', () => {
+        paused = true;
+        clearTimeout(touchTimer);
+      }, { passive: true });
       row.addEventListener('touchend', () => {
-        setTimeout(() => { paused = false; }, 2000); // 2s grace after touch
+        clearTimeout(touchTimer);
+        touchTimer = setTimeout(() => { paused = false; }, 2500);
       }, { passive: true });
 
-      animFrame = requestAnimationFrame(step);
-
-      // Store so we can cancel if grid rebuilds
-      row._autoScrollFrame = animFrame;
+      row._autoScrollRAF = requestAnimationFrame(step);
     });
-  }, 300);
+  }, 400);
 }
 function render() { buildCats(); initMagneticPills(); buildGrid(); updateProgress(); buildEpisodes(); }
 
