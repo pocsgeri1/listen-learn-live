@@ -1287,7 +1287,12 @@
     border-color: currentColor;
   }
 
-  .cat-icon { display: none; }
+  .cat-icon {
+    display: inline;
+    font-size: 0.75rem;
+    margin-right: 5px;
+    opacity: 0.8;
+  }
   .cat-name {
     font-family: 'DM Mono', monospace;
     font-size: 0.65rem;
@@ -2063,7 +2068,7 @@ function buildCats() {
   const grid = document.getElementById('catGrid');
   grid.innerHTML = CATEGORIES.map(cat => `
     <div class="cat-card${activeCat===cat.id?' active':''}" data-cat="${cat.id}" onclick="setCat('${cat.id}')" style="color:${cat.color}">
-      <span class="cat-name">${cat.name}</span>
+      <span class="cat-icon">${cat.icon}</span><span class="cat-name">${cat.name}</span>
     </div>
   `).join('');
 }
