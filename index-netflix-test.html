@@ -336,6 +336,59 @@
     text-align: center;
     padding: 3rem 0;
   }
+  /* ============================================
+     NETFLIX CATEGORY ROWS
+     ============================================ */
+  .nf-section {
+    padding: 2rem 0 0.5rem;
+  }
+  .nf-section-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0 2rem 1rem;
+  }
+  .nf-section-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted2);
+    flex-shrink: 0;
+  }
+  .nf-section-rule {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  .nf-scroll-wrap {
+    position: relative;
+  }
+  .nf-fade-right {
+    position: absolute;
+    right: 0; top: 0; bottom: 0;
+    width: 80px;
+    background: linear-gradient(to right, transparent, var(--bg));
+    pointer-events: none;
+    z-index: 2;
+  }
+  .nf-row {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 0 2rem 1.5rem;
+  }
+  .nf-row::-webkit-scrollbar { display: none; }
+  .nf-row .card {
+    flex: 0 0 280px;
+    scroll-snap-align: start;
+  }
+  @media (max-width: 600px) {
+    .nf-row .card { flex: 0 0 88vw; }
+  }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   html { scroll-behavior: smooth; }
@@ -1669,14 +1722,14 @@
             <div class="ep-drawer-grid" id="epDrawerGrid"></div>
           </div>
         </div>
-  <!-- CATEGORIES -->
+  <!-- CATEGORIES (now jump-links, not filters) -->
   <div class="cat-grid" id="catGrid"></div>
 
-  <!-- COUNT -->
+  <!-- SEARCH COUNT -->
   <div class="results-count" id="resultCount"></div>
 
-  <!-- CONCEPTS -->
-  <div class="concepts-grid" id="conceptsGrid"></div>
+  <!-- NETFLIX ROWS — one per category -->
+  <div id="netflixRows"></div>
 </section>
 
 <!-- DAILY GOAL BAR -->
@@ -1908,48 +1961,56 @@ function filtered() {
 }
 
 function buildGrid() {
-  const list = filtered();
-  document.getElementById('resultCount').textContent = list.length + ' concept' + (list.length!==1?'s':'') + ' shown';
-  const grid = document.getElementById('conceptsGrid');
-  if (!list.length) { grid.innerHTML = '<div class="empty">No concepts match your search.</div>'; return; }
-  grid.innerHTML = list.map((c, i) => {
-    const color = CAT_COLOR[c.category] || '#e8d5a3';
-    const isMastered = mastered.has(c.id);
-    return `
-    <div class="concept-card${isMastered?' mastered':''}" id="cc${c.id}" style="--cat-color:${color}; animation-delay:${Math.min(i,20)*0.03}s">
-      <div class="card-front" onclick="toggleCard(${c.id})">
-        <div class="card-meta">
-          <span class="card-num">#${String(c.id).padStart(3,'0')}</span>
-          <span class="card-cat">${(CATEGORIES.find(x => x.id === c.category) || {}).name || c.category}</span>
-          <span class="mastered-badge">✓ mastered</span>
+  const container = document.getElementById('netflixRows');
+  if (!container) return;
+
+  const q = (document.getElementById('search')?.value || '').toLowerCase().trim();
+  const isVault = vaultMode;
+
+  // Determine which categories to show (all active ones, or just the selected one)
+  const catsToShow = activeCat === 'all'
+    ? CATEGORIES.filter(c => c.id !== 'all')
+    : CATEGORIES.filter(c => c.id === activeCat);
+
+  let totalVisible = 0;
+  let html = '';
+
+  catsToShow.forEach(cat => {
+    let cards = CONCEPTS.filter(c => c.category === cat.id);
+
+    // Apply vault filter
+    if (isVault) cards = cards.filter(c => mastered.has(c.id));
+
+    // Apply search filter
+    if (q) cards = cards.filter(c =>
+      c.term.toLowerCase().includes(q) ||
+      c.hook.toLowerCase().includes(q) ||
+      (c.plain && c.plain.toLowerCase().includes(q))
+    );
+
+    if (cards.length === 0) return; // skip empty rows
+
+    totalVisible += cards.length;
+
+    html += `
+      <div class="nf-section" id="nf-row-${cat.id}">
+        <div class="nf-section-header">
+          <div class="nf-section-title" style="color:${cat.color}">${cat.name}</div>
+          <div class="nf-section-rule"></div>
         </div>
-        ${(() => {
-          if (c.collection_id == null) return '';
-          const col = COLLECTIONS_BY_ID[c.collection_id];
-          if (!col || !Array.isArray(col.people) || col.people.length === 0) return '';
-          return '<div class="people-pills">' + col.people.map(p => `<span class="people-pill">${p}</span>`).join('') + '</div>';
-        })()}
-        <div class="card-term">${c.term}</div>
-        <div class="card-hook">${c.hook}</div>
-        <div class="card-expand-icon">+</div>
-      </div>
-      <div class="card-back">
-        <div class="back-section-label">What it means</div>
-        <div class="back-text">${c.plain}</div>
-        <div class="back-section-label">Analogy</div>
-        <div class="back-analogy">${c.analogy}</div>
-        <div class="back-section-label">Reflect & Use It</div>
-        <div class="back-prompt">
-          <div class="prompt-icon">💬</div>
-          <p>${c.prompt}</p>
+        <div class="nf-scroll-wrap">
+          <div class="nf-fade-right"></div>
+          <div class="nf-row">
+            ${cards.map((c, i) => renderCard(c, i)).join('')}
+          </div>
         </div>
-        <div class="card-actions">
-          <button class="btn-master" onclick="toggleMaster(event,${c.id})">${isMastered?'✓ Mastered':'Mark as Mastered'}</button>
-          <button class="btn-share" onclick="shareCard(event,${c.id})">Share</button>
-        </div>
-      </div>
-    </div>`;
-  }).join('');
+      </div>`;
+  });
+
+  container.innerHTML = html || `<div style="padding:3rem 2rem;color:var(--muted);font-family:'DM Mono',monospace;font-size:0.75rem;letter-spacing:0.12em;text-transform:uppercase;">No concepts found</div>`;
+
+  const countEl = document.getElementById('resultCount');
+  if (countEl) countEl.textContent = totalVisible > 0 ? `${totalVisible} concept${totalVisible !== 1 ? 's' : ''}` : '';
 }
 
 function render() { buildCats(); buildGrid(); updateProgress(); buildEpisodes(); }
