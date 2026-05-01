@@ -1503,7 +1503,6 @@
     gap: 4px;
     margin-bottom: 8px;
   }
-
   .people-pill {
     font-family: 'DM Mono', monospace;
     font-size: 0.6rem;
@@ -1514,6 +1513,13 @@
     border: 1px solid var(--border);
     background: transparent;
     color: var(--muted2);
+  }
+  .card-front .people-pills { display: none; }
+  .card-back .people-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 0.75rem;
   }
 
   .mastered-badge {
