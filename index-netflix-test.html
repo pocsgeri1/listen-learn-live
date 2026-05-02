@@ -554,8 +554,8 @@
     height: 76px;
     border-bottom: 1px solid var(--border);
     background: rgba(13,13,13,0.88);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
     transition: height 0.3s ease, border-color 0.3s ease;
   }
 
@@ -664,6 +664,7 @@
     background: var(--accent);
     animation: pulse 2s infinite;
     flex-shrink: 0;
+    will-change: opacity;
   }
 
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
@@ -962,6 +963,7 @@
     animation: cotdPulse 2s infinite;
     will-change: opacity;
   }
+  
   .cotd-eyebrow-date {
     color: var(--muted);
     margin-left: auto;
@@ -2026,7 +2028,7 @@
     z-index: 1;
     width: 100%;
     max-width: 680px;
-    max-height: 92vh;
+    height: 88vh;
     background: var(--surface);
     border: 1px solid var(--border-hover);
     border-bottom: none;
@@ -2036,6 +2038,8 @@
     overflow: hidden;
     transform: translateY(100%);
     transition: transform 0.42s cubic-bezier(0.32, 0.72, 0, 1);
+    will-change: transform;
+    min-height: 480px;
   }
 
   #quizOverlay.quiz-open .quiz-sheet {
@@ -2123,11 +2127,6 @@
     padding: 32px 36px 40px;
     scrollbar-width: none;
     min-height: 320px;
-  }
-
-  .quiz-sheet {
-    min-height: 480px;
-    will-change: transform;
   }
 
   .quiz-body::-webkit-scrollbar { display: none; }
@@ -4046,18 +4045,21 @@ let quizState = {
 let _quizPoolCache = null;
 
 function getQuizPool() {
-  if (_quizPoolCache) return _quizPoolCache;
-  const eligible = (window.CONCEPTS || []).filter(c =>
-    c.hook && c.plain && c.analogy && c.term
+  // Always read from CONCEPTS directly — never cache a stale empty array
+  const source = window.CONCEPTS || [];
+  if (source.length < 12) {
+    console.warn('Quiz: not enough concepts loaded yet, got', source.length);
+    return [];
+  }
+  const eligible = source.filter(c =>
+    c.hook && c.plain && c.analogy && c.term &&
+    c.hook.length > 5 && c.analogy.length > 10
   );
-  _quizPoolCache = shuffle([...eligible]);
-  return _quizPoolCache;
+  return shuffle([...eligible]);
 }
 
-// Invalidate cache whenever concepts reload (future-proof)
-document.addEventListener('conceptsLoaded', () => { _quizPoolCache = null; });
-
 function openQuiz() {
+  // Ripple effect
   const btn = document.getElementById('navQuizBtn');
   if (btn) {
     const r = btn.getBoundingClientRect();
@@ -4069,11 +4071,21 @@ function openQuiz() {
     setTimeout(() => ripple.remove(), 600);
   }
 
-  // Draw a fresh 12-concept sample from the pre-built pool
+  // Build fresh pool every open — CONCEPTS is guaranteed loaded by now
   const pool = getQuizPool();
+  if (pool.length < 12) {
+    alert('Concepts still loading — try again in a moment.');
+    return;
+  }
+
   quizState.score = 0;
   quizState.round = 0;
-  quizState.pool  = pool.slice(0, 12); // 4 per round
+  quizState._r1score = 0;
+  quizState._r2score = 0;
+  quizState._r3score = 0;
+  // Take 12 from a random offset so every session is different
+  const offset = Math.floor(Math.random() * Math.max(1, pool.length - 12));
+  quizState.pool = pool.slice(offset, offset + 12);
 
   const overlay = document.getElementById('quizOverlay');
   overlay.classList.add('quiz-open');
