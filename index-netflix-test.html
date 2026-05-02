@@ -3175,6 +3175,9 @@ function buildGrid() {
   container.innerHTML = html || `<div style="padding:3rem 2rem;color:var(--muted);font-family:'DM Mono',monospace;font-size:0.75rem;letter-spacing:0.12em;text-transform:uppercase;text-align:center;">No concepts found</div>`;
   document.getElementById('resultCount').textContent = totalVisible > 0 ? `${totalVisible} concept${totalVisible !== 1 ? 's' : ''} shown` : '';
   initDragScroll();
+  const mc = document.getElementById('netflixRows');
+  if (mc) mc._magneticBound = false;
+  initMagneticCards();
 }
 
 // Mouse drag-to-scroll for category rows (desktop)
@@ -3255,8 +3258,8 @@ container.addEventListener('mousemove', (e) => {
     const dx = e.clientX - (rect.left + rect.width / 2);
     const dy = e.clientY - (rect.top + rect.height / 2);
     card.style.transform = `translateY(-8px) translate(${dx * STRENGTH}px, ${dy * STRENGTH}px)`;
-  });  // closes requestAnimationFrame
-});    // closes mousemove
+    });  // closes rAF
+  });    // closes mousemove
 
   container.addEventListener('mouseleave', function() {
     if (activeCard) {
