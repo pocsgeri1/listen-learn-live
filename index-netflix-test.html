@@ -2695,7 +2695,7 @@
   </div><!-- /.app-controls -->
 
   <!-- CATEGORY ROWS — full bleed -->
-  <div id="netflixRows"></div>
+  <div id="netflixRows" style="min-height: 1800px;"></div>
 </section>
 
 <div class="divider"></div>
@@ -3179,45 +3179,8 @@ function buildGrid() {
   initMagneticCards();
 }
 
-// Mouse drag-to-scroll for category rows (desktop)
 function initDragScroll() {
-  document.querySelectorAll('.nf-row').forEach(row => {
-    let isDown = false, startX, scrollStart, didDrag = false;
-
-    row.addEventListener('mousedown', e => {
-      isDown = true;
-      didDrag = false;
-      row.classList.add('dragging');
-      startX = e.pageX - row.offsetLeft;
-      scrollStart = row.scrollLeft;
-    });
-    row.addEventListener('mouseleave', () => {
-      isDown = false;
-      row.classList.remove('dragging');
-    });
-    row.addEventListener('mouseup', () => {
-      isDown = false;
-      // Small delay so click events can check didDrag before we reset it
-      setTimeout(() => {
-        row.classList.remove('dragging');
-        didDrag = false;
-      }, 10);
-    });
-    row.addEventListener('mousemove', e => {
-      if (!isDown) return;
-      const x = e.pageX - row.offsetLeft;
-      const walk = (x - startX) * 1.2;
-      if (Math.abs(walk) > 4) {
-        didDrag = true;
-        e.preventDefault();
-        row.scrollLeft = scrollStart - walk;
-      }
-    });
-    // Block card clicks if we just dragged
-    row.addEventListener('click', e => {
-      if (didDrag) e.stopPropagation();
-    }, true);
-  });
+  return; // disabled for performance — use trackpad swipe or shift-scroll instead
 }
 function initMagneticCards() {
   return; // disabled — was main cause of scroll lag
