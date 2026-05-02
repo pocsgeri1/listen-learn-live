@@ -1875,7 +1875,7 @@
     position: fixed;
     bottom: 0; left: 0; right: 0;
     background: rgba(13,13,13,0.95);
-    backdrop-filter: blur(20px);
+    backdrop-filter: blur(2px);
     border-top: 1px solid var(--border);
     padding: 10px 1.25rem;
     display: flex;
@@ -1969,8 +1969,8 @@
 
   /* ANIMATIONS */
   @keyframes fadeUp {
-    from { opacity: 0; margin-top: 12px; }
-    to { opacity: 1; margin-top: 0; }
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
   .concept-card {
@@ -2768,8 +2768,15 @@ function initMagneticPills() {
   const STRENGTH = 0.35;  // how far pills follow cursor (0 = none, 1 = full)
   const RADIUS   = 80;    // px distance at which magnetism kicks in
 
-  document.querySelectorAll('.cat-card').forEach(pill => {
-    pill.addEventListener('mousemove', function(e) {
+  let _pillRaf = false;
+  const pillGrid = document.getElementById('catGrid');
+  if (!pillGrid) return;
+  pillGrid.addEventListener('mousemove', function(e) {
+    if (_pillRaf) return;
+    _pillRaf = true;
+    requestAnimationFrame(() => { _pillRaf = false;
+      const pill = e.target.closest('.cat-card');
+      if (!pill) return;
       const rect = pill.getBoundingClientRect();
       const cx = rect.left + rect.width / 2;
       const cy = rect.top  + rect.height / 2;
@@ -2781,7 +2788,8 @@ function initMagneticPills() {
         const ty = dy * STRENGTH;
         pill.style.transform = `translate(${tx}px, ${ty}px)`;
       }
-    });
+    });  // closes rAF
+  });    // closes pillGrid mousemove
 
     pill.addEventListener('mouseleave', function() {
       pill.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), border-color 0.2s, background 0.2s';
@@ -3716,7 +3724,12 @@ function toggleVault() {
   buildGrid();
 }
 
-document.getElementById('search').addEventListener('input', e => { searchQ = e.target.value; buildGrid(); });
+let _searchDebounce = null;
+document.getElementById('search').addEventListener('input', e => {
+  searchQ = e.target.value;
+  clearTimeout(_searchDebounce);
+  _searchDebounce = setTimeout(() => buildGrid(), 180);
+});
 
 // Restore saved progress BEFORE loading concepts, so the first render
 // already shows the correct mastered state.
