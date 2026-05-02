@@ -602,7 +602,37 @@
     will-change: transform;
   }
   .nav-link:hover { color: var(--text); background: rgba(255,255,255,0.06); }
-  .nav-link.nav-link--active { color: var(--accent); }
+.nav-link.nav-link--active { color: var(--accent); }
+
+.nav-divider {
+  width: 0.5px;
+  height: 16px;
+  background: var(--border-hover);
+  margin: 0 4px;
+  flex-shrink: 0;
+}
+
+.nav-quiz-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted2);
+  background: none;
+  border: 0.5px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 13px;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  white-space: nowrap;
+}
+
+.nav-quiz-btn:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: rgba(232,213,163,0.06);
+  box-shadow: 0 0 12px rgba(232,213,163,0.18);
+}
 
   /* RIGHT CLUSTER */
   .nav-right {
@@ -1967,6 +1997,8 @@
     <a class="nav-link" onclick="toggleVault();scrollToSection('app')">Vault</a>
     <a class="nav-link" onclick="openCotdFromNav()">Today</a>
     <a class="nav-link" onclick="scrollToSection('signup')">Sign up</a>
+    <div class="nav-divider"></div>
+    <button class="nav-quiz-btn" id="navQuizBtn" onclick="openQuiz()">◈ Quiz</button>
   </div>
 
   <div class="nav-right">
@@ -1987,6 +2019,7 @@
   <button class="nav-mobile-link" onclick="openCotdFromNav();closeMobileNav()">◇ Today's Concept</button>
   <button class="nav-mobile-link" onclick="scrollToSection('signup');closeMobileNav()">◉ Sign up — Free</button>
   <button class="nav-mobile-link" onclick="openHiw();closeMobileNav()">◌ How it works</button>
+  <button class="nav-mobile-link" style="color:var(--accent);border-top:1px solid var(--border);" onclick="openQuiz();closeMobileNav()">◈ Quiz mode</button>
 </div>
 
 <!-- HOW IT WORKS MODAL -->
