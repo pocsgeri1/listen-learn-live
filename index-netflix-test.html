@@ -409,7 +409,6 @@
     align-items: stretch;
     gap: 1rem;
     overflow-x: auto;
-    scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     padding: 0.25rem 2rem 1.5rem;
@@ -420,8 +419,6 @@
   .nf-row .concept-card {
     flex: 0 0 300px;
     min-width: 300px;
-    scroll-snap-align: start;
-    scroll-snap-stop: normal;
     align-self: flex-start;
   }
   @media (max-width: 600px) {
@@ -1974,7 +1971,6 @@
 
   .concept-card {
     animation: fadeUp 0.35s ease both;
-    animation-fill-mode: forwards;
   }
 
   .nf-row.dragging { scroll-snap-type: none; user-select: none; cursor: grabbing; }
@@ -3132,7 +3128,7 @@ function buildGrid() {
               const color = CAT_COLOR[c.category] || '#e8d5a3';
               const isMastered = mastered.has(c.id);
               return `
-              <div class="concept-card${isMastered?' mastered':''}" id="cc${c.id}" style="--cat-color:${color}; animation-delay:${Math.min(i,20)*0.03}s">
+              <div class="concept-card${isMastered?' mastered':''}" id="cc${c.id}" style="--cat-color:${color}">
                 <div class="card-front" onclick="toggleCard(${c.id})">
                   <div class="card-meta">
                     <span class="card-num">#${String(c.id).padStart(3,'0')}</span>
@@ -3535,7 +3531,7 @@ function openEpisodeDrawer(collectionId) {
       const color = CAT_COLOR[c.category] || '#e8d5a3';
       const isMastered = mastered.has(c.id);
       return `
-      <div class="concept-card${isMastered?' mastered':''}" id="epcc${c.id}" style="--cat-color:${color}; animation-delay:${Math.min(i,20)*0.03}s">
+      <div class="concept-card${isMastered?' mastered':''}" id="epcc${c.id}" style="--cat-color:${color}">
         <div class="card-front" onclick="toggleEpCard(${c.id})">
           <div class="card-meta">
             <span class="card-num">#${String(c.id).padStart(3,'0')}</span>
