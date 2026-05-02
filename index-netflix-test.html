@@ -2116,6 +2116,11 @@
     overflow-y: auto;
     padding: 28px 24px 32px;
     scrollbar-width: none;
+    min-height: 320px;
+  }
+
+  .quiz-sheet {
+    min-height: 480px;
   }
 
   .quiz-body::-webkit-scrollbar { display: none; }
@@ -4024,31 +4029,45 @@ const CAT_COLORS = {
 };
 
 let quizState = {
-  round: 0,          // 0-indexed, 0–2
+  round: 0,
   score: 0,
-  pool: [],          // concepts selected for this session
+  pool: [],
   answered: false
 };
 
+// ── Pool is built once after CONCEPTS loads, not on click ──
+let _quizPoolCache = null;
+
+function getQuizPool() {
+  if (_quizPoolCache) return _quizPoolCache;
+  const eligible = (window.CONCEPTS || []).filter(c =>
+    c.hook && c.plain && c.analogy && c.term
+  );
+  _quizPoolCache = shuffle([...eligible]);
+  return _quizPoolCache;
+}
+
+// Invalidate cache whenever concepts reload (future-proof)
+document.addEventListener('conceptsLoaded', () => { _quizPoolCache = null; });
+
 function openQuiz() {
-  // Ripple from button
   const btn = document.getElementById('navQuizBtn');
   if (btn) {
     const r = btn.getBoundingClientRect();
     const ripple = document.createElement('div');
     ripple.className = 'quiz-ripple';
     const size = 40;
-    ripple.style.cssText = `width:${size}px;height:${size}px;left:${r.left + r.width/2 - size/2}px;top:${r.top + r.height/2 - size/2}px`;
+    ripple.style.cssText = `width:${size}px;height:${size}px;left:${r.left+r.width/2-size/2}px;top:${r.top+r.height/2-size/2}px`;
     document.body.appendChild(ripple);
     setTimeout(() => ripple.remove(), 600);
   }
 
-  // Init state
+  // Draw a fresh 12-concept sample from the pre-built pool
+  const pool = getQuizPool();
   quizState.score = 0;
   quizState.round = 0;
-  quizState.pool = buildPool();
+  quizState.pool  = pool.slice(0, 12); // 4 per round
 
-  // Open overlay
   const overlay = document.getElementById('quizOverlay');
   overlay.classList.add('quiz-open');
   document.body.style.overflow = 'hidden';
@@ -4058,18 +4077,8 @@ function openQuiz() {
 }
 
 function closeQuiz() {
-  const overlay = document.getElementById('quizOverlay');
-  overlay.classList.remove('quiz-open');
+  document.getElementById('quizOverlay').classList.remove('quiz-open');
   document.body.style.overflow = '';
-}
-
-function buildPool() {
-  // Need at least 12 concepts with non-empty analogy for Round 3
-  const eligible = (window.CONCEPTS || []).filter(c =>
-    c.hook && c.plain && c.analogy && c.term
-  );
-  // Shuffle and take 12 (4 per round)
-  return shuffle([...eligible]).slice(0, 12);
 }
 
 function shuffle(arr) {
@@ -4081,10 +4090,8 @@ function shuffle(arr) {
 }
 
 function updateProgress() {
-  const pct = (quizState.round / 3) * 100;
-  document.getElementById('quizProgressFill').style.width = pct + '%';
-  const roundDisplay = quizState.round < 3 ? quizState.round + 1 : 3;
-  document.getElementById('quizRoundNum').textContent = roundDisplay;
+  document.getElementById('quizProgressFill').style.width = ((quizState.round / 3) * 100) + '%';
+  document.getElementById('quizRoundNum').textContent = Math.min(quizState.round + 1, 3);
   document.getElementById('quizScoreNum').textContent = quizState.score;
 }
 
@@ -4106,8 +4113,8 @@ function playTone(type) {
       g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
       o.start(); o.stop(ctx.currentTime + 0.4);
     } else {
-      o.frequency.setValueAtTime(220, ctx.currentTime);
-      g.gain.setValueAtTime(0.12, ctx.currentTime);
+      o.frequency.setValueAtTime(200, ctx.currentTime);
+      g.gain.setValueAtTime(0.10, ctx.currentTime);
       g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
       o.start(); o.stop(ctx.currentTime + 0.3);
     }
@@ -4116,28 +4123,132 @@ function playTone(type) {
 
 function renderRound() {
   updateProgress();
-  if (quizState.round === 0) renderRound1();
+  const body = document.getElementById('quizBody');
+  body.scrollTop = 0;
+  if      (quizState.round === 0) renderRound1();
   else if (quizState.round === 1) renderRound2();
   else if (quizState.round === 2) renderRound3();
-  else renderEndScreen();
+  else                             renderEndScreen();
 }
 
-// Placeholders — Steps 3–5 will replace these
-function renderRound1() {
-  document.getElementById('quizBody').innerHTML =
-    '<p style="color:var(--muted2);font-family:DM Sans,sans-serif;font-size:0.9rem;padding:20px 0">Round 1 coming in Step 3…</p>';
+// ── INTERSTITIAL between rounds ──
+function showInterstitial(title, sub, xpText, onNext) {
+  const body = document.getElementById('quizBody');
+  body.innerHTML = `
+    <div class="quiz-interstitial">
+      <span class="quiz-interstitial-icon">✦</span>
+      <div class="quiz-interstitial-title">${title}</div>
+      <div class="quiz-interstitial-sub">${sub}</div>
+      <div class="quiz-xp-badge">${xpText}</div><br>
+      <button class="quiz-next-btn" id="quizNextBtn">Continue →</button>
+    </div>`;
+  document.getElementById('quizNextBtn').onclick = onNext;
 }
+
+// ════════════════════════════════════════════
+// ROUND 1 — Hook Match (Multiple Choice)
+// Show the hook. Pick the correct term from 4.
+// ════════════════════════════════════════════
+function renderRound1() {
+  // Concepts 0–3 used for round 1
+  const concepts = quizState.pool.slice(0, 4);
+  let qi = 0; // current question index within this round
+  let roundScore = 0;
+
+  function renderQ() {
+    if (qi >= concepts.length) {
+      // Round complete
+      quizState.round = 1;
+      const messages = ['Solid start.', 'Nice work.', 'Keep it going.'];
+      showInterstitial(
+        'Round 1 complete',
+        messages[Math.floor(Math.random() * messages.length)],
+        `+${roundScore} pts`,
+        () => renderRound()
+      );
+      return;
+    }
+
+    const correct = concepts[qi];
+    // Pick 3 wrong options from rest of pool (different categories preferred)
+    const wrongPool = shuffle(
+      quizState.pool.filter(c => c.id !== correct.id)
+    ).slice(0, 3);
+    const options = shuffle([correct, ...wrongPool]);
+    const catColor = CAT_COLORS[correct.category] || '#e8d5a3';
+
+    const body = document.getElementById('quizBody');
+    body.innerHTML = `
+      <div class="quiz-type-label">Round 1 of 3 &nbsp;·&nbsp; Hook Match &nbsp;·&nbsp; ${qi+1} / ${concepts.length}</div>
+      <span class="quiz-cat-chip" style="color:${catColor};border-color:${catColor}">${correct.category}</span>
+      <div class="quiz-question">"${correct.hook}"</div>
+      <div class="quiz-options" id="quizOptions">
+        ${options.map((opt, i) => `
+          <button class="quiz-option" data-id="${opt.id}" onclick="r1Pick(this,'${correct.id}')">
+            <span style="font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--muted);letter-spacing:0.1em;display:block;margin-bottom:4px">${String.fromCharCode(65+i)}</span>
+            ${opt.term}
+          </button>`).join('')}
+      </div>`;
+  }
+
+  // Expose pick handler globally so inline onclick works
+  window.r1Pick = function(btn, correctId) {
+    if (quizState.answered) return;
+    quizState.answered = true;
+
+    const all = document.querySelectorAll('.quiz-option');
+    all.forEach(b => { b.disabled = true; });
+
+    const chosen = btn.dataset.id;
+    const isCorrect = String(chosen) === String(correctId);
+
+    if (isCorrect) {
+      btn.classList.add('correct');
+      playTone('correct');
+      addScore(10);
+      roundScore += 10;
+    } else {
+      btn.classList.add('wrong');
+      playTone('wrong');
+      // Reveal correct
+      all.forEach(b => {
+        if (String(b.dataset.id) === String(correctId)) b.classList.add('correct');
+      });
+    }
+
+    setTimeout(() => {
+      quizState.answered = false;
+      qi++;
+      renderQ();
+    }, 1100);
+  };
+
+  quizState.answered = false;
+  renderQ();
+}
+
+// ════════════════════════════════════════════
+// ROUND 2 — Fill the Blank (coming Step 4)
+// ════════════════════════════════════════════
 function renderRound2() {
   document.getElementById('quizBody').innerHTML =
-    '<p style="color:var(--muted2);font-family:DM Sans,sans-serif;font-size:0.9rem;padding:20px 0">Round 2 coming in Step 4…</p>';
+    '<p style="color:var(--muted2);font-family:\'DM Sans\',sans-serif;font-size:0.9rem;padding:20px 0">Round 2 coming in Step 4…</p>';
 }
+
+// ════════════════════════════════════════════
+// ROUND 3 — Analogy Decode (coming Step 5)
+// ════════════════════════════════════════════
 function renderRound3() {
   document.getElementById('quizBody').innerHTML =
-    '<p style="color:var(--muted2);font-family:DM Sans,sans-serif;font-size:0.9rem;padding:20px 0">Round 3 coming in Step 5…</p>';
+    '<p style="color:var(--muted2);font-family:\'DM Sans\',sans-serif;font-size:0.9rem;padding:20px 0">Round 3 coming in Step 5…</p>';
 }
+
+// ════════════════════════════════════════════
+// END SCREEN (coming Step 6)
+// ════════════════════════════════════════════
 function renderEndScreen() {
   document.getElementById('quizBody').innerHTML =
-    '<p style="color:var(--muted2);font-family:DM Sans,sans-serif;font-size:0.9rem;padding:20px 0">End screen coming in Step 6…</p>';
+    '<p style="color:var(--muted2);font-family:\'DM Sans\',sans-serif;font-size:0.9rem;padding:20px 0">End screen coming in Step 6…</p>';
 }
 </script>
 </body>
