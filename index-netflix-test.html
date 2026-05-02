@@ -406,6 +406,7 @@
   }
   .nf-row {
     display: flex;
+    align-items: flex-start;
     gap: 1rem;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
@@ -2485,36 +2486,51 @@ function initDragScroll() {
   });
 }
 function initMagneticCards() {
-  // Runs once — uses event delegation on the stable container
   const STRENGTH = 0.12;
   const container = document.getElementById('netflixRows');
   if (!container || container._magneticBound) return;
   container._magneticBound = true;
 
+  let activeCard = null;
+
   container.addEventListener('mousemove', function(e) {
     const card = e.target.closest('.concept-card');
+
+    // If we moved onto a new card, trigger enter logic
+    if (card !== activeCard) {
+      // Leave old card
+      if (activeCard) {
+        activeCard.style.transition = 'transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94), border-color 0.2s';
+        activeCard.style.transform = 'translateY(0)';
+        setTimeout(() => {
+          if (activeCard) activeCard.style.transition = 'border-color 0.2s, transform 0.2s ease';
+        }, 350);
+      }
+      // Enter new card
+      if (card && !card.classList.contains('open')) {
+        card.style.transition = 'transform 0.12s ease, border-color 0.2s';
+      }
+      activeCard = card;
+    }
+
+    // Apply magnetic transform
     if (!card || card.classList.contains('open')) return;
     const rect = card.getBoundingClientRect();
-    const cx = rect.left + rect.width / 2;
-    const cy = rect.top + rect.height / 2;
-    const dx = e.clientX - cx;
-    const dy = e.clientY - cy;
+    const dx = e.clientX - (rect.left + rect.width / 2);
+    const dy = e.clientY - (rect.top + rect.height / 2);
     card.style.transform = `translateY(-8px) translate(${dx * STRENGTH}px, ${dy * STRENGTH}px)`;
   });
 
-  container.addEventListener('mouseleave', function(e) {
-    const card = e.target.closest('.concept-card');
-    if (!card) return;
-    card.style.transition = 'transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94), border-color 0.2s';
-    card.style.transform = 'translateY(0)';
-    setTimeout(() => { card.style.transition = 'border-color 0.2s, transform 0.2s ease'; }, 350);
-  }, true);
-
-  container.addEventListener('mouseenter', function(e) {
-    const card = e.target.closest('.concept-card');
-    if (!card || card.classList.contains('open')) return;
-    card.style.transition = 'transform 0.12s ease, border-color 0.2s';
-  }, true);
+  container.addEventListener('mouseleave', function() {
+    if (activeCard) {
+      activeCard.style.transition = 'transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94), border-color 0.2s';
+      activeCard.style.transform = 'translateY(0)';
+      setTimeout(() => {
+        if (activeCard) activeCard.style.transition = 'border-color 0.2s, transform 0.2s ease';
+      }, 350);
+      activeCard = null;
+    }
+  });
 }
 function render() { buildCats(); initMagneticPills(); buildGrid(); updateProgress(); buildEpisodes(); }
 
