@@ -1540,7 +1540,8 @@
     border-radius: 999px;
   }
   .concept-card:hover::before { opacity: 0.55; }
-  .concept-card:hover::after, .concept-card.open::after { opacity: 1; }
+  .concept-card:hover::after { opacity: 1; }
+  .concept-card.open::after { opacity: 1; }
   .concept-card.open { border-color: var(--border-hover); transform: translateY(0); }
   .concept-card.mastered { opacity: 0.5; }
 
@@ -1830,7 +1831,7 @@
     animation: fadeUp 0.35s ease both;
   }
 
-  .nf-row.dragging { scroll-snap-type: none; user-select: none; }
+  .nf-row.dragging { scroll-snap-type: none; user-select: none; cursor: grabbing; }
 
   /* RESPONSIVE */
   @media (max-width: 600px) {
@@ -2248,6 +2249,7 @@ async function loadConcepts() {
     await loadCollections();
     render();
     updateHeaderCounts();
+    initMagneticCards();
 
   } catch (error) {
     console.error('Failed to load concepts:', error);
@@ -2445,58 +2447,88 @@ function buildGrid() {
 // Mouse drag-to-scroll for category rows (desktop)
 function initDragScroll() {
   document.querySelectorAll('.nf-row').forEach(row => {
-    let isDown = false, startX, scrollStart;
+    let isDown = false, startX, scrollStart, didDrag = false;
 
     row.addEventListener('mousedown', e => {
       isDown = true;
+      didDrag = false;
       row.classList.add('dragging');
       startX = e.pageX - row.offsetLeft;
       scrollStart = row.scrollLeft;
     });
-    row.addEventListener('mouseleave', () => { isDown = false; row.classList.remove('dragging'); });
-    row.addEventListener('mouseup', () => { isDown = false; row.classList.remove('dragging'); });
+    row.addEventListener('mouseleave', () => {
+      isDown = false;
+      row.classList.remove('dragging');
+    });
+    row.addEventListener('mouseup', () => {
+      isDown = false;
+      // Small delay so click events can check didDrag before we reset it
+      setTimeout(() => {
+        row.classList.remove('dragging');
+        didDrag = false;
+      }, 10);
+    });
     row.addEventListener('mousemove', e => {
       if (!isDown) return;
-      e.preventDefault();
       const x = e.pageX - row.offsetLeft;
       const walk = (x - startX) * 1.2;
-      row.scrollLeft = scrollStart - walk;
+      if (Math.abs(walk) > 4) {
+        didDrag = true;
+        e.preventDefault();
+        row.scrollLeft = scrollStart - walk;
+      }
     });
+    // Block card clicks if we just dragged
+    row.addEventListener('click', e => {
+      if (didDrag) e.stopPropagation();
+    }, true);
   });
 }
 function initMagneticCards() {
+  // Runs once — uses event delegation on the stable container
   const STRENGTH = 0.12;
-  const RADIUS = 120;
-  document.querySelectorAll('.concept-card').forEach(card => {
-    card.addEventListener('mousemove', function(e) {
-      if (card.classList.contains('open')) return;
-      const rect = card.getBoundingClientRect();
-      const cx = rect.left + rect.width / 2;
-      const cy = rect.top + rect.height / 2;
-      const dx = e.clientX - cx;
-      const dy = e.clientY - cy;
-      card.style.transform = `translateY(-8px) translate(${dx * STRENGTH}px, ${dy * STRENGTH}px)`;
-    });
-    card.addEventListener('mouseleave', function() {
-      card.style.transition = 'transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94), border-color 0.2s';
-      card.style.transform = 'translateY(0)';
-      setTimeout(() => { card.style.transition = 'border-color 0.2s, transform 0.2s ease'; }, 350);
-    });
-    card.addEventListener('mouseenter', function() {
-      if (card.classList.contains('open')) return;
-      card.style.transition = 'transform 0.12s ease, border-color 0.2s';
-    });
+  const container = document.getElementById('netflixRows');
+  if (!container || container._magneticBound) return;
+  container._magneticBound = true;
+
+  container.addEventListener('mousemove', function(e) {
+    const card = e.target.closest('.concept-card');
+    if (!card || card.classList.contains('open')) return;
+    const rect = card.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const dx = e.clientX - cx;
+    const dy = e.clientY - cy;
+    card.style.transform = `translateY(-8px) translate(${dx * STRENGTH}px, ${dy * STRENGTH}px)`;
   });
+
+  container.addEventListener('mouseleave', function(e) {
+    const card = e.target.closest('.concept-card');
+    if (!card) return;
+    card.style.transition = 'transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94), border-color 0.2s';
+    card.style.transform = 'translateY(0)';
+    setTimeout(() => { card.style.transition = 'border-color 0.2s, transform 0.2s ease'; }, 350);
+  }, true);
+
+  container.addEventListener('mouseenter', function(e) {
+    const card = e.target.closest('.concept-card');
+    if (!card || card.classList.contains('open')) return;
+    card.style.transition = 'transform 0.12s ease, border-color 0.2s';
+  }, true);
 }
-function render() { buildCats(); initMagneticPills(); buildGrid(); updateProgress(); buildEpisodes(); initMagneticCards(); }
+function render() { buildCats(); initMagneticPills(); buildGrid(); updateProgress(); buildEpisodes(); }
 
 function toggleCard(id) {
   const el = document.getElementById('cc'+id);
   const wasOpen = el.classList.contains('open');
+  // Close all other cards first
+  document.querySelectorAll('.concept-card.open').forEach(card => {
+    if (card.id !== 'cc'+id) card.classList.remove('open');
+  });
   el.classList.toggle('open');
   if (!wasOpen) {
     openedToday.add(id);
-    saveDailyGoal();     // <-- NEW: persist today's opened cards
+    saveDailyGoal();
     updateDailyGoal();
   }
 }
