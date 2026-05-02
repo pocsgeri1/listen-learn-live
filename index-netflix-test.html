@@ -4233,12 +4233,119 @@ function renderRound1() {
 }
 
 // ════════════════════════════════════════════
-// ROUND 2 — Fill the Blank (coming Step 4)
+// ROUND 2 — Fill the Blank
+// Show plain definition with term blanked out.
+// User types the answer. 3 letter hints available.
 // ════════════════════════════════════════════
 function renderRound2() {
-  document.getElementById('quizBody').innerHTML =
-    '<p style="color:var(--muted2);font-family:\'DM Sans\',sans-serif;font-size:0.9rem;padding:20px 0">Round 2 coming in Step 4…</p>';
-}
+  const concepts = quizState.pool.slice(4, 8); // concepts 4–7
+  let qi = 0;
+  let roundScore = 0;
+
+  function renderQ() {
+    if (qi >= concepts.length) {
+      quizState.round = 2;
+      const messages = ['Sharp recall.', 'Your memory is working.', 'Active recall — the real test.'];
+      showInterstitial(
+        'Round 2 complete',
+        messages[Math.floor(Math.random() * messages.length)],
+        `+${roundScore} pts`,
+        () => renderRound()
+      );
+      return;
+    }
+
+    const concept = concepts[qi];
+    const term = concept.term;
+    const catColor = CAT_COLORS[concept.category] || '#e8d5a3';
+
+    // Replace the term in the plain text with _____ (case-insensitive)
+    const blanked = concept.plain.replace(
+      new RegExp(term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'),
+      '<em style="color:var(--accent);font-style:normal;font-weight:700">_____</em>'
+    );
+
+    // Generate 3 letter hints from the term
+    const hints = generateHints(term);
+
+    const body = document.getElementById('quizBody');
+    body.innerHTML = `
+      <div class="quiz-type-label">Round 2 of 3 &nbsp;·&nbsp; Fill the Blank &nbsp;·&nbsp; ${qi+1} / ${concepts.length}</div>
+      <span class="quiz-cat-chip" style="color:${catColor};border-color:${catColor}">${concept.category}</span>
+      <div class="quiz-question" style="font-size:1rem;font-family:'DM Sans',sans-serif;font-weight:300;line-height:1.75">${blanked}</div>
+      <div class="quiz-blank-wrap">
+        <input
+          class="quiz-blank-input"
+          id="quizBlankInput"
+          type="text"
+          placeholder="Type the missing term…"
+          autocomplete="off"
+          autocorrect="off"
+          autocapitalize="off"
+          spellcheck="false"
+        />
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+          <button class="quiz-submit-btn" id="quizBlankSubmit" onclick="r2Submit()">Check →</button>
+          <div class="quiz-hint-row" id="quizHintRow">
+            ${hints.map(h => `<span class="quiz-hint-letter" onclick="r2Hint('${h}')">${h}</span>`).join('')}
+          </div>
+        </div>
+        <div id="quizBlankFeedback" style="min-height:20px;font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted)"></div>
+      </div>`;
+
+    // Allow Enter key to submit
+    const input = document.getElementById('quizBlankInput');
+    input.focus();
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter') r2Submit();
+    });
+  }
+
+  // Hint letters: first letter, a middle letter, last letter
+  function generateHints(term) {
+    const clean = term.replace(/[^a-zA-Z]/g, '');
+    const first = clean[0];
+    const mid   = clean[Math.floor(clean.length / 2)];
+    const last  = clean[clean.length - 1];
+    // Deduplicate
+    return [...new Set([first, mid, last])].map(l => l.toUpperCase());
+  }
+
+  // Clicking a hint letter appends it to the input
+  window.r2Hint = function(letter) {
+    const input = document.getElementById('quizBlankInput');
+    if (!input || input.disabled) return;
+    input.value += letter;
+    input.focus();
+  };
+
+  window.r2Submit = function() {
+    const input = document.getElementById('quizBlankInput');
+    const submitBtn = document.getElementById('quizBlankSubmit');
+    const feedback = document.getElementById('quizBlankFeedback');
+    if (!input || input.disabled) return;
+
+    const answer = input.value.trim();
+    if (!answer) return;
+
+    const concept = concepts[qi];
+    const correct = concept.term;
+
+    // Normalise: lowercase, strip punctuation
+    const norm = s => s.toLowerCase().replace(/[^a-z0-9\s]/g, '').trim();
+    const isCorrect = norm(answer) === norm(correct);
+
+    input.disabled = true;
+    submitBtn.disabled = true;
+
+    if (isCorrect) {
+      input.classList.add('correct');
+      playTone('correct');
+      addScore(15); // slightly more than MC — active recall is harder
+      roundScore += 15;
+      feedback.style.color = 'var(--green)';
+      feedback.textContent = '✓ Correct';
+    } else {
 
 // ════════════════════════════════════════════
 // ROUND 3 — Analogy Decode (coming Step 5)
