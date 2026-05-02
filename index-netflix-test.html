@@ -2812,99 +2812,115 @@ const CATEGORY_COLORS = {
 function generateShareImage(c) {
   const canvas = document.getElementById('shareCanvas');
   const ctx = canvas.getContext('2d');
-  // 2x pixel density for crisp rendering
   const W = 1080, H = 1920;
   canvas.width = W; canvas.height = H;
 
   const catColor = CATEGORY_COLORS[c.category] || '#e8d5a3';
-  const PAD = 88;
+  const PAD = 96;
 
-  // Background
+  // ── BACKGROUND ──────────────────────────────────────────
   ctx.fillStyle = '#0d0d0d';
   ctx.fillRect(0, 0, W, H);
 
-  // Top accent bar
+  // Top accent bar (thick, visible)
   ctx.fillStyle = catColor;
-  ctx.fillRect(0, 0, W, 8);
+  ctx.fillRect(0, 0, W, 10);
 
-  // Category pill
+  // ── HEADER ROW: pill + number ────────────────────────────
   const catName = (CATEGORIES.find(x => x.id === c.category)||{}).name || c.category;
-  ctx.font = '500 22px monospace';
+  ctx.font = '600 26px monospace';
   const pillText = catName.toUpperCase();
-  const pillW = ctx.measureText(pillText).width + 40;
+  const pillW = ctx.measureText(pillText).width + 48;
+  // pill background (subtle fill)
+  ctx.fillStyle = catColor + '22';
+  roundRect(ctx, PAD, 68, pillW, 52, 6);
+  ctx.fill();
   ctx.strokeStyle = catColor;
-  ctx.lineWidth = 2;
-  roundRect(ctx, PAD, 56, pillW, 44, 6);
+  ctx.lineWidth = 1.5;
+  roundRect(ctx, PAD, 68, pillW, 52, 6);
   ctx.stroke();
   ctx.fillStyle = catColor;
-  ctx.fillText(pillText, PAD + 20, 85);
+  ctx.fillText(pillText, PAD + 24, 103);
 
-  // Concept number
-  ctx.font = '400 22px monospace';
-  ctx.fillStyle = '#6b6b6b';
+  ctx.font = '400 26px monospace';
+  ctx.fillStyle = '#444';
   ctx.textAlign = 'right';
-  ctx.fillText('#' + String(c.id).padStart(3, '0'), W - PAD, 85);
+  ctx.fillText('#' + String(c.id).padStart(3, '0'), W - PAD, 103);
   ctx.textAlign = 'left';
 
-  // Term — large, dominant
-  ctx.font = 'bold 88px Georgia, serif';
+  // ── TERM ─────────────────────────────────────────────────
+  ctx.font = 'bold 102px Georgia, serif';
   ctx.fillStyle = '#f0ede8';
-  let termY = wrapText(ctx, c.term, PAD, 240, W - PAD * 2, 108);
+  let termBottomY = wrapText(ctx, c.term, PAD, 272, W - PAD * 2, 122);
 
-  // Divider
-  const divY = termY + 40;
+  // ── DIVIDER ──────────────────────────────────────────────
+  const divY = termBottomY + 52;
   ctx.strokeStyle = 'rgba(255,255,255,0.1)';
-  ctx.lineWidth = 1.5;
-  ctx.beginPath();
-  ctx.moveTo(PAD, divY);
-  ctx.lineTo(W - PAD, divY);
-  ctx.stroke();
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(PAD, divY); ctx.lineTo(W - PAD, divY); ctx.stroke();
 
-  // Hook — prominent subheading
-  ctx.font = '300 38px Georgia, serif';
-  ctx.fillStyle = '#c0bdb8';
-  let y = wrapText(ctx, c.hook, PAD, divY + 64, W - PAD * 2, 52);
+  // ── HOOK ─────────────────────────────────────────────────
+  ctx.font = '300 44px Georgia, serif';
+  ctx.fillStyle = '#b8b4ae';
+  let y = wrapText(ctx, c.hook, PAD, divY + 76, W - PAD * 2, 62);
 
-  // Section: What it means
-  y += 64;
-  ctx.font = '500 20px monospace';
-  ctx.fillStyle = '#555';
-  ctx.fillText('WHAT IT MEANS', PAD, y);
-  y += 36;
-  ctx.font = '300 30px sans-serif';
-  ctx.fillStyle = '#9a9a9a';
-  y = wrapText(ctx, c.plain, PAD, y, W - PAD * 2, 44);
+  // ── SECTION HELPER ───────────────────────────────────────
+  function sectionLabel(label, yPos) {
+    // Label background strip
+    ctx.fillStyle = 'rgba(255,255,255,0.04)';
+    ctx.fillRect(0, yPos - 30, W, 58);
+    // Left accent tick
+    ctx.fillStyle = catColor;
+    ctx.fillRect(0, yPos - 30, 6, 58);
+    // Label text
+    ctx.font = '600 24px monospace';
+    ctx.fillStyle = catColor;
+    ctx.fillText(label, PAD, yPos + 10);
+    return yPos + 58 + 32; // returns y position after the label + gap
+  }
 
-  // Section: Analogy
-  y += 52;
-  ctx.font = '500 20px monospace';
-  ctx.fillStyle = '#555';
-  ctx.fillText('ANALOGY', PAD, y);
-  y += 36;
-  ctx.font = 'italic 30px Georgia, serif';
+  // ── WHAT IT MEANS ────────────────────────────────────────
+  y += 80;
+  y = sectionLabel('WHAT IT MEANS', y);
+  ctx.font = '300 36px Georgia, serif';
+  ctx.fillStyle = '#a8a5a0';
+  y = wrapText(ctx, c.plain, PAD, y, W - PAD * 2, 54);
+
+  // ── ANALOGY ──────────────────────────────────────────────
+  y += 72;
+  y = sectionLabel('ANALOGY', y);
+  ctx.font = 'italic 36px Georgia, serif';
   ctx.fillStyle = '#888';
-  y = wrapText(ctx, c.analogy, PAD, y, W - PAD * 2, 44);
+  // Left quote bar
+  ctx.fillStyle = catColor + '44';
+  ctx.fillRect(PAD, y - 8, 4, 54 * Math.ceil(c.analogy.length / 52) + 16);
+  ctx.fillStyle = '#888';
+  ctx.font = 'italic 36px Georgia, serif';
+  y = wrapText(ctx, c.analogy, PAD + 24, y, W - PAD * 2 - 24, 54);
 
-  // Section: Prompt
-  y += 52;
-  ctx.font = '500 20px monospace';
-  ctx.fillStyle = '#555';
-  ctx.fillText('REFLECT & USE IT', PAD, y);
-  y += 36;
-  ctx.font = '300 30px sans-serif';
+  // ── REFLECT & USE IT ─────────────────────────────────────
+  y += 72;
+  y = sectionLabel('REFLECT & USE IT', y);
+  ctx.font = '300 36px Georgia, serif';
   ctx.fillStyle = catColor;
-  wrapText(ctx, '💬  ' + c.prompt, PAD, y, W - PAD * 2, 44);
+  y = wrapText(ctx, '💬  ' + c.prompt, PAD, y, W - PAD * 2, 54);
 
-  // Footer
-  ctx.fillStyle = 'rgba(255,255,255,0.04)';
-  ctx.fillRect(0, H - 104, W, 104);
-  ctx.font = 'italic 32px Georgia, serif';
+  // ── FOOTER ───────────────────────────────────────────────
+  ctx.fillStyle = 'rgba(255,255,255,0.03)';
+  ctx.fillRect(0, H - 120, W, 120);
+  // Footer top border
+  ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(0, H - 120); ctx.lineTo(W, H - 120); ctx.stroke();
+
+  ctx.font = 'italic 36px Georgia, serif';
   ctx.fillStyle = '#e8d5a3';
-  ctx.fillText('Listen. Learn. Live.', PAD, H - 36);
-  ctx.font = '400 22px monospace';
-  ctx.fillStyle = '#6b6b6b';
+  ctx.fillText('Listen. Learn. Live.', PAD, H - 44);
+
+  ctx.font = '400 24px monospace';
+  ctx.fillStyle = '#555';
   ctx.textAlign = 'right';
-  ctx.fillText('listen-learn-live.vercel.app', W - PAD, H - 36);
+  ctx.fillText('listen-learn-live.vercel.app', W - PAD, H - 44);
   ctx.textAlign = 'left';
 }
 
