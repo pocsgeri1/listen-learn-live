@@ -3240,8 +3240,7 @@ container.addEventListener('mousemove', (e) => {
         card.style.transition = 'transform 0.12s ease, border-color 0.2s';
       }
       activeCard = card;
-  });  // closes requestAnimationFrame
-});    // closes mousemove
+    }
 
     // Apply magnetic transform
     if (!card || card.classList.contains('open')) return;
@@ -3249,7 +3248,8 @@ container.addEventListener('mousemove', (e) => {
     const dx = e.clientX - (rect.left + rect.width / 2);
     const dy = e.clientY - (rect.top + rect.height / 2);
     card.style.transform = `translateY(-8px) translate(${dx * STRENGTH}px, ${dy * STRENGTH}px)`;
-  });
+  });  // closes requestAnimationFrame
+});    // closes mousemove
 
   container.addEventListener('mouseleave', function() {
     if (activeCard) {
