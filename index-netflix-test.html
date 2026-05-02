@@ -406,7 +406,7 @@
   }
   .nf-row {
     display: flex;
-    align-items: flex-start;
+    align-items: stretch;
     gap: 1rem;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
@@ -422,6 +422,7 @@
     min-width: 300px;
     scroll-snap-align: start;
     scroll-snap-stop: normal;
+    align-self: flex-start;
   }
   @media (max-width: 600px) {
     .nf-row .concept-card { flex: 0 0 85vw; min-width: 85vw; }
@@ -1524,7 +1525,6 @@
 
   .concept-card:hover {
     border-color: var(--border-hover);
-    transform: translateY(-8px);
   }
 
   /* Alive glow — thin category-coloured line appears at the bottom on hover */
@@ -1824,12 +1824,13 @@
 
   /* ANIMATIONS */
   @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(16px); }
-    to { opacity: 1; transform: translateY(0); }
+    from { opacity: 0; margin-top: 12px; }
+    to { opacity: 1; margin-top: 0; }
   }
 
   .concept-card {
     animation: fadeUp 0.35s ease both;
+    animation-fill-mode: forwards;
   }
 
   .nf-row.dragging { scroll-snap-type: none; user-select: none; cursor: grabbing; }
