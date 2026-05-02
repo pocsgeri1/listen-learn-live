@@ -4165,6 +4165,7 @@ function renderRound1() {
       // Round complete
       quizState.round = 1;
       const messages = ['Solid start.', 'Nice work.', 'Keep it going.'];
+      quizState._r1score = roundScore;
       showInterstitial(
         'Round 1 complete',
         messages[Math.floor(Math.random() * messages.length)],
@@ -4246,6 +4247,7 @@ function renderRound2() {
     if (qi >= concepts.length) {
       quizState.round = 2;
       const messages = ['Sharp recall.', 'Your memory is working.', 'Active recall — the real test.'];
+      quizState._r2score = roundScore;
       showInterstitial(
         'Round 2 complete',
         messages[Math.floor(Math.random() * messages.length)],
@@ -4348,19 +4350,223 @@ function renderRound2() {
     } else {
 
 // ════════════════════════════════════════════
-// ROUND 3 — Analogy Decode (coming Step 5)
+// ROUND 3 — Analogy Decode (Tap-to-Match)
+// 4 analogies on left, 4 terms on right.
+// Tap an analogy, then tap its term to match.
 // ════════════════════════════════════════════
 function renderRound3() {
-  document.getElementById('quizBody').innerHTML =
-    '<p style="color:var(--muted2);font-family:\'DM Sans\',sans-serif;font-size:0.9rem;padding:20px 0">Round 3 coming in Step 5…</p>';
+  const concepts = quizState.pool.slice(8, 12); // concepts 8–11
+  let roundScore = 0;
+  let selectedAnalogy = null; // id of currently selected analogy card
+  let matched = new Set();    // ids of correctly matched concepts
+
+  function render() {
+    const catColor = c => CAT_COLORS[c.category] || '#e8d5a3';
+    const analogies = shuffle([...concepts]);
+    const terms     = shuffle([...concepts]);
+
+    // Store shuffled order on state so click handlers can reference it
+    quizState._r3analogies = analogies;
+    quizState._r3terms     = terms;
+
+    const body = document.getElementById('quizBody');
+    body.innerHTML = `
+      <div class="quiz-type-label">Round 3 of 3 &nbsp;·&nbsp; Analogy Decode &nbsp;·&nbsp; Match all 4</div>
+      <div class="quiz-question" style="font-size:0.95rem;font-family:'DM Sans',sans-serif;font-weight:300;margin-bottom:20px">
+        Tap an <em>analogy</em>, then tap the <em>term</em> it describes.
+      </div>
+      <div class="quiz-match-grid">
+        <div class="quiz-match-col" id="r3AnalogyCol">
+          ${analogies.map(c => `
+            <button
+              class="quiz-match-item analogy-item"
+              id="analogy-${c.id}"
+              data-id="${c.id}"
+              onclick="r3PickAnalogy(this)"
+            >${c.analogy}</button>
+          `).join('')}
+        </div>
+        <div class="quiz-match-col" id="r3TermCol">
+          ${terms.map(c => `
+            <button
+              class="quiz-match-item term-item"
+              id="term-${c.id}"
+              data-id="${c.id}"
+              onclick="r3PickTerm(this)"
+            >${c.term}</button>
+          `).join('')}
+        </div>
+      </div>`;
+  }
+
+  window.r3PickAnalogy = function(btn) {
+    if (matched.has(btn.dataset.id)) return;
+
+    // Deselect previous
+    if (selectedAnalogy) {
+      const prev = document.getElementById('analogy-' + selectedAnalogy);
+      if (prev) prev.classList.remove('selected');
+    }
+
+    selectedAnalogy = btn.dataset.id;
+    btn.classList.add('selected');
+  };
+
+  window.r3PickTerm = function(btn) {
+    if (!selectedAnalogy) return;
+    if (matched.has(btn.dataset.id)) return;
+
+    const termId    = btn.dataset.id;
+    const analogyEl = document.getElementById('analogy-' + selectedAnalogy);
+    const isCorrect = selectedAnalogy === termId;
+
+    if (isCorrect) {
+      // Lock both as matched
+      btn.classList.remove('selected');
+      btn.classList.add('matched-correct');
+      if (analogyEl) {
+        analogyEl.classList.remove('selected');
+        analogyEl.classList.add('matched-correct');
+      }
+      matched.add(termId);
+      playTone('correct');
+      addScore(20); // highest stakes round
+      roundScore += 20;
+      selectedAnalogy = null;
+
+      // All 4 matched → round complete
+      if (matched.size === concepts.length) {
+        setTimeout(() => {
+          quizState.round = 3;
+          const messages = [
+            'Analogies unlocked.',
+            'You think in patterns.',
+            'That\'s deep encoding.'
+          ];
+          quizState._r3score = roundScore;
+          showInterstitial(
+            'Round 3 complete',
+            messages[Math.floor(Math.random() * messages.length)],
+            `+${roundScore} pts`,
+            () => renderRound()
+          );
+        }, 600);
+      }
+
+    } else {
+      // Wrong — flash both red briefly, keep analogy selected
+      btn.classList.add('matched-wrong');
+      if (analogyEl) analogyEl.classList.add('matched-wrong');
+      playTone('wrong');
+
+      setTimeout(() => {
+        btn.classList.remove('matched-wrong');
+        if (analogyEl) analogyEl.classList.remove('matched-wrong');
+        // Keep analogy selected so user can try again
+        if (analogyEl) analogyEl.classList.add('selected');
+      }, 500);
+    }
+  };
+
+  render();
 }
 
 // ════════════════════════════════════════════
-// END SCREEN (coming Step 6)
+// END SCREEN
 // ════════════════════════════════════════════
 function renderEndScreen() {
-  document.getElementById('quizBody').innerHTML =
-    '<p style="color:var(--muted2);font-family:\'DM Sans\',sans-serif;font-size:0.9rem;padding:20px 0">End screen coming in Step 6…</p>';
+  // Max possible: 4×10 (R1) + 4×15 (R2) + 4×20 (R3) = 180
+  const max = 180;
+  const pct = Math.round((quizState.score / max) * 100);
+
+  // Progress bar fills to 100% on completion
+  document.getElementById('quizProgressFill').style.width = '100%';
+  document.getElementById('quizRoundNum').textContent = '3';
+
+  // Rank tiers
+  const rank = (() => {
+    if (pct >= 90) return { label: 'DEEP THINKER',     line: 'You didn\'t just learn — you encoded.' };
+    if (pct >= 70) return { label: 'CONCEPT COLLECTOR', line: 'Strong recall. Keep pushing the edges.' };
+    if (pct >= 50) return { label: 'SHARP MIND',        line: 'Solid foundation. The gaps are obvious now.' };
+    if (pct >= 30) return { label: 'CURIOUS LEARNER',   line: 'You\'re building the wiring. Stay consistent.' };
+    return              { label: 'JUST WARMING UP',    line: 'Every expert started here. Come back tomorrow.' };
+  })();
+
+  // Star display — 1 to 5 based on pct
+  const stars = Math.max(1, Math.round(pct / 20));
+  const starRow = Array.from({length: 5}, (_, i) =>
+    `<span style="color:${i < stars ? 'var(--accent)' : 'var(--border-hover)'};font-size:1.3rem">✦</span>`
+  ).join('');
+
+  const body = document.getElementById('quizBody');
+  body.innerHTML = `
+    <div class="quiz-end">
+      <div class="quiz-end-rank">${rank.label}</div>
+      <div class="quiz-end-title">Session complete.</div>
+      <div style="margin:14px 0 6px">${starRow}</div>
+      <div class="quiz-end-score">${quizState.score}</div>
+      <div class="quiz-end-of">out of ${max} pts &nbsp;·&nbsp; ${pct}%</div>
+      <div style="
+        font-family:'DM Sans',sans-serif;
+        font-size:0.85rem;
+        color:var(--muted2);
+        line-height:1.6;
+        margin-bottom:32px;
+        max-width:340px;
+        margin-left:auto;
+        margin-right:auto;
+      ">${rank.line}</div>
+
+      <div style="
+        background:var(--surface2);
+        border-radius:10px;
+        padding:16px 20px;
+        margin-bottom:28px;
+        display:grid;
+        grid-template-columns:repeat(3,1fr);
+        gap:8px;
+        text-align:center;
+      ">
+        <div>
+          <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--text)">${quizState._r1score || 0}</div>
+          <div style="font-family:'DM Mono',monospace;font-size:0.55rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);margin-top:4px">Hook Match</div>
+        </div>
+        <div>
+          <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--text)">${quizState._r2score || 0}</div>
+          <div style="font-family:'DM Mono',monospace;font-size:0.55rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);margin-top:4px">Fill Blank</div>
+        </div>
+        <div>
+          <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--text)">${quizState._r3score || 0}</div>
+          <div style="font-family:'DM Mono',monospace;font-size:0.55rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);margin-top:4px">Analogy</div>
+        </div>
+      </div>
+
+      <div class="quiz-end-actions">
+        <button class="quiz-play-again" onclick="openQuiz()">Play again →</button>
+        <button class="quiz-end-close" onclick="closeQuiz()">Done</button>
+      </div>
+    </div>`;
+
+  // Play a satisfying finish tone
+  playFinishTone();
+}
+
+function playFinishTone() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const notes = [523, 659, 784, 1047]; // C E G C — major chord ascent
+    notes.forEach((freq, i) => {
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.connect(g); g.connect(ctx.destination);
+      o.frequency.value = freq;
+      const t = ctx.currentTime + i * 0.13;
+      g.gain.setValueAtTime(0, t);
+      g.gain.linearRampToValueAtTime(0.12, t + 0.05);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 0.5);
+      o.start(t); o.stop(t + 0.5);
+    });
+  } catch(e) {}
 }
 </script>
 </body>
