@@ -1805,6 +1805,24 @@
   }
 
   .daily-dot.filled { background: var(--accent); border-color: var(--accent); }
+  .streak-display {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.78rem;
+  color: var(--accent);
+  margin-left: auto;
+}
+.streak-display #streakCount {
+  font-weight: 500;
+  font-size: 1rem;
+}
+.streak-label {
+  color: var(--muted2);
+  font-size: 0.69rem;
+  letter-spacing: 0.08em;
+}
 
   .daily-msg {
     font-size: 0.72rem;
@@ -2089,6 +2107,11 @@
     <div class="daily-dot"></div>
   </div>
   <div class="daily-msg" id="dailyMsg"><strong>0 of 5</strong> concepts opened today</div>
+  <div class="streak-display">
+    <span id="streakFlame" style="opacity:0.35">🔥</span>
+    <span id="streakCount">0</span>
+    <span class="streak-label">day streak</span>
+  </div>
 </div>
 
 <script>
@@ -2286,7 +2309,8 @@ let openedToday = new Set();
 
 const STORAGE_KEYS = {
   mastered: 'lll_mastered_v1',
-  dailyGoal: 'lll_daily_goal_v1'
+  dailyGoal: 'lll_daily_goal_v1',
+  streak: 'lll_streak_v1'
 };
 
 function saveMastered() {
@@ -2336,6 +2360,57 @@ function loadDailyGoal() {
     console.warn('Could not load daily goal:', e);
     return new Set();
   }
+}
+function saveStreak(count, lastDate) {
+  try {
+    localStorage.setItem(STORAGE_KEYS.streak, JSON.stringify({ count, lastDate }));
+  } catch (e) {
+    console.warn('Could not save streak:', e);
+  }
+}
+
+function loadStreak() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEYS.streak);
+    if (!raw) return { count: 0, lastDate: null };
+    const parsed = JSON.parse(raw);
+    if (typeof parsed.count !== 'number') return { count: 0, lastDate: null };
+    return parsed;
+  } catch (e) {
+    return { count: 0, lastDate: null };
+  }
+}
+
+// Call this when user completes daily goal (5 concepts opened).
+// Handles: increment, first-time, missed day reset.
+function checkAndUpdateStreak() {
+  const today = new Date().toISOString().slice(0, 10);
+  const { count, lastDate } = loadStreak();
+
+  if (lastDate === today) return; // Already counted today
+
+  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+  const newCount = (lastDate === yesterday) ? count + 1 : 1; // consecutive or reset
+
+  saveStreak(newCount, today);
+  updateStreakDisplay(newCount);
+}
+
+function updateStreakDisplay(count) {
+  const el = document.getElementById('streakCount');
+  if (!el) return;
+  el.textContent = count;
+  const flame = document.getElementById('streakFlame');
+  if (flame) flame.style.opacity = count > 0 ? '1' : '0.35';
+}
+
+function initStreakDisplay() {
+  const today = new Date().toISOString().slice(0, 10);
+  const { count, lastDate } = loadStreak();
+  // If last active day was not today or yesterday, streak is broken
+  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+  const activeStreak = (lastDate === today || lastDate === yesterday) ? count : 0;
+  updateStreakDisplay(activeStreak);
 }
 // ---------- END STORAGE HELPERS ----------
 
@@ -2594,8 +2669,12 @@ function updateDailyGoal() {
   const n = Math.min(openedToday.size, 5);
   document.querySelectorAll('.daily-dot').forEach((d,i) => { d.classList.toggle('filled', i < n); });
   const msg = document.getElementById('dailyMsg');
-  if (n >= 5) msg.innerHTML = '<strong>🎉 Goal complete!</strong> Come back tomorrow for 5 more.';
-  else msg.innerHTML = '<strong>' + n + ' of 5</strong> concepts opened today';
+  if (n >= 5) {
+    msg.innerHTML = '<strong>🎉 Goal complete!</strong> Come back tomorrow for 5 more.';
+    checkAndUpdateStreak();
+  } else {
+    msg.innerHTML = '<strong>' + n + ' of 5</strong> concepts opened today';
+  }
 }
 
 function setCat(cat) { activeCat = cat; render(); }
@@ -2798,6 +2877,7 @@ document.getElementById('search').addEventListener('input', e => { searchQ = e.t
 // already shows the correct mastered state.
 mastered = loadMastered();
 openedToday = loadDailyGoal();
+initStreakDisplay();
 updateDailyGoal();
 
 // Load concepts, then show concept of the day once they're ready
