@@ -554,8 +554,8 @@
     height: 76px;
     border-bottom: 1px solid var(--border);
     background: rgba(13,13,13,0.88);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     transition: height 0.3s ease, border-color 0.3s ease;
   }
 
@@ -753,6 +753,7 @@
     pointer-events: none;
     animation: heroGlow 8s ease-in-out infinite alternate;
     z-index: 0;
+    will-change: transform, opacity;
   }
 
   @keyframes heroGlow {
@@ -959,6 +960,7 @@
     border-radius: 50%;
     background: var(--accent);
     animation: cotdPulse 2s infinite;
+    will-change: opacity;
   }
   .cotd-eyebrow-date {
     color: var(--muted);
@@ -4343,11 +4345,25 @@ function renderRound2() {
     if (isCorrect) {
       input.classList.add('correct');
       playTone('correct');
-      addScore(15); // slightly more than MC — active recall is harder
+      addScore(15);
       roundScore += 15;
       feedback.style.color = 'var(--green)';
       feedback.textContent = '✓ Correct';
     } else {
+      input.classList.add('wrong');
+      playTone('wrong');
+      feedback.style.color = 'var(--red)';
+      feedback.textContent = `✗  The answer was: ${correct}`;
+    }
+
+    setTimeout(() => {
+      qi++;
+      renderQ();
+    }, 1400);
+  };
+
+  renderQ();
+}
 
 // ════════════════════════════════════════════
 // ROUND 3 — Analogy Decode (Tap-to-Match)
