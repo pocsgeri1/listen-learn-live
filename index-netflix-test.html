@@ -1830,8 +1830,7 @@
     animation: fadeUp 0.35s ease both;
   }
 
-  .nf-row.dragging { scroll-snap-type: none; }
-  .nf-row.dragging * { pointer-events: none; }
+  .nf-row.dragging { scroll-snap-type: none; user-select: none; }
 
   /* RESPONSIVE */
   @media (max-width: 600px) {
@@ -2455,7 +2454,7 @@ function initDragScroll() {
       scrollStart = row.scrollLeft;
     });
     row.addEventListener('mouseleave', () => { isDown = false; row.classList.remove('dragging'); });
-    row.addEventListener('mouseup', () => { isDown = false; setTimeout(() => row.classList.remove('dragging'), 50); });
+    row.addEventListener('mouseup', () => { isDown = false; row.classList.remove('dragging'); });
     row.addEventListener('mousemove', e => {
       if (!isDown) return;
       e.preventDefault();
@@ -2466,8 +2465,8 @@ function initDragScroll() {
   });
 }
 function initMagneticCards() {
-  const STRENGTH = 0.18;
-  const RADIUS = 100;
+  const STRENGTH = 0.12;
+  const RADIUS = 120;
   document.querySelectorAll('.concept-card').forEach(card => {
     card.addEventListener('mousemove', function(e) {
       if (card.classList.contains('open')) return;
@@ -2476,18 +2475,16 @@ function initMagneticCards() {
       const cy = rect.top + rect.height / 2;
       const dx = e.clientX - cx;
       const dy = e.clientY - cy;
-      const dist = Math.sqrt(dx * dx + dy * dy);
-      if (dist < RADIUS) {
-        card.style.transform = `translateY(-8px) translate(${dx * STRENGTH}px, ${dy * STRENGTH}px)`;
-      }
+      card.style.transform = `translateY(-8px) translate(${dx * STRENGTH}px, ${dy * STRENGTH}px)`;
     });
     card.addEventListener('mouseleave', function() {
-      card.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), border-color 0.2s';
-      card.style.transform = '';
-      setTimeout(() => { card.style.transition = 'border-color 0.2s, transform 0.2s ease'; }, 400);
+      card.style.transition = 'transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94), border-color 0.2s';
+      card.style.transform = 'translateY(0)';
+      setTimeout(() => { card.style.transition = 'border-color 0.2s, transform 0.2s ease'; }, 350);
     });
     card.addEventListener('mouseenter', function() {
-      card.style.transition = 'transform 0.1s ease, border-color 0.2s';
+      if (card.classList.contains('open')) return;
+      card.style.transition = 'transform 0.12s ease, border-color 0.2s';
     });
   });
 }
