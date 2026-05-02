@@ -3221,7 +3221,7 @@ function initDragScroll() {
   });
 }
 function initMagneticCards() {
-  const STRENGTH = 0.12;
+  return; // disabled — was main cause of scroll lag
   const container = document.getElementById('netflixRows');
   if (!container || container._magneticBound) return;
   container._magneticBound = true;
