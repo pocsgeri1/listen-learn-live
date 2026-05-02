@@ -1523,7 +1523,7 @@
 
   .concept-card:hover {
     border-color: var(--border-hover);
-    transform: translateY(-3px);
+    transform: translateY(-8px);
   }
 
   /* Alive glow — thin category-coloured line appears at the bottom on hover */
@@ -1831,7 +1831,7 @@
   }
 
   .nf-row.dragging { scroll-snap-type: none; }
-  .nf-row.dragging .concept-card { pointer-events: none; }
+  .nf-row.dragging * { pointer-events: none; }
 
   /* RESPONSIVE */
   @media (max-width: 600px) {
@@ -2455,7 +2455,7 @@ function initDragScroll() {
       scrollStart = row.scrollLeft;
     });
     row.addEventListener('mouseleave', () => { isDown = false; row.classList.remove('dragging'); });
-    row.addEventListener('mouseup', () => { isDown = false; row.classList.remove('dragging'); });
+    row.addEventListener('mouseup', () => { isDown = false; setTimeout(() => row.classList.remove('dragging'), 50); });
     row.addEventListener('mousemove', e => {
       if (!isDown) return;
       e.preventDefault();
@@ -2465,7 +2465,33 @@ function initDragScroll() {
     });
   });
 }
-function render() { buildCats(); initMagneticPills(); buildGrid(); updateProgress(); buildEpisodes(); }
+function initMagneticCards() {
+  const STRENGTH = 0.18;
+  const RADIUS = 100;
+  document.querySelectorAll('.concept-card').forEach(card => {
+    card.addEventListener('mousemove', function(e) {
+      if (card.classList.contains('open')) return;
+      const rect = card.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dx = e.clientX - cx;
+      const dy = e.clientY - cy;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < RADIUS) {
+        card.style.transform = `translateY(-8px) translate(${dx * STRENGTH}px, ${dy * STRENGTH}px)`;
+      }
+    });
+    card.addEventListener('mouseleave', function() {
+      card.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), border-color 0.2s';
+      card.style.transform = '';
+      setTimeout(() => { card.style.transition = 'border-color 0.2s, transform 0.2s ease'; }, 400);
+    });
+    card.addEventListener('mouseenter', function() {
+      card.style.transition = 'transform 0.1s ease, border-color 0.2s';
+    });
+  });
+}
+function render() { buildCats(); initMagneticPills(); buildGrid(); updateProgress(); buildEpisodes(); initMagneticCards(); }
 
 function toggleCard(id) {
   const el = document.getElementById('cc'+id);
