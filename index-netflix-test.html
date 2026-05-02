@@ -93,6 +93,14 @@
   .episodes-scroll-wrap {
     position: relative;
   }
+  .episodes-fade-left {
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 60px;
+    background: linear-gradient(to right, var(--bg), transparent);
+    pointer-events: none;
+    z-index: 2;
+  }
   .episodes-fade-right {
     position: absolute;
     top: 0; right: 0; bottom: 0;
@@ -353,7 +361,7 @@
     padding: 3rem 0;
   }
   /* ============================================
-     NETFLIX CATEGORY ROWS
+     CATEGORY ROWS — full bleed, static (no auto-scroll)
      ============================================ */
   .nf-section {
     padding: 2rem 0 0.5rem;
@@ -380,6 +388,14 @@
   .nf-scroll-wrap {
     position: relative;
   }
+  .nf-fade-left {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 60px;
+    background: linear-gradient(to right, var(--bg), transparent);
+    pointer-events: none;
+    z-index: 2;
+  }
   .nf-fade-right {
     position: absolute;
     right: 0; top: 0; bottom: 0;
@@ -395,8 +411,10 @@
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    padding: 0 2rem 1.5rem;
+    padding: 0.25rem 2rem 1.5rem;
+    cursor: grab;
   }
+  .nf-row:active { cursor: grabbing; }
   .nf-row::-webkit-scrollbar { display: none; }
   .nf-row .concept-card {
     flex: 0 0 300px;
@@ -406,12 +424,6 @@
   }
   @media (max-width: 600px) {
     .nf-row .concept-card { flex: 0 0 85vw; min-width: 85vw; }
-  }
-  .nf-row {
-    scroll-snap-type: none; /* disable snap during auto-scroll */
-  }
-  .nf-row:hover, .nf-row:focus-within {
-    animation-play-state: paused !important;
   }
   /* ============================================
      HOW IT WORKS MODAL
@@ -1336,9 +1348,14 @@
   .app {
     position: relative;
     z-index: 1;
+    padding: 5rem 0 120px;
+  }
+
+  /* Centred controls wrapper — header, progress bar, vault row, pills, count */
+  .app-controls {
     max-width: 1100px;
     margin: 0 auto;
-    padding: 5rem 2rem 120px;
+    padding: 0 2rem;
   }
 
   .app-header {
@@ -1500,7 +1517,7 @@
     border: 1px solid var(--border);
     border-radius: 10px;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: border-color 0.2s, transform 0.2s ease;
     overflow: hidden;
     position: relative;
   }
@@ -1515,9 +1532,27 @@
     transition: opacity 0.2s;
   }
 
-  .concept-card:hover { border-color: var(--border-hover); }
+  .concept-card:hover {
+    border-color: var(--border-hover);
+    transform: translateY(-3px);
+  }
+
+  /* Alive glow — thin category-coloured line appears at the bottom on hover */
+  .concept-card::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 15%;
+    right: 15%;
+    height: 1px;
+    background: var(--cat-color, var(--accent));
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    border-radius: 999px;
+  }
+  .concept-card:hover::before { opacity: 0.55; }
   .concept-card:hover::after, .concept-card.open::after { opacity: 1; }
-  .concept-card.open { border-color: var(--border-hover); }
+  .concept-card.open { border-color: var(--border-hover); transform: translateY(0); }
   .concept-card.mastered { opacity: 0.5; }
 
   .card-front {
@@ -1806,12 +1841,16 @@
     animation: fadeUp 0.35s ease both;
   }
 
+  .nf-row.dragging { scroll-snap-type: none; }
+  .nf-row.dragging .concept-card { pointer-events: none; }
+
   /* RESPONSIVE */
   @media (max-width: 600px) {
     .steps { grid-template-columns: 1fr; }
     .step:first-child { border-radius: 12px 12px 0 0; }
     .step:last-child { border-radius: 0 0 12px 12px; }
     .hero-stats { gap: 1.5rem; }
+    .app-controls { padding: 0 1.25rem; }
     .app-header { flex-direction: column; align-items: flex-start; }
     .search-wrap { width: 100%; }
     .daily-goal { flex-wrap: wrap; gap: 0.5rem; justify-content: flex-start; }
@@ -1957,6 +1996,7 @@
 </section>
 <!-- APP -->
 <section class="app" id="app">
+  <div class="app-controls">
   <div class="app-header">
     <div class="app-title">Browse <em>concepts</em></div>
     <div class="search-wrap">
@@ -1984,6 +2024,7 @@
             <div class="episodes-section-rule"></div>
           </div>
           <div class="episodes-scroll-wrap">
+            <div class="episodes-fade-left"></div>
             <div class="episodes-fade-right"></div>
             <div id="episodesRow" class="episodes-row"></div>
           </div>
@@ -2005,13 +2046,14 @@
             <div class="ep-drawer-grid" id="epDrawerGrid"></div>
           </div>
         </div>
-  <!-- CATEGORIES (now jump-links, not filters) -->
+  <!-- CATEGORIES — pill filter row -->
   <div class="cat-grid" id="catGrid"></div>
 
   <!-- SEARCH COUNT -->
   <div class="results-count" id="resultCount"></div>
+  </div><!-- /.app-controls -->
 
-  <!-- NETFLIX ROWS — one per category -->
+  <!-- CATEGORY ROWS — full bleed -->
   <div id="netflixRows"></div>
 </section>
 
@@ -2361,8 +2403,9 @@ function buildGrid() {
           <div class="nf-section-rule"></div>
         </div>
         <div class="nf-scroll-wrap">
+          <div class="nf-fade-left"></div>
           <div class="nf-fade-right"></div>
-          <div class="nf-row">
+          <div class="nf-row" id="nf-drag-${cat.id}">
             ${cards.map((c, i) => {
               const color = CAT_COLOR[c.category] || '#e8d5a3';
               const isMastered = mastered.has(c.id);
@@ -2408,66 +2451,30 @@ function buildGrid() {
 
   container.innerHTML = html || `<div style="padding:3rem 2rem;color:var(--muted);font-family:'DM Mono',monospace;font-size:0.75rem;letter-spacing:0.12em;text-transform:uppercase;text-align:center;">No concepts found</div>`;
   document.getElementById('resultCount').textContent = totalVisible > 0 ? `${totalVisible} concept${totalVisible !== 1 ? 's' : ''} shown` : '';
-  startRowAutoScroll();
+  initDragScroll();
 }
-function startRowAutoScroll() {
-  setTimeout(() => {
-    document.querySelectorAll('.nf-row').forEach((row, index) => {
-      // Cancel any previous animation on this row
-      if (row._autoScrollRAF) cancelAnimationFrame(row._autoScrollRAF);
 
-      const maxScroll = row.scrollWidth - row.clientWidth;
-      if (maxScroll < 10) return; // row doesn't overflow, skip
+// Mouse drag-to-scroll for category rows (desktop)
+function initDragScroll() {
+  document.querySelectorAll('.nf-row').forEach(row => {
+    let isDown = false, startX, scrollStart;
 
-      // Even rows scroll left→right, odd rows scroll right→left
-      const goRight = index % 2 === 0;
-      if (!goRight) row.scrollLeft = maxScroll; // start odd rows at the end
-
-      const speed = 0.5;
-      let paused = false;
-      let lastTime = null;
-
-      function step(ts) {
-        if (!lastTime) lastTime = ts;
-        const delta = ts - lastTime;
-        lastTime = ts;
-
-        if (!paused) {
-          const move = speed * (delta / 16); // normalize to 60fps
-          const current = row.scrollLeft;
-
-          if (goRight) {
-            row.scrollLeft = current + move;
-            // Seamless loop: snap back to start when reaching end
-            if (row.scrollLeft >= maxScroll - 1) row.scrollLeft = 0;
-          } else {
-            row.scrollLeft = current - move;
-            // Seamless loop: snap to end when reaching start
-            if (row.scrollLeft <= 1) row.scrollLeft = maxScroll;
-          }
-        }
-
-        row._autoScrollRAF = requestAnimationFrame(step);
-      }
-
-      // Pause on hover (desktop)
-      row.addEventListener('mouseenter', () => { paused = true; }, { passive: true });
-      row.addEventListener('mouseleave', () => { paused = false; }, { passive: true });
-
-      // Pause on touch, resume after 2.5s grace
-      let touchTimer;
-      row.addEventListener('touchstart', () => {
-        paused = true;
-        clearTimeout(touchTimer);
-      }, { passive: true });
-      row.addEventListener('touchend', () => {
-        clearTimeout(touchTimer);
-        touchTimer = setTimeout(() => { paused = false; }, 2500);
-      }, { passive: true });
-
-      row._autoScrollRAF = requestAnimationFrame(step);
+    row.addEventListener('mousedown', e => {
+      isDown = true;
+      row.classList.add('dragging');
+      startX = e.pageX - row.offsetLeft;
+      scrollStart = row.scrollLeft;
     });
-  }, 400);
+    row.addEventListener('mouseleave', () => { isDown = false; row.classList.remove('dragging'); });
+    row.addEventListener('mouseup', () => { isDown = false; row.classList.remove('dragging'); });
+    row.addEventListener('mousemove', e => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - row.offsetLeft;
+      const walk = (x - startX) * 1.2;
+      row.scrollLeft = scrollStart - walk;
+    });
+  });
 }
 function render() { buildCats(); initMagneticPills(); buildGrid(); updateProgress(); buildEpisodes(); }
 
