@@ -689,7 +689,7 @@
     top: 76px;
     left: 0; right: 0;
     background: rgba(13,13,13,0.97);
-    backdrop-filter: blur(24px);
+    backdrop-filter: blur(6px);
     border-bottom: 1px solid var(--border);
     padding: 1rem 2rem 1.5rem;
     z-index: 99;
@@ -2919,6 +2919,7 @@ async function loadConcepts() {
     }
 
     CONCEPTS = data;
+    window.CONCEPTS = CONCEPTS;
     await loadCollections();
     render();
     updateHeaderCounts();
@@ -3217,7 +3218,11 @@ function initMagneticCards() {
 
   let activeCard = null;
 
-  container.addEventListener('mousemove', function(e) {
+  let _rafPending = false;
+container.addEventListener('mousemove', (e) => {
+  if (_rafPending) return;
+  _rafPending = true;
+  requestAnimationFrame(() => { _rafPending = false;
     const card = e.target.closest('.concept-card');
 
     // If we moved onto a new card, trigger enter logic
@@ -3235,7 +3240,8 @@ function initMagneticCards() {
         card.style.transition = 'transform 0.12s ease, border-color 0.2s';
       }
       activeCard = card;
-    }
+  });  // closes requestAnimationFrame
+});    // closes mousemove
 
     // Apply magnetic transform
     if (!card || card.classList.contains('open')) return;
