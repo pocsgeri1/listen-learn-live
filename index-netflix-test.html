@@ -659,12 +659,8 @@
     width: 5px; height: 5px;
     border-radius: 50%;
     background: var(--accent);
-    animation: pulse 2s infinite;
     flex-shrink: 0;
-    will-change: opacity;
   }
-
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
 
   /* MOBILE NAV */
   .nav-mobile-toggle {
@@ -749,14 +745,7 @@
       rgba(232,213,163,0.03) 40%,
       transparent 70%);
     pointer-events: none;
-    animation: heroGlow 8s ease-in-out infinite alternate;
     z-index: 0;
-    will-change: transform, opacity;
-  }
-
-  @keyframes heroGlow {
-    from { opacity: 0.6; transform: translateX(-50%) scale(1); }
-    to   { opacity: 1;   transform: translateX(-50%) scale(1.15); }
   }
 
   .hero > * { position: relative; z-index: 1; }
@@ -957,18 +946,11 @@
     height: 6px;
     border-radius: 50%;
     background: var(--accent);
-    animation: cotdPulse 2s infinite;
-    will-change: opacity;
   }
   
   .cotd-eyebrow-date {
     color: var(--muted);
     margin-left: auto;
-  }
-
-  @keyframes cotdPulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
   }
 
   .cotd-meta {
