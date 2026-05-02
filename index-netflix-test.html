@@ -2791,15 +2791,14 @@ function initMagneticPills() {
     });  // closes rAF
   });    // closes pillGrid mousemove
 
+    document.querySelectorAll('.cat-card').forEach(pill => {
     pill.addEventListener('mouseleave', function() {
       pill.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), border-color 0.2s, background 0.2s';
       pill.style.transform = 'translate(0px, 0px)';
-      // Reset transition after spring so normal interactions stay snappy
       setTimeout(() => {
         pill.style.transition = 'border-color 0.2s, background 0.2s';
       }, 400);
     });
-
     pill.addEventListener('mouseenter', function() {
       pill.style.transition = 'transform 0.1s ease, border-color 0.2s, background 0.2s';
     });
