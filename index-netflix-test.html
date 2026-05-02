@@ -1773,8 +1773,10 @@
   border: 1px solid var(--border-hover);
   border-radius: 8px;
   padding: 1.5rem;
-  max-width: 420px;
+  max-width: 480px;
   width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -1838,12 +1840,24 @@
     background: rgba(13,13,13,0.95);
     backdrop-filter: blur(20px);
     border-top: 1px solid var(--border);
-    padding: 12px 2rem;
+    padding: 10px 1.5rem;
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 1.5rem;
+    justify-content: space-between;
+    gap: 1rem;
     z-index: 100;
+  }
+  .daily-goal-left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-shrink: 0;
+  }
+  .daily-goal-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-width: 0;
   }
 
   .daily-label {
@@ -1926,7 +1940,6 @@
     .app-controls { padding: 0 1.25rem; }
     .app-header { flex-direction: column; align-items: flex-start; }
     .search-wrap { width: 100%; }
-    .daily-goal { flex-wrap: wrap; gap: 0.5rem; justify-content: flex-start; }
   }
 </style>
 </head>
@@ -2173,19 +2186,23 @@
 <!-- /SHARE CARD MODAL -->
 <!-- DAILY GOAL BAR -->
 <div class="daily-goal">
-  <div class="daily-label">Today's goal</div>
-  <div class="daily-dots" id="dailyDots">
-    <div class="daily-dot"></div>
-    <div class="daily-dot"></div>
-    <div class="daily-dot"></div>
-    <div class="daily-dot"></div>
-    <div class="daily-dot"></div>
+  <div class="daily-goal-left">
+    <div class="daily-label">Today's goal</div>
+    <div class="daily-dots" id="dailyDots">
+      <div class="daily-dot"></div>
+      <div class="daily-dot"></div>
+      <div class="daily-dot"></div>
+      <div class="daily-dot"></div>
+      <div class="daily-dot"></div>
+    </div>
   </div>
-  <div class="daily-msg" id="dailyMsg"><strong>0 of 5</strong> concepts opened today</div>
-  <div class="streak-display">
-    <span id="streakFlame" style="opacity:0.35">🔥</span>
-    <span id="streakCount">0</span>
-    <span class="streak-label">day streak</span>
+  <div class="daily-goal-right">
+    <div class="daily-msg" id="dailyMsg"><strong>0 of 5</strong> concepts opened today</div>
+    <div class="streak-display">
+      <span id="streakFlame" style="opacity:0.35">🔥</span>
+      <span id="streakCount">0</span>
+      <span class="streak-label">day streak</span>
+    </div>
   </div>
 </div>
 
@@ -2782,24 +2799,23 @@ const CATEGORY_COLORS = {
 function generateShareImage(c) {
   const canvas = document.getElementById('shareCanvas');
   const ctx = canvas.getContext('2d');
-  const W = 800, H = 460;
+  const W = 540, H = 960;
   canvas.width = W; canvas.height = H;
 
   const catColor = CATEGORY_COLORS[c.category] || '#e8d5a3';
-  const PAD = 52;
+  const PAD = 44;
 
   // Background
   ctx.fillStyle = '#0d0d0d';
   ctx.fillRect(0, 0, W, H);
 
-  // Top accent bar (category color)
+  // Top accent bar
   ctx.fillStyle = catColor;
   ctx.fillRect(0, 0, W, 4);
 
   // Category pill
   const catName = (CATEGORIES.find(x => x.id === c.category)||{}).name || c.category;
   ctx.font = '500 11px "DM Mono", monospace';
-  ctx.fillStyle = catColor;
   const pillText = catName.toUpperCase();
   const pillW = ctx.measureText(pillText).width + 20;
   ctx.strokeStyle = catColor;
@@ -2812,43 +2828,71 @@ function generateShareImage(c) {
   // Concept number
   ctx.font = '400 11px "DM Mono", monospace';
   ctx.fillStyle = '#6b6b6b';
-  ctx.fillText('#' + String(c.id).padStart(3, '0'), W - PAD - 40, 43);
+  ctx.textAlign = 'right';
+  ctx.fillText('#' + String(c.id).padStart(3, '0'), W - PAD, 43);
+  ctx.textAlign = 'left';
 
   // Term
-  ctx.font = 'bold 36px Georgia, serif';
+  ctx.font = 'bold 38px Georgia, serif';
   ctx.fillStyle = '#f0ede8';
-  ctx.fillText(c.term, PAD, 110);
+  wrapText(ctx, c.term, PAD, 108, W - PAD * 2, 48);
 
   // Divider
   ctx.strokeStyle = 'rgba(255,255,255,0.08)';
   ctx.lineWidth = 1;
   ctx.beginPath();
-  ctx.moveTo(PAD, 128);
-  ctx.lineTo(W - PAD, 128);
+  ctx.moveTo(PAD, 130);
+  ctx.lineTo(W - PAD, 130);
   ctx.stroke();
 
   // Hook
-  ctx.font = '300 18px "DM Sans", system-ui, sans-serif';
+  ctx.font = '300 17px "DM Sans", system-ui, sans-serif';
   ctx.fillStyle = '#c0bdb8';
-  const hookBottom = wrapText(ctx, c.hook, PAD, 162, W - PAD * 2, 28);
+  let y = wrapText(ctx, c.hook, PAD, 164, W - PAD * 2, 26);
 
-  // Plain
-  ctx.font = '300 14px "DM Sans", system-ui, sans-serif';
+  // Section: What it means
+  y += 36;
+  ctx.font = '500 10px "DM Mono", monospace';
   ctx.fillStyle = '#6b6b6b';
-  wrapText(ctx, c.plain, PAD, hookBottom + 32, W - PAD * 2, 22);
+  ctx.fillText('WHAT IT MEANS', PAD, y);
+  y += 18;
+  ctx.font = '300 14px "DM Sans", system-ui, sans-serif';
+  ctx.fillStyle = '#9a9a9a';
+  y = wrapText(ctx, c.plain, PAD, y, W - PAD * 2, 22);
+
+  // Section: Analogy
+  y += 28;
+  ctx.font = '500 10px "DM Mono", monospace';
+  ctx.fillStyle = '#6b6b6b';
+  ctx.fillText('ANALOGY', PAD, y);
+  y += 18;
+  ctx.font = 'italic 14px Georgia, serif';
+  ctx.fillStyle = '#9a9a9a';
+  y = wrapText(ctx, c.analogy, PAD, y, W - PAD * 2, 22);
+
+  // Section: Prompt
+  y += 28;
+  ctx.font = '500 10px "DM Mono", monospace';
+  ctx.fillStyle = '#6b6b6b';
+  ctx.fillText('REFLECT & USE IT', PAD, y);
+  y += 18;
+  ctx.font = '300 14px "DM Sans", system-ui, sans-serif';
+  ctx.fillStyle = catColor;
+  wrapText(ctx, '💬 ' + c.prompt, PAD, y, W - PAD * 2, 22);
 
   // Footer bar
   ctx.fillStyle = 'rgba(255,255,255,0.04)';
   ctx.fillRect(0, H - 52, W, 52);
 
-  // Branding
   ctx.font = 'italic 15px Georgia, serif';
   ctx.fillStyle = '#e8d5a3';
-  ctx.fillText('Listen. Learn. Live.', PAD, H - 19);
+  ctx.fillText('Listen. Learn. Live.', PAD, H - 18);
 
-  ctx.font = '400 11px "DM Mono", monospace';
+  ctx.font = '400 10px "DM Mono", monospace';
   ctx.fillStyle = '#6b6b6b';
-  ctx.fillText('listen-learn-live.vercel.app', W - PAD - 210, H - 19);
+  ctx.textAlign = 'right';
+  ctx.fillText('listen-learn-live.vercel.app', W - PAD, H - 18);
+  ctx.textAlign = 'left';
 }
 
 function roundRect(ctx, x, y, w, h, r) {
