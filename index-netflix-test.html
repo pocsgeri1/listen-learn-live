@@ -6,6 +6,7 @@
 <title>Listen. Learn. Live. — Master the concepts that shape intelligent conversation</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js"></script>
 <style>
   :root {
     --bg: #0d0d0d;
@@ -70,6 +71,21 @@
      ============================================ */
   .episodes-section {
     padding: 2.5rem 0 0;
+  }
+  .episodes-controls {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+  .episodes-app-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.2rem;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+    gap: 1rem;
   }
   .episodes-section-header {
     display: flex;
@@ -2625,9 +2641,10 @@
 </section>
 <!-- EPISODES SECTION -->
 <div id="episodesSection" class="episodes-section" style="display:none">
-  <div class="episodes-section-header">
-    <div class="episodes-section-title">Episodes</div>
-    <div class="episodes-section-rule"></div>
+  <div class="episodes-controls">
+    <div class="episodes-app-header">
+      <div class="app-title">Browse <em>episodes</em></div>
+    </div>
   </div>
   <div class="episodes-scroll-wrap">
     <div class="episodes-fade-left"></div>
@@ -2875,6 +2892,7 @@ const CATEGORIES = [
 
 let CONCEPTS = [];
 let COLLECTIONS_BY_ID = {};
+let FUSE = null;
 
 async function loadCollections() {
   try {
@@ -2887,6 +2905,53 @@ async function loadCollections() {
   } catch (e) {
     console.warn('Could not load collections.json — pills will not render:', e);
   }
+}
+
+// FUZZY SEARCH — Fuse.js index built once after concepts + collections load.
+// Each entry is enriched with a `_people` string (joined host + guests from
+// its collection) so typing "Chris Williamson" surfaces all his episodes.
+function buildFuseIndex() {
+  if (typeof Fuse === 'undefined') {
+    console.warn('Fuse.js not loaded — falling back to substring search');
+    FUSE = null;
+    return;
+  }
+  const enriched = CONCEPTS.map(c => {
+    const col = (c.collection_id != null) ? COLLECTIONS_BY_ID[c.collection_id] : null;
+    const people = (col && Array.isArray(col.people)) ? col.people.join(' ') : '';
+    return { id: c.id, term: c.term, hook: c.hook, plain: c.plain, analogy: c.analogy, _people: people };
+  });
+  FUSE = new Fuse(enriched, {
+    keys: [
+      { name: 'term',    weight: 0.40 },
+      { name: '_people', weight: 0.20 },
+      { name: 'hook',    weight: 0.15 },
+      { name: 'plain',   weight: 0.15 },
+      { name: 'analogy', weight: 0.10 }
+    ],
+    threshold: 0.35,        // 0 = exact, 1 = matches anything. 0.35 = typo-tolerant.
+    ignoreLocation: true,   // match anywhere in the field
+    minMatchCharLength: 2
+  });
+}
+
+// Returns a Set of concept IDs that match the query, or null if no query.
+function fuzzyMatchIds(q) {
+  if (!q) return null;
+  if (!FUSE) {
+    // Fallback: substring match on the original 4 fields + people
+    const ql = q.toLowerCase();
+    return new Set(CONCEPTS.filter(c => {
+      const col = (c.collection_id != null) ? COLLECTIONS_BY_ID[c.collection_id] : null;
+      const people = (col && Array.isArray(col.people)) ? col.people.join(' ').toLowerCase() : '';
+      return c.term.toLowerCase().includes(ql)
+        || (c.hook && c.hook.toLowerCase().includes(ql))
+        || (c.plain && c.plain.toLowerCase().includes(ql))
+        || (c.analogy && c.analogy.toLowerCase().includes(ql))
+        || people.includes(ql);
+    }).map(c => c.id));
+  }
+  return new Set(FUSE.search(q).map(r => r.item.id));
 }
 
 async function loadConcepts() {
@@ -2913,6 +2978,7 @@ async function loadConcepts() {
     CONCEPTS = data;
     window.CONCEPTS = CONCEPTS;
     await loadCollections();
+    buildFuseIndex();
     render();
     updateProgress();
     updateHeaderCounts();
@@ -3070,12 +3136,12 @@ function buildCats() {
 }
 
 function filtered() {
+  const matchIds = searchQ ? fuzzyMatchIds(searchQ) : null;
   return CONCEPTS.filter(c => {
     if (vaultActive && !mastered.has(c.id)) return false;
-    const mc = activeCat === 'all' || c.category === activeCat;
-    const q = searchQ.toLowerCase();
-    const mq = !q || c.term.toLowerCase().includes(q) || c.hook.toLowerCase().includes(q) || c.plain.toLowerCase().includes(q);
-    return mc && mq;
+    if (activeCat !== 'all' && c.category !== activeCat) return false;
+    if (matchIds && !matchIds.has(c.id)) return false;
+    return true;
   }).reverse();
 }
 
@@ -3096,14 +3162,12 @@ function buildGrid() {
   let totalVisible = 0;
   let html = '';
 
+  const matchIds = q ? fuzzyMatchIds(searchQ) : null;
+
   catsToShow.forEach(cat => {
     let cards = CONCEPTS.filter(c => c.category === cat.id);
     if (isVault) cards = cards.filter(c => mastered.has(c.id));
-    if (q) cards = cards.filter(c =>
-      c.term.toLowerCase().includes(q) ||
-      c.hook.toLowerCase().includes(q) ||
-      (c.plain && c.plain.toLowerCase().includes(q))
-    );
+    if (matchIds) cards = cards.filter(c => matchIds.has(c.id));
     cards = cards.reverse();
     if (cards.length === 0) return;
     totalVisible += cards.length;
