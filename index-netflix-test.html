@@ -2649,6 +2649,7 @@
 
   <!-- PROGRESS -->
   <div class="progress-bar">
+  <div class="progress-label">Progress</div>
   <div class="progress-track">
     <div class="progress-fill" id="progressFill" style="width:0%"></div>
   </div>
@@ -3080,6 +3081,9 @@ function filtered() {
 function buildGrid() {
   const container = document.getElementById('netflixRows');
   if (!container) return;
+  // Only hold min-height when showing all cats (prevents CLS on initial load).
+  // When filtered to one category, collapse naturally.
+  container.style.minHeight = (activeCat === 'all' && !searchQ) ? '1800px' : '0';
 
   const q = searchQ.toLowerCase();
   const isVault = vaultActive;
@@ -3446,10 +3450,11 @@ function roundRect(ctx, x, y, w, h, r) {
 }
 
 function updateProgress() {
+  if (!CONCEPTS.length) return; // don't overwrite placeholder before load
   const pct = Math.round((mastered.size / CONCEPTS.length) * 100);
   document.getElementById('progressFill').style.width = pct + '%';
   const vaultEl = document.getElementById('progressCount');
-vaultEl.textContent = mastered.size + ' / ' + CONCEPTS.length;
+  vaultEl.textContent = mastered.size + ' / ' + CONCEPTS.length;
 }
 
 function updateHeaderCounts() {
