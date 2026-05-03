@@ -2914,6 +2914,7 @@ async function loadConcepts() {
     window.CONCEPTS = CONCEPTS;
     await loadCollections();
     render();
+    updateProgress();
     updateHeaderCounts();
     initMagneticCards();
 
