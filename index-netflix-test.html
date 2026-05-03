@@ -1409,6 +1409,16 @@
 
   .search-wrap input::placeholder { color: var(--muted); }
 
+  /* VAULT BUTTON — inline in progress bar */
+  .progress-bar .vault-pill {
+    width: auto;
+    padding: 5px 12px;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    margin-left: 0;
+    flex-shrink: 0;
+  }
+
   /* PROGRESS BAR */
   .progress-bar {
     display: flex;
@@ -2577,7 +2587,7 @@
 
     <div class="cotd-actions">
       <button class="cotd-btn cotd-btn--primary" id="cotdMarkBtn">
-        <span id="cotdMarkLabel">✓ Mark Internalized</span>
+        <span id="cotdMarkLabel">⊕ VAULT</span>
       </button>
       <button class="cotd-btn" id="cotdNextBtn">→ Try Another</button>
     </div>
@@ -2613,6 +2623,19 @@
     <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M8 3l5 5-5 5"/></svg>
   </a>
 </section>
+<!-- EPISODES SECTION -->
+<div id="episodesSection" class="episodes-section" style="display:none">
+  <div class="episodes-section-header">
+    <div class="episodes-section-title">Episodes</div>
+    <div class="episodes-section-rule"></div>
+  </div>
+  <div class="episodes-scroll-wrap">
+    <div class="episodes-fade-left"></div>
+    <div class="episodes-fade-right"></div>
+    <div id="episodesRow" class="episodes-row"></div>
+  </div>
+</div>
+<!-- /EPISODES SECTION -->
 <!-- APP -->
 <section class="app" id="app">
   <div class="app-controls">
@@ -2626,28 +2649,12 @@
 
   <!-- PROGRESS -->
   <div class="progress-bar">
-  <div class="progress-label">Overall progress</div>
   <div class="progress-track">
     <div class="progress-fill" id="progressFill" style="width:0%"></div>
   </div>
-  <div class="progress-count" id="progressCount" onclick="toggleVault()" style="cursor:pointer;">0 / 183</div>
+  <div class="progress-count" id="progressCount" onclick="toggleVault()" style="cursor:pointer;">— / —</div>
+  <div class="cat-card vault-pill" id="vaultPill" onclick="toggleVault()" style="color:var(--accent);margin-left:4px;">⊠ VAULT</div>
 </div>
-<div class="vault-row">
-  <div class="vault-pill" id="vaultPill" onclick="toggleVault()">YOUR VAULT</div>
-</div>
-
-  <!-- EPISODES SECTION -->
-        <div id="episodesSection" class="episodes-section" style="display:none">
-          <div class="episodes-section-header">
-            <div class="episodes-section-title">Episodes</div>
-            <div class="episodes-section-rule"></div>
-          </div>
-          <div class="episodes-scroll-wrap">
-            <div class="episodes-fade-left"></div>
-            <div class="episodes-fade-right"></div>
-            <div id="episodesRow" class="episodes-row"></div>
-          </div>
-        </div>
 
         <!-- EPISODE DRAWER -->
         <div class="ep-drawer-backdrop" id="epBackdrop" onclick="closeEpisodeDrawer()"></div>
@@ -3138,7 +3145,7 @@ function buildGrid() {
                     <p>${c.prompt}</p>
                   </div>
                   <div class="card-actions">
-                    <button class="btn-master" onclick="toggleMaster(event,${c.id})">${isMastered?'✓ Mastered':'Mark as Mastered'}</button>
+                    <button class="btn-master" onclick="toggleMaster(event,${c.id})">${isMastered?'✓ VAULT':'⊕ VAULT'}</button>
                     <button class="btn-share" onclick="shareCard(event,${c.id})">Share</button>
                   </div>
                 </div>
@@ -3232,7 +3239,7 @@ function toggleCard(id) {
 function toggleMaster(e, id) {
   e.stopPropagation();
   if (mastered.has(id)) mastered.delete(id);
-  else mastered.add(id);
+  else { mastered.add(id); playVaultSFX(); }
   saveMastered();        // <-- NEW: persist to localStorage
   buildGrid();
   updateProgress();
@@ -3535,7 +3542,7 @@ function openEpisodeDrawer(collectionId) {
             <p>${c.prompt}</p>
           </div>
           <div class="card-actions">
-            <button class="btn-master" onclick="toggleEpMaster(event,${c.id})">${isMastered?'✓ Mastered':'Mark as Mastered'}</button>
+            <button class="btn-master" onclick="toggleEpMaster(event,${c.id})">${isMastered?'✓ VAULT':'⊕ VAULT'}</button>
           </div>
         </div>
       </div>`;
@@ -3568,13 +3575,13 @@ function toggleEpCard(id) {
 function toggleEpMaster(e, id) {
   e.stopPropagation();
   if (mastered.has(id)) mastered.delete(id);
-  else mastered.add(id);
+  else { mastered.add(id); playVaultSFX(); }
   saveMastered();
   // Refresh both the drawer card and the main grid card if visible
   const epCard = document.getElementById('epcc'+id);
   if (epCard) {
     epCard.classList.toggle('mastered', mastered.has(id));
-    epCard.querySelector('.btn-master').textContent = mastered.has(id) ? '✓ Mastered' : 'Mark as Mastered';
+    epCard.querySelector('.btn-master').textContent = mastered.has(id) ? '✓ VAULT' : '⊕ VAULT';
   }
   updateProgress();
   // Silently refresh main grid without closing drawer
@@ -3790,10 +3797,10 @@ function renderCotd(concept) {
   const markLabel = document.getElementById('cotdMarkLabel');
   if (mastered.has(concept.id)) {
     markBtn.classList.add('is-marked');
-    markLabel.textContent = '✓ Internalized';
+    markLabel.textContent = '✓ VAULT';
   } else {
     markBtn.classList.remove('is-marked');
-    markLabel.textContent = '✓ Mark Internalized';
+    markLabel.textContent = '⊕ VAULT';
   }
 
   // Wire mark button to current concept
@@ -3802,6 +3809,7 @@ function renderCotd(concept) {
       mastered.delete(concept.id);
     } else {
       mastered.add(concept.id);
+      playVaultSFX();
       // Also count it toward today's daily goal
       if (!openedToday.has(concept.id)) {
         openedToday.add(concept.id);
@@ -4554,6 +4562,26 @@ function playFinishTone() {
       g.gain.linearRampToValueAtTime(0.12, t + 0.05);
       g.gain.exponentialRampToValueAtTime(0.001, t + 0.5);
       o.start(t); o.stop(t + 0.5);
+    });
+  } catch(e) {}
+}
+
+// Vault SFX — two-note positive chime, plays when a concept is added to vault
+function playVaultSFX() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const notes = [659, 880]; // E5 → A5 — short rising two-note
+    notes.forEach((freq, i) => {
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.type = 'sine';
+      o.connect(g); g.connect(ctx.destination);
+      o.frequency.value = freq;
+      const t = ctx.currentTime + i * 0.12;
+      g.gain.setValueAtTime(0, t);
+      g.gain.linearRampToValueAtTime(0.1, t + 0.04);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 0.38);
+      o.start(t); o.stop(t + 0.4);
     });
   } catch(e) {}
 }
