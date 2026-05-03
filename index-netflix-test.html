@@ -2653,7 +2653,7 @@
   <div class="progress-track">
     <div class="progress-fill" id="progressFill" style="width:0%"></div>
   </div>
-  <div class="progress-count" id="progressCount" onclick="toggleVault()" style="cursor:pointer;">— / —</div>
+  <div class="progress-count" id="progressCount">— / —</div>
   <div class="cat-card vault-pill" id="vaultPill" onclick="toggleVault()" style="color:var(--accent);margin-left:4px;">⊠ VAULT</div>
 </div>
 
@@ -3675,6 +3675,7 @@ function toggleVault() {
   document.getElementById('vaultPill').classList.toggle('vault-active', vaultActive);
   if (vaultActive) activeCat = 'all';
   buildGrid();
+  updateProgress();
 }
 
 let _searchDebounce = null;
