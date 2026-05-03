@@ -4066,7 +4066,7 @@ function openQuiz() {
   overlay.classList.add('quiz-open');
   document.body.style.overflow = 'hidden';
 
-  updateProgress();
+  updateQuizProgress();
   renderRound();
 }
 
@@ -4083,7 +4083,7 @@ function shuffle(arr) {
   return arr;
 }
 
-function updateProgress() {
+function updateQuizProgress() {
   document.getElementById('quizProgressFill').style.width = ((quizState.round / 3) * 100) + '%';
   document.getElementById('quizRoundNum').textContent = Math.min(quizState.round + 1, 3);
   document.getElementById('quizScoreNum').textContent = quizState.score;
@@ -4116,7 +4116,7 @@ function playTone(type) {
 }
 
 function renderRound() {
-  updateProgress();
+  updateQuizProgress();
   const body = document.getElementById('quizBody');
   body.scrollTop = 0;
   if      (quizState.round === 0) renderRound1();
