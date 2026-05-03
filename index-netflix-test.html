@@ -3450,11 +3450,10 @@ function roundRect(ctx, x, y, w, h, r) {
 }
 
 function updateProgress() {
-  if (!CONCEPTS.length) return; // don't overwrite placeholder before load
+  if (!CONCEPTS.length) return;
   const pct = Math.round((mastered.size / CONCEPTS.length) * 100);
   document.getElementById('progressFill').style.width = pct + '%';
-  const vaultEl = document.getElementById('progressCount');
-  vaultEl.textContent = mastered.size + ' / ' + CONCEPTS.length;
+  document.getElementById('progressCount').textContent = mastered.size + ' / ' + CONCEPTS.length;
 }
 
 function updateHeaderCounts() {
