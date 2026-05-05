@@ -6,6 +6,7 @@
 <title>Listen. Learn. Live. — Master the concepts that shape intelligent conversation</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js"></script>
 <style>
   :root {
     --bg: #0d0d0d;
@@ -71,6 +72,21 @@
   .episodes-section {
     padding: 2.5rem 0 0;
   }
+  .episodes-controls {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+  .episodes-app-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.2rem;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
   .episodes-section-header {
     display: flex;
     align-items: center;
@@ -92,6 +108,14 @@
   }
   .episodes-scroll-wrap {
     position: relative;
+  }
+  .episodes-fade-left {
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 60px;
+    background: linear-gradient(to right, var(--bg), transparent);
+    pointer-events: none;
+    z-index: 2;
   }
   .episodes-fade-right {
     position: absolute;
@@ -132,27 +156,43 @@
   }
   .episode-thumb {
     width: 100%;
-    height: 160px;
+    height: 170px;
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+    background: var(--surface2);
+  }
+  .episode-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+  .episode-card:hover .episode-thumb img {
+    transform: scale(1.04);
+  }
+  .episode-thumb-fallback {
+    width: 100%;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .episode-thumb-fallback-title {
     font-family: 'Playfair Display', serif;
-    font-size: 2.8rem;
+    font-size: 1rem;
     font-style: italic;
-    letter-spacing: 0.04em;
-    flex-shrink: 0;
-    position: relative;
-  }
-  .episode-mix-bar {
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 3px;
-    display: flex;
+    color: var(--muted2);
+    text-align: center;
+    padding: 0 1.5rem;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
     overflow: hidden;
-  }
-  .episode-mix-segment {
-    height: 100%;
-    flex-shrink: 0;
   }
   .episode-body {
     padding: 1rem 1.1rem 1.1rem;
@@ -336,6 +376,172 @@
     text-align: center;
     padding: 3rem 0;
   }
+  /* ============================================
+     CATEGORY ROWS — full bleed, static (no auto-scroll)
+     ============================================ */
+  .nf-section {
+    padding: 2rem 0 0.5rem;
+  }
+  .nf-section-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0 2rem 1rem;
+  }
+  .nf-section-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted2);
+    flex-shrink: 0;
+  }
+  .nf-section-rule {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  .nf-scroll-wrap {
+    position: relative;
+  }
+  .nf-fade-left {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 60px;
+    background: linear-gradient(to right, var(--bg), transparent);
+    pointer-events: none;
+    z-index: 2;
+  }
+  .nf-fade-right {
+    position: absolute;
+    right: 0; top: 0; bottom: 0;
+    width: 80px;
+    background: linear-gradient(to right, transparent, var(--bg));
+    pointer-events: none;
+    z-index: 2;
+  }
+  .nf-row {
+    display: flex;
+    align-items: stretch;
+    gap: 1rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 0.25rem 2rem 1.5rem;
+    cursor: grab;
+  }
+  .nf-row:active { cursor: grabbing; }
+  .nf-row::-webkit-scrollbar { display: none; }
+  .nf-row .concept-card {
+    flex: 0 0 300px;
+    min-width: 300px;
+    align-self: flex-start;
+  }
+  @media (max-width: 600px) {
+    .nf-row .concept-card { flex: 0 0 85vw; min-width: 85vw; }
+  }
+  /* ============================================
+     HOW IT WORKS MODAL
+     ============================================ */
+  .hiw-trigger {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    background: none;
+    border: 0.5px solid var(--border);
+    border-radius: 999px;
+    padding: 5px 14px;
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .hiw-trigger:hover { color: var(--accent); border-color: var(--accent); }
+
+  .hiw-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: 300;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+  .hiw-overlay.open {
+    opacity: 1;
+    pointer-events: all;
+  }
+  .hiw-modal {
+    background: var(--surface);
+    border: 1px solid var(--border-hover);
+    border-radius: 16px;
+    padding: 2.5rem;
+    max-width: 680px;
+    width: 100%;
+    position: relative;
+    transform: translateY(12px);
+    transition: transform 0.25s ease;
+  }
+  .hiw-overlay.open .hiw-modal {
+    transform: translateY(0);
+  }
+  .hiw-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+  .hiw-modal-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 400;
+    color: var(--text);
+  }
+  .hiw-modal-close {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 4px 8px;
+    transition: color 0.2s;
+  }
+  .hiw-modal-close:hover { color: var(--text); }
+  .hiw-steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+  .hiw-step-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--border-hover);
+    line-height: 1;
+    margin-bottom: 0.75rem;
+  }
+  .hiw-step h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 400;
+    margin-bottom: 0.4rem;
+    color: var(--text);
+  }
+  .hiw-step p {
+    font-size: 0.8rem;
+    color: var(--muted2);
+    line-height: 1.7;
+  }
+  @media (max-width: 600px) {
+    .hiw-steps { grid-template-columns: 1fr; gap: 1.2rem; }
+    .hiw-modal { padding: 1.75rem; }
+  }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   html { scroll-behavior: smooth; }
@@ -349,94 +555,270 @@
     overflow-x: hidden;
   }
 
-  /* NOISE OVERLAY */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0.4;
-  }
-
   /* NAV */
   nav {
     position: fixed;
     top: 0; left: 0; right: 0;
     z-index: 100;
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
-    padding: 1.25rem 2rem;
+    padding: 0 2.5rem;
+    height: 76px;
     border-bottom: 1px solid var(--border);
-    background: rgba(13,13,13,0.85);
-    backdrop-filter: blur(20px);
+    background: rgba(13,13,13,0.88);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    transition: height 0.3s ease, border-color 0.3s ease;
+  }
+
+  nav.scrolled {
+    height: 62px;
+    border-color: rgba(255,255,255,0.05);
   }
 
   .nav-logo {
     font-family: 'Playfair Display', serif;
-    font-size: 1.1rem;
+    font-size: 1.365rem;
     font-weight: 400;
     color: var(--text);
     letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+  .nav-logo span { color: var(--accent); font-style: italic; }
+
+  /* CENTER ISLAND */
+  .nav-island {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    background: var(--surface2);
+    border: 0.5px solid var(--border-hover);
+    border-radius: 999px;
+    padding: 4px;
   }
 
-  .nav-logo span { color: var(--accent); font-style: italic; }
+  .nav-link {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted2);
+    text-decoration: none;
+    padding: 7px 15px;
+    border-radius: 999px;
+    transition: color 0.2s, background 0.2s;
+    white-space: nowrap;
+    cursor: pointer;
+    background: none;
+    border: none;
+    will-change: transform;
+  }
+  .nav-link:hover { color: var(--text); background: rgba(255,255,255,0.06); }
+.nav-link.nav-link--active { color: var(--accent); }
+
+.nav-divider {
+  width: 0.5px;
+  height: 16px;
+  background: var(--border-hover);
+  margin: 0 4px;
+  flex-shrink: 0;
+}
+
+.nav-quiz-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted2);
+  background: none;
+  border: 0.5px solid var(--border);
+  border-radius: 999px;
+  padding: 6px 13px;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  white-space: nowrap;
+}
+
+.nav-quiz-btn:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: rgba(232,213,163,0.06);
+  box-shadow: 0 0 12px rgba(232,213,163,0.18);
+}
+
+  /* RIGHT CLUSTER */
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    justify-content: flex-end;
+  }
 
   .nav-pill {
     display: flex;
     align-items: center;
     gap: 6px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
+    background: transparent;
+    border: 0.5px solid var(--border);
     border-radius: 999px;
-    padding: 6px 14px;
-    font-size: 0.75rem;
-    color: var(--muted2);
+    padding: 7px 15px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
     letter-spacing: 0.08em;
     text-transform: uppercase;
+    white-space: nowrap;
   }
 
   .nav-dot {
-    width: 6px; height: 6px;
+    width: 5px; height: 5px;
     border-radius: 50%;
     background: var(--accent);
-    animation: pulse 2s infinite;
+    flex-shrink: 0;
   }
 
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  /* MOBILE NAV */
+  .nav-mobile-toggle {
+    display: none;
+    background: none;
+    border: 0.5px solid var(--border);
+    border-radius: 6px;
+    color: var(--muted2);
+    font-size: 1rem;
+    padding: 4px 10px;
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .nav-mobile-toggle:hover { color: var(--text); border-color: var(--border-hover); }
+
+  .nav-mobile-menu {
+    display: none;
+    position: fixed;
+    top: 76px;
+    left: 0; right: 0;
+    background: rgba(13,13,13,0.97);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 2rem 1.5rem;
+    z-index: 99;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .nav-mobile-menu.open { display: flex; }
+
+  .nav-mobile-link {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted2);
+    text-decoration: none;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: color 0.2s;
+    background: none;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    text-align: left;
+    width: 100%;
+  }
+  .nav-mobile-link:last-child { border-bottom: none; }
+  .nav-mobile-link:hover { color: var(--accent); }
+
+  @media (max-width: 768px) {
+    nav { grid-template-columns: 1fr auto; }
+    .nav-island { display: none; }
+    .nav-pill { display: none; }
+    .nav-mobile-toggle { display: block; }
+    .nav-right { gap: 0.5rem; }
+  }
 
   /* HERO */
   .hero {
     position: relative;
-    padding: 160px 2rem 100px;
-    max-width: 900px;
-    margin: 0 auto;
-    text-align: center;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1px 1fr;
+    align-items: center;
+    padding: 90px 0 0 0;
     z-index: 1;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 20%;
+    left: 25%;
+    width: 500px;
+    height: 400px;
+    background: radial-gradient(ellipse at center,
+      rgba(232,213,163,0.05) 0%,
+      transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .hero > * { position: relative; z-index: 1; }
+
+  /* ── Left column ── */
+  .hero-copy {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0 5rem 100px 3rem;
+  }
+
+  /* ── Eyebrow ── */
+  .hero-eyebrow-outer {
+    margin-bottom: 2rem;
+    width: 100%;
   }
 
   .hero-eyebrow {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
     font-family: 'DM Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.2em;
+    font-size: 0.65rem;
+    letter-spacing: 0.22em;
     text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 2rem;
-    padding: 6px 16px;
-    border: 1px solid rgba(232,213,163,0.2);
-    border-radius: 999px;
+    color: var(--muted);
   }
 
+  /* Left line bleeds to screen edge via negative margin */
+  .hero-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: calc(3rem + 100vw);
+    margin-left: calc(-3rem - 100vw);
+    height: 1px;
+    background: var(--border);
+    flex-shrink: 0;
+  }
+
+  .hero-eyebrow::after {
+    content: '';
+    display: inline-block;
+    width: 32px;
+    height: 1px;
+    background: var(--border);
+    flex-shrink: 0;
+  }
+
+  /* ── H1 ── */
   .hero h1 {
     font-family: 'Playfair Display', serif;
-    font-size: clamp(2.8rem, 7vw, 5.5rem);
+    font-size: clamp(2.8rem, 4.5vw, 5rem);
     font-weight: 700;
-    line-height: 1.05;
-    letter-spacing: -0.02em;
-    margin-bottom: 1.5rem;
+    line-height: 1.0;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.75rem;
+    text-align: left;
+    width: 100%;
   }
 
   .hero h1 em {
@@ -445,58 +827,342 @@
     font-weight: 400;
   }
 
-  .hero-sub {
-    font-size: 1.05rem;
-    color: var(--muted2);
-    line-height: 1.7;
-    max-width: 560px;
-    margin: 0 auto 3rem;
-    font-weight: 300;
+  .h1-indent {
+    display: block;
+    text-align: right;
   }
 
+  /* ── Sub ── */
+  .hero-sub {
+    font-size: 1.1rem;
+    color: var(--muted2);
+    line-height: 1.85;
+    margin: 0 0 2.5rem 0;
+    font-weight: 300;
+    text-align: left;
+    width: 100%;
+    max-width: 480px;
+  }
+
+  .hero-brand-name {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    color: var(--accent);
+    font-weight: 400;
+  }
+
+  /* ── Stats band — bleeds left to screen edge ── */
   .hero-stats {
     display: flex;
     justify-content: center;
-    gap: 3rem;
-    margin-bottom: 2.5rem;
+    gap: 0;
+    width: 100%;
+    margin-left: 0;
+    margin-bottom: 3rem;
+    padding: 1.75rem 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
   }
 
-  .stat { text-align: center; }
+  .stat {
+    flex: 1;
+    text-align: center;
+    padding: 0 1rem;
+  }
+
+  .stat + .stat {
+    border-left: 1px solid var(--border);
+  }
+
   .stat-num {
     font-family: 'Playfair Display', serif;
-    font-size: 2rem;
+    font-size: clamp(2.2rem, 3.5vw, 3.2rem);
     font-weight: 700;
     color: var(--text);
     line-height: 1;
-  }
-  .stat-label {
-    font-size: 0.7rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-top: 4px;
+    letter-spacing: -0.02em;
+    display: block;
   }
 
+  .stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 7px;
+    display: block;
+  }
+
+  /* ── CTA ── */
   .hero-cta {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     background: var(--accent);
     color: #0d0d0d;
     font-family: 'DM Sans', sans-serif;
     font-weight: 500;
-    font-size: 0.85rem;
-    letter-spacing: 0.08em;
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
-    padding: 14px 32px;
+    padding: 16px 36px;
     border-radius: 999px;
     cursor: pointer;
     border: none;
-    transition: all 0.2s;
+    transition: all 0.25s;
     text-decoration: none;
+    align-self: center;
   }
-  .hero-cta:hover { background: #f0e0b0; transform: translateY(-1px); }
-  .hero-cta svg { width: 16px; height: 16px; }/* ============================================
+
+  .hero-cta:hover {
+    background: #f0e0b0;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(232,213,163,0.2);
+  }
+
+  .hero-cta svg { width: 16px; height: 16px; }
+
+  /* ── Vertical divider ── */
+  .hero-divider {
+    width: 1px;
+    align-self: stretch;
+    background: var(--border);
+    min-height: 560px;
+  }
+
+  /* ── Right column ── */
+  .hero-card-col {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 3rem 100px 3rem;
+    min-height: 560px;
+  }
+
+  /* ============================================
+     HERO SHOWCASE CARD — Mental Masturbation
+     ============================================ */
+
+  .hero-card-wrap {
+    perspective: 1200px;
+    width: 360px;
+    height: 520px;
+    cursor: pointer;
+    transform: rotate(-1.5deg);
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+  }
+
+  .hero-card-wrap:hover {
+    transform: rotate(0deg) translateY(-8px);
+  }
+
+  .hero-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.65s cubic-bezier(0.4, 0.2, 0.2, 1);
+  }
+
+  .hero-card-wrap.flipped .hero-card-inner {
+    transform: rotateY(180deg);
+  }
+
+  .hero-card-face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 16px;
+    border: 1px solid rgba(160, 143, 212, 0.35);
+    background: var(--surface);
+    padding: 28px 26px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    box-shadow:
+      0 0 0 1px rgba(160,143,212,0.08),
+      0 24px 64px rgba(0,0,0,0.6),
+      inset 0 1px 0 rgba(255,255,255,0.04);
+  }
+
+  .hero-card-back {
+    transform: rotateY(180deg);
+    background: var(--surface2);
+    justify-content: space-between;
+  }
+
+  /* ── Card front ── */
+  .hc-top-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 0;
+  }
+
+  .hc-cat-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #a08fd4;
+    background: rgba(160,143,212,0.1);
+    border: 1px solid rgba(160,143,212,0.2);
+    padding: 3px 9px;
+    border-radius: 999px;
+  }
+
+  .hc-source-row {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 8px;
+    flex-wrap: nowrap;
+  }
+
+  .hc-source-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.52rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    padding: 2px 7px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+
+  .hc-term {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--text);
+    letter-spacing: -0.02em;
+    margin-top: auto;
+    padding-top: 0.5rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .hc-hook {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1.02rem;
+    font-style: italic;
+    color: var(--muted2);
+    line-height: 1.5;
+    font-weight: 300;
+    margin-top: 0.5rem;
+  }
+
+  .hc-flip-hint {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.54rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    opacity: 0.6;
+    margin-top: 1.25rem;
+  }
+
+  .hc-flip-hint-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: 0.7;
+    flex-shrink: 0;
+  }
+
+  /* ── Card back ── */
+  .hc-back-section {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .hc-back-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.56rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .hc-back-text {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.86rem;
+    line-height: 1.7;
+    color: var(--muted2);
+    font-weight: 300;
+  }
+
+  .hc-back-text.analogy {
+    color: var(--muted);
+    font-style: italic;
+    font-size: 0.82rem;
+    border-left: 2px solid rgba(160,143,212,0.35);
+    padding-left: 10px;
+  }
+
+  .hc-back-prompt {
+    padding: 12px 14px;
+    border-radius: 8px;
+    background: rgba(232,213,163,0.06);
+    border: 1px solid rgba(232,213,163,0.15);
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .hc-back-prompt .hc-back-label {
+    color: var(--accent);
+    opacity: 0.9;
+  }
+
+  .hc-back-prompt .hc-back-text {
+    font-size: 0.82rem;
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 900px) {
+    .hero {
+      grid-template-columns: 1fr;
+      padding: 110px 0 0 0;
+    }
+    .hero-copy {
+      padding: 0 2rem 3rem 2rem;
+      align-items: center;
+    }
+    .hero-eyebrow::before { display: none; }
+    .hero-eyebrow::after { width: 24px; }
+    .hero h1 { text-align: center; font-size: clamp(2.4rem, 7vw, 3.8rem); }
+    .h1-indent { padding-left: 2rem; }
+    .hero-sub { text-align: center; margin: 0 auto 2.5rem; }
+    .hero-stats { margin-left: 0; width: 100%; }
+    .stat + .stat { border-left: 1px solid var(--border); }
+    .hero-divider { display: none; }
+    .hero-card-col {
+      padding: 0 2rem 3rem 2rem;
+      min-height: auto;
+    }
+    .hero-card-wrap {
+      width: 300px;
+      height: 440px;
+      transform: rotate(0deg);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .hero-card-wrap { width: 280px; height: 420px; }
+    .hc-term { font-size: 1.7rem; }
+    .hero-copy { padding: 0 1.5rem 3rem 1.5rem; }
+  }
+  /* ============================================
      CONCEPT OF THE DAY — MODAL
      ============================================ */
 
@@ -504,22 +1170,23 @@
     position: fixed;
     inset: 0;
     z-index: 200;
-    background: rgba(13, 13, 13, 0.85);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    display: none;
+    background: rgba(13, 13, 13, 0.92);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    display: flex;
     align-items: flex-start;
     justify-content: center;
     overflow-y: auto;
     padding: 6vh 1.5rem 4vh;
-    animation: cotdFadeIn 0.4s ease both;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+    will-change: opacity;
   }
 
-  .cotd-overlay.active { display: flex; }
-
-  @keyframes cotdFadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+  .cotd-overlay.active {
+    opacity: 1;
+    pointer-events: all;
   }
 
   .cotd-card {
@@ -532,6 +1199,7 @@
     padding: 40px 44px 36px;
     margin: auto 0;
     animation: cotdSlideUp 0.45s ease both;
+    will-change: transform;
   }
 
   @keyframes cotdSlideUp {
@@ -579,6 +1247,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
+    padding-right: 48px;
     font-family: 'DM Mono', monospace;
     font-size: 0.65rem;
     letter-spacing: 0.2em;
@@ -591,16 +1260,11 @@
     height: 6px;
     border-radius: 50%;
     background: var(--accent);
-    animation: cotdPulse 2s infinite;
   }
+  
   .cotd-eyebrow-date {
     color: var(--muted);
     margin-left: auto;
-  }
-
-  @keyframes cotdPulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
   }
 
   .cotd-meta {
@@ -1005,9 +1669,14 @@
   .app {
     position: relative;
     z-index: 1;
+    padding: 5rem 0 120px;
+  }
+
+  /* Centred controls wrapper — header, progress bar, vault row, pills, count */
+  .app-controls {
     max-width: 1100px;
     margin: 0 auto;
-    padding: 0 2rem 120px;
+    padding: 0 2rem;
   }
 
   .app-header {
@@ -1054,6 +1723,16 @@
 
   .search-wrap input::placeholder { color: var(--muted); }
 
+  /* VAULT BUTTON — inline in progress bar */
+  .progress-bar .vault-pill {
+    width: auto;
+    padding: 5px 12px;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    margin-left: 0;
+    flex-shrink: 0;
+  }
+
   /* PROGRESS BAR */
   .progress-bar {
     display: flex;
@@ -1097,56 +1776,49 @@
     white-space: nowrap;
   }
 
-  /* CATEGORY GRID */
+ /* CATEGORY PILL ROW */
   .cat-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 8px;
-    margin-bottom: 2.5rem;
+    padding: 0.5rem 0 1.75rem;
+    margin-bottom: 0.5rem;
   }
 
   .cat-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 16px 14px;
+    flex-shrink: 0;
+    background: transparent;
+    border: 0.5px solid var(--border);
+    border-radius: 999px;
+    padding: 6px 16px;
     cursor: pointer;
-    transition: all 0.2s;
-    position: relative;
-    overflow: hidden;
-    text-align: center;
+    transition: border-color 0.2s, background 0.2s;
+    white-space: nowrap;
+    will-change: transform;
+  }
+  .cat-card:hover { border-color: currentColor; }
+  .cat-card.active {
+    background: rgba(255,255,255,0.06);
+    border-color: currentColor;
   }
 
-  .cat-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: currentColor;
-    opacity: 0;
-    transition: opacity 0.2s;
+  .cat-icon {
+    display: inline;
+    font-size: 0.75rem;
+    margin-right: 5px;
+    opacity: 0.8;
   }
-
-  .cat-card:hover { border-color: var(--border-hover); transform: translateY(-2px); }
-  .cat-card:hover::before { opacity: 1; }
-  .cat-card.active { border-color: var(--border-hover); }
-  .cat-card.active::before { opacity: 1; }
-
-  .cat-icon { font-size: 1.4rem; margin-bottom: 8px; display: block; }
   .cat-name {
-    font-size: 0.72rem;
-    font-weight: 500;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--text);
-    display: block;
-    margin-bottom: 4px;
-  }
-  .cat-count {
     font-family: 'DM Mono', monospace;
-    font-size: 0.62rem;
-    color: var(--muted);
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: currentColor;
+    display: inline;
   }
+  .cat-count { display: none; }
 
   .cat-card[data-cat="all"] { color: var(--accent); }
   .cat-card[data-cat="finance"] { color: var(--blue); }
@@ -1156,6 +1828,13 @@
   .cat-card[data-cat="relationships"] { color: var(--pink); }
   .cat-card[data-cat="language"] { color: var(--teal); }
   .cat-card[data-cat="business"] { color: #e0a060; }
+  .cat-card[data-cat="creativity"] { color: #d4a574; }
+  .cat-card[data-cat="health"] { color: #8ab87a; }
+  .cat-card[data-cat="identity"] { color: #b89878; }
+  .cat-card[data-cat="philosophy"] { color: #9a8fb8; }
+  .cat-card[data-cat="science"] { color: #6ab0c4; }
+  .cat-card[data-cat="society"] { color: #7090a8; }
+  .cat-card[data-cat="tech-ai"] { color: #b8a07a; }
 
   /* CONCEPTS GRID */
   .concepts-grid {
@@ -1169,7 +1848,7 @@
     border: 1px solid var(--border);
     border-radius: 10px;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: border-color 0.2s, transform 0.2s ease;
     overflow: hidden;
     position: relative;
   }
@@ -1184,9 +1863,27 @@
     transition: opacity 0.2s;
   }
 
-  .concept-card:hover { border-color: var(--border-hover); }
-  .concept-card:hover::after, .concept-card.open::after { opacity: 1; }
-  .concept-card.open { border-color: var(--border-hover); }
+  .concept-card:hover {
+    border-color: var(--border-hover);
+  }
+
+  /* Alive glow — thin category-coloured line appears at the bottom on hover */
+  .concept-card::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 15%;
+    right: 15%;
+    height: 1px;
+    background: var(--cat-color, var(--accent));
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    border-radius: 999px;
+  }
+  .concept-card:hover::before { opacity: 0.55; }
+  .concept-card:hover::after { opacity: 1; }
+  .concept-card.open::after { opacity: 1; }
+  .concept-card.open { border-color: var(--border-hover); transform: translateY(0); }
   .concept-card.mastered { opacity: 0.5; }
 
   .card-front {
@@ -1233,7 +1930,6 @@
     gap: 4px;
     margin-bottom: 8px;
   }
-
   .people-pill {
     font-family: 'DM Mono', monospace;
     font-size: 0.6rem;
@@ -1244,6 +1940,13 @@
     border: 1px solid var(--border);
     background: transparent;
     color: var(--muted2);
+  }
+  .card-front .people-pills { display: none; }
+  .card-back .people-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 0.75rem;
   }
 
   .mastered-badge {
@@ -1393,6 +2096,72 @@
   }
 
   .btn-share:hover { border-color: var(--border-hover); color: var(--text); }
+  /* SHARE CARD MODAL */
+.share-modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  z-index: 9000;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+.share-modal-overlay.open { display: flex; }
+.share-modal {
+  background: var(--surface);
+  border: 1px solid var(--border-hover);
+  border-radius: 8px;
+  padding: 1.5rem;
+  max-width: 480px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.share-modal canvas {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  display: block;
+}
+.share-modal-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+.share-modal-actions button {
+  flex: 1;
+  padding: 0.65rem 1rem;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-share-download {
+  background: var(--accent);
+  color: #0d0d0d;
+  border: none;
+  font-weight: 500;
+}
+.btn-share-download:hover { background: var(--accent2); }
+.btn-share-native {
+  background: transparent;
+  color: var(--muted2);
+  border: 1px solid var(--border-hover);
+}
+.btn-share-native:hover { color: var(--text); border-color: var(--border-hover); }
+.btn-share-close {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  font-size: 0.65rem;
+}
+.btn-share-close:hover { color: var(--text); }
 
   /* COUNT */
   .results-count {
@@ -1408,15 +2177,38 @@
   .daily-goal {
     position: fixed;
     bottom: 0; left: 0; right: 0;
-    background: rgba(13,13,13,0.95);
-    backdrop-filter: blur(20px);
+    background: #0d0d0d;
     border-top: 1px solid var(--border);
-    padding: 12px 2rem;
+    padding: 10px 1.25rem;
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 1.5rem;
+    justify-content: space-between;
+    gap: 0.75rem;
     z-index: 100;
+  }
+  .daily-goal-left {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-shrink: 0;
+  }
+  .daily-goal-right {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-shrink: 0;
+  }
+  .daily-goal-left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-shrink: 0;
+  }
+  .daily-goal-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-width: 0;
   }
 
   .daily-label {
@@ -1442,6 +2234,24 @@
   }
 
   .daily-dot.filled { background: var(--accent); border-color: var(--accent); }
+  .streak-display {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.78rem;
+  color: var(--accent);
+  margin-left: auto;
+}
+.streak-display #streakCount {
+  font-weight: 500;
+  font-size: 1rem;
+}
+.streak-label {
+  color: var(--muted2);
+  font-size: 0.69rem;
+  letter-spacing: 0.08em;
+}
 
   .daily-msg {
     font-size: 0.72rem;
@@ -1461,7 +2271,7 @@
 
   /* ANIMATIONS */
   @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(16px); }
+    from { opacity: 0; transform: translateY(12px); }
     to { opacity: 1; transform: translateY(0); }
   }
 
@@ -1469,28 +2279,589 @@
     animation: fadeUp 0.35s ease both;
   }
 
+  .nf-row.dragging { scroll-snap-type: none; user-select: none; cursor: grabbing; }
+
   /* RESPONSIVE */
   @media (max-width: 600px) {
     .steps { grid-template-columns: 1fr; }
     .step:first-child { border-radius: 12px 12px 0 0; }
     .step:last-child { border-radius: 0 0 12px 12px; }
     .hero-stats { gap: 1.5rem; }
+    .app-controls { padding: 0 1.25rem; }
     .app-header { flex-direction: column; align-items: flex-start; }
     .search-wrap { width: 100%; }
-    .daily-goal { flex-wrap: wrap; gap: 0.5rem; justify-content: flex-start; }
+  }
+  /* ============================================
+     QUIZ MODE OVERLAY
+     ============================================ */
+
+  #quizOverlay {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  #quizOverlay.quiz-open {
+    pointer-events: all;
+    opacity: 1;
+  }
+
+  .quiz-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(13,13,13,0.92);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    will-change: opacity;
+  }
+
+  #quizOverlay.quiz-open .quiz-backdrop { opacity: 1; }
+
+  .quiz-sheet {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 680px;
+    height: 88vh;
+    background: var(--surface);
+    border: 1px solid var(--border-hover);
+    border-bottom: none;
+    border-radius: 18px 18px 0 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transform: translateY(100%);
+    transition: transform 0.42s cubic-bezier(0.32, 0.72, 0, 1);
+    will-change: transform;
+    min-height: 480px;
+  }
+
+  #quizOverlay.quiz-open .quiz-sheet {
+    transform: translateY(0);
+  }
+
+  /* Progress bar */
+  .quiz-progress-track {
+    height: 2px;
+    background: var(--border);
+    width: 100%;
+    flex-shrink: 0;
+  }
+
+  .quiz-progress-fill {
+    height: 100%;
+    background: var(--accent);
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+
+  /* Quiz header */
+  .quiz-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px 16px;
+    flex-shrink: 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .quiz-round-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .quiz-round-label span {
+    color: var(--accent);
+    font-size: 0.85rem;
+    font-family: 'Playfair Display', serif;
+    letter-spacing: 0;
+    text-transform: none;
+    margin-left: 8px;
+  }
+
+  .quiz-score-display {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+  }
+
+  .quiz-score-display strong {
+    color: var(--accent);
+    font-size: 0.9rem;
+    font-family: 'Playfair Display', serif;
+    letter-spacing: 0;
+  }
+
+  .quiz-close-btn {
+    background: none;
+    border: 0.5px solid var(--border);
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+
+  .quiz-close-btn:hover { color: var(--text); border-color: var(--border-hover); }
+
+  /* Quiz body — scrollable content area */
+  .quiz-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 32px 36px 40px;
+    scrollbar-width: none;
+    min-height: 320px;
+  }
+
+  .quiz-body::-webkit-scrollbar { display: none; }
+
+  /* Round type label */
+  .quiz-type-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+
+  /* The main question text */
+  .quiz-question {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.1rem, 3vw, 1.4rem);
+    font-weight: 400;
+    color: var(--text);
+    line-height: 1.5;
+    margin-bottom: 28px;
+  }
+
+  .quiz-question em {
+    color: var(--accent);
+    font-style: italic;
+  }
+
+  /* Category chip shown with question */
+  .quiz-cat-chip {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: 999px;
+    border: 0.5px solid currentColor;
+    margin-bottom: 14px;
+    opacity: 0.75;
+  }
+
+  /* ---- Round 1: Multiple choice options ---- */
+  .quiz-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  @media (max-width: 480px) { .quiz-options { grid-template-columns: 1fr; } }
+
+  .quiz-option {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 400;
+    color: var(--muted2);
+    cursor: pointer;
+    transition: border-color 0.18s, color 0.18s, background 0.18s;
+    text-align: left;
+    line-height: 1.4;
+  }
+
+  .quiz-option:hover:not(:disabled) {
+    border-color: var(--border-hover);
+    color: var(--text);
+  }
+
+  .quiz-option.correct {
+    border-color: var(--green);
+    color: var(--green);
+    background: rgba(122,175,138,0.08);
+  }
+
+  .quiz-option.wrong {
+    border-color: var(--red);
+    color: var(--red);
+    background: rgba(212,113,90,0.08);
+    animation: quiz-shake 0.4s ease;
+  }
+
+  .quiz-option:disabled { cursor: default; }
+
+  @keyframes quiz-shake {
+    0%,100% { transform: translateX(0); }
+    20%      { transform: translateX(-6px); }
+    40%      { transform: translateX(6px); }
+    60%      { transform: translateX(-4px); }
+    80%      { transform: translateX(4px); }
+  }
+
+  /* ---- Round 2: Fill the blank ---- */
+  .quiz-blank-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .quiz-blank-input {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--text);
+    width: 100%;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.2s;
+    caret-color: var(--accent);
+  }
+
+  .quiz-blank-input::placeholder { color: var(--muted); font-style: italic; }
+  .quiz-blank-input:focus { border-color: var(--border-hover); }
+  .quiz-blank-input.correct { border-color: var(--green); color: var(--green); }
+  .quiz-blank-input.wrong   { border-color: var(--red);   animation: quiz-shake 0.4s ease; }
+
+  .quiz-submit-btn {
+    align-self: flex-start;
+    padding: 10px 24px;
+    border-radius: 999px;
+    background: var(--accent);
+    color: #0d0d0d;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+  }
+
+  .quiz-submit-btn:hover { background: #f0e0b0; transform: translateY(-1px); }
+  .quiz-submit-btn:disabled { opacity: 0.4; cursor: default; transform: none; }
+
+  .quiz-hint-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+  }
+
+  .quiz-hint-letter {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    padding: 4px 10px;
+    border: 0.5px solid var(--border);
+    border-radius: 4px;
+    color: var(--muted2);
+    cursor: pointer;
+    transition: all 0.15s;
+    text-transform: uppercase;
+  }
+
+  .quiz-hint-letter:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ---- Round 3: Analogy decode tap-to-match ---- */
+  .quiz-match-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .quiz-match-col {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .quiz-match-item {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    color: var(--muted2);
+    cursor: pointer;
+    transition: border-color 0.18s, color 0.18s, background 0.18s;
+    line-height: 1.45;
+    min-height: 64px;
+    display: flex;
+    align-items: center;
+  }
+
+  .quiz-match-item.analogy-item { background: var(--surface2); font-style: italic; }
+  .quiz-match-item.term-item    { background: var(--bg); font-family: 'Playfair Display', serif; font-size: 0.9rem; font-style: normal; }
+
+  .quiz-match-item.selected {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(232,213,163,0.06);
+  }
+
+  .quiz-match-item.matched-correct {
+    border-color: var(--green);
+    color: var(--green);
+    background: rgba(122,175,138,0.08);
+    cursor: default;
+    pointer-events: none;
+  }
+
+  .quiz-match-item.matched-wrong {
+    border-color: var(--red);
+    color: var(--red);
+    background: rgba(212,113,90,0.08);
+    animation: quiz-shake 0.4s ease;
+  }
+
+  /* ---- Round complete interstitial ---- */
+  .quiz-interstitial {
+    text-align: center;
+    padding: 20px 0 8px;
+  }
+
+  .quiz-interstitial-icon {
+    font-size: 2.2rem;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .quiz-interstitial-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  .quiz-interstitial-sub {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    color: var(--muted2);
+    margin-bottom: 24px;
+  }
+
+  .quiz-xp-badge {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 0.5px solid var(--accent);
+    border-radius: 999px;
+    padding: 6px 18px;
+    margin-bottom: 20px;
+  }
+
+  .quiz-next-btn {
+    padding: 12px 32px;
+    border-radius: 999px;
+    background: var(--accent);
+    color: #0d0d0d;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+  }
+
+  .quiz-next-btn:hover { background: #f0e0b0; transform: translateY(-1px); }
+
+  /* ---- End screen ---- */
+  .quiz-end {
+    text-align: center;
+    padding: 16px 0 8px;
+  }
+
+  .quiz-end-rank {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  .quiz-end-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 5vw, 2.4rem);
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .quiz-end-score {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+    margin: 12px 0 4px;
+  }
+
+  .quiz-end-of {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.14em;
+    color: var(--muted);
+    margin-bottom: 28px;
+  }
+
+  .quiz-end-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .quiz-play-again {
+    padding: 12px 28px;
+    border-radius: 999px;
+    background: var(--accent);
+    color: #0d0d0d;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+  }
+
+  .quiz-play-again:hover { background: #f0e0b0; transform: translateY(-1px); }
+
+  .quiz-end-close {
+    padding: 12px 28px;
+    border-radius: 999px;
+    background: none;
+    color: var(--muted2);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .quiz-end-close:hover { border-color: var(--border-hover); color: var(--text); }
+
+  /* Entry ripple from button */
+  .quiz-ripple {
+    position: fixed;
+    border-radius: 50%;
+    background: rgba(232,213,163,0.25);
+    transform: scale(0);
+    animation: quiz-ripple-out 0.55s ease-out forwards;
+    pointer-events: none;
+    z-index: 199;
+  }
+
+  @keyframes quiz-ripple-out {
+    to { transform: scale(40); opacity: 0; }
   }
 </style>
 </head>
 <body>
 
 <!-- NAV -->
-<nav>
-  <div class="nav-logo">Listen. <span>Learn.</span> Live.</div>
-  <div class="nav-pill">
-    <div class="nav-dot"></div>
-    <span id="navConceptCount">165</span> concepts · Free
+<nav id="mainNav">
+  <div class="nav-logo">Epi<span>stemic.</span></div>  
+
+  <div class="nav-island" id="navIsland">
+    <a class="nav-link" onclick="scrollToSection('app')">Concepts</a>
+    <a class="nav-link" onclick="scrollToSection('episodesSection')">Episodes</a>
+    <a class="nav-link" onclick="toggleVault();scrollToSection('app')">Vault</a>
+    <a class="nav-link" onclick="openCotdFromNav()">Today</a>
+    <a class="nav-link" onclick="scrollToSection('signup')">Sign up</a>
+    <div class="nav-divider"></div>
+    <button class="nav-quiz-btn" id="navQuizBtn" onclick="openQuiz()">◈ Quiz</button>
   </div>
-</nav><!-- CONCEPT OF THE DAY — MODAL -->
+
+  <div class="nav-right">
+    <button class="hiw-trigger" onclick="openHiw()">How it works</button>
+    <div class="nav-pill">
+      <div class="nav-dot"></div>
+      <span id="navConceptCount">165</span> free
+    </div>
+    <button class="nav-mobile-toggle" id="navToggle" onclick="toggleMobileNav()">≡</button>
+  </div>
+</nav>
+
+<!-- MOBILE NAV MENU -->
+<div class="nav-mobile-menu" id="navMobileMenu">
+  <button class="nav-mobile-link" onclick="scrollToSection('app');closeMobileNav()">◈ Concepts</button>
+  <button class="nav-mobile-link" onclick="scrollToSection('episodesSection');closeMobileNav()">◎ Episodes</button>
+  <button class="nav-mobile-link" onclick="toggleVault();scrollToSection('app');closeMobileNav()">◆ Vault</button>
+  <button class="nav-mobile-link" onclick="openCotdFromNav();closeMobileNav()">◇ Today's Concept</button>
+  <button class="nav-mobile-link" onclick="scrollToSection('signup');closeMobileNav()">◉ Sign up — Free</button>
+  <button class="nav-mobile-link" onclick="openHiw();closeMobileNav()">◌ How it works</button>
+  <button class="nav-mobile-link" style="color:var(--accent);border-top:1px solid var(--border);" onclick="openQuiz();closeMobileNav()">◈ Quiz mode</button>
+</div>
+
+<!-- HOW IT WORKS MODAL -->
+<div class="hiw-overlay" id="hiwOverlay" onclick="closeHiwOnBackdrop(event)">
+  <div class="hiw-modal">
+    <div class="hiw-modal-header">
+      <div class="hiw-modal-title">How it works</div>
+      <button class="hiw-modal-close" onclick="closeHiw()">✕</button>
+    </div>
+    <div class="hiw-steps">
+      <div class="hiw-step">
+        <div class="hiw-step-num">01</div>
+        <h3>Pick a Category</h3>
+        <p>Choose a category you want to explore — or browse the full library across all areas.</p>
+      </div>
+      <div class="hiw-step">
+        <div class="hiw-step-num">02</div>
+        <h3>Read the Clue Card</h3>
+        <p>Each concept has a hook, plain-language definition, and a memorable analogy. 5 minutes per concept — no more.</p>
+      </div>
+      <div class="hiw-step">
+        <div class="hiw-step-num">03</div>
+        <h3>Reflect & Use It</h3>
+        <p>A conversation prompt helps you apply the concept in real life. Mark it mastered when it clicks.</p>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /HOW IT WORKS MODAL -->
+<!-- CONCEPT OF THE DAY — MODAL -->
 <div class="cotd-overlay" id="cotdOverlay" role="dialog" aria-modal="true" aria-labelledby="cotdTerm">
   <div class="cotd-card" id="cotdCard">
     <button class="cotd-close" id="cotdClose" aria-label="Close concept of the day">✕</button>
@@ -1530,7 +2901,7 @@
 
     <div class="cotd-actions">
       <button class="cotd-btn cotd-btn--primary" id="cotdMarkBtn">
-        <span id="cotdMarkLabel">✓ Mark Internalized</span>
+        <span id="cotdMarkLabel">⊕ VAULT</span>
       </button>
       <button class="cotd-btn" id="cotdNextBtn">→ Try Another</button>
     </div>
@@ -1544,30 +2915,156 @@
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-eyebrow">The Intelligence Toolkit</div>
-  <h1>The ideas shaping<br><em>smart conversation</em></h1>
-  <p class="hero-sub">You consume podcasts and articles — but how much do you actually retain? Learn 5 key concepts a day. Understand them. Use them. Change how you think and communicate.</p>
-  <div class="hero-stats">
-    <div class="stat">
-      <div class="stat-num" id="heroConceptCount">165</div>
-      <div class="stat-label">Concepts</div>
+
+  <!-- LEFT: Hero copy -->
+  <div class="hero-copy">
+
+    <div class="hero-eyebrow-outer">
+      <div class="hero-eyebrow">The Intelligence Toolkit</div>
     </div>
-    <div class="stat">
-      <div class="stat-num" id="heroCategoryCount">11</div>
-      <div class="stat-label">Categories</div>
+
+    <h1>You finish the podcast.<br><span class="h1-indent"><em>Then what?</em></span></h1>
+
+    <p class="hero-sub">Most ideas evaporate within 24 hours. Not because the content is bad. Because passive listening is a broken learning format.<br><br><span class="hero-brand-name">Epistemic</span> fixes that.</p>
+
+    <div class="hero-stats">
+      <div class="stat">
+        <span class="stat-num" id="heroConceptCount">183</span>
+        <span class="stat-label">Concepts</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num" id="heroCategoryCount">12</span>
+        <span class="stat-label">Categories</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">5/day</span>
+        <span class="stat-label">Daily Goal</span>
+      </div>
     </div>
-    <div class="stat">
-      <div class="stat-num">5/day</div>
-      <div class="stat-label">Daily Goal</div>
+
+    <a href="#app" class="hero-cta">
+      Start Learning
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M8 3l5 5-5 5"/></svg>
+    </a>
+
+  </div>
+
+  <!-- VERTICAL DIVIDER -->
+  <div class="hero-divider"></div>
+
+  <!-- RIGHT: Showcase card -->
+  <div class="hero-card-col">
+    <div class="hero-card-wrap" id="heroCard" onclick="this.classList.toggle('flipped')" title="Click to flip">
+      <div class="hero-card-inner">
+
+        <!-- FRONT -->
+        <div class="hero-card-face">
+          <div>
+            <div class="hc-top-row">
+              <span class="hc-cat-pill">Psychology</span>
+            </div>
+            <div class="hc-source-row">
+              <span class="hc-source-pill">Modern Wisdom</span>
+              <span class="hc-source-pill">Chris Williamson</span>
+            </div>
+          </div>
+          <div class="hc-term">Mental Masturbation</div>
+          <div>
+            <div class="hc-hook">Consuming self-improvement content is the most addictive form of doing nothing.</div>
+            <div class="hc-flip-hint">
+              <span class="hc-flip-hint-dot"></span>
+              Tap to flip
+            </div>
+          </div>
+        </div>
+
+        <!-- BACK -->
+        <div class="hero-card-face hero-card-back">
+          <div class="hc-back-section">
+            <div class="hc-back-label">What it means</div>
+            <div class="hc-back-text">Most of what people call self-improvement is just consumption with better branding. You feel sharper after a podcast, more capable after a book — but nothing in your life has changed. You confuse the input with the outcome.</div>
+          </div>
+          <div class="hc-back-section">
+            <div class="hc-back-label">Analogy</div>
+            <div class="hc-back-text analogy">Like buying a gym membership, watching workout videos every morning, reading the science of hypertrophy — and never lifting a single weight.</div>
+          </div>
+          <div class="hc-back-prompt">
+            <div class="hc-back-label">Reflect &amp; use it</div>
+            <div class="hc-back-text">Look at what you've consumed this month. Now look at what you've done. Which one is closer to the person you say you are?</div>
+          </div>
+        </div>
+
+      </div>
     </div>
   </div>
-  <a href="#app" class="hero-cta">
-    Start Learning
-    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M8 3l5 5-5 5"/></svg>
-  </a>
+
 </section>
+<!-- EPISODES SECTION -->
+<div id="episodesSection" class="episodes-section" style="display:none">
+  <div class="episodes-controls">
+    <div class="episodes-app-header">
+      <div class="app-title">Browse <em>episodes</em></div>
+    </div>
+  </div>
+  <div class="episodes-scroll-wrap">
+    <div class="episodes-fade-left"></div>
+    <div class="episodes-fade-right"></div>
+    <div id="episodesRow" class="episodes-row"></div>
+  </div>
+</div>
+<!-- /EPISODES SECTION -->
+<!-- APP -->
+<section class="app" id="app">
+  <div class="app-controls">
+  <div class="app-header">
+    <div class="app-title">Browse <em>concepts</em></div>
+    <div class="search-wrap">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M10 10l3.5 3.5"/></svg>
+      <input type="text" id="search" placeholder="Search concepts..." />
+    </div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-bar">
+  <div class="progress-label">Progress</div>
+  <div class="progress-track">
+    <div class="progress-fill" id="progressFill" style="width:0%"></div>
+  </div>
+  <div class="progress-count" id="progressCount">— / —</div>
+  <div class="cat-card vault-pill" id="vaultPill" onclick="toggleVault()" style="color:var(--accent);margin-left:4px;">⊠ VAULT</div>
+</div>
+
+        <!-- EPISODE DRAWER -->
+        <div class="ep-drawer-backdrop" id="epBackdrop" onclick="closeEpisodeDrawer()"></div>
+        <div class="ep-drawer" id="epDrawer">
+          <div class="ep-drawer-handle"></div>
+          <div class="ep-drawer-header">
+            <div class="ep-drawer-meta">
+              <div class="ep-drawer-title" id="epDrawerTitle"></div>
+              <div class="ep-drawer-pills" id="epDrawerPills"></div>
+            </div>
+            <button class="ep-drawer-close" onclick="closeEpisodeDrawer()">✕</button>
+          </div>
+          <div class="ep-drawer-mix" id="epDrawerMix"></div>
+          <div class="ep-drawer-body">
+            <div class="ep-drawer-grid" id="epDrawerGrid"></div>
+          </div>
+        </div>
+  <!-- CATEGORIES — pill filter row -->
+  <div class="cat-grid" id="catGrid"></div>
+
+  <!-- SEARCH COUNT -->
+  <div class="results-count" id="resultCount"></div>
+  </div><!-- /.app-controls -->
+
+  <!-- CATEGORY ROWS — full bleed -->
+  <div id="netflixRows" style="min-height: 1800px;"></div>
+</section>
+
+<div class="divider"></div>
+
 <!-- NEWSLETTER CAPTURE -->
-<section class="newsletter">
+<section class="newsletter" id="signup">
   <div class="newsletter-inner">
     <div class="newsletter-label">The Weekly Drop</div>
     <h2 class="newsletter-heading">5 concepts. <em>Every Sunday.</em></h2>
@@ -1593,106 +3090,148 @@
   </div>
 </section>
 <!-- /NEWSLETTER CAPTURE -->
-<div class="divider"></div>
-
-<!-- HOW IT WORKS -->
-<section class="how">
-  <div class="section-label">How it works</div>
-  <div class="steps">
-    <div class="step">
-      <div class="step-num">01</div>
-      <h3>Pick a Category</h3>
-      <p>Choose a category that you want to learn about — or browse the full library across all areas.</p>
-    </div>
-    <div class="step">
-      <div class="step-num">02</div>
-      <h3>Read the Clue Card</h3>
-      <p>Each concept has a hook, plain-language definition, and a memorable analogy. 5 minutes per concept — no more.</p>
-    </div>
-    <div class="step">
-      <div class="step-num">03</div>
-      <h3>Reflect & Use It</h3>
-      <p>A conversation prompt helps you apply the concept immediately in your real life. Mark it mastered when it clicks.</p>
+<!-- SHARE CARD MODAL -->
+<div class="share-modal-overlay" id="shareModalOverlay" onclick="closeShareModal(event)">
+  <div class="share-modal">
+    <canvas id="shareCanvas" width="800" height="460"></canvas>
+    <div class="share-modal-actions">
+      <button class="btn-share-download" onclick="downloadShareCard()">↓ Save Image</button>
+      <button class="btn-share-native" id="shareNativeBtn" onclick="nativeShare()">Share ↗</button>
+      <button class="btn-share-close" onclick="closeShareModal()">✕ Close</button>
     </div>
   </div>
-</section>
-
-<div class="divider"></div>
-
-<!-- APP -->
-<section class="app" id="app">
-  <div class="app-header">
-    <div class="app-title">Browse <em>concepts</em></div>
-    <div class="search-wrap">
-      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M10 10l3.5 3.5"/></svg>
-      <input type="text" id="search" placeholder="Search concepts..." />
-    </div>
-  </div>
-
-  <!-- PROGRESS -->
-  <div class="progress-bar">
-  <div class="progress-label">Overall progress</div>
-  <div class="progress-track">
-    <div class="progress-fill" id="progressFill" style="width:0%"></div>
-  </div>
-  <div class="progress-count" id="progressCount" onclick="toggleVault()" style="cursor:pointer;">0 / 183</div>
 </div>
-<div class="vault-row">
-  <div class="vault-pill" id="vaultPill" onclick="toggleVault()">YOUR VAULT</div>
-</div>
-
-  <!-- EPISODES SECTION -->
-        <div id="episodesSection" class="episodes-section" style="display:none">
-          <div class="episodes-section-header">
-            <div class="episodes-section-title">Episodes</div>
-            <div class="episodes-section-rule"></div>
-          </div>
-          <div class="episodes-scroll-wrap">
-            <div class="episodes-fade-right"></div>
-            <div id="episodesRow" class="episodes-row"></div>
-          </div>
-        </div>
-
-        <!-- EPISODE DRAWER -->
-        <div class="ep-drawer-backdrop" id="epBackdrop" onclick="closeEpisodeDrawer()"></div>
-        <div class="ep-drawer" id="epDrawer">
-          <div class="ep-drawer-handle"></div>
-          <div class="ep-drawer-header">
-            <div class="ep-drawer-meta">
-              <div class="ep-drawer-title" id="epDrawerTitle"></div>
-              <div class="ep-drawer-pills" id="epDrawerPills"></div>
-            </div>
-            <button class="ep-drawer-close" onclick="closeEpisodeDrawer()">✕</button>
-          </div>
-          <div class="ep-drawer-mix" id="epDrawerMix"></div>
-          <div class="ep-drawer-body">
-            <div class="ep-drawer-grid" id="epDrawerGrid"></div>
-          </div>
-        </div>
-  <!-- CATEGORIES -->
-  <div class="cat-grid" id="catGrid"></div>
-
-  <!-- COUNT -->
-  <div class="results-count" id="resultCount"></div>
-
-  <!-- CONCEPTS -->
-  <div class="concepts-grid" id="conceptsGrid"></div>
-</section>
-
+<!-- /SHARE CARD MODAL -->
 <!-- DAILY GOAL BAR -->
 <div class="daily-goal">
-  <div class="daily-label">Today's goal</div>
-  <div class="daily-dots" id="dailyDots">
-    <div class="daily-dot"></div>
-    <div class="daily-dot"></div>
-    <div class="daily-dot"></div>
-    <div class="daily-dot"></div>
-    <div class="daily-dot"></div>
+  <div class="daily-goal-left">
+    <div class="daily-label">Today's goal</div>
+    <div class="daily-dots" id="dailyDots">
+      <div class="daily-dot"></div>
+      <div class="daily-dot"></div>
+      <div class="daily-dot"></div>
+      <div class="daily-dot"></div>
+      <div class="daily-dot"></div>
+    </div>
   </div>
-  <div class="daily-msg" id="dailyMsg"><strong>0 of 5</strong> concepts opened today</div>
+  <div class="daily-goal-right">
+    <div class="daily-msg" id="dailyMsg"><strong>0 of 5</strong> concepts opened today</div>
+    <div class="streak-display">
+      <span id="streakFlame" style="opacity:0.35">🔥</span>
+      <span id="streakCount">0</span>
+      <span class="streak-label">day streak</span>
+    </div>
+  </div>
 </div>
 
 <script>
+// MAGNETIC PILL EFFECT
+function initMagneticPills() {
+  const STRENGTH = 0.35;  // how far pills follow cursor (0 = none, 1 = full)
+  const RADIUS   = 80;    // px distance at which magnetism kicks in
+
+  let _pillRaf = false;
+  const pillGrid = document.getElementById('catGrid');
+  if (!pillGrid) return;
+  pillGrid.addEventListener('mousemove', function(e) {
+    if (_pillRaf) return;
+    _pillRaf = true;
+    requestAnimationFrame(() => { _pillRaf = false;
+      const pill = e.target.closest('.cat-card');
+      if (!pill) return;
+      const rect = pill.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top  + rect.height / 2;
+      const dx = e.clientX - cx;
+      const dy = e.clientY - cy;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < RADIUS) {
+        const tx = dx * STRENGTH;
+        const ty = dy * STRENGTH;
+        pill.style.transform = `translate(${tx}px, ${ty}px)`;
+      }
+    });  // closes rAF
+  });    // closes pillGrid mousemove
+
+    document.querySelectorAll('.cat-card').forEach(pill => {
+    pill.addEventListener('mouseleave', function() {
+      pill.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), border-color 0.2s, background 0.2s';
+      pill.style.transform = 'translate(0px, 0px)';
+      setTimeout(() => {
+        pill.style.transition = 'border-color 0.2s, background 0.2s';
+      }, 400);
+    });
+    pill.addEventListener('mouseenter', function() {
+      pill.style.transition = 'transform 0.1s ease, border-color 0.2s, background 0.2s';
+    });
+  });
+}
+// NAV BEHAVIOUR
+function scrollToSection(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function toggleMobileNav() {
+  const menu = document.getElementById('navMobileMenu');
+  const toggle = document.getElementById('navToggle');
+  const open = menu.classList.toggle('open');
+  toggle.textContent = open ? '✕' : '≡';
+  document.body.style.overflow = open ? 'hidden' : '';
+}
+
+function closeMobileNav() {
+  const menu = document.getElementById('navMobileMenu');
+  const toggle = document.getElementById('navToggle');
+  menu.classList.remove('open');
+  toggle.textContent = '≡';
+  document.body.style.overflow = '';
+}
+
+// Shrink nav on scroll
+window.addEventListener('scroll', function() {
+  document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 40);
+}, { passive: true });
+
+// Magnetic effect on nav island links
+function initMagneticNav() {
+  document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('mousemove', function(e) {
+      const rect = link.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dx = (e.clientX - cx) * 0.25;
+      const dy = (e.clientY - cy) * 0.25;
+      link.style.transform = `translate(${dx}px, ${dy}px)`;
+    });
+    link.addEventListener('mouseleave', function() {
+      link.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), color 0.2s, background 0.2s';
+      link.style.transform = 'translate(0,0)';
+      setTimeout(() => { link.style.transition = 'color 0.2s, background 0.2s'; }, 400);
+    });
+    link.addEventListener('mouseenter', function() {
+      link.style.transition = 'transform 0.1s ease, color 0.2s, background 0.2s';
+    });
+  });
+}
+
+// Call after DOM ready
+document.addEventListener('DOMContentLoaded', initMagneticNav);
+// HOW IT WORKS MODAL
+function openHiw() {
+  document.getElementById('hiwOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeHiw() {
+  document.getElementById('hiwOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function closeHiwOnBackdrop(e) {
+  if (e.target === document.getElementById('hiwOverlay')) closeHiw();
+}
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeHiw();
+});
 const CATEGORIES = [
   { id:'all',           name:'All',           icon:'◈', color:'#e8d5a3' },
   { id:'business',      name:'Business',      icon:'◈', color:'#e0a060' },
@@ -1713,6 +3252,7 @@ const CATEGORIES = [
 
 let CONCEPTS = [];
 let COLLECTIONS_BY_ID = {};
+let FUSE = null;
 
 async function loadCollections() {
   try {
@@ -1727,23 +3267,60 @@ async function loadCollections() {
   }
 }
 
+// FUZZY SEARCH — Fuse.js index built once after concepts + collections load.
+// Each entry is enriched with a `_people` string (joined host + guests from
+// its collection) so typing "Chris Williamson" surfaces all his episodes.
+function buildFuseIndex() {
+  if (typeof Fuse === 'undefined') {
+    console.warn('Fuse.js not loaded — falling back to substring search');
+    FUSE = null;
+    return;
+  }
+  const enriched = CONCEPTS.map(c => {
+    const col = (c.collection_id != null) ? COLLECTIONS_BY_ID[c.collection_id] : null;
+    const people = (col && Array.isArray(col.people)) ? col.people.join(' ') : '';
+    return { id: c.id, term: c.term, hook: c.hook, plain: c.plain, analogy: c.analogy, _people: people };
+  });
+  FUSE = new Fuse(enriched, {
+    keys: [
+      { name: 'term',    weight: 0.40 },
+      { name: '_people', weight: 0.20 },
+      { name: 'hook',    weight: 0.15 },
+      { name: 'plain',   weight: 0.15 },
+      { name: 'analogy', weight: 0.10 }
+    ],
+    threshold: 0.25,        // 0 = exact, 1 = matches anything. 0.25 = catches typos, rejects loose overlaps.
+    ignoreLocation: true,   // match anywhere in the field
+    minMatchCharLength: 3,
+    distance: 60            // limit how far apart matched chars can be in a field
+  });
+}
+
+// Returns a Set of concept IDs that match the query, or null if no query.
+function fuzzyMatchIds(q) {
+  if (!q) return null;
+  if (!FUSE) {
+    // Fallback: substring match on the original 4 fields + people
+    const ql = q.toLowerCase();
+    return new Set(CONCEPTS.filter(c => {
+      const col = (c.collection_id != null) ? COLLECTIONS_BY_ID[c.collection_id] : null;
+      const people = (col && Array.isArray(col.people)) ? col.people.join(' ').toLowerCase() : '';
+      return c.term.toLowerCase().includes(ql)
+        || (c.hook && c.hook.toLowerCase().includes(ql))
+        || (c.plain && c.plain.toLowerCase().includes(ql))
+        || (c.analogy && c.analogy.toLowerCase().includes(ql))
+        || people.includes(ql);
+    }).map(c => c.id));
+  }
+  return new Set(FUSE.search(q).map(r => r.item.id));
+}
+
 async function loadConcepts() {
-  const grid = document.getElementById('conceptsGrid');
+  const grid = document.getElementById('netflixRows');
   const count = document.getElementById('resultCount');
 
   if (grid) {
-    grid.innerHTML = `
-      <div style="
-        grid-column: 1 / -1;
-        text-align: center;
-        padding: 3rem 2rem;
-        color: var(--muted);
-        font-size: 0.85rem;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-      ">
-        Loading concepts...
-      </div>`;
+    grid.innerHTML = `<div style="padding:3rem 2rem;color:var(--muted);font-family:'DM Mono',monospace;font-size:0.75rem;letter-spacing:0.12em;text-transform:uppercase;text-align:center;">Loading concepts...</div>`;
   }
 
   try {
@@ -1760,47 +3337,19 @@ async function loadConcepts() {
     }
 
     CONCEPTS = data;
+    window.CONCEPTS = CONCEPTS;
     await loadCollections();
+    buildFuseIndex();
     render();
+    updateProgress();
     updateHeaderCounts();
+    initMagneticCards();
 
   } catch (error) {
     console.error('Failed to load concepts:', error);
 
     if (grid) {
-      grid.innerHTML = `
-        <div style="
-          grid-column: 1 / -1;
-          text-align: center;
-          padding: 3rem 2rem;
-        ">
-          <div style="
-            font-size: 0.85rem;
-            font-weight: 500;
-            color: var(--text);
-            margin-bottom: 8px;
-          ">Could not load concepts</div>
-          <div style="
-            font-size: 0.78rem;
-            color: var(--muted);
-            margin-bottom: 1.5rem;
-            line-height: 1.6;
-          ">
-            If you're viewing this file directly from your desktop,<br>
-            open it through your Vercel URL instead.
-          </div>
-          <button onclick="loadConcepts()" style="
-            padding: 8px 20px;
-            font-size: 0.75rem;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            border: 0.5px solid var(--border-hover);
-            border-radius: 6px;
-            background: none;
-            color: var(--muted2);
-            cursor: pointer;
-          ">Try again</button>
-        </div>`;
+      grid.innerHTML = `<div style="padding:3rem 2rem;color:var(--muted);font-family:'DM Mono',monospace;font-size:0.75rem;letter-spacing:0.12em;text-transform:uppercase;text-align:center;">Could not load concepts — open via Vercel URL</div>`;
     }
 
     if (count) {
@@ -1829,7 +3378,8 @@ let openedToday = new Set();
 
 const STORAGE_KEYS = {
   mastered: 'lll_mastered_v1',
-  dailyGoal: 'lll_daily_goal_v1'
+  dailyGoal: 'lll_daily_goal_v1',
+  streak: 'lll_streak_v1'
 };
 
 function saveMastered() {
@@ -1880,6 +3430,57 @@ function loadDailyGoal() {
     return new Set();
   }
 }
+function saveStreak(count, lastDate) {
+  try {
+    localStorage.setItem(STORAGE_KEYS.streak, JSON.stringify({ count, lastDate }));
+  } catch (e) {
+    console.warn('Could not save streak:', e);
+  }
+}
+
+function loadStreak() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEYS.streak);
+    if (!raw) return { count: 0, lastDate: null };
+    const parsed = JSON.parse(raw);
+    if (typeof parsed.count !== 'number') return { count: 0, lastDate: null };
+    return parsed;
+  } catch (e) {
+    return { count: 0, lastDate: null };
+  }
+}
+
+// Call this when user completes daily goal (5 concepts opened).
+// Handles: increment, first-time, missed day reset.
+function checkAndUpdateStreak() {
+  const today = new Date().toISOString().slice(0, 10);
+  const { count, lastDate } = loadStreak();
+
+  if (lastDate === today) return; // Already counted today
+
+  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+  const newCount = (lastDate === yesterday) ? count + 1 : 1; // consecutive or reset
+
+  saveStreak(newCount, today);
+  updateStreakDisplay(newCount);
+}
+
+function updateStreakDisplay(count) {
+  const el = document.getElementById('streakCount');
+  if (!el) return;
+  el.textContent = count;
+  const flame = document.getElementById('streakFlame');
+  if (flame) flame.style.opacity = count > 0 ? '1' : '0.35';
+}
+
+function initStreakDisplay() {
+  const today = new Date().toISOString().slice(0, 10);
+  const { count, lastDate } = loadStreak();
+  // If last active day was not today or yesterday, streak is broken
+  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+  const activeStreak = (lastDate === today || lastDate === yesterday) ? count : 0;
+  updateStreakDisplay(activeStreak);
+}
 // ---------- END STORAGE HELPERS ----------
 
 function getCatCount(cat) {
@@ -1890,77 +3491,177 @@ function buildCats() {
   const grid = document.getElementById('catGrid');
   grid.innerHTML = CATEGORIES.map(cat => `
     <div class="cat-card${activeCat===cat.id?' active':''}" data-cat="${cat.id}" onclick="setCat('${cat.id}')" style="color:${cat.color}">
-      <span class="cat-icon">${cat.icon}</span>
-      <span class="cat-name">${cat.name}</span>
-      <span class="cat-count">${getCatCount(cat.id)} concepts</span>
+      <span class="cat-icon">${cat.icon}</span><span class="cat-name">${cat.name}</span>
     </div>
   `).join('');
 }
 
 function filtered() {
+  const matchIds = searchQ ? fuzzyMatchIds(searchQ) : null;
   return CONCEPTS.filter(c => {
     if (vaultActive && !mastered.has(c.id)) return false;
-    const mc = activeCat === 'all' || c.category === activeCat;
-    const q = searchQ.toLowerCase();
-    const mq = !q || c.term.toLowerCase().includes(q) || c.hook.toLowerCase().includes(q) || c.plain.toLowerCase().includes(q);
-    return mc && mq;
+    if (activeCat !== 'all' && c.category !== activeCat) return false;
+    if (matchIds && !matchIds.has(c.id)) return false;
+    return true;
   }).reverse();
 }
 
 function buildGrid() {
-  const list = filtered();
-  document.getElementById('resultCount').textContent = list.length + ' concept' + (list.length!==1?'s':'') + ' shown';
-  const grid = document.getElementById('conceptsGrid');
-  if (!list.length) { grid.innerHTML = '<div class="empty">No concepts match your search.</div>'; return; }
-  grid.innerHTML = list.map((c, i) => {
-    const color = CAT_COLOR[c.category] || '#e8d5a3';
-    const isMastered = mastered.has(c.id);
-    return `
-    <div class="concept-card${isMastered?' mastered':''}" id="cc${c.id}" style="--cat-color:${color}; animation-delay:${Math.min(i,20)*0.03}s">
-      <div class="card-front" onclick="toggleCard(${c.id})">
-        <div class="card-meta">
-          <span class="card-num">#${String(c.id).padStart(3,'0')}</span>
-          <span class="card-cat">${(CATEGORIES.find(x => x.id === c.category) || {}).name || c.category}</span>
-          <span class="mastered-badge">✓ mastered</span>
+  const container = document.getElementById('netflixRows');
+  if (!container) return;
+  // Only hold min-height when showing all cats (prevents CLS on initial load).
+  // When filtered to one category, collapse naturally.
+  container.style.minHeight = (activeCat === 'all' && !searchQ) ? '1800px' : '0';
+
+  const q = searchQ.toLowerCase();
+  const isVault = vaultActive;
+
+  const catsToShow = activeCat === 'all'
+    ? CATEGORIES.filter(c => c.id !== 'all')
+    : CATEGORIES.filter(c => c.id === activeCat);
+
+  let totalVisible = 0;
+  let html = '';
+
+  const matchIds = q ? fuzzyMatchIds(searchQ) : null;
+
+  catsToShow.forEach(cat => {
+    let cards = CONCEPTS.filter(c => c.category === cat.id);
+    if (isVault) cards = cards.filter(c => mastered.has(c.id));
+    if (matchIds) cards = cards.filter(c => matchIds.has(c.id));
+    cards = cards.reverse();
+    if (cards.length === 0) return;
+    totalVisible += cards.length;
+
+    html += `
+      <div class="nf-section" id="nf-row-${cat.id}">
+        <div class="nf-section-header">
+          <div class="nf-section-title" style="color:${cat.color}">${cat.name} <span style="color:var(--muted);font-size:0.65rem;">&middot; ${cards.length}</span></div>
+          <div class="nf-section-rule"></div>
         </div>
-        ${(() => {
-          if (c.collection_id == null) return '';
-          const col = COLLECTIONS_BY_ID[c.collection_id];
-          if (!col || !Array.isArray(col.people) || col.people.length === 0) return '';
-          return '<div class="people-pills">' + col.people.map(p => `<span class="people-pill">${p}</span>`).join('') + '</div>';
-        })()}
-        <div class="card-term">${c.term}</div>
-        <div class="card-hook">${c.hook}</div>
-        <div class="card-expand-icon">+</div>
-      </div>
-      <div class="card-back">
-        <div class="back-section-label">What it means</div>
-        <div class="back-text">${c.plain}</div>
-        <div class="back-section-label">Analogy</div>
-        <div class="back-analogy">${c.analogy}</div>
-        <div class="back-section-label">Reflect & Use It</div>
-        <div class="back-prompt">
-          <div class="prompt-icon">💬</div>
-          <p>${c.prompt}</p>
+        <div class="nf-scroll-wrap">
+          <div class="nf-fade-left"></div>
+          <div class="nf-fade-right"></div>
+          <div class="nf-row" id="nf-drag-${cat.id}">
+            ${cards.map((c, i) => {
+              const color = CAT_COLOR[c.category] || '#e8d5a3';
+              const isMastered = mastered.has(c.id);
+              return `
+              <div class="concept-card${isMastered?' mastered':''}" id="cc${c.id}" style="--cat-color:${color}">
+                <div class="card-front" onclick="toggleCard(${c.id})">
+                  <div class="card-meta">
+                    <span class="card-num">#${String(c.id).padStart(3,'0')}</span>
+                    <span class="card-cat">${(CATEGORIES.find(x => x.id === c.category)||{}).name||c.category}</span>
+                    <span class="mastered-badge">✓ mastered</span>
+                  </div>
+                  ${(() => {
+                    if (c.collection_id == null) return '';
+                    const col = COLLECTIONS_BY_ID[c.collection_id];
+                    if (!col || !Array.isArray(col.people) || col.people.length === 0) return '';
+                    return '<div class="people-pills">' + col.people.map(p => `<span class="people-pill">${p}</span>`).join('') + '</div>';
+                  })()}
+                  <div class="card-term">${c.term}</div>
+                  <div class="card-hook">${c.hook}</div>
+                  <div class="card-expand-icon">+</div>
+                </div>
+                <div class="card-back">
+                  <div class="back-section-label">What it means</div>
+                  <div class="back-text">${c.plain}</div>
+                  <div class="back-section-label">Analogy</div>
+                  <div class="back-analogy">${c.analogy}</div>
+                  <div class="back-section-label">Reflect & Use It</div>
+                  <div class="back-prompt">
+                    <div class="prompt-icon">💬</div>
+                    <p>${c.prompt}</p>
+                  </div>
+                  <div class="card-actions">
+                    <button class="btn-master" onclick="toggleMaster(event,${c.id})">${isMastered?'✓ VAULT':'⊕ VAULT'}</button>
+                    <button class="btn-share" onclick="shareCard(event,${c.id})">Share</button>
+                  </div>
+                </div>
+              </div>`;
+            }).join('')}
+          </div>
         </div>
-        <div class="card-actions">
-          <button class="btn-master" onclick="toggleMaster(event,${c.id})">${isMastered?'✓ Mastered':'Mark as Mastered'}</button>
-          <button class="btn-share" onclick="shareCard(event,${c.id})">Share</button>
-        </div>
-      </div>
-    </div>`;
-  }).join('');
+      </div>`;
+  });
+
+  container.innerHTML = html || `<div style="padding:3rem 2rem;color:var(--muted);font-family:'DM Mono',monospace;font-size:0.75rem;letter-spacing:0.12em;text-transform:uppercase;text-align:center;">No concepts found</div>`;
+  document.getElementById('resultCount').textContent = totalVisible > 0 ? `${totalVisible} concept${totalVisible !== 1 ? 's' : ''} shown` : '';
+  initDragScroll();
+  const mc = document.getElementById('netflixRows');
+  if (mc) mc._magneticBound = false;
+  initMagneticCards();
 }
 
-function render() { buildCats(); buildGrid(); updateProgress(); buildEpisodes(); }
+function initDragScroll() {
+  return; // disabled for performance — use trackpad swipe or shift-scroll instead
+}
+function initMagneticCards() {
+  return; // disabled — was main cause of scroll lag
+  const container = document.getElementById('netflixRows');
+  if (!container || container._magneticBound) return;
+  container._magneticBound = true;
+
+  let activeCard = null;
+
+  let _rafPending = false;
+container.addEventListener('mousemove', (e) => {
+  if (_rafPending) return;
+  _rafPending = true;
+  requestAnimationFrame(() => { _rafPending = false;
+    const card = e.target.closest('.concept-card');
+
+    // If we moved onto a new card, trigger enter logic
+    if (card !== activeCard) {
+      // Leave old card
+      if (activeCard) {
+        activeCard.style.transition = 'transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94), border-color 0.2s';
+        activeCard.style.transform = 'translateY(0)';
+        setTimeout(() => {
+          if (activeCard) activeCard.style.transition = 'border-color 0.2s, transform 0.2s ease';
+        }, 350);
+      }
+      // Enter new card
+      if (card && !card.classList.contains('open')) {
+        card.style.transition = 'transform 0.12s ease, border-color 0.2s';
+      }
+      activeCard = card;
+    }
+
+    // Apply magnetic transform
+    if (!card || card.classList.contains('open')) return;
+    const rect = card.getBoundingClientRect();
+    const dx = e.clientX - (rect.left + rect.width / 2);
+    const dy = e.clientY - (rect.top + rect.height / 2);
+    card.style.transform = `translateY(-8px) translate(${dx * STRENGTH}px, ${dy * STRENGTH}px)`;
+    });  // closes rAF
+  });    // closes mousemove
+
+  container.addEventListener('mouseleave', function() {
+    if (activeCard) {
+      activeCard.style.transition = 'transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94), border-color 0.2s';
+      activeCard.style.transform = 'translateY(0)';
+      setTimeout(() => {
+        if (activeCard) activeCard.style.transition = 'border-color 0.2s, transform 0.2s ease';
+      }, 350);
+      activeCard = null;
+    }
+  });
+}
+function render() { buildCats(); initMagneticPills(); buildGrid(); updateProgress(); buildEpisodes(); }
 
 function toggleCard(id) {
   const el = document.getElementById('cc'+id);
   const wasOpen = el.classList.contains('open');
+  // Close all other cards first
+  document.querySelectorAll('.concept-card.open').forEach(card => {
+    if (card.id !== 'cc'+id) card.classList.remove('open');
+  });
   el.classList.toggle('open');
   if (!wasOpen) {
     openedToday.add(id);
-    saveDailyGoal();     // <-- NEW: persist today's opened cards
+    saveDailyGoal();
     updateDailyGoal();
   }
 }
@@ -1968,26 +3669,217 @@ function toggleCard(id) {
 function toggleMaster(e, id) {
   e.stopPropagation();
   if (mastered.has(id)) mastered.delete(id);
-  else mastered.add(id);
+  else { mastered.add(id); playVaultSFX(); }
   saveMastered();        // <-- NEW: persist to localStorage
   buildGrid();
   updateProgress();
 }
 
+let _shareConceptId = null;
+
 function shareCard(e, id) {
   e.stopPropagation();
   const c = CONCEPTS.find(x => x.id === id);
   if (!c) return;
-  const text = `"${c.term}" — ${c.hook}\n\nListen. Learn. Live.`;
-  if (navigator.share) { navigator.share({ title: c.term, text }); }
-  else if (navigator.clipboard) { navigator.clipboard.writeText(text); }
+  _shareConceptId = id;
+  generateShareImage(c);
+  document.getElementById('shareModalOverlay').classList.add('open');
+  // Show/hide native share button based on capability
+  const nativeBtn = document.getElementById('shareNativeBtn');
+  if (nativeBtn) nativeBtn.style.display = navigator.share ? '' : 'none';
+}
+
+function closeShareModal(e) {
+  if (e && e.target !== document.getElementById('shareModalOverlay')) return;
+  document.getElementById('shareModalOverlay').classList.remove('open');
+  _shareConceptId = null;
+}
+
+function downloadShareCard() {
+  const canvas = document.getElementById('shareCanvas');
+  const c = CONCEPTS.find(x => x.id === _shareConceptId);
+  const filename = c ? c.term.toLowerCase().replace(/\s+/g, '-') + '.png' : 'concept.png';
+  const link = document.createElement('a');
+  link.download = filename;
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
+
+function nativeShare() {
+  const canvas = document.getElementById('shareCanvas');
+  const c = CONCEPTS.find(x => x.id === _shareConceptId);
+  if (!c) return;
+  const shareText = `Just learnt this: "${c.term}"\n\n${c.hook}\n\nThe full breakdown — analogy, meaning, how to use it — is on Listen. Learn. Live. Worth 3 minutes of your day 👇\nhttps://listen-learn-live.vercel.app`;
+  canvas.toBlob(blob => {
+    const file = new File([blob], 'concept.png', { type: 'image/png' });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      navigator.share({ title: c.term, text: shareText, files: [file] });
+    } else {
+      navigator.share({ title: c.term, text: shareText });
+    }
+  });
+}
+
+function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+  const words = text.split(' ');
+  let line = '';
+  let currentY = y;
+  for (let i = 0; i < words.length; i++) {
+    const testLine = line + words[i] + ' ';
+    if (ctx.measureText(testLine).width > maxWidth && i > 0) {
+      ctx.fillText(line.trim(), x, currentY);
+      line = words[i] + ' ';
+      currentY += lineHeight;
+    } else {
+      line = testLine;
+    }
+  }
+  ctx.fillText(line.trim(), x, currentY);
+  return currentY;
+}
+
+const CATEGORY_COLORS = {
+  finance:'#6b9fc4', psychology:'#a08fd4', thinking:'#7aaf8a',
+  power:'#d4715a', relationships:'#c47a9f', language:'#5abfaf',
+  business:'#e0a060', creativity:'#d4a574', health:'#8ab87a',
+  identity:'#b89878', philosophy:'#9a8fb8', science:'#6ab0c4',
+  society:'#7090a8', 'tech-ai':'#b8a07a'
+};
+
+function generateShareImage(c) {
+  const canvas = document.getElementById('shareCanvas');
+  const ctx = canvas.getContext('2d');
+  const W = 1080, H = 1920;
+  canvas.width = W; canvas.height = H;
+
+  const catColor = CATEGORY_COLORS[c.category] || '#e8d5a3';
+  const PAD = 96;
+
+  // ── BACKGROUND ──────────────────────────────────────────
+  ctx.fillStyle = '#0d0d0d';
+  ctx.fillRect(0, 0, W, H);
+
+  // Top accent bar (thick, visible)
+  ctx.fillStyle = catColor;
+  ctx.fillRect(0, 0, W, 10);
+
+  // ── HEADER ROW: pill + number ────────────────────────────
+  const catName = (CATEGORIES.find(x => x.id === c.category)||{}).name || c.category;
+  ctx.font = '600 26px monospace';
+  const pillText = catName.toUpperCase();
+  const pillW = ctx.measureText(pillText).width + 48;
+  // pill background (subtle fill)
+  ctx.fillStyle = catColor + '22';
+  roundRect(ctx, PAD, 68, pillW, 52, 6);
+  ctx.fill();
+  ctx.strokeStyle = catColor;
+  ctx.lineWidth = 1.5;
+  roundRect(ctx, PAD, 68, pillW, 52, 6);
+  ctx.stroke();
+  ctx.fillStyle = catColor;
+  ctx.fillText(pillText, PAD + 24, 103);
+
+  ctx.font = '400 26px monospace';
+  ctx.fillStyle = '#444';
+  ctx.textAlign = 'right';
+  ctx.fillText('#' + String(c.id).padStart(3, '0'), W - PAD, 103);
+  ctx.textAlign = 'left';
+
+  // ── TERM ─────────────────────────────────────────────────
+  ctx.font = 'bold 102px Georgia, serif';
+  ctx.fillStyle = '#f0ede8';
+  let termBottomY = wrapText(ctx, c.term, PAD, 272, W - PAD * 2, 122);
+
+  // ── DIVIDER ──────────────────────────────────────────────
+  const divY = termBottomY + 52;
+  ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(PAD, divY); ctx.lineTo(W - PAD, divY); ctx.stroke();
+
+  // ── HOOK ─────────────────────────────────────────────────
+  ctx.font = '300 44px Georgia, serif';
+  ctx.fillStyle = '#b8b4ae';
+  let y = wrapText(ctx, c.hook, PAD, divY + 76, W - PAD * 2, 62);
+
+  // ── SECTION HELPER ───────────────────────────────────────
+  function sectionLabel(label, yPos) {
+    // Label background strip
+    ctx.fillStyle = 'rgba(255,255,255,0.04)';
+    ctx.fillRect(0, yPos - 30, W, 58);
+    // Left accent tick
+    ctx.fillStyle = catColor;
+    ctx.fillRect(0, yPos - 30, 6, 58);
+    // Label text
+    ctx.font = '600 24px monospace';
+    ctx.fillStyle = catColor;
+    ctx.fillText(label, PAD, yPos + 10);
+    return yPos + 58 + 32; // returns y position after the label + gap
+  }
+
+  // ── WHAT IT MEANS ────────────────────────────────────────
+  y += 80;
+  y = sectionLabel('WHAT IT MEANS', y);
+  ctx.font = '300 36px Georgia, serif';
+  ctx.fillStyle = '#a8a5a0';
+  y = wrapText(ctx, c.plain, PAD, y, W - PAD * 2, 54);
+
+  // ── ANALOGY ──────────────────────────────────────────────
+  y += 72;
+  y = sectionLabel('ANALOGY', y);
+  ctx.font = 'italic 36px Georgia, serif';
+  ctx.fillStyle = '#888';
+  // Left quote bar
+  ctx.fillStyle = catColor + '44';
+  ctx.fillRect(PAD, y - 8, 4, 54 * Math.ceil(c.analogy.length / 52) + 16);
+  ctx.fillStyle = '#888';
+  ctx.font = 'italic 36px Georgia, serif';
+  y = wrapText(ctx, c.analogy, PAD + 24, y, W - PAD * 2 - 24, 54);
+
+  // ── REFLECT & USE IT ─────────────────────────────────────
+  y += 72;
+  y = sectionLabel('REFLECT & USE IT', y);
+  ctx.font = '300 36px Georgia, serif';
+  ctx.fillStyle = catColor;
+  y = wrapText(ctx, '💬  ' + c.prompt, PAD, y, W - PAD * 2, 54);
+
+  // ── FOOTER ───────────────────────────────────────────────
+  ctx.fillStyle = 'rgba(255,255,255,0.03)';
+  ctx.fillRect(0, H - 120, W, 120);
+  // Footer top border
+  ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(0, H - 120); ctx.lineTo(W, H - 120); ctx.stroke();
+
+  ctx.font = 'italic 36px Georgia, serif';
+  ctx.fillStyle = '#e8d5a3';
+  ctx.fillText('Listen. Learn. Live.', PAD, H - 44);
+
+  ctx.font = '400 24px monospace';
+  ctx.fillStyle = '#555';
+  ctx.textAlign = 'right';
+  ctx.fillText('listen-learn-live.vercel.app', W - PAD, H - 44);
+  ctx.textAlign = 'left';
+}
+
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
 }
 
 function updateProgress() {
+  if (!CONCEPTS.length) return;
   const pct = Math.round((mastered.size / CONCEPTS.length) * 100);
   document.getElementById('progressFill').style.width = pct + '%';
-  const vaultEl = document.getElementById('progressCount');
-vaultEl.textContent = mastered.size + ' / ' + CONCEPTS.length;
+  document.getElementById('progressCount').textContent = mastered.size + ' / ' + CONCEPTS.length;
 }
 
 function updateHeaderCounts() {
@@ -2009,8 +3901,12 @@ function updateDailyGoal() {
   const n = Math.min(openedToday.size, 5);
   document.querySelectorAll('.daily-dot').forEach((d,i) => { d.classList.toggle('filled', i < n); });
   const msg = document.getElementById('dailyMsg');
-  if (n >= 5) msg.innerHTML = '<strong>🎉 Goal complete!</strong> Come back tomorrow for 5 more.';
-  else msg.innerHTML = '<strong>' + n + ' of 5</strong> concepts opened today';
+  if (n >= 5) {
+    msg.innerHTML = '<strong>🎉 Goal complete!</strong> Come back tomorrow for 5 more.';
+    checkAndUpdateStreak();
+  } else {
+    msg.innerHTML = '<strong>' + n + ' of 5</strong> concepts opened today';
+  }
 }
 
 function setCat(cat) { activeCat = cat; render(); }
@@ -2054,7 +3950,7 @@ function openEpisodeDrawer(collectionId) {
       const color = CAT_COLOR[c.category] || '#e8d5a3';
       const isMastered = mastered.has(c.id);
       return `
-      <div class="concept-card${isMastered?' mastered':''}" id="epcc${c.id}" style="--cat-color:${color}; animation-delay:${Math.min(i,20)*0.03}s">
+      <div class="concept-card${isMastered?' mastered':''}" id="epcc${c.id}" style="--cat-color:${color}">
         <div class="card-front" onclick="toggleEpCard(${c.id})">
           <div class="card-meta">
             <span class="card-num">#${String(c.id).padStart(3,'0')}</span>
@@ -2076,7 +3972,7 @@ function openEpisodeDrawer(collectionId) {
             <p>${c.prompt}</p>
           </div>
           <div class="card-actions">
-            <button class="btn-master" onclick="toggleEpMaster(event,${c.id})">${isMastered?'✓ Mastered':'Mark as Mastered'}</button>
+            <button class="btn-master" onclick="toggleEpMaster(event,${c.id})">${isMastered?'✓ VAULT':'⊕ VAULT'}</button>
           </div>
         </div>
       </div>`;
@@ -2109,13 +4005,13 @@ function toggleEpCard(id) {
 function toggleEpMaster(e, id) {
   e.stopPropagation();
   if (mastered.has(id)) mastered.delete(id);
-  else mastered.add(id);
+  else { mastered.add(id); playVaultSFX(); }
   saveMastered();
   // Refresh both the drawer card and the main grid card if visible
   const epCard = document.getElementById('epcc'+id);
   if (epCard) {
     epCard.classList.toggle('mastered', mastered.has(id));
-    epCard.querySelector('.btn-master').textContent = mastered.has(id) ? '✓ Mastered' : 'Mark as Mastered';
+    epCard.querySelector('.btn-master').textContent = mastered.has(id) ? '✓ VAULT' : '⊕ VAULT';
   }
   updateProgress();
   // Silently refresh main grid without closing drawer
@@ -2128,7 +4024,17 @@ document.addEventListener('keydown', function(e) {
     closeEpisodeDrawer();
   }
 });
-
+function getYouTubeId(url) {
+  if (!url) return null;
+  try {
+    const u = new URL(url);
+    // Standard: youtube.com/watch?v=VIDEO_ID
+    if (u.hostname.includes('youtube.com')) return u.searchParams.get('v');
+    // Short: youtu.be/VIDEO_ID
+    if (u.hostname === 'youtu.be') return u.pathname.slice(1);
+  } catch (e) {}
+  return null;
+}
 function buildEpisodes() {
   const episodeCollections = Object.values(COLLECTIONS_BY_ID)
     .filter(col => col.type === 'episode')
@@ -2160,20 +4066,25 @@ function buildEpisodes() {
         }).join('')
       : '';
 
-    // Thumbnail: dominant category color, italic initials
-    const dominantCat = sortedCats.length > 0 ? sortedCats[0][0] : 'all';
-    const thumbColor = CAT_COLOR[dominantCat] || '#3a3a3a';
-    const initials = (col.people || []).slice(0, 2).map(p => p.trim()[0] || '').join('');
+    // YouTube thumbnail or clean fallback
+    const ytId = getYouTubeId(col.episode_url);
+    const thumbHtml = ytId
+      ? `<img
+           src="https://img.youtube.com/vi/${ytId}/maxresdefault.jpg"
+           alt="${col.title.trim()}"
+           loading="lazy"
+           onerror="this.onerror=null;this.src='https://img.youtube.com/vi/${ytId}/hqdefault.jpg'"
+         />`
+      : `<div class="episode-thumb-fallback">
+           <div class="episode-thumb-fallback-title">${col.title.trim()}</div>
+         </div>`;
 
     const peoplePills = (col.people || [])
       .map(p => `<span class="episode-person-pill">${p}</span>`).join('');
 
     return `
       <div class="episode-card" onclick="openEpisodeDrawer(${col.id})">
-        <div class="episode-thumb" style="background:${thumbColor}18">
-          <span style="color:${thumbColor};opacity:0.9">${initials || '◉'}</span>
-          <div class="episode-mix-bar">${mixBar}</div>
-        </div>
+        <div class="episode-thumb">${thumbHtml}</div>
         <div class="episode-body">
           <div class="episode-title">${col.title.trim()}</div>
           <div class="episode-people-row">${peoplePills}</div>
@@ -2190,14 +4101,21 @@ function toggleVault() {
   document.getElementById('vaultPill').classList.toggle('vault-active', vaultActive);
   if (vaultActive) activeCat = 'all';
   buildGrid();
+  updateProgress();
 }
 
-document.getElementById('search').addEventListener('input', e => { searchQ = e.target.value; buildGrid(); });
+let _searchDebounce = null;
+document.getElementById('search').addEventListener('input', e => {
+  searchQ = e.target.value;
+  clearTimeout(_searchDebounce);
+  _searchDebounce = setTimeout(() => buildGrid(), 180);
+});
 
 // Restore saved progress BEFORE loading concepts, so the first render
 // already shows the correct mastered state.
 mastered = loadMastered();
 openedToday = loadDailyGoal();
+initStreakDisplay();
 updateDailyGoal();
 
 // Load concepts, then show concept of the day once they're ready
@@ -2310,10 +4228,10 @@ function renderCotd(concept) {
   const markLabel = document.getElementById('cotdMarkLabel');
   if (mastered.has(concept.id)) {
     markBtn.classList.add('is-marked');
-    markLabel.textContent = '✓ Internalized';
+    markLabel.textContent = '✓ VAULT';
   } else {
     markBtn.classList.remove('is-marked');
-    markLabel.textContent = '✓ Mark Internalized';
+    markLabel.textContent = '⊕ VAULT';
   }
 
   // Wire mark button to current concept
@@ -2322,6 +4240,7 @@ function renderCotd(concept) {
       mastered.delete(concept.id);
     } else {
       mastered.add(concept.id);
+      playVaultSFX();
       // Also count it toward today's daily goal
       if (!openedToday.has(concept.id)) {
         openedToday.add(concept.id);
@@ -2342,6 +4261,26 @@ function openCotd() {
   const overlay = document.getElementById('cotdOverlay');
   overlay.classList.add('active');
   document.body.classList.add('cotd-open');
+}
+
+// Nav-triggered version — always renders a concept regardless of dismissed state
+function openCotdFromNav() {
+  if (!CONCEPTS || CONCEPTS.length === 0) return;
+  const concept = pickTodaysConcept(CONCEPTS);
+  if (!concept) return;
+  renderCotd(concept);
+
+  // Re-wire buttons in case initConceptOfTheDay never ran
+  document.getElementById('cotdClose').onclick = function() { closeCotd(false); };
+  document.getElementById('cotdNextBtn').onclick = function() {
+    const current = parseInt(
+      document.getElementById('cotdConceptNum').textContent.replace(/\D/g, ''), 10
+    );
+    renderCotd(pickRandomConcept(CONCEPTS, current));
+  };
+  document.getElementById('cotdLibraryLink').onclick = function() { closeCotd(false); };
+
+  openCotd();
 }
 
 function closeCotd(persist) {
@@ -2459,6 +4398,624 @@ function initConceptOfTheDay() {
     message.className = 'newsletter-message ' + type;
   }
 })();
+</script>
+  <!-- ============================================
+     QUIZ MODE OVERLAY
+     ============================================ -->
+<div id="quizOverlay">
+  <div class="quiz-backdrop" onclick="closeQuiz()"></div>
+  <div class="quiz-sheet" id="quizSheet">
+    <div class="quiz-progress-track">
+      <div class="quiz-progress-fill" id="quizProgressFill"></div>
+    </div>
+    <div class="quiz-header">
+      <div>
+        <div class="quiz-round-label">Round <span id="quizRoundNum">1</span> of 3</div>
+      </div>
+      <div class="quiz-score-display">Score &nbsp;<strong id="quizScoreNum">0</strong></div>
+      <button class="quiz-close-btn" onclick="closeQuiz()">✕</button>
+    </div>
+    <div class="quiz-body" id="quizBody">
+      <!-- Rounds render here -->
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================
+// QUIZ MODE — CORE ENGINE
+// ============================================
+
+const CAT_COLORS = {
+  finance:'#6b9fc4', psychology:'#a08fd4', thinking:'#7aaf8a',
+  power:'#d4715a', relationships:'#c47a9f', language:'#5abfaf',
+  business:'#e0a060', creativity:'#d4a574', health:'#8ab87a',
+  identity:'#b89878', philosophy:'#9a8fb8', science:'#6ab0c4',
+  society:'#7090a8', 'tech-ai':'#b8a07a'
+};
+
+let quizState = {
+  round: 0,
+  score: 0,
+  pool: [],
+  answered: false
+};
+
+// ── Pool is built once after CONCEPTS loads, not on click ──
+let _quizPoolCache = null;
+
+function getQuizPool() {
+  // Always read from CONCEPTS directly — never cache a stale empty array
+  const source = window.CONCEPTS || [];
+  if (source.length < 12) {
+    console.warn('Quiz: not enough concepts loaded yet, got', source.length);
+    return [];
+  }
+  const eligible = source.filter(c =>
+    c.hook && c.plain && c.analogy && c.term &&
+    c.hook.length > 5 && c.analogy.length > 10
+  );
+  return shuffle([...eligible]);
+}
+
+function openQuiz() {
+  // Ripple effect
+  const btn = document.getElementById('navQuizBtn');
+  if (btn) {
+    const r = btn.getBoundingClientRect();
+    const ripple = document.createElement('div');
+    ripple.className = 'quiz-ripple';
+    const size = 40;
+    ripple.style.cssText = `width:${size}px;height:${size}px;left:${r.left+r.width/2-size/2}px;top:${r.top+r.height/2-size/2}px`;
+    document.body.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 600);
+  }
+
+  // Build fresh pool every open — CONCEPTS is guaranteed loaded by now
+  const pool = getQuizPool();
+  if (pool.length < 12) {
+    alert('Concepts still loading — try again in a moment.');
+    return;
+  }
+
+  quizState.score = 0;
+  quizState.round = 0;
+  quizState._r1score = 0;
+  quizState._r2score = 0;
+  quizState._r3score = 0;
+  // Take 12 from a random offset so every session is different
+  const offset = Math.floor(Math.random() * Math.max(1, pool.length - 12));
+  quizState.pool = pool.slice(offset, offset + 12);
+
+  const overlay = document.getElementById('quizOverlay');
+  overlay.classList.add('quiz-open');
+  document.body.style.overflow = 'hidden';
+
+  updateQuizProgress();
+  renderRound();
+}
+
+function closeQuiz() {
+  document.getElementById('quizOverlay').classList.remove('quiz-open');
+  document.body.style.overflow = '';
+}
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function updateQuizProgress() {
+  document.getElementById('quizProgressFill').style.width = ((quizState.round / 3) * 100) + '%';
+  document.getElementById('quizRoundNum').textContent = Math.min(quizState.round + 1, 3);
+  document.getElementById('quizScoreNum').textContent = quizState.score;
+}
+
+function addScore(pts) {
+  quizState.score += pts;
+  document.getElementById('quizScoreNum').textContent = quizState.score;
+}
+
+function playTone(type) {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    if (type === 'correct') {
+      o.frequency.setValueAtTime(523, ctx.currentTime);
+      o.frequency.setValueAtTime(659, ctx.currentTime + 0.1);
+      g.gain.setValueAtTime(0.15, ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+      o.start(); o.stop(ctx.currentTime + 0.4);
+    } else {
+      o.frequency.setValueAtTime(200, ctx.currentTime);
+      g.gain.setValueAtTime(0.10, ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+      o.start(); o.stop(ctx.currentTime + 0.3);
+    }
+  } catch(e) {}
+}
+
+function renderRound() {
+  updateQuizProgress();
+  const body = document.getElementById('quizBody');
+  body.scrollTop = 0;
+  if      (quizState.round === 0) renderRound1();
+  else if (quizState.round === 1) renderRound2();
+  else if (quizState.round === 2) renderRound3();
+  else                             renderEndScreen();
+}
+
+// ── INTERSTITIAL between rounds ──
+function showInterstitial(title, sub, xpText, onNext) {
+  const body = document.getElementById('quizBody');
+  body.innerHTML = `
+    <div class="quiz-interstitial">
+      <span class="quiz-interstitial-icon">✦</span>
+      <div class="quiz-interstitial-title">${title}</div>
+      <div class="quiz-interstitial-sub">${sub}</div>
+      <div class="quiz-xp-badge">${xpText}</div><br>
+      <button class="quiz-next-btn" id="quizNextBtn">Continue →</button>
+    </div>`;
+  document.getElementById('quizNextBtn').onclick = onNext;
+}
+
+// ════════════════════════════════════════════
+// ROUND 1 — Hook Match (Multiple Choice)
+// Show the hook. Pick the correct term from 4.
+// ════════════════════════════════════════════
+function renderRound1() {
+  // Concepts 0–3 used for round 1
+  const concepts = quizState.pool.slice(0, 4);
+  let qi = 0; // current question index within this round
+  let roundScore = 0;
+
+  function renderQ() {
+    if (qi >= concepts.length) {
+      // Round complete
+      quizState.round = 1;
+      const messages = ['Solid start.', 'Nice work.', 'Keep it going.'];
+      quizState._r1score = roundScore;
+      showInterstitial(
+        'Round 1 complete',
+        messages[Math.floor(Math.random() * messages.length)],
+        `+${roundScore} pts`,
+        () => renderRound()
+      );
+      return;
+    }
+
+    const correct = concepts[qi];
+    // Pick 3 wrong options from rest of pool (different categories preferred)
+    const wrongPool = shuffle(
+      quizState.pool.filter(c => c.id !== correct.id)
+    ).slice(0, 3);
+    const options = shuffle([correct, ...wrongPool]);
+    const catColor = CAT_COLORS[correct.category] || '#e8d5a3';
+
+    const body = document.getElementById('quizBody');
+    body.innerHTML = `
+      <div class="quiz-type-label">Round 1 of 3 &nbsp;·&nbsp; Hook Match &nbsp;·&nbsp; ${qi+1} / ${concepts.length}</div>
+      <span class="quiz-cat-chip" style="color:${catColor};border-color:${catColor}">${correct.category}</span>
+      <div class="quiz-question">"${correct.hook}"</div>
+      <div class="quiz-options" id="quizOptions">
+        ${options.map((opt, i) => `
+          <button class="quiz-option" data-id="${opt.id}" onclick="r1Pick(this,'${correct.id}')">
+            <span style="font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--muted);letter-spacing:0.1em;display:block;margin-bottom:4px">${String.fromCharCode(65+i)}</span>
+            ${opt.term}
+          </button>`).join('')}
+      </div>`;
+  }
+
+  // Expose pick handler globally so inline onclick works
+  window.r1Pick = function(btn, correctId) {
+    if (quizState.answered) return;
+    quizState.answered = true;
+
+    const all = document.querySelectorAll('.quiz-option');
+    all.forEach(b => { b.disabled = true; });
+
+    const chosen = btn.dataset.id;
+    const isCorrect = String(chosen) === String(correctId);
+
+    if (isCorrect) {
+      btn.classList.add('correct');
+      playTone('correct');
+      addScore(10);
+      roundScore += 10;
+    } else {
+      btn.classList.add('wrong');
+      playTone('wrong');
+      // Reveal correct
+      all.forEach(b => {
+        if (String(b.dataset.id) === String(correctId)) b.classList.add('correct');
+      });
+    }
+
+    setTimeout(() => {
+      quizState.answered = false;
+      qi++;
+      renderQ();
+    }, 1100);
+  };
+
+  quizState.answered = false;
+  renderQ();
+}
+
+// ════════════════════════════════════════════
+// ROUND 2 — Fill the Blank
+// Show plain definition with term blanked out.
+// User types the answer. 3 letter hints available.
+// ════════════════════════════════════════════
+function renderRound2() {
+  const concepts = quizState.pool.slice(4, 8); // concepts 4–7
+  let qi = 0;
+  let roundScore = 0;
+
+  function renderQ() {
+    if (qi >= concepts.length) {
+      quizState.round = 2;
+      const messages = ['Sharp recall.', 'Your memory is working.', 'Active recall — the real test.'];
+      quizState._r2score = roundScore;
+      showInterstitial(
+        'Round 2 complete',
+        messages[Math.floor(Math.random() * messages.length)],
+        `+${roundScore} pts`,
+        () => renderRound()
+      );
+      return;
+    }
+
+    const concept = concepts[qi];
+    const term = concept.term;
+    const catColor = CAT_COLORS[concept.category] || '#e8d5a3';
+
+    // Replace the term in the plain text with _____ (case-insensitive)
+    const blanked = concept.plain.replace(
+      new RegExp(term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'),
+      '<em style="color:var(--accent);font-style:normal;font-weight:700">_____</em>'
+    );
+
+    // Generate 3 letter hints from the term
+    const hints = generateHints(term);
+
+    const body = document.getElementById('quizBody');
+    body.innerHTML = `
+      <div class="quiz-type-label">Round 2 of 3 &nbsp;·&nbsp; Fill the Blank &nbsp;·&nbsp; ${qi+1} / ${concepts.length}</div>
+      <span class="quiz-cat-chip" style="color:${catColor};border-color:${catColor}">${concept.category}</span>
+      <div class="quiz-question" style="font-size:1rem;font-family:'DM Sans',sans-serif;font-weight:300;line-height:1.75">${blanked}</div>
+      <div class="quiz-blank-wrap">
+        <input
+          class="quiz-blank-input"
+          id="quizBlankInput"
+          type="text"
+          placeholder="Type the missing term…"
+          autocomplete="off"
+          autocorrect="off"
+          autocapitalize="off"
+          spellcheck="false"
+        />
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+          <button class="quiz-submit-btn" id="quizBlankSubmit" onclick="r2Submit()">Check →</button>
+          <div class="quiz-hint-row" id="quizHintRow">
+            ${hints.map(h => `<span class="quiz-hint-letter" onclick="r2Hint('${h}')">${h}</span>`).join('')}
+          </div>
+        </div>
+        <div id="quizBlankFeedback" style="min-height:20px;font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted)"></div>
+      </div>`;
+
+    // Allow Enter key to submit
+    const input = document.getElementById('quizBlankInput');
+    input.focus();
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter') r2Submit();
+    });
+  }
+
+  // Hint letters: first letter, a middle letter, last letter
+  function generateHints(term) {
+    const clean = term.replace(/[^a-zA-Z]/g, '');
+    const first = clean[0];
+    const mid   = clean[Math.floor(clean.length / 2)];
+    const last  = clean[clean.length - 1];
+    // Deduplicate
+    return [...new Set([first, mid, last])].map(l => l.toUpperCase());
+  }
+
+  // Clicking a hint letter appends it to the input
+  window.r2Hint = function(letter) {
+    const input = document.getElementById('quizBlankInput');
+    if (!input || input.disabled) return;
+    input.value += letter;
+    input.focus();
+  };
+
+  window.r2Submit = function() {
+    const input = document.getElementById('quizBlankInput');
+    const submitBtn = document.getElementById('quizBlankSubmit');
+    const feedback = document.getElementById('quizBlankFeedback');
+    if (!input || input.disabled) return;
+
+    const answer = input.value.trim();
+    if (!answer) return;
+
+    const concept = concepts[qi];
+    const correct = concept.term;
+
+    // Normalise: lowercase, strip punctuation
+    const norm = s => s.toLowerCase().replace(/[^a-z0-9\s]/g, '').trim();
+    const isCorrect = norm(answer) === norm(correct);
+
+    input.disabled = true;
+    submitBtn.disabled = true;
+
+    if (isCorrect) {
+      input.classList.add('correct');
+      playTone('correct');
+      addScore(15);
+      roundScore += 15;
+      feedback.style.color = 'var(--green)';
+      feedback.textContent = '✓ Correct';
+    } else {
+      input.classList.add('wrong');
+      playTone('wrong');
+      feedback.style.color = 'var(--red)';
+      feedback.textContent = `✗  The answer was: ${correct}`;
+    }
+
+    setTimeout(() => {
+      qi++;
+      renderQ();
+    }, 1400);
+  };
+
+  renderQ();
+}
+
+// ════════════════════════════════════════════
+// ROUND 3 — Analogy Decode (Tap-to-Match)
+// 4 analogies on left, 4 terms on right.
+// Tap an analogy, then tap its term to match.
+// ════════════════════════════════════════════
+function renderRound3() {
+  const concepts = quizState.pool.slice(8, 12); // concepts 8–11
+  let roundScore = 0;
+  let selectedAnalogy = null; // id of currently selected analogy card
+  let matched = new Set();    // ids of correctly matched concepts
+
+  function render() {
+    const catColor = c => CAT_COLORS[c.category] || '#e8d5a3';
+    const analogies = shuffle([...concepts]);
+    const terms     = shuffle([...concepts]);
+
+    // Store shuffled order on state so click handlers can reference it
+    quizState._r3analogies = analogies;
+    quizState._r3terms     = terms;
+
+    const body = document.getElementById('quizBody');
+    body.innerHTML = `
+      <div class="quiz-type-label">Round 3 of 3 &nbsp;·&nbsp; Analogy Decode &nbsp;·&nbsp; Match all 4</div>
+      <div class="quiz-question" style="font-size:0.95rem;font-family:'DM Sans',sans-serif;font-weight:300;margin-bottom:20px">
+        Tap an <em>analogy</em>, then tap the <em>term</em> it describes.
+      </div>
+      <div class="quiz-match-grid">
+        <div class="quiz-match-col" id="r3AnalogyCol">
+          ${analogies.map(c => `
+            <button
+              class="quiz-match-item analogy-item"
+              id="analogy-${c.id}"
+              data-id="${c.id}"
+              onclick="r3PickAnalogy(this)"
+            >${c.analogy}</button>
+          `).join('')}
+        </div>
+        <div class="quiz-match-col" id="r3TermCol">
+          ${terms.map(c => `
+            <button
+              class="quiz-match-item term-item"
+              id="term-${c.id}"
+              data-id="${c.id}"
+              onclick="r3PickTerm(this)"
+            >${c.term}</button>
+          `).join('')}
+        </div>
+      </div>`;
+  }
+
+  window.r3PickAnalogy = function(btn) {
+    if (matched.has(btn.dataset.id)) return;
+
+    // Deselect previous
+    if (selectedAnalogy) {
+      const prev = document.getElementById('analogy-' + selectedAnalogy);
+      if (prev) prev.classList.remove('selected');
+    }
+
+    selectedAnalogy = btn.dataset.id;
+    btn.classList.add('selected');
+  };
+
+  window.r3PickTerm = function(btn) {
+    if (!selectedAnalogy) return;
+    if (matched.has(btn.dataset.id)) return;
+
+    const termId    = btn.dataset.id;
+    const analogyEl = document.getElementById('analogy-' + selectedAnalogy);
+    const isCorrect = selectedAnalogy === termId;
+
+    if (isCorrect) {
+      // Lock both as matched
+      btn.classList.remove('selected');
+      btn.classList.add('matched-correct');
+      if (analogyEl) {
+        analogyEl.classList.remove('selected');
+        analogyEl.classList.add('matched-correct');
+      }
+      matched.add(termId);
+      playTone('correct');
+      addScore(20); // highest stakes round
+      roundScore += 20;
+      selectedAnalogy = null;
+
+      // All 4 matched → round complete
+      if (matched.size === concepts.length) {
+        setTimeout(() => {
+          quizState.round = 3;
+          const messages = [
+            'Analogies unlocked.',
+            'You think in patterns.',
+            'That\'s deep encoding.'
+          ];
+          quizState._r3score = roundScore;
+          showInterstitial(
+            'Round 3 complete',
+            messages[Math.floor(Math.random() * messages.length)],
+            `+${roundScore} pts`,
+            () => renderRound()
+          );
+        }, 600);
+      }
+
+    } else {
+      // Wrong — flash both red briefly, keep analogy selected
+      btn.classList.add('matched-wrong');
+      if (analogyEl) analogyEl.classList.add('matched-wrong');
+      playTone('wrong');
+
+      setTimeout(() => {
+        btn.classList.remove('matched-wrong');
+        if (analogyEl) analogyEl.classList.remove('matched-wrong');
+        // Keep analogy selected so user can try again
+        if (analogyEl) analogyEl.classList.add('selected');
+      }, 500);
+    }
+  };
+
+  render();
+}
+
+// ════════════════════════════════════════════
+// END SCREEN
+// ════════════════════════════════════════════
+function renderEndScreen() {
+  // Max possible: 4×10 (R1) + 4×15 (R2) + 4×20 (R3) = 180
+  const max = 180;
+  const pct = Math.round((quizState.score / max) * 100);
+
+  // Progress bar fills to 100% on completion
+  document.getElementById('quizProgressFill').style.width = '100%';
+  document.getElementById('quizRoundNum').textContent = '3';
+
+  // Rank tiers
+  const rank = (() => {
+    if (pct >= 90) return { label: 'DEEP THINKER',     line: 'You didn\'t just learn — you encoded.' };
+    if (pct >= 70) return { label: 'CONCEPT COLLECTOR', line: 'Strong recall. Keep pushing the edges.' };
+    if (pct >= 50) return { label: 'SHARP MIND',        line: 'Solid foundation. The gaps are obvious now.' };
+    if (pct >= 30) return { label: 'CURIOUS LEARNER',   line: 'You\'re building the wiring. Stay consistent.' };
+    return              { label: 'JUST WARMING UP',    line: 'Every expert started here. Come back tomorrow.' };
+  })();
+
+  // Star display — 1 to 5 based on pct
+  const stars = Math.max(1, Math.round(pct / 20));
+  const starRow = Array.from({length: 5}, (_, i) =>
+    `<span style="color:${i < stars ? 'var(--accent)' : 'var(--border-hover)'};font-size:1.3rem">✦</span>`
+  ).join('');
+
+  const body = document.getElementById('quizBody');
+  body.innerHTML = `
+    <div class="quiz-end">
+      <div class="quiz-end-rank">${rank.label}</div>
+      <div class="quiz-end-title">Session complete.</div>
+      <div style="margin:14px 0 6px">${starRow}</div>
+      <div class="quiz-end-score">${quizState.score}</div>
+      <div class="quiz-end-of">out of ${max} pts &nbsp;·&nbsp; ${pct}%</div>
+      <div style="
+        font-family:'DM Sans',sans-serif;
+        font-size:0.85rem;
+        color:var(--muted2);
+        line-height:1.6;
+        margin-bottom:32px;
+        max-width:340px;
+        margin-left:auto;
+        margin-right:auto;
+      ">${rank.line}</div>
+
+      <div style="
+        background:var(--surface2);
+        border-radius:10px;
+        padding:16px 20px;
+        margin-bottom:28px;
+        display:grid;
+        grid-template-columns:repeat(3,1fr);
+        gap:8px;
+        text-align:center;
+      ">
+        <div>
+          <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--text)">${quizState._r1score || 0}</div>
+          <div style="font-family:'DM Mono',monospace;font-size:0.55rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);margin-top:4px">Hook Match</div>
+        </div>
+        <div>
+          <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--text)">${quizState._r2score || 0}</div>
+          <div style="font-family:'DM Mono',monospace;font-size:0.55rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);margin-top:4px">Fill Blank</div>
+        </div>
+        <div>
+          <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--text)">${quizState._r3score || 0}</div>
+          <div style="font-family:'DM Mono',monospace;font-size:0.55rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);margin-top:4px">Analogy</div>
+        </div>
+      </div>
+
+      <div class="quiz-end-actions">
+        <button class="quiz-play-again" onclick="openQuiz()">Play again →</button>
+        <button class="quiz-end-close" onclick="closeQuiz()">Done</button>
+      </div>
+    </div>`;
+
+  // Play a satisfying finish tone
+  playFinishTone();
+}
+
+function playFinishTone() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const notes = [523, 659, 784, 1047]; // C E G C — major chord ascent
+    notes.forEach((freq, i) => {
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.connect(g); g.connect(ctx.destination);
+      o.frequency.value = freq;
+      const t = ctx.currentTime + i * 0.13;
+      g.gain.setValueAtTime(0, t);
+      g.gain.linearRampToValueAtTime(0.12, t + 0.05);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 0.5);
+      o.start(t); o.stop(t + 0.5);
+    });
+  } catch(e) {}
+}
+
+// Vault SFX — two-note positive chime, plays when a concept is added to vault
+function playVaultSFX() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const notes = [659, 880]; // E5 → A5 — short rising two-note
+    notes.forEach((freq, i) => {
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.type = 'sine';
+      o.connect(g); g.connect(ctx.destination);
+      o.frequency.value = freq;
+      const t = ctx.currentTime + i * 0.12;
+      g.gain.setValueAtTime(0, t);
+      g.gain.linearRampToValueAtTime(0.1, t + 0.04);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 0.38);
+      o.start(t); o.stop(t + 0.4);
+    });
+  } catch(e) {}
+}
 </script>
 </body>
 </html>
