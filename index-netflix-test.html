@@ -739,26 +739,26 @@
   /* HERO */
   .hero {
     position: relative;
-    padding: 180px 2rem 130px;
-    max-width: 960px;
+    padding: 140px 3rem 100px;
+    max-width: 1200px;
     margin: 0 auto;
-    text-align: center;
+    display: grid;
+    grid-template-columns: 1fr 1px 1fr;
+    gap: 0 4rem;
+    align-items: center;
     z-index: 1;
-    overflow: hidden;
   }
 
-  /* Subtle radial glow — pure CSS, no JS */
   .hero::before {
     content: '';
     position: absolute;
-    top: 20%;
-    left: 50%;
+    top: 30%;
+    left: 30%;
     transform: translateX(-50%);
-    width: 600px;
+    width: 500px;
     height: 400px;
     background: radial-gradient(ellipse at center,
-      rgba(232,213,163,0.07) 0%,
-      rgba(232,213,163,0.03) 40%,
+      rgba(232,213,163,0.05) 0%,
       transparent 70%);
     pointer-events: none;
     z-index: 0;
@@ -766,35 +766,59 @@
 
   .hero > * { position: relative; z-index: 1; }
 
+  /* Left column — copy */
+  .hero-copy {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  /* Vertical divider */
+  .hero-divider {
+    width: 1px;
+    align-self: stretch;
+    background: var(--border);
+    min-height: 480px;
+  }
+
+  /* Right column — card showcase */
+  .hero-card-col {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 0 2rem 2rem;
+  }
+
   .hero-eyebrow {
     display: inline-flex;
     align-items: center;
     gap: 10px;
     font-family: 'DM Mono', monospace;
-    font-size: 0.68rem;
+    font-size: 0.65rem;
     letter-spacing: 0.22em;
     text-transform: uppercase;
     color: var(--muted);
-    margin-bottom: 2.5rem;
+    margin-bottom: 2rem;
   }
 
-  /* Editorial lines flanking the eyebrow */
   .hero-eyebrow::before,
   .hero-eyebrow::after {
     content: '';
     display: inline-block;
-    width: 32px;
+    width: 24px;
     height: 1px;
     background: var(--border-hover);
   }
 
   .hero h1 {
     font-family: 'Playfair Display', serif;
-    font-size: clamp(3.2rem, 8.5vw, 7rem);
+    font-size: clamp(2.6rem, 5vw, 4.4rem);
     font-weight: 700;
-    line-height: 1.02;
+    line-height: 1.05;
     letter-spacing: -0.03em;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
+    text-align: left;
   }
 
   .hero h1 em {
@@ -804,28 +828,36 @@
   }
 
   .hero-sub {
-    font-size: 1rem;
+    font-size: 0.95rem;
     color: var(--muted2);
-    line-height: 1.8;
-    max-width: 520px;
-    margin: 0 auto 4rem;
+    line-height: 1.85;
+    max-width: 440px;
+    margin: 0 0 0.6rem 0;
     font-weight: 300;
+  }
+
+  .hero-brand-name {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    color: var(--accent);
+    font-weight: 400;
   }
 
   .hero-stats {
     display: flex;
-    justify-content: center;
-    gap: 4rem;
-    margin-bottom: 3.5rem;
-    padding: 2rem 0;
+    justify-content: flex-start;
+    gap: 2.5rem;
+    margin: 2.5rem 0;
+    padding: 1.5rem 0;
     border-top: 1px solid var(--border);
     border-bottom: 1px solid var(--border);
+    width: 100%;
   }
 
-  .stat { text-align: center; }
+  .stat { text-align: left; }
   .stat-num {
     font-family: 'Playfair Display', serif;
-    font-size: clamp(2.5rem, 4vw, 3.8rem);
+    font-size: clamp(2rem, 3vw, 2.8rem);
     font-weight: 700;
     color: var(--text);
     line-height: 1;
@@ -833,11 +865,11 @@
   }
   .stat-label {
     font-family: 'DM Mono', monospace;
-    font-size: 0.62rem;
+    font-size: 0.6rem;
     letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--muted);
-    margin-top: 8px;
+    margin-top: 6px;
   }
 
   .hero-cta {
@@ -848,10 +880,10 @@
     color: #0d0d0d;
     font-family: 'DM Sans', sans-serif;
     font-weight: 500;
-    font-size: 0.82rem;
+    font-size: 0.78rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    padding: 17px 40px;
+    padding: 16px 36px;
     border-radius: 999px;
     cursor: pointer;
     border: none;
@@ -864,6 +896,202 @@
     box-shadow: 0 8px 32px rgba(232,213,163,0.2);
   }
   .hero-cta svg { width: 16px; height: 16px; }
+
+  /* ============================================
+     HERO SHOWCASE CARD — Mental Masturbation
+     ============================================ */
+
+  .hero-card-wrap {
+    perspective: 1200px;
+    width: 340px;
+    height: 480px;
+    cursor: pointer;
+    transform: rotate(-1.5deg);
+    transition: transform 0.3s ease;
+  }
+
+  .hero-card-wrap:hover {
+    transform: rotate(0deg) translateY(-6px);
+  }
+
+  .hero-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.65s cubic-bezier(0.4, 0.2, 0.2, 1);
+  }
+
+  .hero-card-wrap.flipped .hero-card-inner {
+    transform: rotateY(180deg);
+  }
+
+  .hero-card-face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 16px;
+    border: 1px solid rgba(160, 143, 212, 0.35);
+    background: var(--surface);
+    padding: 32px 28px;
+    display: flex;
+    flex-direction: column;
+    box-shadow:
+      0 0 0 1px rgba(160,143,212,0.08),
+      0 20px 60px rgba(0,0,0,0.5),
+      inset 0 1px 0 rgba(255,255,255,0.04);
+  }
+
+  .hero-card-back {
+    transform: rotateY(180deg);
+    background: var(--surface2);
+  }
+
+  /* Card front elements */
+  .hc-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: auto;
+  }
+
+  .hc-cat-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #a08fd4;
+    background: rgba(160,143,212,0.1);
+    border: 1px solid rgba(160,143,212,0.2);
+    padding: 3px 9px;
+    border-radius: 999px;
+  }
+
+  .hc-source-pills {
+    display: flex;
+    gap: 5px;
+  }
+
+  .hc-source-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    padding: 2px 7px;
+    border-radius: 999px;
+  }
+
+  .hc-term {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.9rem;
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--text);
+    margin: auto 0 1rem;
+    letter-spacing: -0.02em;
+  }
+
+  .hc-hook {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    font-style: italic;
+    color: var(--muted2);
+    line-height: 1.55;
+    font-weight: 300;
+  }
+
+  .hc-flip-hint {
+    margin-top: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.56rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    opacity: 0.7;
+  }
+
+  .hc-flip-hint-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: 0.6;
+  }
+
+  /* Card back elements */
+  .hc-back-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+
+  .hc-back-text {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    line-height: 1.65;
+    color: var(--muted2);
+    font-weight: 300;
+    margin-bottom: 16px;
+  }
+
+  .hc-back-text.analogy {
+    color: var(--muted);
+    font-style: italic;
+    font-size: 0.75rem;
+    border-left: 2px solid rgba(160,143,212,0.3);
+    padding-left: 10px;
+  }
+
+  .hc-back-prompt {
+    margin-top: auto;
+    padding: 12px 14px;
+    border-radius: 8px;
+    background: rgba(232,213,163,0.06);
+    border: 1px solid rgba(232,213,163,0.15);
+  }
+
+  .hc-back-prompt .hc-back-label {
+    color: var(--accent);
+    opacity: 0.8;
+    margin-bottom: 4px;
+  }
+
+  .hc-back-prompt .hc-back-text {
+    font-size: 0.75rem;
+    color: var(--muted2);
+    margin-bottom: 0;
+  }
+
+  /* Mobile hero */
+  @media (max-width: 900px) {
+    .hero {
+      grid-template-columns: 1fr;
+      padding: 120px 2rem 80px;
+      gap: 4rem 0;
+    }
+    .hero-divider { display: none; }
+    .hero-copy { align-items: center; text-align: center; }
+    .hero h1 { text-align: center; font-size: clamp(2.4rem, 7vw, 3.8rem); }
+    .hero-sub { max-width: 520px; margin: 0 auto 0.6rem; text-align: center; }
+    .hero-stats { justify-content: center; gap: 2rem; }
+    .stat { text-align: center; }
+    .hero-card-col { padding: 0; }
+    .hero-card-wrap { width: 300px; height: 420px; transform: rotate(0deg); }
+  }
+
+  @media (max-width: 480px) {
+    .hero-card-wrap { width: 280px; height: 400px; }
+    .hc-term { font-size: 1.6rem; }
+  }
   /* ============================================
      CONCEPT OF THE DAY — MODAL
      ============================================ */
@@ -2617,27 +2845,70 @@
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-eyebrow">The Intelligence Toolkit</div>
-  <h1>The ideas shaping<br><em>smart conversation</em></h1>
-  <p class="hero-sub">You consume podcasts and articles — but how much do you actually retain? Learn 5 key concepts a day. Understand them. Use them. Change how you think and communicate.</p>
-  <div class="hero-stats">
-    <div class="stat">
-      <div class="stat-num" id="heroConceptCount">165</div>
-      <div class="stat-label">Concepts</div>
+  <!-- LEFT: Hero copy -->
+  <div class="hero-copy">
+    <div class="hero-eyebrow">The Intelligence Toolkit</div>
+    <h1>You finish the podcast.<br><em>Then what?</em></h1>
+    <p class="hero-sub">Most ideas evaporate within 24 hours. Not because the content is bad. Because passive listening is a broken learning format.<br><br><span class="hero-brand-name">Epistemic</span> fixes that.</p>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num" id="heroConceptCount">165</div>
+        <div class="stat-label">Concepts</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" id="heroCategoryCount">11</div>
+        <div class="stat-label">Categories</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">5/day</div>
+        <div class="stat-label">Daily Goal</div>
+      </div>
     </div>
-    <div class="stat">
-      <div class="stat-num" id="heroCategoryCount">11</div>
-      <div class="stat-label">Categories</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num">5/day</div>
-      <div class="stat-label">Daily Goal</div>
+    <a href="#app" class="hero-cta">
+      Start Learning
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M8 3l5 5-5 5"/></svg>
+    </a>
+  </div>
+
+  <!-- VERTICAL DIVIDER -->
+  <div class="hero-divider"></div>
+
+  <!-- RIGHT: Showcase card -->
+  <div class="hero-card-col">
+    <div class="hero-card-wrap" id="heroCard" onclick="this.classList.toggle('flipped')" title="Click to flip">
+      <div class="hero-card-inner">
+
+        <!-- FRONT -->
+        <div class="hero-card-face">
+          <div class="hc-meta">
+            <span class="hc-cat-pill">Psychology</span>
+            <div class="hc-source-pills">
+              <span class="hc-source-pill">Modern Wisdom</span>
+              <span class="hc-source-pill">Chris Williamson</span>
+            </div>
+          </div>
+          <div class="hc-term">Mental Masturbation</div>
+          <div class="hc-hook">Self-improvement content is the most addictive form of doing nothing.</div>
+          <div class="hc-flip-hint">
+            <span class="hc-flip-hint-dot"></span>
+            Tap to flip
+          </div>
+        </div>
+
+        <!-- BACK -->
+        <div class="hero-card-face hero-card-back">
+          <div class="hc-back-label">What it means</div>
+          <div class="hc-back-text">Most of what people call self-improvement is just consumption with better branding. You feel sharper after a podcast, more capable after a book — but nothing in your life has changed. You confuse the input with the outcome.</div>
+          <div class="hc-back-text analogy">Like buying a gym membership, watching workout videos every morning, reading the science of hypertrophy — and never lifting a single weight.</div>
+          <div class="hc-back-prompt">
+            <div class="hc-back-label">Reflect &amp; use it</div>
+            <div class="hc-back-text">Look at what you've consumed this month. Now look at what you've done. Which one is closer to the person you say you are?</div>
+          </div>
+        </div>
+
+      </div>
     </div>
   </div>
-  <a href="#app" class="hero-cta">
-    Start Learning
-    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M8 3l5 5-5 5"/></svg>
-  </a>
 </section>
 <!-- EPISODES SECTION -->
 <div id="episodesSection" class="episodes-section" style="display:none">
