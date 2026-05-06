@@ -2385,5 +2385,16 @@
     "analogy": "Your boss says 'see me at 3 p.m.' with no context. For the next four hours, you mentally rehearse getting fired, even though she just wants to ask about your weekend plans.",
     "prompt": "When was the last time someone left you hanging with an ambiguous message? What story did you tell yourself before you got the full context?",
     "collection_id": 13
+  },
+  {
+    "id": 220,
+    "term": "Hidden Metrics",
+    "category": "thinking",
+    "source": "cw",
+    "hook": "You'll sacrifice invisible peace for visible progress — then wonder why you're miserable.",
+    "plain": "People optimize for observable metrics — salary, house size, job title — while ignoring hidden ones like daily stress, relationship texture, or mental peace. A longer commute for more money might look like a win on paper, but the unseen cost to your well-being is steep and compounding.",
+    "analogy": "You take a job that pays $10k more but adds 90 minutes to your commute. The raise is visible on your paycheck. The decade of resentment, exhaustion, and missed dinners with your kids isn't tracked anywhere.",
+    "prompt": "Name one visible metric you're currently optimizing for. What hidden metric are you sacrificing to get it? Is the trade actually worth it?",
+    "collection_id": 13
   }
 ]
