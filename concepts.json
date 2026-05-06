@@ -2198,5 +2198,16 @@
     "analogy": "Like describing a car accident as if you were watching security footage, not sitting in the driver's seat.",
     "prompt": "What situation are you misreading because you're part of it?",
     "collection_id": null
+  },
+  {
+    "id": 203,
+    "term": "Feelings Don't Care About Facts",
+    "category": "psychology",
+    "source": "cw",
+    "hook": "Facts don't change minds — emotions do, regardless of evidence presented.",
+    "plain": "People often say 'facts don't care about your feelings,' but the reverse is actually true. When someone holds a belief tied to identity or upbringing, presenting evidence rarely shifts them. What matters is how the information makes them feel, and whether the person delivering it feels safe and trustworthy.",
+    "analogy": "You can show someone a dozen peer-reviewed studies proving their political stance is flawed. If those studies make them feel attacked or stupid, they'll reject every word — even if the data is bulletproof.",
+    "prompt": "Think of the last time someone presented you with hard evidence that contradicted something you believed. Did you change your mind, or did you feel defensive? What emotion came up first?",
+    "collection_id": 13
   }
 ]
