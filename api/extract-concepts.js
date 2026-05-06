@@ -35,7 +35,7 @@ FOR EACH EXTRACTED CONCEPT, RETURN THIS EXACT JSON STRUCTURE:
   "id": null,
   "term": "[2-5 words, clear and memorable]",
   "category": "[exactly one of: finance | psychology | thinking | power | relationships | language | business | identity | health | philosophy | society | creativity | science | tech-ai]",
-  "source": "[exactly one of: cw | ah | dk | core based on who said it]",
+  "source": "[2-letter source code — see SOURCE ATTRIBUTION below]",
   "hook": "[one sentence, max 12 words, format: observation — implication]",
   "plain": "[2-3 sentences, zero jargon, plain English only]",
   "analogy": "[one concrete real-world scenario, 1-2 sentences]",
@@ -150,10 +150,29 @@ tech-ai:       technology, AI, digital systems — MUST pass the 15-year-old ana
 When a concept could fit two categories, ask: where would someone most want to find this when searching the library?
 
 SOURCE ATTRIBUTION
-cw   = Chris Williamson / Modern Wisdom (host or his framing)
-ah   = Alex Hormozi (or content from his books/episodes)
-dk   = Dan Koe (or content from his letters/videos)
-core = universal concept that predates any one modern voice, even if discussed in the episode (e.g. "opportunity cost", "loss aversion"). When in doubt, use "core".
+------------------
+The episode metadata you receive includes a HOST and a PODCAST name. Use them to assign each concept a 2-letter source code.
+
+KNOWN MAPPINGS (use these exactly when they apply):
+  cw   = Chris Williamson / Modern Wisdom
+  ah   = Alex Hormozi
+  dk   = Dan Koe
+  core = universal concept that predates any one modern voice (e.g. "opportunity cost", "loss aversion", "framing effect")
+
+UNKNOWN HOSTS — generate a 2-letter code from the host's name:
+  - Take the first letter of the host's first name, then the first letter of their last name, lowercased.
+  - Joe Rogan        → "jr"
+  - Tim Ferriss      → "tf"
+  - Lex Fridman      → "lf"
+  - Steven Bartlett  → "sb"
+  - Naval Ravikant   → "nr"
+  - Ryan Holiday     → "rh"
+  - Andrew Huberman  → would be "ah" but that COLLIDES with Alex Hormozi → use "ahu" instead.
+
+If the generated code collides with a known mapping above, append the next consonant from the last name (e.g. "ahu" for Andrew Huberman, "jrg" if "jr" were taken).
+
+THE "core" RULE — applies regardless of who the host is:
+  If the concept is universal and predates the modern podcast era — i.e. it would exist in a textbook or in classical thought without this episode — use "core" instead of the host code. When in doubt, use "core".
 
 OUTPUT FORMAT
 -------------
@@ -293,11 +312,20 @@ const CONCEPTS_TABLE = 'Concepts';
 const INTAKE_TABLE = 'Intake';
 
 const VALID_CATEGORIES = ['finance', 'psychology', 'thinking', 'power', 'relationships', 'language', 'business', 'identity', 'health', 'philosophy', 'society', 'creativity', 'science', 'tech-ai'];
-const VALID_SOURCES = ['core', 'cw', 'ah', 'dk'];
+
+// Source codes are now open-ended (see SOURCE ATTRIBUTION in the prompt above).
+// Any 2-4 lowercase letter code passes through; Airtable typecast: true (in
+// createConceptRow's POST body) auto-creates new Single Select options.
+// Anything missing or malformed falls back to 'core'.
+function normalizeSource(raw) {
+  if (typeof raw !== 'string') return 'core';
+  const s = raw.trim().toLowerCase();
+  return /^[a-z]{2,4}$/.test(s) ? s : 'core';
+}
 
 async function createConceptRow(concept, episodeRefLabel, episodeUrl, collectionId) {
   const category = VALID_CATEGORIES.includes(concept.category) ? concept.category : null;
-  const source = VALID_SOURCES.includes(concept.source) ? concept.source : 'core';
+  const source = normalizeSource(concept.source);
 
   if (!category) throw new Error(`Invalid category: ${concept.category} (term: ${concept.term})`);
   if (!concept.term || !concept.hook || !concept.plain || !concept.analogy || !concept.prompt) {
