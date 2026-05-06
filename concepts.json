@@ -2121,5 +2121,16 @@
     "analogy": "Think of a specialized consulting firm with 8 people, all working remotely, serving 50 high-ticket clients a year at $60K each. Profit: $2M. No office, no bureaucracy, no investors breathing down your neck. Freedom and wealth.",
     "prompt": "If you could design a business that makes $1-2M profit with 6-12 people, what would you sell? Who would you serve? Write one sentence.",
     "collection_id": 12
+  },
+  {
+    "id": 196,
+    "term": "Performance Business",
+    "category": "business",
+    "source": "dk",
+    "hook": "Thirty people, tech-enabled, $10-100M exit — the pro game.",
+    "plain": "A performance business is designed for a $10-100M exit with around 30 people. It's tech-enabled, IP-rich, and built to sell to a strategic acquirer or private equity. You need to be a business geek who loves acronyms, go-to-market strategy, and LTV/CAC ratios. This is different from a lifestyle boutique — you're optimizing for a liquidity event, not just profit.",
+    "analogy": "A SaaS company with 30 employees, $10M ARR, and 80% gross margins gets acquired by a public company for $50M. The founder exits wealthy but spent 7 years living and breathing metrics, funding, and growth strategy.",
+    "prompt": "Would you rather have a lifestyle boutique or a performance business? If you chose performance, are you actually willing to geek out on tech, business strategy, and exits for 5-7 years?",
+    "collection_id": 12
   }
 ]
