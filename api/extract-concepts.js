@@ -174,7 +174,7 @@ export default async function handler(req, res) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
 
-  const { intakeRecordId, episodeTitle, host, episodeUrl, duration, transcript, people } = req.body || {};
+  const { intakeRecordId, episodeTitle, host, episodeUrl, duration, transcript, people, podcast } = req.body || {};
 
   if (!intakeRecordId || !transcript) {
     return res.status(400).json({ error: 'Missing intakeRecordId or transcript' });
@@ -206,6 +206,7 @@ export default async function handler(req, res) {
         episodeTitle: episodeTitle || 'Untitled episode',
         people,
         episodeUrl,
+        podcast,
       });
     } catch (err) {
       await updateIntakeStatus(intakeRecordId, 'FAILED', 0, `Collection creation failed: ${String(err.message || err).slice(0, 500)}`);
@@ -382,7 +383,7 @@ const COLLECTIONS_REPO_NAME = 'listen-learn-live';
 const COLLECTIONS_BRANCH = 'main';
 const COLLECTIONS_PATH = 'collections.json';
 
-async function createEpisodeCollection({ episodeTitle, people, episodeUrl }) {
+async function createEpisodeCollection({ episodeTitle, people, episodeUrl, podcast }) {
   const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
   if (!GITHUB_TOKEN) {
     throw new Error('GITHUB_TOKEN env var missing');
@@ -440,6 +441,7 @@ async function createEpisodeCollection({ episodeTitle, people, episodeUrl }) {
     id: newId,
     title: String(episodeTitle).slice(0, 200),
     type: 'episode',
+    podcast: podcast ? String(podcast).slice(0, 100) : 'Other',
     people: peopleArray,
     episode_url: episodeUrl || '',
     created_date: today,
