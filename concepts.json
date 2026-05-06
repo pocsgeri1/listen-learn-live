@@ -2033,5 +2033,16 @@
     "analogy": "A restaurant might say, 'We only have 40 tables, and if we fill them 6 nights a week, we're thriving.' They don't try to seat 80 people by cramming tables together. The constraint creates quality and sanity.",
     "prompt": "What is your official capacity for this year? How many clients, sales, or projects would make you say 'we crushed it' — and feel totally satisfied?",
     "collection_id": 12
+  },
+  {
+    "id": 188,
+    "term": "Entrepreneurial Pyramid",
+    "category": "business",
+    "source": "dk",
+    "hook": "Labor, IP, data, software, financial asset — climb in order.",
+    "plain": "The pyramid has five levels. Bottom: skilled labor (you sell your time). Next: intellectual property and media (you create frameworks and content). Middle: data and software (you build systems that scale). Top: financial assets (you sell the company). Most people are stuck at level one because school taught them to trade time for money. The new economy rewards those who climb.",
+    "analogy": "A consultant gets paid per hour — that's labor. If they write a book and license a methodology, that's IP. If they build a quiz that generates leads automatically, that's data. If they sell the consulting firm for $5M, that's a financial asset.",
+    "prompt": "Where are you on the pyramid right now? What's the smallest move you could make in the next 90 days to climb one level?",
+    "collection_id": 12
   }
 ]
