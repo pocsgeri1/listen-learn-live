@@ -74,6 +74,26 @@
     padding: 5rem 0 5rem;
     background: var(--band);
   }
+  .episodes-podcast-group {
+    margin-bottom: 3rem;
+  }
+  .episodes-podcast-group:last-child {
+    margin-bottom: 0;
+  }
+  .episodes-podcast-heading {
+    max-width: 1100px;
+    margin: 0 auto 1rem;
+    padding: 0 2rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted2);
+  }
+  .episodes-podcast-heading span {
+    color: var(--muted);
+    margin-left: 0.6rem;
+  }
   .episodes-controls {
     max-width: 1100px;
     margin: 0 auto;
@@ -3009,11 +3029,7 @@
       <div class="app-title">Browse <em>episodes</em></div>
     </div>
   </div>
-  <div class="episodes-scroll-wrap">
-    <div class="episodes-fade-left"></div>
-    <div class="episodes-fade-right"></div>
-    <div id="episodesRow" class="episodes-row"></div>
-  </div>
+  <div id="episodesRow"></div>
 </div>
 <!-- /EPISODES SECTION -->
 <!-- APP -->
@@ -4054,22 +4070,25 @@ function buildEpisodes() {
 
   section.style.display = 'block';
 
-  row.innerHTML = episodeCollections.map(col => {
+  // Group episodes by podcast
+  const grouped = {};
+  episodeCollections.forEach(col => {
+    const podcastName = col.podcast || 'Other';
+    if (!grouped[podcastName]) grouped[podcastName] = [];
+    grouped[podcastName].push(col);
+  });
+
+  // Sort podcasts: most episodes first, alphabetical tiebreak
+  const podcastNames = Object.keys(grouped).sort((a, b) => {
+    const diff = grouped[b].length - grouped[a].length;
+    return diff !== 0 ? diff : a.localeCompare(b);
+  });
+
+  // Helper: render one episode card
+  function renderCard(col) {
     const epConcepts = CONCEPTS.filter(c => c.collection_id === col.id);
     const conceptCount = epConcepts.length;
 
-    // Category mix
-    const catCounts = {};
-    epConcepts.forEach(c => { catCounts[c.category] = (catCounts[c.category] || 0) + 1; });
-    const sortedCats = Object.entries(catCounts).sort((a,b) => b[1]-a[1]);
-    const mixBar = conceptCount > 0
-      ? sortedCats.map(([cat, n]) => {
-          const pct = (n / conceptCount * 100).toFixed(1);
-          return `<div class="episode-mix-segment" style="width:${pct}%;background:${CAT_COLOR[cat]||'#e8d5a3'}"></div>`;
-        }).join('')
-      : '';
-
-    // YouTube thumbnail or clean fallback
     const ytId = getYouTubeId(col.episode_url);
     const thumbHtml = ytId
       ? `<img
@@ -4093,7 +4112,27 @@ function buildEpisodes() {
           <div class="episode-people-row">${peoplePills}</div>
           <div class="episode-count">${conceptCount} concept${conceptCount !== 1 ? 's' : ''}</div>
         </div>
-      </div>`;
+      </div>
+    `;
+  }
+
+  // Render one group (heading + scrollable row of cards) per podcast
+  row.innerHTML = podcastNames.map(podcastName => {
+    const cols = grouped[podcastName];
+    const count = cols.length;
+    const cards = cols.map(renderCard).join('');
+    return `
+      <div class="episodes-podcast-group">
+        <div class="episodes-podcast-heading">
+          ${podcastName}<span>${count} episode${count !== 1 ? 's' : ''}</span>
+        </div>
+        <div class="episodes-scroll-wrap">
+          <div class="episodes-fade-left"></div>
+          <div class="episodes-fade-right"></div>
+          <div class="episodes-row">${cards}</div>
+        </div>
+      </div>
+    `;
   }).join('');
 }
 
