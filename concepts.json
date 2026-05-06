@@ -2275,5 +2275,16 @@
     "analogy": "Getting a 'we need to talk' text triggers the same bodily response as hearing footsteps behind you in a dark alley. Your brain can't separate the two.",
     "prompt": "Name a recent conversation where your body reacted disproportionately to the actual stakes. What physical sensations did you notice — jaw clenching, shallow breathing, tightness in your chest?",
     "collection_id": 13
+  },
+  {
+    "id": 210,
+    "term": "Perspective Seeking",
+    "category": "thinking",
+    "source": "cw",
+    "hook": "Don't attack their point — ask how they got there.",
+    "plain": "Instead of arguing with someone's conclusion, ask them how they arrived at it. 'I see things differently' is less combative than 'I disagree.' Saying 'Tell me how you got there' or 'What shaped that view?' invites explanation without triggering defense. You're commenting on process, not declaring them wrong.",
+    "analogy": "Your friend says something you think is wildly off-base. Instead of saying, 'That's ridiculous,' you ask, 'How did you come to that conclusion?' They explain, you understand the logic (even if you still disagree), and the conversation stays open.",
+    "prompt": "Next time someone says something you disagree with, don't state your opinion. Instead, ask: 'How did you come to see it that way?' Notice whether it changes the tenor of the exchange.",
+    "collection_id": 13
   }
 ]
