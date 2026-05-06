@@ -2363,5 +2363,16 @@
     "analogy": "Compare 'I think I'd probably be a good fit for this role' versus 'I'm confident I'd be a strong asset to this team.' Same message, completely different level of conviction.",
     "prompt": "Record yourself speaking for two minutes on a topic you care about. Count how many times you hedge with 'I think,' 'maybe,' or 'I guess.' Then re-record without those phrases — notice the shift.",
     "collection_id": 13
+  },
+  {
+    "id": 218,
+    "term": "Tell Me What I'm Missing",
+    "category": "language",
+    "source": "cw",
+    "hook": "Defuse tension by admitting you might not have the full picture.",
+    "plain": "When someone seems irrationally upset or defensive, saying 'tell me what I'm missing' invites them to explain without feeling attacked. It signals curiosity, not judgment, and often reveals hidden context you weren't aware of. This phrase shifts the dynamic from confrontation to collaboration.",
+    "analogy": "Your coworker snaps at a simple request. Instead of getting defensive, you say, 'I feel like I'm missing something here — what's going on?' They admit they've been overwhelmed for weeks, and suddenly the tension makes sense.",
+    "prompt": "In your next tense interaction, use the exact phrase: 'Help me understand — what am I missing here?' Notice whether it changes the other person's body language.",
+    "collection_id": 13
   }
 ]
