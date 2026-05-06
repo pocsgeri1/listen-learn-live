@@ -2374,5 +2374,16 @@
     "analogy": "Your coworker snaps at a simple request. Instead of getting defensive, you say, 'I feel like I'm missing something here — what's going on?' They admit they've been overwhelmed for weeks, and suddenly the tension makes sense.",
     "prompt": "In your next tense interaction, use the exact phrase: 'Help me understand — what am I missing here?' Notice whether it changes the other person's body language.",
     "collection_id": 13
+  },
+  {
+    "id": 219,
+    "term": "The Open Loop Anxiety",
+    "category": "psychology",
+    "source": "cw",
+    "hook": "Ambiguity breeds panic — 'we need to talk' is psychological torture.",
+    "plain": "When someone opens a conversation with vague, ominous language — like 'we need to talk' or a one-letter text response — your brain fills the silence with worst-case scenarios. The lack of clarity is where all the fear lives. You'd almost prefer bad news immediately than hours of spiraling speculation.",
+    "analogy": "Your boss says 'see me at 3 p.m.' with no context. For the next four hours, you mentally rehearse getting fired, even though she just wants to ask about your weekend plans.",
+    "prompt": "When was the last time someone left you hanging with an ambiguous message? What story did you tell yourself before you got the full context?",
+    "collection_id": 13
   }
 ]
