@@ -2396,5 +2396,16 @@
     "analogy": "You take a job that pays $10k more but adds 90 minutes to your commute. The raise is visible on your paycheck. The decade of resentment, exhaustion, and missed dinners with your kids isn't tracked anywhere.",
     "prompt": "Name one visible metric you're currently optimizing for. What hidden metric are you sacrificing to get it? Is the trade actually worth it?",
     "collection_id": 13
+  },
+  {
+    "id": 221,
+    "term": "Bad Times Predict Relationships",
+    "category": "relationships",
+    "source": "cw",
+    "hook": "Peak moments don't predict longevity — how you handle conflict does.",
+    "plain": "Relationships rarely end because there weren't enough great moments. They end because there were too many unresolved bad ones. How you handle disagreement, rupture, and tension is a far better predictor of whether you'll stay together than how much fun you have when things are easy.",
+    "analogy": "You went skydiving together, had an amazing honeymoon, and laugh at the same jokes. But when conflict arises, you both shut down and stop talking for days. The skydiving won't save you.",
+    "prompt": "Think of your closest relationship. Rate the quality of your good times out of 10. Now rate how you handle conflict. Which number matters more for whether you'll still be together in five years?",
+    "collection_id": 13
   }
 ]
