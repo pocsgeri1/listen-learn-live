@@ -198,6 +198,8 @@
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
+    user-select: none;
+    -webkit-user-select: none;
   }
   .episodes-row::-webkit-scrollbar { display: none; }
   .episode-card {
@@ -494,6 +496,8 @@
     scrollbar-width: none;
     padding: 0.25rem 2rem 1.5rem;
     cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
   }
   .nf-row:active { cursor: grabbing; }
   .nf-row::-webkit-scrollbar { display: none; }
@@ -3070,6 +3074,10 @@
   <div class="episodes-controls">
     <div class="episodes-app-header">
       <div class="app-title">Browse <em>episodes</em></div>
+      <div class="search-wrap">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M10 10l3.5 3.5"/></svg>
+        <input type="text" id="episodeSearch" placeholder="Search episodes..." />
+      </div>
     </div>
   </div>
   <div id="episodesRow"></div>
@@ -4177,8 +4185,20 @@ function getYouTubeId(url) {
   return null;
 }
 function buildEpisodes() {
+  const searchInput = document.getElementById('episodeSearch');
+  const query = (searchInput && searchInput.value || '').trim().toLowerCase();
+
   const episodeCollections = Object.values(COLLECTIONS_BY_ID)
     .filter(col => col.type === 'episode')
+    .filter(col => {
+      if (!query) return true;
+      const haystack = [
+        col.title || '',
+        col.podcast || '',
+        ...(col.people || [])
+      ].join(' ').toLowerCase();
+      return haystack.includes(query);
+    })
     .sort((a, b) => new Date(b.created_date || 0) - new Date(a.created_date || 0));
 
   const section = document.getElementById('episodesSection');
@@ -4280,6 +4300,12 @@ document.getElementById('search').addEventListener('input', e => {
   searchQ = e.target.value;
   clearTimeout(_searchDebounce);
   _searchDebounce = setTimeout(() => buildGrid(), 180);
+});
+
+let _epSearchDebounce = null;
+document.getElementById('episodeSearch').addEventListener('input', () => {
+  clearTimeout(_epSearchDebounce);
+  _epSearchDebounce = setTimeout(() => buildEpisodes(), 180);
 });
 
 // Restore saved progress BEFORE loading concepts, so the first render
