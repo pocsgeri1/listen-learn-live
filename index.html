@@ -147,6 +147,49 @@
     pointer-events: none;
     z-index: 2;
   }
+  /* ── Scroll arrows (works for both episode rows and category rows) ── */
+  .scroll-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(20, 20, 20, 0.85);
+    border: 0.5px solid var(--border-hover);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 1rem;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 3;
+    opacity: 0;
+    transition: opacity 0.2s, background 0.2s, border-color 0.2s;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+  .scroll-arrow:hover {
+    background: rgba(28, 28, 28, 0.95);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .scroll-arrow.left { left: 0.6rem; }
+  .scroll-arrow.right { right: 0.6rem; }
+  .scroll-arrow.hidden { display: none; }
+
+  /* Show arrows on hover of the scroll wrapper */
+  .episodes-scroll-wrap:hover .scroll-arrow,
+  .nf-scroll-wrap:hover .scroll-arrow {
+    opacity: 1;
+  }
+
+  /* Hide arrows on touch devices (drag/swipe is the native interaction) */
+  @media (hover: none) {
+    .scroll-arrow { display: none !important; }
+  }
   .episodes-row {
     display: flex;
     gap: 1rem;
@@ -3559,6 +3602,8 @@ function buildGrid() {
           <div class="nf-section-rule"></div>
         </div>
         <div class="nf-scroll-wrap">
+          <button class="scroll-arrow left" aria-label="Scroll left" onclick="scrollRow(this, -1)">‹</button>
+          <button class="scroll-arrow right" aria-label="Scroll right" onclick="scrollRow(this, 1)">›</button>
           <div class="nf-fade-left"></div>
           <div class="nf-fade-right"></div>
           <div class="nf-row" id="nf-drag-${cat.id}">
@@ -3611,10 +3656,87 @@ function buildGrid() {
   const mc = document.getElementById('netflixRows');
   if (mc) mc._magneticBound = false;
   initMagneticCards();
+  document.querySelectorAll('.nf-row').forEach(updateArrowVisibility);
 }
 
 function initDragScroll() {
-  return; // disabled for performance — use trackpad swipe or shift-scroll instead
+  document.querySelectorAll('.nf-row, .episodes-row').forEach(row => {
+    if (row._dragBound) return;
+    row._dragBound = true;
+
+    let isDown = false;
+    let startX = 0;
+    let scrollLeftStart = 0;
+    let didDrag = false;
+
+    row.addEventListener('mousedown', (e) => {
+      isDown = true;
+      didDrag = false;
+      startX = e.pageX - row.offsetLeft;
+      scrollLeftStart = row.scrollLeft;
+      row.style.cursor = 'grabbing';
+    });
+
+    row.addEventListener('mouseleave', () => {
+      isDown = false;
+      row.style.cursor = '';
+    });
+
+    row.addEventListener('mouseup', () => {
+      isDown = false;
+      row.style.cursor = '';
+    });
+
+    row.addEventListener('mousemove', (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - row.offsetLeft;
+      const walk = (x - startX) * 1.4;
+      if (Math.abs(walk) > 4) didDrag = true;
+      row.scrollLeft = scrollLeftStart - walk;
+    });
+
+    // Block click-through on cards if user actually dragged
+    row.addEventListener('click', (e) => {
+      if (didDrag) {
+        e.stopPropagation();
+        e.preventDefault();
+        didDrag = false;
+      }
+    }, true); // capture phase
+  });
+}
+function scrollRow(button, direction) {
+  const wrap = button.closest('.episodes-scroll-wrap, .nf-scroll-wrap');
+  if (!wrap) return;
+  const row = wrap.querySelector('.episodes-row, .nf-row');
+  if (!row) return;
+  // Scroll by ~80% of visible width for a natural "next page" feel
+  const scrollAmount = row.clientWidth * 0.8 * direction;
+  row.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+  // Update arrow visibility after scroll settles
+  setTimeout(() => updateArrowVisibility(row), 350);
+}
+
+function updateArrowVisibility(row) {
+  const wrap = row.closest('.episodes-scroll-wrap, .nf-scroll-wrap');
+  if (!wrap) return;
+  const leftArrow = wrap.querySelector('.scroll-arrow.left');
+  const rightArrow = wrap.querySelector('.scroll-arrow.right');
+  if (!leftArrow || !rightArrow) return;
+
+  const atStart = row.scrollLeft <= 4;
+  const atEnd = row.scrollLeft >= row.scrollWidth - row.clientWidth - 4;
+  const noOverflow = row.scrollWidth <= row.clientWidth + 4;
+
+  leftArrow.classList.toggle('hidden', atStart || noOverflow);
+  rightArrow.classList.toggle('hidden', atEnd || noOverflow);
+
+  // Bind scroll listener once per row to update arrows during drag/swipe
+  if (!row._scrollListenerBound) {
+    row._scrollListenerBound = true;
+    row.addEventListener('scroll', () => updateArrowVisibility(row), { passive: true });
+  }
 }
 function initMagneticCards() {
   return; // disabled — was main cause of scroll lag
@@ -4127,6 +4249,8 @@ function buildEpisodes() {
           ${podcastName}<span>${count} episode${count !== 1 ? 's' : ''}</span>
         </div>
         <div class="episodes-scroll-wrap">
+          <button class="scroll-arrow left" aria-label="Scroll left" onclick="scrollRow(this, -1)">‹</button>
+          <button class="scroll-arrow right" aria-label="Scroll right" onclick="scrollRow(this, 1)">›</button>
           <div class="episodes-fade-left"></div>
           <div class="episodes-fade-right"></div>
           <div class="episodes-row">${cards}</div>
@@ -4134,6 +4258,11 @@ function buildEpisodes() {
       </div>
     `;
   }).join('');
+
+  // Re-init drag-scroll after fresh render
+  initDragScroll();
+  // Update arrow visibility for each row
+  document.querySelectorAll('.episodes-row').forEach(updateArrowVisibility);
 }
 
 let vaultActive = false;
