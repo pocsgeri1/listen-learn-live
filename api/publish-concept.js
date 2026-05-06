@@ -41,19 +41,22 @@ export default async function handler(req, res) {
     });
   }
 
-  // Validate category and source against allowed values
+  // Validate category against fixed list
   const allowedCategories = ['finance', 'psychology', 'thinking', 'power', 'relationships', 'language', 'business', 'identity', 'health', 'philosophy', 'society', 'creativity', 'science', 'tech-ai'];
-  const allowedSources = ['core', 'cw', 'ah', 'dk'];
 
   if (!allowedCategories.includes(category)) {
     return res.status(400).json({
       error: `Invalid category "${category}". Must be one of: ${allowedCategories.join(', ')}`,
     });
   }
-  if (!allowedSources.includes(source)) {
-    return res.status(400).json({
-      error: `Invalid source "${source}". Must be one of: ${allowedSources.join(', ')}`,
-    });
+
+  // Source codes are open-ended (host initials e.g. cw, ah, dk, jr, tf, lf, rh, sb, nr,
+  // plus the special "core" code for universal concepts). Accept any 2-4 lowercase
+  // letter code; anything malformed falls back to "core".
+  let normalizedSource = 'core';
+  if (typeof source === 'string') {
+    const s = source.trim().toLowerCase();
+    if (/^[a-z]{2,4}$/.test(s)) normalizedSource = s;
   }
 
   // GitHub API configuration
@@ -130,7 +133,7 @@ export default async function handler(req, res) {
       id: nextId,
       term: term.trim(),
       category,
-      source,
+      source: normalizedSource,
       hook: hook.trim(),
       plain: plain.trim(),
       analogy: analogy.trim(),
