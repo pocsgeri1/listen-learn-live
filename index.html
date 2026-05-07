@@ -2170,6 +2170,29 @@
   }
 
   .btn-share:hover { border-color: var(--border-hover); color: var(--text); }
+  .btn-listen {
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+    border: 1px solid var(--accent);
+    background: none;
+    color: var(--accent);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn-listen:hover {
+    background: rgba(232,213,163,0.08);
+    border-color: var(--accent2);
+    color: var(--accent2);
+  }
   /* SHARE CARD MODAL */
 .share-modal-overlay {
   display: none;
@@ -3653,6 +3676,14 @@ function buildGrid() {
                   <div class="card-actions">
                     <button class="btn-master" onclick="toggleMaster(event,${c.id})">${isMastered?'✓ VAULT':'⊕ VAULT'}</button>
                     <button class="btn-share" onclick="shareCard(event,${c.id})">Share</button>
+                    ${(() => {
+                      if (c.collection_id == null || typeof c.timestamp !== 'number') return '';
+                      const col = COLLECTIONS_BY_ID[c.collection_id];
+                      if (!col || !col.episode_url) return '';
+                      const url = buildTimestampedUrl(col.episode_url, c.timestamp);
+                      if (!url) return '';
+                      return `<a class="btn-listen" href="${url}" target="_blank" rel="noopener" onclick="event.stopPropagation()">↗ Listen</a>`;
+                    })()}
                   </div>
                 </div>
               </div>`;
@@ -4126,6 +4157,12 @@ function openEpisodeDrawer(collectionId) {
           </div>
           <div class="card-actions">
             <button class="btn-master" onclick="toggleEpMaster(event,${c.id})">${isMastered?'✓ VAULT':'⊕ VAULT'}</button>
+            ${(() => {
+              if (typeof c.timestamp !== 'number' || !col || !col.episode_url) return '';
+              const url = buildTimestampedUrl(col.episode_url, c.timestamp);
+              if (!url) return '';
+              return `<a class="btn-listen" href="${url}" target="_blank" rel="noopener" onclick="event.stopPropagation()">↗ Listen</a>`;
+            })()}
           </div>
         </div>
       </div>`;
@@ -4188,6 +4225,27 @@ function getYouTubeId(url) {
   } catch (e) {}
   return null;
 }
+
+// Build a deep link to the episode at a specific timestamp, with an 8-second pre-roll
+// buffer so the user lands a moment before the concept is discussed (avoids mid-sentence drops).
+// Currently handles YouTube. Future-proofed: add Spotify/Apple branches here when needed.
+function buildTimestampedUrl(episodeUrl, timestampSeconds) {
+  if (!episodeUrl || typeof timestampSeconds !== 'number' || timestampSeconds < 0) return null;
+  const offset = Math.max(0, timestampSeconds - 8);
+  try {
+    const u = new URL(episodeUrl);
+    if (u.hostname.includes('youtube.com') || u.hostname === 'youtu.be') {
+      // Strip any existing &t= and set fresh
+      u.searchParams.delete('t');
+      u.searchParams.set('t', offset + 's');
+      return u.toString();
+    }
+    // Unknown platform: return the URL untouched (button will still open the episode).
+    return episodeUrl;
+  } catch (e) {
+    return null;
+  }
+}
 function buildEpisodes() {
   const searchInput = document.getElementById('episodeSearch');
   const query = (searchInput && searchInput.value || '').trim().toLowerCase();
@@ -4203,7 +4261,12 @@ function buildEpisodes() {
       ].join(' ').toLowerCase();
       return haystack.includes(query);
     })
-    .sort((a, b) => new Date(b.created_date || 0) - new Date(a.created_date || 0));
+    .sort((a, b) => {
+      // Prefer aired_date (when the episode actually aired). Fall back to created_date (when we processed it).
+      const dateA = a.aired_date || a.created_date || 0;
+      const dateB = b.aired_date || b.created_date || 0;
+      return new Date(dateB) - new Date(dateA);
+    });
 
   const section = document.getElementById('episodesSection');
   const row = document.getElementById('episodesRow');
