@@ -2726,5 +2726,16 @@
     "analogy": "Your company gives a bonus to people who bike to work. Someone complains they're being punished for driving. No — you're just not getting the bonus. The absence of a reward isn't a penalty.",
     "prompt": "Think of a policy you opposed recently. Was it genuinely harmful, or did you just not receive the benefit? What would change if you reframed it?",
     "collection_id": 14
+  },
+  {
+    "id": 251,
+    "term": "Recursive Red Pill Learning",
+    "category": "thinking",
+    "source": "cw",
+    "hook": "Algorithms train you on the most extreme stories, not the most common.",
+    "plain": "A feedback loop where the most outrageous, unrepresentative stories dominate your information diet because they generate the most engagement. You start believing rare disasters are the norm because those are the only examples you ever see. Your worldview becomes a highlight reel of catastrophes that don't reflect base rates.",
+    "analogy": "If you only watched plane crash documentaries, you'd think flying was suicide. The 50,000 safe flights that day don't get coverage. You're building a mental model of the world from the outliers.",
+    "prompt": "Name one belief you hold about relationships or politics. Where did you learn it — from life, or from the internet's greatest hits reel?",
+    "collection_id": 14
   }
 ]
