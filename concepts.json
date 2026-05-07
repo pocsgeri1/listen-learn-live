@@ -2682,5 +2682,16 @@
     "analogy": "An actor who's terrified of being seen off-stage. On camera, with the right lighting and script, they're confident. But run into them at the grocery store and they're mortified. The persona only works under controlled conditions.",
     "prompt": "When was the last time you were genuinely comfortable being seen without preparation? What's changed since then?",
     "collection_id": 14
+  },
+  {
+    "id": 247,
+    "term": "Platform Feminization",
+    "category": "society",
+    "source": "cw",
+    "hook": "Social media makes everyone act like insecure teenage girls — even men.",
+    "plain": "The phenomenon where online platforms reward behaviors traditionally associated with adolescent female social dynamics — rumination, reputation warfare, indirect aggression, performative emotion. Because physical confrontation is impossible online, everyone defaults to gossip, subtweets, and callout culture regardless of gender.",
+    "analogy": "You can't punch someone on Twitter, so even the toughest guy ends up using high school cafeteria tactics — spreading screenshots, rallying allies, destroying reputations. The medium reshapes the behavior.",
+    "prompt": "Think of the last online argument you saw. Could it have been resolved in 60 seconds face-to-face? What does the platform add — and what does it prevent?",
+    "collection_id": 14
   }
 ]
