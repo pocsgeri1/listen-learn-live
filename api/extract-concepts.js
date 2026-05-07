@@ -47,11 +47,16 @@ FOR EACH EXTRACTED CONCEPT, RETURN THIS EXACT JSON STRUCTURE:
     "conversation_value": [integer 1-10],
     "composite": [average of four above, one decimal place]
   },
-  "episode_ref": "[episode title and timestamp if identifiable]"
+  "episode_ref": "[episode title and timestamp if identifiable]",
+  "timestamp": [integer seconds from start of episode where this concept is discussed, or null if no timestamp marker is present in the transcript]
 }
 
 Leave "id" as null — the human reviewer assigns sequential IDs on approval.
 Do not output a "collection_id" field — it is assigned by the pipeline, not by you.
+
+TIMESTAMP EXTRACTION
+--------------------
+Glasp-exported transcripts contain inline timestamps in formats like (23:14), [00:23:14], 23:14, or 1:23:45. When you identify the moment a concept is discussed, convert that timestamp to total seconds and emit it as the integer "timestamp" field. Examples: 23:14 → 1394, 1:23:45 → 5025, 0:42 → 42. If no timestamp marker is near the concept in the transcript, emit null.
 
 SCORING RUBRIC
 --------------
@@ -193,7 +198,7 @@ export default async function handler(req, res) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
 
-  const { intakeRecordId, episodeTitle, host, episodeUrl, duration, transcript, people, podcast } = req.body || {};
+  const { intakeRecordId, episodeTitle, host, episodeUrl, duration, transcript, people, podcast, airedDate } = req.body || {};
 
   if (!intakeRecordId || !transcript) {
     return res.status(400).json({ error: 'Missing intakeRecordId or transcript' });
@@ -226,6 +231,7 @@ export default async function handler(req, res) {
         people,
         episodeUrl,
         podcast,
+        airedDate,
       });
     } catch (err) {
       await updateIntakeStatus(intakeRecordId, 'FAILED', 0, `Collection creation failed: ${String(err.message || err).slice(0, 500)}`);
@@ -342,6 +348,7 @@ async function createConceptRow(concept, episodeRefLabel, episodeUrl, collection
     'Analogy': concept.analogy,
     'Prompt': concept.prompt,
     'Episode Reference': concept.episode_ref || episodeRefLabel,
+    'Timestamp': (typeof concept.timestamp === 'number' && concept.timestamp >= 0) ? concept.timestamp : null,
   };
 
   if (episodeUrl) fields['Episode URL'] = episodeUrl;
@@ -411,7 +418,7 @@ const COLLECTIONS_REPO_NAME = 'listen-learn-live';
 const COLLECTIONS_BRANCH = 'main';
 const COLLECTIONS_PATH = 'collections.json';
 
-async function createEpisodeCollection({ episodeTitle, people, episodeUrl, podcast }) {
+async function createEpisodeCollection({ episodeTitle, people, episodeUrl, podcast, airedDate }) {
   const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
   if (!GITHUB_TOKEN) {
     throw new Error('GITHUB_TOKEN env var missing');
@@ -472,6 +479,7 @@ async function createEpisodeCollection({ episodeTitle, people, episodeUrl, podca
     podcast: podcast ? String(podcast).slice(0, 100) : 'Other',
     people: peopleArray,
     episode_url: episodeUrl || '',
+    aired_date: airedDate || null,
     created_date: today,
   };
 
