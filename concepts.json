@@ -2528,5 +2528,16 @@
     "analogy": "You spent years building the perfect kitchen — marble counters, chef's knives, Instagram-ready. But you never learned to cook, and you eat alone every night from delivery boxes. The kitchen looks great in photos.",
     "prompt": "List three things you're optimizing for right now. Which one would you still care about if no one ever saw the result?",
     "collection_id": 14
+  },
+  {
+    "id": 233,
+    "term": "Criticism-creation Balance Sheet",
+    "category": "thinking",
+    "source": "cw",
+    "hook": "If you criticize more than you create, you're a net drain.",
+    "plain": "A mental framework for evaluating whether someone is contributing value or extracting it. If your output is overwhelmingly critique — quote tweets, takedowns, debunking — without producing original work, you're consuming the system's energy without replenishing it. Criticism is cheap; creation is costly.",
+    "analogy": "It's like being the person at the potluck who only ever points out what's wrong with other people's dishes but never brings anything themselves. You're still eating, but you're not feeding anyone.",
+    "prompt": "Scroll through your last 20 social media posts. How many are original contributions versus reactions to someone else's work? What does the ratio say?",
+    "collection_id": 14
   }
 ]
