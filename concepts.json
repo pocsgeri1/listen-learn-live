@@ -2501,10 +2501,21 @@
     "term": "One Conversation Isn't Enough",
     "category": "relationships",
     "source": "cw",
-    "hook": "Stop putting all the pressure on a single moment — spread it out.", 
+    "hook": "Stop putting all the pressure on a single moment — spread it out.",
     "plain": "People often treat one difficult conversation like a make-or-break event, which ramps up anxiety and increases the chance of saying the wrong thing. In reality, meaningful topics need multiple conversations over time. Framing it as 'Let's talk about this over the next few weeks' lowers the stakes and makes honesty easier.",
     "analogy": "Instead of ambushing your partner with 'We need to decide our future right now,' say, 'I'd like to have some conversations about our future over the next month. Can we start this weekend?' The pressure drops instantly.",
     "prompt": "Name one topic you've been avoiding because it feels too big for one conversation. How would you break it into three smaller conversations spread across a month?",
     "collection_id": 13
+  },
+  {
+    "id": 231,
+    "term": "Reputation Management",
+    "category": "identity",
+    "source": "cw",
+    "hook": "Teenage life becomes constant reputation defense — every silence judges you.",
+    "plain": "The condition where you treat every moment of visibility as a potential threat to how others perceive you. You're not living experiences — you're preemptively defending against criticism that hasn't even been voiced yet. This becomes exhausting because you never get to just exist; you're always on trial.",
+    "analogy": "Imagine walking through your office believing everyone's drafting a performance review of you in real time. Even going to get coffee becomes a calculated move — do I look lazy? Too social? You never relax because the jury is always deliberating.",
+    "prompt": "Name one decision you made this week where you chose what looks defensible over what you actually wanted. What would change if no one was scoring you?",
+    "collection_id": 14
   }
 ]
