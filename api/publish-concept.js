@@ -24,6 +24,7 @@ export default async function handler(req, res) {
     analogy,
     prompt,
     collection_id,
+    timestamp,
   } = req.body || {};
 
   // Validate required fields
@@ -129,6 +130,16 @@ export default async function handler(req, res) {
       }
     }
 
+    // Normalize timestamp: accept number, null, undefined, empty string.
+    // Anything that isn't a non-negative integer becomes null.
+    let normalizedTimestamp = null;
+    if (timestamp !== undefined && timestamp !== null && timestamp !== '') {
+      const parsedTs = parseInt(timestamp, 10);
+      if (Number.isInteger(parsedTs) && parsedTs >= 0) {
+        normalizedTimestamp = parsedTs;
+      }
+    }
+
     const newConcept = {
       id: nextId,
       term: term.trim(),
@@ -139,6 +150,7 @@ export default async function handler(req, res) {
       analogy: analogy.trim(),
       prompt: prompt.trim(),
       collection_id: normalizedCollectionId,
+      timestamp: normalizedTimestamp,
     };
 
     // Step 5: append and re-serialize with 2-space indentation to match existing file
