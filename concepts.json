@@ -2737,5 +2737,16 @@
     "analogy": "If you only watched plane crash documentaries, you'd think flying was suicide. The 50,000 safe flights that day don't get coverage. You're building a mental model of the world from the outliers.",
     "prompt": "Name one belief you hold about relationships or politics. Where did you learn it — from life, or from the internet's greatest hits reel?",
     "collection_id": 14
+  },
+  {
+    "id": 252,
+    "term": "Everything Drags to Its Extreme",
+    "category": "tech-ai",
+    "source": "cw",
+    "hook": "Algorithms don't show balance — they show the most deranged endpoint.",
+    "plain": "A fundamental property of engagement-driven platforms: they don't surface the median or the reasonable. They surface the most provocative, extreme version of every trend because that's what keeps eyes on screens. If you engage with fitness content, you'll end up at eating disorders. If you engage with politics, you'll end up at radicalization.",
+    "analogy": "You casually mention you like spicy food, and suddenly every restaurant recommendation is ghost pepper challenges. The algorithm doesn't know moderation — it only knows 'more.'",
+    "prompt": "Pick one topic you've googled or watched videos about this month. Now search it again and see where the rabbit hole leads in five clicks. Would you recommend that endpoint to a friend?",
+    "collection_id": 14
   }
 ]
