@@ -2748,5 +2748,16 @@
     "analogy": "You casually mention you like spicy food, and suddenly every restaurant recommendation is ghost pepper challenges. The algorithm doesn't know moderation — it only knows 'more.'",
     "prompt": "Pick one topic you've googled or watched videos about this month. Now search it again and see where the rabbit hole leads in five clicks. Would you recommend that endpoint to a friend?",
     "collection_id": 14
+  },
+  {
+    "id": 253,
+    "term": "Simulation Substitution",
+    "category": "psychology",
+    "source": "cw",
+    "hook": "YouTube friends feel real enough to stop you getting lonely enough.",
+    "plain": "When digital imitations of human needs — parasocial relationships, curated advice, performative empathy — are just satisfying enough to prevent you from seeking the real thing. You're not getting what you need, but you're getting enough of a facsimile that you don't feel the urgency to change. The pain stays low-grade and chronic.",
+    "analogy": "You're drinking diet soda when you're dehydrated. It tastes like the thing, tricks your brain briefly, but your cells are still screaming for water. You just don't notice because the craving got muted.",
+    "prompt": "What's one relationship you're maintaining online that you wouldn't bother with if you had to show up in person?",
+    "collection_id": 14
   }
 ]
