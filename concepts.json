@@ -2594,5 +2594,16 @@
     "analogy": "You start donating to one cause, then the algorithm shows you ten more. Soon you're convinced that anyone not as outraged as you is complicit. You're not more moral — you're just more exhausted.",
     "prompt": "What's one cause you care deeply about online but have done nothing about offline in the past month? What's the gap?",
     "collection_id": 14
+  },
+  {
+    "id": 239,
+    "term": "Product, Not Person",
+    "category": "identity",
+    "source": "cw",
+    "hook": "You're optimizing a brand, not living a life — motherhood's bad ROI.",
+    "plain": "The psychological state where you view yourself as something to be marketed, refined, and sold rather than a human being having experiences. Decisions are filtered through 'What does this do for my value?' instead of 'Do I want this?' Motherhood, aging, failure — anything that can't be aestheticized or monetized becomes unthinkable.",
+    "analogy": "A tech startup wouldn't intentionally take on something messy, unpredictable, and resource-draining with no clear exit strategy. That's how you're treating your own life — every choice is a pitch deck to invisible investors.",
+    "prompt": "What's one thing you want to do that would make you less valuable on paper but more alive in practice?",
+    "collection_id": 14
   }
 ]
