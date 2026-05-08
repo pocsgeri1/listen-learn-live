@@ -2806,5 +2806,17 @@
     "prompt": "If aging is just gene switches in the wrong position, what behaviors today might be scrambling them fastest for you?",
     "collection_id": 15,
     "timestamp": 2757
+  },
+  {
+    "id": 258,
+    "term": "Edge Ai",
+    "category": "tech-ai",
+    "source": "cw",
+    "hook": "AI runs on your laptop now — data centers aren't the chokepoint anymore.",
+    "plain": "Early AI required massive cloud infrastructure, leading to fears that a few companies would control all intelligence. But AI models are now small enough to run locally on consumer hardware. You can download an open-source model, run it on a Mac at home, and get performance that rivaled enterprise systems just months ago. This shift breaks the centralization narrative.",
+    "analogy": "Like when computing moved from needing a mainframe you rented by the hour to having a desktop at home that did more.",
+    "prompt": "If AI can run on your phone without needing the cloud, what changes about how you'd use it daily?",
+    "collection_id": 15,
+    "timestamp": 490
   }
 ]
