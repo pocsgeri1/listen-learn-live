@@ -2794,5 +2794,17 @@
     "prompt": "If you could skip the randomness in one area of your life and just copy the best outcome every time, what would it be?",
     "collection_id": 15,
     "timestamp": 5012
+  },
+  {
+    "id": 257,
+    "term": "Epigenetic Aging",
+    "category": "health",
+    "source": "cw",
+    "hook": "DNA breaks move gene switches wrong — that's aging, not wear and tear.",
+    "plain": "Every cell has the same DNA, but different genes are turned on or off (like molecular switches) to make a heart cell different from a skin cell. As you age, DNA gets damaged from radiation, stress, and bad habits. When your body repairs the DNA, those on/off switches sometimes get moved to the wrong place. Genes that should be off turn on; genes that should be on turn off. That's aging: cells forgetting how to do their job because the instruction manual got scrambled.",
+    "analogy": "Like a recipe book where someone moved all the page markers — the instructions are still there, but you keep opening to the wrong recipe.",
+    "prompt": "If aging is just gene switches in the wrong position, what behaviors today might be scrambling them fastest for you?",
+    "collection_id": 15,
+    "timestamp": 2757
   }
 ]
