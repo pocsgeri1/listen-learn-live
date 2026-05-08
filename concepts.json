@@ -2962,5 +2962,17 @@
     "prompt": "Which cause do you support that you'd reconsider if it personally cost you $10,000 a year?",
     "collection_id": 15,
     "timestamp": 6751
+  },
+  {
+    "id": 271,
+    "term": "Human-machine Interface",
+    "category": "tech-ai",
+    "source": "cw",
+    "hook": "Soft neural connection, no brain surgery — tap AI like Neo learning helicopters.",
+    "plain": "Instead of wires inserted into your brain, future interfaces might use thin devices on your retina or near your ear that transmit signals to your brain non-invasively. You could think a question and receive an answer, or think 'I want to fly a helicopter' and instantly access the skill. It's not about being controlled by AI; it's about accessing super-intelligence as a tool whenever you need it.",
+    "analogy": "Like typing a question into Google, but the answer appears in your mind without looking at a screen.",
+    "prompt": "If you could access any skill or knowledge instantly by thinking about it, what would you learn first?",
+    "collection_id": 15,
+    "timestamp": 3719
   }
 ]
