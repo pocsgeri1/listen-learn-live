@@ -2926,5 +2926,17 @@
     "prompt": "If you owned a 24/7 robot that could make or build anything, what business would you run from your garage?",
     "collection_id": 15,
     "timestamp": 836
+  },
+  {
+    "id": 268,
+    "term": "Fusion Energy Breakthrough",
+    "category": "science",
+    "source": "cw",
+    "hook": "AI solved plasma control — 30-minute stable fusion, energy cost drops 100x.",
+    "plain": "Fusion has been 'a decade away' for 70 years. The challenge was stabilizing superheated plasma long enough to extract energy. AI recently learned how to control the magnetic fields dynamically, and systems in China now hold plasma stable for 30 minutes. If this scales, energy costs could drop to 1 cent per kilowatt-hour — 10x to 40x cheaper than today — unlocking massive productivity and economic growth.",
+    "analogy": "Like if your electric bill went from $150 a month to $5, and suddenly running your AC, heating, and charging your car felt free.",
+    "prompt": "If electricity cost nearly nothing, what would you do more of that feels expensive today?",
+    "collection_id": 15,
+    "timestamp": 1628
   }
 ]
