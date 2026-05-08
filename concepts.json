@@ -2830,5 +2830,17 @@
     "prompt": "If you got paid to train a robot by doing everyday tasks, which skill would you want to monetize?",
     "collection_id": 15,
     "timestamp": 902
+  },
+  {
+    "id": 260,
+    "term": "Lunar Mass Driver",
+    "category": "science",
+    "source": "cw",
+    "hook": "Electric rail gun shoots material off the moon — cheaper than rockets.",
+    "plain": "Instead of using rockets to move material off the moon, you build a 9-kilometer magnetic rail track. Objects accelerate down the track and reach escape velocity in 4.5 seconds, flying toward Mars or Earth. Because the moon has no atmosphere and 1/6th Earth's gravity, this is vastly more energy-efficient than launching from Earth. You could power it with solar panels and send tons of material into space cheaply.",
+    "analogy": "Like using a slingshot to throw a baseball instead of carrying it across the country by hand — same destination, fraction of the effort.",
+    "prompt": "If launching material into space became 100x cheaper, what would you want built on the moon or Mars first?",
+    "collection_id": 15,
+    "timestamp": 1644
   }
 ]
