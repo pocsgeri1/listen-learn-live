@@ -2770,5 +2770,17 @@
     "analogy": "It's like a friend group that only meets to complain about their ex-boss. Once the boss leaves, they realize they have nothing else to talk about. The friendship was hate cosplaying as connection.",
     "prompt": "Think of your closest online community. If the thing you all oppose suddenly vanished, would the group still exist?",
     "collection_id": 14
+  },
+  {
+    "id": 255,
+    "term": "Existential Threat Bias",
+    "category": "psychology",
+    "source": "cw",
+    "hook": "Humans are wired to see predators — every generation invents its apocalypse.",
+    "plain": "People are programmed for survival, which makes them constantly scan for existential threats even when conditions are improving. Every era has had its version of 'the world is ending' — plague, famine, population bombs, climate collapse, AI takeover. Historically, innovation solved each crisis, but our brains don't update fast enough to recognize progress.",
+    "analogy": "It's like someone who grew up poor still hoarding canned goods decades after becoming wealthy — the survival instinct outlasts the actual threat.",
+    "prompt": "What current fear do you hold that might look as overblown in 20 years as Y2K panic does now?",
+    "collection_id": 15,
+    "timestamp": 0
   }
 ]
