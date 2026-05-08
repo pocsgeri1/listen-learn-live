@@ -2902,5 +2902,17 @@
     "prompt": "If the government could inventory everything you own and tax it annually, what's the first thing you'd think about hiding or selling?",
     "collection_id": 15,
     "timestamp": 5565
+  },
+  {
+    "id": 266,
+    "term": "Embryo Selection",
+    "category": "health",
+    "source": "cw",
+    "hook": "Pick healthiest embryo from IVF harvest — already done, now with genetic scoring.",
+    "plain": "When someone does IVF, a doctor already looks at embryos under a microscope and picks the one that looks healthiest. New tech sequences the DNA of each embryo and scores them for traits like disease risk, immune function, IQ, and psychological traits. You're not changing anything; you're just picking from the embryos that already exist, using better information than visual inspection.",
+    "analogy": "Like choosing the ripest apple from a basket instead of just grabbing one blindly.",
+    "prompt": "If you could see genetic scores for 10 embryos before selecting one, which trait would matter most to you?",
+    "collection_id": 15,
+    "timestamp": 4905
   }
 ]
