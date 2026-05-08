@@ -2854,5 +2854,17 @@
     "prompt": "If you could improve one aspect of your cellular function to feel 10 years younger, what would it be?",
     "collection_id": 15,
     "timestamp": 2238
+  },
+  {
+    "id": 262,
+    "term": "Technology Diffusion",
+    "category": "business",
+    "source": "cw",
+    "hook": "New tech starts centralized, then commoditizes — monopolies always break apart.",
+    "plain": "Every breakthrough technology begins with a small group controlling it, leading people to fear monopolies. But historically, those advantages erode as the tech spreads and becomes cheaper. Early internet required Cisco switches; people feared Cisco would control everything. Now switches are commoditized. Same pattern repeating with AI — what feels monopolistic today becomes ubiquitous tomorrow.",
+    "analogy": "Owning the first car factory felt like owning transportation itself. A generation later, every town had mechanics and highways and motels — the value diffused into a thousand new industries.",
+    "prompt": "What tech do you assume only big companies can use right now — that you'll probably be using casually in three years?",
+    "collection_id": 15,
+    "timestamp": 422
   }
 ]
