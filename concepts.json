@@ -2818,5 +2818,17 @@
     "prompt": "If AI can run on your phone without needing the cloud, what changes about how you'd use it daily?",
     "collection_id": 15,
     "timestamp": 490
+  },
+  {
+    "id": 259,
+    "term": "Arm Farms",
+    "category": "tech-ai",
+    "source": "cw",
+    "hook": "Humans train robots by doing chores on camera — GoPros to teach folding.",
+    "plain": "Engineers in India strap GoPros to their heads and do mundane tasks like folding laundry or packing boxes. The footage trains AI models that control humanoid robots. It's the same approach Tesla used for self-driving: capture the best human performance, use it to train the machine. This is temporary — eventually robots learn from other robots — but for now, humans are the training data.",
+    "analogy": "Like how your mom showed you how to fold a shirt once, but instead of remembering, you filmed it and now a robot watches the video on repeat.",
+    "prompt": "If you got paid to train a robot by doing everyday tasks, which skill would you want to monetize?",
+    "collection_id": 15,
+    "timestamp": 902
   }
 ]
