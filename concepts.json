@@ -2914,5 +2914,17 @@
     "prompt": "If you could see genetic scores for 10 embryos before selecting one, which trait would matter most to you?",
     "collection_id": 15,
     "timestamp": 4905
+  },
+  {
+    "id": 267,
+    "term": "Robot Employee Revolution",
+    "category": "tech-ai",
+    "source": "cw",
+    "hook": "Everyone gets a robot employee — not corporations, individuals build businesses.",
+    "plain": "Most people think AI robots will be owned by corporations to replace workers. But what if everyone can buy a robot that works 24/7 in their garage? You tell it to build custom bicycles, it orders parts, assembles them, ships them. Suddenly anyone can run a manufacturing business from home like people run Etsy stores today.",
+    "analogy": "Like when the internet let anyone open a Shopify store instead of needing a brick-and-mortar retail lease and employees.",
+    "prompt": "If you owned a 24/7 robot that could make or build anything, what business would you run from your garage?",
+    "collection_id": 15,
+    "timestamp": 836
   }
 ]
