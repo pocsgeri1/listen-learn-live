@@ -3022,5 +3022,17 @@
     "prompt": "Which disease feels untouchable today that you'd bet gets solved within your lifetime?",
     "collection_id": 15,
     "timestamp": 605
+  },
+  {
+    "id": 276,
+    "term": "Yamanaka Factors (Age Reversal)",
+    "category": "health",
+    "source": "cw",
+    "hook": "Four proteins reset cells to youth — mice lived 250+ years, blindness reversed.",
+    "plain": "In 2006, a scientist discovered four proteins that reset a cell's epigenetic markers, turning any cell into a stem cell. Later, researchers found that using smaller doses didn't reset the cell completely — it just moved the markers back to where they're supposed to be, making the cell 'young' again. Mice treated this way lived the equivalent of 200+ human years. It's being tested in humans now for diseases like blindness and arthritis.",
+    "analogy": "Like hitting 'restore factory settings' on your phone, but only resetting the buggy apps, not wiping everything.",
+    "prompt": "If you could reset one part of your body to how it was at age 25, what would you pick?",
+    "collection_id": 15,
+    "timestamp": 2852
   }
 ]
