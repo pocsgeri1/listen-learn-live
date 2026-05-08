@@ -2890,5 +2890,17 @@
     "prompt": "Name one resource you assume is scarce that future tech might make absurdly abundant.",
     "collection_id": 15,
     "timestamp": 42
+  },
+  {
+    "id": 265,
+    "term": "California Wealth Tax",
+    "category": "finance",
+    "source": "cw",
+    "hook": "Tax private property annually — precedent breaks, 51% can vote for 49%.",
+    "plain": "California proposed a tax on net worth, not income. That means taxing assets you already own and paid taxes on. Even if it starts at 1% for billionaires, it sets a precedent: the government can assess everything you own and take a cut every year. Over time, thresholds drop and rates rise. Eventually, the majority can vote to take wealth from the minority. Private property rights erode.",
+    "analogy": "Like if your neighbors voted to take your car because they need one and you have two, even though you bought it with money you already paid taxes on.",
+    "prompt": "If the government could inventory everything you own and tax it annually, what's the first thing you'd think about hiding or selling?",
+    "collection_id": 15,
+    "timestamp": 5565
   }
 ]
