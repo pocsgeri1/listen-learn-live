@@ -647,7 +647,7 @@
     height: 62px;
     border-color: rgba(255,255,255,0.05);
   }
-
+  body.drawer-open nav { display: none; }
   .nav-logo {
     font-family: 'Playfair Display', serif;
     font-size: 1.365rem;
@@ -4171,12 +4171,14 @@ function openEpisodeDrawer(collectionId) {
   document.getElementById('epBackdrop').classList.add('open');
   document.getElementById('epDrawer').classList.add('open');
   document.body.style.overflow = 'hidden';
+  document.body.classList.add('drawer-open');
 }
 
 function closeEpisodeDrawer() {
   document.getElementById('epBackdrop').classList.remove('open');
   document.getElementById('epDrawer').classList.remove('open');
   document.body.style.overflow = '';
+  document.body.classList.remove('drawer-open');
 }
 
 function toggleEpCard(id) {
