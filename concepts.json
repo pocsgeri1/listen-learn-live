@@ -2866,5 +2866,17 @@
     "prompt": "What tech do you assume only big companies can use right now — that you'll probably be using casually in three years?",
     "collection_id": 15,
     "timestamp": 422
+  },
+  {
+    "id": 263,
+    "term": "Promise Inflation Trap",
+    "category": "society",
+    "source": "cw",
+    "hook": "Politicians promise more each cycle — delivery lags, resentment compounds, system breaks.",
+    "plain": "Democracies incentivize politicians to promise benefits they can't fund. Each election cycle, they promise more to win votes. When promises aren't met, people feel betrayed and demand bigger promises next time. This compounds until the system can't deliver, trust collapses, and the majority votes to take from the minority to pay for the promises.",
+    "analogy": "Like a parent promising their kid increasingly elaborate birthday parties every year until they can't afford it, and the kid resents them for breaking promises.",
+    "prompt": "Which political promise made to your generation do you think will never actually be delivered?",
+    "collection_id": 15,
+    "timestamp": 4853
   }
 ]
