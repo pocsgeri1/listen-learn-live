@@ -2782,5 +2782,17 @@
     "prompt": "What current fear do you hold that might look as overblown in 20 years as Y2K panic does now?",
     "collection_id": 15,
     "timestamp": 0
+  },
+  {
+    "id": 256,
+    "term": "Meiosis Manipulation",
+    "category": "science",
+    "source": "cw",
+    "hook": "Turn off gene shuffling — make seed from plants that never had it.",
+    "plain": "Most crops can't produce consistent seed because of meiosis, the process that randomly shuffles genes when making sperm and egg. Scientists figured out how to turn off meiosis so both chromosomes go into every seed, making all offspring identical. This lets farmers plant seed instead of chopping up plants, reduces costs, increases yields, and allows faster crop improvement every generation.",
+    "analogy": "Like making photocopies of the best plant instead of rolling dice and hoping the next generation turns out good.",
+    "prompt": "If you could skip the randomness in one area of your life and just copy the best outcome every time, what would it be?",
+    "collection_id": 15,
+    "timestamp": 5012
   }
 ]
