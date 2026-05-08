@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Listen. Learn. Live. — Master the concepts that shape intelligent conversation</title>
+<title>Epistemic. — Master the concepts that shape intelligent conversation</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js"></script>
@@ -3888,7 +3888,7 @@ function nativeShare() {
   const canvas = document.getElementById('shareCanvas');
   const c = CONCEPTS.find(x => x.id === _shareConceptId);
   if (!c) return;
-  const shareText = `Just learnt this: "${c.term}"\n\n${c.hook}\n\nThe full breakdown — analogy, meaning, how to use it — is on Listen. Learn. Live. Worth 3 minutes of your day 👇\nhttps://listen-learn-live.vercel.app`;
+  const shareText = `New concept I'm sitting with: "${c.term}"\n\n${c.hook}\n\nFull breakdown — analogy, meaning, how to actually use it — on Epistemic.\nhttps://epistemic.live`;
   canvas.toBlob(blob => {
     const file = new File([blob], 'concept.png', { type: 'image/png' });
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
@@ -4031,12 +4031,12 @@ function generateShareImage(c) {
 
   ctx.font = 'italic 36px Georgia, serif';
   ctx.fillStyle = '#e8d5a3';
-  ctx.fillText('Listen. Learn. Live.', PAD, H - 44);
+  ctx.fillText('Epistemic.', PAD, H - 44);
 
   ctx.font = '400 24px monospace';
   ctx.fillStyle = '#555';
   ctx.textAlign = 'right';
-  ctx.fillText('listen-learn-live.vercel.app', W - PAD, H - 44);
+  ctx.fillText('epistemic.live', W - PAD, H - 44);
   ctx.textAlign = 'left';
 }
 
