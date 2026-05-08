@@ -2938,5 +2938,17 @@
     "prompt": "If electricity cost nearly nothing, what would you do more of that feels expensive today?",
     "collection_id": 15,
     "timestamp": 1628
+  },
+  {
+    "id": 269,
+    "term": "Agency Crisis",
+    "category": "psychology",
+    "source": "cw",
+    "hook": "Social systems told you what's next — automation forces self-direction.",
+    "plain": "For generations, systems gave people a clear path: go to school, get a degree, get a job, retire. Agency — the spark to create your own path — was programmed out of most people. AI and automation break that conveyor belt. The future belongs to people who can self-start, spot opportunities, and act without being told what to do next. That shift is terrifying for those who've never practiced it.",
+    "analogy": "Like someone who always followed GPS suddenly needing to navigate by landmarks and instinct when the satellites go down.",
+    "prompt": "When's the last time you pursued something because you wanted to, not because it was the next expected step?",
+    "collection_id": 15,
+    "timestamp": 1068
   }
 ]
