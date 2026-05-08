@@ -647,7 +647,20 @@
     height: 62px;
     border-color: rgba(255,255,255,0.05);
   }
-  body.drawer-open nav { display: none; }
+  body.drawer-open nav,
+  body.drawer-open .hero,
+  body.drawer-open .episodes-section,
+  body.drawer-open .app > .app-controls,
+  body.drawer-open #netflixRows,
+  body.drawer-open .newsletter,
+  body.drawer-open .divider,
+  body.drawer-open .daily-goal {
+    visibility: hidden;
+  }
+  body.drawer-open .ep-drawer-backdrop,
+  body.drawer-open .ep-drawer {
+    visibility: visible;
+  }
   .nav-logo {
     font-family: 'Playfair Display', serif;
     font-size: 1.365rem;
