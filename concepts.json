@@ -2986,5 +2986,17 @@
     "prompt": "If sticking around another 10 years meant access to tech that could double your lifespan, what's worth changing today to get there?",
     "collection_id": 15,
     "timestamp": 3307
+  },
+  {
+    "id": 273,
+    "term": "Federal Student Loan Trap",
+    "category": "finance",
+    "source": "cw",
+    "hook": "Government loans any amount, any degree, any school — tuition explodes, no market check.",
+    "plain": "The federal government will loan students unlimited money for any degree at any college, with no underwriting. Colleges realized they could charge whatever they wanted because students would just borrow more. Tuition skyrocketed from $10k to $60k+ per year. Students graduated with debt they can't discharge in bankruptcy, for degrees that don't pay enough to cover the loans. The system creates debt slaves.",
+    "analogy": "Like if banks gave anyone a million-dollar mortgage with no income check, and then every house in the neighborhood suddenly cost a million dollars.",
+    "prompt": "If student loans required the same underwriting as a car loan, which degrees would stop being funded immediately?",
+    "collection_id": 15,
+    "timestamp": 6515
   }
 ]
