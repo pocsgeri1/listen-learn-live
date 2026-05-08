@@ -3010,5 +3010,17 @@
     "prompt": "If machines can improve themselves faster than humans can guide them, where does human judgment still matter?",
     "collection_id": 15,
     "timestamp": 541
+  },
+  {
+    "id": 275,
+    "term": "Car-t Therapy",
+    "category": "health",
+    "source": "cw",
+    "hook": "Program immune cells to hunt cancer — cures blood cancers, costs dropped 100x.",
+    "plain": "Doctors take T-cells out of your body, genetically program them to recognize a cancer protein, put them back in, and they hunt down cancer cells with near-100% success in blood cancers. Initially cost millions per treatment. Now costs are dropping toward tens of thousands as the process scales. A whole disease category could vanish this decade.",
+    "analogy": "Like giving your immune system a wanted poster with the criminal's face and GPS coordinates, then letting it do the arrest.",
+    "prompt": "Which disease feels untouchable today that you'd bet gets solved within your lifetime?",
+    "collection_id": 15,
+    "timestamp": 605
   }
 ]
