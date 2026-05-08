@@ -2878,5 +2878,17 @@
     "prompt": "Which political promise made to your generation do you think will never actually be delivered?",
     "collection_id": 15,
     "timestamp": 4853
+  },
+  {
+    "id": 264,
+    "term": "Haber-bosch Process",
+    "category": "science",
+    "source": "cw",
+    "hook": "Nitrogen from air became fertilizer — population skyrocketed, starvation crisis solved.",
+    "plain": "In the late 1800s, the world faced mass starvation because fertilizer came from bird droppings on South American islands, and those deposits were running out. Scientists figured out how to compress atmospheric nitrogen and turn it into fertilizer. Overnight, the existential threat vanished and global population exploded because food production scaled exponentially.",
+    "analogy": "Like if someone told you the grid was about to collapse, then someone invented a battery that pulls infinite power from static electricity in the air.",
+    "prompt": "Name one resource you assume is scarce that future tech might make absurdly abundant.",
+    "collection_id": 15,
+    "timestamp": 42
   }
 ]
