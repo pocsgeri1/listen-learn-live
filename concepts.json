@@ -2998,5 +2998,17 @@
     "prompt": "If student loans required the same underwriting as a car loan, which degrees would stop being funded immediately?",
     "collection_id": 15,
     "timestamp": 6515
+  },
+  {
+    "id": 274,
+    "term": "Auto Research Agents",
+    "category": "tech-ai",
+    "source": "cw",
+    "hook": "AI models improving themselves overnight — human researchers became optional fast.",
+    "plain": "Someone ran 30 AI agents on a home computer over a weekend. The agents talked to each other, scored improvements, and built a better language model than ChatGPT had recently. No human researchers involved. The implication: AI is now capable of bootstrapping itself into better versions without centralized labs.",
+    "analogy": "Like if you left 30 interns locked in a library overnight and they came out having written a better textbook than the professor assigned.",
+    "prompt": "If machines can improve themselves faster than humans can guide them, where does human judgment still matter?",
+    "collection_id": 15,
+    "timestamp": 541
   }
 ]
