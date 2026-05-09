@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- Epistemic Favicon — Direction 3: E. (E with trademark period) -->
+  <!-- Italic E shifted left to make room for a clear period at right baseline. -->
+  <rect width="64" height="64" rx="12" fill="#0d0d0d"/>
+  <g fill="#e8d5a3" transform="skewX(-12) translate(2 0)">
+    <rect x="14" y="16" width="24" height="5" rx="0.5"/>
+    <rect x="16" y="16" width="6" height="32"/>
+    <rect x="16" y="29" width="15" height="4" rx="0.5"/>
+    <rect x="12" y="44" width="28" height="5" rx="0.5"/>
+    <rect x="10" y="16" width="6" height="2"/>
+    <rect x="36" y="16" width="4" height="2"/>
+    <rect x="10" y="48" width="8" height="2"/>
+    <rect x="36" y="48" width="6" height="2"/>
+  </g>
+  <!-- The period — sized to match the brand wordmark proportion -->
+  <circle cx="50" cy="46" r="4" fill="#e8d5a3"/>
+</svg>
