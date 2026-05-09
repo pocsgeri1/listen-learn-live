@@ -3046,5 +3046,17 @@
     "prompt": "What's consuming your attention right now that you definitely won't remember in five years?",
     "collection_id": 500,
     "timestamp": 0
+  },
+  {
+    "id": 278,
+    "term": "Criticism Source Filter",
+    "category": "psychology",
+    "source": "core",
+    "hook": "Their opinion only matters if you'd actually want their life.",
+    "plain": "You internalize criticism from people whose judgment you wouldn't trust on any other topic. If you wouldn't ask them for career advice, relationship guidance, or creative direction, their negative assessment of you is just noise. The filter isn't about dismissing all feedback—it's about recognizing that unsolicited criticism usually says more about the critic than the criticized.",
+    "analogy": "Honestly, would you take parenting advice from your childless uncle who can't even keep a houseplant alive for three months?!",
+    "prompt": "Whose recent criticism actually stung you—and would you trade places with them?",
+    "collection_id": 500,
+    "timestamp": 15
   }
 ]
