@@ -300,6 +300,33 @@
     letter-spacing: 0.08em;
     margin-top: auto;
   }
+  /* ---- Short cards ---- */
+  .short-card {
+    flex: 0 0 220px; min-width: 220px;
+    border-radius: 10px; overflow: hidden;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    display: flex; flex-direction: column;
+    transition: border-color 0.2s;
+  }
+  .short-card:hover { border-color: var(--border-hover); }
+  .short-thumb { position: relative; width: 100%; height: 120px; overflow: hidden; background: var(--surface2); }
+  .short-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .short-thumb-fallback {
+    width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-serif); font-style: italic; font-size: 0.82rem; color: var(--muted);
+    padding: 12px; text-align: center;
+  }
+  .short-thumb-link { display: block; width: 100%; height: 100%; position: relative; }
+  .short-thumb-link img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.3s; }
+  .short-thumb-link:hover img { transform: scale(1.04); }
+  .short-thumb-play {
+    position: absolute; top: 6px; right: 8px;
+    font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent);
+    background: rgba(0,0,0,0.6); border-radius: 4px; padding: 2px 6px;
+  }
+  .short-card .card-front { padding: 12px 14px 10px; cursor: pointer; flex: 1; }
+  .short-card .card-back  { padding: 14px; }
 
   /* ============================================
      EPISODE DRAWER (bottom sheet overlay)
@@ -2897,6 +2924,7 @@
 
   <div class="nav-island" id="navIsland">
     <a class="nav-link" onclick="scrollToSection('episodesSection')">Episodes</a>
+    <a class="nav-link" onclick="scrollToSection('shortsSection')">Shorts</a>
     <a class="nav-link" onclick="scrollToSection('app')">Concepts</a>
     <a class="nav-link" onclick="toggleVault();scrollToSection('app')">Vault</a>
     <a class="nav-link" onclick="openCotdFromNav()">Today</a>
@@ -2918,6 +2946,7 @@
 <!-- MOBILE NAV MENU -->
 <div class="nav-mobile-menu" id="navMobileMenu">
   <button class="nav-mobile-link" onclick="scrollToSection('episodesSection');closeMobileNav()">◎ Episodes</button>
+  <button class="nav-mobile-link" onclick="scrollToSection('shortsSection');closeMobileNav()">◈ Shorts</button>
   <button class="nav-mobile-link" onclick="scrollToSection('app');closeMobileNav()">◈ Concepts</button>
   <button class="nav-mobile-link" onclick="toggleVault();scrollToSection('app');closeMobileNav()">◆ Vault</button>
   <button class="nav-mobile-link" onclick="openCotdFromNav();closeMobileNav()">◇ Today's Concept</button>
@@ -3105,6 +3134,17 @@
   <div id="episodesRow"></div>
 </div>
 <!-- /EPISODES SECTION -->
+
+<!-- SHORTS SECTION -->
+<div id="shortsSection" class="episodes-section" style="display:none; background: var(--bg);">
+  <div class="episodes-controls">
+    <div class="episodes-app-header">
+      <div class="app-title">Browse <em>shorts</em></div>
+    </div>
+  </div>
+  <div id="shortsRow"></div>
+</div>
+<!-- /SHORTS SECTION -->
 <!-- APP -->
 <section class="app" id="app">
   <div class="app-controls">
@@ -3828,7 +3868,7 @@ container.addEventListener('mousemove', (e) => {
     }
   });
 }
-function render() { buildCats(); initMagneticPills(); buildGrid(); updateProgress(); buildEpisodes(); }
+function render() { buildCats(); initMagneticPills(); buildGrid(); updateProgress(); buildEpisodes(); buildShorts(); }
 
 function toggleCard(id) {
   const el = document.getElementById('cc'+id);
@@ -4353,7 +4393,133 @@ function buildEpisodes() {
   // Update arrow visibility for each row
   document.querySelectorAll('.episodes-row').forEach(updateArrowVisibility);
 }
+function buildShorts() {
+  const shortCollections = Object.values(COLLECTIONS_BY_ID)
+    .filter(col => col.type === 'short')
+    .sort((a, b) => {
+      const dateA = a.aired_date || a.created_date || 0;
+      const dateB = b.aired_date || b.created_date || 0;
+      return new Date(dateB) - new Date(dateA);
+    });
 
+  const section = document.getElementById('shortsSection');
+  const row     = document.getElementById('shortsRow');
+  if (!section || !row) return;
+
+  if (shortCollections.length === 0) { section.style.display = 'none'; return; }
+  section.style.display = 'block';
+
+  // Group by creator (podcast field)
+  const grouped = {};
+  shortCollections.forEach(col => {
+    const name = col.podcast || 'Other';
+    if (!grouped[name]) grouped[name] = [];
+    grouped[name].push(col);
+  });
+
+  const creatorNames = Object.keys(grouped).sort((a, b) => {
+    const diff = grouped[b].length - grouped[a].length;
+    return diff !== 0 ? diff : a.localeCompare(b);
+  });
+
+  function renderShortCard(col) {
+    const colConcepts = CONCEPTS.filter(c => c.collection_id === col.id);
+    const ytId = getYouTubeId(col.episode_url);
+
+    // Single-concept: render inline concept card with thumbnail strip on top
+    if (colConcepts.length === 1) {
+      const c = colConcepts[0];
+      const color = CAT_COLOR[c.category] || '#e8d5a3';
+      const isMastered = mastered.has(c.id);
+      const ytUrl = col.episode_url || '#';
+      const thumbHtml = ytId
+        ? `<a href="${ytUrl}" target="_blank" rel="noopener" class="short-thumb-link" onclick="event.stopPropagation()">
+             <img src="https://img.youtube.com/vi/${ytId}/mqdefault.jpg"
+               onerror="this.onerror=null;this.src='https://img.youtube.com/vi/${ytId}/hqdefault.jpg'"
+               loading="lazy" alt="${col.title.trim()}">
+             <span class="short-thumb-play">↗</span>
+           </a>`
+        : `<div class="short-thumb-fallback">${col.title.trim()}</div>`;
+
+      return `
+        <div class="short-card concept-card${isMastered ? ' mastered' : ''}" style="--cat-color:${color}" id="sc${c.id}">
+          <div class="short-thumb">${thumbHtml}</div>
+          <div class="card-front" onclick="toggleShortCard(${c.id})">
+            <div class="card-meta">
+              <span class="card-cat">${(CATEGORIES.find(x => x.id === c.category)||{}).name||c.category}</span>
+              <span class="mastered-badge">✓ mastered</span>
+            </div>
+            <div class="card-term">${c.term}</div>
+            <div class="card-hook">${c.hook}</div>
+            <div class="card-expand-icon">+</div>
+          </div>
+          <div class="card-back">
+            <div class="back-section-label">What it means</div>
+            <div class="back-text">${c.plain}</div>
+            <div class="back-section-label">Analogy</div>
+            <div class="back-analogy">${c.analogy}</div>
+            <div class="back-section-label">Reflect & Use It</div>
+            <div class="back-prompt"><div class="prompt-icon">💬</div><p>${c.prompt}</p></div>
+            <div class="card-actions">
+              <button class="btn-master" onclick="toggleShortMaster(event,${c.id})">
+                ${isMastered ? '✓ VAULT' : '⊕ VAULT'}
+              </button>
+              ${col.episode_url ? `<a class="btn-listen" href="${col.episode_url}" target="_blank" rel="noopener" onclick="event.stopPropagation()">↗ Watch</a>` : ''}
+            </div>
+          </div>
+        </div>`;
+    }
+
+    // Multi-concept (2–3): episode-style card that opens the existing drawer
+    const conceptCount = colConcepts.length;
+    const thumbHtml = ytId
+      ? `<img src="https://img.youtube.com/vi/${ytId}/maxresdefault.jpg" loading="lazy"
+             onerror="this.onerror=null;this.src='https://img.youtube.com/vi/${ytId}/hqdefault.jpg'"
+             alt="${col.title.trim()}">`
+      : `<div class="episode-thumb-fallback"><div class="episode-thumb-fallback-title">${col.title.trim()}</div></div>`;
+
+    return `
+      <div class="episode-card" onclick="openEpisodeDrawer(${col.id})">
+        <div class="episode-thumb">${thumbHtml}</div>
+        <div class="episode-body">
+          <div class="episode-title">${col.title.trim()}</div>
+          <div class="episode-count">${conceptCount} concepts</div>
+        </div>
+      </div>`;
+  }
+
+  row.innerHTML = creatorNames.map(name => {
+    const cols = grouped[name];
+    const cards = cols.map(renderShortCard).join('');
+    return `
+      <div class="episodes-podcast-group">
+        <div class="episodes-podcast-heading">${name}<span>${cols.length} short${cols.length !== 1 ? 's' : ''}</span></div>
+        <div class="episodes-scroll-wrap">
+          <button class="scroll-arrow left" aria-label="Scroll left" onclick="scrollRow(this,-1)">‹</button>
+          <button class="scroll-arrow right" aria-label="Scroll right" onclick="scrollRow(this,1)">›</button>
+          <div class="episodes-fade-left"></div>
+          <div class="episodes-fade-right"></div>
+          <div class="episodes-row">${cards}</div>
+        </div>
+      </div>`;
+  }).join('');
+
+  initDragScroll();
+  document.querySelectorAll('#shortsRow .episodes-row').forEach(updateArrowVisibility);
+}
+
+function toggleShortCard(id) {
+  const card = document.getElementById('sc' + id);
+  if (card) card.classList.toggle('open');
+}
+
+function toggleShortMaster(e, id) {
+  e.stopPropagation();
+  if (mastered.has(id)) mastered.delete(id); else mastered.add(id);
+  saveMastered();
+  buildShorts();
+  updateProgress();
+}
 let vaultActive = false;
 function toggleVault() {
   vaultActive = !vaultActive;
