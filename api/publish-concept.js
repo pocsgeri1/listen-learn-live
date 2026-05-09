@@ -79,7 +79,7 @@ export default async function handler(req, res) {
       headers: {
         'Authorization': `token ${GITHUB_TOKEN}`,
         'Accept': 'application/vnd.github+json',
-        'User-Agent': 'LLL-Publisher',
+        'User-Agent': 'Epistemic-Publisher',
       },
     });
 
@@ -165,7 +165,7 @@ export default async function handler(req, res) {
         'Authorization': `token ${GITHUB_TOKEN}`,
         'Accept': 'application/vnd.github+json',
         'Content-Type': 'application/json',
-        'User-Agent': 'LLL-Publisher',
+        'User-Agent': 'Epistemic-Publisher',
       },
       body: JSON.stringify({
         message: `Add concept #${nextId}: ${newConcept.term}`,
