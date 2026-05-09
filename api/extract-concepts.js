@@ -11,7 +11,7 @@ export const config = {
 
 // ---- Extraction prompt (kept in-code for single-file deploy) --------------
 
-const EXTRACTION_PROMPT = `You are an expert knowledge curator for Listen. Learn. Live. — a platform that turns podcast content into structured learning cards for ambitious professionals, especially non-native English speakers navigating work in a second language.
+const EXTRACTION_PROMPT = `You are an expert knowledge curator for Epistemic — a platform that turns podcast content into structured learning cards for ambitious professionals, especially non-native English speakers navigating work in a second language.
 
 Your job is to extract the most valuable concepts, phrases, and frameworks from the podcast transcript below and format them as structured learning cards that will be reviewed by a human editor before publishing.
 
@@ -431,7 +431,7 @@ async function createEpisodeCollection({ episodeTitle, people, episodeUrl, podca
     headers: {
       'Authorization': `token ${GITHUB_TOKEN}`,
       'Accept': 'application/vnd.github+json',
-      'User-Agent': 'LLL-Publisher',
+      'User-Agent': 'Epistemic-Publisher',
     },
   });
   if (!getResp.ok) {
@@ -494,7 +494,7 @@ async function createEpisodeCollection({ episodeTitle, people, episodeUrl, podca
       'Authorization': `token ${GITHUB_TOKEN}`,
       'Accept': 'application/vnd.github+json',
       'Content-Type': 'application/json',
-      'User-Agent': 'LLL-Publisher',
+      'User-Agent': 'Epistemic-Publisher',
     },
     body: JSON.stringify({
       message: `chore: add episode collection ${newId} (${String(episodeTitle).slice(0, 60)})`,
