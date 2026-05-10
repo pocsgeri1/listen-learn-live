@@ -3238,5 +3238,17 @@
     "prompt": "Name one thing you pursue intensely that has zero connection to survival or reproduction. Why does it still feel so compelling?",
     "collection_id": 501,
     "timestamp": 5522
+  },
+  {
+    "id": 294,
+    "term": "Error Management Theory",
+    "category": "thinking",
+    "source": "core",
+    "hook": "Evolution wired us to make predictable mistakes — better safe than sorry.",
+    "plain": "Error management theory explains why our brains are biased toward certain types of mistakes. Throughout evolution, the cost of missing a threat (false negative) was often death, while the cost of seeing a threat that wasn't there (false positive) was just wasted energy. So we evolved to err on the side of caution. Men overestimate women's sexual interest because missing a mating opportunity was costly. Women overestimate men's threat because missing danger was deadly. These asymmetric error costs shaped predictable biases we still carry.",
+    "analogy": "Smoke detectors go off when you burn toast because they're designed to have false alarms. The cost of missing a real fire is catastrophic, so the system errs toward sensitivity. Your brain does the same with threats, opportunities, and social cues.",
+    "prompt": "What recurring false alarm do you get in relationships or at work — and what would the cost have been if you'd ignored a real signal?",
+    "collection_id": 501,
+    "timestamp": 223
   }
 ]
