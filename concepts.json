@@ -3598,5 +3598,17 @@
     "prompt": "Think of a tool or system you use daily. What does it do now that it wasn't designed to do when you first started using it? Who discovered that capability?",
     "collection_id": 502,
     "timestamp": 2446
+  },
+  {
+    "id": 324,
+    "term": "Intellectual Necessity Threshold",
+    "category": "society",
+    "source": "ry",
+    "hook": "As jobs require higher IQ to start, fewer people qualify — unemployment becomes cognitive.",
+    "plain": "When automation removes low-skill jobs, the remaining roles demand higher intelligence to perform. Over time, the baseline cognitive ability required to contribute economically rises. More people fall below the threshold, not because they're less capable than before, but because the bar moved. Unemployment becomes an IQ sorting mechanism.",
+    "analogy": "You're playing basketball, and every year they raise the hoop by six inches. You're the same height, but eventually you can't reach it anymore. The game didn't change its rules — it just priced you out.",
+    "prompt": "What's the hardest intellectual skill required for your current job? If that baseline doubled in the next five years, would you still qualify?",
+    "collection_id": 502,
+    "timestamp": 7450
   }
 ]
