@@ -3610,5 +3610,17 @@
     "prompt": "What's the hardest intellectual skill required for your current job? If that baseline doubled in the next five years, would you still qualify?",
     "collection_id": 502,
     "timestamp": 7450
+  },
+  {
+    "id": 325,
+    "term": "Terminal Biological Clock",
+    "category": "identity",
+    "source": "ry",
+    "hook": "Your urgency to have kids exists because your lifespan has an endpoint.",
+    "plain": "Humans feel biological pressure to reproduce because we die. If you lived for a thousand years, the urgency disappears — you'd delay having kids indefinitely. Biological clocks are calibrated to terminal lifespans. Remove the terminal point, and reproductive behavior collapses.",
+    "analogy": "You're running to catch a train that leaves in five minutes, so you sprint. But if the train runs every hour forever, why rush? You'll get there eventually. That's immortality and reproduction.",
+    "prompt": "If you knew you'd live to 500, what major life decision would you delay? And what does that say about why you're rushing toward it now?",
+    "collection_id": 502,
+    "timestamp": 4139
   }
 ]
