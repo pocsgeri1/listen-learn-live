@@ -3670,5 +3670,17 @@
     "prompt": "If you lost your current job tomorrow and AI could do every role you're qualified for, what would you do with the next 10 years? No retraining allowed.",
     "collection_id": 502,
     "timestamp": 1007
+  },
+  {
+    "id": 330,
+    "term": "Black Box Intelligence",
+    "category": "tech-ai",
+    "source": "ry",
+    "hook": "Even the people who built it run experiments to learn what it can do.",
+    "plain": "Modern AI systems are trained on massive datasets, and their creators don't fully understand how they work. After training, engineers run tests to discover capabilities — 'Can you do math? Can you lie?' — because the internal decision-making is opaque. It's science, not engineering: you grow it, then study it.",
+    "analogy": "You plant a seed, water it, and a tree grows. But you didn't design the tree — you just provided conditions. Now you're testing the branches to see if they'll hold weight. You're the gardener, not the architect.",
+    "prompt": "What happens when we rely on systems that no one fully understands to make important decisions?",
+    "collection_id": 502,
+    "timestamp": 2407
   }
 ]
