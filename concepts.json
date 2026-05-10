@@ -3430,5 +3430,17 @@
     "prompt": "Think of the last person you found attractive. Did your opinion of them change after seeing how others reacted to them?",
     "collection_id": 501,
     "timestamp": 1830
+  },
+  {
+    "id": 310,
+    "term": "Meta-invention",
+    "category": "thinking",
+    "source": "ry",
+    "hook": "Inventing intelligence is the last invention we'll ever make — it invents itself from there.",
+    "plain": "Unlike tools that do one thing (fire, wheel, hammer), AI is intelligence that invents more intelligence. Once you create a system that can do science and engineering better than humans, you've automated the invention process itself. It's not a tool — it's a replacement inventor.",
+    "analogy": "Every previous invention stopped at itself: fire cooks food, but fire doesn't invent wheels. AI is like hiring a scientist who then hires 10 more scientists, who each hire 10 more, forever. You've automated the thing that makes everything else.",
+    "prompt": "What's the last problem you tried to solve by hiring a smarter person? Now imagine that person could instantly clone themselves a thousand times and work 24/7. What disappears from your life?",
+    "collection_id": 502,
+    "timestamp": 1634
   }
 ]
