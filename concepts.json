@@ -3106,5 +3106,17 @@
     "prompt": "Think of a time someone treated you with what could be called 'benevolent sexism.' Did it feel patronizing or did it feel good?",
     "collection_id": 501,
     "timestamp": 3343
+  },
+  {
+    "id": 283,
+    "term": "Middle-class Hay Fever",
+    "category": "psychology",
+    "source": "cw",
+    "hook": "No real threats left — so your brain invents trivial ones to react to.",
+    "plain": "When humans lived in high-threat environments, our immune systems fought real parasites. Now, in the sanitized modern world, immune systems get bored and attack harmless things like pollen — hence allergies. The same thing happens with our threat-detection systems. When middle-class people have no real dangers (war, starvation, violence), their brains start flagging trivial things as catastrophic: microaggressions, processed foods, the wrong pronoun. It's not that these things don't matter — it's that the reaction is wildly disproportionate because the system has nothing else to do.",
+    "analogy": "It's like a guard dog in a gated community. There are no burglars, so it starts barking at the mailman, the garbage truck, and falling leaves. The instinct is real, but it's misfiring.",
+    "prompt": "What issue are you currently anxious about that would seem absurd to someone living in a genuinely dangerous environment?",
+    "collection_id": 501,
+    "timestamp": 5060
   }
 ]
