@@ -3538,5 +3538,17 @@
     "prompt": "List the three most expensive roles in your company or life right now. If each could be done by an AI for $50/month, what decisions would you make in the next 90 days?",
     "collection_id": 502,
     "timestamp": 645
+  },
+  {
+    "id": 319,
+    "term": "Perpetual Safety Paradox",
+    "category": "tech-ai",
+    "source": "ry",
+    "hook": "You can't guarantee indefinite safety for a system that's smarter and improving faster than you.",
+    "plain": "Controlling superintelligence permanently is impossible, not just hard. Even if you make it safe today, it will improve itself, interact with people, encounter new situations, and evolve. Locking down something smarter than you forever isn't difficult — it's definitionally impossible. Safety isn't a solvable problem; it's a paradox.",
+    "analogy": "You're trying to childproof a house for a kid who gets 10% smarter every day. By the time you've locked the cabinets, they've learned to pick locks. By the time you've secured the doors, they've figured out windows. You're always behind.",
+    "prompt": "What's the most ambitious long-term plan you've ever made? Now imagine the key variable in that plan gets 10x smarter than you every year. Does the plan still work?",
+    "collection_id": 502,
+    "timestamp": 3071
   }
 ]
