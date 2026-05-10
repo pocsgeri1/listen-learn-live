@@ -3682,5 +3682,29 @@
     "prompt": "What happens when we rely on systems that no one fully understands to make important decisions?",
     "collection_id": 502,
     "timestamp": 2407
+  },
+  {
+    "id": 331,
+    "term": "Batch Test Concept Alpha",
+    "category": "thinking",
+    "source": "core",
+    "hook": "This is a test hook under twelve words total.",
+    "plain": "This is a test concept used to validate the batch publish endpoint. It will be deleted from concepts.json after testing. Plain English only.",
+    "analogy": "Like a smoke test before opening a new restaurant — you fire up the kitchen with one fake order to make sure nothing burns.",
+    "prompt": "What is one piece of infrastructure you should test before relying on it in production?",
+    "collection_id": null,
+    "timestamp": null
+  },
+  {
+    "id": 332,
+    "term": "Batch Test Concept Beta",
+    "category": "thinking",
+    "source": "core",
+    "hook": "Second test hook validating multi-concept batching works.",
+    "plain": "This is the second test concept in the same batch. Both should land in concepts.json under a single GitHub commit. That is the whole point.",
+    "analogy": "Like sending two letters in one envelope instead of two — same destination, half the postage, no chance of one arriving before the other.",
+    "prompt": "Where else in your workflow are you doing something one-at-a-time that could be batched?",
+    "collection_id": null,
+    "timestamp": null
   }
 ]
