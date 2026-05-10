@@ -3646,5 +3646,17 @@
     "prompt": "What's one skill you've worked years to develop that a computer could learn in seconds? How do you justify continuing to compete on that axis?",
     "collection_id": 502,
     "timestamp": 1316
+  },
+  {
+    "id": 328,
+    "term": "Minimum Wage as Admission",
+    "category": "society",
+    "source": "ry",
+    "hook": "We created wage floors because some people don't produce enough value to justify payment.",
+    "plain": "Minimum wage exists because some workers don't generate enough economic output to earn what they're paid. The market alone wouldn't support them. The minimum wage is society admitting that without intervention, these people wouldn't get hired — so we force employers to pay them above their value.",
+    "analogy": "You're selling lemonade for $5, but your lemons cost $6. Without a rule forcing people to buy from you anyway, you'd go out of business. Minimum wage is the rule that keeps you in the game.",
+    "prompt": "In your own work, what's the task you do that produces the least value per hour? If someone else could do it for $5/hour, would you still be doing it?",
+    "collection_id": 502,
+    "timestamp": 7440
   }
 ]
