@@ -3154,5 +3154,17 @@
     "prompt": "Think of the last time you witnessed someone in distress. If it was a woman, did you feel a stronger urge to help than you would have if it were a man?",
     "collection_id": 501,
     "timestamp": 4846
+  },
+  {
+    "id": 287,
+    "term": "Gender Egalitarian Paradox",
+    "category": "society",
+    "source": "core",
+    "hook": "More equality between sexes — more difference in behavior and personality.",
+    "plain": "As societies become more gender-egalitarian and offer more freedom of choice, men and women don't converge — they diverge. Women become more anxious, more neurotic, more risk-averse. Men become more risk-taking, more aggressive, more competitive. This isn't because equality is bad; it's because when social pressure is removed, sex-specific adaptations activate. In highly egalitarian countries, women choose careers that align with their preferences (fewer go into engineering), and psychological sex differences widen. Freedom amplifies biology, not erases it.",
+    "analogy": "Imagine two plants raised in identical greenhouses. Once you move them outside, one thrives in sun, the other in shade. The difference was always there — the controlled environment just masked it.",
+    "prompt": "Think of a choice you made when no one was watching. How different was it from what you'd have chosen under social pressure?",
+    "collection_id": 501,
+    "timestamp": 962
   }
 ]
