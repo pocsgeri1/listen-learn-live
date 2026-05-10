@@ -931,6 +931,14 @@
     width: 100%;
   }
 
+  /* Desktop: line spans behave like inline text, natural wrap */
+  .hero h1 .h1-line {
+    display: inline;
+  }
+  .hero h1 .h1-line + .h1-line::before {
+    content: ' ';
+  }
+
   .hero h1 em {
     font-style: italic;
     color: var(--accent);
@@ -972,6 +980,17 @@
     padding: 1.75rem 0;
     border-top: 1px solid var(--border);
     border-bottom: 1px solid var(--border);
+  }
+
+  /* Desktop: stats sit inside the left column of the hero grid (col 1 of 3) */
+  @media (min-width: 901px) {
+    .hero-stats {
+      grid-column: 1;
+      max-width: none;
+      margin-left: 3rem;
+      margin-right: 5rem;
+      width: auto;
+    }
   }
 
   .stat {
@@ -1241,37 +1260,132 @@
 
   /* ── Mobile ── */
   @media (max-width: 900px) {
+    /* Switch from grid to flex on mobile so we can reorder copy + card + stats */
     .hero {
-      grid-template-columns: 1fr;
-      padding: 110px 0 0 0;
+      display: flex;
+      flex-direction: column;
+      padding: 90px 0 0 0;
     }
+
+    /* Hero-copy becomes a flex column so we can reorder its children */
     .hero-copy {
-      padding: 0 2rem 3rem 2rem;
-      align-items: center;
+      padding: 0 1.75rem 0 1.75rem;
+      align-items: flex-start;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      order: 1;
+    }
+
+    /* Tighter eyebrow → H1 gap on mobile */
+    .hero-eyebrow-outer {
+      margin-bottom: 2rem;
+      order: 1;
     }
     .hero-eyebrow::before { display: none; }
     .hero-eyebrow::after { width: 24px; }
-    .hero h1 { text-align: center; font-size: clamp(2.4rem, 7vw, 3.8rem); }
-    .h1-indent { padding-left: 2rem; }
-    .hero-sub { text-align: center; margin: 0 auto 2.5rem; }
-    .hero-stats { margin-left: 0; width: 100%; }
+
+    /* H1: left-aligned, controlled 3-line layout */
+    .hero h1 {
+      text-align: left;
+      font-size: clamp(2.2rem, 8.5vw, 3.4rem);
+      line-height: 1.1;
+      margin-bottom: 1.25rem;
+      order: 2;
+    }
+    .hero h1 .h1-line {
+      display: block;
+    }
+    .hero h1 .h1-line + .h1-line::before {
+      content: none;
+    }
+    .h1-indent {
+      display: block;
+      text-align: right;
+      padding-left: 0;
+    }
+
+    /* Sub copy left-aligned to match H1 */
+    .hero-sub {
+      text-align: left;
+      margin: 0 0 2rem 0;
+      font-size: 1rem;
+      line-height: 1.7;
+      order: 3;
+    }
+
+    /* CTA moves above the card on mobile */
+    .hero-cta {
+      order: 4;
+      margin-bottom: 2.5rem;
+    }
+
+    /* Stats move BELOW the card on mobile (proof points) */
+    .hero-stats {
+      order: 3;
+      width: 100%;
+      margin: 0;
+      padding: 1.5rem 1.75rem;
+      box-sizing: border-box;
+    }
     .stat + .stat { border-left: 1px solid var(--border); }
+
+    /* Card column lives between CTA and stats */
     .hero-divider { display: none; }
     .hero-card-col {
-      padding: 0 2rem 3rem 2rem;
+      padding: 0 1.75rem 2.5rem 1.75rem;
       min-height: auto;
+      order: 2;
+      align-self: center;
     }
     .hero-card-wrap {
-      width: 300px;
-      height: 440px;
+      width: 100%;
+      max-width: 340px;
+      min-height: 480px;
+      height: auto;
       transform: rotate(0deg);
+    }
+    .hero-card-face {
+      padding: 24px 22px;
+    }
+    .hero-card-back {
+      gap: 14px;
+    }
+    .hero-card-face .hc-back-text {
+      font-size: 0.84rem;
+      line-height: 1.65;
+    }
+    .hero-card-face .hc-back-text.analogy {
+      font-size: 0.8rem;
+    }
+    .hero-card-face .hc-back-prompt {
+      padding: 11px 13px;
+    }
+    .hero-card-face .hc-back-prompt .hc-back-text {
+      font-size: 0.8rem;
+    }
+
+    /* Stat numbers slightly smaller as they're now proof points, not hero */
+    .stat-num {
+      font-size: clamp(1.8rem, 5vw, 2.4rem);
     }
   }
 
+    /* Stats move BELOW the card on mobile (proof points) */
+    .hero-stats {
+      order: 3;
+      width: 100%;
+      margin: 0;
+      padding: 1.5rem 1.75rem;
+      box-sizing: border-box;
+    }
+    .stat + .stat { border-left: 1p
+
   @media (max-width: 480px) {
-    .hero-card-wrap { width: 280px; height: 420px; }
+    .hero-card-wrap { max-width: 320px; min-height: 500px; height: auto; }
     .hc-term { font-size: 1.7rem; }
-    .hero-copy { padding: 0 1.5rem 3rem 1.5rem; }
+    .hero-copy { padding: 0 1.5rem 2.5rem 1.5rem; }
+    .hero-card-col { padding: 0 1.5rem 3rem 1.5rem; }
   }
   /* ============================================
      CONCEPT OF THE DAY — MODAL
@@ -3051,30 +3165,35 @@
       <div class="hero-eyebrow">The Intelligence Toolkit</div>
     </div>
 
-    <h1>You finished a 3,5 hour<br>podcast.<br><span class="h1-indent"><em>Then what?</em></span></h1>
+    <h1>
+      <span class="h1-line">You finished a</span>
+      <span class="h1-line">3,5 hour podcast.</span>
+      <span class="h1-indent"><em>Then what?</em></span>
+    </h1>
 
     <p class="hero-sub">Most ideas evaporate within 24 hours. Not because the content is bad. Because passive listening is a broken learning format.<br><br><span class="hero-brand-name">Epistemic</span> fixes that.</p>
-
-    <div class="hero-stats">
-      <div class="stat">
-        <span class="stat-num" id="heroConceptCount">183</span>
-        <span class="stat-label">Concepts</span>
-      </div>
-      <div class="stat">
-        <span class="stat-num" id="heroCategoryCount">12</span>
-        <span class="stat-label">Categories</span>
-      </div>
-      <div class="stat">
-        <span class="stat-num">5/day</span>
-        <span class="stat-label">Daily Goal</span>
-      </div>
-    </div>
 
     <a href="#app" class="hero-cta">
       Start Learning
       <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M8 3l5 5-5 5"/></svg>
     </a>
 
+  </div>
+
+  <!-- Stats band — moved out of hero-copy so it can sit below the card on mobile -->
+  <div class="hero-stats">
+    <div class="stat">
+      <span class="stat-num" id="heroConceptCount">183</span>
+      <span class="stat-label">Concepts</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num" id="heroCategoryCount">12</span>
+      <span class="stat-label">Categories</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">5/day</span>
+      <span class="stat-label">Daily Goal</span>
+    </div>
   </div>
 
   <!-- VERTICAL DIVIDER -->
