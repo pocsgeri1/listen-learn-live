@@ -3574,5 +3574,17 @@
     "prompt": "If you're probably in a simulation, what's the one thing you'd do differently to make sure you're interesting enough not to get shut down?",
     "collection_id": 502,
     "timestamp": 3479
+  },
+  {
+    "id": 322,
+    "term": "Consent Without Comprehension",
+    "category": "philosophy",
+    "source": "ry",
+    "hook": "You can't ethically consent to something you fundamentally can't understand.",
+    "plain": "To consent to an experiment, you must understand what's happening to you. If AI systems are unpredictable and unexplainable by design, no one can truly comprehend the risks. Deploying them on society without informed consent is unethical by definition — like running medical trials on people who can't read the waiver.",
+    "analogy": "A doctor hands you a 500-page contract in a language you don't speak and says, 'Sign here — it's probably fine.' You didn't consent. You just signed. That's deploying superintelligence without explaining the stakes.",
+    "prompt": "What's the biggest decision you've signed off on in the last year that you didn't fully understand? Who had the power in that transaction, and why did you say yes anyway?",
+    "collection_id": 502,
+    "timestamp": 3215
   }
 ]
