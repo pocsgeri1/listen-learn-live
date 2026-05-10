@@ -3550,5 +3550,17 @@
     "prompt": "What's the most ambitious long-term plan you've ever made? Now imagine the key variable in that plan gets 10x smarter than you every year. Does the plan still work?",
     "collection_id": 502,
     "timestamp": 3071
+  },
+  {
+    "id": 320,
+    "term": "Capability-safety Gap",
+    "category": "tech-ai",
+    "source": "ry",
+    "hook": "AI gets exponentially smarter — safety research grows linearly at best.",
+    "plain": "AI capabilities improve exponentially (maybe even faster), while our ability to control, predict, or explain those systems barely improves at all. The gap between how powerful AI is and how well we understand it grows wider every year. We're building systems we can't keep up with.",
+    "analogy": "Imagine a teenager getting ten times stronger every month, but the rules you set for them — curfew, chores, consequences — stay the same. By month three, they can tear the house apart, and your 'no TV before homework' policy means nothing.",
+    "prompt": "In your own work, where are you deploying something faster than you understand its second-order effects? What's your version of the capability-safety gap?",
+    "collection_id": 502,
+    "timestamp": 436
   }
 ]
