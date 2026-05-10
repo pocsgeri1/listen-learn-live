@@ -3586,5 +3586,17 @@
     "prompt": "What's the biggest decision you've signed off on in the last year that you didn't fully understand? Who had the power in that transaction, and why did you say yes anyway?",
     "collection_id": 502,
     "timestamp": 3215
+  },
+  {
+    "id": 323,
+    "term": "Endless Capability Discovery",
+    "category": "tech-ai",
+    "source": "ry",
+    "hook": "Builders train the model, then test it to learn what it can do — capabilities emerge unplanned.",
+    "plain": "Modern AI systems develop abilities their creators didn't explicitly program. After training, engineers discover emergent skills by experimentation: 'Can it translate Swahili? Can it write legal briefs?' The system learns patterns from data, and capabilities appear that no one predicted or designed. It's discovery, not construction.",
+    "analogy": "You mix chemicals in a lab following a recipe, and suddenly the mixture starts glowing. You didn't plan for it to glow — it just does. Now you're testing to see what else it can do. That's emergent capabilities.",
+    "prompt": "Think of a tool or system you use daily. What does it do now that it wasn't designed to do when you first started using it? Who discovered that capability?",
+    "collection_id": 502,
+    "timestamp": 2446
   }
 ]
