@@ -3394,5 +3394,17 @@
     "prompt": "Pick the relationship you're least satisfied with right now. List what you give and what you get. Is the ledger balanced?",
     "collection_id": 501,
     "timestamp": null
+  },
+  {
+    "id": 307,
+    "term": "Deceptive Mating Strategy",
+    "category": "relationships",
+    "source": "cw",
+    "hook": "Anonymity and scale let men fake commitment — women withdraw entirely.",
+    "plain": "In small ancestral groups, deceptive short-term mating had heavy costs: your reputation tanked, her kin could retaliate, and you couldn't just disappear. Modern dating apps and cities offer unprecedented anonymity and access to millions of potential mates. This allows men to pursue purely short-term strategies — promising commitment, getting sex, then ghosting — without weathering the traditional social costs. Women, aware of this dynamic, increasingly see the pathway to a committed relationship as a minefield. Many choose singlehood instead.",
+    "analogy": "It's like hiring contractors online versus in your small town. Online, a bad contractor can scam you and vanish. In a small town, everyone knows everyone — so bad behavior has consequences. Dating apps are the online contractor model.",
+    "prompt": "In your last five interactions with someone new, which ones felt like they had real social accountability — and which felt disposable?",
+    "collection_id": 501,
+    "timestamp": 396
   }
 ]
