@@ -1360,7 +1360,7 @@
     .hero-card-wrap {
       width: 100%;
       max-width: 340px;
-      height: 560px;
+      height: 450px;
       transform: rotate(0deg);
     }
     .hero-card-face {
@@ -1379,9 +1379,14 @@
     .hero-card-face .hc-back-text {
       font-size: 0.84rem;
       line-height: 1.65;
+      color: var(--text);
     }
     .hero-card-face .hc-back-text.analogy {
       font-size: 0.8rem;
+      color: var(--muted2);
+    }
+    .hero-card-face .hc-back-prompt .hc-back-text {
+      color: var(--text);
     }
     .hero-card-face .hc-back-prompt {
       padding: 11px 13px;
@@ -1397,7 +1402,7 @@
   }
 
     @media (max-width: 480px) {
-    .hero-card-wrap { max-width: 320px; height: 600px; }
+    .hero-card-wrap { max-width: 320px; height: 480px; }
     .hc-term { font-size: 1.7rem; }
     .hero-copy { padding: 0 1.5rem 2.5rem 1.5rem; }
     .hero-card-col { padding: 0 1.5rem 3rem 1.5rem; }
