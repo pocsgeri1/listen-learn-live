@@ -3562,5 +3562,17 @@
     "prompt": "In your own work, where are you deploying something faster than you understand its second-order effects? What's your version of the capability-safety gap?",
     "collection_id": 502,
     "timestamp": 436
+  },
+  {
+    "id": 321,
+    "term": "Retroactive Simulation Commitment",
+    "category": "philosophy",
+    "source": "ry",
+    "hook": "If I run a billion sims of this moment later, you're statistically in one now.",
+    "plain": "Once simulation technology becomes affordable, anyone can run billions of simulations of any moment in history — including this one. If someone commits to running a billion copies of this conversation in the future, the odds that you're in the 'real' version right now drop to one in a billion. It's a probability argument that flips the present into the past.",
+    "analogy": "Imagine someone announces, 'Tomorrow, I'm printing a billion counterfeit $100 bills.' The moment they do, the $100 bill in your wallet is statistically counterfeit. The commitment alone changes the odds of what's real.",
+    "prompt": "If you're probably in a simulation, what's the one thing you'd do differently to make sure you're interesting enough not to get shut down?",
+    "collection_id": 502,
+    "timestamp": 3479
   }
 ]
