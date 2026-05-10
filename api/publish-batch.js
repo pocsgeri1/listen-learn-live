@@ -1,13 +1,27 @@
 // /api/publish-batch.js
-// Receives an array of approved concepts from Make.com, appends them ALL to
-// concepts.json on GitHub in a single commit, and returns per-concept success/fail.
-// Single GitHub commit = single Vercel build = no SHA race conditions.
+// Receives an array of approved concepts from Make.com, appends ALL of them
+// to concepts.json on GitHub in a SINGLE commit, and returns per-concept
+// success/failure so Make can flip Status individually in Airtable.
+//
+// Why batch: the per-concept publisher fires N HTTP commits in rapid succession,
+// which Vercel coalesces into one build that misses the last 1-2 commits. One
+// batch = one commit = one deterministic build.
+//
+// Accepts BOTH shapes for each concept object:
+//   (a) lowercase keys: term, category, source, hook, plain, analogy, prompt,
+//       collection_id, timestamp, airtable_id
+//   (b) Airtable raw aggregator output: Term, Category, Source, Hook, Plain,
+//       Analogy, Prompt, "Collection ID", Timestamp, ID
+// This means Make.com can dump the array aggregator output directly as
+// { "concepts": {{2.array}} } without trying to reshape it in IML (which
+// has no working object-mapping primitive on free tier).
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed. Use POST.' });
   }
 
+  // Shared-secret check
   const providedSecret = req.headers['x-publish-secret'];
   if (providedSecret !== process.env.PUBLISH_SECRET) {
     return res.status(401).json({ error: 'Unauthorized. Invalid secret.' });
@@ -17,12 +31,24 @@ export default async function handler(req, res) {
 
   if (!Array.isArray(incomingConcepts) || incomingConcepts.length === 0) {
     return res.status(400).json({
-      error: 'Body must contain a non-empty "concepts" array.',
+      error: 'Request body must include a non-empty `concepts` array.',
     });
   }
 
-  const allowedCategories = ['finance', 'psychology', 'thinking', 'power', 'relationships', 'language', 'business', 'identity', 'health', 'philosophy', 'society', 'creativity', 'science', 'tech-ai'];
+  // Hard cap to prevent accidental floods
+  if (incomingConcepts.length > 100) {
+    return res.status(400).json({
+      error: `Batch too large: ${incomingConcepts.length} concepts. Max is 100 per call.`,
+    });
+  }
 
+  const allowedCategories = [
+    'finance', 'psychology', 'thinking', 'power', 'relationships', 'language',
+    'business', 'identity', 'health', 'philosophy', 'society', 'creativity',
+    'science', 'tech-ai',
+  ];
+
+  // GitHub config
   const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
   const REPO_OWNER = 'pocsgeri1';
   const REPO_NAME = 'listen-learn-live';
@@ -35,8 +61,127 @@ export default async function handler(req, res) {
 
   const githubApiUrl = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}?ref=${BRANCH}`;
 
+  // Helper: read a field from either lowercase or Airtable-cased version.
+  // Returns trimmed string, or '' if missing/empty/non-string.
+  function readField(obj, ...keys) {
+    for (const k of keys) {
+      const v = obj[k];
+      if (v === undefined || v === null) continue;
+      if (typeof v === 'string') {
+        const t = v.trim();
+        if (t) return t;
+      } else if (typeof v === 'number') {
+        return String(v);
+      }
+    }
+    return '';
+  }
+
+  // Helper: read an int field (or null) from either casing
+  function readIntOrNull(obj, ...keys) {
+    for (const k of keys) {
+      const v = obj[k];
+      if (v === undefined || v === null || v === '' || v === 0 || v === '0' || v === 'null') continue;
+      const parsed = parseInt(v, 10);
+      if (Number.isInteger(parsed) && parsed > 0) return parsed;
+    }
+    return null;
+  }
+
+  function readTimestampOrNull(obj, ...keys) {
+    for (const k of keys) {
+      const v = obj[k];
+      if (v === undefined || v === null || v === '') continue;
+      const parsed = parseInt(v, 10);
+      if (Number.isInteger(parsed) && parsed >= 0) return parsed;
+    }
+    return null;
+  }
+
+  // Normalize each incoming concept into the canonical shape, OR record a validation error.
+  // We do this BEFORE fetching GitHub so we fail fast if the whole batch is bad.
+  const normalized = [];
+  const results = []; // per-concept result objects
+
+  for (let i = 0; i < incomingConcepts.length; i++) {
+    const raw = incomingConcepts[i] || {};
+
+    const airtable_id = readField(raw, 'airtable_id', 'ID', 'id', 'Record ID', 'record_id');
+    const term = readField(raw, 'term', 'Term');
+    const category = readField(raw, 'category', 'Category');
+    const sourceRaw = readField(raw, 'source', 'Source');
+    const hook = readField(raw, 'hook', 'Hook');
+    const plain = readField(raw, 'plain', 'Plain');
+    const analogy = readField(raw, 'analogy', 'Analogy');
+    const prompt = readField(raw, 'prompt', 'Prompt');
+    const collection_id = readIntOrNull(raw, 'collection_id', 'Collection ID');
+    const timestamp = readTimestampOrNull(raw, 'timestamp', 'Timestamp');
+
+    const missing = [];
+    if (!term) missing.push('term');
+    if (!category) missing.push('category');
+    if (!hook) missing.push('hook');
+    if (!plain) missing.push('plain');
+    if (!analogy) missing.push('analogy');
+    if (!prompt) missing.push('prompt');
+
+    if (missing.length > 0) {
+      results.push({
+        airtable_id: airtable_id || null,
+        term: term || `(index ${i})`,
+        concept_id: null,
+        success: false,
+        error: `Missing required fields: ${missing.join(', ')}`,
+      });
+      continue;
+    }
+
+    if (!allowedCategories.includes(category)) {
+      results.push({
+        airtable_id: airtable_id || null,
+        term,
+        concept_id: null,
+        success: false,
+        error: `Invalid category "${category}". Must be one of: ${allowedCategories.join(', ')}`,
+      });
+      continue;
+    }
+
+    // Normalize source: any 2-4 lowercase letter code, else fall back to "core"
+    let normalizedSource = 'core';
+    if (sourceRaw) {
+      const s = sourceRaw.toLowerCase();
+      if (/^[a-z]{2,4}$/.test(s)) normalizedSource = s;
+    }
+
+    normalized.push({
+      _index: i,
+      airtable_id: airtable_id || null,
+      term,
+      category,
+      source: normalizedSource,
+      hook,
+      plain,
+      analogy,
+      prompt,
+      collection_id,
+      timestamp,
+    });
+  }
+
+  // If every concept failed validation, bail before touching GitHub
+  if (normalized.length === 0) {
+    return res.status(400).json({
+      success: false,
+      published_count: 0,
+      failed_count: results.length,
+      results,
+      error: 'No concepts passed validation. Nothing committed.',
+    });
+  }
+
   try {
-    // Step 1: fetch current concepts.json from GitHub ONCE
+    // Step 1: fetch current concepts.json
     const getResp = await fetch(githubApiUrl, {
       headers: {
         'Authorization': `token ${GITHUB_TOKEN}`,
@@ -57,137 +202,106 @@ export default async function handler(req, res) {
     const currentSha = fileData.sha;
     const decodedContent = Buffer.from(fileData.content, 'base64').toString('utf-8');
 
-    let concepts;
+    let existingConcepts;
     try {
-      concepts = JSON.parse(decodedContent);
+      existingConcepts = JSON.parse(decodedContent);
     } catch (parseErr) {
       return res.status(500).json({ error: 'concepts.json on GitHub is not valid JSON.', detail: parseErr.message });
     }
 
-    if (!Array.isArray(concepts)) {
+    if (!Array.isArray(existingConcepts)) {
       return res.status(500).json({ error: 'concepts.json is not an array.' });
     }
 
-    // Step 2: validate and normalize each incoming concept
-    const results = [];
-    const validNewConcepts = [];
-    let nextId = concepts.reduce((max, c) => (typeof c.id === 'number' && c.id > max ? c.id : max), 0);
+    // Step 2: build a lowercase term set for duplicate detection
+    const existingTermsLower = new Set(
+      existingConcepts.filter(c => c && c.term).map(c => c.term.toLowerCase())
+    );
 
-    // Track terms across this batch + existing to catch duplicates within the batch itself
-    const existingTermsLower = new Set(concepts.map(c => c.term && c.term.toLowerCase()).filter(Boolean));
+    // Also dedupe within the batch itself
+    const batchTermsLower = new Set();
 
-    for (const incoming of incomingConcepts) {
-      const { term, category, source, hook, plain, analogy, prompt, collection_id, timestamp, airtable_id } = incoming || {};
+    // Step 3: compute starting ID
+    let nextId = existingConcepts.reduce(
+      (max, c) => (typeof c.id === 'number' && c.id > max ? c.id : max),
+      0
+    ) + 1;
 
-      // Validate required fields
-      const missing = [];
-      if (!term) missing.push('term');
-      if (!category) missing.push('category');
-      if (!source) missing.push('source');
-      if (!hook) missing.push('hook');
-      if (!plain) missing.push('plain');
-      if (!analogy) missing.push('analogy');
-      if (!prompt) missing.push('prompt');
+    // Step 4: validate each normalized concept against duplicates, append to file
+    const toAppend = [];
+    for (const n of normalized) {
+      const termLower = n.term.toLowerCase();
 
-      if (missing.length > 0) {
-        results.push({
-          airtable_id: airtable_id || null,
-          term: term || '(missing)',
-          success: false,
-          error: `Missing required fields: ${missing.join(', ')}`,
-        });
-        continue;
-      }
-
-      if (!allowedCategories.includes(category)) {
-        results.push({
-          airtable_id: airtable_id || null,
-          term,
-          success: false,
-          error: `Invalid category "${category}".`,
-        });
-        continue;
-      }
-
-      const termLower = term.trim().toLowerCase();
       if (existingTermsLower.has(termLower)) {
         results.push({
-          airtable_id: airtable_id || null,
-          term,
+          airtable_id: n.airtable_id,
+          term: n.term,
+          concept_id: null,
           success: false,
-          error: `Duplicate term "${term}" — already exists or already in this batch.`,
+          error: `A concept with term "${n.term}" already exists in concepts.json. Not publishing duplicate.`,
         });
         continue;
       }
 
-      // Normalize source
-      let normalizedSource = 'core';
-      if (typeof source === 'string') {
-        const s = source.trim().toLowerCase();
-        if (/^[a-z]{2,4}$/.test(s)) normalizedSource = s;
+      if (batchTermsLower.has(termLower)) {
+        results.push({
+          airtable_id: n.airtable_id,
+          term: n.term,
+          concept_id: null,
+          success: false,
+          error: `Term "${n.term}" appears more than once in this batch. Only the first occurrence is published.`,
+        });
+        continue;
       }
 
-      // Normalize collection_id
-      let normalizedCollectionId = null;
-      if (collection_id !== undefined && collection_id !== null && collection_id !== '' && collection_id !== 0 && collection_id !== '0') {
-        const parsed = parseInt(collection_id, 10);
-        if (Number.isInteger(parsed) && parsed > 0) {
-          normalizedCollectionId = parsed;
-        }
-      }
+      batchTermsLower.add(termLower);
 
-      // Normalize timestamp
-      let normalizedTimestamp = null;
-      if (timestamp !== undefined && timestamp !== null && timestamp !== '') {
-        const parsedTs = parseInt(timestamp, 10);
-        if (Number.isInteger(parsedTs) && parsedTs >= 0) {
-          normalizedTimestamp = parsedTs;
-        }
-      }
-
-      nextId += 1;
       const newConcept = {
         id: nextId,
-        term: term.trim(),
-        category,
-        source: normalizedSource,
-        hook: hook.trim(),
-        plain: plain.trim(),
-        analogy: analogy.trim(),
-        prompt: prompt.trim(),
-        collection_id: normalizedCollectionId,
-        timestamp: normalizedTimestamp,
+        term: n.term,
+        category: n.category,
+        source: n.source,
+        hook: n.hook,
+        plain: n.plain,
+        analogy: n.analogy,
+        prompt: n.prompt,
+        collection_id: n.collection_id,
+        timestamp: n.timestamp,
       };
 
-      validNewConcepts.push(newConcept);
-      existingTermsLower.add(termLower);
-
+      toAppend.push(newConcept);
       results.push({
-        airtable_id: airtable_id || null,
-        term: newConcept.term,
+        airtable_id: n.airtable_id,
+        term: n.term,
         concept_id: nextId,
         success: true,
+        error: null,
       });
+
+      nextId++;
     }
 
-    // If nothing valid to publish, return early with the per-item errors
-    if (validNewConcepts.length === 0) {
-      return res.status(400).json({
-        error: 'No valid concepts to publish.',
+    // If nothing made it through after dedup, don't commit
+    if (toAppend.length === 0) {
+      const failed = results.filter(r => !r.success).length;
+      return res.status(200).json({
+        success: false,
+        published_count: 0,
+        failed_count: failed,
         results,
+        message: 'No concepts to publish after validation and dedup. No commit made.',
       });
     }
 
-    // Step 3: append all valid concepts and commit ONCE
-    concepts.push(...validNewConcepts);
-    const updatedContent = JSON.stringify(concepts, null, 2) + '\n';
+    // Step 5: append and serialize
+    const updatedConcepts = existingConcepts.concat(toAppend);
+    const updatedContent = JSON.stringify(updatedConcepts, null, 2) + '\n';
     const updatedContentBase64 = Buffer.from(updatedContent, 'utf-8').toString('base64');
 
-    const firstId = validNewConcepts[0].id;
-    const lastId = validNewConcepts[validNewConcepts.length - 1].id;
-    const commitMessage = validNewConcepts.length === 1
-      ? `Add concept #${firstId}: ${validNewConcepts[0].term}`
-      : `Add ${validNewConcepts.length} concepts (#${firstId}–#${lastId})`;
+    // Step 6: single commit with all appended concepts
+    const commitMessage = toAppend.length === 1
+      ? `Add concept #${toAppend[0].id}: ${toAppend[0].term}`
+      : `Batch publish: add ${toAppend.length} concepts (#${toAppend[0].id}–#${toAppend[toAppend.length - 1].id})`;
 
     const commitResp = await fetch(githubApiUrl, {
       method: 'PUT',
@@ -207,29 +321,28 @@ export default async function handler(req, res) {
 
     if (!commitResp.ok) {
       const text = await commitResp.text();
-      // Mark every "success" as failed since the commit itself failed
-      const failedResults = results.map(r => r.success ? { ...r, success: false, error: `Commit failed: ${commitResp.status}` } : r);
       return res.status(502).json({
         error: `Failed to commit to GitHub. Status: ${commitResp.status}`,
         detail: text,
-        results: failedResults,
       });
     }
 
     const commitData = await commitResp.json();
+    const publishedCount = toAppend.length;
+    const failedCount = results.filter(r => !r.success).length;
 
     return res.status(200).json({
       success: true,
-      published_count: validNewConcepts.length,
-      failed_count: results.filter(r => !r.success).length,
+      published_count: publishedCount,
+      failed_count: failedCount,
       commit_sha: commitData.commit && commitData.commit.sha,
       results,
-      message: `Published ${validNewConcepts.length} concept(s). Live on site in ~60s.`,
+      message: `Published ${publishedCount} concept(s) in 1 commit. Live on site in ~60s.`,
     });
 
   } catch (err) {
     return res.status(500).json({
-      error: 'Unexpected error while publishing batch.',
+      error: 'Unexpected error while batch publishing.',
       detail: err.message,
     });
   }
