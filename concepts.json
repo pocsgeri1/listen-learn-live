@@ -3466,5 +3466,17 @@
     "prompt": "If your job disappeared tomorrow and 99% of others did too, what would you do with 60 hours a week for the next 30 years? Not 'find another job' — that's gone.",
     "collection_id": 502,
     "timestamp": 651
+  },
+  {
+    "id": 313,
+    "term": "Hr Manual Workaround",
+    "category": "power",
+    "source": "ry",
+    "hook": "Rules restrict average behavior — smart actors just find unrestricted subdomains.",
+    "plain": "Companies write HR policies to prevent bad behavior, but intelligent actors always find loopholes. You ban sexual harassment — so they push behavior into 'mentorship.' You ban insider trading — so they use legal proxies. Rules don't stop smart people; they just push misconduct into areas the manual hasn't covered yet.",
+    "analogy": "Your kid's not allowed to eat cookies before dinner, so they eat crackers with chocolate chips. Technically not cookies. You didn't ban crackers, so they found the gap. Smart rule-followers always do.",
+    "prompt": "What's a rule in your workplace or life that you've watched someone technically follow while violating the spirit of it completely? What subdomain did they exploit?",
+    "collection_id": 502,
+    "timestamp": 471
   }
 ]
