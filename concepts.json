@@ -3490,5 +3490,17 @@
     "prompt": "If AI could replicate every skill you have, what's the one experience or piece of knowledge only you possess? Could you get paid for it?",
     "collection_id": 502,
     "timestamp": 791
+  },
+  {
+    "id": 315,
+    "term": "Unpredictability Barrier",
+    "category": "thinking",
+    "source": "ry",
+    "hook": "If you can predict a smarter agent's moves, you're not smarter — violating the premise.",
+    "plain": "By definition, you cannot predict what a superintelligent system will do. If you could, you'd be operating at its level of intelligence, which contradicts the idea that it's smarter than you. It's like your dog trying to predict why you do a podcast — it's outside the dog's model of the world.",
+    "analogy": "You're playing chess against a grandmaster. If you can predict every move they'll make, you're playing at their level — so they're not really better than you. True intelligence gaps mean you can't see their strategy coming.",
+    "prompt": "Think of the smartest person you know. Now imagine they're 10x smarter. What decisions of theirs would you stop trying to predict, and how would that change your relationship with them?",
+    "collection_id": 502,
+    "timestamp": 1190
   }
 ]
