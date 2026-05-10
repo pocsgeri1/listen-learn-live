@@ -3658,5 +3658,17 @@
     "prompt": "In your own work, what's the task you do that produces the least value per hour? If someone else could do it for $5/hour, would you still be doing it?",
     "collection_id": 502,
     "timestamp": 7440
+  },
+  {
+    "id": 329,
+    "term": "Paradigm Shift Job Loss",
+    "category": "business",
+    "source": "ry",
+    "hook": "Before, one job automated meant retrain elsewhere — now all jobs automate, no Plan B.",
+    "plain": "Historically, when technology automated a job, workers retrained for a different role. But if AI automates cognitive labor across all domains, there's no 'next job' to retrain for. The advice 'learn to code' already expired — AI codes better than humans. This isn't displacement. It's obsolescence.",
+    "analogy": "You're told the factory closed, so learn to drive trucks. Then trucks go autonomous, so learn to code. Then AI codes. Then AI does everything. You're not behind on retraining — there's nowhere left to retrain to.",
+    "prompt": "If you lost your current job tomorrow and AI could do every role you're qualified for, what would you do with the next 10 years? No retraining allowed.",
+    "collection_id": 502,
+    "timestamp": 1007
   }
 ]
