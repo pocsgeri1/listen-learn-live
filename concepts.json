@@ -3070,5 +3070,17 @@
     "prompt": "What quality are you trying to force that might arrive if you just started moving?",
     "collection_id": 500,
     "timestamp": 42
+  },
+  {
+    "id": 280,
+    "term": "Vulnerability Signaling",
+    "category": "psychology",
+    "source": "cw",
+    "hook": "Women evolved to communicate need — sadness spreads, resources follow.",
+    "plain": "Throughout human history, women faced unique vulnerabilities due to smaller size, pregnancy, and caretaking demands. Those who effectively communicated sadness, distress, or need were more likely to receive help and resources. This tendency persists today: women globally report feeling less happy and less healthy than men, and women's depression spreads through social networks more than men's does. It's an adaptation that once ensured survival but now manifests as a general bleak outlook on life.",
+    "analogy": "Think of a crying child in a store — everyone stops to help. Women who signaled vulnerability in ancestral environments received the same protective response. Now that mechanism fires constantly, even when the threat is abstract or manufactured.",
+    "prompt": "In the last month, when did expressing distress get you immediate help — and when did it backfire because the context had changed?",
+    "collection_id": 501,
+    "timestamp": 53
   }
 ]
