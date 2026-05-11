@@ -25,6 +25,7 @@ export default async function handler(req, res) {
     prompt,
     collection_id,
     timestamp,
+    editors_pick,
   } = req.body || {};
 
   // Validate required fields
@@ -151,6 +152,7 @@ export default async function handler(req, res) {
       prompt: prompt.trim(),
       collection_id: normalizedCollectionId,
       timestamp: normalizedTimestamp,
+      editors_pick: editors_pick === true,
     };
 
     // Step 5: append and re-serialize with 2-space indentation to match existing file
