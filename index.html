@@ -2126,7 +2126,31 @@
   .concept-card.open::after { opacity: 1; }
   .concept-card.open { border-color: var(--border-hover); transform: translateY(0); }
   .concept-card.mastered { opacity: 0.5; }
-
+  /* Editor's Pick — gold border + badge */
+  .concept-card.editors-pick {
+    border-color: rgba(232,213,163,0.45);
+  }
+  .concept-card.editors-pick:hover {
+    border-color: rgba(232,213,163,0.7);
+  }
+  .pick-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: rgba(232,213,163,0.1);
+    color: var(--accent);
+    border: 1px solid rgba(232,213,163,0.3);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .pick-badge .pick-star {
+    font-size: 0.65rem;
+    line-height: 1;
+  }
   .card-front {
     padding: 18px 18px 18px 22px;
   }
@@ -3826,12 +3850,12 @@ function buildGrid() {
             ${cards.map((c, i) => {
               const color = CAT_COLOR[c.category] || '#e8d5a3';
               const isMastered = mastered.has(c.id);
-              return `
-              <div class="concept-card${isMastered?' mastered':''}" id="cc${c.id}" style="--cat-color:${color}">
+              return `<div class="concept-card${isMastered?' mastered':''}${c.editors_pick===true?' editors-pick':''}" id="cc${c.id}" style="--cat-color:${color}">
                 <div class="card-front" onclick="toggleCard(${c.id})">
                   <div class="card-meta">
                     <span class="card-num">#${String(c.id).padStart(3,'0')}</span>
                     <span class="card-cat">${(CATEGORIES.find(x => x.id === c.category)||{}).name||c.category}</span>
+                    ${c.editors_pick===true ? '<span class="pick-badge"><span class="pick-star">★</span>PICK</span>' : ''}
                     <span class="mastered-badge">✓ mastered</span>
                   </div>
                   ${(() => {
@@ -4315,11 +4339,12 @@ function openEpisodeDrawer(collectionId) {
       const color = CAT_COLOR[c.category] || '#e8d5a3';
       const isMastered = mastered.has(c.id);
       return `
-      <div class="concept-card${isMastered?' mastered':''}" id="epcc${c.id}" style="--cat-color:${color}">
+      <div class="concept-card${isMastered?' mastered':''}${c.editors_pick===true?' editors-pick':''}" id="epcc${c.id}" style="--cat-color:${color}">
         <div class="card-front" onclick="toggleEpCard(${c.id})">
           <div class="card-meta">
             <span class="card-num">#${String(c.id).padStart(3,'0')}</span>
             <span class="card-cat">${(CATEGORIES.find(x => x.id === c.category)||{}).name||c.category}</span>
+            ${c.editors_pick===true ? '<span class="pick-badge"><span class="pick-star">★</span>PICK</span>' : ''}
             <span class="mastered-badge">✓ mastered</span>
           </div>
           <div class="card-term">${c.term}</div>
@@ -4588,11 +4613,12 @@ function buildShorts() {
         : `<div class="short-thumb-fallback">${col.title.trim()}</div>`;
 
       return `
-        <div class="short-card concept-card${isMastered ? ' mastered' : ''}" style="--cat-color:${color}" id="sc${c.id}">
+        <div class="short-card concept-card${isMastered ? ' mastered' : ''}${c.editors_pick===true?' editors-pick':''}" style="--cat-color:${color}" id="sc${c.id}">
           <div class="short-thumb">${thumbHtml}</div>
           <div class="card-front" onclick="toggleShortCard(${c.id})">
             <div class="card-meta">
               <span class="card-cat">${(CATEGORIES.find(x => x.id === c.category)||{}).name||c.category}</span>
+              ${c.editors_pick===true ? '<span class="pick-badge"><span class="pick-star">★</span>PICK</span>' : ''}
               <span class="mastered-badge">✓ mastered</span>
             </div>
             <div class="card-term">${c.term}</div>
