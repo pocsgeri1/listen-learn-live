@@ -3369,7 +3369,8 @@
     "analogy": "Imagine your gym doubles its membership fee but removes the weights, the showers, and half the machines. You'd cancel. Women are doing the same cost-benefit analysis with modern relationships.",
     "prompt": "Name one relationship — romantic, professional, or social — where you're currently doing the math on whether it's still worth it.",
     "collection_id": 501,
-    "timestamp": 247
+    "timestamp": 247,
+    "editors_pick": true
   },
   {
     "id": 305,
@@ -3705,7 +3706,8 @@
     "analogy": "Two people at a party, each certain the other is silently critiquing their outfit, both too anxious about their own appearance to notice what anyone else is wearing.",
     "prompt": "Think of the last thing you posted or bought to impress others — who specifically were you picturing, and did they actually notice?",
     "collection_id": null,
-    "timestamp": null
+    "timestamp": null,
+    "editors_pick": true
   },
   {
     "id": 333,
@@ -3717,7 +3719,8 @@
     "analogy": "The GPS recalculates. It doesn't apologize for the wrong turn — it just finds a new route with the roads still open.",
     "prompt": "Where in your life are you optimizing the wrong variable because the thing you actually want feels out of reach?",
     "collection_id": null,
-    "timestamp": null
+    "timestamp": null,
+    "editors_pick": true
   },
   {
     "id": 334,
@@ -3741,7 +3744,8 @@
     "analogy": "A book titled 'Stop Your Erectile Dysfunction NOW' might sell to the right audience, but nobody's reading it on the subway with the title facing out. The shame tax kills word-of-mouth. Compare that to a book with a discreet, clever title — people display it, recommend it, post it.",
     "prompt": "If your business, podcast, or personal brand were a book cover, would someone proudly hold it up in a crowded room? If not, what's the cringe element?",
     "collection_id": null,
-    "timestamp": null
+    "timestamp": null,
+    "editors_pick": true
   },
   {
     "id": 336,
@@ -3810,7 +3814,7 @@
     "category": "thinking",
     "source": "dp",
     "hook": "Creativity requires boredom — pen, paper, nature, no screens.",
-    "plain": "You can't think clearly while consuming content. Pause Reflect Document is the practice of stepping away from noise, sitting in nature with a pen and paper, and letting boredom surface insights. No phone. No laptop. Just you, blank pages, and time to connect dots from the last five years. The best ideas come when you stop searching for them and let your brain wander. This is how you discover what only you can say.",
+    "plain": "You can't think clearly while consuming content. Pause → Reflect → Document is the practice of stepping away from noise, sitting in nature with a pen and paper, and letting boredom surface insights. No phone. No laptop. Just you, blank pages, and time to connect dots from the last five years. The best ideas come when you stop searching for them and let your brain wander. This is how you discover what only you can say.",
     "analogy": "Musicians don't compose symphonies while binge-watching Netflix. They sit in silence until the melody emerges.",
     "prompt": "Block 90 minutes this weekend. Go somewhere quiet with no Wi-Fi. Bring a notebook and ask: What are five problems I've solved in the last two years that someone would pay me to teach them how to solve?",
     "collection_id": 503,
@@ -3923,7 +3927,7 @@
   },
   {
     "id": 350,
-    "term": "The Fog Analogy",
+    "term": "The AI-Fog Analogy",
     "category": "business",
     "source": "dp",
     "hook": "If you're not flying already, AI fog keeps you grounded.",
@@ -3932,7 +3936,7 @@
     "prompt": "Is your professional brand already 'in the air' — do 500+ people know what you do and could refer you without Googling? If not, what's the fastest way to get airborne this quarter?",
     "collection_id": 503,
     "timestamp": 732,
-    "editors_pick": false
+    "editors_pick": true
   },
   {
     "id": 351,
@@ -3997,7 +4001,7 @@
     "prompt": "Do you know any business owner over 60 who's mentioned being tired or wanting to retire? Ask them what their exit plan is. You might be the solution.",
     "collection_id": 503,
     "timestamp": 3618,
-    "editors_pick": false
+    "editors_pick": true
   },
   {
     "id": 356,
@@ -4127,7 +4131,7 @@
     "prompt": "Who in your life virtue-signals against wealth or ambition? Now privately ask: do their actions match their words, or are they covering insecurity?",
     "collection_id": 504,
     "timestamp": 1274,
-    "editors_pick": false
+    "editors_pick": true
   },
   {
     "id": 366,
@@ -4140,7 +4144,7 @@
     "prompt": "Take your biggest 2025 goal. Now 10x it. What would you have to do differently in the next 48 hours if that 10x version were your real target?",
     "collection_id": 504,
     "timestamp": 1083,
-    "editors_pick": false
+    "editors_pick": true
   },
   {
     "id": 367,
@@ -4209,7 +4213,7 @@
   },
   {
     "id": 372,
-    "term": "Self-actualization Default",
+    "term": "Self-Actualization Default",
     "category": "philosophy",
     "source": "dk",
     "hook": "Every action either moves toward self-actualization or self-sabotage — no middle.",
@@ -4218,20 +4222,20 @@
     "prompt": "Zoom out to age 60. Consult that version of yourself on one decision you're facing this week. Would they thank you for choosing short-term comfort or long-term capability?",
     "collection_id": 504,
     "timestamp": 1504,
-    "editors_pick": false
+    "editors_pick": true
   },
   {
     "id": 373,
     "term": "Challenge Plateau",
     "category": "psychology",
     "source": "dk",
-    "hook": "Most jobs stop challenging you after six months — then rot your brain.",
+    "hook": "Most jobs stop challenging you after 6-12 months — then rot your brain.",
     "plain": "The point where the learning curve at work flattens and you enter autopilot. Without increasing challenge matched by development, you stagnate psychologically. Flow states and meaning come from rising difficulty — jobs that plateau kill both.",
     "analogy": "Like beating a video game's tutorial, then replaying level 1 for forty years — you're not getting better, you're atrophying while pretending to be productive.",
     "prompt": "In your current work, when was the last time you faced a problem you genuinely didn't know how to solve? If it's been over 90 days, what skill could you add to raise the challenge?",
     "collection_id": 504,
     "timestamp": 754,
-    "editors_pick": false
+    "editors_pick": true
   },
   {
     "id": 374,
@@ -4283,11 +4287,11 @@
     "prompt": "What experience from your early 20s are you still trying to recreate? What would you gain by accepting it was a tutorial-level high, not the ceiling?",
     "collection_id": 504,
     "timestamp": 70,
-    "editors_pick": false
+    "editors_pick": true
   },
   {
     "id": 378,
-    "term": "Third-of-life Tax",
+    "term": "Third-of-Life Tax",
     "category": "business",
     "source": "dk",
     "hook": "A job takes a third of your time — then drains the next third.",
@@ -4296,7 +4300,7 @@
     "prompt": "Calculate your waking hours last week: work, post-work recovery fog, and true free time. If the recovery block is larger than you realized, what changes?",
     "collection_id": 504,
     "timestamp": 598,
-    "editors_pick": false
+    "editors_pick": true
   },
   {
     "id": 379,
