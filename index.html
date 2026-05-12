@@ -513,6 +513,46 @@
     color: var(--muted);
     letter-spacing: 0.08em;
   }
+  .ep-drawer-cat-filter {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 6px;
+    padding: 0 2rem 1.2rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    flex-shrink: 0;
+  }
+  .ep-drawer-cat-filter::-webkit-scrollbar { display: none; }
+  .ep-drawer-cat-pill {
+    flex-shrink: 0;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 5px 13px;
+    border-radius: 999px;
+    border: 0.5px solid currentColor;
+    background: transparent;
+    cursor: pointer;
+    transition: transform 0.1s ease, background 0.2s, opacity 0.2s;
+    opacity: 0.5;
+    color: var(--col-color, var(--accent));
+  }
+  .ep-drawer-cat-pill:hover { opacity: 0.8; }
+  .ep-drawer-cat-pill.active {
+    opacity: 1;
+    background: color-mix(in srgb, var(--col-color, var(--accent)) 12%, transparent);
+  }
+  /* Mobile: show one column at a time */
+  @media (max-width: 700px) {
+    .ep-cat-column { display: none; }
+    .ep-cat-column.visible { display: flex; }
+  }
+  /* Desktop: all columns visible, pills just highlight */
+  @media (min-width: 701px) {
+    .ep-cat-column { display: flex; }
+    .ep-cat-column.faded { opacity: 0.35; }
+  }
   @media (max-width: 600px) {
     .ep-cat-column { flex: 0 0 260px; }
   }
@@ -3399,6 +3439,7 @@
             <button class="ep-drawer-close" onclick="closeEpisodeDrawer()">✕</button>
           </div>
           <div class="ep-drawer-mix" id="epDrawerMix"></div>
+          <div class="ep-drawer-cat-filter" id="epDrawerCatFilter"></div>
           <div class="ep-drawer-body">
             <div class="ep-drawer-grid" id="epDrawerGrid"></div>
           </div>
@@ -4437,7 +4478,7 @@ function openEpisodeDrawer(collectionId) {
         </div>`;
       }).join('');
 
-      return `<div class="ep-cat-column">
+      return `<div class="ep-cat-column" data-cat="${catKey}">
         <div class="ep-cat-column-header" style="--col-color:${catColor}">
           <span class="ep-cat-column-label">${catInfo.name}</span>
           <span class="ep-cat-column-count">${catGroups[catKey].length}</span>
@@ -4446,14 +4487,77 @@ function openEpisodeDrawer(collectionId) {
       </div>`;
     }).join('');
   }
-
+  // Category filter pills above the columns
+  const filterRow = document.getElementById('epDrawerCatFilter');
+  if (sortedCatKeys.length > 1) {
+    filterRow.style.display = '';
+    filterRow.innerHTML = sortedCatKeys.map((catKey, i) => {
+      const catInfo = CATEGORIES.find(x => x.id === catKey) || { name: catKey };
+      const color = CAT_COLOR[catKey] || '#e8d5a3';
+      return `<button class="ep-drawer-cat-pill${i === 0 ? ' active' : ''}" data-cat="${catKey}" style="--col-color:${color}" onclick="filterDrawerCat('${catKey}')">${catInfo.name} <span style="opacity:0.5;font-size:0.55rem">${catGroups[catKey].length}</span></button>`;
+    }).join('');
+    // Show first column only on mobile; all on desktop
+    filterDrawerCat(sortedCatKeys[0]);
+    // Magnetic effect on drawer pills
+    initMagneticDrawerPills();
+  } else {
+    filterRow.style.display = 'none';
+    // Only one category — ensure column is visible
+    document.querySelectorAll('.ep-cat-column').forEach(c => c.classList.add('visible'));
+  }
   // Open
   document.getElementById('epBackdrop').classList.add('open');
   document.getElementById('epDrawer').classList.add('open');
   document.body.style.overflow = 'hidden';
   document.body.classList.add('drawer-open');
 }
+function filterDrawerCat(catKey) {
+  // Update active pill
+  document.querySelectorAll('.ep-drawer-cat-pill').forEach(p => {
+    p.classList.toggle('active', p.dataset.cat === catKey);
+  });
+  const isMobile = window.innerWidth <= 700;
+  document.querySelectorAll('.ep-cat-column').forEach(col => {
+    const match = col.dataset.cat === catKey;
+    if (isMobile) {
+      col.classList.toggle('visible', match);
+      col.classList.remove('faded');
+    } else {
+      col.classList.remove('visible');
+      col.classList.toggle('faded', !match);
+    }
+  });
+}
 
+function initMagneticDrawerPills() {
+  const STRENGTH = 0.3;
+  const filterRow = document.getElementById('epDrawerCatFilter');
+  if (!filterRow) return;
+  let _raf = false;
+  filterRow.addEventListener('mousemove', function(e) {
+    if (_raf) return; _raf = true;
+    requestAnimationFrame(() => { _raf = false;
+      const pill = e.target.closest('.ep-drawer-cat-pill');
+      if (!pill) return;
+      const rect = pill.getBoundingClientRect();
+      const dx = (e.clientX - (rect.left + rect.width / 2)) * STRENGTH;
+      const dy = (e.clientY - (rect.top + rect.height / 2)) * STRENGTH;
+      pill.style.transform = `translate(${dx}px, ${dy}px)`;
+    });
+  });
+  filterRow.addEventListener('mouseleave', () => {
+    filterRow.querySelectorAll('.ep-drawer-cat-pill').forEach(p => {
+      p.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), background 0.2s, opacity 0.2s';
+      p.style.transform = 'translate(0,0)';
+      setTimeout(() => { p.style.transition = 'transform 0.1s ease, background 0.2s, opacity 0.2s'; }, 400);
+    });
+  });
+  filterRow.querySelectorAll('.ep-drawer-cat-pill').forEach(p => {
+    p.addEventListener('mouseenter', () => {
+      p.style.transition = 'transform 0.1s ease, background 0.2s, opacity 0.2s';
+    });
+  });
+}
 function closeEpisodeDrawer() {
   document.getElementById('epBackdrop').classList.remove('open');
   document.getElementById('epDrawer').classList.remove('open');
