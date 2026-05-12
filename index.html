@@ -4487,7 +4487,23 @@ function openEpisodeDrawer(collectionId) {
       </div>`;
     }).join('');
 
-    // Category filter pills above the columns
+    const filterRow = document.getElementById('epDrawerCatFilter');
+    if (sortedCatKeys.length > 1) {
+      filterRow.style.display = '';
+      filterRow.innerHTML = sortedCatKeys.map((catKey, i) => {
+        const catInfo = CATEGORIES.find(x => x.id === catKey) || { name: catKey };
+        const color = CAT_COLOR[catKey] || '#e8d5a3';
+        return `<button class="ep-drawer-cat-pill${i === 0 ? ' active' : ''}" data-cat="${catKey}" style="--col-color:${color}" onclick="filterDrawerCat('${catKey}')">${catInfo.name} <span style="opacity:0.5;font-size:0.55rem">${catGroups[catKey].length}</span></button>`;
+      }).join('');
+      filterDrawerCat(sortedCatKeys[0]);
+      initMagneticDrawerPills();
+    } else {
+      filterRow.style.display = 'none';
+      document.querySelectorAll('.ep-cat-column').forEach(c => c.classList.add('visible'));
+    }
+  }
+
+  // Open
     const filterRow = document.getElementById('epDrawerCatFilter');
     if (sortedCatKeys.length > 1) {
       filterRow.style.display = '';
@@ -4527,6 +4543,52 @@ function openEpisodeDrawer(collectionId) {
 }
 function filterDrawerCat(catKey) {
   // Update active pill
+  document.querySelectorAll('.ep-drawer-cat-pill').forEach(p => {
+    p.classList.toggle('active', p.dataset.cat === catKey);
+  });
+  const isMobile = window.innerWidth <= 700;
+  document.querySelectorAll('.ep-cat-column').forEach(col => {
+    const match = col.dataset.cat === catKey;
+    if (isMobile) {
+      col.classList.toggle('visible', match);
+      col.classList.remove('faded');
+    } else {
+      col.classList.remove('visible');
+      col.classList.toggle('faded', !match);
+    }
+  });
+}
+
+function initMagneticDrawerPills() {
+  const STRENGTH = 0.3;
+  const filterRow = document.getElementById('epDrawerCatFilter');
+  if (!filterRow) return;
+  let _raf = false;
+  filterRow.addEventListener('mousemove', function(e) {
+    if (_raf) return; _raf = true;
+    requestAnimationFrame(() => { _raf = false;
+      const pill = e.target.closest('.ep-drawer-cat-pill');
+      if (!pill) return;
+      const rect = pill.getBoundingClientRect();
+      const dx = (e.clientX - (rect.left + rect.width / 2)) * STRENGTH;
+      const dy = (e.clientY - (rect.top + rect.height / 2)) * STRENGTH;
+      pill.style.transform = `translate(${dx}px, ${dy}px)`;
+    });
+  });
+  filterRow.addEventListener('mouseleave', () => {
+    filterRow.querySelectorAll('.ep-drawer-cat-pill').forEach(p => {
+      p.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), background 0.2s, opacity 0.2s';
+      p.style.transform = 'translate(0,0)';
+      setTimeout(() => { p.style.transition = 'transform 0.1s ease, background 0.2s, opacity 0.2s'; }, 400);
+    });
+  });
+  filterRow.querySelectorAll('.ep-drawer-cat-pill').forEach(p => {
+    p.addEventListener('mouseenter', () => {
+      p.style.transition = 'transform 0.1s ease, background 0.2s, opacity 0.2s';
+    });
+  });
+}
+function filterDrawerCat(catKey) {
   document.querySelectorAll('.ep-drawer-cat-pill').forEach(p => {
     p.classList.toggle('active', p.dataset.cat === catKey);
   });
