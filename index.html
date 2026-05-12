@@ -4486,9 +4486,23 @@ function openEpisodeDrawer(collectionId) {
         ${cards}
       </div>`;
     }).join('');
+
+    // Category filter pills above the columns
+    const filterRow = document.getElementById('epDrawerCatFilter');
+    if (sortedCatKeys.length > 1) {
+      filterRow.style.display = '';
+      filterRow.innerHTML = sortedCatKeys.map((catKey, i) => {
+        const catInfo = CATEGORIES.find(x => x.id === catKey) || { name: catKey };
+        const color = CAT_COLOR[catKey] || '#e8d5a3';
+        return `<button class="ep-drawer-cat-pill${i === 0 ? ' active' : ''}" data-cat="${catKey}" style="--col-color:${color}" onclick="filterDrawerCat('${catKey}')">${catInfo.name} <span style="opacity:0.5;font-size:0.55rem">${catGroups[catKey].length}</span></button>`;
+      }).join('');
+      filterDrawerCat(sortedCatKeys[0]);
+      initMagneticDrawerPills();
+    } else {
+      filterRow.style.display = 'none';
+      document.querySelectorAll('.ep-cat-column').forEach(c => c.classList.add('visible'));
+    }
   }
-  // Category filter pills above the columns
-  const filterRow = document.getElementById('epDrawerCatFilter');
   if (sortedCatKeys.length > 1) {
     filterRow.style.display = '';
     filterRow.innerHTML = sortedCatKeys.map((catKey, i) => {
