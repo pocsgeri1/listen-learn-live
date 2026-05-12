@@ -116,10 +116,13 @@ export default async function handler(req, res) {
     const prompt = readField(raw, 'prompt', 'Prompt');
     const collection_id = readIntOrNull(raw, 'collection_id', 'Collection ID');
     const timestamp = readTimestampOrNull(raw, 'timestamp', 'Timestamp');
-    const editors_pick = readField(raw, 'editors_pick', "Editor's Pick", 'Editors Pick') === true
-                      || readField(raw, 'editors_pick', "Editor's Pick", 'Editors Pick') === 'true'
-                      || readField(raw, 'editors_pick', "Editor's Pick", 'Editors Pick') === 1
-                      || readField(raw, 'editors_pick', "Editor's Pick", 'Editors Pick') === '1';
+    // Read editors_pick directly — readField above only handles strings/numbers
+    // and would silently coerce boolean true → '' (= false).
+    const editorsPickRaw = raw['editors_pick'] ?? raw["Editor's Pick"] ?? raw['Editors Pick'];
+    const editors_pick = editorsPickRaw === true
+                      || editorsPickRaw === 'true'
+                      || editorsPickRaw === 1
+                      || editorsPickRaw === '1';
 
     const missing = [];
     if (!term) missing.push('term');
