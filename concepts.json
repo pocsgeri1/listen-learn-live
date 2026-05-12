@@ -4310,5 +4310,18 @@
     "collection_id": 504,
     "timestamp": 401,
     "editors_pick": false
+  },
+  {
+    "id": 380,
+    "term": "Flavor-Of-The-Day Validation",
+    "category": "business",
+    "source": "dk",
+    "hook": "If a business model is popular on YouTube, it works — saturation means proof.",
+    "plain": "The counterintuitive insight that if you see many people teaching a business model online, it's not oversaturated — it's validated. Most people never commit, so perceived competition is an illusion. Popularity means the model has traction.",
+    "analogy": "Like seeing ten gyms in your neighborhood and thinking 'too crowded' — when actually, it proves demand is high and most people quit after January anyway.",
+    "prompt": "Search YouTube for three trending business models. Pick one that scares you because it looks 'too popular.' Now ask: how many people do I know personally who've stuck with it for 12 months?",
+    "collection_id": 504,
+    "timestamp": 821,
+    "editors_pick": true
   }
 ]
