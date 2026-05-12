@@ -477,10 +477,44 @@
   .ep-drawer-body::-webkit-scrollbar-track { background: transparent; }
   .ep-drawer-body::-webkit-scrollbar-thumb { background: var(--border-hover); border-radius: 2px; }
   .ep-drawer-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1rem;
-    align-items: start;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 1.5rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-hover) transparent;
+  }
+  .ep-cat-column {
+    flex: 0 0 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .ep-cat-column-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 4px 8px;
+    border-bottom: 1.5px solid var(--col-color, var(--accent));
+    margin-bottom: 4px;
+  }
+  .ep-cat-column-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--col-color, var(--accent));
+  }
+  .ep-cat-column-count {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+  }
+  @media (max-width: 600px) {
+    .ep-cat-column { flex: 0 0 260px; }
   }
   .ep-empty {
     font-family: 'DM Mono', monospace;
@@ -4333,7 +4367,7 @@ function openEpisodeDrawer(collectionId) {
   const listenLink = col.episode_url
     ? `<a class="ep-drawer-listen" href="${col.episode_url}" target="_blank" rel="noopener">↗ Listen</a>`
     : '';
-  const drawerDateStr = col.date ? new Date(col.date).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' }).toUpperCase() : '';
+  const drawerDateStr = (col.date || col.created_date) ? new Date(col.date || col.created_date).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' }).toUpperCase() : '';
   const drawerDateHtml = drawerDateStr ? `<span class="episode-datestamp">${drawerDateStr}</span>` : '';
   pills.innerHTML = peoplePills + countPill + drawerDateHtml + listenLink;
 
@@ -4349,47 +4383,66 @@ function openEpisodeDrawer(collectionId) {
       }).join('')
     : '';
 
-  // Concept cards — reuse the same card markup as the main grid
+  // Concept cards — grouped by category, one column per category
   const grid = document.getElementById('epDrawerGrid');
   if (!epConcepts.length) {
     grid.innerHTML = '<div class="ep-empty">No concepts yet in this episode</div>';
   } else {
-    grid.innerHTML = epConcepts.map((c, i) => {
-      const color = CAT_COLOR[c.category] || '#e8d5a3';
-      const isMastered = mastered.has(c.id);
-      return `
-      <div class="concept-card${isMastered?' mastered':''}${c.editors_pick===true?' editors-pick':''}" id="epcc${c.id}" style="--cat-color:${color}">
-        <div class="card-front" onclick="toggleEpCard(${c.id})">
-          <div class="card-meta">
-            <span class="card-num">#${String(c.id).padStart(3,'0')}</span>
-            <span class="card-cat">${(CATEGORIES.find(x => x.id === c.category)||{}).name||c.category}</span>
-            ${c.editors_pick===true ? '<span class="pick-badge"><span class="pick-star">★</span>PICK</span>' : ''}
-            <span class="mastered-badge">✓ mastered</span>
+    // Group by category, preserve order
+    const catGroups = {};
+    epConcepts.forEach(c => {
+      if (!catGroups[c.category]) catGroups[c.category] = [];
+      catGroups[c.category].push(c);
+    });
+    // Sort category groups: most concepts first
+    const sortedCatKeys = Object.keys(catGroups).sort((a, b) => catGroups[b].length - catGroups[a].length);
+
+    grid.innerHTML = sortedCatKeys.map(catKey => {
+      const catInfo = CATEGORIES.find(x => x.id === catKey) || { name: catKey, color: '#e8d5a3' };
+      const catColor = CAT_COLOR[catKey] || '#e8d5a3';
+      const cards = catGroups[catKey].map(c => {
+        const isMastered = mastered.has(c.id);
+        return `
+        <div class="concept-card${isMastered?' mastered':''}${c.editors_pick===true?' editors-pick':''}" id="epcc${c.id}" style="--cat-color:${catColor}">
+          <div class="card-front" onclick="toggleEpCard(${c.id})">
+            <div class="card-meta">
+              <span class="card-num">#${String(c.id).padStart(3,'0')}</span>
+              ${c.editors_pick===true ? '<span class="pick-badge"><span class="pick-star">★</span>PICK</span>' : ''}
+              <span class="mastered-badge">✓ mastered</span>
+            </div>
+            <div class="card-term">${c.term}</div>
+            <div class="card-hook">${c.hook}</div>
+            <div class="card-expand-icon">+</div>
           </div>
-          <div class="card-term">${c.term}</div>
-          <div class="card-hook">${c.hook}</div>
-          <div class="card-expand-icon">+</div>
+          <div class="card-back">
+            <div class="back-section-label">What it means</div>
+            <div class="back-text">${c.plain}</div>
+            <div class="back-section-label">Analogy</div>
+            <div class="back-analogy">${c.analogy}</div>
+            <div class="back-section-label">Reflect & Use It</div>
+            <div class="back-prompt">
+              <div class="prompt-icon">💬</div>
+              <p>${c.prompt}</p>
+            </div>
+            <div class="card-actions">
+              <button class="btn-master" onclick="toggleEpMaster(event,${c.id})">${isMastered?'✓ VAULT':'⊕ VAULT'}</button>
+              ${(() => {
+                if (typeof c.timestamp !== 'number' || !col || !col.episode_url) return '';
+                const url = buildTimestampedUrl(col.episode_url, c.timestamp);
+                if (!url) return '';
+                return `<a class="btn-listen" href="${url}" target="_blank" rel="noopener" onclick="event.stopPropagation()">↗ Listen</a>`;
+              })()}
+            </div>
+          </div>
+        </div>`;
+      }).join('');
+
+      return `<div class="ep-cat-column">
+        <div class="ep-cat-column-header" style="--col-color:${catColor}">
+          <span class="ep-cat-column-label">${catInfo.name}</span>
+          <span class="ep-cat-column-count">${catGroups[catKey].length}</span>
         </div>
-        <div class="card-back">
-          <div class="back-section-label">What it means</div>
-          <div class="back-text">${c.plain}</div>
-          <div class="back-section-label">Analogy</div>
-          <div class="back-analogy">${c.analogy}</div>
-          <div class="back-section-label">Reflect & Use It</div>
-          <div class="back-prompt">
-            <div class="prompt-icon">💬</div>
-            <p>${c.prompt}</p>
-          </div>
-          <div class="card-actions">
-            <button class="btn-master" onclick="toggleEpMaster(event,${c.id})">${isMastered?'✓ VAULT':'⊕ VAULT'}</button>
-            ${(() => {
-              if (typeof c.timestamp !== 'number' || !col || !col.episode_url) return '';
-              const url = buildTimestampedUrl(col.episode_url, c.timestamp);
-              if (!url) return '';
-              return `<a class="btn-listen" href="${url}" target="_blank" rel="noopener" onclick="event.stopPropagation()">↗ Listen</a>`;
-            })()}
-          </div>
-        </div>
+        ${cards}
       </div>`;
     }).join('');
   }
@@ -4545,7 +4598,7 @@ function buildEpisodes() {
     const peoplePills = (col.people || [])
       .map(p => `<span class="episode-person-pill">${p}</span>`).join('');
 
-    const dateStr = col.date ? new Date(col.date).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' }).toUpperCase() : '';
+    const dateStr = (col.date || col.created_date) ? new Date(col.date || col.created_date).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' }).toUpperCase() : '';
     const dominantCat = epConcepts.length > 0 ? epConcepts[0].category : null;
     const dateColor = dominantCat ? (CAT_COLOR[dominantCat] || 'var(--accent)') : 'var(--accent)';
 
