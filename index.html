@@ -307,6 +307,25 @@
     letter-spacing: 0.08em;
     margin-top: auto;
   }
+  .episode-datestamp {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .episode-datestamp::before {
+    content: '';
+    display: inline-block;
+    width: 2px;
+    height: 10px;
+    background: var(--ep-date-color, var(--accent));
+    border-radius: 1px;
+    opacity: 0.6;
+  }
   /* ---- Short cards ---- */
   .short-card {
     flex: 0 0 220px; min-width: 220px;
@@ -445,9 +464,7 @@
   }
   .ep-drawer-close:hover { color: var(--text); border-color: var(--border-hover); }
   .ep-drawer-mix {
-    height: 3px;
-    display: flex;
-    flex-shrink: 0;
+    display: none;
   }
   .ep-drawer-body {
     flex: 1;
@@ -3854,7 +3871,7 @@ function buildGrid() {
                 <div class="card-front" onclick="toggleCard(${c.id})">
                   <div class="card-meta">
                     <span class="card-num">#${String(c.id).padStart(3,'0')}</span>
-                    <span class="card-cat">${(CATEGORIES.find(x => x.id === c.category)||{}).name||c.category}</span>
+                    <span class="card-cat" style="cursor:pointer" onclick="event.stopPropagation();setCat('${c.category}');closeEpisodeDrawer()">${(CATEGORIES.find(x => x.id === c.category)||{}).name||c.category}</span>
                     ${c.editors_pick===true ? '<span class="pick-badge"><span class="pick-star">★</span>PICK</span>' : ''}
                     <span class="mastered-badge">✓ mastered</span>
                   </div>
@@ -4316,7 +4333,9 @@ function openEpisodeDrawer(collectionId) {
   const listenLink = col.episode_url
     ? `<a class="ep-drawer-listen" href="${col.episode_url}" target="_blank" rel="noopener">↗ Listen</a>`
     : '';
-  pills.innerHTML = peoplePills + countPill + listenLink;
+  const drawerDateStr = col.date ? new Date(col.date).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' }).toUpperCase() : '';
+  const drawerDateHtml = drawerDateStr ? `<span class="episode-datestamp">${drawerDateStr}</span>` : '';
+  pills.innerHTML = peoplePills + countPill + drawerDateHtml + listenLink;
 
   // Category mix bar
   const catCounts = {};
@@ -4526,13 +4545,17 @@ function buildEpisodes() {
     const peoplePills = (col.people || [])
       .map(p => `<span class="episode-person-pill">${p}</span>`).join('');
 
+    const dateStr = col.date ? new Date(col.date).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' }).toUpperCase() : '';
+    const dominantCat = epConcepts.length > 0 ? epConcepts[0].category : null;
+    const dateColor = dominantCat ? (CAT_COLOR[dominantCat] || 'var(--accent)') : 'var(--accent)';
+
     return `
       <div class="episode-card" onclick="openEpisodeDrawer(${col.id})">
         <div class="episode-thumb">${thumbHtml}</div>
         <div class="episode-body">
           <div class="episode-title">${col.title.trim()}</div>
           <div class="episode-people-row">${peoplePills}</div>
-          <div class="episode-count">${conceptCount} concept${conceptCount !== 1 ? 's' : ''}</div>
+          <div class="episode-count">${conceptCount} concept${conceptCount !== 1 ? 's' : ''}${dateStr ? ` &nbsp;·&nbsp; <span class="episode-datestamp" style="--ep-date-color:${dateColor}">${dateStr}</span>` : ''}</div>
         </div>
       </div>
     `;
