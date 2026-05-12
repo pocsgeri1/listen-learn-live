@@ -4367,7 +4367,7 @@ function openEpisodeDrawer(collectionId) {
   const listenLink = col.episode_url
     ? `<a class="ep-drawer-listen" href="${col.episode_url}" target="_blank" rel="noopener">↗ Listen</a>`
     : '';
-  const drawerDateStr = (col.date || col.created_date) ? new Date(col.date || col.created_date).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' }).toUpperCase() : '';
+  const drawerDateStr = (col.aired_date || col.date || col.created_date) ? new Date(col.aired_date || col.date || col.created_date).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' }).toUpperCase() : '';
   const drawerDateHtml = drawerDateStr ? `<span class="episode-datestamp">${drawerDateStr}</span>` : '';
   pills.innerHTML = peoplePills + countPill + drawerDateHtml + listenLink;
 
@@ -4598,7 +4598,7 @@ function buildEpisodes() {
     const peoplePills = (col.people || [])
       .map(p => `<span class="episode-person-pill">${p}</span>`).join('');
 
-    const dateStr = (col.date || col.created_date) ? new Date(col.date || col.created_date).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' }).toUpperCase() : '';
+    const dateStr = (col.aired_date || col.date || col.created_date) ? new Date(col.aired_date || col.date || col.created_date).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' }).toUpperCase() : '';
     const dominantCat = epConcepts.length > 0 ? epConcepts[0].category : null;
     const dateColor = dominantCat ? (CAT_COLOR[dominantCat] || 'var(--accent)') : 'var(--accent)';
 
