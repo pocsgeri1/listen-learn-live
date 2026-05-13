@@ -4846,5 +4846,70 @@
     "collection_id": 510,
     "timestamp": 0,
     "editors_pick": true
+  },
+  {
+    "id": 420,
+    "term": "Stage 1: Love Bombing",
+    "category": "relationships",
+    "source": "mm",
+    "hook": "Why sudden intensity is a red flag, not romance.",
+    "plain": "Someone showers you with attention, deep talks, and the feeling of being truly seen. It feels like destiny. But you're being studied — mapped for weaknesses while your guard drops. The flood isn't affection. It's reconnaissance.",
+    "analogy": "A hacker doesn't break down the door. They send flowers, learn your birthday, earn your trust — then you hand over the password yourself.",
+    "prompt": "Think of the last time someone came on unusually strong. What did they learn about you in those early weeks?",
+    "collection_id": 507,
+    "timestamp": 0,
+    "editors_pick": false
+  },
+  {
+    "id": 421,
+    "term": "Stage 2: Devaluation",
+    "category": "psychology",
+    "source": "mm",
+    "hook": "When inconsistency becomes the control mechanism.",
+    "plain": "The warmth that came easily now arrives randomly. You work harder to recreate early magic, but the goal is your confusion — not clarity. Unpredictable reactions keep you chasing validation that once felt effortless. The instability is the point.",
+    "analogy": "A slot machine that paid out every time would be boring. Make the reward random, and people pull the lever until their arm falls off.",
+    "prompt": "Where are you working hardest to get back to 'how it used to be' — and who benefits from that effort?",
+    "collection_id": 507,
+    "timestamp": 42,
+    "editors_pick": true
+  },
+  {
+    "id": 422,
+    "term": "Stage 3: Retroactive Realization",
+    "category": "psychology",
+    "source": "mm",
+    "hook": "The worst betrayal is learning the beginning was fake.",
+    "plain": "The discard hurts, but the real pain comes later: realizing the love bombing was never real. The cycle didn't start when they left. It started the moment they made you feel like the center of the universe. You weren't falling in love. You were being set up.",
+    "analogy": "Like rewatching a magic trick in slow motion and seeing the false bottom in the box. The reveal doesn't just ruin the ending — it poisons the whole memory.",
+    "prompt": "What early 'proof' of someone's feelings would you now interpret completely differently?",
+    "collection_id": 507,
+    "timestamp": 90,
+    "editors_pick": false
+  },
+  {
+    "id": 423,
+    "term": "Manson's Law of Avoidance",
+    "category": "psychology",
+    "source": "mm",
+    "hook": "We dodge what could change us most — good or bad.",
+    "plain": "You avoid opportunities in direct proportion to how much they threaten your self-concept. Public speaking terrifies because bombing would shatter how you see your ideas. A dream job abroad gets declined because accepting it means questioning who you've told yourself you are. Your mind fights equally hard against threats and breakthroughs.",
+    "analogy": "A hermit crab outgrows its shell but refuses bigger ones — not because they're unavailable, but because switching means a few seconds of terrifying exposure.",
+    "prompt": "What opportunity are you manufacturing reasons to decline right now?",
+    "collection_id": 508,
+    "timestamp": 15,
+    "editors_pick": true
+  },
+  {
+    "id": 424,
+    "term": "Loose Self-definition",
+    "category": "identity",
+    "source": "mm",
+    "hook": "Admitting you don't know yourself unlocks who you could become.",
+    "plain": "The tighter your self-narrative, the more you'll sabotage change to protect it. Buddhism's 'no self' concept suggests your identity is a useful fiction, not a fact. Holding your story lightly — 'I don't actually know who I am' — removes the psychological handcuffs when new versions of you try to emerge.",
+    "analogy": "A actor who believes they are the detective character can't play the villain. But one who knows they're just an actor can inhabit anyone.",
+    "prompt": "Which part of your self-story are you defending most aggressively?",
+    "collection_id": 508,
+    "timestamp": 195,
+    "editors_pick": true
   }
 ]
