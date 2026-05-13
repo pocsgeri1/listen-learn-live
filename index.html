@@ -514,13 +514,16 @@
     letter-spacing: 0.08em;
   }
   .ep-drawer-cat-filter {
-    display: flex;
+    display: flex !important;
     flex-wrap: nowrap;
     gap: 6px;
     padding: 0 2rem 1.2rem;
     overflow-x: auto;
     scrollbar-width: none;
     flex-shrink: 0;
+  }
+  @media (max-width: 700px) {
+    .ep-drawer-cat-filter { padding: 0 1.25rem 1rem; }
   }
   .ep-drawer-cat-filter::-webkit-scrollbar { display: none; }
   .ep-drawer-cat-pill {
@@ -4515,8 +4518,10 @@ function filterDrawerCat(catKey) {
     p.classList.toggle('active', p.dataset.cat === catKey);
   });
   const isMobile = window.innerWidth <= 700;
+  let targetCol = null;
   document.querySelectorAll('.ep-cat-column').forEach(col => {
     const match = col.dataset.cat === catKey;
+    if (match) targetCol = col;
     if (isMobile) {
       col.classList.toggle('visible', match);
       col.classList.remove('faded');
@@ -4525,6 +4530,16 @@ function filterDrawerCat(catKey) {
       col.classList.toggle('faded', !match);
     }
   });
+  // Desktop: scroll target column into center of the drawer grid
+  if (!isMobile && targetCol) {
+    const grid = document.getElementById('epDrawerGrid');
+    if (grid) {
+      const colRect = targetCol.getBoundingClientRect();
+      const gridRect = grid.getBoundingClientRect();
+      const offset = (colRect.left + colRect.width / 2) - (gridRect.left + gridRect.width / 2);
+      grid.scrollBy({ left: offset, behavior: 'smooth' });
+    }
+  }
 }
 
 function initMagneticDrawerPills() {
@@ -4566,8 +4581,12 @@ function closeEpisodeDrawer() {
 function toggleEpCard(id) {
   const el = document.getElementById('epcc'+id);
   if (!el) return;
+  // If the card is in a faded column, switch the filter to that column first
+  const parentCol = el.closest('.ep-cat-column');
+  if (parentCol && parentCol.classList.contains('faded')) {
+    filterDrawerCat(parentCol.dataset.cat);
+  }
   const wasOpen = el.classList.contains('open');
-  // Close all other drawer cards first (same fix as toggleCard)
   document.querySelectorAll('#epDrawerGrid .concept-card.open').forEach(card => {
     if (card.id !== 'epcc'+id) card.classList.remove('open');
   });
