@@ -1603,7 +1603,8 @@
     "plain": "Whether you're a morning person or night owl is largely determined by genetics. Fighting your chronotype costs you performance, health, and cognitive function — it's not a moral failing to overcome.",
     "analogy": "A natural night owl forced into a 6am-to-midnight schedule is like running an engine on the wrong fuel. The engine technically works — it's just operating far below its capacity.",
     "prompt": "When during the day do you do your best thinking — and how much of your current schedule actually protects that window versus filling it with low-value tasks?",
-    "collection_id": 5
+    "collection_id": 5,
+    "editors_pick": true
   },
   {
     "id": 149,
@@ -2853,7 +2854,8 @@
     "analogy": "Like replacing a dying car battery instead of just putting higher-octane gas in the tank.",
     "prompt": "If you could improve one aspect of your cellular function to feel 10 years younger, what would it be?",
     "collection_id": 15,
-    "timestamp": 2238
+    "timestamp": 2238,
+    "editors_pick": true
   },
   {
     "id": 262,
@@ -2881,7 +2883,7 @@
   },
   {
     "id": 264,
-    "term": "Haber-bosch Process",
+    "term": "Haber-Bosch Process",
     "category": "science",
     "source": "cw",
     "hook": "Nitrogen from air became fertilizer — population skyrocketed, starvation crisis solved.",
@@ -2925,7 +2927,8 @@
     "analogy": "Like when the internet let anyone open a Shopify store instead of needing a brick-and-mortar retail lease and employees.",
     "prompt": "If you owned a 24/7 robot that could make or build anything, what business would you run from your garage?",
     "collection_id": 15,
-    "timestamp": 836
+    "timestamp": 836,
+    "editors_pick": true
   },
   {
     "id": 268,
@@ -2985,7 +2988,8 @@
     "analogy": "Like a video game where the finish line keeps moving further away, but you're running faster than it's moving — you never hit the end.",
     "prompt": "If sticking around another 10 years meant access to tech that could double your lifespan, what's worth changing today to get there?",
     "collection_id": 15,
-    "timestamp": 3307
+    "timestamp": 3307,
+    "editors_pick": true
   },
   {
     "id": 273,
@@ -3033,7 +3037,8 @@
     "analogy": "Like hitting 'restore factory settings' on your phone, but only resetting the buggy apps, not wiping everything.",
     "prompt": "If you could reset one part of your body to how it was at age 25, what would you pick?",
     "collection_id": 15,
-    "timestamp": 2852
+    "timestamp": 2852,
+    "editors_pick": true
   },
   {
     "id": 277,
@@ -3225,7 +3230,8 @@
     "analogy": "Imagine playing a video game where some characters start with +5 charisma. Every NPC is slightly nicer to them, every quest slightly easier. You'd call it an unfair advantage — but we pretend it doesn't exist in real life.",
     "prompt": "Think of the most attractive person you know personally. List three specific advantages they've received that were invisible to them but obvious to you.",
     "collection_id": 501,
-    "timestamp": 5309
+    "timestamp": 5309,
+    "editors_pick": true
   },
   {
     "id": 293,
@@ -3273,7 +3279,8 @@
     "analogy": "Imagine someone joining a vegan meetup not because they care about animal rights, but because attractive people are there. The performance is genuine enough to pass — but the motivation is pure strategy.",
     "prompt": "Think of someone whose values conveniently align with whoever they're trying to impress. What tell gives them away?",
     "collection_id": 501,
-    "timestamp": 631
+    "timestamp": 631,
+    "editors_pick": true
   },
   {
     "id": 297,
@@ -3470,7 +3477,7 @@
   },
   {
     "id": 313,
-    "term": "Hr Manual Workaround",
+    "term": "HR Manual Workaround",
     "category": "power",
     "source": "ry",
     "hook": "Rules restrict average behavior — smart actors just find unrestricted subdomains.",
@@ -3622,7 +3629,8 @@
     "analogy": "You're running to catch a train that leaves in five minutes, so you sprint. But if the train runs every hour forever, why rush? You'll get there eventually. That's immortality and reproduction.",
     "prompt": "If you knew you'd live to 500, what major life decision would you delay? And what does that say about why you're rushing toward it now?",
     "collection_id": 502,
-    "timestamp": 4139
+    "timestamp": 4139,
+    "editors_pick": true
   },
   {
     "id": 326,
@@ -3682,7 +3690,8 @@
     "analogy": "You plant a seed, water it, and a tree grows. But you didn't design the tree — you just provided conditions. Now you're testing the branches to see if they'll hold weight. You're the gardener, not the architect.",
     "prompt": "What happens when we rely on systems that no one fully understands to make important decisions?",
     "collection_id": 502,
-    "timestamp": 2407
+    "timestamp": 2407,
+    "editors_pick": true
   },
   {
     "id": 331,
@@ -3949,7 +3958,7 @@
     "prompt": "What's one failure or embarrassing moment from the last five years that you've never shared publicly because you thought it made you look bad? That's your next post.",
     "collection_id": 503,
     "timestamp": 2349,
-    "editors_pick": false
+    "editors_pick": true
   },
   {
     "id": 352,
@@ -3975,11 +3984,11 @@
     "prompt": "What's one small opportunity you've noticed at work that no one is solving? How would you test a solution for under £500 and 10 hours of effort?",
     "collection_id": 503,
     "timestamp": 1098,
-    "editors_pick": false
+    "editors_pick": true
   },
   {
     "id": 354,
-    "term": "Value Creation Loop",
+    "term": "4-Step Value Creation Loop",
     "category": "business",
     "source": "dp",
     "hook": "Entrepreneurs follow six steps, then repeat — not one big bet.",
@@ -4027,7 +4036,7 @@
     "prompt": "Write down three moments in your career where you solved a problem that stumped everyone else. That's your personal IP. Who would pay to hear that story?",
     "collection_id": 503,
     "timestamp": 2280,
-    "editors_pick": false
+    "editors_pick": true
   },
   {
     "id": 358,
@@ -4040,7 +4049,7 @@
     "prompt": "What's one experience you've lived through — good or bad — that gave you a perspective most people don't have? How could you turn that into advice, content, or a product?",
     "collection_id": 503,
     "timestamp": 2448,
-    "editors_pick": false
+    "editors_pick": true
   },
   {
     "id": 359,
@@ -4070,7 +4079,7 @@
   },
   {
     "id": 361,
-    "term": "Six-month Loop",
+    "term": "Six-Month Loop",
     "category": "identity",
     "source": "dk",
     "hook": "Most people plateau at 23 — they repeat the same six months forever.",
@@ -4083,7 +4092,7 @@
   },
   {
     "id": 362,
-    "term": "Hole-digging Effect",
+    "term": "Hole-Digging Effect",
     "category": "psychology",
     "source": "dk",
     "hook": "You think you're staying in place — you're actually digging a hole.",
@@ -4261,15 +4270,15 @@
     "prompt": "Think of someone in their 40s you know personally. Do they handle criticism, setbacks, or disagreement better than they did at 20? If not, what pattern have they been repeating?",
     "collection_id": 504,
     "timestamp": 158,
-    "editors_pick": false
+    "editors_pick": true
   },
   {
     "id": 376,
     "term": "Goal Gravity",
     "category": "thinking",
     "source": "dk",
-    "hook": "A goal only has pull when you've invested energy into it.",
-    "plain": "The principle that goals feel motivating or compelling only after you've spent time working toward them. Without action invested, a goal is just a wish — you won't feel discipline or recognize distractions as mistakes until you've built momentum.",
+    "hook": "A goal only has pull when you've invested significant energy into it.",
+    "plain": "Goals feel motivating or compelling only after you've spent time working toward them. Without action invested, a goal is just a wish — you won't feel discipline or recognize distractions as mistakes until you've built momentum.",
     "analogy": "Like starting a garden — watering it once doesn't make you care about weeds. But after a month of daily care, you're furious when a rabbit eats your tomatoes because you've invested energy.",
     "prompt": "Pick a goal you claim matters. Work on it for 30 consecutive days, even 20 minutes daily. On day 31, ask: do I now feel actual pain when something threatens this progress?",
     "collection_id": 504,
@@ -4365,7 +4374,7 @@
     "prompt": "If you got everything you wanted tomorrow, do you honestly think you'd be able to handle it?",
     "collection_id": 505,
     "timestamp": 6046,
-    "editors_pick": false
+    "editors_pick": true
   },
   {
     "id": 384,
@@ -4404,7 +4413,7 @@
     "prompt": "Name one person you've survived a real crisis with. What changed about the relationship afterward?",
     "collection_id": 505,
     "timestamp": 694,
-    "editors_pick": false
+    "editors_pick": true
   },
   {
     "id": 387,
@@ -4521,7 +4530,7 @@
     "prompt": "If you had unlimited money and total freedom tomorrow, what guardrails would you need to avoid self-destruction?",
     "collection_id": 505,
     "timestamp": 6244,
-    "editors_pick": false
+    "editors_pick": true
   },
   {
     "id": 396,
