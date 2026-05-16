@@ -2283,6 +2283,44 @@
     color: var(--cat-color);
   }
 
+  .shorts-filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 0 0 16px 0;
+    align-items: center;
+  }
+  .short-filter-pill {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    transition: all 0.15s;
+  }
+  .short-filter-pill.active, .short-filter-pill:hover {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+  }
+  .shorts-search {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-family: 'DM Mono', monospace;
+    outline: none;
+    min-width: 160px;
+  }
+  .shorts-search:focus { border-color: var(--accent); }
+  
   .people-pills {
     display: flex;
     flex-wrap: wrap;
@@ -4635,13 +4673,15 @@ document.addEventListener('keydown', function(e) {
 });
 function getYouTubeId(url) {
   if (!url) return null;
-  try {
-    const u = new URL(url);
-    // Standard: youtube.com/watch?v=VIDEO_ID
-    if (u.hostname.includes('youtube.com')) return u.searchParams.get('v');
-    // Short: youtu.be/VIDEO_ID
-    if (u.hostname === 'youtu.be') return u.pathname.slice(1);
-  } catch (e) {}
+  // Handle /shorts/ format
+  const shortsMatch = url.match(/\/shorts\/([a-zA-Z0-9_-]{11})/);
+  if (shortsMatch) return shortsMatch[1];
+  // Standard youtube.com/watch?v=
+  const watchMatch = url.match(/[?&]v=([a-zA-Z0-9_-]{11})/);
+  if (watchMatch) return watchMatch[1];
+  // youtu.be/
+  const shortMatch = url.match(/youtu\.be\/([a-zA-Z0-9_-]{11})/);
+  if (shortMatch) return shortMatch[1];
   return null;
 }
 
@@ -4790,104 +4830,88 @@ function buildShorts() {
   if (shortCollections.length === 0) { section.style.display = 'none'; return; }
   section.style.display = 'block';
 
-  // Group by creator (podcast field)
-  const grouped = {};
-  shortCollections.forEach(col => {
-    const name = col.podcast || 'Other';
-    if (!grouped[name]) grouped[name] = [];
-    grouped[name].push(col);
-  });
-
-  const creatorNames = Object.keys(grouped).sort((a, b) => {
-    const diff = grouped[b].length - grouped[a].length;
-    return diff !== 0 ? diff : a.localeCompare(b);
-  });
-
   function renderShortCard(col) {
     const colConcepts = CONCEPTS.filter(c => c.collection_id === col.id);
     const ytId = getYouTubeId(col.episode_url);
-
-    // Single-concept: render inline concept card with thumbnail strip on top
-    if (colConcepts.length === 1) {
-      const c = colConcepts[0];
-      const color = CAT_COLOR[c.category] || '#e8d5a3';
-      const isMastered = mastered.has(c.id);
-      const ytUrl = col.episode_url || '#';
-      const thumbHtml = ytId
-        ? `<a href="${ytUrl}" target="_blank" rel="noopener" class="short-thumb-link" onclick="event.stopPropagation()">
-             <img src="https://img.youtube.com/vi/${ytId}/mqdefault.jpg"
-               onerror="this.onerror=null;this.src='https://img.youtube.com/vi/${ytId}/hqdefault.jpg'"
-               loading="lazy" alt="${col.title.trim()}">
-             <span class="short-thumb-play">↗</span>
-           </a>`
-        : `<div class="short-thumb-fallback">${col.title.trim()}</div>`;
-
-      return `
-        <div class="short-card concept-card${isMastered ? ' mastered' : ''}${c.editors_pick===true?' editors-pick':''}" style="--cat-color:${color}" id="sc${c.id}">
-          <div class="short-thumb">${thumbHtml}</div>
-          <div class="card-front" onclick="toggleShortCard(${c.id})">
-            <div class="card-meta">
-              <span class="card-cat">${(CATEGORIES.find(x => x.id === c.category)||{}).name||c.category}</span>
-              ${c.editors_pick===true ? '<span class="pick-badge"><span class="pick-star">★</span>PICK</span>' : ''}
-              <span class="mastered-badge">✓ mastered</span>
-            </div>
-            <div class="card-term">${c.term}</div>
-            <div class="card-hook">${c.hook}</div>
-            <div class="card-expand-icon">+</div>
-          </div>
-          <div class="card-back">
-            <div class="back-section-label">What it means</div>
-            <div class="back-text">${c.plain}</div>
-            <div class="back-section-label">Analogy</div>
-            <div class="back-analogy">${c.analogy}</div>
-            <div class="back-section-label">Reflect & Use It</div>
-            <div class="back-prompt"><div class="prompt-icon">💬</div><p>${c.prompt}</p></div>
-            <div class="card-actions">
-              <button class="btn-master" onclick="toggleShortMaster(event,${c.id})">
-                ${isMastered ? '✓ VAULT' : '⊕ VAULT'}
-              </button>
-              ${col.episode_url ? `<a class="btn-listen" href="${col.episode_url}" target="_blank" rel="noopener" onclick="event.stopPropagation()">↗ Watch</a>` : ''}
-            </div>
-          </div>
-        </div>`;
-    }
-
-    // Multi-concept (2–3): episode-style card that opens the existing drawer
     const conceptCount = colConcepts.length;
     const thumbHtml = ytId
-      ? `<img src="https://img.youtube.com/vi/${ytId}/maxresdefault.jpg" loading="lazy"
+      ? `<img src="https://img.youtube.com/vi/${ytId}/mqdefault.jpg" loading="lazy"
              onerror="this.onerror=null;this.src='https://img.youtube.com/vi/${ytId}/hqdefault.jpg'"
              alt="${col.title.trim()}">`
       : `<div class="episode-thumb-fallback"><div class="episode-thumb-fallback-title">${col.title.trim()}</div></div>`;
-
     return `
       <div class="episode-card" onclick="openEpisodeDrawer(${col.id})">
         <div class="episode-thumb">${thumbHtml}</div>
         <div class="episode-body">
           <div class="episode-title">${col.title.trim()}</div>
-          <div class="episode-count">${conceptCount} concepts</div>
+          <div class="episode-count">${conceptCount} concept${conceptCount !== 1 ? 's' : ''}</div>
         </div>
       </div>`;
   }
 
-  row.innerHTML = creatorNames.map(name => {
-    const cols = grouped[name];
-    const cards = cols.map(renderShortCard).join('');
+  const allPeople = [...new Set(shortCollections.flatMap(col => col.people || []))].sort();
+  const filterPills = ['All', ...allPeople].map(p =>
+    `<button class="short-filter-pill${p === 'All' ? ' active' : ''}" data-person="${p === 'All' ? 'all' : p}" onclick="filterShorts('${p === 'All' ? 'all' : p}')">${p}</button>`
+  ).join('');
+
+  row.innerHTML = `
+    <div class="shorts-filter-bar">
+      ${filterPills}
+      <input id="shortsSearch" class="shorts-search" type="text" placeholder="Search…" oninput="filterShorts(null, this.value)">
+    </div>
+    <div class="episodes-scroll-wrap">
+      <button class="scroll-arrow left" aria-label="Scroll left" onclick="scrollRow(this,-1)">‹</button>
+      <button class="scroll-arrow right" aria-label="Scroll right" onclick="scrollRow(this,1)">›</button>
+      <div class="episodes-fade-left"></div>
+      <div class="episodes-fade-right"></div>
+      <div class="episodes-row" id="shortsCardRow">${shortCollections.map(renderShortCard).join('')}</div>
+    </div>`;
+
+  window._shortCollections = shortCollections;
+  window._renderShortCard = renderShortCard;
+
+  initDragScroll();
+  document.querySelectorAll('#shortsRow .episodes-row').forEach(updateArrowVisibility);
+}
+
+function filterShorts(person, searchText) {
+  const collections = window._shortCollections || [];
+  const search = (searchText !== undefined ? searchText : (document.getElementById('shortsSearch')?.value || '')).toLowerCase();
+  const activePerson = person !== null ? person : (document.querySelector('.short-filter-pill.active')?.dataset.person || 'all');
+
+  if (person !== null) {
+    document.querySelectorAll('.short-filter-pill').forEach(p => p.classList.toggle('active', p.dataset.person === person));
+  }
+
+  const filtered = collections.filter(col => {
+    const matchPerson = activePerson === 'all' || (col.people || []).includes(activePerson);
+    const matchSearch = !search || col.title.toLowerCase().includes(search) || (col.people || []).join(' ').toLowerCase().includes(search);
+    return matchPerson && matchSearch;
+  });
+
+  const row = document.getElementById('shortsCardRow');
+  if (!row) return;
+  row.innerHTML = filtered.map(col => {
+    const colConcepts = CONCEPTS.filter(c => c.collection_id === col.id);
+    const ytId = getYouTubeId(col.episode_url);
+    const conceptCount = colConcepts.length;
+    const thumbHtml = ytId
+      ? `<img src="https://img.youtube.com/vi/${ytId}/mqdefault.jpg" loading="lazy"
+             onerror="this.onerror=null;this.src='https://img.youtube.com/vi/${ytId}/hqdefault.jpg'"
+             alt="${col.title.trim()}">`
+      : `<div class="episode-thumb-fallback"><div class="episode-thumb-fallback-title">${col.title.trim()}</div></div>`;
     return `
-      <div class="episodes-podcast-group">
-        <div class="episodes-podcast-heading">${name}<span>${cols.length} short${cols.length !== 1 ? 's' : ''}</span></div>
-        <div class="episodes-scroll-wrap">
-          <button class="scroll-arrow left" aria-label="Scroll left" onclick="scrollRow(this,-1)">‹</button>
-          <button class="scroll-arrow right" aria-label="Scroll right" onclick="scrollRow(this,1)">›</button>
-          <div class="episodes-fade-left"></div>
-          <div class="episodes-fade-right"></div>
-          <div class="episodes-row">${cards}</div>
+      <div class="episode-card" onclick="openEpisodeDrawer(${col.id})">
+        <div class="episode-thumb">${thumbHtml}</div>
+        <div class="episode-body">
+          <div class="episode-title">${col.title.trim()}</div>
+          <div class="episode-count">${conceptCount} concept${conceptCount !== 1 ? 's' : ''}</div>
         </div>
       </div>`;
   }).join('');
 
-  initDragScroll();
-  document.querySelectorAll('#shortsRow .episodes-row').forEach(updateArrowVisibility);
+  const rowEl = document.querySelector('#shortsRow .episodes-row');
+  if (rowEl) updateArrowVisibility(rowEl);
 }
 
 function toggleShortCard(id) {
