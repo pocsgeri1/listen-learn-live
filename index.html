@@ -4855,9 +4855,11 @@ function buildShorts() {
   ).join('');
 
   row.innerHTML = `
+    <div style="max-width:1100px;margin:0 auto;padding:0 2rem;">
     <div class="shorts-filter-bar">
       ${filterPills}
       <input id="shortsSearch" class="shorts-search" type="text" placeholder="Search…" oninput="filterShorts(null, this.value)">
+    </div>
     </div>
     <div class="episodes-scroll-wrap">
       <button class="scroll-arrow left" aria-label="Scroll left" onclick="scrollRow(this,-1)">‹</button>
@@ -4872,8 +4874,28 @@ function buildShorts() {
 
   initDragScroll();
   document.querySelectorAll('#shortsRow .episodes-row').forEach(updateArrowVisibility);
+  initMagneticShortPills();
 }
-
+function initMagneticShortPills() {
+  const bar = document.querySelector('.shorts-filter-bar');
+  if (!bar) return;
+  bar.querySelectorAll('.short-filter-pill').forEach(pill => {
+    pill.addEventListener('mousemove', function(e) {
+      const rect = pill.getBoundingClientRect();
+      const dx = (e.clientX - (rect.left + rect.width/2)) * 0.3;
+      const dy = (e.clientY - (rect.top + rect.height/2)) * 0.3;
+      pill.style.transform = `translate(${dx}px, ${dy}px)`;
+    });
+    pill.addEventListener('mouseleave', function() {
+      pill.style.transition = 'transform 0.4s cubic-bezier(0.25,0.46,0.45,0.94), background 0.15s, border-color 0.15s';
+      pill.style.transform = 'translate(0,0)';
+      setTimeout(() => { pill.style.transition = 'background 0.15s, border-color 0.15s'; }, 400);
+    });
+    pill.addEventListener('mouseenter', function() {
+      pill.style.transition = 'transform 0.1s ease, background 0.15s, border-color 0.15s';
+    });
+  });
+}
 function filterShorts(person, searchText) {
   const collections = window._shortCollections || [];
   const search = (searchText !== undefined ? searchText : (document.getElementById('shortsSearch')?.value || '')).toLowerCase();
