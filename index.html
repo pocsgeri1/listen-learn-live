@@ -2309,16 +2309,17 @@
     border-color: var(--accent);
   }
   .shorts-search {
-    background: var(--surface2);
+    background: var(--surface);
     border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 14px;
     color: var(--text);
-    padding: 5px 14px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-family: 'DM Mono', monospace;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
     outline: none;
-    min-width: 160px;
+    min-width: 220px;
   }
+  .shorts-search::placeholder { color: var(--muted); }
   .shorts-search:focus { border-color: var(--accent); }
   
   .people-pills {
@@ -4858,7 +4859,7 @@ function buildShorts() {
     <div style="max-width:1100px;margin:0 auto;padding:0 2rem;">
     <div class="shorts-filter-bar">
       ${filterPills}
-      <input id="shortsSearch" class="shorts-search" type="text" placeholder="Search…" oninput="filterShorts(null, this.value)">
+      <input id="shortsSearch" class="shorts-search" type="text" placeholder="Search shorts..." oninput="filterShorts(null, this.value)">
     </div>
     </div>
     <div class="episodes-scroll-wrap">
