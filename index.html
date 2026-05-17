@@ -2178,58 +2178,22 @@
     gap: 10px;
   }
 
+  /* ── CONCEPT CARD — shared base ── */
   .concept-card {
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 10px;
+    border-radius: 12px;
     cursor: pointer;
-    transition: border-color 0.2s, transform 0.2s ease;
-    overflow: hidden;
     position: relative;
+    transition: border-color 0.2s, box-shadow 0.2s;
   }
+  .concept-card.editors-pick { border-color: rgba(232,213,163,0.45); }
+  .concept-card.editors-pick:hover { border-color: rgba(232,213,163,0.7); }
+  .concept-card.mastered { opacity: 0.45; }
 
-  .concept-card::after {
-    content: '';
-    position: absolute;
-    left: 0; top: 0; bottom: 0;
-    width: 2px;
-    background: var(--cat-color, var(--accent));
-    opacity: 0;
-    transition: opacity 0.2s;
-  }
-
-  .concept-card:hover {
-    border-color: var(--border-hover);
-  }
-
-  /* Alive glow — thin category-coloured line appears at the bottom on hover */
-  .concept-card::before {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 15%;
-    right: 15%;
-    height: 1px;
-    background: var(--cat-color, var(--accent));
-    opacity: 0;
-    transition: opacity 0.25s ease;
-    border-radius: 999px;
-  }
-  .concept-card:hover::before { opacity: 0.55; }
-  .concept-card:hover::after { opacity: 1; }
-  .concept-card.open::after { opacity: 1; }
-  .concept-card.open { border-color: var(--border-hover); transform: translateY(0); }
-  .concept-card.mastered { opacity: 0.5; }
-  /* Editor's Pick — gold border + badge */
-  .concept-card.editors-pick {
-    border-color: rgba(232,213,163,0.45);
-  }
-  .concept-card.editors-pick:hover {
-    border-color: rgba(232,213,163,0.7);
-  }
   .pick-badge {
     font-family: 'DM Mono', monospace;
-    font-size: 0.6rem;
+    font-size: 0.58rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     padding: 2px 8px;
@@ -2241,27 +2205,49 @@
     align-items: center;
     gap: 4px;
   }
-  .pick-badge .pick-star {
-    font-size: 0.65rem;
-    line-height: 1;
-  }
-  .card-front {
-    padding: 18px 18px 18px 22px;
-  }
+  .pick-badge .pick-star { font-size: 0.65rem; line-height: 1; }
 
-  .card-meta {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
+  .mastered-badge {
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: rgba(122,175,138,0.15);
+    color: var(--green);
+    display: none;
   }
+  .concept-card.mastered .mastered-badge { display: block; }
 
   .card-num {
     font-family: 'DM Mono', monospace;
-    font-size: 0.6rem;
+    font-size: 0.58rem;
     color: var(--muted);
   }
-
+  .card-cat {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--cat-color) 12%, transparent);
+    color: var(--cat-color);
+  }
+  .card-term {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+    line-height: 1.2;
+  }
+  .card-hook {
+    font-size: 0.8rem;
+    color: var(--muted2);
+    line-height: 1.5;
+    font-style: italic;
+  }
   .card-src {
     font-size: 0.6rem;
     letter-spacing: 0.1em;
@@ -2271,66 +2257,10 @@
     border: 1px solid var(--border);
     color: var(--muted2);
   }
-
-  .card-cat {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    padding: 2px 8px;
-    border-radius: 999px;
-    background: color-mix(in srgb, var(--cat-color) 10%, transparent);
-    color: var(--cat-color);
-  }
-
-  .shorts-filter-bar {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    padding: 0 0 16px 0;
-    align-items: center;
-  }
-  .short-filter-pill {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    color: var(--text-muted);
-    padding: 5px 14px;
-    border-radius: 20px;
-    font-size: 12px;
-    cursor: pointer;
-    font-family: 'DM Mono', monospace;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    transition: all 0.15s;
-  }
-  .short-filter-pill.active, .short-filter-pill:hover {
-    background: var(--accent);
-    color: var(--bg);
-    border-color: var(--accent);
-  }
-  .shorts-search {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 8px 14px;
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.82rem;
-    outline: none;
-    min-width: 220px;
-  }
-  .shorts-search::placeholder { color: var(--muted); }
-  .shorts-search:focus { border-color: var(--accent); }
-  
-  .people-pills {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
-    margin-bottom: 8px;
-  }
+  .people-pills { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px; }
   .people-pill {
     font-family: 'DM Mono', monospace;
-    font-size: 0.6rem;
+    font-size: 0.58rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     padding: 2px 8px;
@@ -2340,130 +2270,252 @@
     color: var(--muted2);
   }
   .card-front .people-pills { display: none; }
-  .card-back .people-pills {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
-    margin-bottom: 0.75rem;
+  .card-back .people-pills { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 0.75rem; }
+
+  /* ── FLIP CARDS — nf-row only ── */
+  .nf-row { perspective: 1400px; }
+
+  .nf-row .concept-card {
+    flex: 0 0 280px;
+    min-width: 280px;
+    height: 370px;
+    overflow: visible;
+    border: none;
+    background: transparent;
+    border-radius: 14px;
+    align-self: flex-start;
+  }
+  @media (max-width: 600px) {
+    .nf-row .concept-card { flex: 0 0 80vw; min-width: 80vw; height: 360px; }
   }
 
-  .mastered-badge {
-    margin-left: auto;
-    font-size: 0.6rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    padding: 2px 8px;
-    border-radius: 999px;
-    background: rgba(122,175,138,0.15);
-    color: var(--green);
-    display: none;
+  .nf-row .concept-card .card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.62s cubic-bezier(0.4, 0.2, 0.2, 1);
   }
-
-  .concept-card.mastered .mastered-badge { display: block; }
-
-  .card-term {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.05rem;
-    font-weight: 700;
-    color: var(--text);
-    margin-bottom: 6px;
-    line-height: 1.2;
+  .nf-row .concept-card.open .card-inner {
+    transform: rotateY(180deg);
   }
-
-  .card-hook {
-    font-size: 0.8rem;
-    color: var(--muted2);
-    line-height: 1.5;
-    font-style: italic;
-  }
-
-  .card-expand-icon {
+  .nf-row .concept-card .card-front,
+  .nf-row .concept-card .card-back {
     position: absolute;
-    right: 16px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  /* FLIP — FRONT FACE */
+  .nf-row .concept-card .card-front {
+    background: var(--surface);
     border: 1px solid var(--border);
+    padding: 22px 22px 18px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.04);
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.25s ease;
+    transform: rotate(-0.8deg);
+  }
+  .nf-row .concept-card:hover .card-front {
+    border-color: rgba(255,255,255,0.13);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.06);
+    transform: rotate(0deg) translateY(-6px);
+  }
+  .nf-row .concept-card.open .card-front {
+    transform: rotate(0deg);
+  }
+  .nf-row .concept-card.editors-pick .card-front {
+    border-color: rgba(232,213,163,0.4);
+  }
+
+  .nf-row .card-meta {
     display: flex;
     align-items: center;
-    justify-content: center;
+    gap: 7px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+  .nf-row .card-term {
+    font-size: 1.12rem;
+    margin-top: auto;
+    padding-top: 0.5rem;
+    margin-bottom: 0.3rem;
+  }
+  .nf-row .card-hook {
+    font-size: 0.82rem;
+    line-height: 1.55;
+  }
+  .nf-row .card-flip-hint {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: auto;
+    padding-top: 1rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.52rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
     color: var(--muted);
-    font-size: 0.9rem;
-    transition: all 0.2s;
+    opacity: 0.55;
+  }
+  .nf-row .card-flip-hint-dot {
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: 0.7;
     flex-shrink: 0;
   }
 
-  .concept-card.open .card-expand-icon {
+  /* FLIP — BACK FACE */
+  .nf-row .concept-card .card-back {
+    transform: rotateY(180deg);
     background: var(--surface2);
-    color: var(--text);
-    transform: translateY(-50%) rotate(45deg);
+    border: 1px solid var(--cat-color, var(--border));
+    border-color: color-mix(in srgb, var(--cat-color, var(--accent)) 35%, transparent);
+    padding: 20px 20px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.45);
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-hover) transparent;
   }
+  .nf-row .concept-card .card-back::-webkit-scrollbar { width: 3px; }
+  .nf-row .concept-card .card-back::-webkit-scrollbar-thumb { background: var(--border-hover); border-radius: 2px; }
 
-  /* CARD BACK */
-  .card-back {
-    display: none;
-    padding: 0 22px 20px;
-    border-top: 1px solid var(--border);
-    margin-top: 0;
-  }
-
-  .concept-card.open .card-back { display: block; }
-
-  .back-section-label {
+  /* Back content — reuse hc- hero card style */
+  .nf-row .back-section-label {
     font-family: 'DM Mono', monospace;
-    font-size: 0.58rem;
+    font-size: 0.54rem;
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--muted);
-    margin-top: 16px;
-    margin-bottom: 6px;
+    margin-top: 14px;
+    margin-bottom: 5px;
   }
-
-  .back-text {
+  .nf-row .back-section-label:first-child { margin-top: 0; }
+  .nf-row .back-text {
     font-size: 0.82rem;
-    color: var(--muted2);
+    color: var(--text);
     line-height: 1.7;
+    font-weight: 300;
   }
-
-  .back-analogy {
-    background: var(--surface2);
-    border-left: 2px solid var(--cat-color, var(--accent));
-    padding: 10px 14px;
-    border-radius: 0 6px 6px 0;
-    font-size: 0.8rem;
+  .nf-row .back-analogy {
+    font-size: 0.78rem;
     color: var(--muted2);
-    line-height: 1.6;
+    line-height: 1.65;
     font-style: italic;
+    border-left: 2px solid color-mix(in srgb, var(--cat-color, var(--accent)) 50%, transparent);
+    padding-left: 10px;
+    border-radius: 0;
   }
-
-  .back-prompt {
+  .nf-row .back-prompt {
     background: rgba(232,213,163,0.06);
     border: 1px solid rgba(232,213,163,0.15);
     border-radius: 8px;
-    padding: 12px 14px;
+    padding: 10px 12px;
+    margin-top: 12px;
   }
-
-  .prompt-icon { font-size: 0.9rem; margin-bottom: 4px; }
-
-  .back-prompt p {
-    font-size: 0.8rem;
+  .nf-row .back-prompt p {
+    font-size: 0.78rem;
     color: var(--accent);
     line-height: 1.6;
+    margin: 0;
   }
-
-  .card-actions {
+  .nf-row .prompt-icon { font-size: 0.82rem; margin-bottom: 3px; }
+  .nf-row .card-actions {
     display: flex;
-    gap: 8px;
-    margin-top: 14px;
+    gap: 7px;
+    margin-top: 12px;
+    flex-shrink: 0;
   }
 
+  /* ── ACCORDION CARDS — drawer only (ep-cat-column) ── */
+  .ep-cat-column .concept-card {
+    overflow: hidden;
+    border-radius: 10px;
+  }
+  .ep-cat-column .concept-card::after {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 2px;
+    background: var(--cat-color, var(--accent));
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .ep-cat-column .concept-card:hover { border-color: var(--border-hover); }
+  .ep-cat-column .concept-card:hover::after { opacity: 1; }
+  .ep-cat-column .concept-card.open::after { opacity: 1; }
+  .ep-cat-column .concept-card.open { border-color: var(--border-hover); }
+  .ep-cat-column .card-front {
+    padding: 16px 16px 14px 18px;
+    position: relative;
+  }
+  .ep-cat-column .card-meta {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+  }
+  .ep-cat-column .card-expand-icon {
+    position: absolute;
+    right: 14px; top: 50%; transform: translateY(-50%);
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--muted); font-size: 0.85rem;
+    transition: all 0.2s;
+  }
+  .ep-cat-column .concept-card.open .card-expand-icon {
+    background: var(--surface2); color: var(--text);
+    transform: translateY(-50%) rotate(45deg);
+  }
+  .ep-cat-column .card-back {
+    display: none;
+    padding: 0 18px 16px;
+    border-top: 1px solid var(--border);
+  }
+  .ep-cat-column .concept-card.open .card-back { display: block; }
+  .ep-cat-column .back-section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.56rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 14px;
+    margin-bottom: 5px;
+  }
+  .ep-cat-column .back-text { font-size: 0.8rem; color: var(--muted2); line-height: 1.7; }
+  .ep-cat-column .back-analogy {
+    background: var(--surface2);
+    border-left: 2px solid var(--cat-color, var(--accent));
+    padding: 8px 12px;
+    border-radius: 0 6px 6px 0;
+    font-size: 0.78rem; color: var(--muted2); line-height: 1.6; font-style: italic;
+  }
+  .ep-cat-column .back-prompt {
+    background: rgba(232,213,163,0.06);
+    border: 1px solid rgba(232,213,163,0.15);
+    border-radius: 8px; padding: 10px 12px;
+  }
+  .ep-cat-column .back-prompt p { font-size: 0.78rem; color: var(--accent); line-height: 1.6; margin: 0; }
+  .ep-cat-column .prompt-icon { font-size: 0.85rem; margin-bottom: 3px; }
+  .ep-cat-column .card-actions { display: flex; gap: 7px; margin-top: 12px; }
+
+  /* ── ACTION BUTTONS — shared ── */
   .btn-master {
     flex: 1;
-    padding: 8px 14px;
+    padding: 7px 12px;
     border-radius: 6px;
-    font-size: 0.72rem;
+    font-size: 0.68rem;
     font-weight: 500;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -2474,14 +2526,13 @@
     background: none;
     color: var(--muted2);
   }
-
   .btn-master:hover { border-color: var(--green); color: var(--green); }
   .concept-card.mastered .btn-master { border-color: var(--green); color: var(--green); background: rgba(122,175,138,0.1); }
 
   .btn-share {
-    padding: 8px 14px;
+    padding: 7px 12px;
     border-radius: 6px;
-    font-size: 0.72rem;
+    font-size: 0.68rem;
     font-weight: 500;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -2492,12 +2543,12 @@
     background: none;
     color: var(--muted2);
   }
-
   .btn-share:hover { border-color: var(--border-hover); color: var(--text); }
+
   .btn-listen {
-    padding: 8px 14px;
+    padding: 7px 12px;
     border-radius: 6px;
-    font-size: 0.72rem;
+    font-size: 0.68rem;
     font-weight: 500;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -2510,13 +2561,9 @@
     text-decoration: none;
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 5px;
   }
-  .btn-listen:hover {
-    background: rgba(232,213,163,0.08);
-    border-color: var(--accent2);
-    color: var(--accent2);
-  }
+  .btn-listen:hover { background: rgba(232,213,163,0.08); border-color: var(--accent2); color: var(--accent2); }
   /* SHARE CARD MODAL */
 .share-modal-overlay {
   display: none;
@@ -3988,45 +4035,47 @@ function buildGrid() {
             ${cards.map((c, i) => {
               const color = CAT_COLOR[c.category] || '#e8d5a3';
               const isMastered = mastered.has(c.id);
-              return `<div class="concept-card${isMastered?' mastered':''}${c.editors_pick===true?' editors-pick':''}" id="cc${c.id}" style="--cat-color:${color}">
-                <div class="card-front" onclick="toggleCard(${c.id})">
-                  <div class="card-meta">
-                    <span class="card-num">#${String(c.id).padStart(3,'0')}</span>
-                    <span class="card-cat" style="cursor:pointer" onclick="event.stopPropagation();setCat('${c.category}');closeEpisodeDrawer()">${(CATEGORIES.find(x => x.id === c.category)||{}).name||c.category}</span>
-                    ${c.editors_pick===true ? '<span class="pick-badge"><span class="pick-star">★</span>PICK</span>' : ''}
-                    <span class="mastered-badge">✓ mastered</span>
+              return `<div class="concept-card${isMastered?' mastered':''}${c.editors_pick===true?' editors-pick':''}" id="cc${c.id}" style="--cat-color:${color}" onclick="toggleCard(${c.id})">
+                <div class="card-inner">
+                  <div class="card-front">
+                    <div class="card-meta">
+                      <span class="card-num">#${String(c.id).padStart(3,'0')}</span>
+                      <span class="card-cat" onclick="event.stopPropagation();setCat('${c.category}');closeEpisodeDrawer()">${(CATEGORIES.find(x => x.id === c.category)||{}).name||c.category}</span>
+                      ${c.editors_pick===true ? '<span class="pick-badge"><span class="pick-star">★</span>PICK</span>' : ''}
+                      <span class="mastered-badge">✓ mastered</span>
+                    </div>
+                    <div class="card-term">${c.term}</div>
+                    <div class="card-hook">${c.hook}</div>
+                    <div class="card-flip-hint"><div class="card-flip-hint-dot"></div>tap to explore</div>
                   </div>
-                  ${(() => {
-                    if (c.collection_id == null) return '';
-                    const col = COLLECTIONS_BY_ID[c.collection_id];
-                    if (!col || !Array.isArray(col.people) || col.people.length === 0) return '';
-                    return '<div class="people-pills">' + col.people.map(p => `<span class="people-pill">${p}</span>`).join('') + '</div>';
-                  })()}
-                  <div class="card-term">${c.term}</div>
-                  <div class="card-hook">${c.hook}</div>
-                  <div class="card-expand-icon">+</div>
-                </div>
-                <div class="card-back">
-                  <div class="back-section-label">What it means</div>
-                  <div class="back-text">${c.plain}</div>
-                  <div class="back-section-label">Analogy</div>
-                  <div class="back-analogy">${c.analogy}</div>
-                  <div class="back-section-label">Reflect & Use It</div>
-                  <div class="back-prompt">
-                    <div class="prompt-icon">💬</div>
-                    <p>${c.prompt}</p>
-                  </div>
-                  <div class="card-actions">
-                    <button class="btn-master" onclick="toggleMaster(event,${c.id})">${isMastered?'✓ VAULT':'⊕ VAULT'}</button>
-                    <button class="btn-share" onclick="shareCard(event,${c.id})">Share</button>
+                  <div class="card-back">
                     ${(() => {
-                      if (c.collection_id == null || typeof c.timestamp !== 'number') return '';
+                      if (c.collection_id == null) return '';
                       const col = COLLECTIONS_BY_ID[c.collection_id];
-                      if (!col || !col.episode_url) return '';
-                      const url = buildTimestampedUrl(col.episode_url, c.timestamp);
-                      if (!url) return '';
-                      return `<a class="btn-listen" href="${url}" target="_blank" rel="noopener" onclick="event.stopPropagation()">↗ Listen</a>`;
+                      if (!col || !Array.isArray(col.people) || col.people.length === 0) return '';
+                      return '<div class="people-pills">' + col.people.map(p => `<span class="people-pill">${p}</span>`).join('') + '</div>';
                     })()}
+                    <div class="back-section-label">What it means</div>
+                    <div class="back-text">${c.plain}</div>
+                    <div class="back-section-label">Analogy</div>
+                    <div class="back-analogy">${c.analogy}</div>
+                    <div class="back-section-label">Reflect &amp; use it</div>
+                    <div class="back-prompt">
+                      <div class="prompt-icon">💬</div>
+                      <p>${c.prompt}</p>
+                    </div>
+                    <div class="card-actions">
+                      <button class="btn-master" onclick="event.stopPropagation();toggleMaster(event,${c.id})">${isMastered?'✓ VAULT':'⊕ VAULT'}</button>
+                      <button class="btn-share" onclick="event.stopPropagation();shareCard(event,${c.id})">Share</button>
+                      ${(() => {
+                        if (c.collection_id == null || typeof c.timestamp !== 'number') return '';
+                        const col = COLLECTIONS_BY_ID[c.collection_id];
+                        if (!col || !col.episode_url) return '';
+                        const url = buildTimestampedUrl(col.episode_url, c.timestamp);
+                        if (!url) return '';
+                        return `<a class="btn-listen" href="${url}" target="_blank" rel="noopener" onclick="event.stopPropagation()">↗ Listen</a>`;
+                      })()}
+                    </div>
                   </div>
                 </div>
               </div>`;
@@ -4180,11 +4229,8 @@ function render() { buildCats(); initMagneticPills(); buildGrid(); updateProgres
 
 function toggleCard(id) {
   const el = document.getElementById('cc'+id);
+  if (!el) return;
   const wasOpen = el.classList.contains('open');
-  // Close all other cards first
-  document.querySelectorAll('.concept-card.open').forEach(card => {
-    if (card.id !== 'cc'+id) card.classList.remove('open');
-  });
   el.classList.toggle('open');
   if (!wasOpen) {
     openedToday.add(id);
