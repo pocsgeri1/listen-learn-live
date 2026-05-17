@@ -2581,7 +2581,7 @@
   border: 1px solid var(--border-hover);
   border-radius: 8px;
   padding: 1.5rem;
-  max-width: 480px;
+  max-width: 420px;
   width: 100%;
   max-height: 90vh;
   overflow-y: auto;
@@ -3580,7 +3580,7 @@
 <!-- SHARE CARD MODAL -->
 <div class="share-modal-overlay" id="shareModalOverlay" onclick="closeShareModal(event)">
   <div class="share-modal">
-    <canvas id="shareCanvas" width="1200" height="675" style="max-height:60vh;width:100%;height:auto;border-radius:8px;"></canvas>
+    <canvas id="shareCanvas" width="1080" height="1080" style="max-height:70vh;width:100%;height:auto;border-radius:8px;display:block;"></canvas>
     <div class="share-modal-actions">
       <button class="btn-share-download" onclick="downloadShareCard()">↓ Save Image</button>
       <button class="btn-share-native" id="shareNativeBtn" onclick="nativeShare()">Share ↗</button>
@@ -4333,213 +4333,142 @@ function generateShareImage(c) {
   const canvas = document.getElementById('shareCanvas');
   const ctx = canvas.getContext('2d');
 
-  // Landscape card: 1200×675 (16:9, shareable)
-  const W = 1200, H = 675;
+  // Square: 1080×1080 — Instagram, WhatsApp, universal
+  const W = 1080, H = 1080;
   canvas.width = W; canvas.height = H;
 
   const catColor = CATEGORY_COLORS[c.category] || '#e8d5a3';
   const catName = (CATEGORIES.find(x => x.id === c.category)||{}).name || c.category;
-  const CARD_PAD = 48;
-  const CARD_GAP = 20;
-  const CARD_W = (W - CARD_PAD * 2 - CARD_GAP) / 2;
-  const CARD_H = H - CARD_PAD * 2;
-  const RADIUS = 16;
+  const PAD = 80;
 
-  // ── PAGE BACKGROUND ──
-  ctx.fillStyle = '#0d0d0d';
+  // ── BACKGROUND ──
+  ctx.fillStyle = '#141414';
   ctx.fillRect(0, 0, W, H);
 
-  // Subtle noise-like texture via very faint grid
-  ctx.strokeStyle = 'rgba(255,255,255,0.015)';
-  ctx.lineWidth = 0.5;
-  for (let x = 0; x < W; x += 40) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
-  for (let y = 0; y < H; y += 40) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
-
-  // ── HELPER: rounded rect clip/fill ──
-  function cardRoundRect(x, y, w, h, r) {
-    ctx.beginPath();
-    ctx.moveTo(x + r, y);
-    ctx.lineTo(x + w - r, y); ctx.quadraticCurveTo(x + w, y, x + w, y + r);
-    ctx.lineTo(x + w, y + h - r); ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-    ctx.lineTo(x + r, y + h); ctx.quadraticCurveTo(x, y + h, x, y + h - r);
-    ctx.lineTo(x, y + r); ctx.quadraticCurveTo(x, y, x + r, y);
-    ctx.closePath();
-  }
-
-  // ── FRONT CARD ──
-  const fx = CARD_PAD;
-  const fy = CARD_PAD;
-
-  // Card shadow
-  ctx.shadowColor = 'rgba(0,0,0,0.6)';
-  ctx.shadowBlur = 32;
-  ctx.shadowOffsetY = 8;
-  cardRoundRect(fx, fy, CARD_W, CARD_H, RADIUS);
-  ctx.fillStyle = '#141414';
-  ctx.fill();
-  ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
-
-  // Card border
-  cardRoundRect(fx, fy, CARD_W, CARD_H, RADIUS);
+  // Outer card border (full bleed — the canvas IS the card)
   ctx.strokeStyle = 'rgba(255,255,255,0.08)';
-  ctx.lineWidth = 1;
-  ctx.stroke();
+  ctx.lineWidth = 1.5;
+  ctx.strokeRect(0.75, 0.75, W - 1.5, H - 1.5);
 
   // Category top bar
   ctx.fillStyle = catColor;
-  ctx.fillRect(fx, fy, CARD_W, 4);
-  // Clip top bar to rounded corners
-  ctx.save();
-  cardRoundRect(fx, fy, CARD_W, 20, RADIUS);
-  ctx.clip();
-  ctx.fillStyle = catColor;
-  ctx.fillRect(fx, fy, CARD_W, 4);
-  ctx.restore();
+  ctx.fillRect(0, 0, W, 5);
 
-  // Category pill
-  const PILL_PAD_X = 16, PILL_PAD_Y = 5;
-  ctx.font = '500 18px monospace';
-  const pillTextW = ctx.measureText(catName.toUpperCase()).width;
-  const pillW = pillTextW + PILL_PAD_X * 2;
-  const pillX = fx + 24, pillY = fy + 24;
-  ctx.fillStyle = catColor + '22';
-  cardRoundRect(pillX, pillY, pillW, 28, 6); ctx.fill();
-  ctx.strokeStyle = catColor; ctx.lineWidth = 1;
-  cardRoundRect(pillX, pillY, pillW, 28, 6); ctx.stroke();
-  ctx.fillStyle = catColor;
-  ctx.fillText(catName.toUpperCase(), pillX + PILL_PAD_X, pillY + 19);
+  // ── CATEGORY PILL ──
+  ctx.font = '500 22px monospace';
+  const pillText = catName.toUpperCase();
+  const pillTextW = ctx.measureText(pillText).width;
+  const pillPadX = 20, pillH = 36, pillR = 6;
+  const pillW = pillTextW + pillPadX * 2;
+  const pillX = PAD, pillY = PAD;
 
-  // ID
-  ctx.font = '400 16px monospace';
-  ctx.fillStyle = '#444';
+  // Pill background
+  ctx.fillStyle = catColor + '20';
+  roundRect(ctx, pillX, pillY, pillW, pillH, pillR);
+  ctx.fill();
+  // Pill border
+  ctx.strokeStyle = catColor;
+  ctx.lineWidth = 1;
+  roundRect(ctx, pillX, pillY, pillW, pillH, pillR);
+  ctx.stroke();
+  // Pill text
+  ctx.fillStyle = catColor;
+  ctx.textBaseline = 'middle';
+  ctx.fillText(pillText, pillX + pillPadX, pillY + pillH / 2);
+
+  // Concept ID — top right
+  ctx.font = '400 22px monospace';
+  ctx.fillStyle = 'rgba(255,255,255,0.2)';
   ctx.textAlign = 'right';
-  ctx.fillText('#' + String(c.id).padStart(3,'0'), fx + CARD_W - 24, pillY + 19);
+  ctx.textBaseline = 'middle';
+  ctx.fillText('#' + String(c.id).padStart(3, '0'), W - PAD, pillY + pillH / 2);
   ctx.textAlign = 'left';
 
-  // Term — large serif, pushed toward bottom third of front
-  ctx.font = 'bold 44px Georgia, serif';
+  // ── TERM — large serif, lower third of card ──
+  ctx.textBaseline = 'alphabetic';
   ctx.fillStyle = '#f0ede8';
-  const termY = fy + CARD_H * 0.48;
-  const termBottom = wrapText(ctx, c.term, fx + 24, termY, CARD_W - 48, 54);
 
-  // Hook — italic, below term
-  ctx.font = 'italic 300 22px Georgia, serif';
-  ctx.fillStyle = '#9a9a9a';
-  wrapText(ctx, c.hook, fx + 24, termBottom + 14, CARD_W - 48, 32);
-
-  // Flip hint at bottom
-  ctx.font = '400 14px monospace';
-  ctx.fillStyle = '#444';
-  ctx.fillText('TAP TO EXPLORE', fx + 24, fy + CARD_H - 22);
-
-  // ── BACK CARD ──
-  const bx = CARD_PAD + CARD_W + CARD_GAP;
-  const by = CARD_PAD;
-
-  ctx.shadowColor = 'rgba(0,0,0,0.6)';
-  ctx.shadowBlur = 32;
-  ctx.shadowOffsetY = 8;
-  cardRoundRect(bx, by, CARD_W, CARD_H, RADIUS);
-  ctx.fillStyle = '#1c1c1c';
-  ctx.fill();
-  ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
-
-  // Back card border — category color tinted
-  cardRoundRect(bx, by, CARD_W, CARD_H, RADIUS);
-  ctx.strokeStyle = catColor + '55';
-  ctx.lineWidth = 1.5;
-  ctx.stroke();
-
-  // Category left accent bar on back
-  ctx.save();
-  cardRoundRect(bx, by, CARD_W, CARD_H, RADIUS);
-  ctx.clip();
-  ctx.fillStyle = catColor + '33';
-  ctx.fillRect(bx, by, 3, CARD_H);
-  ctx.restore();
-
-  let gy = by + 28;
-  const gx = bx + 22;
-  const gW = CARD_W - 44;
-
-  function backLabel(label) {
-    ctx.font = '500 13px monospace';
-    ctx.fillStyle = '#555';
-    ctx.fillText(label, gx, gy);
-    gy += 20;
-  }
-  function backText(text, color, font, lineH, maxLines) {
-    ctx.font = font;
-    ctx.fillStyle = color;
-    const lines = [];
+  // Measure and wrap term
+  function wrapLines(text, maxWidth, fontStr) {
+    ctx.font = fontStr;
     const words = text.split(' ');
+    const lines = [];
     let line = '';
     for (const w of words) {
       const test = line ? line + ' ' + w : w;
-      if (ctx.measureText(test).width > gW) { lines.push(line); line = w; }
-      else line = test;
+      if (ctx.measureText(test).width > maxWidth && line) {
+        lines.push(line);
+        line = w;
+      } else {
+        line = test;
+      }
     }
     if (line) lines.push(line);
-    const capped = maxLines ? lines.slice(0, maxLines) : lines;
-    capped.forEach(l => { ctx.fillText(l, gx, gy); gy += lineH; });
-    return gy;
+    return lines;
   }
 
-  // What it means
-  backLabel('WHAT IT MEANS');
-  backText(c.plain, '#c8c4be', '300 18px Georgia, serif', 27, 4);
-  gy += 14;
+  const termFont = 'bold 88px Georgia, serif';
+  const termLines = wrapLines(c.term, W - PAD * 2, termFont);
+  const termLineH = 100;
+  const termBlockH = termLines.length * termLineH;
 
-  // Analogy bar
-  ctx.fillStyle = catColor + '55';
-  ctx.fillRect(gx, gy, 2, 60);
-  backLabel('ANALOGY');
-  ctx.font = 'italic 300 17px Georgia, serif';
-  ctx.fillStyle = '#777';
-  const analogyLines = [];
-  const aWords = c.analogy.split(' ');
-  let aLine = '';
-  for (const w of aWords) {
-    const test = aLine ? aLine + ' ' + w : w;
-    if (ctx.measureText(test).width > gW - 12) { analogyLines.push(aLine); aLine = w; }
-    else aLine = test;
-  }
-  if (aLine) analogyLines.push(aLine);
-  analogyLines.slice(0, 3).forEach(l => { ctx.fillText(l, gx + 12, gy); gy += 24; });
-  gy += 12;
+  // Position term in the lower-centre zone
+  const termStartY = H * 0.52;
+  ctx.font = termFont;
+  ctx.fillStyle = '#f0ede8';
+  termLines.forEach((line, i) => {
+    ctx.fillText(line, PAD, termStartY + i * termLineH);
+  });
+  const termEndY = termStartY + termBlockH;
 
-  // Prompt box
-  const promptBoxH = Math.min(CARD_H - (gy - by) - 24, 110);
-  if (promptBoxH > 30) {
-    ctx.fillStyle = 'rgba(232,213,163,0.06)';
-    cardRoundRect(gx, gy, gW, promptBoxH, 6); ctx.fill();
-    ctx.strokeStyle = 'rgba(232,213,163,0.18)'; ctx.lineWidth = 1;
-    cardRoundRect(gx, gy, gW, promptBoxH, 6); ctx.stroke();
-    gy += 14;
-    backLabel('REFLECT & USE IT');
-    ctx.font = '300 16px Georgia, serif';
-    ctx.fillStyle = '#e8d5a3';
-    const pWords = c.prompt.split(' ');
-    let pLine = '';
-    const pLines = [];
-    for (const w of pWords) {
-      const test = pLine ? pLine + ' ' + w : w;
-      if (ctx.measureText(test).width > gW - 24) { pLines.push(pLine); pLine = w; }
-      else pLine = test;
-    }
-    if (pLine) pLines.push(pLine);
-    pLines.slice(0, 3).forEach(l => { ctx.fillText(l, gx + 12, gy); gy += 23; });
-  }
+  // ── HOOK — italic, below term ──
+  const hookFont = 'italic 34px Georgia, serif';
+  const hookLines = wrapLines(c.hook, W - PAD * 2, hookFont);
+  const hookLineH = 50;
+  ctx.font = hookFont;
+  ctx.fillStyle = '#9a9a9a';
+  hookLines.slice(0, 3).forEach((line, i) => {
+    ctx.fillText(line, PAD, termEndY + 36 + i * hookLineH);
+  });
+
+  // ── DIVIDER — thin horizontal rule above term ──
+  const dividerY = termStartY - 44;
+  ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(PAD, dividerY);
+  ctx.lineTo(W - PAD, dividerY);
+  ctx.stroke();
+
+  // ── FLIP HINT — above divider, small mono label ──
+  ctx.font = '400 20px monospace';
+  ctx.fillStyle = 'rgba(255,255,255,0.2)';
+  ctx.fillText('TAP TO EXPLORE', PAD, dividerY - 18);
 
   // ── FOOTER ──
-  ctx.font = 'italic 22px Georgia, serif';
+  const footerY = H - PAD + 20;
+
+  // Footer rule
+  ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(PAD, footerY - 28);
+  ctx.lineTo(W - PAD, footerY - 28);
+  ctx.stroke();
+
+  // Epistemic. — italic serif, gold
+  ctx.font = 'italic 32px Georgia, serif';
   ctx.fillStyle = '#e8d5a3';
-  ctx.fillText('Epistemic.', fx, H - 14);
-  ctx.font = '400 16px monospace';
-  ctx.fillStyle = '#333';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('Epistemic.', PAD, footerY);
+
+  // epistemic.live — right aligned, muted mono
+  ctx.font = '400 22px monospace';
+  ctx.fillStyle = 'rgba(255,255,255,0.25)';
   ctx.textAlign = 'right';
-  ctx.fillText('epistemic.live', W - fx, H - 14);
+  ctx.fillText('epistemic.live', W - PAD, footerY);
   ctx.textAlign = 'left';
+  ctx.textBaseline = 'alphabetic';
 }
 
 function roundRect(ctx, x, y, w, h, r) {
