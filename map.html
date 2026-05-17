@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Epistemic. — Concept Map</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<meta name="theme-color" content="#0d0d0d">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0d0d;
+    --surface: #141414;
+    --surface2: #1c1c1c;
+    --border: rgba(255,255,255,0.07);
+    --border-hover: rgba(255,255,255,0.15);
+    --text: #f0ede8;
+    --muted: #6b6b6b;
+    --muted2: #9a9a9a;
+    --accent: #e8d5a3;
+    --accent2: #c4a96b;
+    --red: #d4715a;
+    --green: #7aaf8a;
+    --blue: #6b9fc4;
+    --purple: #a08fd4;
+    --pink: #c47a9f;
+    --teal: #5abfaf;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    height: 100%;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    overflow: hidden;
+  }
+
+  /* noise overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    align-items: center;
+    padding: 1.25rem 2rem;
+    border-bottom: 1px solid var(--border);
+    background: rgba(13,13,13,0.92);
+    backdrop-filter: blur(3px);
+  }
+
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text);
+    text-decoration: none;
+  }
+  .nav-logo em { font-style: italic; color: var(--accent); }
+
+  .nav-island {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0.3rem 0.5rem;
+  }
+
+  .nav-link {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--muted2);
+    text-decoration: none;
+    padding: 0.35rem 0.85rem;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: color 0.15s, background 0.15s;
+    border: none;
+    background: transparent;
+  }
+  .nav-link:hover { color: var(--text); background: rgba(255,255,255,0.06); }
+  .nav-link.active { color: var(--accent); }
+
+  .nav-right { margin-left: 1rem; }
+
+  .nav-pill {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted2);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0.4rem 0.9rem;
+  }
+
+  .nav-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: pulse 2s infinite;
+  }
+
+  /* ── MAP CONTAINER ── */
+  #mapWrap {
+    position: fixed;
+    inset: 0;
+    top: 64px; /* below nav */
+    overflow: hidden;
+    cursor: grab;
+    z-index: 1;
+  }
+  #mapWrap.dragging { cursor: grabbing; }
+
+  #mapCanvas {
+    position: absolute;
+    top: 0; left: 0;
+    /* transform applied by JS for pan/zoom */
+    transform-origin: 0 0;
+  }
+
+  /* ── SVG ELEMENTS via CSS ── */
+  .orbit-ring {
+    fill: none;
+    stroke: var(--border);
+    stroke-width: 1;
+  }
+
+  .cat-node {
+    cursor: pointer;
+  }
+  .cat-node circle {
+    transition: r 0.2s, opacity 0.2s;
+  }
+  .cat-node:hover circle.cat-bg { opacity: 0.18; }
+
+  .concept-node {
+    cursor: pointer;
+  }
+  .concept-node circle {
+    transition: r 0.15s;
+  }
+
+  /* ── SEARCH BAR ── */
+  #searchBar {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0.6rem 1rem 0.6rem 1.25rem;
+    min-width: 280px;
+    max-width: 440px;
+    width: 90vw;
+    transition: border-color 0.2s;
+  }
+  #searchBar:focus-within { border-color: rgba(255,255,255,0.2); }
+
+  #searchBar input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 300;
+    color: var(--text);
+    min-width: 0;
+  }
+  #searchBar input::placeholder { color: var(--muted); }
+
+  #searchCount {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  #clearSearch {
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 0.85rem;
+    line-height: 1;
+    padding: 0 2px;
+    display: none;
+    transition: color 0.15s;
+  }
+  #clearSearch:hover { color: var(--text); }
+  #clearSearch.visible { display: block; }
+
+  /* ── HINT BAR ── */
+  #hintBar {
+    position: fixed;
+    bottom: 5.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 50;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    gap: 1.5rem;
+    pointer-events: none;
+  }
+
+  /* ── ZOOM CONTROLS ── */
+  #zoomControls {
+    position: fixed;
+    right: 1.5rem;
+    bottom: 2rem;
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .zoom-btn {
+    width: 36px; height: 36px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--muted2);
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .zoom-btn:hover { color: var(--text); border-color: var(--border-hover); }
+
+  /* ── CONCEPT PANEL (side drawer) ── */
+  #conceptPanel {
+    position: fixed;
+    top: 64px; right: 0;
+    bottom: 0;
+    width: 380px;
+    max-width: 100vw;
+    background: var(--surface);
+    border-left: 1px solid var(--border);
+    z-index: 60;
+    transform: translateX(100%);
+    transition: transform 0.28s cubic-bezier(0.4,0,0.2,1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  #conceptPanel.open { transform: translateX(0); }
+
+  .panel-accent-bar {
+    height: 3px;
+    width: 100%;
+    flex-shrink: 0;
+    background: var(--accent);
+  }
+
+  .panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 1.5rem 1rem;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  .panel-cat-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.05);
+    color: var(--accent);
+  }
+
+  .panel-close {
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1;
+    padding: 4px;
+    transition: color 0.15s;
+  }
+  .panel-close:hover { color: var(--text); }
+
+  .panel-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.5rem;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  .panel-term {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+  }
+
+  .panel-hook {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 0.95rem;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+  }
+
+  .panel-section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+  }
+
+  .panel-text {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--text);
+    margin-bottom: 1.5rem;
+  }
+
+  .panel-prompt-block {
+    background: rgba(232,213,163,0.04);
+    border: 1px solid rgba(232,213,163,0.1);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .panel-prompt-block .panel-text {
+    margin-bottom: 0;
+    font-style: italic;
+    color: var(--muted2);
+  }
+
+  .panel-footer {
+    padding: 1rem 1.5rem 1.5rem;
+    border-top: 1px solid var(--border);
+    flex-shrink: 0;
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .btn-master-panel {
+    flex: 1;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.7rem 1rem;
+    border-radius: 999px;
+    border: 1px solid var(--accent);
+    background: var(--accent);
+    color: #0d0d0d;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+  }
+  .btn-master-panel.mastered {
+    background: rgba(122,175,138,0.12);
+    border-color: var(--green);
+    color: var(--green);
+  }
+  .btn-master-panel:hover:not(.mastered) { background: var(--accent2); border-color: var(--accent2); }
+
+  .btn-map-link {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.7rem 1rem;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted2);
+    cursor: pointer;
+    text-decoration: none;
+    display: flex; align-items: center; justify-content: center;
+    transition: color 0.15s, border-color 0.15s;
+    white-space: nowrap;
+  }
+  .btn-map-link:hover { color: var(--text); border-color: var(--border-hover); }
+
+  /* ── CATEGORY LEGEND ── */
+  #legend {
+    position: fixed;
+    left: 1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 3px 0;
+    transition: opacity 0.2s;
+  }
+  .legend-item.dimmed { opacity: 0.3; }
+
+  .legend-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .legend-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted2);
+    transition: color 0.2s;
+  }
+  .legend-item:hover .legend-label { color: var(--text); }
+  .legend-item.active .legend-label { color: var(--text); }
+
+  /* ── LOADING ── */
+  #loadingScreen {
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 1rem;
+    transition: opacity 0.5s;
+  }
+  #loadingScreen.fade { opacity: 0; pointer-events: none; }
+
+  .loading-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .loading-bar-wrap {
+    width: 160px;
+    height: 2px;
+    background: var(--border);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+
+  .loading-bar {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 999px;
+    animation: loadProgress 1.2s ease-in-out forwards;
+  }
+
+  @keyframes loadProgress {
+    from { width: 0; }
+    to { width: 100%; }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── MOBILE: hide legend, adjust panel ── */
+  @media (max-width: 600px) {
+    #legend { display: none; }
+    #conceptPanel { width: 100vw; top: auto; height: 70vh; border-left: none; border-top: 1px solid var(--border); transform: translateY(100%); }
+    #conceptPanel.open { transform: translateY(0); }
+    .panel-term { font-size: 1.3rem; }
+    #zoomControls { display: none; }
+    #hintBar { display: none; }
+    nav { padding: 1rem 1.25rem; grid-template-columns: 1fr auto; }
+    .nav-island { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LOADING SCREEN -->
+<div id="loadingScreen">
+  <div class="loading-logo">Epistemic.</div>
+  <div class="loading-bar-wrap"><div class="loading-bar"></div></div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="/"><em>Epistemic.</em></a>
+  <div class="nav-island">
+    <a class="nav-link" href="/">Episodes</a>
+    <a class="nav-link" href="/">Concepts</a>
+    <a class="nav-link active">Map</a>
+    <a class="nav-link" href="/">Today</a>
+    <a class="nav-link" href="/#signup">Sign up</a>
+  </div>
+  <div class="nav-right">
+    <div class="nav-pill">
+      <div class="nav-dot"></div>
+      <span id="navConceptCount">—</span> concepts
+    </div>
+  </div>
+</nav>
+
+<!-- CATEGORY LEGEND -->
+<div id="legend"></div>
+
+<!-- MAP CANVAS -->
+<div id="mapWrap">
+  <svg id="mapCanvas" xmlns="http://www.w3.org/2000/svg"></svg>
+</div>
+
+<!-- HINT BAR -->
+<div id="hintBar">
+  <span>Scroll to zoom</span>
+  <span>Drag to pan</span>
+  <span>Click a node to explore</span>
+</div>
+
+<!-- SEARCH BAR -->
+<div id="searchBar">
+  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="flex-shrink:0;opacity:0.4">
+    <circle cx="6" cy="6" r="4.5" stroke="#f0ede8" stroke-width="1.2"/>
+    <path d="M9.5 9.5L12 12" stroke="#f0ede8" stroke-width="1.2" stroke-linecap="round"/>
+  </svg>
+  <input type="text" id="searchInput" placeholder="Search concepts…" autocomplete="off" spellcheck="false">
+  <span id="searchCount"></span>
+  <button id="clearSearch" title="Clear search">✕</button>
+</div>
+
+<!-- ZOOM CONTROLS -->
+<div id="zoomControls">
+  <button class="zoom-btn" id="zoomIn" title="Zoom in">+</button>
+  <button class="zoom-btn" id="zoomOut" title="Zoom out">−</button>
+  <button class="zoom-btn" id="zoomReset" title="Reset view" style="font-size:0.7rem;">⌂</button>
+</div>
+
+<!-- CONCEPT PANEL -->
+<div id="conceptPanel">
+  <div class="panel-accent-bar" id="panelAccentBar"></div>
+  <div class="panel-header">
+    <span class="panel-cat-pill" id="panelCatPill"></span>
+    <button class="panel-close" onclick="closePanel()">✕</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-term" id="panelTerm"></div>
+    <div class="panel-hook" id="panelHook"></div>
+
+    <div class="panel-section-label">What it means</div>
+    <div class="panel-text" id="panelPlain"></div>
+
+    <div class="panel-section-label">Think of it like this</div>
+    <div class="panel-text" id="panelAnalogy"></div>
+
+    <div class="panel-section-label">Reflect</div>
+    <div class="panel-prompt-block">
+      <div class="panel-text" id="panelPrompt"></div>
+    </div>
+  </div>
+  <div class="panel-footer">
+    <button class="btn-master-panel" id="panelMasterBtn" onclick="toggleMasterFromPanel()">Mark mastered</button>
+    <a class="btn-map-link" href="/" id="panelSiteLink">View on site →</a>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════
+// CONFIG
+// ═══════════════════════════════════════════════
+const CAT_COLOR = {
+  finance:       '#6b9fc4',
+  psychology:    '#a08fd4',
+  thinking:      '#7aaf8a',
+  power:         '#d4715a',
+  relationships: '#c47a9f',
+  language:      '#5abfaf',
+  business:      '#e0a060',
+  identity:      '#b89878',
+  health:        '#8ab87a',
+  philosophy:    '#9a8fb8',
+  society:       '#7090a8',
+  creativity:    '#d4a574',
+  science:       '#6ab0c4',
+  'tech-ai':     '#b8a07a',
+};
+
+const CAT_ORDER = Object.keys(CAT_COLOR);
+
+// ═══════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════
+let CONCEPTS = [];
+let mastered = new Set();
+let activeCat = null;  // which category is zoomed in
+let selectedConcept = null;
+let searchQuery = '';
+let highlightedIds = new Set(); // from search
+
+// Pan/zoom state
+let panX = 0, panY = 0, scale = 1;
+let isPanning = false, panStartX = 0, panStartY = 0, panOriginX = 0, panOriginY = 0;
+
+// SVG elements map
+const nodeEls = {}; // id → g element
+
+// ═══════════════════════════════════════════════
+// LOAD DATA
+// ═══════════════════════════════════════════════
+async function init() {
+  // Load mastered from localStorage
+  try {
+    const raw = localStorage.getItem('mastered_v1') || localStorage.getItem('mastered');
+    mastered = raw ? new Set(JSON.parse(raw)) : new Set();
+  } catch(e) { mastered = new Set(); }
+
+  // Fetch concepts
+  try {
+    const res = await fetch('/concepts.json');
+    CONCEPTS = await res.json();
+  } catch(e) {
+    console.error('Failed to load concepts.json', e);
+    CONCEPTS = [];
+  }
+
+  document.getElementById('navConceptCount').textContent = CONCEPTS.length;
+
+  buildLegend();
+  buildMap();
+  setupInteractions();
+
+  // Fade out loading screen
+  setTimeout(() => {
+    const ls = document.getElementById('loadingScreen');
+    ls.classList.add('fade');
+    setTimeout(() => ls.remove(), 500);
+  }, 1100);
+}
+
+// ═══════════════════════════════════════════════
+// LAYOUT MATH
+// ═══════════════════════════════════════════════
+function getViewport() {
+  return {
+    w: window.innerWidth,
+    h: window.innerHeight - 64, // below nav
+  };
+}
+
+function computeLayout() {
+  const { w, h } = getViewport();
+  const cx = w / 2;
+  const cy = h / 2;
+  const orbitRadius = Math.min(w, h) * 0.36;
+
+  // Group concepts by category
+  const byCategory = {};
+  CONCEPTS.forEach(c => {
+    if (!byCategory[c.category]) byCategory[c.category] = [];
+    byCategory[c.category].push(c);
+  });
+
+  // Place categories in a circle
+  const cats = CAT_ORDER.filter(cat => byCategory[cat] && byCategory[cat].length > 0);
+  const catNodes = [];
+  cats.forEach((cat, i) => {
+    const angle = (i / cats.length) * Math.PI * 2 - Math.PI / 2;
+    catNodes.push({
+      cat,
+      x: cx + Math.cos(angle) * orbitRadius,
+      y: cy + Math.sin(angle) * orbitRadius,
+      count: byCategory[cat].length,
+    });
+  });
+
+  // Place concept nodes orbiting each category
+  const conceptNodes = [];
+  catNodes.forEach(cn => {
+    const concepts = byCategory[cn.cat] || [];
+    const innerR = 60 + Math.min(concepts.length, 40) * 1.2;
+    concepts.forEach((c, i) => {
+      const angle = (i / concepts.length) * Math.PI * 2 + Math.random() * 0.3;
+      // Slight jitter for organic feel
+      const r = innerR + (Math.sin(i * 2.7) * 14);
+      conceptNodes.push({
+        concept: c,
+        catNode: cn,
+        x: cn.x + Math.cos(angle) * r,
+        y: cn.y + Math.sin(angle) * r,
+      });
+    });
+  });
+
+  return { cx, cy, catNodes, conceptNodes, cats, byCategory };
+}
+
+// ═══════════════════════════════════════════════
+// BUILD SVG MAP
+// ═══════════════════════════════════════════════
+function buildMap() {
+  const svg = document.getElementById('mapCanvas');
+  const { w, h } = getViewport();
+  const layout = computeLayout();
+  const { catNodes, conceptNodes } = layout;
+
+  // Size canvas to viewport; pan/zoom handled by transform on a group
+  svg.setAttribute('width', w);
+  svg.setAttribute('height', h);
+  svg.innerHTML = '';
+
+  // Root group (pan/zoom target)
+  const root = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+  root.id = 'mapRoot';
+  svg.appendChild(root);
+
+  // ── Subtle orbit rings for each category ──
+  catNodes.forEach(cn => {
+    const innerR = 60 + Math.min(
+      (layout.byCategory[cn.cat] || []).length, 40
+    ) * 1.2 + 14;
+    const ring = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    ring.setAttribute('cx', cn.x);
+    ring.setAttribute('cy', cn.y);
+    ring.setAttribute('r', innerR + 10);
+    ring.setAttribute('fill', 'none');
+    ring.setAttribute('stroke', CAT_COLOR[cn.cat]);
+    ring.setAttribute('stroke-width', '0.5');
+    ring.setAttribute('opacity', '0.08');
+    root.appendChild(ring);
+  });
+
+  // ── Lines from category center to concept nodes ──
+  conceptNodes.forEach(cn => {
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', cn.catNode.x);
+    line.setAttribute('y1', cn.catNode.y);
+    line.setAttribute('x2', cn.x);
+    line.setAttribute('y2', cn.y);
+    line.setAttribute('stroke', CAT_COLOR[cn.concept.category]);
+    line.setAttribute('stroke-width', '0.5');
+    line.setAttribute('opacity', '0.12');
+    line.dataset.conceptId = cn.concept.id;
+    line.dataset.cat = cn.concept.category;
+    line.classList.add('concept-line');
+    root.appendChild(line);
+  });
+
+  // ── Concept nodes ──
+  conceptNodes.forEach(cn => {
+    const c = cn.concept;
+    const color = CAT_COLOR[c.category] || '#e8d5a3';
+    const isMastered = mastered.has(String(c.id)) || mastered.has(c.id);
+
+    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    g.classList.add('concept-node');
+    g.dataset.id = c.id;
+    g.dataset.cat = c.category;
+
+    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    circle.setAttribute('cx', cn.x);
+    circle.setAttribute('cy', cn.y);
+    circle.setAttribute('r', 4);
+    circle.setAttribute('fill', isMastered ? color : 'transparent');
+    circle.setAttribute('stroke', color);
+    circle.setAttribute('stroke-width', isMastered ? '0' : '1.2');
+    circle.setAttribute('opacity', isMastered ? '0.85' : '0.55');
+    circle.classList.add('concept-circle');
+
+    g.appendChild(circle);
+    g.addEventListener('click', (e) => { e.stopPropagation(); openConceptPanel(c, color); });
+
+    // Hover: show term label
+    const hoverLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    hoverLabel.setAttribute('x', cn.x);
+    hoverLabel.setAttribute('y', cn.y - 8);
+    hoverLabel.setAttribute('text-anchor', 'middle');
+    hoverLabel.setAttribute('font-family', 'DM Mono, monospace');
+    hoverLabel.setAttribute('font-size', '7');
+    hoverLabel.setAttribute('fill', color);
+    hoverLabel.setAttribute('opacity', '0');
+    hoverLabel.setAttribute('pointer-events', 'none');
+    hoverLabel.setAttribute('letter-spacing', '0.05em');
+    hoverLabel.textContent = c.term.length > 22 ? c.term.slice(0, 20) + '…' : c.term;
+    hoverLabel.classList.add('concept-label');
+
+    g.appendChild(hoverLabel);
+
+    g.addEventListener('mouseenter', () => {
+      if (isPanning) return;
+      circle.setAttribute('r', 6.5);
+      circle.setAttribute('opacity', '1');
+      hoverLabel.setAttribute('opacity', '1');
+    });
+    g.addEventListener('mouseleave', () => {
+      if (g.dataset.id == selectedConcept?.id) return;
+      circle.setAttribute('r', 4);
+      circle.setAttribute('opacity', isMastered ? '0.85' : '0.55');
+      hoverLabel.setAttribute('opacity', '0');
+    });
+
+    root.appendChild(g);
+    nodeEls[c.id] = g;
+  });
+
+  // ── Category nodes (on top) ──
+  catNodes.forEach(cn => {
+    const color = CAT_COLOR[cn.cat];
+    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    g.classList.add('cat-node');
+    g.dataset.cat = cn.cat;
+
+    // Glow halo
+    const halo = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    halo.setAttribute('cx', cn.x);
+    halo.setAttribute('cy', cn.y);
+    halo.setAttribute('r', 22);
+    halo.setAttribute('fill', color);
+    halo.setAttribute('opacity', '0.08');
+    halo.classList.add('cat-bg');
+
+    // Main circle
+    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    circle.setAttribute('cx', cn.x);
+    circle.setAttribute('cy', cn.y);
+    circle.setAttribute('r', 14);
+    circle.setAttribute('fill', cn.cat === activeCat ? color : 'var(--surface)');
+    circle.setAttribute('stroke', color);
+    circle.setAttribute('stroke-width', '1.5');
+    circle.setAttribute('opacity', '0.9');
+
+    // Category label
+    const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    label.setAttribute('x', cn.x);
+    label.setAttribute('y', cn.y + 4);
+    label.setAttribute('text-anchor', 'middle');
+    label.setAttribute('font-family', 'DM Mono, monospace');
+    label.setAttribute('font-size', '6.5');
+    label.setAttribute('font-weight', '500');
+    label.setAttribute('fill', cn.cat === activeCat ? '#0d0d0d' : color);
+    label.setAttribute('letter-spacing', '0.04em');
+    label.setAttribute('pointer-events', 'none');
+    label.textContent = cn.cat.toUpperCase().replace('-', '–');
+
+    // Count below
+    const count = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    count.setAttribute('x', cn.x);
+    count.setAttribute('y', cn.y + 30);
+    count.setAttribute('text-anchor', 'middle');
+    count.setAttribute('font-family', 'DM Mono, monospace');
+    count.setAttribute('font-size', '6');
+    count.setAttribute('fill', color);
+    count.setAttribute('opacity', '0.55');
+    count.setAttribute('pointer-events', 'none');
+    count.textContent = cn.count;
+
+    g.appendChild(halo);
+    g.appendChild(circle);
+    g.appendChild(label);
+    g.appendChild(count);
+
+    g.addEventListener('click', (e) => { e.stopPropagation(); handleCatClick(cn.cat); });
+    g.addEventListener('mouseenter', () => { halo.setAttribute('opacity', '0.18'); circle.setAttribute('r', 16); });
+    g.addEventListener('mouseleave', () => { halo.setAttribute('opacity', '0.08'); circle.setAttribute('r', 14); });
+
+    root.appendChild(g);
+  });
+
+  applyTransform();
+}
+
+// ═══════════════════════════════════════════════
+// LEGEND
+// ═══════════════════════════════════════════════
+function buildLegend() {
+  const el = document.getElementById('legend');
+  const byCategory = {};
+  CONCEPTS.forEach(c => {
+    if (!byCategory[c.category]) byCategory[c.category] = 0;
+    byCategory[c.category]++;
+  });
+
+  CAT_ORDER.forEach(cat => {
+    if (!byCategory[cat]) return;
+    const color = CAT_COLOR[cat];
+    const item = document.createElement('div');
+    item.className = 'legend-item';
+    item.innerHTML = `
+      <div class="legend-dot" style="background:${color}"></div>
+      <div class="legend-label">${cat}</div>
+    `;
+    item.addEventListener('click', () => handleCatClick(cat));
+    el.appendChild(item);
+  });
+}
+
+function updateLegendActive() {
+  document.querySelectorAll('.legend-item').forEach(item => {
+    const cat = item.querySelector('.legend-label').textContent;
+    if (!activeCat) {
+      item.classList.remove('dimmed', 'active');
+    } else if (cat === activeCat) {
+      item.classList.add('active');
+      item.classList.remove('dimmed');
+    } else {
+      item.classList.add('dimmed');
+      item.classList.remove('active');
+    }
+  });
+}
+
+// ═══════════════════════════════════════════════
+// CATEGORY FILTER
+// ═══════════════════════════════════════════════
+function handleCatClick(cat) {
+  if (activeCat === cat) {
+    // Deselect
+    activeCat = null;
+    applyVisibility();
+    updateLegendActive();
+    resetView();
+  } else {
+    activeCat = cat;
+    applyVisibility();
+    updateLegendActive();
+    panToCategory(cat);
+  }
+}
+
+function applyVisibility() {
+  const root = document.getElementById('mapRoot');
+  if (!root) return;
+
+  // Concept nodes
+  root.querySelectorAll('.concept-node').forEach(g => {
+    const cat = g.dataset.cat;
+    const show = !activeCat || cat === activeCat;
+    const inSearch = !searchQuery || highlightedIds.has(Number(g.dataset.id));
+    const visible = show && (searchQuery ? inSearch : true);
+    g.setAttribute('opacity', visible ? '1' : '0.06');
+    g.style.pointerEvents = visible ? '' : 'none';
+  });
+
+  // Lines
+  root.querySelectorAll('.concept-line').forEach(line => {
+    const cat = line.dataset.cat;
+    const show = !activeCat || cat === activeCat;
+    line.setAttribute('opacity', show ? '0.12' : '0.02');
+  });
+
+  // Category nodes: dim others
+  root.querySelectorAll('.cat-node').forEach(g => {
+    const cat = g.dataset.cat;
+    const dim = activeCat && cat !== activeCat;
+    g.setAttribute('opacity', dim ? '0.2' : '1');
+    g.style.pointerEvents = dim ? 'none' : '';
+  });
+}
+
+// ═══════════════════════════════════════════════
+// PAN TO CATEGORY
+// ═══════════════════════════════════════════════
+function panToCategory(cat) {
+  const layout = computeLayout();
+  const cn = layout.catNodes.find(n => n.cat === cat);
+  if (!cn) return;
+
+  const { w, h } = getViewport();
+  const targetScale = 1.8;
+  const targetX = w / 2 - cn.x * targetScale;
+  const targetY = h / 2 - cn.y * targetScale;
+
+  animatePanZoom(targetX, targetY, targetScale, 400);
+}
+
+function resetView() {
+  animatePanZoom(0, 0, 1, 350);
+}
+
+function animatePanZoom(tx, ty, ts, duration) {
+  const startX = panX, startY = panY, startS = scale;
+  const startTime = performance.now();
+
+  function frame(now) {
+    const t = Math.min((now - startTime) / duration, 1);
+    const ease = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t; // ease in-out
+    panX = startX + (tx - startX) * ease;
+    panY = startY + (ty - startY) * ease;
+    scale = startS + (ts - startS) * ease;
+    applyTransform();
+    if (t < 1) requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+
+// ═══════════════════════════════════════════════
+// SEARCH
+// ═══════════════════════════════════════════════
+function applySearch(query) {
+  searchQuery = query.trim().toLowerCase();
+  highlightedIds = new Set();
+
+  const countEl = document.getElementById('searchCount');
+  const clearBtn = document.getElementById('clearSearch');
+
+  if (!searchQuery) {
+    countEl.textContent = '';
+    clearBtn.classList.remove('visible');
+    applyVisibility();
+    return;
+  }
+
+  clearBtn.classList.add('visible');
+
+  CONCEPTS.forEach(c => {
+    if (
+      c.term.toLowerCase().includes(searchQuery) ||
+      c.hook.toLowerCase().includes(searchQuery) ||
+      c.plain.toLowerCase().includes(searchQuery)
+    ) {
+      highlightedIds.add(c.id);
+    }
+  });
+
+  countEl.textContent = highlightedIds.size + ' match' + (highlightedIds.size !== 1 ? 'es' : '');
+
+  // Apply visibility
+  const root = document.getElementById('mapRoot');
+  if (!root) return;
+
+  root.querySelectorAll('.concept-node').forEach(g => {
+    const id = Number(g.dataset.id);
+    const hit = highlightedIds.has(id);
+    const catOk = !activeCat || g.dataset.cat === activeCat;
+    const visible = hit && catOk;
+    g.setAttribute('opacity', visible ? '1' : '0.05');
+    g.style.pointerEvents = visible ? '' : 'none';
+  });
+
+  root.querySelectorAll('.concept-line').forEach(line => {
+    const id = Number(line.dataset.conceptId);
+    const hit = highlightedIds.has(id);
+    const catOk = !activeCat || line.dataset.cat === activeCat;
+    line.setAttribute('opacity', hit && catOk ? '0.2' : '0.02');
+  });
+}
+
+// ═══════════════════════════════════════════════
+// CONCEPT PANEL
+// ═══════════════════════════════════════════════
+function openConceptPanel(concept, color) {
+  selectedConcept = concept;
+
+  document.getElementById('panelAccentBar').style.background = color;
+  document.getElementById('panelCatPill').textContent = concept.category;
+  document.getElementById('panelCatPill').style.color = color;
+  document.getElementById('panelTerm').textContent = concept.term;
+  document.getElementById('panelHook').textContent = concept.hook;
+  document.getElementById('panelPlain').textContent = concept.plain;
+  document.getElementById('panelAnalogy').textContent = concept.analogy;
+  document.getElementById('panelPrompt').textContent = concept.prompt;
+
+  const isMastered = mastered.has(String(concept.id)) || mastered.has(concept.id);
+  const btn = document.getElementById('panelMasterBtn');
+  btn.textContent = isMastered ? '✓ Mastered' : 'Mark mastered';
+  btn.className = 'btn-master-panel' + (isMastered ? ' mastered' : '');
+
+  document.getElementById('conceptPanel').classList.add('open');
+
+  // Highlight the node
+  highlightNode(concept.id);
+}
+
+function closePanel() {
+  document.getElementById('conceptPanel').classList.remove('open');
+  if (selectedConcept) {
+    unhighlightNode(selectedConcept.id);
+    selectedConcept = null;
+  }
+}
+
+function highlightNode(id) {
+  const g = nodeEls[id];
+  if (!g) return;
+  const circle = g.querySelector('circle');
+  const label = g.querySelector('text');
+  if (circle) { circle.setAttribute('r', '7'); circle.setAttribute('opacity', '1'); }
+  if (label) label.setAttribute('opacity', '1');
+}
+
+function unhighlightNode(id) {
+  const g = nodeEls[id];
+  if (!g) return;
+  const c = CONCEPTS.find(c => c.id == id);
+  const isMastered = c && (mastered.has(String(c.id)) || mastered.has(c.id));
+  const circle = g.querySelector('circle');
+  const label = g.querySelector('text');
+  if (circle) { circle.setAttribute('r', '4'); circle.setAttribute('opacity', isMastered ? '0.85' : '0.55'); }
+  if (label) label.setAttribute('opacity', '0');
+}
+
+function toggleMasterFromPanel() {
+  if (!selectedConcept) return;
+  const id = String(selectedConcept.id);
+  const wasMastered = mastered.has(id);
+
+  if (wasMastered) {
+    mastered.delete(id);
+  } else {
+    mastered.add(id);
+  }
+
+  // Persist — match key used by main site
+  try {
+    localStorage.setItem('mastered_v1', JSON.stringify([...mastered]));
+    // Also write legacy key for compatibility
+    localStorage.setItem('mastered', JSON.stringify([...mastered]));
+  } catch(e) {}
+
+  const btn = document.getElementById('panelMasterBtn');
+  const nowMastered = !wasMastered;
+  btn.textContent = nowMastered ? '✓ Mastered' : 'Mark mastered';
+  btn.className = 'btn-master-panel' + (nowMastered ? ' mastered' : '');
+
+  // Update node appearance
+  const g = nodeEls[selectedConcept.id];
+  if (g) {
+    const color = CAT_COLOR[selectedConcept.category] || '#e8d5a3';
+    const circle = g.querySelector('circle');
+    if (circle) {
+      circle.setAttribute('fill', nowMastered ? color : 'transparent');
+      circle.setAttribute('stroke-width', nowMastered ? '0' : '1.2');
+      circle.setAttribute('opacity', nowMastered ? '1' : '0.55');
+    }
+  }
+}
+
+// ═══════════════════════════════════════════════
+// PAN + ZOOM
+// ═══════════════════════════════════════════════
+function applyTransform() {
+  const root = document.getElementById('mapRoot');
+  if (root) root.setAttribute('transform', `translate(${panX},${panY}) scale(${scale})`);
+}
+
+function setupInteractions() {
+  const wrap = document.getElementById('mapWrap');
+
+  // Pan (mouse)
+  wrap.addEventListener('mousedown', (e) => {
+    if (e.target.closest('.concept-node') || e.target.closest('.cat-node')) return;
+    isPanning = true;
+    wrap.classList.add('dragging');
+    panStartX = e.clientX;
+    panStartY = e.clientY;
+    panOriginX = panX;
+    panOriginY = panY;
+  });
+
+  window.addEventListener('mousemove', (e) => {
+    if (!isPanning) return;
+    panX = panOriginX + (e.clientX - panStartX);
+    panY = panOriginY + (e.clientY - panStartY);
+    applyTransform();
+  });
+
+  window.addEventListener('mouseup', () => {
+    isPanning = false;
+    document.getElementById('mapWrap').classList.remove('dragging');
+  });
+
+  // Pan (touch)
+  let touchStartX = 0, touchStartY = 0;
+  wrap.addEventListener('touchstart', (e) => {
+    if (e.touches.length !== 1) return;
+    isPanning = true;
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+    panOriginX = panX;
+    panOriginY = panY;
+  }, { passive: true });
+
+  wrap.addEventListener('touchmove', (e) => {
+    if (!isPanning || e.touches.length !== 1) return;
+    panX = panOriginX + (e.touches[0].clientX - touchStartX);
+    panY = panOriginY + (e.touches[0].clientY - touchStartY);
+    applyTransform();
+  }, { passive: true });
+
+  wrap.addEventListener('touchend', () => { isPanning = false; });
+
+  // Scroll to zoom
+  wrap.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? 0.9 : 1.1;
+    const rect = wrap.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    zoomAt(mouseX, mouseY, delta);
+  }, { passive: false });
+
+  // Click on empty → close panel + reset category
+  wrap.addEventListener('click', (e) => {
+    if (!e.target.closest('.concept-node') && !e.target.closest('.cat-node')) {
+      closePanel();
+    }
+  });
+
+  // Zoom buttons
+  document.getElementById('zoomIn').addEventListener('click', () => {
+    const { w, h } = getViewport();
+    zoomAt(w / 2, h / 2, 1.2);
+  });
+  document.getElementById('zoomOut').addEventListener('click', () => {
+    const { w, h } = getViewport();
+    zoomAt(w / 2, h / 2, 0.83);
+  });
+  document.getElementById('zoomReset').addEventListener('click', () => {
+    activeCat = null;
+    applyVisibility();
+    updateLegendActive();
+    resetView();
+  });
+
+  // Search
+  const input = document.getElementById('searchInput');
+  input.addEventListener('input', () => applySearch(input.value));
+
+  document.getElementById('clearSearch').addEventListener('click', () => {
+    input.value = '';
+    applySearch('');
+  });
+
+  // Window resize: rebuild
+  window.addEventListener('resize', debounce(() => {
+    buildMap();
+    applyVisibility();
+  }, 300));
+}
+
+function zoomAt(mouseX, mouseY, factor) {
+  const newScale = Math.max(0.35, Math.min(4, scale * factor));
+  const scaleChange = newScale / scale;
+  panX = mouseX - (mouseX - panX) * scaleChange;
+  panY = mouseY - (mouseY - panY) * scaleChange;
+  scale = newScale;
+  applyTransform();
+}
+
+function debounce(fn, wait) {
+  let t;
+  return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), wait); };
+}
+
+// ═══════════════════════════════════════════════
+// BOOT
+// ═══════════════════════════════════════════════
+init();
+</script>
+</body>
+</html>
