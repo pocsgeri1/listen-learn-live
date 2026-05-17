@@ -378,6 +378,63 @@
     color: var(--muted2);
   }
 
+  /* ── EPISODE SOURCE PILL ── */
+  .panel-source-wrap {
+    margin-bottom: 1.5rem;
+  }
+  .panel-episode-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted2);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 4px 10px;
+    text-decoration: none;
+    transition: color 0.15s, border-color 0.15s;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .panel-episode-pill:hover { color: var(--text); border-color: var(--border-hover); }
+  .panel-episode-pill-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background: var(--muted);
+  }
+
+  /* ── RELATED CONCEPTS ── */
+  .panel-related-wrap {
+    margin-bottom: 1.5rem;
+  }
+  .panel-related-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 0.5rem;
+  }
+  .panel-related-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid;
+    background: transparent;
+    cursor: pointer;
+    transition: opacity 0.15s, background 0.15s;
+    line-height: 1.4;
+  }
+  .panel-related-pill:hover { opacity: 0.75; }
+  
   .panel-footer {
     padding: 1rem 1.5rem 1.5rem;
     border-top: 1px solid var(--border);
@@ -601,6 +658,8 @@
     <div class="panel-term" id="panelTerm"></div>
     <div class="panel-hook" id="panelHook"></div>
 
+    <div class="panel-source-wrap" id="panelSourceWrap" style="display:none"></div>
+
     <div class="panel-section-label">What it means</div>
     <div class="panel-text" id="panelPlain"></div>
 
@@ -610,6 +669,11 @@
     <div class="panel-section-label">Reflect</div>
     <div class="panel-prompt-block">
       <div class="panel-text" id="panelPrompt"></div>
+    </div>
+
+    <div class="panel-related-wrap" id="panelRelatedWrap" style="display:none">
+      <div class="panel-section-label">Related concepts</div>
+      <div class="panel-related-pills" id="panelRelatedPills"></div>
     </div>
   </div>
   <div class="panel-footer">
@@ -647,6 +711,7 @@ const CAT_ORDER = Object.keys(CAT_COLOR);
 let CONCEPTS = [];
 let mastered = new Set();
 let activeCat = null;  // which category is zoomed in
+let COLLECTIONS = {};  // id → collection object
 let selectedConcept = null;
 let searchQuery = '';
 let highlightedIds = new Set(); // from search
@@ -668,27 +733,31 @@ async function init() {
     mastered = raw ? new Set(JSON.parse(raw)) : new Set();
   } catch(e) { mastered = new Set(); }
 
-  // Fetch concepts
+  // Fetch concepts + collections in parallel
   try {
-    const res = await fetch('/concepts.json');
-    CONCEPTS = await res.json();
+    const [cRes, colRes] = await Promise.all([
+      fetch('/concepts.json'),
+      fetch('/collections.json'),
+    ]);
+    CONCEPTS = await cRes.json();
+    const colArr = await colRes.json();
+    if (Array.isArray(colArr)) {
+      colArr.forEach(col => { COLLECTIONS[col.id] = col; });
+    }
   } catch(e) {
-    console.error('Failed to load concepts.json', e);
+    console.error('Failed to load data', e);
     CONCEPTS = [];
   }
 
   document.getElementById('navConceptCount').textContent = CONCEPTS.length;
 
-  // Build bidirectional relationship index.
-  // Some concepts declare related_ids (forward links). We also want reverse:
-  // if concept 42 lists 7 as related, concept 7 should show 42 as related too.
-  window.RELATED_INDEX = {}; // id → Set of related ids
+  // Build bidirectional relationship index
+  window.RELATED_INDEX = {};
   CONCEPTS.forEach(c => {
     if (!window.RELATED_INDEX[c.id]) window.RELATED_INDEX[c.id] = new Set();
     if (Array.isArray(c.related_ids)) {
       c.related_ids.forEach(rid => {
         window.RELATED_INDEX[c.id].add(rid);
-        // reverse link
         if (!window.RELATED_INDEX[rid]) window.RELATED_INDEX[rid] = new Set();
         window.RELATED_INDEX[rid].add(c.id);
       });
@@ -825,7 +894,8 @@ function buildMap() {
     g.classList.add('concept-node');
     g.dataset.id = c.id;
     g.dataset.cat = c.category;
-
+    g.dataset.cx = cn.x;
+    g.dataset.cy = cn.y;
     const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
     circle.setAttribute('cx', cn.x);
     circle.setAttribute('cy', cn.y);
@@ -1129,14 +1199,53 @@ function openConceptPanel(concept, color) {
   document.getElementById('panelAnalogy').textContent = concept.analogy;
   document.getElementById('panelPrompt').textContent = concept.prompt;
 
+  // Episode attribution
+  const sourceWrap = document.getElementById('panelSourceWrap');
+  const col = concept.collection_id ? COLLECTIONS[concept.collection_id] : null;
+  if (col && col.type === 'episode' && col.title) {
+    const href = col.episode_url || '/';
+    sourceWrap.innerHTML = `<a class="panel-episode-pill" href="${href}" target="_blank" rel="noopener">
+      <span class="panel-episode-pill-dot" style="background:${color}"></span>
+      ${col.podcast ? col.podcast + ' — ' : ''}${col.title}
+    </a>`;
+    sourceWrap.style.display = '';
+  } else {
+    sourceWrap.style.display = 'none';
+    sourceWrap.innerHTML = '';
+  }
+
+  // Related concepts
+  const relatedWrap = document.getElementById('panelRelatedWrap');
+  const relatedPills = document.getElementById('panelRelatedPills');
+  const relatedIds = window.RELATED_INDEX && window.RELATED_INDEX[concept.id]
+    ? Array.from(window.RELATED_INDEX[concept.id])
+    : [];
+  const relatedConcepts = relatedIds
+    .map(rid => CONCEPTS.find(c => c.id === rid))
+    .filter(Boolean)
+    .slice(0, 6);
+
+  if (relatedConcepts.length > 0) {
+    relatedPills.innerHTML = relatedConcepts.map(rc => {
+      const rc_color = CAT_COLOR[rc.category] || 'var(--muted)';
+      return `<button class="panel-related-pill"
+        style="color:${rc_color};border-color:${rc_color}22;"
+        onclick="navigateToRelated(${rc.id})"
+        title="${rc.hook || ''}"
+      >${rc.term}</button>`;
+    }).join('');
+    relatedWrap.style.display = '';
+  } else {
+    relatedWrap.style.display = 'none';
+    relatedPills.innerHTML = '';
+  }
+
   const isMastered = mastered.has(String(concept.id)) || mastered.has(concept.id);
   const btn = document.getElementById('panelMasterBtn');
   btn.textContent = isMastered ? '✓ Mastered' : 'Mark mastered';
   btn.className = 'btn-master-panel' + (isMastered ? ' mastered' : '');
 
   document.getElementById('conceptPanel').classList.add('open');
-
-  // Highlight the node
   highlightNode(concept.id);
 }
 
@@ -1148,6 +1257,30 @@ function closePanel() {
   }
 }
 
+function navigateToRelated(id) {
+  const concept = CONCEPTS.find(c => c.id === id);
+  if (!concept) return;
+  const color = CAT_COLOR[concept.category] || 'var(--accent)';
+
+  // Unhighlight current
+  if (selectedConcept) unhighlightNode(selectedConcept.id);
+
+  // Pan map to the target node
+  const el = nodeEls[id];
+  if (el) {
+    const cx = parseFloat(el.dataset.cx);
+    const cy = parseFloat(el.dataset.cy);
+    if (!isNaN(cx) && !isNaN(cy)) {
+      const { w, h } = getViewport();
+      panX = (w / 2 - 190) - cx * scale; // 190 = half panel width offset
+      panY = h / 2 - cy * scale;
+      applyTransform();
+    }
+  }
+
+  openConceptPanel(concept, color);
+}
+  
 function highlightNode(id) {
   const g = nodeEls[id];
   if (!g) return;
