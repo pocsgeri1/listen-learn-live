@@ -123,6 +123,11 @@ export default async function handler(req, res) {
                       || editorsPickRaw === 'true'
                       || editorsPickRaw === 1
                       || editorsPickRaw === '1';
+    // related_ids: array of ints, or empty array. Never null in output.
+    const relatedIdsRaw = raw['related_ids'] ?? raw['Related IDs'] ?? [];
+    const related_ids = Array.isArray(relatedIdsRaw)
+      ? relatedIdsRaw.map(v => parseInt(v, 10)).filter(n => Number.isInteger(n) && n > 0)
+      : [];
 
     const missing = [];
     if (!term) missing.push('term');
@@ -174,6 +179,7 @@ export default async function handler(req, res) {
       collection_id,
       timestamp,
       editors_pick,
+      related_ids,
     });
   }
 
@@ -276,6 +282,7 @@ export default async function handler(req, res) {
         collection_id: n.collection_id,
         timestamp: n.timestamp,
         editors_pick: n.editors_pick === true,
+        related_ids: n.related_ids || [],
       };
 
       toAppend.push(newConcept);
