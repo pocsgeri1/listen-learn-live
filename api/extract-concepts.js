@@ -212,8 +212,26 @@ export default async function handler(req, res) {
 
   try {
     // 1. Call Claude API
+    // Fetch existing concepts to build the library reference for related_ids generation.
+    // If this fails, we proceed without it — related_ids will be empty for this batch.
+    let libraryRef = [];
+    try {
+      const libResp = await fetch(`https://raw.githubusercontent.com/pocsgeri1/listen-learn-live/main/concepts.json`);
+      if (libResp.ok) {
+        const libData = await libResp.json();
+        if (Array.isArray(libData)) {
+          libraryRef = libData.map(c => ({ id: c.id, term: c.term, category: c.category }));
+        }
+      }
+    } catch (libErr) {
+      console.warn('Could not fetch existing library for related_ids — proceeding without it.', libErr.message);
+    }
+
     const episodeMeta = `${episodeTitle || 'Unknown'} | ${host || 'Unknown'} | ${episodeUrl || ''} | Duration: ${duration || 'n/a'} min`;
-    const userMessage = `EPISODE_METADATA:\n${episodeMeta}\n\nTRANSCRIPT:\n${transcript}`;
+    const librarySection = libraryRef.length
+      ? `EXISTING_LIBRARY:\n${JSON.stringify(libraryRef)}\n\n`
+      : '';
+    const userMessage = `EPISODE_METADATA:\n${episodeMeta}\n\n${librarySection}TRANSCRIPT:\n${transcript}`;
 
     const concepts = await callClaude(userMessage);
 
@@ -353,6 +371,11 @@ async function createConceptRow(concept, episodeRefLabel, episodeUrl, collection
 
   if (episodeUrl) fields['Episode URL'] = episodeUrl;
   if (Number.isFinite(collectionId)) fields['Collection ID'] = collectionId;
+  // Store related_ids as a comma-separated string (Airtable has no native int-array field).
+  // publish-batch.js reads this back and stores it as a proper array in concepts.json.
+  if (Array.isArray(concept.related_ids) && concept.related_ids.length > 0) {
+    fields['Related IDs'] = concept.related_ids.join(', ');
+  }
 
   const s = concept.scores || {};
   if (typeof s.universality === 'number') fields['Universality Score'] = s.universality;
