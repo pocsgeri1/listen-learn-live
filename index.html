@@ -34,6 +34,12 @@
     --teal: #5abfaf;
   }
 
+  .short-filter-pill.active {
+    background: var(--accent) !important;
+    color: #0d0d0d !important;
+    border-color: var(--accent) !important;
+  }
+
   .progress-count.vault-active {
     color: var(--accent);
     text-decoration: underline;
@@ -4413,7 +4419,7 @@ function generateShareImage(c) {
   const termBlockH = termLines.length * termLineH;
 
   // Position term in the lower-centre zone
-  const termStartY = H * 0.52;
+  const termStartY = H * 0.56;
   ctx.font = termFont;
   ctx.fillStyle = '#f0ede8';
   termLines.forEach((line, i) => {
@@ -4440,10 +4446,10 @@ function generateShareImage(c) {
   ctx.lineTo(W - PAD, dividerY);
   ctx.stroke();
 
-  // ── FLIP HINT — above divider, small mono label ──
+  // ── URL HINT — above divider ──
   ctx.font = '400 20px monospace';
-  ctx.fillStyle = 'rgba(255,255,255,0.2)';
-  ctx.fillText('TAP TO EXPLORE', PAD, dividerY - 18);
+  ctx.fillStyle = 'rgba(255,255,255,0.22)';
+  ctx.fillText('epistemic.live', PAD, dividerY - 22);
 
   // ── FOOTER ──
   const footerY = H - PAD + 20;
@@ -4939,12 +4945,12 @@ function buildShorts() {
 
   const allPeople = [...new Set(shortCollections.flatMap(col => col.people || []))].sort();
   const filterPills = ['All', ...allPeople].map(p =>
-    `<button class="short-filter-pill${p === 'All' ? ' active' : ''}" data-person="${p === 'All' ? 'all' : p}" onclick="filterShorts('${p === 'All' ? 'all' : p}')">${p}</button>`
+    `<button class="short-filter-pill${p === 'All' ? ' active' : ''}" data-person="${p === 'All' ? 'all' : p}" onclick="filterShorts('${p === 'All' ? 'all' : p}')" style="background:var(--surface2);border:1px solid var(--border);color:var(--muted2);padding:5px 14px;border-radius:999px;font-size:0.68rem;cursor:pointer;font-family:'DM Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;transition:all 0.15s;">${p}</button>`
   ).join('');
 
   row.innerHTML = `
     <div style="max-width:1100px;margin:0 auto;padding:0 2rem;">
-    <div class="shorts-filter-bar">
+    <div class="shorts-filter-bar" style="display:flex;flex-wrap:wrap;gap:8px;padding:0 0 16px 0;align-items:center;">
       ${filterPills}
     </div>
     </div>
