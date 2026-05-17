@@ -517,7 +517,7 @@
     display: flex !important;
     flex-wrap: nowrap;
     gap: 6px;
-    padding: 0 2rem 1.2rem;
+    padding: 1rem 2rem 1.2rem;
     overflow-x: auto;
     scrollbar-width: none;
     flex-shrink: 0;
@@ -3443,6 +3443,10 @@
   <div class="episodes-controls">
     <div class="episodes-app-header">
       <div class="app-title">Browse <em>shorts</em></div>
+      <div class="search-wrap">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M10 10l3.5 3.5"/></svg>
+        <input id="shortsSearch" type="text" placeholder="Search shorts..." oninput="filterShorts(null, this.value)" />
+      </div>
     </div>
   </div>
   <div id="shortsRow"></div>
@@ -4732,12 +4736,12 @@ function buildEpisodes() {
   const row = document.getElementById('episodesRow');
   if (!section || !row) return;
 
+  section.style.display = 'block';
+
   if (episodeCollections.length === 0) {
-    section.style.display = 'none';
+    row.innerHTML = `<div style="padding:2rem;text-align:center;font-family:'DM Mono',monospace;font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);">No episodes match your search</div>`;
     return;
   }
-
-  section.style.display = 'block';
 
   // Group episodes by podcast
   const grouped = {};
@@ -4859,10 +4863,6 @@ function buildShorts() {
     <div style="max-width:1100px;margin:0 auto;padding:0 2rem;">
     <div class="shorts-filter-bar">
       ${filterPills}
-      <div class="search-wrap" style="margin-left:auto;">
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M10 10l3.5 3.5"/></svg>
-        <input id="shortsSearch" type="text" placeholder="Search shorts..." oninput="filterShorts(null, this.value)" style="background:none;border:none;outline:none;color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.82rem;width:100%;" />
-      </div>
     </div>
     </div>
     <div class="episodes-scroll-wrap">
