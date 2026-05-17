@@ -852,6 +852,12 @@ function buildMap() {
   root.id = 'mapRoot';
   svg.appendChild(root);
 
+  // Dedicated layer for relationship edges (above orbit lines, below nodes)
+  const edgeLayer = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+  edgeLayer.id = 'edgeLayer';
+  edgeLayer.setAttribute('pointer-events', 'none');
+  root.appendChild(edgeLayer);
+
   // ── Subtle orbit rings for each category ──
   catNodes.forEach(cn => {
     const innerR = 60 + Math.min(
@@ -884,6 +890,8 @@ function buildMap() {
     root.appendChild(line);
   });
 
+  // ── Re-append edge layer so it sits above orbit lines, below nodes ──
+  root.appendChild(edgeLayer);
   // ── Concept nodes ──
   conceptNodes.forEach(cn => {
     const c = cn.concept;
@@ -1247,10 +1255,12 @@ function openConceptPanel(concept, color) {
 
   document.getElementById('conceptPanel').classList.add('open');
   highlightNode(concept.id);
+  drawRelationshipEdges(concept);
 }
 
 function closePanel() {
   document.getElementById('conceptPanel').classList.remove('open');
+  clearRelationshipEdges();
   if (selectedConcept) {
     unhighlightNode(selectedConcept.id);
     selectedConcept = null;
@@ -1279,6 +1289,60 @@ function navigateToRelated(id) {
   }
 
   openConceptPanel(concept, color);
+}
+
+function drawRelationshipEdges(concept) {
+  const layer = document.getElementById('edgeLayer');
+  if (!layer) return;
+  layer.innerHTML = '';
+
+  const relatedIds = window.RELATED_INDEX && window.RELATED_INDEX[concept.id]
+    ? Array.from(window.RELATED_INDEX[concept.id])
+    : [];
+  if (relatedIds.length === 0) return;
+
+  // Find source node position
+  const srcEl = nodeEls[concept.id];
+  if (!srcEl) return;
+  const srcX = parseFloat(srcEl.dataset.cx);
+  const srcY = parseFloat(srcEl.dataset.cy);
+  if (isNaN(srcX) || isNaN(srcY)) return;
+
+  relatedIds.forEach(rid => {
+    const tgtEl = nodeEls[rid];
+    if (!tgtEl) return;
+    const tgtX = parseFloat(tgtEl.dataset.cx);
+    const tgtY = parseFloat(tgtEl.dataset.cy);
+    if (isNaN(tgtX) || isNaN(tgtY)) return;
+
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', srcX);
+    line.setAttribute('y1', srcY);
+    line.setAttribute('x2', tgtX);
+    line.setAttribute('y2', tgtY);
+    line.setAttribute('stroke', '#e8d5a3');
+    line.setAttribute('stroke-width', '0.8');
+    line.setAttribute('opacity', '0');
+    line.setAttribute('stroke-dasharray', '3 4');
+    layer.appendChild(line);
+
+    // Fade in
+    requestAnimationFrame(() => {
+      line.style.transition = 'opacity 0.3s ease';
+      line.setAttribute('opacity', '0.18');
+    });
+  });
+}
+
+function clearRelationshipEdges() {
+  const layer = document.getElementById('edgeLayer');
+  if (!layer) return;
+  // Fade out then clear
+  Array.from(layer.children).forEach(line => {
+    line.style.transition = 'opacity 0.2s ease';
+    line.setAttribute('opacity', '0');
+  });
+  setTimeout(() => { if (layer) layer.innerHTML = ''; }, 220);
 }
   
 function highlightNode(id) {
