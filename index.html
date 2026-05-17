@@ -619,7 +619,7 @@
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    padding: 0.25rem 2rem 1.5rem;
+    padding: 1rem 2rem 1.5rem;
     cursor: grab;
     user-select: none;
     -webkit-user-select: none;
@@ -3580,7 +3580,7 @@
 <!-- SHARE CARD MODAL -->
 <div class="share-modal-overlay" id="shareModalOverlay" onclick="closeShareModal(event)">
   <div class="share-modal">
-    <canvas id="shareCanvas" width="800" height="460"></canvas>
+    <canvas id="shareCanvas" width="1200" height="675" style="max-height:60vh;width:100%;height:auto;border-radius:8px;"></canvas>
     <div class="share-modal-actions">
       <button class="btn-share-download" onclick="downloadShareCard()">↓ Save Image</button>
       <button class="btn-share-native" id="shareNativeBtn" onclick="nativeShare()">Share ↗</button>
@@ -4066,14 +4066,14 @@ function buildGrid() {
                     </div>
                     <div class="card-actions">
                       <button class="btn-master" onclick="event.stopPropagation();toggleMaster(event,${c.id})">${isMastered?'✓ VAULT':'⊕ VAULT'}</button>
-                      <button class="btn-share" onclick="event.stopPropagation();shareCard(event,${c.id})">Share</button>
+                      <button class="btn-share" onclick="event.stopPropagation();shareCard(event,${c.id})">↑ Share</button>
                       ${(() => {
                         if (c.collection_id == null || typeof c.timestamp !== 'number') return '';
                         const col = COLLECTIONS_BY_ID[c.collection_id];
                         if (!col || !col.episode_url) return '';
                         const url = buildTimestampedUrl(col.episode_url, c.timestamp);
                         if (!url) return '';
-                        return `<a class="btn-listen" href="${url}" target="_blank" rel="noopener" onclick="event.stopPropagation()">↗ Listen</a>`;
+                        return `<a class="btn-listen" href="${url}" target="_blank" rel="noopener" onclick="event.stopPropagation()">▶ Listen</a>`;
                       })()}
                     </div>
                   </div>
@@ -4241,11 +4241,21 @@ function toggleCard(id) {
 
 function toggleMaster(e, id) {
   e.stopPropagation();
-  if (mastered.has(id)) mastered.delete(id);
-  else { mastered.add(id); playVaultSFX(); }
-  saveMastered();        // <-- NEW: persist to localStorage
-  buildGrid();
+  const isMastering = !mastered.has(id);
+  if (isMastering) { mastered.add(id); playVaultSFX(); }
+  else mastered.delete(id);
+  saveMastered();
   updateProgress();
+
+  // Update card in-place — no full rebuild
+  const el = document.getElementById('cc' + id);
+  if (el) {
+    el.classList.toggle('mastered', mastered.has(id));
+    const btn = el.querySelector('.btn-master');
+    if (btn) btn.textContent = mastered.has(id) ? '✓ VAULT' : '⊕ VAULT';
+    const badge = el.querySelector('.mastered-badge');
+    if (badge) badge.style.display = mastered.has(id) ? 'block' : 'none';
+  }
 }
 
 let _shareConceptId = null;
@@ -4322,115 +4332,213 @@ const CATEGORY_COLORS = {
 function generateShareImage(c) {
   const canvas = document.getElementById('shareCanvas');
   const ctx = canvas.getContext('2d');
-  const W = 1080, H = 1920;
+
+  // Landscape card: 1200×675 (16:9, shareable)
+  const W = 1200, H = 675;
   canvas.width = W; canvas.height = H;
 
   const catColor = CATEGORY_COLORS[c.category] || '#e8d5a3';
-  const PAD = 96;
+  const catName = (CATEGORIES.find(x => x.id === c.category)||{}).name || c.category;
+  const CARD_PAD = 48;
+  const CARD_GAP = 20;
+  const CARD_W = (W - CARD_PAD * 2 - CARD_GAP) / 2;
+  const CARD_H = H - CARD_PAD * 2;
+  const RADIUS = 16;
 
-  // ── BACKGROUND ──────────────────────────────────────────
+  // ── PAGE BACKGROUND ──
   ctx.fillStyle = '#0d0d0d';
   ctx.fillRect(0, 0, W, H);
 
-  // Top accent bar (thick, visible)
-  ctx.fillStyle = catColor;
-  ctx.fillRect(0, 0, W, 10);
+  // Subtle noise-like texture via very faint grid
+  ctx.strokeStyle = 'rgba(255,255,255,0.015)';
+  ctx.lineWidth = 0.5;
+  for (let x = 0; x < W; x += 40) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
+  for (let y = 0; y < H; y += 40) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
 
-  // ── HEADER ROW: pill + number ────────────────────────────
-  const catName = (CATEGORIES.find(x => x.id === c.category)||{}).name || c.category;
-  ctx.font = '600 26px monospace';
-  const pillText = catName.toUpperCase();
-  const pillW = ctx.measureText(pillText).width + 48;
-  // pill background (subtle fill)
-  ctx.fillStyle = catColor + '22';
-  roundRect(ctx, PAD, 68, pillW, 52, 6);
-  ctx.fill();
-  ctx.strokeStyle = catColor;
-  ctx.lineWidth = 1.5;
-  roundRect(ctx, PAD, 68, pillW, 52, 6);
-  ctx.stroke();
-  ctx.fillStyle = catColor;
-  ctx.fillText(pillText, PAD + 24, 103);
-
-  ctx.font = '400 26px monospace';
-  ctx.fillStyle = '#444';
-  ctx.textAlign = 'right';
-  ctx.fillText('#' + String(c.id).padStart(3, '0'), W - PAD, 103);
-  ctx.textAlign = 'left';
-
-  // ── TERM ─────────────────────────────────────────────────
-  ctx.font = 'bold 102px Georgia, serif';
-  ctx.fillStyle = '#f0ede8';
-  let termBottomY = wrapText(ctx, c.term, PAD, 272, W - PAD * 2, 122);
-
-  // ── DIVIDER ──────────────────────────────────────────────
-  const divY = termBottomY + 52;
-  ctx.strokeStyle = 'rgba(255,255,255,0.1)';
-  ctx.lineWidth = 1;
-  ctx.beginPath(); ctx.moveTo(PAD, divY); ctx.lineTo(W - PAD, divY); ctx.stroke();
-
-  // ── HOOK ─────────────────────────────────────────────────
-  ctx.font = '300 44px Georgia, serif';
-  ctx.fillStyle = '#b8b4ae';
-  let y = wrapText(ctx, c.hook, PAD, divY + 76, W - PAD * 2, 62);
-
-  // ── SECTION HELPER ───────────────────────────────────────
-  function sectionLabel(label, yPos) {
-    // Label background strip
-    ctx.fillStyle = 'rgba(255,255,255,0.04)';
-    ctx.fillRect(0, yPos - 30, W, 58);
-    // Left accent tick
-    ctx.fillStyle = catColor;
-    ctx.fillRect(0, yPos - 30, 6, 58);
-    // Label text
-    ctx.font = '600 24px monospace';
-    ctx.fillStyle = catColor;
-    ctx.fillText(label, PAD, yPos + 10);
-    return yPos + 58 + 32; // returns y position after the label + gap
+  // ── HELPER: rounded rect clip/fill ──
+  function cardRoundRect(x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y); ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+    ctx.lineTo(x + w, y + h - r); ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    ctx.lineTo(x + r, y + h); ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+    ctx.lineTo(x, y + r); ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.closePath();
   }
 
-  // ── WHAT IT MEANS ────────────────────────────────────────
-  y += 80;
-  y = sectionLabel('WHAT IT MEANS', y);
-  ctx.font = '300 36px Georgia, serif';
-  ctx.fillStyle = '#a8a5a0';
-  y = wrapText(ctx, c.plain, PAD, y, W - PAD * 2, 54);
+  // ── FRONT CARD ──
+  const fx = CARD_PAD;
+  const fy = CARD_PAD;
 
-  // ── ANALOGY ──────────────────────────────────────────────
-  y += 72;
-  y = sectionLabel('ANALOGY', y);
-  ctx.font = 'italic 36px Georgia, serif';
-  ctx.fillStyle = '#888';
-  // Left quote bar
-  ctx.fillStyle = catColor + '44';
-  ctx.fillRect(PAD, y - 8, 4, 54 * Math.ceil(c.analogy.length / 52) + 16);
-  ctx.fillStyle = '#888';
-  ctx.font = 'italic 36px Georgia, serif';
-  y = wrapText(ctx, c.analogy, PAD + 24, y, W - PAD * 2 - 24, 54);
+  // Card shadow
+  ctx.shadowColor = 'rgba(0,0,0,0.6)';
+  ctx.shadowBlur = 32;
+  ctx.shadowOffsetY = 8;
+  cardRoundRect(fx, fy, CARD_W, CARD_H, RADIUS);
+  ctx.fillStyle = '#141414';
+  ctx.fill();
+  ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
 
-  // ── REFLECT & USE IT ─────────────────────────────────────
-  y += 72;
-  y = sectionLabel('REFLECT & USE IT', y);
-  ctx.font = '300 36px Georgia, serif';
-  ctx.fillStyle = catColor;
-  y = wrapText(ctx, '💬  ' + c.prompt, PAD, y, W - PAD * 2, 54);
-
-  // ── FOOTER ───────────────────────────────────────────────
-  ctx.fillStyle = 'rgba(255,255,255,0.03)';
-  ctx.fillRect(0, H - 120, W, 120);
-  // Footer top border
+  // Card border
+  cardRoundRect(fx, fy, CARD_W, CARD_H, RADIUS);
   ctx.strokeStyle = 'rgba(255,255,255,0.08)';
   ctx.lineWidth = 1;
-  ctx.beginPath(); ctx.moveTo(0, H - 120); ctx.lineTo(W, H - 120); ctx.stroke();
+  ctx.stroke();
 
-  ctx.font = 'italic 36px Georgia, serif';
-  ctx.fillStyle = '#e8d5a3';
-  ctx.fillText('Epistemic.', PAD, H - 44);
+  // Category top bar
+  ctx.fillStyle = catColor;
+  ctx.fillRect(fx, fy, CARD_W, 4);
+  // Clip top bar to rounded corners
+  ctx.save();
+  cardRoundRect(fx, fy, CARD_W, 20, RADIUS);
+  ctx.clip();
+  ctx.fillStyle = catColor;
+  ctx.fillRect(fx, fy, CARD_W, 4);
+  ctx.restore();
 
-  ctx.font = '400 24px monospace';
-  ctx.fillStyle = '#555';
+  // Category pill
+  const PILL_PAD_X = 16, PILL_PAD_Y = 5;
+  ctx.font = '500 18px monospace';
+  const pillTextW = ctx.measureText(catName.toUpperCase()).width;
+  const pillW = pillTextW + PILL_PAD_X * 2;
+  const pillX = fx + 24, pillY = fy + 24;
+  ctx.fillStyle = catColor + '22';
+  cardRoundRect(pillX, pillY, pillW, 28, 6); ctx.fill();
+  ctx.strokeStyle = catColor; ctx.lineWidth = 1;
+  cardRoundRect(pillX, pillY, pillW, 28, 6); ctx.stroke();
+  ctx.fillStyle = catColor;
+  ctx.fillText(catName.toUpperCase(), pillX + PILL_PAD_X, pillY + 19);
+
+  // ID
+  ctx.font = '400 16px monospace';
+  ctx.fillStyle = '#444';
   ctx.textAlign = 'right';
-  ctx.fillText('epistemic.live', W - PAD, H - 44);
+  ctx.fillText('#' + String(c.id).padStart(3,'0'), fx + CARD_W - 24, pillY + 19);
+  ctx.textAlign = 'left';
+
+  // Term — large serif, pushed toward bottom third of front
+  ctx.font = 'bold 44px Georgia, serif';
+  ctx.fillStyle = '#f0ede8';
+  const termY = fy + CARD_H * 0.48;
+  const termBottom = wrapText(ctx, c.term, fx + 24, termY, CARD_W - 48, 54);
+
+  // Hook — italic, below term
+  ctx.font = 'italic 300 22px Georgia, serif';
+  ctx.fillStyle = '#9a9a9a';
+  wrapText(ctx, c.hook, fx + 24, termBottom + 14, CARD_W - 48, 32);
+
+  // Flip hint at bottom
+  ctx.font = '400 14px monospace';
+  ctx.fillStyle = '#444';
+  ctx.fillText('TAP TO EXPLORE', fx + 24, fy + CARD_H - 22);
+
+  // ── BACK CARD ──
+  const bx = CARD_PAD + CARD_W + CARD_GAP;
+  const by = CARD_PAD;
+
+  ctx.shadowColor = 'rgba(0,0,0,0.6)';
+  ctx.shadowBlur = 32;
+  ctx.shadowOffsetY = 8;
+  cardRoundRect(bx, by, CARD_W, CARD_H, RADIUS);
+  ctx.fillStyle = '#1c1c1c';
+  ctx.fill();
+  ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
+
+  // Back card border — category color tinted
+  cardRoundRect(bx, by, CARD_W, CARD_H, RADIUS);
+  ctx.strokeStyle = catColor + '55';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+
+  // Category left accent bar on back
+  ctx.save();
+  cardRoundRect(bx, by, CARD_W, CARD_H, RADIUS);
+  ctx.clip();
+  ctx.fillStyle = catColor + '33';
+  ctx.fillRect(bx, by, 3, CARD_H);
+  ctx.restore();
+
+  let gy = by + 28;
+  const gx = bx + 22;
+  const gW = CARD_W - 44;
+
+  function backLabel(label) {
+    ctx.font = '500 13px monospace';
+    ctx.fillStyle = '#555';
+    ctx.fillText(label, gx, gy);
+    gy += 20;
+  }
+  function backText(text, color, font, lineH, maxLines) {
+    ctx.font = font;
+    ctx.fillStyle = color;
+    const lines = [];
+    const words = text.split(' ');
+    let line = '';
+    for (const w of words) {
+      const test = line ? line + ' ' + w : w;
+      if (ctx.measureText(test).width > gW) { lines.push(line); line = w; }
+      else line = test;
+    }
+    if (line) lines.push(line);
+    const capped = maxLines ? lines.slice(0, maxLines) : lines;
+    capped.forEach(l => { ctx.fillText(l, gx, gy); gy += lineH; });
+    return gy;
+  }
+
+  // What it means
+  backLabel('WHAT IT MEANS');
+  backText(c.plain, '#c8c4be', '300 18px Georgia, serif', 27, 4);
+  gy += 14;
+
+  // Analogy bar
+  ctx.fillStyle = catColor + '55';
+  ctx.fillRect(gx, gy, 2, 60);
+  backLabel('ANALOGY');
+  ctx.font = 'italic 300 17px Georgia, serif';
+  ctx.fillStyle = '#777';
+  const analogyLines = [];
+  const aWords = c.analogy.split(' ');
+  let aLine = '';
+  for (const w of aWords) {
+    const test = aLine ? aLine + ' ' + w : w;
+    if (ctx.measureText(test).width > gW - 12) { analogyLines.push(aLine); aLine = w; }
+    else aLine = test;
+  }
+  if (aLine) analogyLines.push(aLine);
+  analogyLines.slice(0, 3).forEach(l => { ctx.fillText(l, gx + 12, gy); gy += 24; });
+  gy += 12;
+
+  // Prompt box
+  const promptBoxH = Math.min(CARD_H - (gy - by) - 24, 110);
+  if (promptBoxH > 30) {
+    ctx.fillStyle = 'rgba(232,213,163,0.06)';
+    cardRoundRect(gx, gy, gW, promptBoxH, 6); ctx.fill();
+    ctx.strokeStyle = 'rgba(232,213,163,0.18)'; ctx.lineWidth = 1;
+    cardRoundRect(gx, gy, gW, promptBoxH, 6); ctx.stroke();
+    gy += 14;
+    backLabel('REFLECT & USE IT');
+    ctx.font = '300 16px Georgia, serif';
+    ctx.fillStyle = '#e8d5a3';
+    const pWords = c.prompt.split(' ');
+    let pLine = '';
+    const pLines = [];
+    for (const w of pWords) {
+      const test = pLine ? pLine + ' ' + w : w;
+      if (ctx.measureText(test).width > gW - 24) { pLines.push(pLine); pLine = w; }
+      else pLine = test;
+    }
+    if (pLine) pLines.push(pLine);
+    pLines.slice(0, 3).forEach(l => { ctx.fillText(l, gx + 12, gy); gy += 23; });
+  }
+
+  // ── FOOTER ──
+  ctx.font = 'italic 22px Georgia, serif';
+  ctx.fillStyle = '#e8d5a3';
+  ctx.fillText('Epistemic.', fx, H - 14);
+  ctx.font = '400 16px monospace';
+  ctx.fillStyle = '#333';
+  ctx.textAlign = 'right';
+  ctx.fillText('epistemic.live', W - fx, H - 14);
   ctx.textAlign = 'left';
 }
 
@@ -4576,7 +4684,7 @@ function openEpisodeDrawer(collectionId) {
                 if (typeof c.timestamp !== 'number' || !col || !col.episode_url) return '';
                 const url = buildTimestampedUrl(col.episode_url, c.timestamp);
                 if (!url) return '';
-                return `<a class="btn-listen" href="${url}" target="_blank" rel="noopener" onclick="event.stopPropagation()">↗ Listen</a>`;
+                return `<a class="btn-listen" href="${url}" target="_blank" rel="noopener" onclick="event.stopPropagation()">▶ Listen</a>`;
               })()}
             </div>
           </div>
