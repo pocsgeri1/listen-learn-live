@@ -679,6 +679,22 @@ async function init() {
 
   document.getElementById('navConceptCount').textContent = CONCEPTS.length;
 
+  // Build bidirectional relationship index.
+  // Some concepts declare related_ids (forward links). We also want reverse:
+  // if concept 42 lists 7 as related, concept 7 should show 42 as related too.
+  window.RELATED_INDEX = {}; // id → Set of related ids
+  CONCEPTS.forEach(c => {
+    if (!window.RELATED_INDEX[c.id]) window.RELATED_INDEX[c.id] = new Set();
+    if (Array.isArray(c.related_ids)) {
+      c.related_ids.forEach(rid => {
+        window.RELATED_INDEX[c.id].add(rid);
+        // reverse link
+        if (!window.RELATED_INDEX[rid]) window.RELATED_INDEX[rid] = new Set();
+        window.RELATED_INDEX[rid].add(c.id);
+      });
+    }
+  });
+
   buildLegend();
   buildMap();
   setupInteractions();
