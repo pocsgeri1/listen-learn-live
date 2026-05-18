@@ -2409,7 +2409,8 @@
     "plain": "People often say 'facts don't care about your feelings,' but the reverse is actually true. When someone holds a belief tied to identity or upbringing, presenting evidence rarely shifts them. What matters is how the information makes them feel, and whether the person delivering it feels safe and trustworthy.",
     "analogy": "You can show someone a dozen peer-reviewed studies proving their political stance is flawed. If those studies make them feel attacked or stupid, they'll reject every word — even if the data is bulletproof.",
     "prompt": "Think of the last time someone presented you with hard evidence that contradicted something you believed. Did you change your mind, or did you feel defensive? What emotion came up first?",
-    "collection_id": 13
+    "collection_id": 13,
+    "related_ids": [3, 19, 66]
   },
   {
     "id": 204,
@@ -2420,7 +2421,8 @@
     "plain": "Vagal authority refers to whose emotional regulation sets the tone in a conversation or group. If you stay calm when others panic, you're the thermostat — you determine the temperature. If you match others' anxiety, they're setting the tone. The person with the highest capacity for discomfort controls the room.",
     "analogy": "In a tense board meeting, one person is spiraling about a missed deadline. If you stay grounded and say, 'Let's break this down,' the room calms. If you match their panic, everyone escalates. You just decided the room's emotional direction.",
     "prompt": "In your next group conversation, observe who sets the emotional tone. Is it you? If not, what would it take to be the person who regulates the room?",
-    "collection_id": 13
+    "collection_id": 13,
+    "related_ids": [151, 79, 386]
   },
   {
     "id": 205,
@@ -2431,7 +2433,8 @@
     "plain": "When someone is emotionally overwhelmed, they don't always need advice or relatability. Often, the most powerful thing you can do is say 'I'm here. We don't have to talk. I can just sit with you.' This signals that their emotions aren't too big for you, and they don't need to perform or resolve anything in that moment.",
     "analogy": "Your friend just got devastating news. Instead of saying 'I know how you feel' or launching into advice, you just sit on the couch next to them, silent, for ten minutes. That's space holding.",
     "prompt": "Who in your life needs space held for them right now? What would it look like to just be present without trying to fix anything?",
-    "collection_id": 13
+    "collection_id": 13,
+    "related_ids": [79, 12, 69]
   },
   {
     "id": 206,
@@ -2442,7 +2445,8 @@
     "plain": "In high-stakes settings like courtrooms or negotiations, the explicit conversation is only half of what's happening. How you react to bad news, when you object, how you walk away from a sidebar — all of it communicates credibility, confidence, or weakness. People read the subtext more than the text.",
     "analogy": "A lawyer hears damaging testimony but stays stone-faced. The jury thinks, 'They expected that — must not be a big deal.' Another lawyer flinches and objects frantically. The jury thinks, 'They're hiding something.'",
     "prompt": "Recall a recent important conversation. What did your body language or tone communicate that your words didn't? Would someone watching on mute have read you as confident or anxious?",
-    "collection_id": 13
+    "collection_id": 13,
+    "related_ids": [151, 39, 8]
   },
   {
     "id": 207,
@@ -2453,7 +2457,8 @@
     "plain": "After a conflict, genuine repair starts with full ownership of your actions, no hedging. Saying 'I did this because you did that' scores zero points. A real apology includes naming what you did, acknowledging the likely impact, and reaffirming the relationship. No justifications, no deflections.",
     "analogy": "After a fight, you say, 'I shouldn't have said that. I can imagine it hurt you, and I don't want to be the person who makes you feel small. We're still a team.' Compare that to, 'I said it because you pushed me — what did you expect?'",
     "prompt": "Think of the last unresolved argument you had. Write out a one-sentence apology that takes full ownership without any 'but' clause. Could you actually say it out loud?",
-    "collection_id": 13
+    "collection_id": 13,
+    "related_ids": [20, 108, 99]
   },
   {
     "id": 208,
@@ -2464,7 +2469,8 @@
     "plain": "Anger is often a secondary emotion masking something more vulnerable: grief, fear, or sadness. When someone lashes out, it's rarely about the surface issue. The intensity signals that something deeper and more painful is driving the response. Understanding this lets you respond to the real emotion, not just the loudest one.",
     "analogy": "Your dad explodes when you scratch his car. He's not actually furious about the paint — he's terrified he's losing control, or grieving the fact that his health is declining and he can't keep up anymore.",
     "prompt": "Think of the last time you felt real anger. If you peel back one layer, what emotion was sitting underneath? Fear? Hurt? Disappointment?",
-    "collection_id": 13
+    "collection_id": 13,
+    "related_ids": [198, 58, 15]
   },
   {
     "id": 209,
@@ -2475,7 +2481,8 @@
     "plain": "When someone challenges your authority, questions your judgment, or threatens your social standing, your nervous system responds identically to physical danger. Pupils dilate, fists clench, breath shortens — you're preparing for a fight that isn't actually happening. The threat is social, but the body doesn't know that.",
     "analogy": "Getting a 'we need to talk' text triggers the same bodily response as hearing footsteps behind you in a dark alley. Your brain can't separate the two.",
     "prompt": "Name a recent conversation where your body reacted disproportionately to the actual stakes. What physical sensations did you notice — jaw clenching, shallow breathing, tightness in your chest?",
-    "collection_id": 13
+    "collection_id": 13,
+    "related_ids": [38, 91, 92]
   },
   {
     "id": 210,
@@ -2486,7 +2493,8 @@
     "plain": "Instead of arguing with someone's conclusion, ask them how they arrived at it. 'I see things differently' is less combative than 'I disagree.' Saying 'Tell me how you got there' or 'What shaped that view?' invites explanation without triggering defense. You're commenting on process, not declaring them wrong.",
     "analogy": "Your friend says something you think is wildly off-base. Instead of saying, 'That's ridiculous,' you ask, 'How did you come to that conclusion?' They explain, you understand the logic (even if you still disagree), and the conversation stays open.",
     "prompt": "Next time someone says something you disagree with, don't state your opinion. Instead, ask: 'How did you come to see it that way?' Notice whether it changes the tenor of the exchange.",
-    "collection_id": 13
+    "collection_id": 13,
+    "related_ids": [78, 99, 66]
   },
   {
     "id": 211,
@@ -2497,7 +2505,8 @@
     "plain": "Many people suppress emotions because they fear being 'too much' for those around them. Saying 'your emotions aren't too big for me' is a direct reassurance that they don't have to perform composure or shrink themselves. It gives explicit permission to be fully human without fear of rejection.",
     "analogy": "Your partner starts crying after a hard day and apologizes. You say, 'Your emotions aren't too big for me. There's space for all of this.' They exhale, stop apologizing, and actually let themselves feel.",
     "prompt": "Who in your inner circle might be holding back because they're afraid of being too much? How could you communicate that their full emotional range is safe with you?",
-    "collection_id": 13
+    "collection_id": 13,
+    "related_ids": [79, 69, 20]
   },
   {
     "id": 212,
@@ -2508,7 +2517,8 @@
     "plain": "Most people never received formal training in how to communicate. Instead, they absorbed patterns from parents or authority figures who may have used yelling, conflict, or even physical aggression to resolve tension. Without better examples, those patterns replicate across generations, even when people intellectually know they're harmful.",
     "analogy": "If your dad solved every disagreement by slamming doors and your mom gave the silent treatment for days, you absorbed that script. Now when your partner asks where you want to eat dinner, you either shut down or blow up — because that's the only playbook you downloaded.",
     "prompt": "Name one communication behavior you inherited from a parent. Now imagine your kid adopting that same behavior in 20 years — what would you change about it today?",
-    "collection_id": 13
+    "collection_id": 13,
+    "related_ids": [25, 105, 147]
   },
   {
     "id": 213,
@@ -2519,7 +2529,8 @@
     "plain": "Yelling and defensiveness are the brain's default response to conflict. They're effortless because they follow well-worn neural pathways tied to fight-or-flight. Staying calm, taking a breath, and choosing words carefully requires real strength — it's harder to do, but far more effective.",
     "analogy": "It's like letting a car roll downhill versus driving it uphill. One happens with zero input. The other takes skill, control, and intentional effort.",
     "prompt": "Recall the last time you raised your voice in a disagreement. What would have changed if you'd taken three deep breaths before responding?",
-    "collection_id": 13
+    "collection_id": 13,
+    "related_ids": [91, 90]
   },
   {
     "id": 214,
@@ -2530,7 +2541,8 @@
     "plain": "Instead of letting worries consume your mental bandwidth all week, schedule a dedicated time to address them. When an anxious thought arises, write it down and commit to processing it during your designated worry hour. This closes the loop without letting the concern hijack your present moment.",
     "analogy": "You're stressed about a looming deadline. Instead of spiraling every time you think about it, you note it down and say, 'I'll deal with this Sunday at 2 p.m.' Your brain relaxes because it knows the worry has a home.",
     "prompt": "Pick a recurring time slot this week to process lingering worries. What changes when you give anxious thoughts a scheduled appointment instead of constant access?",
-    "collection_id": 13
+    "collection_id": 13,
+    "related_ids": [44, 396, 104]
   },
   {
     "id": 215,
@@ -2541,7 +2553,8 @@
     "plain": "When declining an invitation or request, lead with the refusal before softening it. Most people do the opposite: 'Thank you so much, I'd love to, but I can't.' The word 'but' erases everything before it. Instead, try: 'I can't make it. Thank you for thinking of me, though — hope it's great.' It's clearer and more respectful.",
     "analogy": "Your boss invites you to a Saturday event you don't want to attend. Bad: 'I'd love to come, but I can't.' Good: 'I can't make it. Really appreciate the invite, though — hope it goes well.'",
     "prompt": "Next time you need to decline something, structure your response as: No + gratitude + kindness. Notice whether it feels more honest than your usual approach.",
-    "collection_id": 13
+    "collection_id": 13,
+    "related_ids": [20, 217, 39]
   },
   {
     "id": 216,
@@ -2552,7 +2565,8 @@
     "plain": "When you need to deliver bad news or have a tough conversation, starting with pleasantries creates more anxiety than clarity. Instead, label the difficulty upfront: 'This is going to be a hard conversation' or 'I have difficult news.' This primes the other person emotionally and signals respect for the weight of what's coming.",
     "analogy": "Instead of asking 'How's your week?' then dropping 'We need to let you go,' say 'I have hard news — we're going to have to let you go. Here's why.' The second approach hurts less overall because there's no false hope.",
     "prompt": "Name one difficult conversation you're avoiding. How would you label it to the person if you had to have it this week?",
-    "collection_id": 13
+    "collection_id": 13,
+    "related_ids": [219, 108, 215]
   },
   {
     "id": 217,
@@ -2563,7 +2577,8 @@
     "plain": "People undermine their own authority by prefacing statements with hedges like 'I think,' 'I believe,' 'I could be wrong, but,' or 'I don't mean to bother you.' These qualifiers erode credibility before you've even made your point. Stating things directly without unnecessary cushioning makes you sound more confident and clear.",
     "analogy": "Compare 'I think I'd probably be a good fit for this role' versus 'I'm confident I'd be a strong asset to this team.' Same message, completely different level of conviction.",
     "prompt": "Record yourself speaking for two minutes on a topic you care about. Count how many times you hedge with 'I think,' 'maybe,' or 'I guess.' Then re-record without those phrases — notice the shift.",
-    "collection_id": 13
+    "collection_id": 13,
+    "related_ids": [25, 385, 231]
   },
   {
     "id": 218,
@@ -2574,7 +2589,8 @@
     "plain": "When someone seems irrationally upset or defensive, saying 'tell me what I'm missing' invites them to explain without feeling attacked. It signals curiosity, not judgment, and often reveals hidden context you weren't aware of. This phrase shifts the dynamic from confrontation to collaboration.",
     "analogy": "Your coworker snaps at a simple request. Instead of getting defensive, you say, 'I feel like I'm missing something here — what's going on?' They admit they've been overwhelmed for weeks, and suddenly the tension makes sense.",
     "prompt": "In your next tense interaction, use the exact phrase: 'Help me understand — what am I missing here?' Notice whether it changes the other person's body language.",
-    "collection_id": 13
+    "collection_id": 13,
+    "related_ids": [66, 78, 210]
   },
   {
     "id": 219,
@@ -2585,7 +2601,8 @@
     "plain": "When someone opens a conversation with vague, ominous language — like 'we need to talk' or a one-letter text response — your brain fills the silence with worst-case scenarios. The lack of clarity is where all the fear lives. You'd almost prefer bad news immediately than hours of spiraling speculation.",
     "analogy": "Your boss says 'see me at 3 p.m.' with no context. For the next four hours, you mentally rehearse getting fired, even though she just wants to ask about your weekend plans.",
     "prompt": "When was the last time someone left you hanging with an ambiguous message? What story did you tell yourself before you got the full context?",
-    "collection_id": 13
+    "collection_id": 13,
+    "related_ids": [156, 396, 44]
   },
   {
     "id": 220,
@@ -2596,7 +2613,8 @@
     "plain": "People optimize for observable metrics — salary, house size, job title — while ignoring hidden ones like daily stress, relationship texture, or mental peace. A longer commute for more money might look like a win on paper, but the unseen cost to your well-being is steep and compounding.",
     "analogy": "You take a job that pays $10k more but adds 90 minutes to your commute. The raise is visible on your paycheck. The decade of resentment, exhaustion, and missed dinners with your kids isn't tracked anywhere.",
     "prompt": "Name one visible metric you're currently optimizing for. What hidden metric are you sacrificing to get it? Is the trade actually worth it?",
-    "collection_id": 13
+    "collection_id": 13,
+    "related_ids": [31, 2, 356]
   },
   {
     "id": 221,
@@ -2607,7 +2625,8 @@
     "plain": "Relationships rarely end because there weren't enough great moments. They end because there were too many unresolved bad ones. How you handle disagreement, rupture, and tension is a far better predictor of whether you'll stay together than how much fun you have when things are easy.",
     "analogy": "You went skydiving together, had an amazing honeymoon, and laugh at the same jokes. But when conflict arises, you both shut down and stop talking for days. The skydiving won't save you.",
     "prompt": "Think of your closest relationship. Rate the quality of your good times out of 10. Now rate how you handle conflict. Which number matters more for whether you'll still be together in five years?",
-    "collection_id": 13
+    "collection_id": 13,
+    "related_ids": [386, 108, 401]
   },
   {
     "id": 222,
@@ -2618,7 +2637,8 @@
     "plain": "In high-stakes conversations, your breath should be the first thing you say. Taking a deliberate pause before responding slows the interaction, lowers anxiety, and signals control. You don't get extra points for quick comebacks in real life — measured responses land harder and give you time to think.",
     "analogy": "Someone insults you in a meeting. Instead of snapping back, you take a slow breath, count to three, then calmly say, 'I need you to repeat that.' The room shifts. You just took control without raising your voice.",
     "prompt": "In your next difficult conversation, commit to taking one full breath before your first sentence. Notice what changes about how you feel and how the other person responds.",
-    "collection_id": 13
+    "collection_id": 13,
+    "related_ids": [204, 226, 225]
   },
   {
     "id": 223,
@@ -2629,7 +2649,8 @@
     "plain": "When you have a strong emotional response that doesn't match the situation, saying 'I can tell something else is coming up for me — I'm not sure yet what it is' invites your partner into the moment instead of forcing you to handle it alone. It's vulnerable and prevents misattribution.",
     "analogy": "Your partner mentions dinner plans and you feel inexplicably upset. Instead of snapping or withdrawing, you say, 'I'm having a bigger reaction than this deserves. Something else is happening for me — give me a second to figure it out.'",
     "prompt": "Next time you feel disproportionately upset in a conversation, pause and say, 'Something else is coming up for me.' Then take 60 seconds to figure out what the real trigger is.",
-    "collection_id": 13
+    "collection_id": 13,
+    "related_ids": [198, 208, 482]
   },
   {
     "id": 224,
@@ -2640,7 +2661,8 @@
     "plain": "A 'nice guy' prioritizes being pleasant and avoiding discomfort, often at the expense of honesty or boundaries. A 'good man' prioritizes acting with integrity, even when it's uncomfortable. One optimizes for approval; the other optimizes for respect and self-respect.",
     "analogy": "Nice guy: agrees to plans he doesn't want, says yes when he means no, avoids hard conversations to keep the peace. Good man: says no when he needs to, has the difficult conversation because he cares, and doesn't need everyone to like him.",
     "prompt": "In the past month, when did you act like a nice guy (seeking approval) versus a good man (acting with integrity)? What would it cost you to choose the latter more often?",
-    "collection_id": 13
+    "collection_id": 13,
+    "related_ids": [20, 227, 290]
   },
   {
     "id": 225,
@@ -2651,7 +2673,8 @@
     "plain": "People who lie or manipulate thrive on emotional reactions. They want you to get flustered, defensive, or aggressive because it validates their narrative. But calm, measured responses with long pauses unsettle them. Silence forces them to sit with their own dishonesty, and they'll often unravel on their own.",
     "analogy": "Someone accuses you of something you didn't do. Instead of yelling 'That's not true!', you pause for five seconds and say, 'I need you to say that again.' They stammer, backpedal, and suddenly can't repeat the accusation with the same conviction.",
     "prompt": "Next time someone says something inflammatory, resist the urge to respond immediately. Count to seven. What happens to their energy when you refuse to react?",
-    "collection_id": 13
+    "collection_id": 13,
+    "related_ids": [75, 204, 151]
   },
   {
     "id": 226,
@@ -2662,7 +2685,8 @@
     "plain": "When a conversation becomes heated, your body needs at least 20 minutes to fully regulate. Trying to continue after just a minute or two means you're still flooded with stress hormones. Real de-escalation requires time away from the trigger, not just a quick breather.",
     "analogy": "After a blowout argument, your partner says 'give me a minute,' then comes back 90 seconds later still fuming. That's not enough. A real reset means leaving the room, going for a walk, and returning when your heart rate is back to normal.",
     "prompt": "Next time you feel your heart racing in a conflict, commit to a full 20-minute break before re-engaging. Track what changes about your clarity and tone when you return.",
-    "collection_id": 13
+    "collection_id": 13,
+    "related_ids": [109, 204, 222]
   },
   {
     "id": 227,
@@ -2673,7 +2697,8 @@
     "plain": "Assertiveness is the middle ground between passive (sacrificing your own needs) and aggressive (ignoring others' needs). It means clearly stating your boundaries or desires while still respecting the other person. You can enforce a limit and still care about someone — both things are true.",
     "analogy": "Your friend keeps showing up late. Passive: you say nothing and quietly resent them. Aggressive: you snap, 'You're selfish and inconsiderate.' Assertive: 'I need you to be on time. It matters to me, and I know you can do it.'",
     "prompt": "Identify one boundary you've been passive about. How would you communicate it assertively — honoring both your needs and the other person's dignity?",
-    "collection_id": 13
+    "collection_id": 13,
+    "related_ids": [20, 224, 12]
   },
   {
     "id": 228,
@@ -2684,7 +2709,8 @@
     "plain": "Selective Productivity is productivity defined by what you choose not to do, not what you accomplish. Focus is the number of things you say no to. Commitment is the elimination of alternatives. Real output comes from ruthlessly narrowing your attention, not adding more tasks.",
     "analogy": "Like a sculptor—the art is in what you chip away, not what you pile on.",
     "prompt": "What are you still doing that you know doesn't matter?",
-    "collection_id": null
+    "collection_id": null,
+    "related_ids": [2, 52, 484]
   },
   {
     "id": 229,
@@ -2695,7 +2721,8 @@
     "plain": "Type one empathy is feeling someone's emotions — you sense their sadness, anger, or fear. Type two empathy is understanding how they arrived at their perspective, even if you don't share it. Many people have the first without the second, which limits true connection and makes disagreement feel like a threat.",
     "analogy": "Your friend is devastated after a breakup (type one: you feel their sadness). But you can't fathom why they stayed so long in a toxic relationship (type two: you don't understand their reasoning). Without the second, you're sympathetic but not truly understanding.",
     "prompt": "Think of someone whose actions baffle you. Can you articulate the logic or life experience that might have led them there, even if you'd never make that choice yourself?",
-    "collection_id": 13
+    "collection_id": 13,
+    "related_ids": [12, 294, 305]
   },
   {
     "id": 230,
@@ -2706,7 +2733,8 @@
     "plain": "People often treat one difficult conversation like a make-or-break event, which ramps up anxiety and increases the chance of saying the wrong thing. In reality, meaningful topics need multiple conversations over time. Framing it as 'Let's talk about this over the next few weeks' lowers the stakes and makes honesty easier.",
     "analogy": "Instead of ambushing your partner with 'We need to decide our future right now,' say, 'I'd like to have some conversations about our future over the next month. Can we start this weekend?' The pressure drops instantly.",
     "prompt": "Name one topic you've been avoiding because it feels too big for one conversation. How would you break it into three smaller conversations spread across a month?",
-    "collection_id": 13
+    "collection_id": 13,
+    "related_ids": [108, 207, 221]
   },
   {
     "id": 231,
@@ -2717,7 +2745,8 @@
     "plain": "The condition where you treat every moment of visibility as a potential threat to how others perceive you. You're not living experiences — you're preemptively defending against criticism that hasn't even been voiced yet. This becomes exhausting because you never get to just exist; you're always on trial.",
     "analogy": "Imagine walking through your office believing everyone's drafting a performance review of you in real time. Even going to get coffee becomes a calculated move — do I look lazy? Too social? You never relax because the jury is always deliberating.",
     "prompt": "Name one decision you made this week where you chose what looks defensible over what you actually wanted. What would change if no one was scoring you?",
-    "collection_id": 14
+    "collection_id": 14,
+    "related_ids": [25, 239, 240]
   },
   {
     "id": 232,
@@ -2728,7 +2757,8 @@
     "plain": "A state where you've optimized for all the culturally approved desires — career, independence, self-brand — but neglected foundational human needs like stable attachment, community, and dependence on others. You're succeeding by every external metric but starving emotionally because success and satisfaction aren't the same thing.",
     "analogy": "You spent years building the perfect kitchen — marble counters, chef's knives, Instagram-ready. But you never learned to cook, and you eat alone every night from delivery boxes. The kitchen looks great in photos.",
     "prompt": "List three things you're optimizing for right now. Which one would you still care about if no one ever saw the result?",
-    "collection_id": 14
+    "collection_id": 14,
+    "related_ids": [89, 97, 11]
   },
   {
     "id": 233,
@@ -2739,7 +2769,8 @@
     "plain": "A mental framework for evaluating whether someone is contributing value or extracting it. If your output is overwhelmingly critique — quote tweets, takedowns, debunking — without producing original work, you're consuming the system's energy without replenishing it. Criticism is cheap; creation is costly.",
     "analogy": "It's like being the person at the potluck who only ever points out what's wrong with other people's dishes but never brings anything themselves. You're still eating, but you're not feeding anyone.",
     "prompt": "Scroll through your last 20 social media posts. How many are original contributions versus reactions to someone else's work? What does the ratio say?",
-    "collection_id": 14
+    "collection_id": 14,
+    "related_ids": [134, 351, 176]
   },
   {
     "id": 234,
@@ -2750,7 +2781,8 @@
     "plain": "When the sophistication of psychological vocabulary prevents you from naming a simple, concrete issue. You've learned to articulate your attachment style, your triggers, your need for space — but you can't admit that the person you're with treats you badly. The jargon becomes a smokescreen for reality.",
     "analogy": "You're arguing about the optimal room temperature while the house is on fire. Yes, communication matters — but sometimes the answer isn't better dialogue, it's leaving the burning building.",
     "prompt": "Describe your biggest relationship frustration without using the words 'boundaries,' 'attachment,' 'communication,' or 'trigger.' What's left?",
-    "collection_id": 14
+    "collection_id": 14,
+    "related_ids": [57, 76]
   },
   {
     "id": 235,
@@ -2761,7 +2793,8 @@
     "plain": "A dynamic where you invest emotional trust and dependency into professionals or influencers rather than the people in your life who actually care about you. You'd rather tell a therapist, a podcast host, or an online community about your struggles than the person sitting across from you at dinner.",
     "analogy": "You're renting emotional intimacy from strangers when you could be building equity with people who'd show up at 3am. The rental feels safer because there's no risk — but there's also no foundation.",
     "prompt": "Who do you tell your problems to first — the person who loves you, or someone you're paying (or parasocially attached to)? Why?",
-    "collection_id": 14
+    "collection_id": 14,
+    "related_ids": [236, 178, 34]
   },
   {
     "id": 236,
@@ -2772,7 +2805,8 @@
     "plain": "When groups gather not to solve problems but to endlessly dissect and reinforce them. You're not seeking advice; you're seeking validation that your worry is justified. The community rewards you for going deeper into the anxiety, not for moving past it.",
     "analogy": "It's like a book club where no one finishes the book — you just meet every week to talk about how hard chapter three is. The struggle becomes the point, not the resolution.",
     "prompt": "What's one worry you've workshopped with the internet for months? If you had to act on it in the next 48 hours — no more discussion — what would you do?",
-    "collection_id": 14
+    "collection_id": 14,
+    "related_ids": [235, 254, 43]
   },
   {
     "id": 237,
@@ -2783,7 +2817,8 @@
     "plain": "When a mental health label becomes central to your self-concept so early that you can't imagine yourself without it. You're not someone who occasionally struggles — you ARE your disorder. The diagnosis was meant to help you, but it became a cage because you built your entire personality around it.",
     "analogy": "It's like getting a nickname in middle school and still introducing yourself that way at 30. What was meant to be descriptive became definitional, and now you don't know who you'd be without it.",
     "prompt": "What's a label you've used to describe yourself for years? If you woke up tomorrow and it didn't apply — would you feel relieved or lost?",
-    "collection_id": 14
+    "collection_id": 14,
+    "related_ids": [71, 105, 288]
   },
   {
     "id": 238,
@@ -2794,7 +2829,8 @@
     "plain": "The process where your natural inclination toward empathy and fairness gets hijacked by content designed to make you feel morally superior for caring more. Each video pulls you further into extreme positions not because you're evil, but because the algorithm rewards the appearance of infinite compassion. Moderation feels like betrayal.",
     "analogy": "You start donating to one cause, then the algorithm shows you ten more. Soon you're convinced that anyone not as outraged as you is complicit. You're not more moral — you're just more exhausted.",
     "prompt": "What's one cause you care deeply about online but have done nothing about offline in the past month? What's the gap?",
-    "collection_id": 14
+    "collection_id": 14,
+    "related_ids": [6, 102, 251]
   },
   {
     "id": 239,
@@ -2805,7 +2841,8 @@
     "plain": "The psychological state where you view yourself as something to be marketed, refined, and sold rather than a human being having experiences. Decisions are filtered through 'What does this do for my value?' instead of 'Do I want this?' Motherhood, aging, failure — anything that can't be aestheticized or monetized becomes unthinkable.",
     "analogy": "A tech startup wouldn't intentionally take on something messy, unpredictable, and resource-draining with no clear exit strategy. That's how you're treating your own life — every choice is a pitch deck to invisible investors.",
     "prompt": "What's one thing you want to do that would make you less valuable on paper but more alive in practice?",
-    "collection_id": 14
+    "collection_id": 14,
+    "related_ids": [25, 231, 248]
   },
   {
     "id": 240,
@@ -2816,7 +2853,8 @@
     "plain": "The compulsion to live your life as if it's being watched and judged in real time. You're not present in the moment; you're mentally framing it for Instagram, rehearsing the caption, planning the photo. The experience itself becomes secondary to its documentation and reception.",
     "analogy": "Going to a concert but spending the whole time thinking about which 15 seconds to post on your story. You witnessed the event, but you didn't experience it — you were too busy directing the trailer.",
     "prompt": "Describe the last trip, meal, or moment you fully experienced without thinking about how you'd share it. How long ago was that?",
-    "collection_id": 14
+    "collection_id": 14,
+    "related_ids": [239, 102, 231]
   },
   {
     "id": 241,
@@ -2827,7 +2865,8 @@
     "plain": "A dependency on environments where you can edit, rehearse, and perfect your presentation. After years of being able to undo, filter, and pre-script everything online, spontaneous interaction feels dangerous. You're not avoiding people — you're avoiding the loss of control.",
     "analogy": "Imagine only ever driving in a simulator where you can pause, rewind, and restart. Then someone hands you real car keys. The road hasn't changed — but you've lost the ability to tolerate unpredictability.",
     "prompt": "When was the last time you did something in public with zero ability to edit or rehearse? How did it feel?",
-    "collection_id": 14
+    "collection_id": 14,
+    "related_ids": [90, 253, 91]
   },
   {
     "id": 242,
@@ -2838,7 +2877,8 @@
     "plain": "The experience of identifying a problem before it's culturally acceptable to name it. You see the issue clearly, but because you're ahead of the curve, you're dismissed as alarmist, reactionary, or conspiratorial. Later, when everyone agrees, no one remembers you were right — they just remember you were annoying.",
     "analogy": "You're the person who smelled smoke in the building while everyone else was still at their desks. By the time they see the flames, they've forgotten you warned them — they just know you were the one yelling.",
     "prompt": "What's one thing you believe to be true that would get you mocked if you said it aloud in your peer group right now?",
-    "collection_id": 14
+    "collection_id": 14,
+    "related_ids": [51, 36, 435]
   },
   {
     "id": 243,
@@ -2849,7 +2889,8 @@
     "plain": "The shift where ethical standing became something publicly auditable through your social media activity. If you didn't post the right content at the right time, your silence was interpreted as complicity. Virtue became something you could screenshot, and failing to perform it meant social exile.",
     "analogy": "It's like your workplace started scoring you not on your actual work, but on whether you wore the company T-shirt to lunch. The performance of loyalty replaced the substance of contribution.",
     "prompt": "Think of the last time you posted something because you felt you had to, not because you cared. What were you actually afraid would happen if you stayed silent?",
-    "collection_id": 14
+    "collection_id": 14,
+    "related_ids": [25, 46]
   },
   {
     "id": 244,
@@ -2860,7 +2901,8 @@
     "plain": "A state where you're emotionally invested and behaving like you're in a relationship, but there's no formal commitment. You're giving the benefits of a partnership without receiving the security, and you can't complain because 'we never said we were serious.' It's designed to keep you hanging.",
     "analogy": "You're working 50-hour weeks at a company that keeps saying your promotion is 'under review.' You're doing the job, but you don't have the title, the pay, or the security — and you're too invested to leave.",
     "prompt": "If someone asked you to define your current relationship in one sentence with no ambiguity, could you? If not — why are you okay with that?",
-    "collection_id": 14
+    "collection_id": 14,
+    "related_ids": [20, 249, 392]
   },
   {
     "id": 245,
@@ -2871,7 +2913,8 @@
     "plain": "When you reveal intimate struggles not to connect or heal, but because the algorithm rewards confession. The most private parts of your life become content currency. You're not opening up — you're auctioning off emotional real estate to strangers who will never hold you accountable or help you recover.",
     "analogy": "It's like standing in a town square reading your diary aloud because people clap. You mistake the applause for intimacy, but when you go home, you're still alone — and now everyone knows your weak points.",
     "prompt": "What's one thing you've shared online that you wouldn't say to your best friend's face? Why the gap?",
-    "collection_id": 14
+    "collection_id": 14,
+    "related_ids": [87, 239, 102]
   },
   {
     "id": 246,
@@ -2882,7 +2925,8 @@
     "plain": "The paradox of being hyperaware of how you look while feeling deep shame about your unedited self. You'll spend hours perfecting an image but panic when someone takes a candid photo. The vanity and the insecurity aren't opposites — they're two sides of the same performance anxiety.",
     "analogy": "An actor who's terrified of being seen off-stage. On camera, with the right lighting and script, they're confident. But run into them at the grocery store and they're mortified. The persona only works under controlled conditions.",
     "prompt": "When was the last time you were genuinely comfortable being seen without preparation? What's changed since then?",
-    "collection_id": 14
+    "collection_id": 14,
+    "related_ids": [35, 143, 300]
   },
   {
     "id": 247,
@@ -2893,7 +2937,8 @@
     "plain": "The phenomenon where online platforms reward behaviors traditionally associated with adolescent female social dynamics — rumination, reputation warfare, indirect aggression, performative emotion. Because physical confrontation is impossible online, everyone defaults to gossip, subtweets, and callout culture regardless of gender.",
     "analogy": "You can't punch someone on Twitter, so even the toughest guy ends up using high school cafeteria tactics — spreading screenshots, rallying allies, destroying reputations. The medium reshapes the behavior.",
     "prompt": "Think of the last online argument you saw. Could it have been resolved in 60 seconds face-to-face? What does the platform add — and what does it prevent?",
-    "collection_id": 14
+    "collection_id": 14,
+    "related_ids": [102, 252, 289]
   },
   {
     "id": 248,
@@ -2904,7 +2949,8 @@
     "plain": "When companies rebrand insecurity-inducing products as instruments of self-care and confidence. You're being sold an editing app, a cosmetic procedure, or a supplement under the guise of empowerment — but using it makes you feel more dependent and less secure. The rhetoric is liberation; the result is addiction.",
     "analogy": "A casino telling you that gambling is self-expression. Sure, you feel a rush when you win — but the house designed the game to keep you playing, not to set you free.",
     "prompt": "Name one product or service you bought because it promised confidence. Did it deliver, or did it create a new insecurity to solve?",
-    "collection_id": 14
+    "collection_id": 14,
+    "related_ids": [239, 25, 110]
   },
   {
     "id": 249,
@@ -2915,7 +2961,8 @@
     "plain": "The cultural expectation that commitment is something you do after you've perfected yourself, healed all your wounds, and maximized your independence. The message isn't 'take your time' — it's 'you're not ready, and you won't be for years.' Relationships become something you earn, not something you grow into.",
     "analogy": "It's like being told you can't learn to swim until you've mastered dry-land technique. You'll never feel ready because readiness requires the thing you're avoiding.",
     "prompt": "What's one relationship milestone you're delaying until you 'fix' yourself? What if you're already good enough for someone who matters?",
-    "collection_id": 14
+    "collection_id": 14,
+    "related_ids": [244, 288, 97]
   },
   {
     "id": 250,
@@ -2926,7 +2973,8 @@
     "plain": "A rhetorical tactic where a policy that adds support to one group is reframed as a punishment to everyone else. Instead of 'mothers get help,' it becomes 'non-mothers are being penalized.' The baseline shifts so that neutrality feels like oppression and assistance feels like discrimination.",
     "analogy": "Your company gives a bonus to people who bike to work. Someone complains they're being punished for driving. No — you're just not getting the bonus. The absence of a reward isn't a penalty.",
     "prompt": "Think of a policy you opposed recently. Was it genuinely harmful, or did you just not receive the benefit? What would change if you reframed it?",
-    "collection_id": 14
+    "collection_id": 14,
+    "related_ids": [9, 57, 46]
   },
   {
     "id": 251,
@@ -2937,7 +2985,8 @@
     "plain": "A feedback loop where the most outrageous, unrepresentative stories dominate your information diet because they generate the most engagement. You start believing rare disasters are the norm because those are the only examples you ever see. Your worldview becomes a highlight reel of catastrophes that don't reflect base rates.",
     "analogy": "If you only watched plane crash documentaries, you'd think flying was suicide. The 50,000 safe flights that day don't get coverage. You're building a mental model of the world from the outliers.",
     "prompt": "Name one belief you hold about relationships or politics. Where did you learn it — from life, or from the internet's greatest hits reel?",
-    "collection_id": 14
+    "collection_id": 14,
+    "related_ids": [3, 156, 252]
   },
   {
     "id": 252,
@@ -2948,7 +2997,8 @@
     "plain": "A fundamental property of engagement-driven platforms: they don't surface the median or the reasonable. They surface the most provocative, extreme version of every trend because that's what keeps eyes on screens. If you engage with fitness content, you'll end up at eating disorders. If you engage with politics, you'll end up at radicalization.",
     "analogy": "You casually mention you like spicy food, and suddenly every restaurant recommendation is ghost pepper challenges. The algorithm doesn't know moderation — it only knows 'more.'",
     "prompt": "Pick one topic you've googled or watched videos about this month. Now search it again and see where the rabbit hole leads in five clicks. Would you recommend that endpoint to a friend?",
-    "collection_id": 14
+    "collection_id": 14,
+    "related_ids": [102, 251, 247]
   },
   {
     "id": 253,
