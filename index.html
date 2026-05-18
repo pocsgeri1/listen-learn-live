@@ -2463,12 +2463,26 @@
   .ep-cat-column .concept-card {
     flex: 0 0 auto;
     width: 100%;
-    height: 360px;
+    height: 300px;
     overflow: visible;
     border: none;
     background: transparent;
     border-radius: 14px;
+    /* DECK OVERLAP: each card pulls up so the next covers its bottom ~30% */
+    margin-top: -90px;
+    transition: transform 0.42s cubic-bezier(0.22,0.61,0.36,1), margin-top 0.42s cubic-bezier(0.22,0.61,0.36,1);
   }
+  .ep-cat-column .concept-card:first-of-type { margin-top: 0; }
+  /* alternating fan tilt */
+  .ep-cat-column .concept-card:nth-child(odd)  .card-inner { transform: rotate(-1.4deg); }
+  .ep-cat-column .concept-card:nth-child(even) .card-inner { transform: rotate(1.4deg); }
+  .ep-cat-column .concept-card:nth-child(odd).open  .card-inner,
+  .ep-cat-column .concept-card:nth-child(even).open .card-inner { transform: rotateY(180deg); }
+  /* hovered or open card lifts ABOVE its neighbours so it's fully visible */
+  .ep-cat-column .concept-card:hover,
+  .ep-cat-column .concept-card.open { z-index: 30; }
+  .ep-cat-column .concept-card.open { margin-top: -90px; }
+  .ep-cat-column .concept-card.open:first-of-type { margin-top: 0; }
 
   .ep-cat-column .concept-card .card-inner {
     position: relative;
@@ -2494,20 +2508,15 @@
   .ep-cat-column .concept-card .card-front {
     background: var(--surface);
     border: 1px solid var(--border);
-    padding: 22px 22px 18px;
+    padding: 20px 20px 16px;
     display: flex;
     flex-direction: column;
     box-shadow: 0 8px 24px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.04);
-    transition: border-color 0.2s, box-shadow 0.2s, transform 0.25s ease;
-    transform: rotate(-0.8deg);
+    transition: border-color 0.2s, box-shadow 0.2s;
   }
   .ep-cat-column .concept-card:hover .card-front {
     border-color: rgba(255,255,255,0.13);
     box-shadow: 0 12px 32px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.06);
-    transform: rotate(0deg) translateY(-6px);
-  }
-  .ep-cat-column .concept-card.open .card-front {
-    transform: rotate(0deg);
   }
   .ep-cat-column .concept-card.editors-pick .card-front {
     border-color: rgba(232,213,163,0.4);
@@ -2522,8 +2531,8 @@
   }
   .ep-cat-column .card-term {
     font-size: 1.12rem;
-    margin-top: auto;
-    padding-top: 0.5rem;
+    margin-top: 0;
+    padding-top: 0.25rem;
     margin-bottom: 0.3rem;
   }
   .ep-cat-column .card-hook {
@@ -2531,11 +2540,7 @@
     line-height: 1.55;
   }
   .ep-cat-column .card-flip-hint {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    margin-top: auto;
-    padding-top: 1rem;
+    display: none;
     font-family: 'DM Mono', monospace;
     font-size: 0.52rem;
     letter-spacing: 0.14em;
@@ -2613,6 +2618,18 @@
     display: flex;
     gap: 7px;
     margin-top: 12px;
+    flex-shrink: 0;
+  }
+
+  /* ── ACTION BAR AT TOP OF BACK FACE — shared ── */
+  .card-actions-top {
+    margin-top: 0 !important;
+    flex-shrink: 0;
+  }
+  .card-actions-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 12px 0 14px;
     flex-shrink: 0;
   }
 
@@ -4157,6 +4174,19 @@ function buildGrid() {
                     <div class="card-flip-hint"><div class="card-flip-hint-dot"></div>tap to explore</div>
                   </div>
                   <div class="card-back">
+                    <div class="card-actions card-actions-top">
+                      <button class="btn-master" onclick="event.stopPropagation();toggleMaster(event,${c.id})">${isMastered?'✓ VAULT':'⊕ VAULT'}</button>
+                      <button class="btn-share" onclick="event.stopPropagation();shareCard(event,${c.id})">↑ Share</button>
+                      ${(() => {
+                        if (c.collection_id == null || typeof c.timestamp !== 'number') return '';
+                        const col = COLLECTIONS_BY_ID[c.collection_id];
+                        if (!col || !col.episode_url) return '';
+                        const url = buildTimestampedUrl(col.episode_url, c.timestamp);
+                        if (!url) return '';
+                        return `<a class="btn-listen" href="${url}" target="_blank" rel="noopener" onclick="event.stopPropagation()">▶ Listen</a>`;
+                      })()}
+                    </div>
+                    <div class="card-actions-divider"></div>
                     ${(() => {
                       if (c.collection_id == null) return '';
                       const col = COLLECTIONS_BY_ID[c.collection_id];
@@ -4171,18 +4201,6 @@ function buildGrid() {
                     <div class="back-prompt">
                       <div class="prompt-icon">💬</div>
                       <p>${c.prompt}</p>
-                    </div>
-                    <div class="card-actions">
-                      <button class="btn-master" onclick="event.stopPropagation();toggleMaster(event,${c.id})">${isMastered?'✓ VAULT':'⊕ VAULT'}</button>
-                      <button class="btn-share" onclick="event.stopPropagation();shareCard(event,${c.id})">↑ Share</button>
-                      ${(() => {
-                        if (c.collection_id == null || typeof c.timestamp !== 'number') return '';
-                        const col = COLLECTIONS_BY_ID[c.collection_id];
-                        if (!col || !col.episode_url) return '';
-                        const url = buildTimestampedUrl(col.episode_url, c.timestamp);
-                        if (!url) return '';
-                        return `<a class="btn-listen" href="${url}" target="_blank" rel="noopener" onclick="event.stopPropagation()">▶ Listen</a>`;
-                      })()}
                     </div>
                   </div>
                 </div>
@@ -4719,16 +4737,7 @@ function openEpisodeDrawer(collectionId) {
               <div class="card-flip-hint"><div class="card-flip-hint-dot"></div>tap to explore</div>
             </div>
             <div class="card-back">
-              <div class="back-section-label">What it means</div>
-              <div class="back-text">${c.plain}</div>
-              <div class="back-section-label">Analogy</div>
-              <div class="back-analogy">${c.analogy}</div>
-              <div class="back-section-label">Reflect &amp; use it</div>
-              <div class="back-prompt">
-                <div class="prompt-icon">💬</div>
-                <p>${c.prompt}</p>
-              </div>
-              <div class="card-actions">
+              <div class="card-actions card-actions-top">
                 <button class="btn-master" onclick="event.stopPropagation();toggleEpMaster(event,${c.id})">${isMastered?'✓ VAULT':'⊕ VAULT'}</button>
                 <button class="btn-share" onclick="event.stopPropagation();shareCard(event,${c.id})">↑ Share</button>
                 ${(() => {
@@ -4737,6 +4746,16 @@ function openEpisodeDrawer(collectionId) {
                   if (!url) return '';
                   return `<a class="btn-listen" href="${url}" target="_blank" rel="noopener" onclick="event.stopPropagation()">▶ Listen</a>`;
                 })()}
+              </div>
+              <div class="card-actions-divider"></div>
+              <div class="back-section-label">What it means</div>
+              <div class="back-text">${c.plain}</div>
+              <div class="back-section-label">Analogy</div>
+              <div class="back-analogy">${c.analogy}</div>
+              <div class="back-section-label">Reflect &amp; use it</div>
+              <div class="back-prompt">
+                <div class="prompt-icon">💬</div>
+                <p>${c.prompt}</p>
               </div>
             </div>
           </div>
