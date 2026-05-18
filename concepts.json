@@ -1208,7 +1208,8 @@
     "plain": "The mental skill of entertaining different frameworks, viewpoints, and interpretations simultaneously — without anxiety or the need to immediately resolve the tension between them.",
     "analogy": "A great negotiator can simultaneously hold their position, understand the other party's position, and see the systemic pressures on both — without getting defensive about any of them.",
     "prompt": "What is a situation in your life right now where you're holding only one perspective — and what would you see if you genuinely tried on the opposite view?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [78, 66, 381]
   },
   {
     "id": 104,
@@ -1219,7 +1220,8 @@
     "plain": "From DBT therapy: fully accepting circumstances without denial or resistance — not because you agree with them, but because fighting reality adds suffering on top of pain.",
     "analogy": "You're stuck in traffic for an hour. Raging against it doesn't move the cars. Accepting it frees your mind to listen to something useful instead.",
     "prompt": "What reality in your life are you still fighting or refusing to accept — and what would become possible if you accepted it fully and redirected that energy?",
-    "collection_id": 5
+    "collection_id": 5,
+    "related_ids": [154, 331, 58]
   },
   {
     "id": 105,
@@ -1230,7 +1232,8 @@
     "plain": "From James Clear: instead of 'I want to run a marathon,' shift to 'I am a runner.' Behavior follows identity — change the self-concept and the actions follow naturally.",
     "analogy": "A person who says 'I'm trying to quit smoking' still identifies as a smoker. A person who says 'I'm not a smoker' has already changed their identity — and their behavior follows.",
     "prompt": "What habit do you want to build that you could reframe as an identity — and what would you do differently today if you already saw yourself as that person?",
-    "collection_id": 5
+    "collection_id": 5,
+    "related_ids": [467, 469, 124]
   },
   {
     "id": 106,
@@ -1241,7 +1244,8 @@
     "plain": "The brain's ability to rewire itself throughout life based on experience. You're not stuck with your current patterns — behaviors, thoughts, and habits literally reshape neural structure over time.",
     "analogy": "London cab drivers who memorized every street had measurably larger hippocampuses (the brain's navigation center) than the general population. The brain literally changed shape from use.",
     "prompt": "What neural pathway are you reinforcing every day through repetition — and is it one you'd consciously choose if you thought about it as building brain structure?",
-    "collection_id": 5
+    "collection_id": 5,
+    "related_ids": [276, 257, 41]
   },
   {
     "id": 107,
@@ -1252,7 +1256,8 @@
     "plain": "Before starting something, you mentally fast-forward to its failure and work backwards to identify what likely caused it — creating a checklist from anticipated failure rather than optimistic planning.",
     "analogy": "Before a product launch, you imagine it's 12 months later and the launch completely failed. You ask: what went wrong? The answers become your pre-launch checklist.",
     "prompt": "Think of something important you're about to start. Imagine it has completely failed 12 months from now. What's the most likely reason — and what can you do about it now?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [33, 155, 80]
   },
   {
     "id": 108,
@@ -1263,7 +1268,8 @@
     "plain": "The discomfort of a necessary conversation is almost always smaller than the long-term cost of not having it. Postponed hard conversations compound in damage over time.",
     "analogy": "The slight awkwardness of telling a friend they're wrong costs you 10 minutes of discomfort. Not telling them costs you the friendship over the following months.",
     "prompt": "What conversation have you been postponing for more than two weeks? What is that delay actually costing you or the other person?",
-    "collection_id": 3
+    "collection_id": 3,
+    "related_ids": [20, 207, 216]
   },
   {
     "id": 109,
@@ -1274,7 +1280,8 @@
     "plain": "From Bessel van der Kolk: unprocessed trauma doesn't disappear — it gets stored in the body as chronic tension, posture, anxiety, and physical symptoms that persist long after the event.",
     "analogy": "A soldier back from war with no visible wounds but chronic back pain, gut issues, and hypervigilance. The conflict ended. His body didn't get the memo.",
     "prompt": "What physical tensions, patterns, or symptoms do you carry regularly that might be stored emotional responses rather than purely physical issues?",
-    "collection_id": 5
+    "collection_id": 5,
+    "related_ids": [198, 208, 223]
   },
   {
     "id": 110,
@@ -1285,7 +1292,8 @@
     "plain": "Stack so much value into what you're selling — bonuses, guarantees, specificity, risk reversal — that the customer feels it would be foolish to pass it up. The product can be average; the offer cannot.",
     "analogy": "Instead of 'join my gym for €50/month,' you offer: gym + personalized nutrition plan + weekly check-in call + full money-back if you don't lose 5kg in 30 days. Same gym. Completely different offer.",
     "prompt": "Think of something you're selling or pitching. What could you add — a guarantee, a bonus, a specific result — to make saying no genuinely difficult?",
-    "collection_id": 6
+    "collection_id": 6,
+    "related_ids": [111, 114, 116]
   },
   {
     "id": 111,
@@ -1296,7 +1304,8 @@
     "plain": "Hormozi's formula: to increase perceived value, maximize the dream outcome and the buyer's belief it will work, while minimizing how long it takes and how hard it is for them.",
     "analogy": "A weight loss program promising visible results in 2 weeks with minimal meal prep will outsell one promising results in a year requiring strict discipline — same outcome, radically different value equation.",
     "prompt": "Think of something you're offering — a product, a service, yourself. How could you increase the perceived likelihood of success or reduce the perceived effort required?",
-    "collection_id": 6
+    "collection_id": 6,
+    "related_ids": [184, 120, 113]
   },
   {
     "id": 112,
@@ -1307,7 +1316,8 @@
     "plain": "No matter how good your product, if you're selling to people who don't urgently need it, you'll struggle. A mediocre offer to a desperate market beats a perfect offer to an indifferent one.",
     "analogy": "The best food stall in the world loses to a mediocre one at 2am outside a nightclub. Timing and desperation consistently trump quality.",
     "prompt": "Who is your most desperate buyer — the person who would pay almost anything for what you offer? Are you actually selling to them, or to a convenient but less motivated audience?",
-    "collection_id": 6
+    "collection_id": 6,
+    "related_ids": [185, 129, 380]
   },
   {
     "id": 113,
@@ -1318,7 +1328,8 @@
     "plain": "When someone feels completely understood — when you name their exact frustration, fear, or struggle with precision — they automatically assume you know how to solve it.",
     "analogy": "A doctor who describes your symptoms precisely before you've finished speaking earns your trust instantly. You feel like they already know what's wrong.",
     "prompt": "Can you describe the exact pain of your ideal customer in their own words — the specific frustration they feel at 2am — better than they could describe it themselves?",
-    "collection_id": 6
+    "collection_id": 6,
+    "related_ids": [111, 184, 218]
   },
   {
     "id": 114,
@@ -1329,7 +1340,8 @@
     "plain": "Guarantees shift the psychological burden of the purchase from the buyer to the seller. This dramatically increases conversion, especially at higher prices.",
     "analogy": "'Try it for 30 days — if you're not satisfied, full refund and you keep the bonuses.' The buyer has literally nothing to lose. So why not?",
     "prompt": "What guarantee could you offer that would make your product genuinely risk-free for the buyer — and how confident are you actually in what you're selling?",
-    "collection_id": 6
+    "collection_id": 6,
+    "related_ids": [23, 72, 110]
   },
   {
     "id": 115,
@@ -1340,7 +1352,8 @@
     "plain": "Most people over-prepare and under-attempt. Successful people fail faster and iterate more. The volume of attempts beats the precision of a single perfect attempt.",
     "analogy": "A comedian who performs 300 nights a year will be funnier than one who spends 300 nights perfecting a single set. Reps consistently beat rehearsal.",
     "prompt": "Where in your life or work are you waiting to be ready or perfect — when shipping something imperfect and learning from reality would serve you far better?",
-    "collection_id": 6
+    "collection_id": 6,
+    "related_ids": [142, 121, 93]
   },
   {
     "id": 116,
@@ -1351,7 +1364,8 @@
     "plain": "Counter-intuitively, raising prices often increases perceived value, customer commitment, and real-world results. Cheap prices signal a cheap product and attract uncommitted buyers.",
     "analogy": "A therapist who charges €300/hour will be taken far more seriously than one who charges €30 — even if equally skilled. The price sets the expectation before a word is spoken.",
     "prompt": "What are you underpricing because you're afraid people won't pay more — when the right customers would actually pay significantly more and get better results?",
-    "collection_id": 6
+    "collection_id": 6,
+    "related_ids": [190, 292, 25]
   },
   {
     "id": 117,
@@ -1362,7 +1376,8 @@
     "plain": "Generalists compete on price. Specialists command premiums. The more precisely you define who you serve and what problem you solve, the less competition you face.",
     "analogy": "'I help businesses grow' = crowded, low-margin market. 'I help D2C supplement brands reduce churn through email sequences' = near-zero competition and dramatically higher fees.",
     "prompt": "What is the most specific, painful version of the problem you solve — and are you actually marketing to the people with that exact pain?",
-    "collection_id": 6
+    "collection_id": 6,
+    "related_ids": [130, 119, 171]
   },
   {
     "id": 118,
@@ -1373,7 +1388,8 @@
     "plain": "You don't become confident by telling yourself you're great. You become confident by doing hard things, accumulating real proof, and building an undeniable stack of evidence that you can deliver.",
     "analogy": "You don't become confident driving by telling yourself 'I'm a great driver.' You become confident by driving thousands of miles in all conditions. The mileage creates the belief.",
     "prompt": "What skill or area of your life would you feel most confident in if you simply put in 10x more reps than you currently have — regardless of talent?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [123, 364, 405]
   },
   {
     "id": 119,
@@ -1384,7 +1400,8 @@
     "plain": "The goal isn't to be the best in an existing category — it's to define a new category where you're the only option. This eliminates price comparison and the race to the bottom.",
     "analogy": "Apple didn't compete with existing music players. They created the iPod, iTunes, and an integrated ecosystem. No direct comparison existed — so no price war was possible.",
     "prompt": "What unique combination of your specific experience, perspective, and approach creates a category that only you occupy — rather than a crowded market you're trying to win?",
-    "collection_id": 6
+    "collection_id": 6,
+    "related_ids": [130, 117, 62]
   },
   {
     "id": 120,
@@ -1395,7 +1412,8 @@
     "plain": "Customers rarely want your product. They want the outcome your product enables. Identify the real desire underneath the stated desire — and sell that.",
     "analogy": "People don't want a gym membership — they want to look better naked and feel more confident. Airlines don't sell flights — they sell the destination and everything it represents.",
     "prompt": "What is your customer's actual dream outcome — not what they're asking for, but what they're hoping that thing will give them?",
-    "collection_id": 6
+    "collection_id": 6,
+    "related_ids": [185, 184, 50]
   },
   {
     "id": 121,
@@ -1406,7 +1424,8 @@
     "plain": "Execution velocity matters above almost everything else. Most people have ideas. The differentiator is how fast you move from idea to real-world action and feedback.",
     "analogy": "Two people hear the same insight in the same podcast. One tests it Tuesday. The other is still planning it three months later. The first person already has data.",
     "prompt": "What idea have you been sitting on for more than two weeks that you could test — imperfectly — within the next 48 hours?",
-    "collection_id": 6
+    "collection_id": 6,
+    "related_ids": [93, 115, 340]
   },
   {
     "id": 122,
@@ -1417,7 +1436,8 @@
     "plain": "Ignore short-term metrics and optimize for compound outcomes. The decisions that look wrong or slow in year one often look obviously brilliant in year five.",
     "analogy": "A tree doesn't look like much in its first year. You can't rush the root system. The patience required to build real businesses — or real skills — is almost always longer than people expect.",
     "prompt": "What decision are you about to make for short-term comfort or optics that future-you — five years from now — might regret?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [1, 41, 45]
   },
   {
     "id": 123,
@@ -1428,7 +1448,8 @@
     "plain": "Confidence that doesn't come from actual competence is fragile and temporary. Confidence built through real difficulty, real failure, and real recovery is durable and authentic.",
     "analogy": "An actor who bombs their first audition, recovers, and keeps going earns confidence over 100 auditions. The person who only gets praised and never fails is brittle when the first real challenge arrives.",
     "prompt": "Where do you have the most genuine confidence right now — and can you trace it back to specific hard experiences that built it?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [118, 32, 412]
   },
   {
     "id": 124,
@@ -1439,7 +1460,8 @@
     "plain": "Self-discipline isn't a muscle you force. It's an expression of identity. When you genuinely identify as someone disciplined, the actions follow naturally — without the constant internal battle.",
     "analogy": "A professional athlete doesn't drag themselves to training every morning. They go because athletes train. The identity eliminates the daily internal debate about whether to show up.",
     "prompt": "In the area where your discipline is weakest — are you fighting against who you are, or could you change the identity and make the behavior feel natural?",
-    "collection_id": 5
+    "collection_id": 5,
+    "related_ids": [105, 467, 199]
   },
   {
     "id": 125,
@@ -1450,7 +1472,8 @@
     "plain": "Instead of selling your time (freelancing, jobs), package what you know into digital products, content, and systems that can earn money while you sleep.",
     "analogy": "A consultant trades time for money directly. But a consultant who writes a course, framework, or book sells the same knowledge to 10,000 people simultaneously — without being there.",
     "prompt": "What do you know — from experience, study, or hard-won mistakes — that someone else would pay to learn? How could you package that without it requiring your presence each time?",
-    "collection_id": 6
+    "collection_id": 6,
+    "related_ids": [128, 139, 357]
   },
   {
     "id": 126,
@@ -1461,7 +1484,8 @@
     "plain": "A single person with a skill, an audience, and a digital product can earn well without employees, overhead, or investors. The internet provides the leverage that used to require an army.",
     "analogy": "A writer with 50,000 email subscribers and a €97 guide can earn more than an agency with 20 employees — with a fraction of the complexity, cost, and stress.",
     "prompt": "If you had to build something that generated income using only your own knowledge and a laptop — what would you build, and for whom?",
-    "collection_id": 6
+    "collection_id": 6,
+    "related_ids": [195, 342, 353]
   },
   {
     "id": 127,
@@ -1472,7 +1496,8 @@
     "plain": "Dan Koe's three-stage framework: pursue mastery because you genuinely care → turn that mastery into income → use your platform and resources to grow beyond your own interests.",
     "analogy": "Stage 1: become a genuinely great cook. Stage 2: open a restaurant. Stage 3: train other chefs and build a food culture. Each stage builds on the foundation of the previous one.",
     "prompt": "Which stage are you in right now — and what would need to be true before you could genuinely move to the next one?",
-    "collection_id": 5
+    "collection_id": 5,
+    "related_ids": [89, 97, 372]
   },
   {
     "id": 128,
@@ -1483,7 +1508,8 @@
     "plain": "Content, code, media, and digital products are forms of leverage that multiply your effort beyond the hour you put in. Unlike physical labor, digital work compounds indefinitely.",
     "analogy": "An article you wrote in 2021 still brings readers to your site in 2025. You worked once. The work kept working — while you slept, traveled, and did other things.",
     "prompt": "What knowledge or skill do you have that, if you packaged it into something digital, would keep working for you long after you created it?",
-    "collection_id": 6
+    "collection_id": 6,
+    "related_ids": [5, 125, 172]
   },
   {
     "id": 129,
@@ -1494,7 +1520,8 @@
     "plain": "All meaningful products and content ultimately solve one of three timeless human problems. These markets never go away, never become saturated, and always have willing buyers.",
     "analogy": "Finance apps, fitness platforms, and dating services are all booming simultaneously — completely different industries, driven by the exact same three core human needs.",
     "prompt": "Whatever you're building or selling — which of the three eternal markets does it ultimately serve? Is that the framing you're leading with?",
-    "collection_id": 6
+    "collection_id": 6,
+    "related_ids": [112, 92, 415]
   },
   {
     "id": 130,
@@ -1505,7 +1532,8 @@
     "plain": "Rather than picking a niche from the outside, your specific intersection of obsessions — fitness + philosophy + business, for example — creates a category of one that nobody else can replicate.",
     "analogy": "Nobody else is both a former nightclub DJ and a philosophy-reading self-improvement podcaster. Chris Williamson didn't pick a niche externally — he became one through who he genuinely is.",
     "prompt": "What three to five genuine interests, when combined, describe a perspective on the world that only you have? That intersection might be your most defensible market position.",
-    "collection_id": 6
+    "collection_id": 6,
+    "related_ids": [119, 357, 136]
   },
   {
     "id": 131,
@@ -1516,7 +1544,8 @@
     "plain": "A person who controls their own time, income streams, and location — not dependent on any one employer, system, or geography. Made possible in a new way by the internet and digital work.",
     "analogy": "The opposite of someone who can be made redundant with a single email. The sovereign individual can't be fired — because nobody hired them in the first place.",
     "prompt": "How many of your current income sources, relationships, and freedoms depend on a single entity — a company, a person, a location? What would it take to diversify that dependency?",
-    "collection_id": 5
+    "collection_id": 5,
+    "related_ids": [32, 97, 314]
   },
   {
     "id": 132,
@@ -1527,7 +1556,8 @@
     "plain": "The tendency to abandon a strategy, business, or skill the moment something new and more exciting appears — before the original effort has had enough time to compound into results.",
     "analogy": "Planting seeds in a garden, then digging them up after a week because you read about different seeds. Nothing ever grows because nothing was ever given time to root.",
     "prompt": "What project or skill have you abandoned in the past two years that might have succeeded if you'd given it significantly more time before switching?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [64, 376, 398]
   },
   {
     "id": 133,
@@ -1538,7 +1568,8 @@
     "plain": "The act of writing forces you to confront half-formed ideas and expose gaps in your thinking. You discover what you know — and don't know — through the process of writing it down.",
     "analogy": "You think you understand compound interest completely — until someone asks you to explain it in writing to a 12-year-old. The gaps appear immediately.",
     "prompt": "What is a belief or idea you hold that you've never actually written down in full? Try writing it — and notice where your thinking becomes vague or uncertain.",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [160, 341, 360]
   },
   {
     "id": 134,
@@ -1549,7 +1580,8 @@
     "plain": "Sharing your learning, failures, and process as it happens — rather than only sharing polished success stories. Creates authenticity, trust, and an audience growing alongside you.",
     "analogy": "A fitness account that shows real workouts, real meals, and real setbacks builds far more trust than one showing only shredded results with no context.",
     "prompt": "What are you building or learning right now that you could share publicly — in progress, messy, and unfinished — that would genuinely help someone earlier in the same journey?",
-    "collection_id": 6
+    "collection_id": 6,
+    "related_ids": [170, 178, 140]
   },
   {
     "id": 135,
@@ -1560,7 +1592,8 @@
     "plain": "Content and businesses built from authentic obsession consistently outperform those manufactured to chase trends. Real curiosity produces depth — and depth creates lasting audiences who trust you.",
     "analogy": "A person who genuinely geeks out on Roman history for 10 years will produce richer, more interesting content than someone who picks Roman history because it was trending that week.",
     "prompt": "What topic do you find yourself reading about, watching, and thinking about even when nobody is paying you to — and have you ever considered building something around that?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [337, 86, 411]
   },
   {
     "id": 136,
@@ -1571,7 +1604,8 @@
     "plain": "Your domain of mastery is the specific territory where your skills, experience, and interests converge into genuine depth that others can learn from and value.",
     "analogy": "A former nurse who got seriously into fitness has something unique: anatomy knowledge, health science, and real training experience combined. That intersection is harder to compete with than any single element.",
     "prompt": "What combination of experiences do you have that almost nobody else has in exactly the same configuration — and who could benefit most from what only that combination produces?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [130, 152, 357]
   },
   {
     "id": 137,
@@ -1582,7 +1616,8 @@
     "plain": "When you pivot to something new, you don't start at zero. All your previous skills, experiences, and hard lessons transfer and compound into the new domain in unexpected ways.",
     "analogy": "A lawyer who becomes a therapist doesn't lose their legal knowledge. Their ability to analyze complex arguments and spot logical fallacies makes them a more rigorous, effective therapist.",
     "prompt": "If you were to change direction completely today — what skills and experiences from your current life would give you an unexpected advantage in the new path?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [74, 345, 470]
   },
   {
     "id": 138,
@@ -1593,7 +1628,8 @@
     "plain": "The fastest way to validate whether an idea has market value is to sell a rough version of it before investing heavily in making it polished. Real feedback from real buyers beats all speculation.",
     "analogy": "Rather than spending six months building a full course, offer a live workshop first. If 10 people pay — you've validated the idea. If nobody pays — you saved six months.",
     "prompt": "What idea are you over-preparing before testing? What's the smallest version of it you could sell to a real person this week to find out if it's worth building?",
-    "collection_id": 6
+    "collection_id": 6,
+    "related_ids": [142, 180, 418]
   },
   {
     "id": 139,
@@ -1604,7 +1640,8 @@
     "plain": "The traditional model trades your time directly for money — you earn when you work. The alternative creates assets — content, products, systems — that generate value independently of your presence.",
     "analogy": "A plumber earns only when they work. A plumbing course creator earns while they sleep, travel, and do other things. Same expertise — radically different leverage and ceiling.",
     "prompt": "What percentage of your income currently requires your direct presence to generate — and what would it take to start shifting even 10% of that to something that works without you?",
-    "collection_id": 6
+    "collection_id": 6,
+    "related_ids": [125, 378, 37]
   },
   {
     "id": 140,
@@ -1615,7 +1652,8 @@
     "plain": "A product can go stale, become irrelevant, or be copied. An audience that genuinely trusts you is a durable asset you can deploy for any new offer, product, or pivot over time.",
     "analogy": "A chef who loses their restaurant still has their following. They can open a new restaurant, start a YouTube channel, or write a cookbook — and the audience walks with them.",
     "prompt": "If everything you currently sell disappeared tomorrow — do you have an audience that trusts you enough to buy whatever you created next?",
-    "collection_id": 6
+    "collection_id": 6,
+    "related_ids": [134, 172, 34]
   },
   {
     "id": 141,
@@ -1626,7 +1664,8 @@
     "plain": "Inbound: people come to you because of your content, reputation, or referrals. Outbound: you go find people through cold outreach or ads. Inbound scales better but takes longer to build.",
     "analogy": "A great restaurant in a busy street with word-of-mouth (inbound) vs a driver handing out menus door to door (outbound). Both work. One compounds and eventually runs itself.",
     "prompt": "What could you create — content, a reputation, a referral system — that would have customers seeking you out rather than you constantly chasing them?",
-    "collection_id": 6
+    "collection_id": 6,
+    "related_ids": [352, 334, 6]
   },
   {
     "id": 142,
@@ -1637,7 +1676,8 @@
     "plain": "Getting something real into the world and improving from actual feedback consistently beats waiting until it's perfect. Perfection is imaginary; feedback from reality is priceless.",
     "analogy": "Every iPhone ever released had flaws. Apple released them anyway — because version 2 built from real-world data is always better than a perfect version 1 that ships never.",
     "prompt": "What are you currently polishing or perfecting that would teach you far more if you simply released it now and improved based on real reactions?",
-    "collection_id": 6
+    "collection_id": 6,
+    "related_ids": [115, 138, 407]
   },
   {
     "id": 143,
@@ -1648,7 +1688,8 @@
     "plain": "Constantly comparing your internal experience — doubts, struggles, failures — to other people's external presentation — wins, appearances, milestones — is a structurally unfair and deeply damaging comparison.",
     "analogy": "You're comparing your blooper reel to their Oscar montage. Of course you feel behind. You're not seeing the same film.",
     "prompt": "Who do you follow or watch whose success regularly makes you feel inadequate — and do you actually know anything real about the full picture of their journey?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [162, 165, 35]
   },
   {
     "id": 144,
@@ -1659,7 +1700,8 @@
     "plain": "Noam Chomsky's concept: mass media and institutional framing can shape what people believe and want in ways that serve those in power — while people feel they arrived at their views independently.",
     "analogy": "You voted for the candidate you chose. But every news outlet you consumed, every framing of the issues, was shaped by people with specific interests in the outcome.",
     "prompt": "What political or social opinion do you hold most strongly — and can you trace exactly where it came from and who benefits from you holding it?",
-    "collection_id": 3
+    "collection_id": 3,
+    "related_ids": [46, 70, 158]
   },
   {
     "id": 145,
@@ -1670,7 +1712,8 @@
     "plain": "3-4 hours of genuine deep work — no interruptions, no notifications, full focus — produces more meaningful output than 10 hours of fragmented, meeting-interrupted, email-checking 'work.'",
     "analogy": "A surgeon doing 3 hours of precise, focused surgery produces more value than an administrative assistant present for 8 hours of scattered tasks. Time in the room is not the metric.",
     "prompt": "If you had to produce your most important work in only 4 hours per day — what would you ruthlessly eliminate from your current schedule to make those 4 hours genuinely count?",
-    "collection_id": 6
+    "collection_id": 6,
+    "related_ids": [44, 228, 413]
   },
   {
     "id": 146,
@@ -1681,7 +1724,8 @@
     "plain": "People don't just reward those in their group more — they systematically disadvantage outsiders, often without realizing it. It operates beneath conscious awareness in hiring, friendship, and trust.",
     "analogy": "Two identical CVs — one with a traditionally local name, one with a foreign name. The local name gets significantly more callbacks. No deliberate prejudice required.",
     "prompt": "Where in your professional or social life might you be systematically favoring people who look, think, or come from the same place as you — without consciously intending to?",
-    "collection_id": 3
+    "collection_id": 3,
+    "related_ids": [38, 254, 282]
   },
   {
     "id": 147,
@@ -1692,7 +1736,8 @@
     "plain": "Ego is fragile because it depends entirely on comparison — the moment someone surpasses you, your ego suffers. Genuine self-esteem is stable because it doesn't require external validation or superiority.",
     "analogy": "A man with fragile ego feels genuinely threatened when a younger colleague succeeds. A man with real self-esteem feels proud of them — because his worth isn't diminished by theirs.",
     "prompt": "When someone around you succeeds in an area you care about — do you feel proud, inspired, or quietly threatened? That reaction tells you something important.",
-    "collection_id": 5
+    "collection_id": 5,
+    "related_ids": [61, 231, 385]
   },
   {
     "id": 148,
@@ -1704,7 +1749,8 @@
     "analogy": "A natural night owl forced into a 6am-to-midnight schedule is like running an engine on the wrong fuel. The engine technically works — it's just operating far below its capacity.",
     "prompt": "When during the day do you do your best thinking — and how much of your current schedule actually protects that window versus filling it with low-value tasks?",
     "collection_id": 5,
-    "editors_pick": true
+    "editors_pick": true,
+    "related_ids": [90, 374, 220]
   },
   {
     "id": 149,
@@ -1715,7 +1761,8 @@
     "plain": "Formal education teaches what was relevant decades ago. Self-directed learning lets you master cutting-edge skills faster than any institution can update its curriculum.",
     "analogy": "A programmer who taught themselves AI tools and shipped real projects last year is often more practically valuable than someone with an AI PhD who only knows the academic theory.",
     "prompt": "What skill that's highly valued right now could you teach yourself to a competent level in the next six months — without enrolling in anything?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [166, 353, 470]
   },
   {
     "id": 150,
@@ -1726,7 +1773,8 @@
     "plain": "A cognitive strategy where you mentally rehearse worst-case scenarios not to create anxiety but to reduce it — because preparation transforms fear into a concrete plan.",
     "analogy": "A pilot mentally runs through emergency procedures before every flight — not because they expect to crash, but because having done so means they can act calmly if it happens.",
     "prompt": "What upcoming high-stakes situation could you significantly improve your odds on by spending 30 minutes imagining every specific way it could go wrong?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [107, 396, 294]
   },
   {
     "id": 151,
@@ -1737,7 +1785,8 @@
     "plain": "The ability to accurately perceive and understand the social, political, and emotional dynamics of a situation as it's happening — and use that understanding to navigate it effectively.",
     "analogy": "An experienced poker player doesn't just play their cards — they read every person at the table simultaneously and adjust strategy in real time.",
     "prompt": "Think of a situation you recently misread or were caught off guard by. What signals were there in advance that you missed or dismissed?",
-    "collection_id": 3
+    "collection_id": 3,
+    "related_ids": [206, 8, 204]
   },
   {
     "id": 152,
@@ -1748,7 +1797,8 @@
     "plain": "Being excellent in one domain gives you no automatic advantage — and often creates overconfidence — in other domains. Knowing this protects you from taking advice from the wrong experts.",
     "analogy": "A brilliant surgeon's views on geopolitics deserve exactly the same weight as any other intelligent person's — not the extra authority their surgical excellence might seem to confer.",
     "prompt": "Who do you regularly take advice from whose expertise is in a different domain from the one you're asking about — and have you adjusted for that difference?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [30, 136, 472]
   },
   {
     "id": 153,
