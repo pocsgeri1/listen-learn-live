@@ -494,12 +494,7 @@
     scrollbar-width: thin;
     scrollbar-color: var(--border-hover) transparent;
   }
-  .ep-cat-column {
-    flex: 0 0 300px;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
+  .ep-cat-column { gap: 1rem; }
   .ep-cat-column-header {
     position: sticky;
     top: 0;
@@ -570,6 +565,9 @@
     max-width: 1080px;
     margin: 0 auto;
     animation: epColSwoosh 0.4s cubic-bezier(0.22,0.61,0.36,1) both;
+  }
+  .ep-cat-column.visible .ep-cat-column-header {
+    grid-column: 1 / -1;
   }
   @keyframes epColSwoosh {
     from { opacity: 0; transform: translateY(18px); }
