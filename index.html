@@ -3429,12 +3429,12 @@
       <span class="stat-label">Concepts</span>
     </div>
     <div class="stat">
-      <span class="stat-num" id="heroCategoryCount">—</span>
-      <span class="stat-label">Categories</span>
+      <span class="stat-num" id="heroEpisodeCount">—</span>
+      <span class="stat-label">Episodes</span>
     </div>
     <div class="stat">
-      <span class="stat-num">5/day</span>
-      <span class="stat-label">Daily Goal</span>
+      <span class="stat-num" id="heroCategoryCount">—</span>
+      <span class="stat-label">Categories</span>
     </div>
   </div>
 
@@ -4529,12 +4529,22 @@ function updateHeaderCounts() {
   const usedCategories = new Set(CONCEPTS.map(c => c.category));
   const categoryCount = usedCategories.size;
 
+  // Concept count excludes duplicate cards (duplicate_of set) so the headline
+  // number stays honest once the same concept appears across multiple episodes.
+  const conceptCount = CONCEPTS.filter(c => !c.duplicate_of).length;
+
+  // Episode count = episodes + shorts in collections.json (curated packs excluded).
+  const episodeCount = Object.values(COLLECTIONS_BY_ID).filter(
+    col => col && (col.type === 'episode' || col.type === 'short')
+  ).length;
+
   // Nav count: instant (small, in the corner — animation would feel jittery)
   const navEl = document.getElementById('navConceptCount');
-  if (navEl) navEl.textContent = CONCEPTS.length;
+  if (navEl) navEl.textContent = conceptCount;
 
   // Hero stats: animated count-up — eye-catching on the landing
-  animateCount(document.getElementById('heroConceptCount'), CONCEPTS.length, 1200);
+  animateCount(document.getElementById('heroConceptCount'), conceptCount, 1200);
+  animateCount(document.getElementById('heroEpisodeCount'), episodeCount, 1200);
   animateCount(document.getElementById('heroCategoryCount'), categoryCount, 1200);
 }
 
