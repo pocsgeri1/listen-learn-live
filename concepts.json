@@ -8757,5 +8757,26 @@
       156
     ],
     "duplicate_of": null
+  },
+  {
+    "id": 516,
+    "term": "Minimum Viable Offer",
+    "category": "business",
+    "source": "dk",
+    "hook": "First product will always be shit — ship it anyway.",
+    "plain": "A bare-bones service you can sell immediately to start learning. Examples: a $500 consulting package (4 calls), a single freelance skill, or tutoring on one narrow topic. The goal isn't perfection — it's getting real feedback fast so you can iterate. Most people wait years to launch; this gets you paid within weeks.",
+    "analogy": "Like a food truck testing one menu item before opening a restaurant — you learn what people actually want by serving them today, not by planning in a notebook for 18 months.",
+    "prompt": "What's the ugliest, smallest version of something you could sell this week — not next quarter, this week — that someone would pay $100–$500 for?",
+    "collection_id": 516,
+    "timestamp": 1557,
+    "editors_pick": false,
+    "related_ids": [
+      12,
+      45,
+      67,
+      89,
+      134
+    ],
+    "duplicate_of": 138
   }
 ]
