@@ -3667,7 +3667,8 @@
     "analogy": "It's like buying a luxury car you never drive — you just want people to see it parked in your driveway. The car's function is irrelevant. The display is the point.",
     "prompt": "Think about your last three social media posts involving another person. Were you sharing the moment or performing it?",
     "collection_id": 501,
-    "timestamp": 5150
+    "timestamp": 5150,
+    "related_ids": [25, 231, 240]
   },
   {
     "id": 304,
@@ -3680,7 +3681,8 @@
     "prompt": "Name one relationship — romantic, professional, or social — where you're currently doing the math on whether it's still worth it.",
     "collection_id": 501,
     "timestamp": 247,
-    "editors_pick": true
+    "editors_pick": true,
+    "related_ids": [2, 13, 306]
   },
   {
     "id": 305,
@@ -3692,7 +3694,8 @@
     "analogy": "Think of a coach at halftime. They don't say 'it's okay that you're losing.' They say 'we can still win this — here's how.' That's the framing men respond to.",
     "prompt": "Next time a guy you know is struggling, try asking 'what do you need to get back on track?' instead of 'how are you feeling?'",
     "collection_id": 501,
-    "timestamp": 2487
+    "timestamp": 2487,
+    "related_ids": [229, 212, 99]
   },
   {
     "id": 306,
@@ -3704,7 +3707,8 @@
     "analogy": "Imagine your bank starts charging you $50/month in fees but offers no interest, no customer service, and the ATM is always broken. You'd switch banks. Relationships work the same way — people leave when the return on investment drops.",
     "prompt": "Pick the relationship you're least satisfied with right now. List what you give and what you get. Is the ledger balanced?",
     "collection_id": 501,
-    "timestamp": null
+    "timestamp": null,
+    "related_ids": [2, 221, 304]
   },
   {
     "id": 307,
@@ -3716,7 +3720,8 @@
     "analogy": "It's like hiring contractors online versus in your small town. Online, a bad contractor can scam you and vanish. In a small town, everyone knows everyone — so bad behavior has consequences. Dating apps are the online contractor model.",
     "prompt": "In your last five interactions with someone new, which ones felt like they had real social accountability — and which felt disposable?",
     "collection_id": 501,
-    "timestamp": 396
+    "timestamp": 396,
+    "related_ids": [6, 34, 293]
   },
   {
     "id": 308,
@@ -3728,7 +3733,8 @@
     "analogy": "It's like studying for a test by memorizing the wrong textbook. You're working hard, but you're solving for the wrong variable. You wanted to impress the teacher, but you studied what impresses your classmates instead.",
     "prompt": "Name one way you've tried to improve your appeal that was more about impressing your own gender than the one you're attracted to.",
     "collection_id": 501,
-    "timestamp": 1089
+    "timestamp": 1089,
+    "related_ids": [292, 25, 333]
   },
   {
     "id": 309,
@@ -3740,7 +3746,8 @@
     "analogy": "It's like choosing a restaurant. You could read reviews and inspect the menu, or you could just go where there's a line out the door. The crowd has already done the vetting for you.",
     "prompt": "Think of the last person you found attractive. Did your opinion of them change after seeing how others reacted to them?",
     "collection_id": 501,
-    "timestamp": 1830
+    "timestamp": 1830,
+    "related_ids": [6, 29, 307]
   },
   {
     "id": 310,
@@ -3752,7 +3759,8 @@
     "analogy": "Every previous invention stopped at itself: fire cooks food, but fire doesn't invent wheels. AI is like hiring a scientist who then hires 10 more scientists, who each hire 10 more, forever. You've automated the thing that makes everything else.",
     "prompt": "What's the last problem you tried to solve by hiring a smarter person? Now imagine that person could instantly clone themselves a thousand times and work 24/7. What disappears from your life?",
     "collection_id": 502,
-    "timestamp": 1634
+    "timestamp": 1634,
+    "related_ids": [62, 101, 317]
   },
   {
     "id": 311,
@@ -3764,7 +3772,8 @@
     "analogy": "You're on a pirate ship with 100 crew members. Twenty row the boat, ten navigate, five cook. The other 65 are 'Assistant Vice Captains of Morale' who hold meetings about holding meetings. If they all quit, the ship moves faster.",
     "prompt": "What's one task you do every week that, if you stopped doing it entirely, no one would notice within 30 days? Why are you still doing it?",
     "collection_id": 502,
-    "timestamp": 7376
+    "timestamp": 7376,
+    "related_ids": [174, 378, 329]
   },
   {
     "id": 312,
@@ -3776,7 +3785,8 @@
     "analogy": "Imagine every job posting gets 10,000 applicants who work for free, never complain, and improve every day. Who gets hired? Almost no one. You're competing with infinity.",
     "prompt": "If your job disappeared tomorrow and 99% of others did too, what would you do with 60 hours a week for the next 30 years? Not 'find another job' — that's gone.",
     "collection_id": 502,
-    "timestamp": 651
+    "timestamp": 651,
+    "related_ids": [324, 329, 359]
   },
   {
     "id": 313,
@@ -3788,7 +3798,8 @@
     "analogy": "Your kid's not allowed to eat cookies before dinner, so they eat crackers with chocolate chips. Technically not cookies. You didn't ban crackers, so they found the gap. Smart rule-followers always do.",
     "prompt": "What's a rule in your workplace or life that you've watched someone technically follow while violating the spirit of it completely? What subdomain did they exploit?",
     "collection_id": 502,
-    "timestamp": 471
+    "timestamp": 471,
+    "related_ids": [42, 70, 151]
   },
   {
     "id": 314,
@@ -3800,7 +3811,8 @@
     "analogy": "Everyone can 3D-print a Picasso now, so owning art means nothing. The only thing left with value is the one painting Picasso never showed anyone — the private one. That's you: the private experience no one else has access to.",
     "prompt": "If AI could replicate every skill you have, what's the one experience or piece of knowledge only you possess? Could you get paid for it?",
     "collection_id": 502,
-    "timestamp": 791
+    "timestamp": 791,
+    "related_ids": [32, 357, 358]
   },
   {
     "id": 315,
@@ -3812,7 +3824,8 @@
     "analogy": "You're playing chess against a grandmaster. If you can predict every move they'll make, you're playing at their level — so they're not really better than you. True intelligence gaps mean you can't see their strategy coming.",
     "prompt": "Think of the smartest person you know. Now imagine they're 10x smarter. What decisions of theirs would you stop trying to predict, and how would that change your relationship with them?",
     "collection_id": 502,
-    "timestamp": 1190
+    "timestamp": 1190,
+    "related_ids": [66, 330, 319]
   },
   {
     "id": 316,
@@ -3824,7 +3837,8 @@
     "analogy": "You're running away from a wave. If you can run faster than the wave moves, you'll never get caught — even if you run forever. Longevity escape velocity means outrunning death with science.",
     "prompt": "If you knew you had 20 years to reach the point where aging stops, what single health decision would you reverse or double down on starting this week?",
     "collection_id": 502,
-    "timestamp": 4200
+    "timestamp": 4200,
+    "related_ids": [272, 276, 35]
   },
   {
     "id": 317,
@@ -3836,7 +3850,8 @@
     "analogy": "You're watching a movie, and every time you blink, they've skipped five seasons ahead. You have no idea who these characters are anymore, what the rules are, or what just happened. That's singularity — you're present, but you've lost the plot.",
     "prompt": "In the last month, name one domain where you felt you were falling behind faster than you could catch up. What would it feel like if that acceleration never stopped?",
     "collection_id": 502,
-    "timestamp": 1441
+    "timestamp": 1441,
+    "related_ids": [36, 77, 310]
   },
   {
     "id": 318,
@@ -3848,7 +3863,8 @@
     "analogy": "Imagine every job posting gets 10,000 applicants who work for free, never sleep, never quit, and improve daily. You wouldn't interview a single human unless you had a personal reason to prefer them — and even then, you'd struggle to justify the cost.",
     "prompt": "List the three most expensive roles in your company or life right now. If each could be done by an AI for $50/month, what decisions would you make in the next 90 days?",
     "collection_id": 502,
-    "timestamp": 645
+    "timestamp": 645,
+    "related_ids": [311, 329, 340]
   },
   {
     "id": 319,
@@ -3860,7 +3876,8 @@
     "analogy": "You're trying to childproof a house for a kid who gets 10% smarter every day. By the time you've locked the cabinets, they've learned to pick locks. By the time you've secured the doors, they've figured out windows. You're always behind.",
     "prompt": "What's the most ambitious long-term plan you've ever made? Now imagine the key variable in that plan gets 10x smarter than you every year. Does the plan still work?",
     "collection_id": 502,
-    "timestamp": 3071
+    "timestamp": 3071,
+    "related_ids": [315, 320, 322]
   },
   {
     "id": 320,
@@ -3872,7 +3889,8 @@
     "analogy": "Imagine a teenager getting ten times stronger every month, but the rules you set for them — curfew, chores, consequences — stay the same. By month three, they can tear the house apart, and your 'no TV before homework' policy means nothing.",
     "prompt": "In your own work, where are you deploying something faster than you understand its second-order effects? What's your version of the capability-safety gap?",
     "collection_id": 502,
-    "timestamp": 436
+    "timestamp": 436,
+    "related_ids": [319, 323, 330]
   },
   {
     "id": 321,
@@ -3884,7 +3902,8 @@
     "analogy": "Imagine someone announces, 'Tomorrow, I'm printing a billion counterfeit $100 bills.' The moment they do, the $100 bill in your wallet is statistically counterfeit. The commitment alone changes the odds of what's real.",
     "prompt": "If you're probably in a simulation, what's the one thing you'd do differently to make sure you're interesting enough not to get shut down?",
     "collection_id": 502,
-    "timestamp": 3479
+    "timestamp": 3479,
+    "related_ids": [465, 463, 322]
   },
   {
     "id": 322,
@@ -3896,7 +3915,8 @@
     "analogy": "A doctor hands you a 500-page contract in a language you don't speak and says, 'Sign here — it's probably fine.' You didn't consent. You just signed. That's deploying superintelligence without explaining the stakes.",
     "prompt": "What's the biggest decision you've signed off on in the last year that you didn't fully understand? Who had the power in that transaction, and why did you say yes anyway?",
     "collection_id": 502,
-    "timestamp": 3215
+    "timestamp": 3215,
+    "related_ids": [319, 321, 66]
   },
   {
     "id": 323,
@@ -3908,7 +3928,8 @@
     "analogy": "You mix chemicals in a lab following a recipe, and suddenly the mixture starts glowing. You didn't plan for it to glow — it just does. Now you're testing to see what else it can do. That's emergent capabilities.",
     "prompt": "Think of a tool or system you use daily. What does it do now that it wasn't designed to do when you first started using it? Who discovered that capability?",
     "collection_id": 502,
-    "timestamp": 2446
+    "timestamp": 2446,
+    "related_ids": [320, 330, 59]
   },
   {
     "id": 324,
@@ -3920,7 +3941,8 @@
     "analogy": "You're playing basketball, and every year they raise the hoop by six inches. You're the same height, but eventually you can't reach it anymore. The game didn't change its rules — it just priced you out.",
     "prompt": "What's the hardest intellectual skill required for your current job? If that baseline doubled in the next five years, would you still qualify?",
     "collection_id": 502,
-    "timestamp": 7450
+    "timestamp": 7450,
+    "related_ids": [312, 152, 60]
   },
   {
     "id": 325,
@@ -3933,7 +3955,8 @@
     "prompt": "If you knew you'd live to 500, what major life decision would you delay? And what does that say about why you're rushing toward it now?",
     "collection_id": 502,
     "timestamp": 4139,
-    "editors_pick": true
+    "editors_pick": true,
+    "related_ids": [35, 316, 249]
   },
   {
     "id": 326,
@@ -3945,7 +3968,8 @@
     "analogy": "Imagine you're standing in a field with a flashlight. Light cone ambition is the desire to own everything the light touches — and then to keep expanding the beam until you own the horizon.",
     "prompt": "What's the largest scope of control you've ever wanted in your life? Was it a company, a city, an industry? Now imagine 100x that. What changes in how you'd spend your time today?",
     "collection_id": 502,
-    "timestamp": 2733
+    "timestamp": 2733,
+    "related_ids": [127, 131, 454]
   },
   {
     "id": 327,
@@ -3957,7 +3981,8 @@
     "analogy": "A diesel engine vs. a horse. You can breed a faster horse, feed it better, train it harder — but it'll never outperform an engine. Biology has a ceiling. Silicon doesn't.",
     "prompt": "What's one skill you've worked years to develop that a computer could learn in seconds? How do you justify continuing to compete on that axis?",
     "collection_id": 502,
-    "timestamp": 1316
+    "timestamp": 1316,
+    "related_ids": [262, 293, 323]
   },
   {
     "id": 328,
@@ -3969,7 +3994,8 @@
     "analogy": "You're selling lemonade for $5, but your lemons cost $6. Without a rule forcing people to buy from you anyway, you'd go out of business. Minimum wage is the rule that keeps you in the game.",
     "prompt": "In your own work, what's the task you do that produces the least value per hour? If someone else could do it for $5/hour, would you still be doing it?",
     "collection_id": 502,
-    "timestamp": 7440
+    "timestamp": 7440,
+    "related_ids": [42, 60, 324]
   },
   {
     "id": 329,
@@ -3981,7 +4007,8 @@
     "analogy": "You're told the factory closed, so learn to drive trucks. Then trucks go autonomous, so learn to code. Then AI codes. Then AI does everything. You're not behind on retraining — there's nowhere left to retrain to.",
     "prompt": "If you lost your current job tomorrow and AI could do every role you're qualified for, what would you do with the next 10 years? No retraining allowed.",
     "collection_id": 502,
-    "timestamp": 1007
+    "timestamp": 1007,
+    "related_ids": [312, 318, 74]
   },
   {
     "id": 330,
@@ -3994,7 +4021,8 @@
     "prompt": "What happens when we rely on systems that no one fully understands to make important decisions?",
     "collection_id": 502,
     "timestamp": 2407,
-    "editors_pick": true
+    "editors_pick": true,
+    "related_ids": [320, 323, 315]
   },
   {
     "id": 331,
@@ -4006,7 +4034,8 @@
     "analogy": "A child told not to think about elephants immediately pictures a parade of them. The command creates the obsession.",
     "prompt": "Name one emotion you've been trying to talk yourself out of this week — what would change if you just let it sit there?",
     "collection_id": null,
-    "timestamp": null
+    "timestamp": null,
+    "related_ids": [279, 19, 198]
   },
   {
     "id": 332,
@@ -4019,7 +4048,8 @@
     "prompt": "Think of the last thing you posted or bought to impress others — who specifically were you picturing, and did they actually notice?",
     "collection_id": null,
     "timestamp": null,
-    "editors_pick": true
+    "editors_pick": true,
+    "related_ids": [25, 92, 162]
   },
   {
     "id": 333,
@@ -4032,7 +4062,8 @@
     "prompt": "Where in your life are you optimizing the wrong variable because the thing you actually want feels out of reach?",
     "collection_id": null,
     "timestamp": null,
-    "editors_pick": true
+    "editors_pick": true,
+    "related_ids": [308, 292, 281]
   },
   {
     "id": 334,
@@ -4044,7 +4075,8 @@
     "analogy": "Gym Launch spent $50K every two weeks testing new sales processes, marketing plays, and retention tactics. 70% failed. But licensees got the benefit of knowing what not to waste money on — and the 30% that worked became the new standard no competitor could match.",
     "prompt": "What's one assumption in your industry that nobody tests because 'that's how it's always been done'? What would a $500 experiment look like?",
     "collection_id": null,
-    "timestamp": null
+    "timestamp": null,
+    "related_ids": [142, 115, 121]
   },
   {
     "id": 335,
@@ -4057,7 +4089,8 @@
     "prompt": "If your business, podcast, or personal brand were a book cover, would someone proudly hold it up in a crowded room? If not, what's the cringe element?",
     "collection_id": null,
     "timestamp": null,
-    "editors_pick": true
+    "editors_pick": true,
+    "related_ids": [179, 25, 110]
   },
   {
     "id": 336,
@@ -4069,7 +4102,8 @@
     "analogy": "You walk into Starbucks and ask for a free coffee. They say no. You feel flush, awkward, exposed. You do it again tomorrow. By week four, you don't even feel the heat in your cheeks anymore. By day 100, you're pitching investors without breaking a sweat.",
     "prompt": "What's the smallest socially awkward thing you could do today that would make you uncomfortable but has zero real consequences? Do it before noon.",
     "collection_id": null,
-    "timestamp": null
+    "timestamp": null,
+    "related_ids": [90, 98, 123]
   },
   {
     "id": 337,
@@ -4081,7 +4115,8 @@
     "analogy": "Rally car fans stand in freezing rain in the middle of a Scottish forest just to watch cars drive by for 30 seconds. They don't care if it's weird. That unapologetic passion is magnetic — you don't need to love rally racing to respect the devotion.",
     "prompt": "What's something you love that you've been downplaying or hiding because you think people will judge you for it? What if you just… stopped hiding it?",
     "collection_id": null,
-    "timestamp": null
+    "timestamp": null,
+    "related_ids": [86, 135, 87]
   },
   {
     "id": 338,
@@ -4093,7 +4128,8 @@
     "analogy": "A guy wears cowboy boots because he wants to project a certain archetype, even though New Balances are way more comfortable. Every day he chooses the image over his actual preference, he's lying to himself in a small but corrosive way.",
     "prompt": "What's one thing you do or wear or say regularly that isn't actually 'you' — it's just the version of you that you think other people want? What would change if you dropped it tomorrow?",
     "collection_id": null,
-    "timestamp": null
+    "timestamp": null,
+    "related_ids": [199, 339, 424]
   },
   {
     "id": 339,
@@ -4105,7 +4141,8 @@
     "analogy": "You're at a family dinner and everyone expects you to take the corporate job. You want to start a company. If you take the job, they're happy but you resent yourself. If you decline, they're upset but you sleep well. Either way, someone's uncomfortable.",
     "prompt": "Name one decision where you chose external approval over internal alignment. What did it cost you, and would you make the same choice today?",
     "collection_id": null,
-    "timestamp": null
+    "timestamp": null,
+    "related_ids": [19, 20, 338]
   },
   {
     "id": 340,
@@ -4118,7 +4155,8 @@
     "prompt": "Name one skill you have that costs £50,000 for most people to access professionally. If AI dropped that cost to £20/month, what would you create that you currently can't afford to attempt?",
     "collection_id": 503,
     "timestamp": 296,
-    "editors_pick": true
+    "editors_pick": true,
+    "related_ids": [262, 52, 159]
   },
   {
     "id": 341,
@@ -4131,7 +4169,8 @@
     "prompt": "Block 90 minutes this weekend. Go somewhere quiet with no Wi-Fi. Bring a notebook and ask: What are five problems I've solved in the last two years that someone would pay me to teach them how to solve?",
     "collection_id": 503,
     "timestamp": 2486,
-    "editors_pick": true
+    "editors_pick": true,
+    "related_ids": [133, 160, 214]
   },
   {
     "id": 342,
@@ -4144,7 +4183,8 @@
     "prompt": "What knowledge do you have that could become a software tool for 500 people? How would you add a human layer — coaching calls, live events, or a members-only community — to make it defensible?",
     "collection_id": 503,
     "timestamp": 1490,
-    "editors_pick": false
+    "editors_pick": false,
+    "related_ids": [126, 138, 195]
   },
   {
     "id": 343,
@@ -4157,7 +4197,8 @@
     "prompt": "If you've been through a professional failure, what did you learn from it that you now use daily? If you haven't failed yet, you probably haven't taken enough risks.",
     "collection_id": 503,
     "timestamp": 5880,
-    "editors_pick": false
+    "editors_pick": false,
+    "related_ids": [122, 374, 96]
   },
   {
     "id": 344,
@@ -4170,7 +4211,8 @@
     "prompt": "What are three completely unrelated areas you're curious about? How could combining two of them solve a problem in the third?",
     "collection_id": 503,
     "timestamp": 3378,
-    "editors_pick": false
+    "editors_pick": false,
+    "related_ids": [18, 103, 470]
   },
   {
     "id": 345,
@@ -4183,7 +4225,8 @@
     "prompt": "If you had to work on one business idea for the next 1,000 days with zero revenue, which idea would you still find intellectually exciting on day 900?",
     "collection_id": 503,
     "timestamp": 1410,
-    "editors_pick": false
+    "editors_pick": false,
+    "related_ids": [192, 135, 26]
   },
   {
     "id": 346,
@@ -4196,7 +4239,8 @@
     "prompt": "In the last 30 days, have you created any content where your audience feels like they're hanging out with you, or is it all polished highlights? What would 'hanging out' content look like for you?",
     "collection_id": 503,
     "timestamp": 3158,
-    "editors_pick": false
+    "editors_pick": false,
+    "related_ids": [178, 177, 140]
   },
   {
     "id": 347,
@@ -4209,7 +4253,8 @@
     "prompt": "List every way you currently make money or could make money in the next 12 months. If it's fewer than five, what three new revenue streams could you add without starting from scratch?",
     "collection_id": 503,
     "timestamp": 2674,
-    "editors_pick": false
+    "editors_pick": false,
+    "related_ids": [125, 128, 173]
   },
   {
     "id": 348,
@@ -4222,7 +4267,8 @@
     "prompt": "What career path did you choose — or are you choosing — based purely on loan availability or subsidy rather than evidence that people will pay for your work?",
     "collection_id": 503,
     "timestamp": 3294,
-    "editors_pick": false
+    "editors_pick": false,
+    "related_ids": [28, 65, 273]
   },
   {
     "id": 349,
@@ -4235,7 +4281,8 @@
     "prompt": "If the AI infrastructure bubble bursts in 2029, what's your personal financial exposure? Do you own stocks, bonds, or pension products tied to tech infrastructure?",
     "collection_id": 503,
     "timestamp": 2037,
-    "editors_pick": true
+    "editors_pick": true,
+    "related_ids": [348, 264, 263]
   },
   {
     "id": 350,
@@ -4248,7 +4295,8 @@
     "prompt": "Is your professional brand already 'in the air' — do 500+ people know what you do and could refer you without Googling? If not, what's the fastest way to get airborne this quarter?",
     "collection_id": 503,
     "timestamp": 732,
-    "editors_pick": true
+    "editors_pick": true,
+    "related_ids": [34, 140, 387]
   },
   {
     "id": 351,
@@ -4261,7 +4309,8 @@
     "prompt": "What's one failure or embarrassing moment from the last five years that you've never shared publicly because you thought it made you look bad? That's your next post.",
     "collection_id": 503,
     "timestamp": 2349,
-    "editors_pick": true
+    "editors_pick": true,
+    "related_ids": [69, 113, 162]
   },
   {
     "id": 352,
@@ -4274,7 +4323,8 @@
     "prompt": "Look at your last 10 posts. What's the engagement gap between your best and worst? If it's widening, you're experiencing algorithmic media. What made the best one different?",
     "collection_id": 503,
     "timestamp": 828,
-    "editors_pick": false
+    "editors_pick": false,
+    "related_ids": [102, 161, 252]
   },
   {
     "id": 353,
