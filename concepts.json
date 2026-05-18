@@ -5037,7 +5037,8 @@
     "prompt": "What's one piece of advice you already know but haven't acted on in the past month?",
     "collection_id": 505,
     "timestamp": 5666,
-    "editors_pick": true
+    "editors_pick": true,
+    "related_ids": [35, 106, 160]
   },
   {
     "id": 404,
@@ -5050,7 +5051,8 @@
     "prompt": "What do you have that someone else wants — and what do they have that you want? How could you barter?",
     "collection_id": 505,
     "timestamp": 7689,
-    "editors_pick": false
+    "editors_pick": false,
+    "related_ids": [34, 49, 56]
   },
   {
     "id": 405,
@@ -5063,7 +5065,8 @@
     "prompt": "What's one skill you've 'learned' but never truly mastered because you stopped after getting it right once?",
     "collection_id": 505,
     "timestamp": 5832,
-    "editors_pick": false
+    "editors_pick": false,
+    "related_ids": [41, 123, 142]
   },
   {
     "id": 406,
@@ -5076,7 +5079,8 @@
     "prompt": "Who or what are you currently blaming for something in your life? What would change if you blamed yourself instead?",
     "collection_id": 505,
     "timestamp": 5486,
-    "editors_pick": false
+    "editors_pick": false,
+    "related_ids": [32, 61, 402]
   },
   {
     "id": 407,
@@ -5089,7 +5093,8 @@
     "prompt": "Think of your proudest achievement. Was it the result that mattered, or the months of struggle leading up to it?",
     "collection_id": 505,
     "timestamp": 828,
-    "editors_pick": true
+    "editors_pick": true,
+    "related_ids": [89, 139, 481]
   },
   {
     "id": 408,
@@ -5102,7 +5107,8 @@
     "prompt": "What's one result in your life that felt too easy to get — and did you actually value it afterward?",
     "collection_id": 505,
     "timestamp": 507,
-    "editors_pick": true
+    "editors_pick": true,
+    "related_ids": [35, 90, 397]
   },
   {
     "id": 409,
@@ -5115,7 +5121,8 @@
     "prompt": "Picture your last average Tuesday with your partner (or most recent ex). If that repeated for 10 years, would you be happy?",
     "collection_id": 505,
     "timestamp": 1264,
-    "editors_pick": true
+    "editors_pick": true,
+    "related_ids": [200, 244, 306]
   },
   {
     "id": 410,
@@ -5128,7 +5135,8 @@
     "prompt": "Pick one thing you're anxious about. Now zoom out — what's the widest view where you still feel some confidence?",
     "collection_id": 505,
     "timestamp": 230,
-    "editors_pick": true
+    "editors_pick": true,
+    "related_ids": [36, 100, 477]
   },
   {
     "id": 411,
@@ -5141,7 +5149,8 @@
     "prompt": "What were you obsessed with five years ago? What are you obsessed with now? Do you see a pattern?",
     "collection_id": 505,
     "timestamp": 5853,
-    "editors_pick": false
+    "editors_pick": false,
+    "related_ids": [130, 135]
   },
   {
     "id": 412,
@@ -5154,7 +5163,8 @@
     "prompt": "Name one moment where everything went wrong and you didn't have a plan. What did that teach you about your own resilience?",
     "collection_id": 505,
     "timestamp": 383,
-    "editors_pick": false
+    "editors_pick": false,
+    "related_ids": [123, 469]
   },
   {
     "id": 413,
@@ -5167,7 +5177,8 @@
     "prompt": "What's one project you'd start today if you believed one daily hour was actually sufficient?",
     "collection_id": 506,
     "timestamp": 0,
-    "editors_pick": true
+    "editors_pick": true,
+    "related_ids": [145, 228, 484]
   },
   {
     "id": 414,
@@ -5180,7 +5191,8 @@
     "prompt": "What sacrifice are you refusing to make while claiming you're ready to change?",
     "collection_id": 506,
     "timestamp": 20,
-    "editors_pick": false
+    "editors_pick": false,
+    "related_ids": [199, 471]
   },
   {
     "id": 415,
@@ -5193,7 +5205,8 @@
     "prompt": "What would you need to believe about your future to endure your current worst-case scenario?",
     "collection_id": 507,
     "timestamp": 0,
-    "editors_pick": true
+    "editors_pick": true,
+    "related_ids": [89, 416, 478]
   },
   {
     "id": 416,
@@ -5206,7 +5219,8 @@
     "prompt": "What interpretation of your current struggle would make it feel worth enduring?",
     "collection_id": 507,
     "timestamp": 45,
-    "editors_pick": false
+    "editors_pick": false,
+    "related_ids": [89, 104, 415]
   },
   {
     "id": 417,
@@ -5219,7 +5233,8 @@
     "prompt": "What would happen if you assigned one person to do nothing but respond to your highest-value signal?",
     "collection_id": 512,
     "timestamp": 15,
-    "editors_pick": true
+    "editors_pick": true,
+    "related_ids": [121, 138]
   },
   {
     "id": 418,
@@ -5232,7 +5247,8 @@
     "prompt": "What's the one thing you've been treating as 'business progress' that's actually just prep work you could finish in an afternoon?",
     "collection_id": 509,
     "timestamp": 0,
-    "editors_pick": true
+    "editors_pick": true,
+    "related_ids": [138, 182]
   },
   {
     "id": 419,
@@ -5245,7 +5261,8 @@
     "prompt": "What problem have you 'solved' that somehow still feels present in a new form?",
     "collection_id": 510,
     "timestamp": 0,
-    "editors_pick": true
+    "editors_pick": true,
+    "related_ids": [91, 255]
   },
   {
     "id": 420,
@@ -5258,7 +5275,8 @@
     "prompt": "Think of the last time someone came on unusually strong. What did they learn about you in those early weeks?",
     "collection_id": 511,
     "timestamp": 0,
-    "editors_pick": false
+    "editors_pick": false,
+    "related_ids": [75, 421, 422]
   },
   {
     "id": 421,
@@ -5271,7 +5289,8 @@
     "prompt": "Where are you working hardest to get back to 'how it used to be' — and who benefits from that effort?",
     "collection_id": 511,
     "timestamp": 42,
-    "editors_pick": true
+    "editors_pick": true,
+    "related_ids": [420, 422, 75]
   },
   {
     "id": 422,
@@ -5284,7 +5303,8 @@
     "prompt": "What early 'proof' of someone's feelings would you now interpret completely differently?",
     "collection_id": 511,
     "timestamp": 90,
-    "editors_pick": false
+    "editors_pick": false,
+    "related_ids": [420, 421, 24]
   },
   {
     "id": 423,
@@ -5297,7 +5317,8 @@
     "prompt": "What opportunity are you manufacturing reasons to decline right now?",
     "collection_id": 508,
     "timestamp": 15,
-    "editors_pick": true
+    "editors_pick": true,
+    "related_ids": [15, 98, 424]
   },
   {
     "id": 424,
@@ -5310,7 +5331,8 @@
     "prompt": "Which part of your self-story are you defending most aggressively?",
     "collection_id": 508,
     "timestamp": 195,
-    "editors_pick": true
+    "editors_pick": true,
+    "related_ids": [71, 423, 467]
   },
   {
     "id": 425,
@@ -5324,7 +5346,7 @@
     "collection_id": 513,
     "timestamp": 2537,
     "editors_pick": false,
-    "related_ids": []
+    "related_ids": [70, 429, 432]
   },
   {
     "id": 426,
@@ -5338,7 +5360,7 @@
     "collection_id": 513,
     "timestamp": 2208,
     "editors_pick": true,
-    "related_ids": []
+    "related_ids": [260, 268, 434]
   },
   {
     "id": 427,
@@ -5352,7 +5374,7 @@
     "collection_id": 513,
     "timestamp": 4091,
     "editors_pick": false,
-    "related_ids": []
+    "related_ids": [63, 428, 437]
   },
   {
     "id": 428,
@@ -5366,7 +5388,7 @@
     "collection_id": 513,
     "timestamp": 4610,
     "editors_pick": false,
-    "related_ids": []
+    "related_ids": [106, 330, 427]
   },
   {
     "id": 429,
@@ -5380,7 +5402,7 @@
     "collection_id": 513,
     "timestamp": 1315,
     "editors_pick": false,
-    "related_ids": []
+    "related_ids": [70, 425, 430]
   },
   {
     "id": 430,
@@ -5394,7 +5416,7 @@
     "collection_id": 513,
     "timestamp": 1367,
     "editors_pick": false,
-    "related_ids": []
+    "related_ids": [429, 450, 70]
   },
   {
     "id": 431,
@@ -5408,7 +5430,7 @@
     "collection_id": 513,
     "timestamp": 4642,
     "editors_pick": false,
-    "related_ids": []
+    "related_ids": [271, 327, 434]
   },
   {
     "id": 432,
@@ -5422,7 +5444,7 @@
     "collection_id": 513,
     "timestamp": 1027,
     "editors_pick": false,
-    "related_ids": []
+    "related_ids": [46, 425, 439]
   },
   {
     "id": 433,
@@ -5436,7 +5458,7 @@
     "collection_id": 513,
     "timestamp": 2012,
     "editors_pick": false,
-    "related_ids": []
+    "related_ids": [425, 435, 444]
   },
   {
     "id": 434,
@@ -5450,7 +5472,7 @@
     "collection_id": 513,
     "timestamp": 2231,
     "editors_pick": false,
-    "related_ids": []
+    "related_ids": [426, 431, 438]
   },
   {
     "id": 435,
@@ -5464,7 +5486,7 @@
     "collection_id": 513,
     "timestamp": 3253,
     "editors_pick": false,
-    "related_ids": []
+    "related_ids": [36, 444, 156]
   },
   {
     "id": 436,
@@ -5478,7 +5500,7 @@
     "collection_id": 513,
     "timestamp": 1027,
     "editors_pick": false,
-    "related_ids": []
+    "related_ids": [25, 46, 158]
   },
   {
     "id": 437,
@@ -5492,7 +5514,7 @@
     "collection_id": 513,
     "timestamp": 4342,
     "editors_pick": false,
-    "related_ids": []
+    "related_ids": [23, 100, 427]
   },
   {
     "id": 438,
@@ -5506,7 +5528,7 @@
     "collection_id": 513,
     "timestamp": 4669,
     "editors_pick": true,
-    "related_ids": []
+    "related_ids": [256, 266, 434]
   },
   {
     "id": 439,
@@ -5520,7 +5542,7 @@
     "collection_id": 513,
     "timestamp": 5058,
     "editors_pick": false,
-    "related_ids": []
+    "related_ids": [262, 432, 440]
   },
   {
     "id": 440,
@@ -5534,7 +5556,7 @@
     "collection_id": 513,
     "timestamp": 352,
     "editors_pick": false,
-    "related_ids": []
+    "related_ids": [439, 442, 54]
   },
   {
     "id": 441,
@@ -5548,7 +5570,7 @@
     "collection_id": 513,
     "timestamp": 1837,
     "editors_pick": false,
-    "related_ids": []
+    "related_ids": [294, 315, 91]
   },
   {
     "id": 442,
@@ -5562,7 +5584,7 @@
     "collection_id": 513,
     "timestamp": 1219,
     "editors_pick": false,
-    "related_ids": []
+    "related_ids": [26, 440]
   },
   {
     "id": 443,
@@ -5576,7 +5598,7 @@
     "collection_id": 513,
     "timestamp": 1655,
     "editors_pick": true,
-    "related_ids": []
+    "related_ids": [36, 439]
   },
   {
     "id": 444,
@@ -5590,7 +5612,7 @@
     "collection_id": 513,
     "timestamp": 3253,
     "editors_pick": false,
-    "related_ids": []
+    "related_ids": [30, 103, 435]
   },
   {
     "id": 445,
@@ -5604,7 +5626,7 @@
     "collection_id": 514,
     "timestamp": 745,
     "editors_pick": false,
-    "related_ids": []
+    "related_ids": [456, 461, 50]
   },
   {
     "id": 446,
@@ -5618,7 +5640,7 @@
     "collection_id": 514,
     "timestamp": 3229,
     "editors_pick": true,
-    "related_ids": []
+    "related_ids": [49, 65, 348]
   },
   {
     "id": 447,
@@ -5632,7 +5654,7 @@
     "collection_id": 514,
     "timestamp": 2068,
     "editors_pick": false,
-    "related_ids": []
+    "related_ids": [445, 448, 461]
   },
   {
     "id": 448,
@@ -5646,7 +5668,7 @@
     "collection_id": 514,
     "timestamp": 849,
     "editors_pick": false,
-    "related_ids": []
+    "related_ids": [13, 447, 455]
   },
   {
     "id": 449,
@@ -5660,7 +5682,7 @@
     "collection_id": 514,
     "timestamp": 1080,
     "editors_pick": false,
-    "related_ids": []
+    "related_ids": [38, 88, 324]
   },
   {
     "id": 450,
@@ -5674,7 +5696,7 @@
     "collection_id": 514,
     "timestamp": 692,
     "editors_pick": false,
-    "related_ids": []
+    "related_ids": [42, 56, 70]
   },
   {
     "id": 451,
@@ -5688,7 +5710,7 @@
     "collection_id": 514,
     "timestamp": 7123,
     "editors_pick": false,
-    "related_ids": []
+    "related_ids": [463, 465, 50]
   },
   {
     "id": 452,
@@ -5702,7 +5724,7 @@
     "collection_id": 514,
     "timestamp": 63,
     "editors_pick": false,
-    "related_ids": []
+    "related_ids": [102, 161, 460]
   },
   {
     "id": 453,
