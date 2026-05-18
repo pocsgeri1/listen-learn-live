@@ -496,11 +496,9 @@
     flex: 0 0 300px;
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
-    padding-top: 14px;
+    gap: 1rem;
   }
-  /* keep header out of the deck stacking context */
-  .ep-cat-column > .ep-cat-column-header { position: relative; z-index: 1; }
+  .ep-cat-column-header { position: sticky; top: 0; z-index: 3; background: var(--surface); padding-top: 6px; }
   .ep-cat-column-header {
     display: flex;
     align-items: center;
@@ -2454,148 +2452,168 @@
     flex-shrink: 0;
   }
 
-  /* ── DECK CARDS — drawer only (ep-cat-column) ───────────────────
-     Fanned stack at rest (~55% peek, alternating tilt). Column hover
-     or .deck-spread eases the stack open so all hooks are scannable.
-     One open card straightens, lifts, dims all others to 0.1.
-     Only transform/opacity animate — GPU-composited, no layout cost. */
+  /* ── DRAWER FLIP CARDS — drawer only (ep-cat-column) ────────────
+     Same flip mechanic as Browse-concepts (.nf-row): fixed-height
+     card, front = term + hook + hint, click flips 180° to the back.
+     No category pill on the front — the column header is the category.
+     Only transform animates — GPU-composited, no layout cost. */
+
+  .ep-cat-column { perspective: 1400px; }
 
   .ep-cat-column .concept-card {
-    overflow: hidden;
-    border-radius: 10px;
+    flex: 0 0 auto;
+    width: 100%;
+    height: 360px;
+    overflow: visible;
+    border: none;
+    background: transparent;
+    border-radius: 14px;
+  }
+
+  .ep-cat-column .concept-card .card-inner {
     position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.62s cubic-bezier(0.4, 0.2, 0.2, 1);
+  }
+  .ep-cat-column .concept-card.open .card-inner {
+    transform: rotateY(180deg);
+  }
+  .ep-cat-column .concept-card .card-front,
+  .ep-cat-column .concept-card .card-back {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  /* FRONT FACE */
+  .ep-cat-column .concept-card .card-front {
     background: var(--surface);
     border: 1px solid var(--border);
-    transform-origin: center top;
-    /* deck overlap: each card pulls up onto the previous one (~45% overlap) */
-    margin-top: -58px;
-    transition: transform 0.42s cubic-bezier(0.22,0.61,0.36,1),
-                opacity 0.32s ease,
-                border-color 0.2s ease,
-                margin-top 0.42s cubic-bezier(0.22,0.61,0.36,1);
-    will-change: transform;
+    padding: 22px 22px 18px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.04);
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.25s ease;
+    transform: rotate(-0.8deg);
   }
-  /* first card sits flush under the header, no negative pull */
-  .ep-cat-column .concept-card:first-of-type { margin-top: 0; }
-  /* alternating tilt — the "pack of cards" fan */
-  .ep-cat-column .concept-card:nth-child(odd)  { transform: rotate(-1.6deg); }
-  .ep-cat-column .concept-card:nth-child(even) { transform: rotate(1.6deg); }
-
-  /* category accent rail */
-  .ep-cat-column .concept-card::after {
-    content: '';
-    position: absolute;
-    left: 0; top: 0; bottom: 0;
-    width: 2px;
-    background: var(--cat-color, var(--accent));
-    opacity: 0;
-    transition: opacity 0.2s;
+  .ep-cat-column .concept-card:hover .card-front {
+    border-color: rgba(255,255,255,0.13);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.06);
+    transform: rotate(0deg) translateY(-6px);
   }
-
-  /* SPREAD: hovering the column (or .deck-spread on touch) fans it open
-     so every hook is readable. Tilt relaxes, overlap shrinks. */
-  .ep-cat-column:hover .concept-card,
-  .ep-cat-column.deck-spread .concept-card {
-    margin-top: 8px;
+  .ep-cat-column .concept-card.open .card-front {
     transform: rotate(0deg);
   }
-  .ep-cat-column:hover .concept-card:first-of-type,
-  .ep-cat-column.deck-spread .concept-card:first-of-type { margin-top: 0; }
-  .ep-cat-column:hover .concept-card:hover {
-    border-color: var(--border-hover);
-    transform: rotate(0deg) translateY(-3px);
-  }
-  .ep-cat-column .concept-card:hover::after { opacity: 1; }
-
-  /* OPEN: focused card straightens, lifts above the deck, accent on */
-  .ep-cat-column .concept-card.open {
-    transform: rotate(0deg) translateY(-4px) scale(1.015) !important;
-    margin-top: 8px;
-    border-color: var(--border-hover);
-    z-index: 20;
-    box-shadow: 0 14px 40px -18px rgba(0,0,0,0.7);
-  }
-  .ep-cat-column .concept-card.open:first-of-type { margin-top: 0; }
-  .ep-cat-column .concept-card.open::after { opacity: 1; }
-  /* every non-open card in the drawer dims while one is focused */
-  #epDrawerGrid.has-open .ep-cat-column .concept-card:not(.open) {
-    opacity: 0.1;
-    pointer-events: none;
+  .ep-cat-column .concept-card.editors-pick .card-front {
+    border-color: rgba(232,213,163,0.4);
   }
 
-  .ep-cat-column .card-front {
-    padding: 16px 16px 14px 18px;
-    position: relative;
-  }
   .ep-cat-column .card-meta {
     display: flex;
     align-items: center;
     gap: 7px;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
     flex-wrap: wrap;
   }
-  .ep-cat-column .card-expand-icon {
-    position: absolute;
-    right: 14px; top: 50%; transform: translateY(-50%);
-    width: 18px; height: 18px;
+  .ep-cat-column .card-term {
+    font-size: 1.12rem;
+    margin-top: auto;
+    padding-top: 0.5rem;
+    margin-bottom: 0.3rem;
+  }
+  .ep-cat-column .card-hook {
+    font-size: 0.82rem;
+    line-height: 1.55;
+  }
+  .ep-cat-column .card-flip-hint {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: auto;
+    padding-top: 1rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.52rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    opacity: 0.55;
+  }
+  .ep-cat-column .card-flip-hint-dot {
+    width: 4px; height: 4px;
     border-radius: 50%;
-    border: 1px solid var(--border);
-    display: flex; align-items: center; justify-content: center;
-    color: var(--muted); font-size: 0.85rem;
-    transition: all 0.2s;
+    background: var(--accent);
+    opacity: 0.7;
+    flex-shrink: 0;
   }
-  .ep-cat-column .concept-card.open .card-expand-icon {
-    background: var(--surface2); color: var(--text);
-    transform: translateY(-50%) rotate(45deg);
+
+  /* BACK FACE */
+  .ep-cat-column .concept-card .card-back {
+    transform: rotateY(180deg);
+    background: var(--surface2);
+    border: 1px solid var(--cat-color, var(--border));
+    border-color: color-mix(in srgb, var(--cat-color, var(--accent)) 35%, transparent);
+    padding: 20px 20px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.45);
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-hover) transparent;
   }
-  .ep-cat-column .card-back {
-    display: none;
-    padding: 0 18px 16px;
-    border-top: 1px solid var(--border);
-  }
-  .ep-cat-column .concept-card.open .card-back { display: block; }
+  .ep-cat-column .concept-card .card-back::-webkit-scrollbar { width: 3px; }
+  .ep-cat-column .concept-card .card-back::-webkit-scrollbar-thumb { background: var(--border-hover); border-radius: 2px; }
+
   .ep-cat-column .back-section-label {
     font-family: 'DM Mono', monospace;
-    font-size: 0.56rem;
-    letter-spacing: 0.18em;
+    font-size: 0.54rem;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--muted);
     margin-top: 14px;
     margin-bottom: 5px;
   }
-  .ep-cat-column .back-text { font-size: 0.8rem; color: var(--muted2); line-height: 1.7; }
+  .ep-cat-column .back-section-label:first-child { margin-top: 0; }
+  .ep-cat-column .back-text {
+    font-size: 0.82rem;
+    color: var(--text);
+    line-height: 1.7;
+    font-weight: 300;
+  }
   .ep-cat-column .back-analogy {
-    background: var(--surface2);
-    border-left: 2px solid var(--cat-color, var(--accent));
-    padding: 8px 12px;
-    border-radius: 0 6px 6px 0;
-    font-size: 0.78rem; color: var(--muted2); line-height: 1.6; font-style: italic;
+    font-size: 0.78rem;
+    color: var(--muted2);
+    line-height: 1.65;
+    font-style: italic;
+    border-left: 2px solid color-mix(in srgb, var(--cat-color, var(--accent)) 50%, transparent);
+    padding-left: 10px;
+    border-radius: 0;
+    background: transparent;
   }
   .ep-cat-column .back-prompt {
     background: rgba(232,213,163,0.06);
     border: 1px solid rgba(232,213,163,0.15);
-    border-radius: 8px; padding: 10px 12px;
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-top: 12px;
   }
-  .ep-cat-column .back-prompt p { font-size: 0.78rem; color: var(--accent); line-height: 1.6; margin: 0; }
-  .ep-cat-column .prompt-icon { font-size: 0.85rem; margin-bottom: 3px; }
-  .ep-cat-column .card-actions { display: flex; gap: 7px; margin-top: 12px; }
-
-  /* Mobile: gentler deck — less tilt, more reveal, tap to spread */
-  @media (max-width: 700px) {
-    .ep-cat-column .concept-card { margin-top: -44px; }
-    .ep-cat-column .concept-card:nth-child(odd)  { transform: rotate(-1deg); }
-    .ep-cat-column .concept-card:nth-child(even) { transform: rotate(1deg); }
-    .ep-cat-column.deck-spread .concept-card { margin-top: 8px; transform: rotate(0deg); }
-    .ep-cat-column.deck-spread .concept-card:first-of-type { margin-top: 0; }
+  .ep-cat-column .back-prompt p {
+    font-size: 0.78rem;
+    color: var(--accent);
+    line-height: 1.6;
+    margin: 0;
   }
-  /* Respect reduced-motion: no tilt, no overlap, instant */
-  @media (prefers-reduced-motion: reduce) {
-    .ep-cat-column .concept-card {
-      margin-top: 8px !important;
-      transform: none !important;
-      transition: opacity 0.2s ease, border-color 0.2s ease;
-    }
-    .ep-cat-column .concept-card:first-of-type { margin-top: 0 !important; }
+  .ep-cat-column .prompt-icon { font-size: 0.82rem; margin-bottom: 3px; }
+  .ep-cat-column .card-actions {
+    display: flex;
+    gap: 7px;
+    margin-top: 12px;
+    flex-shrink: 0;
   }
 
   /* ── ACTION BUTTONS — shared ── */
@@ -4688,35 +4706,38 @@ function openEpisodeDrawer(collectionId) {
       const cards = catGroups[catKey].map(c => {
         const isMastered = mastered.has(c.id);
         return `
-        <div class="concept-card${isMastered?' mastered':''}${c.editors_pick===true?' editors-pick':''}" id="epcc${c.id}" style="--cat-color:${catColor}">
-          <div class="card-front" onclick="toggleEpCard(${c.id})">
-            <div class="card-meta">
-              <span class="card-num">#${String(c.id).padStart(3,'0')}</span>
-              ${c.editors_pick===true ? '<span class="pick-badge"><span class="pick-star">★</span>PICK</span>' : ''}
-              <span class="mastered-badge">✓ mastered</span>
+        <div class="concept-card${isMastered?' mastered':''}${c.editors_pick===true?' editors-pick':''}" id="epcc${c.id}" style="--cat-color:${catColor}" onclick="toggleEpCard(${c.id})">
+          <div class="card-inner">
+            <div class="card-front">
+              <div class="card-meta">
+                <span class="card-num">#${String(c.id).padStart(3,'0')}</span>
+                ${c.editors_pick===true ? '<span class="pick-badge"><span class="pick-star">★</span>PICK</span>' : ''}
+                <span class="mastered-badge">✓ mastered</span>
+              </div>
+              <div class="card-term">${c.term}</div>
+              <div class="card-hook">${c.hook}</div>
+              <div class="card-flip-hint"><div class="card-flip-hint-dot"></div>tap to explore</div>
             </div>
-            <div class="card-term">${c.term}</div>
-            <div class="card-hook">${c.hook}</div>
-            <div class="card-expand-icon">+</div>
-          </div>
-          <div class="card-back">
-            <div class="back-section-label">What it means</div>
-            <div class="back-text">${c.plain}</div>
-            <div class="back-section-label">Analogy</div>
-            <div class="back-analogy">${c.analogy}</div>
-            <div class="back-section-label">Reflect & Use It</div>
-            <div class="back-prompt">
-              <div class="prompt-icon">💬</div>
-              <p>${c.prompt}</p>
-            </div>
-            <div class="card-actions">
-              <button class="btn-master" onclick="toggleEpMaster(event,${c.id})">${isMastered?'✓ VAULT':'⊕ VAULT'}</button>
-              ${(() => {
-                if (typeof c.timestamp !== 'number' || !col || !col.episode_url) return '';
-                const url = buildTimestampedUrl(col.episode_url, c.timestamp);
-                if (!url) return '';
-                return `<a class="btn-listen" href="${url}" target="_blank" rel="noopener" onclick="event.stopPropagation()">▶ Listen</a>`;
-              })()}
+            <div class="card-back">
+              <div class="back-section-label">What it means</div>
+              <div class="back-text">${c.plain}</div>
+              <div class="back-section-label">Analogy</div>
+              <div class="back-analogy">${c.analogy}</div>
+              <div class="back-section-label">Reflect &amp; use it</div>
+              <div class="back-prompt">
+                <div class="prompt-icon">💬</div>
+                <p>${c.prompt}</p>
+              </div>
+              <div class="card-actions">
+                <button class="btn-master" onclick="event.stopPropagation();toggleEpMaster(event,${c.id})">${isMastered?'✓ VAULT':'⊕ VAULT'}</button>
+                <button class="btn-share" onclick="event.stopPropagation();shareCard(event,${c.id})">↑ Share</button>
+                ${(() => {
+                  if (typeof c.timestamp !== 'number' || !col || !col.episode_url) return '';
+                  const url = buildTimestampedUrl(col.episode_url, c.timestamp);
+                  if (!url) return '';
+                  return `<a class="btn-listen" href="${url}" target="_blank" rel="noopener" onclick="event.stopPropagation()">▶ Listen</a>`;
+                })()}
+              </div>
             </div>
           </div>
         </div>`;
@@ -4827,27 +4848,9 @@ function toggleEpCard(id) {
   if (parentCol && parentCol.classList.contains('faded')) {
     filterDrawerCat(parentCol.dataset.cat);
   }
-  // Touch devices have no :hover — first tap on a resting deck spreads it
-  // open so hooks are readable; the actual card opens on the next tap.
-  const noHover = window.matchMedia('(hover: none)').matches;
-  if (noHover && parentCol && !parentCol.classList.contains('deck-spread')
-      && !el.classList.contains('open')) {
-    document.querySelectorAll('#epDrawerGrid .ep-cat-column.deck-spread')
-      .forEach(c => { if (c !== parentCol) c.classList.remove('deck-spread'); });
-    parentCol.classList.add('deck-spread');
-    return;
-  }
   const wasOpen = el.classList.contains('open');
-  document.querySelectorAll('#epDrawerGrid .concept-card.open').forEach(card => {
-    if (card.id !== 'epcc'+id) card.classList.remove('open');
-  });
+  // Each card flips independently — match Browse-concepts behaviour.
   el.classList.toggle('open');
-  // Grid-level flag drives the "dim every other card" CSS rule
-  const grid = document.getElementById('epDrawerGrid');
-  if (grid) {
-    grid.classList.toggle('has-open',
-      !!grid.querySelector('.concept-card.open'));
-  }
   if (!wasOpen && !openedToday.has(id)) {
     openedToday.add(id);
     saveDailyGoal();
