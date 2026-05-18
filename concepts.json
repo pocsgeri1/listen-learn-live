@@ -3009,7 +3009,8 @@
     "plain": "When digital imitations of human needs — parasocial relationships, curated advice, performative empathy — are just satisfying enough to prevent you from seeking the real thing. You're not getting what you need, but you're getting enough of a facsimile that you don't feel the urgency to change. The pain stays low-grade and chronic.",
     "analogy": "You're drinking diet soda when you're dehydrated. It tastes like the thing, tricks your brain briefly, but your cells are still screaming for water. You just don't notice because the craving got muted.",
     "prompt": "What's one relationship you're maintaining online that you wouldn't bother with if you had to show up in person?",
-    "collection_id": 14
+    "collection_id": 14,
+    "related_ids": [178, 232, 300]
   },
   {
     "id": 254,
@@ -3020,7 +3021,8 @@
     "plain": "A community dynamic where the shared identity is defined by mutual contempt for an out-group rather than affection for each other or a positive vision. You're not connected by what you're building together — you're connected by what you're tearing down. When the enemy disappears, so does the bond.",
     "analogy": "It's like a friend group that only meets to complain about their ex-boss. Once the boss leaves, they realize they have nothing else to talk about. The friendship was hate cosplaying as connection.",
     "prompt": "Think of your closest online community. If the thing you all oppose suddenly vanished, would the group still exist?",
-    "collection_id": 14
+    "collection_id": 14,
+    "related_ids": [38, 43, 146]
   },
   {
     "id": 255,
@@ -3032,7 +3034,8 @@
     "analogy": "It's like someone who grew up poor still hoarding canned goods decades after becoming wealthy — the survival instinct outlasts the actual threat.",
     "prompt": "What current fear do you hold that might look as overblown in 20 years as Y2K panic does now?",
     "collection_id": 15,
-    "timestamp": 0
+    "timestamp": 0,
+    "related_ids": [91, 156, 419]
   },
   {
     "id": 256,
@@ -3045,7 +3048,8 @@
     "prompt": "If you could skip the randomness in one area of your life and just copy the best outcome every time, what would it be?",
     "collection_id": 15,
     "timestamp": 5012,
-    "editors_pick": true
+    "editors_pick": true,
+    "related_ids": [264, 291, 293]
   },
   {
     "id": 257,
@@ -3057,7 +3061,8 @@
     "analogy": "Like a recipe book where someone moved all the page markers — the instructions are still there, but you keep opening to the wrong recipe.",
     "prompt": "If aging is just gene switches in the wrong position, what behaviors today might be scrambling them fastest for you?",
     "collection_id": 15,
-    "timestamp": 2757
+    "timestamp": 2757,
+    "related_ids": [106, 276, 261]
   },
   {
     "id": 258,
@@ -3069,7 +3074,8 @@
     "analogy": "Like when computing moved from needing a mainframe you rented by the hour to having a desktop at home that did more.",
     "prompt": "If AI can run on your phone without needing the cloud, what changes about how you'd use it daily?",
     "collection_id": 15,
-    "timestamp": 490
+    "timestamp": 490,
+    "related_ids": [262, 327, 349]
   },
   {
     "id": 259,
@@ -3081,7 +3087,8 @@
     "analogy": "Like how your mom showed you how to fold a shirt once, but instead of remembering, you filmed it and now a robot watches the video on repeat.",
     "prompt": "If you got paid to train a robot by doing everyday tasks, which skill would you want to monetize?",
     "collection_id": 15,
-    "timestamp": 902
+    "timestamp": 902,
+    "related_ids": [267, 434]
   },
   {
     "id": 260,
@@ -3093,7 +3100,8 @@
     "analogy": "Like using a slingshot to throw a baseball instead of carrying it across the country by hand — same destination, fraction of the effort.",
     "prompt": "If launching material into space became 100x cheaper, what would you want built on the moon or Mars first?",
     "collection_id": 15,
-    "timestamp": 1644
+    "timestamp": 1644,
+    "related_ids": [268, 326, 461]
   },
   {
     "id": 261,
@@ -3106,7 +3114,8 @@
     "prompt": "If you could improve one aspect of your cellular function to feel 10 years younger, what would it be?",
     "collection_id": 15,
     "timestamp": 2238,
-    "editors_pick": true
+    "editors_pick": true,
+    "related_ids": [257, 272, 316]
   },
   {
     "id": 262,
@@ -3118,7 +3127,8 @@
     "analogy": "Owning the first car factory felt like owning transportation itself. A generation later, every town had mechanics and highways and motels — the value diffused into a thousand new industries.",
     "prompt": "What tech do you assume only big companies can use right now — that you'll probably be using casually in three years?",
     "collection_id": 15,
-    "timestamp": 422
+    "timestamp": 422,
+    "related_ids": [159, 340, 51]
   },
   {
     "id": 263,
@@ -3130,7 +3140,8 @@
     "analogy": "Like a parent promising their kid increasingly elaborate birthday parties every year until they can't afford it, and the kid resents them for breaking promises.",
     "prompt": "Which political promise made to your generation do you think will never actually be delivered?",
     "collection_id": 15,
-    "timestamp": 4853
+    "timestamp": 4853,
+    "related_ids": [28, 348, 144]
   },
   {
     "id": 264,
@@ -3143,7 +3154,8 @@
     "prompt": "Name one resource you assume is scarce that future tech might make absurdly abundant.",
     "collection_id": 15,
     "timestamp": 42,
-    "editors_pick": true
+    "editors_pick": true,
+    "related_ids": [36, 256, 194]
   },
   {
     "id": 265,
@@ -3155,7 +3167,8 @@
     "analogy": "Like if your neighbors voted to take your car because they need one and you have two, even though you bought it with money you already paid taxes on.",
     "prompt": "If the government could inventory everything you own and tax it annually, what's the first thing you'd think about hiding or selling?",
     "collection_id": 15,
-    "timestamp": 5565
+    "timestamp": 5565,
+    "related_ids": [193, 273, 464]
   },
   {
     "id": 266,
@@ -3167,7 +3180,8 @@
     "analogy": "Like choosing the ripest apple from a basket instead of just grabbing one blindly.",
     "prompt": "If you could see genetic scores for 10 embryos before selecting one, which trait would matter most to you?",
     "collection_id": 15,
-    "timestamp": 4905
+    "timestamp": 4905,
+    "related_ids": [256, 275, 322]
   },
   {
     "id": 267,
@@ -3180,7 +3194,8 @@
     "prompt": "If you owned a 24/7 robot that could make or build anything, what business would you run from your garage?",
     "collection_id": 15,
     "timestamp": 836,
-    "editors_pick": true
+    "editors_pick": true,
+    "related_ids": [318, 311, 329]
   },
   {
     "id": 268,
@@ -3192,7 +3207,8 @@
     "analogy": "Like if your electric bill went from $150 a month to $5, and suddenly running your AC, heating, and charging your car felt free.",
     "prompt": "If electricity cost nearly nothing, what would you do more of that feels expensive today?",
     "collection_id": 15,
-    "timestamp": 1628
+    "timestamp": 1628,
+    "related_ids": [260, 310, 349]
   },
   {
     "id": 269,
@@ -3204,7 +3220,8 @@
     "analogy": "Like someone who always followed GPS suddenly needing to navigate by landmarks and instinct when the satellites go down.",
     "prompt": "When's the last time you pursued something because you wanted to, not because it was the next expected step?",
     "collection_id": 15,
-    "timestamp": 1068
+    "timestamp": 1068,
+    "related_ids": [32, 61, 90]
   },
   {
     "id": 270,
@@ -3216,7 +3233,8 @@
     "analogy": "Like someone in a mansion advocating for banning air conditioning because 'people should learn to appreciate natural temperatures.'",
     "prompt": "Which cause do you support that you'd reconsider if it personally cost you $10,000 a year?",
     "collection_id": 15,
-    "timestamp": 6751
+    "timestamp": 6751,
+    "related_ids": [25, 60, 144]
   },
   {
     "id": 271,
@@ -3228,7 +3246,8 @@
     "analogy": "Like typing a question into Google, but the answer appears in your mind without looking at a screen.",
     "prompt": "If you could access any skill or knowledge instantly by thinking about it, what would you learn first?",
     "collection_id": 15,
-    "timestamp": 3719
+    "timestamp": 3719,
+    "related_ids": [106, 258, 428]
   },
   {
     "id": 272,
@@ -3241,7 +3260,8 @@
     "prompt": "If sticking around another 10 years meant access to tech that could double your lifespan, what's worth changing today to get there?",
     "collection_id": 15,
     "timestamp": 3307,
-    "editors_pick": true
+    "editors_pick": true,
+    "related_ids": [316, 276, 35]
   },
   {
     "id": 273,
@@ -3253,7 +3273,8 @@
     "analogy": "Like if banks gave anyone a million-dollar mortgage with no income check, and then every house in the neighborhood suddenly cost a million dollars.",
     "prompt": "If student loans required the same underwriting as a car loan, which degrees would stop being funded immediately?",
     "collection_id": 15,
-    "timestamp": 6515
+    "timestamp": 6515,
+    "related_ids": [348, 42, 311]
   },
   {
     "id": 274,
@@ -3265,7 +3286,8 @@
     "analogy": "Like if you left 30 interns locked in a library overnight and they came out having written a better textbook than the professor assigned.",
     "prompt": "If machines can improve themselves faster than humans can guide them, where does human judgment still matter?",
     "collection_id": 15,
-    "timestamp": 541
+    "timestamp": 541,
+    "related_ids": [310, 323, 330]
   },
   {
     "id": 275,
@@ -3277,7 +3299,8 @@
     "analogy": "Like giving your immune system a wanted poster with the criminal's face and GPS coordinates, then letting it do the arrest.",
     "prompt": "Which disease feels untouchable today that you'd bet gets solved within your lifetime?",
     "collection_id": 15,
-    "timestamp": 605
+    "timestamp": 605,
+    "related_ids": [266, 261, 276]
   },
   {
     "id": 276,
@@ -3290,7 +3313,8 @@
     "prompt": "If you could reset one part of your body to how it was at age 25, what would you pick?",
     "collection_id": 15,
     "timestamp": 2852,
-    "editors_pick": true
+    "editors_pick": true,
+    "related_ids": [257, 272, 316]
   },
   {
     "id": 277,
@@ -3302,7 +3326,8 @@
     "analogy": "Imagine reading your great-grandparent's diary and finding three pages about a coworker's passive-aggressive email. That's how most of your current stress will look from any real distance.",
     "prompt": "What's consuming your attention right now that you definitely won't remember in five years?",
     "collection_id": 500,
-    "timestamp": 0
+    "timestamp": 0,
+    "related_ids": [2, 155, 220]
   },
   {
     "id": 278,
@@ -3314,7 +3339,8 @@
     "analogy": "Honestly, would you take parenting advice from your childless uncle who can't even keep a houseplant alive for three months?!",
     "prompt": "Whose recent criticism actually stung you—and would you trade places with them?",
     "collection_id": 500,
-    "timestamp": 15
+    "timestamp": 15,
+    "related_ids": [12, 66, 393]
   },
   {
     "id": 279,
@@ -3326,7 +3352,8 @@
     "analogy": "Confidence works like quicksand: the harder you struggle to grab it directly, the faster it slips away. Stop thrashing and move sideways toward action instead.",
     "prompt": "What quality are you trying to force that might arrive if you just started moving?",
     "collection_id": 500,
-    "timestamp": 42
+    "timestamp": 42,
+    "related_ids": [331, 388, 90]
   },
   {
     "id": 280,
@@ -3338,7 +3365,8 @@
     "analogy": "Think of a crying child in a store — everyone stops to help. Women who signaled vulnerability in ancestral environments received the same protective response. Now that mechanism fires constantly, even when the threat is abstract or manufactured.",
     "prompt": "In the last month, when did expressing distress get you immediate help — and when did it backfire because the context had changed?",
     "collection_id": 501,
-    "timestamp": 53
+    "timestamp": 53,
+    "related_ids": [293, 294, 286]
   },
   {
     "id": 281,
@@ -3350,7 +3378,8 @@
     "analogy": "Imagine you're negotiating a salary and your coworker volunteers to work for free. You'd be furious — they just tanked everyone's leverage. That's what simps do in the dating market.",
     "prompt": "Think of the last time you or someone you know was called a simp. What were they giving away — and what were they not getting in return?",
     "collection_id": 501,
-    "timestamp": 4984
+    "timestamp": 4984,
+    "related_ids": [289, 298, 6]
   },
   {
     "id": 282,
@@ -3362,7 +3391,8 @@
     "analogy": "It's like calling someone sexist for holding a door open, even though most people — including the person walking through — appreciate the gesture. The ideology and the lived experience are out of sync.",
     "prompt": "Think of a time someone treated you with what could be called 'benevolent sexism.' Did it feel patronizing or did it feel good?",
     "collection_id": 501,
-    "timestamp": 3343
+    "timestamp": 3343,
+    "related_ids": [60, 286, 295]
   },
   {
     "id": 283,
@@ -3374,7 +3404,8 @@
     "analogy": "It's like a guard dog in a gated community. There are no burglars, so it starts barking at the mailman, the garbage truck, and falling leaves. The instinct is real, but it's misfiring.",
     "prompt": "What issue are you currently anxious about that would seem absurd to someone living in a genuinely dangerous environment?",
     "collection_id": 501,
-    "timestamp": 5060
+    "timestamp": 5060,
+    "related_ids": [91, 92, 300]
   },
   {
     "id": 284,
@@ -3386,7 +3417,8 @@
     "analogy": "It's like a poker game where everyone keeps inventing new hands. You have a straight? I have a straight plus a pair. You have a pair? I have a pair plus I'm left-handed. Eventually, no one is playing poker anymore.",
     "prompt": "When was the last time you or someone you know added a qualifier to an argument to make it harder to disagree with?",
     "collection_id": 501,
-    "timestamp": 915
+    "timestamp": 915,
+    "related_ids": [238, 243, 60]
   },
   {
     "id": 285,
@@ -3398,7 +3430,8 @@
     "analogy": "Imagine joining a new company and the existing team tests your loyalty by seeing if you'll gossip about the rival department. Passing the test means you're in. Women face a version of this test constantly — especially around attitudes toward men.",
     "prompt": "Who in your circle would lose trust in you if you became close friends with someone they dislike — and what does that cost you?",
     "collection_id": 501,
-    "timestamp": 134
+    "timestamp": 134,
+    "related_ids": [298, 289, 38]
   },
   {
     "id": 286,
@@ -3410,7 +3443,8 @@
     "analogy": "It's like getting free upgrades every time you fly and then complaining that the airline is trying to control you. The benefit is real — but the framing obscures it.",
     "prompt": "Think of the last time you witnessed someone in distress. If it was a woman, did you feel a stronger urge to help than you would have if it were a man?",
     "collection_id": 501,
-    "timestamp": 4846
+    "timestamp": 4846,
+    "related_ids": [282, 280, 29]
   },
   {
     "id": 287,
@@ -3422,7 +3456,8 @@
     "analogy": "Imagine two plants raised in identical greenhouses. Once you move them outside, one thrives in sun, the other in shade. The difference was always there — the controlled environment just masked it.",
     "prompt": "Think of a choice you made when no one was watching. How different was it from what you'd have chosen under social pressure?",
     "collection_id": 501,
-    "timestamp": 962
+    "timestamp": 962,
+    "related_ids": [291, 293, 60]
   },
   {
     "id": 288,
@@ -3434,7 +3469,8 @@
     "analogy": "It's like treating every relationship as a video game side quest that might derail your main storyline. You're so focused on the hero's journey that you forget the side quests are where the story actually happens.",
     "prompt": "Think of the last major life decision you made. Did you prioritize what you wanted independently, or did you factor in what the people you love needed from you?",
     "collection_id": 501,
-    "timestamp": 3041
+    "timestamp": 3041,
+    "related_ids": [97, 127, 372]
   },
   {
     "id": 289,
@@ -3446,7 +3482,8 @@
     "analogy": "Imagine you're selling lemonade for $5 and your neighbor starts selling it for $1. You're not mad because you hate lemonade — you're mad because they're crashing the market.",
     "prompt": "Think of the last time you or someone you know judged another woman for being 'too easy' with a guy. What was really being protected?",
     "collection_id": 501,
-    "timestamp": 4984
+    "timestamp": 4984,
+    "related_ids": [281, 298, 42]
   },
   {
     "id": 290,
@@ -3458,7 +3495,8 @@
     "analogy": "Think of a drill sergeant. They're not there to coddle you. They're there to get you ready for something hard. Some people need that energy to break through inertia.",
     "prompt": "Who in your life has ever been brutally honest with you in a way that hurt but ultimately helped? What did they say?",
     "collection_id": 501,
-    "timestamp": 2689
+    "timestamp": 2689,
+    "related_ids": [224, 305, 295]
   },
   {
     "id": 291,
@@ -3470,7 +3508,8 @@
     "analogy": "Beavers build dams, which create ponds, which favor beavers. Humans build ideologies, which create social systems, which favor whoever built the ideology. The dam isn't neutral — it's strategic.",
     "prompt": "What social norm or rule did you argue for in the last year that, if adopted, would make your life easier?",
     "collection_id": 501,
-    "timestamp": 690
+    "timestamp": 690,
+    "related_ids": [287, 293, 74]
   },
   {
     "id": 292,
@@ -3483,7 +3522,8 @@
     "prompt": "Think of the most attractive person you know personally. List three specific advantages they've received that were invisible to them but obvious to you.",
     "collection_id": 501,
     "timestamp": 5309,
-    "editors_pick": true
+    "editors_pick": true,
+    "related_ids": [29, 25, 146]
   },
   {
     "id": 293,
@@ -3496,7 +3536,8 @@
     "prompt": "Name one thing you pursue intensely that has zero connection to survival or reproduction. Why does it still feel so compelling?",
     "collection_id": 501,
     "timestamp": 5522,
-    "editors_pick": true
+    "editors_pick": true,
+    "related_ids": [91, 294, 300]
   },
   {
     "id": 294,
@@ -3508,7 +3549,8 @@
     "analogy": "Smoke detectors go off when you burn toast because they're designed to have false alarms. The cost of missing a real fire is catastrophic, so the system errs toward sensitivity. Your brain does the same with threats, opportunities, and social cues.",
     "prompt": "What recurring false alarm do you get in relationships or at work — and what would the cost have been if you'd ignored a real signal?",
     "collection_id": 501,
-    "timestamp": 223
+    "timestamp": 223,
+    "related_ids": [293, 280, 157]
   },
   {
     "id": 295,
@@ -3520,7 +3562,8 @@
     "analogy": "Imagine a survey asking if you prefer salty or sweet food, then telling you that preferring salt is a sign of internalized capitalism. You're not being measured — you're being judged.",
     "prompt": "What preference do you have — in relationships, work, or life — that you've been told is problematic but you still hold anyway?",
     "collection_id": 501,
-    "timestamp": 3343
+    "timestamp": 3343,
+    "related_ids": [282, 234, 290]
   },
   {
     "id": 296,
@@ -3533,7 +3576,8 @@
     "prompt": "Think of someone whose values conveniently align with whoever they're trying to impress. What tell gives them away?",
     "collection_id": 501,
     "timestamp": 631,
-    "editors_pick": true
+    "editors_pick": true,
+    "related_ids": [25, 87, 289]
   },
   {
     "id": 297,
@@ -3545,7 +3589,8 @@
     "analogy": "Imagine you're on a sinking ship. You don't want the guy next to you to sit down and process his feelings. You want him to bail water. That's the ancestral environment men lived in for millennia.",
     "prompt": "Think of the last time a male friend was struggling. Did you offer empathy or a solution — and which did he respond to?",
     "collection_id": 501,
-    "timestamp": 2481
+    "timestamp": 2481,
+    "related_ids": [38, 290, 34]
   },
   {
     "id": 298,
@@ -3557,7 +3602,8 @@
     "analogy": "It's like a group of friends agreeing to dress casually for a party, then shaming the one person who shows up in a suit. They didn't break a rule — they just made everyone else look underdressed.",
     "prompt": "Think of the last time you or someone you know was accused of being a 'pick me.' What behavior triggered it — and who was actually threatened?",
     "collection_id": 501,
-    "timestamp": 4923
+    "timestamp": 4923,
+    "related_ids": [285, 289, 281]
   },
   {
     "id": 299,
@@ -3569,7 +3615,8 @@
     "analogy": "It's like studying for a French exam by practicing German. You're working hard, but you're solving for the wrong audience. The feedback loop is broken.",
     "prompt": "Think of one thing you do to be more attractive. If you asked five people of the gender you're trying to attract, would they agree it works — or would they laugh?",
     "collection_id": 501,
-    "timestamp": 1686
+    "timestamp": 1686,
+    "related_ids": [165, 294, 301]
   },
   {
     "id": 300,
@@ -3581,7 +3628,8 @@
     "analogy": "Junk food is supernormal stimuli for taste. Your body evolved to crave fat and sugar because they were rare. Doritos deliver both in concentrations that don't exist in nature — so you can't stop eating them.",
     "prompt": "What's the lowest-effort, highest-dopamine thing you return to when you're depleted — and what would the 'natural' version of that reward have been?",
     "collection_id": 501,
-    "timestamp": 3355
+    "timestamp": 3355,
+    "related_ids": [91, 161, 283]
   },
   {
     "id": 301,
@@ -3593,7 +3641,8 @@
     "analogy": "It's like your computer detecting a virus and immediately quarantining the file. The system doesn't reason through it — it just reacts instantly to protect you.",
     "prompt": "Think of the last time you felt an 'ick' toward someone. Was it a genuine red flag or a minor deviation from an ideal you've been conditioned to expect?",
     "collection_id": 501,
-    "timestamp": 4770
+    "timestamp": 4770,
+    "related_ids": [299, 15, 388]
   },
   {
     "id": 302,
@@ -3605,7 +3654,8 @@
     "analogy": "Imagine praising a pianist for being good at guitar while ignoring the fact that they're an elite pianist. You're devaluing the thing they're actually best at by measuring them against a different standard.",
     "prompt": "Think of a woman in your life who does something traditionally feminine better than anyone you know. Have you ever explicitly praised her for it — or do you reserve praise for when she does 'masculine' things?",
     "collection_id": 501,
-    "timestamp": 2874
+    "timestamp": 2874,
+    "related_ids": [282, 286, 60]
   },
   {
     "id": 303,
