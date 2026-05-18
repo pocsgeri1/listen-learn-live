@@ -4504,10 +4504,12 @@ function roundRect(ctx, x, y, w, h, r) {
 }
 
 function updateProgress() {
-  if (!CONCEPTS.length) return;
-  const pct = Math.round((mastered.size / CONCEPTS.length) * 100);
+  // Exclude cross-episode duplicates so this aligns with the header stat counter.
+  const total = CONCEPTS.filter(c => !c.duplicate_of).length;
+  if (!total) return;
+  const pct = Math.round((mastered.size / total) * 100);
   document.getElementById('progressFill').style.width = pct + '%';
-  document.getElementById('progressCount').textContent = mastered.size + ' / ' + CONCEPTS.length;
+  document.getElementById('progressCount').textContent = mastered.size + ' / ' + total;
 }
 
 function animateCount(el, target, duration) {
