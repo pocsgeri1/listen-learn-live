@@ -1809,7 +1809,8 @@
     "plain": "When asked questions, people tend to answer in ways that make them look good rather than ways that are accurate. Surveys, interviews, and conversations are all affected by this constantly.",
     "analogy": "Ask people if they voted in the last election — far more say yes than actually did. Nobody wants to admit they didn't.",
     "prompt": "What have you recently said in a conversation that was the socially acceptable answer rather than the completely honest one?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [245, 87, 231]
   },
   {
     "id": 154,
@@ -1820,7 +1821,8 @@
     "plain": "A Stoic practice of deliberately imagining the loss of things you value — health, relationships, work — to counteract hedonic adaptation and cultivate genuine gratitude.",
     "analogy": "Imagining what life would be like if you suddenly lost your eyesight makes you genuinely, viscerally grateful for the ability to see in a way that no reminder ever quite achieves.",
     "prompt": "Pick one thing in your life you currently take for granted. Spend two minutes genuinely imagining it gone. How does the thing feel now?",
-    "collection_id": 5
+    "collection_id": 5,
+    "related_ids": [35, 104, 389]
   },
   {
     "id": 155,
@@ -1831,7 +1833,8 @@
     "plain": "Most people think one step ahead. Second-order thinking asks: and what does that lead to? And then what? The best decisions require thinking through the downstream consequences of the immediate outcome.",
     "analogy": "Giving a hungry person a fish solves today's problem (first order). Teaching them to fish solves every future problem (second order). Many well-intentioned interventions fail because they stop at first-order thinking.",
     "prompt": "Think of a decision you're about to make. What's the second-order effect — what happens as a consequence of what happens next?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [80, 50, 107]
   },
   {
     "id": 156,
@@ -1842,7 +1845,8 @@
     "plain": "People judge the probability of events based on how easily examples come to mind — not on actual statistical likelihood. Vivid, recent, or emotional events feel more common than they are.",
     "analogy": "After seeing dramatic plane crash news coverage, people significantly overestimate the danger of flying — while underestimating the much higher danger of the car ride to the airport.",
     "prompt": "What risk are you currently overestimating because dramatic examples of it are vivid in your memory — and what real risk might you be underestimating because it's less visible?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [36, 24, 255]
   },
   {
     "id": 157,
@@ -1853,7 +1857,8 @@
     "plain": "When something goes wrong, the most likely explanation is mistake, misunderstanding, or poor judgment — not deliberate bad intent. Assuming malice is usually wrong and always expensive.",
     "analogy": "Your colleague didn't respond to your important email for three days. More likely: they're overwhelmed, disorganized, or forgot — not that they're deliberately undermining you.",
     "prompt": "Where are you currently assuming bad intent from someone when incompetence, distraction, or a simple misunderstanding is a more plausible explanation?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [3, 294, 203]
   },
   {
     "id": 158,
@@ -1864,7 +1869,8 @@
     "plain": "At any given moment, there's a window of politically and socially acceptable positions. Ideas outside it are dismissed as extreme — but the window moves over time as culture shifts.",
     "analogy": "Same-sex marriage was outside the Overton Window in most Western countries in 1990. By 2015 it was mainstream law. The window moved — the idea didn't change.",
     "prompt": "What position do you hold privately that currently sits just outside the Overton Window in your field or social circle — and how confident are you that you're right ahead of consensus?",
-    "collection_id": 3
+    "collection_id": 3,
+    "related_ids": [46, 243]
   },
   {
     "id": 159,
@@ -1875,7 +1881,8 @@
     "plain": "For non-perishable things — ideas, technologies, business models, habits — longevity predicts future survival. Something that has lasted 500 years will probably last 500 more. Last year's trend, probably not.",
     "analogy": "Shakespeare has been read for 400 years — the Lindy Effect says he'll be read for at least another 400. A viral TikTok trend from six months ago? Probably gone.",
     "prompt": "What decision are you basing on a recent trend or new framework — when an older, Lindy-proven approach might be more reliable?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [48, 74, 262]
   },
   {
     "id": 160,
@@ -1886,7 +1893,8 @@
     "plain": "Writing clarifies thinking, builds audiences, creates products, and compounds over time in a way almost no other single skill does. Everything in a knowledge economy starts with someone writing something.",
     "analogy": "Every article, essay, or thread someone wrote years ago is still working for them today — bringing readers, opportunities, and buyers without any additional effort. That's leverage you can't get from a meeting.",
     "prompt": "If you wrote 300 words every day for one year about something you genuinely know and care about — where would you be at the end of it, and who might find you?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [133, 170, 360]
   },
   {
     "id": 161,
@@ -1897,7 +1905,8 @@
     "plain": "Limbic capitalism is when companies deliberately engineer their products to hijack the reward centres of your brain — the parts that crave pleasure, novelty, and relief. It's not accidental. The addiction is the business model.",
     "analogy": "A slot machine doesn't pay out every time because that would be boring — it pays out just often enough to keep you pulling the lever. Instagram, fast food, and gambling apps all use the same principle.",
     "prompt": "Pick one app or habit you return to daily. Is the reward coming from you — or is it being manufactured for you?",
-    "collection_id": 3
+    "collection_id": 3,
+    "related_ids": [102, 300, 91]
   },
   {
     "id": 162,
@@ -1908,7 +1917,8 @@
     "plain": "When you're jealous of someone, you're looking through a narrow aperture at a thin slice of their life — specifically the slice that's turning out best and is marketed to look even better. You have no idea what horrors exist in the totality of their experience. You want their success without their suffering, which is a fantasy that makes you bitter.",
     "analogy": "You see Elon Musk's rockets and wealth but have no clue what it's like to live with a mind that's a constant storm, thinking five times faster than normal with no off switch.",
     "prompt": "Pick someone you envy — what's one specific problem you'd have to take on if you actually traded lives with them?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [143, 332, 400]
   },
   {
     "id": 163,
@@ -1919,7 +1929,8 @@
     "plain": "If you reveal your ignorance by asking stupid questions a thousand times and genuinely listen to the answers, you eventually know a thousand things you didn't know before. Each admission of ignorance is painful but it directly reduces your stupidity. This is an actual pathway to success if you're willing to endure the temporary embarrassment.",
     "analogy": "It's like compound interest in reverse — every question you ask pays off your ignorance debt with interest, and eventually you're actually knowledgeable.",
     "prompt": "What's one question you've been too embarrassed to ask that would actually help you if you knew the answer?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [66, 149, 336]
   },
   {
     "id": 164,
@@ -1930,7 +1941,8 @@
     "plain": "When you're moving up, progress accelerates exponentially. When you're going down, decline accelerates even faster toward a cliff. The good news: it doesn't matter how small your first steps upward are. Once you get the ball rolling in the right direction, momentum builds geometrically. Even shamefully tiny steps compound into major progress.",
     "analogy": "Like credit scores — one good payment leads to better rates which makes the next payment easier. One missed payment triggers fees which makes missing the next one more likely, then collections, then bankruptcy.",
     "prompt": "What's the smallest possible upward step you could take today in an area where you've been stuck?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [1, 41, 59]
   },
   {
     "id": 165,
@@ -1941,7 +1953,8 @@
     "plain": "We now have access to the most articulate, successful, high-performing people on the planet through media. We watch them and compare ourselves to them, which is completely unfair. If you're someone who sits down to listen to three-hour intellectual podcasts, you're already wildly selected from the normal population. Your actual comparison group is you yesterday, not Joe Rogan or whoever you're watching.",
     "analogy": "It's like a college basketball player comparing themselves to LeBron James instead of to the version of themselves from last season — totally different leagues.",
     "prompt": "Who are you unfairly comparing yourself to, and what would change if you compared yourself to last month's version of you?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [143, 51, 300]
   },
   {
     "id": 166,
@@ -1952,7 +1965,8 @@
     "plain": "True independence comes from directing your own learning (self-education), pursuing what genuinely benefits you rather than external systems (self-interest), and refusing to outsource your judgment to others (self-sufficiency). These three reinforce each other: learning makes you capable, pursuing your interests motivates you to learn, and self-sufficiency clarifies what actually serves you. Together, they prevent your life direction from being hijacked by institutions designed to serve themselves.",
     "analogy": "A carpenter who only learns what the factory teaches, only builds what the boss assigns, and only trusts the foreman's judgment will never open their own shop.",
     "prompt": "Which of the three — self-education, self-interest, or self-sufficiency — is weakest in your life right now, and what's one decision you're outsourcing that you could reclaim this week?",
-    "collection_id": 11
+    "collection_id": 11,
+    "related_ids": [32, 131, 149]
   },
   {
     "id": 167,
@@ -1963,7 +1977,8 @@
     "plain": "An idea museum is a dedicated space (digital document, folder, app) where you capture every concept, phrase, or framework that makes you think 'I wish I wrote that.' You don't analyze it immediately — you just collect it. Over time, this becomes your personal library of high-signal thinking that you can draw from, reframe, and recombine into original work.",
     "analogy": "A chef who keeps a notebook of every dish that blew their mind — not to copy them, but to understand what made them work and create variations.",
     "prompt": "Open a blank document right now titled 'Idea Museum' — what are three ideas from the last month that stuck with you, even if you can't explain why yet?",
-    "collection_id": 11
+    "collection_id": 11,
+    "related_ids": [341, 135, 403]
   },
   {
     "id": 168,
@@ -1974,7 +1989,8 @@
     "plain": "Content succeeds when it balances two forces: performance (ideas that have proven potential to resonate with others) and excitement (ideas you genuinely care about exploring). Too much performance focus makes you a clickbait machine. Too much excitement without audience consideration means you're journaling in public. The sweet spot is where both overlap.",
     "analogy": "A musician who only plays what the crowd wants becomes a cover band. One who only plays experimental self-indulgence plays empty rooms. The best find songs they love that audiences also love.",
     "prompt": "List your last five content ideas — mark each as High/Low Performance and High/Low Excitement. How many fall in the top-right quadrant?",
-    "collection_id": 11
+    "collection_id": 11,
+    "related_ids": [135, 176, 337]
   },
   {
     "id": 169,
@@ -1985,7 +2001,8 @@
     "plain": "You don't need endless new ideas. You need to master the art of structuring ideas so they land with impact. The same concept can perform wildly differently depending on whether it's framed as a story, a list, a question, or a contrast. Learning structures (hooks, frameworks, analogies) is more valuable than chasing novelty, because you can apply those structures to any idea.",
     "analogy": "A comedian doesn't need new jokes every night — they refine the delivery, timing, and setup of five jokes until each one reliably kills.",
     "prompt": "Take one idea you've shared recently that didn't land — now rewrite it using a completely different structure (e.g., turn a statement into a question, or a list into a story).",
-    "collection_id": 11
+    "collection_id": 11,
+    "related_ids": [76, 405]
   },
   {
     "id": 170,
@@ -1996,7 +2013,8 @@
     "plain": "Instead of separating learning (private) from creating (public), treat your self-education as the foundation of your content. When you study something, take notes as if you'll teach it. When you discover an insight, share it immediately. This turns your natural curiosity into a business asset and removes the pressure to 'create content' — you're just synthesizing what you're already learning.",
     "analogy": "A medical student who tweets their study notes builds an audience of future doctors. They're not creating extra work — they're just making their learning visible.",
     "prompt": "What did you learn this week that genuinely surprised you — and how would you explain it to someone in two sentences?",
-    "collection_id": 11
+    "collection_id": 11,
+    "related_ids": [134, 160, 358]
   },
   {
     "id": 171,
@@ -2007,7 +2025,8 @@
     "plain": "Instead of trying to serve everyone, you build a system that solves a problem exactly the way you needed it solved. It's opinionated, specific, and reflects your lived experience. This makes it irreplaceable for the narrow group of people who share your problem and worldview — and they'll pay more because it fits them perfectly, not generically.",
     "analogy": "There are thousands of note-taking apps, but Roam Research became valuable because it was built for a specific type of networked thinker who couldn't find that elsewhere.",
     "prompt": "What's one tool, process, or habit you've built for yourself that works better than anything you've found — and who else struggles with the exact same gap?",
-    "collection_id": 11
+    "collection_id": 11,
+    "related_ids": [119, 130, 357]
   },
   {
     "id": 172,
@@ -2018,7 +2037,8 @@
     "plain": "In a world where anyone can create anything (via AI or automation), the scarcest resource is attention. The ability to attract, earn, and hold someone's focus becomes the ultimate competitive advantage. Products fail not because they're bad, but because no one knows they exist. Attention is non-scalable by AI and will remain valuable indefinitely.",
     "analogy": "Two restaurants with identical food — one empty, one with a line around the block. The difference isn't quality. It's attention.",
     "prompt": "List three products or creators you admire — how did you first hear about them, and what made you keep paying attention after that?",
-    "collection_id": 11
+    "collection_id": 11,
+    "related_ids": [140, 102, 387]
   },
   {
     "id": 173,
@@ -2029,7 +2049,8 @@
     "plain": "In a world where AI can generate generic answers to any problem, what becomes valuable is not the solution itself but the unique system someone built to solve it. A hyperspecific, opinionated, battle-tested process that works for a particular type of person. Products succeed when they reflect the creator's lived experience and worldview, not when they try to serve everyone.",
     "analogy": "There are a thousand productivity apps, but people pay for the one that matches how their brain actually works — built by someone who struggled the same way they do.",
     "prompt": "What's one recurring problem in your life that you've solved with a makeshift system — and who else do you know who's solving it the hard way right now?",
-    "collection_id": 11
+    "collection_id": 11,
+    "related_ids": [342, 357, 120]
   },
   {
     "id": 174,
@@ -2040,7 +2061,8 @@
     "plain": "Mechanical living is performing repetitive, specialized tasks that require no judgment, creativity, or connection to a larger purpose. It's the psychological state created by jobs designed for efficiency rather than human flourishing. The danger isn't just boredom — it's that it actively erodes your capacity to think independently and make meaningful decisions.",
     "analogy": "Factory workers in the Industrial Revolution became extensions of machines. Knowledge workers scrolling through support tickets at a call center are doing the same thing, just digitally.",
     "prompt": "What task in your current work requires zero judgment from you and could be done by almost anyone — and what would it take to eliminate or automate it in the next 90 days?",
-    "collection_id": 11
+    "collection_id": 11,
+    "related_ids": [269, 311, 90]
   },
   {
     "id": 175,
@@ -2051,7 +2073,8 @@
     "plain": "Idea density measures how many genuinely useful, memorable concepts appear in a piece of content. High idea density means every paragraph offers something worth highlighting or revisiting. Low density is filler, fluff, and restatements. Building idea density over time — by curating better sources, refining your thinking, and cutting weak ideas — is what makes a brand worth following.",
     "analogy": "A textbook with one useful insight per chapter has low density. A mentor who drops three frameworks in a ten-minute conversation has high density.",
     "prompt": "Read the last thing you wrote or posted — count the number of sentences that contain a genuinely useful, non-obvious idea. What percentage is that?",
-    "collection_id": 11
+    "collection_id": 11,
+    "related_ids": [169, 76, 360]
   },
   {
     "id": 176,
@@ -2062,7 +2085,8 @@
     "plain": "As AI makes information abundant, what becomes scarce is a distinct point of view. Opinionated work is content or products that reflect a specific worldview, taste, and lived experience. It's not neutral or algorithmic — it's human, debatable, and impossible to replicate without walking the same path. This is what builds trust and loyalty in a saturated world.",
     "analogy": "A book summary site gives you information. A newsletter from someone who actually read the book and disagrees with half of it gives you perspective.",
     "prompt": "What's one widely accepted idea in your field that you privately disagree with — and what would it look like to share that disagreement publicly?",
-    "collection_id": 11
+    "collection_id": 11,
+    "related_ids": [135, 87, 337]
   },
   {
     "id": 177,
@@ -2073,7 +2097,8 @@
     "plain": "To build a relationship that sticks in someone's memory, you need 7 hours of total interaction, 11 separate touchpoints, and presence across 4 different platforms or contexts. This is how we go from stranger to recognizable person in someone's mental Rolodex. Most people trying to 'network' fail because they meet once and assume that's enough.",
     "analogy": "Think of how you feel about a colleague you've only met once at a conference versus someone you've worked with on three projects, grabbed coffee with twice, and follow on LinkedIn and Instagram. The second person feels like a real connection — the first is a vague face you might not even recognize.",
     "prompt": "Pick someone you want to remember you this year. Map out 11 ways you could interact with them across at least 4 contexts — email, in-person, social media, phone. What's interaction number 1?",
-    "collection_id": 12
+    "collection_id": 12,
+    "related_ids": [34, 69, 346]
   },
   {
     "id": 178,
@@ -2084,7 +2109,8 @@
     "plain": "A parasocial relationship is a one-sided connection where someone feels they know you, even though you've never met. It happens when they've spent enough time with your content (video, audio, writing) that their brain treats you like a familiar person. This is how influencers, podcasters, and personal brands operate — they create intimacy without reciprocity.",
     "analogy": "You've never met George Clooney, but if you saw him at a coffee shop, you'd feel comfortable saying hi because you've 'spent time' with him through movies and interviews. That feeling is parasocial — he has no idea who you are, but you feel like you know him.",
     "prompt": "Who in your professional world could benefit from feeling like they already know you before you meet? What 7 hours of content could you create to make that happen?",
-    "collection_id": 12
+    "collection_id": 12,
+    "related_ids": [6, 140, 253]
   },
   {
     "id": 179,
@@ -2095,7 +2121,8 @@
     "plain": "Humans are hardwired to ignore most stimuli. To break through, you need to trigger one of five filters: scary (threat), strange (novelty), sexy (attraction), free value (unexpected gift), or familiar (7-11-4 repetition). Most marketing and personal branding fails because it's none of these — it's just noise that gets deleted.",
     "analogy": "Walk down Oxford Street. You'll remember the person in the hot dog costume, the guy handing out £20 notes, and the friend you bumped into. You won't remember the 3,000 other people. Your brain sorted them into 'ignore' because they didn't meet the five filters.",
     "prompt": "Look at your last five LinkedIn posts or emails. Which of the five filters did each one use? If none — rewrite one using 'free value' or 'strange.'",
-    "collection_id": 12
+    "collection_id": 12,
+    "related_ids": [63, 9]
   },
   {
     "id": 180,
@@ -2106,7 +2133,8 @@
     "plain": "Instead of building a product and hoping customers appear, sell a demo or customer needs analysis first. You present the concept, the research, and collect data on whether people would actually buy it. This lets you validate demand, refine messaging, and pre-sell without any inventory or finished product.",
     "analogy": "Imagine launching a libido-boosting coffee brand. Instead of ordering 10,000 units, you approach retailers with a 30-minute presentation on the science and market research, plus a plan to survey their customers. If they say yes to the demo, you know you've got a real opportunity before spending a penny on beans.",
     "prompt": "What idea are you sitting on right now? Write the title of the demo presentation you'd give to test it. Who would you pitch it to in the next 48 hours?",
-    "collection_id": 12
+    "collection_id": 12,
+    "related_ids": [138, 114, 417]
   },
   {
     "id": 181,
@@ -2117,7 +2145,8 @@
     "plain": "A framework for introducing yourself in a way that sticks. Name: who you are. Same: what you do that people already understand. Fame: what makes you interesting (big clients, awards, numbers). Aim: what you're working on in the next 90 days. Game: your bigger 3-6 year vision. This structure forces clarity and makes you memorable.",
     "analogy": "Instead of 'I help people with productivity,' you say: 'I'm Sarah, I run a consulting firm like McKinsey but for startups. We've worked with three unicorns. Right now we're launching an AI tool for sales teams. Long-term, we're building the operating system for 10-person billion-dollar companies.'",
     "prompt": "Write out your Name-Same-Fame-Aim-Game. If you fumble on any part, that's where you lack clarity. Fix it before your next introduction.",
-    "collection_id": 12
+    "collection_id": 12,
+    "related_ids": [25, 357]
   },
   {
     "id": 182,
@@ -2128,7 +2157,8 @@
     "plain": "A side hustle isn't an ongoing business; it's a time-boxed experiment that has a clear start and end date within 90 days. You're not committing to something forever — you're testing an idea, learning the mechanics of commerce, and closing the loop. This prevents you from getting stuck in a half-built venture and forces rapid iteration.",
     "analogy": "Daniel sold roses door-to-door for Valentine's Day. The idea came up 3 weeks before, he bought stock, sold them in tuxedos, split the cash, and it was over. No inventory left, no ongoing commitments — just a clean loop of learning.",
     "prompt": "What could you start and finish in the next 90 days that would teach you something about selling, marketing, or delivering value? Write the end date first.",
-    "collection_id": 12
+    "collection_id": 12,
+    "related_ids": [138, 121, 343]
   },
   {
     "id": 183,
@@ -2139,7 +2169,8 @@
     "plain": "An entrepreneurial apprenticeship means joining a small team where you have direct access to the entrepreneur building the business. You're not there to climb a corporate ladder; you're there to learn the new rules — how to build a personal brand, scale digitally, and operate in the creator economy. This beats university or a big company because you're learning the skills that actually matter today.",
     "analogy": "Think of it like training with a Michelin-star chef in their restaurant versus taking a culinary degree. One teaches you the theory; the other teaches you how to actually run a kitchen under pressure.",
     "prompt": "Name three entrepreneurs in your city with 5,000+ followers and a business model you admire. Which one could you email this week offering to work for free for 90 days?",
-    "collection_id": 12
+    "collection_id": 12,
+    "related_ids": [345, 355]
   },
   {
     "id": 184,
@@ -2150,7 +2181,8 @@
     "plain": "A situational model is the mental framework every buyer uses when making a decision. Four questions define it: Where am I now? Where do I want to be? What's stopping me? What's the easiest path forward? If your product or pitch doesn't address all four, you're leaving conversion on the table.",
     "analogy": "Someone wants to lose 20 pounds. Current state: overweight, tired. Desired state: fit, energized. Obstacle: no time for the gym. Path forward: 15-minute home workouts. A product that speaks to all four will sell; one that only addresses 'desired state' will get ignored.",
     "prompt": "Pick your best customer. Write out their situational model in four sentences — where they were, where they wanted to be, what blocked them, and why your solution was the path of least resistance.",
-    "collection_id": 12
+    "collection_id": 12,
+    "related_ids": [120, 113, 111]
   },
   {
     "id": 185,
@@ -2161,7 +2193,8 @@
     "plain": "Most people launching a business focus on the supply side — finding bottlers, getting certifications, perfecting the product. Professionals flip it: they test whether demand exists before building anything. You do this by selling the demo, running ads to a waitlist, or surveying potential buyers. If no one clicks, you saved yourself a year of wasted effort.",
     "analogy": "Imagine spending 6 months developing a new app, only to find out no one wants it. Now imagine spending 2 weeks running Facebook ads with 50 different headlines to see which one gets 15% click-through. You'd know exactly what to build — and who to build it for.",
     "prompt": "Take your next business idea. Before you spend a dollar on supply, design one test that would prove demand exists. What's the smallest version of that test?",
-    "collection_id": 12
+    "collection_id": 12,
+    "related_ids": [112, 120]
   },
   {
     "id": 186,
@@ -2172,7 +2205,8 @@
     "plain": "In a bell curve system, everyone's outcomes cluster around the average with limited outliers. In a power law system, outcomes are exponential — the top performers can earn 100x or 1,000x more than the median. Jobs, salaries, and traditional careers are bell curves. Platforms, personal brands, and digital businesses are power laws. Your goal is to exit bell curves.",
     "analogy": "Doctors in the NHS all earn roughly the same — that's a bell curve. YouTubers range from $0 to $10 million a month — that's a power law. Same effort, different systems, wildly different outcomes.",
     "prompt": "Write down your current income sources. Which are bell curves, and which are power laws? What would it take to shift 50% of your effort into power law opportunities?",
-    "collection_id": 12
+    "collection_id": 12,
+    "related_ids": [27, 51, 94]
   },
   {
     "id": 187,
@@ -2183,7 +2217,8 @@
     "plain": "Official capacity is the number of clients or customers that would make this year a total success. You name the number, then reverse-engineer the lead flow needed to hit it. This creates focus and prevents you from being dragged into everyone else's game. If you hit the number, you celebrate — you don't keep chasing more just because it's there.",
     "analogy": "A restaurant might say, 'We only have 40 tables, and if we fill them 6 nights a week, we're thriving.' They don't try to seat 80 people by cramming tables together. The constraint creates quality and sanity.",
     "prompt": "What is your official capacity for this year? How many clients, sales, or projects would make you say 'we crushed it' — and feel totally satisfied?",
-    "collection_id": 12
+    "collection_id": 12,
+    "related_ids": [110, 417, 484]
   },
   {
     "id": 188,
@@ -2194,7 +2229,8 @@
     "plain": "The pyramid has five levels. Bottom: skilled labor (you sell your time). Next: intellectual property and media (you create frameworks and content). Middle: data and software (you build systems that scale). Top: financial assets (you sell the company). Most people are stuck at level one because school taught them to trade time for money. The new economy rewards those who climb.",
     "analogy": "A consultant gets paid per hour — that's labor. If they write a book and license a methodology, that's IP. If they build a quiz that generates leads automatically, that's data. If they sell the consulting firm for $5M, that's a financial asset.",
     "prompt": "Where are you on the pyramid right now? What's the smallest move you could make in the next 90 days to climb one level?",
-    "collection_id": 12
+    "collection_id": 12,
+    "related_ids": [5, 128, 125]
   },
   {
     "id": 189,
@@ -2205,7 +2241,8 @@
     "plain": "Leverage is what separates incremental opportunities from exponential ones. Leverage can be fame, capital, distribution, technology, or partnerships with people far ahead of you. If an opportunity doesn't give you access to at least one form of leverage, it's linear — it won't scale. Professionals ruthlessly filter for leverage before saying yes.",
     "analogy": "Getting coffee with a local accountant is linear. Getting coffee with a billionaire investor who could intro you to their network and co-invest in your next deal is exponential. Same time investment, different leverage.",
     "prompt": "List the three biggest opportunities on your plate right now. For each one, ask: does this give me access to fame, capital, distribution, or a game-changing partnership? If no — decline it.",
-    "collection_id": 12
+    "collection_id": 12,
+    "related_ids": [5, 93, 42]
   },
   {
     "id": 190,
@@ -2216,7 +2253,8 @@
     "plain": "Adding a small barrier to entry — a survey, an application, a waiting list — makes people perceive what's on the other side as more valuable. This works because humans equate effort with worth. If you let everyone in instantly, they assume it's worthless. If they have to qualify, they assume it's exclusive.",
     "analogy": "Two discussion groups on the same topic. One lets anyone join instantly. The other requires a 5-question application. The second group will have higher engagement and members who believe the content is better — even if it's identical.",
     "prompt": "Where in your business or personal brand are you giving away too much too easily? Add one small gate this week and watch what happens to perceived value.",
-    "collection_id": 12
+    "collection_id": 12,
+    "related_ids": [11, 397, 408]
   },
   {
     "id": 191,
@@ -2227,7 +2265,8 @@
     "plain": "The top 1% of any audience has 15% of the total budget; the next 9% has 45%. That means 60% of all spending power sits in the top 10%, while the bottom 90% collectively has just 40%. The new business model is to give the 90% free content and only create paid products for the top 10% — special access, communities, limited editions.",
     "analogy": "A YouTuber gives free videos to a million people. Then they launch a $10,000 mastermind for the top 50 fans. The million people drive the brand and SEO; the 50 people fund the entire business.",
     "prompt": "If you only monetized the top 10% of your audience, what would you sell them? What would the 90% get for free that makes them love you enough to refer the top 10%?",
-    "collection_id": 12
+    "collection_id": 12,
+    "related_ids": [27, 112]
   },
   {
     "id": 192,
@@ -2238,7 +2277,8 @@
     "plain": "The sweet spot sits at the intersection of three circles: what you're passionate about, what problem you solve, and what people will pay for. Most people optimize for one and fail. Corporate jobs hit problem + payment but kill passion. Yoga instructors hit passion but often miss payment. You need to find the compromise that ticks all three boxes.",
     "analogy": "A corporate lawyer hates their job but makes $300K. They quit to become a yoga instructor, love the work, but go broke. The sweet spot would be legal consulting for wellness startups — uses their expertise, serves a market they care about, and pays well.",
     "prompt": "Draw three overlapping circles: passion, problem you solve, payment. Where's the overlap? If it's empty, what's the smallest shift that would create one?",
-    "collection_id": 12
+    "collection_id": 12,
+    "related_ids": [97, 345, 130]
   },
   {
     "id": 193,
@@ -2249,7 +2289,8 @@
     "plain": "In the industrial age, wealth was tied to physical assets and geography, so governments could tax heavily without losing people. In the digital age, top earners can relocate in weeks with nothing but a laptop and phone. Countries competing for talent must lower taxes to attract the 1% who pay 30% of all taxes. High-tax jurisdictions lose their best people.",
     "analogy": "The UK raised taxes on entrepreneurs. Result: 10,000 millionaires left for Dubai in one year. Dubai has no income tax, and everything works better. Now the UK has less tax revenue than before the increase.",
     "prompt": "If you could legally relocate to a low-tax country without losing clients, income, or relationships — would you? If yes, what's actually stopping you? If no, why not?",
-    "collection_id": 12
+    "collection_id": 12,
+    "related_ids": [131, 265, 459]
   },
   {
     "id": 194,
@@ -2260,7 +2301,8 @@
     "plain": "Wealth isn't a zero-sum game where the rich take from the poor. Entrepreneurs create new economic value by turning ideas into companies. When investors buy shares, they're purchasing something that didn't exist before — a figment of imagination formalized into an asset. This is why entrepreneurship grows the economy rather than redistributing it.",
     "analogy": "Daniel's software company raised £400K for 10%, valuing it at £4M. That £3.6M didn't come from anyone's pocket — it was created from intellectual property and investor belief. New wealth entered the economy, not extracted from it.",
     "prompt": "Think of the business or side hustle you want to build. If you raised money for it, where would the valuation come from? What idea or IP would make someone believe it's worth something?",
-    "collection_id": 12
+    "collection_id": 12,
+    "related_ids": [13, 310, 340]
   },
   {
     "id": 195,
@@ -2271,7 +2313,8 @@
     "plain": "A lifestyle boutique is a business with 6-12 people, $2-4M in revenue, and 60%+ profit margins because it's digital or IP-based. You're not trying to be a unicorn or raise VC money. You're building something wildly profitable that gives you total control, freedom to choose clients, and time for life. For many, this is more fulfilling than scaling to 100 employees.",
     "analogy": "Think of a specialized consulting firm with 8 people, all working remotely, serving 50 high-ticket clients a year at $60K each. Profit: $2M. No office, no bureaucracy, no investors breathing down your neck. Freedom and wealth.",
     "prompt": "If you could design a business that makes $1-2M profit with 6-12 people, what would you sell? Who would you serve? Write one sentence.",
-    "collection_id": 12
+    "collection_id": 12,
+    "related_ids": [126, 196, 356]
   },
   {
     "id": 196,
@@ -2282,7 +2325,8 @@
     "plain": "A performance business is designed for a $10-100M exit with around 30 people. It's tech-enabled, IP-rich, and built to sell to a strategic acquirer or private equity. You need to be a business geek who loves acronyms, go-to-market strategy, and LTV/CAC ratios. This is different from a lifestyle boutique — you're optimizing for a liquidity event, not just profit.",
     "analogy": "A SaaS company with 30 employees, $10M ARR, and 80% gross margins gets acquired by a public company for $50M. The founder exits wealthy but spent 7 years living and breathing metrics, funding, and growth strategy.",
     "prompt": "Would you rather have a lifestyle boutique or a performance business? If you chose performance, are you actually willing to geek out on tech, business strategy, and exits for 5-7 years?",
-    "collection_id": 12
+    "collection_id": 12,
+    "related_ids": [195, 110, 355]
   },
   {
     "id": 197,
@@ -2293,7 +2337,8 @@
     "plain": "Most of what people call self-improvement is just consumption with better branding. You feel sharper after a podcast, more capable after a book, more strategic after a thread — but nothing in your life has actually changed. The information goes in. The behavior stays the same. You confuse the input with the outcome.",
     "analogy": "Like buying a gym membership, watching workout videos every morning, reading the science of hypertrophy — and never lifting a single weight.",
     "prompt": "Look at what you've consumed this month. Now look at what you've done. Which one is closer to the person you say you are?",
-    "collection_id": null
+    "collection_id": null,
+    "related_ids": [90, 118, 398]
   },
   {
     "id": 198,
@@ -2304,7 +2349,8 @@
     "plain": "Meta-emotions are emotional reactions to your own emotions. You might feel guilty about feeling angry, or anxious about feeling happy. This creates a second layer of emotion that often intensifies or prolongs the original feeling.",
     "analogy": "Like being hungry, then feeling ashamed that you're hungry — the shame doesn't feed you, it just makes being hungry worse.",
     "prompt": "What feeling are you currently judging yourself for having, and what would change if you just allowed it?",
-    "collection_id": null
+    "collection_id": null,
+    "related_ids": [19, 331, 396]
   },
   {
     "id": 199,
@@ -2315,7 +2361,8 @@
     "plain": "Exceptional performance requires habits, choices, and thinking that most people don't practice. You cannot simultaneously fit into the crowd and stand out from it. Different inputs create different outputs.",
     "analogy": "Like Olympic athletes eating and training while their friends party — the routines that create extraordinary results look strange to ordinary people.",
     "prompt": "What 'normal' behavior are you clinging to that keeps you from the exceptional life you want?",
-    "collection_id": null
+    "collection_id": null,
+    "related_ids": [97, 414]
   },
   {
     "id": 200,
@@ -2326,7 +2373,8 @@
     "plain": "Say you love the idea of being fit but hate working out, you'll never stay fit. The lifestyle required to produce a result must appeal to you, not just the end result. Mastering your desires brings the same peace as achieving them.",
     "analogy": "Like wanting to be a bestselling author but hating the daily grind of writing — the fantasy is appealing, but the reality will crush you.",
     "prompt": "What do you want the result of, but refuse to do the work for?",
-    "collection_id": null
+    "collection_id": null,
+    "related_ids": [409, 474]
   },
   {
     "id": 201,
@@ -2337,7 +2385,8 @@
     "plain": "People say 'you've changed' as an accusation when you start behaving in ways that make them uncomfortable. What they're really saying is 'you've grown, and I don't know how to relate to this version of you.' It's not malice — it's a lack of skill. They've seen so few people grow that they don't have language for it.",
     "analogy": "You stop drinking at parties and old friends say 'you're not fun anymore.' They're not mad you're sober — they're upset the role you played (the party guy) no longer exists, and they don't know how to interact with the new version.",
     "prompt": "Who in your life has accused you of changing recently? What growth were they actually witnessing that made them uncomfortable?",
-    "collection_id": null
+    "collection_id": null,
+    "related_ids": [71, 288, 375]
   },
   {
     "id": 202,
@@ -2348,7 +2397,8 @@
     "plain": "It is the practice of removing the subjective, emotional part from the equation. You strip away your preferences, your ego, your story, and assess the situation as if you weren't involved. What remains is the truth of the thing itself, not how you feel about it.",
     "analogy": "Like describing a car accident as if you were watching security footage, not sitting in the driver's seat.",
     "prompt": "What situation are you misreading because you're part of it?",
-    "collection_id": null
+    "collection_id": null,
+    "related_ids": [61, 80]
   },
   {
     "id": 203,
