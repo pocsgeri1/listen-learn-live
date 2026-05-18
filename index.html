@@ -505,16 +505,12 @@
     top: 0;
     z-index: 50;
     background: var(--surface);
-    padding: 14px 4px 12px;
-    margin-bottom: 28px;
-  }
-  .ep-cat-column-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 4px 8px;
+    padding: 14px 4px 14px;
     border-bottom: 1.5px solid var(--col-color, var(--accent));
-    margin-bottom: 4px;
+    margin-bottom: 32px;
   }
   .ep-cat-column-label {
     font-family: 'DM Mono', monospace;
@@ -563,22 +559,30 @@
     background: color-mix(in srgb, var(--col-color, var(--accent)) 12%, transparent);
   }
   
-  /* Desktop + mobile: only the active category column is shown.
-     Switching pills swooshes the new column in. */
+  /* Only the active category renders. Desktop = 3-col grid (≤9 cards,
+     no scroll). Mobile = single vertical column (unchanged feel). */
   .ep-cat-column { display: none; }
   .ep-cat-column.visible {
-    display: flex;
-    flex: 1 1 100%;
-    max-width: 880px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    width: 100%;
+    max-width: 1080px;
     margin: 0 auto;
     animation: epColSwoosh 0.4s cubic-bezier(0.22,0.61,0.36,1) both;
   }
   @keyframes epColSwoosh {
-    from { opacity: 0; transform: translateX(40px); }
-    to   { opacity: 1; transform: translateX(0); }
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
-  @media (max-width: 600px) {
-    .ep-cat-column { flex: 0 0 260px; }
+  /* Mobile: revert to the single vertical column you liked */
+  @media (max-width: 700px) {
+    .ep-cat-column.visible {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-width: 520px;
+    }
   }
   .ep-empty {
     font-family: 'DM Mono', monospace;
@@ -2475,54 +2479,43 @@
   .ep-cat-column { perspective: 1400px; }
 
   .ep-cat-column .concept-card {
-    flex: 0 0 auto;
     width: 100%;
-    height: 300px;
+    height: 340px;
     overflow: visible;
     border: none;
     background: transparent;
     border-radius: 14px;
-    /* DECK OVERLAP: each card pulls up so the next covers its bottom ~30% */
-    margin-top: -90px;
-    transition: height 0.46s cubic-bezier(0.22,0.61,0.36,1),
-                margin-top 0.46s cubic-bezier(0.22,0.61,0.36,1),
-                opacity 0.32s ease,
-                transform 0.42s cubic-bezier(0.22,0.61,0.36,1);
-    will-change: height, transform;
+    transition: transform 0.4s cubic-bezier(0.22,0.61,0.36,1),
+                opacity 0.32s ease;
+    will-change: transform;
   }
-  .ep-cat-column .concept-card:first-of-type { margin-top: 0; }
 
-  /* alternating fan tilt (on inner so it doesn't fight the flip) */
-  .ep-cat-column .concept-card:nth-child(odd)  .card-inner { transform: rotate(-1.4deg); }
-  .ep-cat-column .concept-card:nth-child(even) .card-inner { transform: rotate(1.4deg); }
   .ep-cat-column .card-inner {
     transition: transform 0.55s cubic-bezier(0.4,0.2,0.2,1);
   }
 
-  /* hover: highlight the visible part only — do NOT raise z-index,
-     so the card stays tucked behind the one below it. */
+  /* hover: gentle lift + highlight (no tilt, no overlap in a grid) */
   .ep-cat-column .concept-card:hover .card-front {
     border-color: var(--border-hover);
     background: var(--surface2);
   }
-
-  /* ── OPEN: card escapes the deck, grows to full size, others dim ── */
-  .ep-cat-column .concept-card.open {
-    height: 440px;
-    margin-top: 14px;
-    margin-bottom: 14px;
-    z-index: 40;
+  .ep-cat-column .concept-card:hover {
+    transform: translateY(-4px);
   }
-  .ep-cat-column .concept-card.open:first-of-type { margin-top: 0; }
+
+  /* ── OPEN: flip in place, lift above, dim every other card ── */
+  .ep-cat-column .concept-card.open {
+    z-index: 40;
+    transform: scale(1.03);
+  }
   .ep-cat-column .concept-card.open .card-inner {
-    transform: rotateY(180deg) scale(1.02);
+    transform: rotateY(180deg);
   }
   .ep-cat-column .concept-card.open .card-front,
   .ep-cat-column .concept-card.open .card-back {
     box-shadow: 0 22px 60px -20px rgba(0,0,0,0.85);
   }
-  /* EVERY other card in the whole drawer fades to 0.1 — including
-     siblings inside the open card's own column */
+  /* every other card in the drawer dims to 0.1 while one is open */
   #epDrawerGrid:has(.concept-card.open) .concept-card:not(.open) {
     opacity: 0.1;
     pointer-events: none;
