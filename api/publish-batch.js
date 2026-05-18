@@ -243,21 +243,25 @@ export default async function handler(req, res) {
       0
     ) + 1;
 
-    // Step 4: validate each normalized concept against duplicates, append to file
+    // Step 2b: map lowercase term -> original (lowest) concept id, so a
+    // cross-episode repeat can point back at the first occurrence.
+    const termToOriginalId = new Map();
+    for (const c of existingConcepts) {
+      if (!c || !c.term || typeof c.id !== 'number') continue;
+      const t = c.term.toLowerCase();
+      // Keep the earliest (lowest) id as the canonical original.
+      if (!termToOriginalId.has(t) || c.id < termToOriginalId.get(t)) {
+        termToOriginalId.set(t, c.id);
+      }
+    }
+
+    // Step 4: validate each normalized concept, append to file.
+    // Cross-episode repeats are PUBLISHED with a duplicate_of marker so the
+    // concept still appears in its episode drawer. Same-term-twice within a
+    // single batch is still rejected (that's an extraction mistake).
     const toAppend = [];
     for (const n of normalized) {
       const termLower = n.term.toLowerCase();
-
-      if (existingTermsLower.has(termLower)) {
-        results.push({
-          airtable_id: n.airtable_id,
-          term: n.term,
-          concept_id: null,
-          success: false,
-          error: `A concept with term "${n.term}" already exists in concepts.json. Not publishing duplicate.`,
-        });
-        continue;
-      }
 
       if (batchTermsLower.has(termLower)) {
         results.push({
@@ -272,6 +276,12 @@ export default async function handler(req, res) {
 
       batchTermsLower.add(termLower);
 
+      // If this term already exists in the live file, this is a legitimate
+      // cross-episode repeat: publish it, tagged back to the original id.
+      const duplicateOf = existingTermsLower.has(termLower)
+        ? (termToOriginalId.get(termLower) || null)
+        : null;
+
       const newConcept = {
         id: nextId,
         term: n.term.trim(),
@@ -285,6 +295,7 @@ export default async function handler(req, res) {
         timestamp: n.timestamp,
         editors_pick: n.editors_pick === true,
         related_ids: n.related_ids || [],
+        duplicate_of: duplicateOf,
       };
 
       toAppend.push(newConcept);
@@ -293,7 +304,9 @@ export default async function handler(req, res) {
         term: n.term,
         concept_id: nextId,
         success: true,
-        error: null,
+        error: duplicateOf
+          ? `Published as cross-episode duplicate of concept #${duplicateOf}.`
+          : null,
       });
 
       nextId++;
