@@ -497,7 +497,10 @@
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
+    padding-top: 14px;
   }
+  /* keep header out of the deck stacking context */
+  .ep-cat-column > .ep-cat-column-header { position: relative; z-index: 1; }
   .ep-cat-column-header {
     display: flex;
     align-items: center;
@@ -2451,11 +2454,34 @@
     flex-shrink: 0;
   }
 
-  /* ── ACCORDION CARDS — drawer only (ep-cat-column) ── */
+  /* ── DECK CARDS — drawer only (ep-cat-column) ───────────────────
+     Fanned stack at rest (~55% peek, alternating tilt). Column hover
+     or .deck-spread eases the stack open so all hooks are scannable.
+     One open card straightens, lifts, dims all others to 0.1.
+     Only transform/opacity animate — GPU-composited, no layout cost. */
+
   .ep-cat-column .concept-card {
     overflow: hidden;
     border-radius: 10px;
+    position: relative;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    transform-origin: center top;
+    /* deck overlap: each card pulls up onto the previous one (~45% overlap) */
+    margin-top: -58px;
+    transition: transform 0.42s cubic-bezier(0.22,0.61,0.36,1),
+                opacity 0.32s ease,
+                border-color 0.2s ease,
+                margin-top 0.42s cubic-bezier(0.22,0.61,0.36,1);
+    will-change: transform;
   }
+  /* first card sits flush under the header, no negative pull */
+  .ep-cat-column .concept-card:first-of-type { margin-top: 0; }
+  /* alternating tilt — the "pack of cards" fan */
+  .ep-cat-column .concept-card:nth-child(odd)  { transform: rotate(-1.6deg); }
+  .ep-cat-column .concept-card:nth-child(even) { transform: rotate(1.6deg); }
+
+  /* category accent rail */
   .ep-cat-column .concept-card::after {
     content: '';
     position: absolute;
@@ -2465,10 +2491,38 @@
     opacity: 0;
     transition: opacity 0.2s;
   }
-  .ep-cat-column .concept-card:hover { border-color: var(--border-hover); }
+
+  /* SPREAD: hovering the column (or .deck-spread on touch) fans it open
+     so every hook is readable. Tilt relaxes, overlap shrinks. */
+  .ep-cat-column:hover .concept-card,
+  .ep-cat-column.deck-spread .concept-card {
+    margin-top: 8px;
+    transform: rotate(0deg);
+  }
+  .ep-cat-column:hover .concept-card:first-of-type,
+  .ep-cat-column.deck-spread .concept-card:first-of-type { margin-top: 0; }
+  .ep-cat-column:hover .concept-card:hover {
+    border-color: var(--border-hover);
+    transform: rotate(0deg) translateY(-3px);
+  }
   .ep-cat-column .concept-card:hover::after { opacity: 1; }
+
+  /* OPEN: focused card straightens, lifts above the deck, accent on */
+  .ep-cat-column .concept-card.open {
+    transform: rotate(0deg) translateY(-4px) scale(1.015) !important;
+    margin-top: 8px;
+    border-color: var(--border-hover);
+    z-index: 20;
+    box-shadow: 0 14px 40px -18px rgba(0,0,0,0.7);
+  }
+  .ep-cat-column .concept-card.open:first-of-type { margin-top: 0; }
   .ep-cat-column .concept-card.open::after { opacity: 1; }
-  .ep-cat-column .concept-card.open { border-color: var(--border-hover); }
+  /* every non-open card in the drawer dims while one is focused */
+  #epDrawerGrid.has-open .ep-cat-column .concept-card:not(.open) {
+    opacity: 0.1;
+    pointer-events: none;
+  }
+
   .ep-cat-column .card-front {
     padding: 16px 16px 14px 18px;
     position: relative;
@@ -2525,6 +2579,24 @@
   .ep-cat-column .back-prompt p { font-size: 0.78rem; color: var(--accent); line-height: 1.6; margin: 0; }
   .ep-cat-column .prompt-icon { font-size: 0.85rem; margin-bottom: 3px; }
   .ep-cat-column .card-actions { display: flex; gap: 7px; margin-top: 12px; }
+
+  /* Mobile: gentler deck — less tilt, more reveal, tap to spread */
+  @media (max-width: 700px) {
+    .ep-cat-column .concept-card { margin-top: -44px; }
+    .ep-cat-column .concept-card:nth-child(odd)  { transform: rotate(-1deg); }
+    .ep-cat-column .concept-card:nth-child(even) { transform: rotate(1deg); }
+    .ep-cat-column.deck-spread .concept-card { margin-top: 8px; transform: rotate(0deg); }
+    .ep-cat-column.deck-spread .concept-card:first-of-type { margin-top: 0; }
+  }
+  /* Respect reduced-motion: no tilt, no overlap, instant */
+  @media (prefers-reduced-motion: reduce) {
+    .ep-cat-column .concept-card {
+      margin-top: 8px !important;
+      transform: none !important;
+      transition: opacity 0.2s ease, border-color 0.2s ease;
+    }
+    .ep-cat-column .concept-card:first-of-type { margin-top: 0 !important; }
+  }
 
   /* ── ACTION BUTTONS — shared ── */
   .btn-master {
@@ -4750,16 +4822,32 @@ function closeEpisodeDrawer() {
 function toggleEpCard(id) {
   const el = document.getElementById('epcc'+id);
   if (!el) return;
-  // If the card is in a faded column, switch the filter to that column first
   const parentCol = el.closest('.ep-cat-column');
+  // If the card is in a faded column, switch the filter to that column first
   if (parentCol && parentCol.classList.contains('faded')) {
     filterDrawerCat(parentCol.dataset.cat);
+  }
+  // Touch devices have no :hover — first tap on a resting deck spreads it
+  // open so hooks are readable; the actual card opens on the next tap.
+  const noHover = window.matchMedia('(hover: none)').matches;
+  if (noHover && parentCol && !parentCol.classList.contains('deck-spread')
+      && !el.classList.contains('open')) {
+    document.querySelectorAll('#epDrawerGrid .ep-cat-column.deck-spread')
+      .forEach(c => { if (c !== parentCol) c.classList.remove('deck-spread'); });
+    parentCol.classList.add('deck-spread');
+    return;
   }
   const wasOpen = el.classList.contains('open');
   document.querySelectorAll('#epDrawerGrid .concept-card.open').forEach(card => {
     if (card.id !== 'epcc'+id) card.classList.remove('open');
   });
   el.classList.toggle('open');
+  // Grid-level flag drives the "dim every other card" CSS rule
+  const grid = document.getElementById('epDrawerGrid');
+  if (grid) {
+    grid.classList.toggle('has-open',
+      !!grid.querySelector('.concept-card.open'));
+  }
   if (!wasOpen && !openedToday.has(id)) {
     openedToday.add(id);
     saveDailyGoal();
