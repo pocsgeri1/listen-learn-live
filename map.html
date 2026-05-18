@@ -1413,9 +1413,11 @@ function setupInteractions() {
   const wrap = document.getElementById('mapWrap');
 
   // Pan (mouse)
+  let dragMoved = false;
   wrap.addEventListener('mousedown', (e) => {
     if (e.target.closest('.concept-node') || e.target.closest('.cat-node')) return;
     isPanning = true;
+    dragMoved = false;
     wrap.classList.add('dragging');
     panStartX = e.clientX;
     panStartY = e.clientY;
@@ -1425,8 +1427,11 @@ function setupInteractions() {
 
   window.addEventListener('mousemove', (e) => {
     if (!isPanning) return;
-    panX = panOriginX + (e.clientX - panStartX);
-    panY = panOriginY + (e.clientY - panStartY);
+    const dx = e.clientX - panStartX;
+    const dy = e.clientY - panStartY;
+    if (Math.abs(dx) > 5 || Math.abs(dy) > 5) dragMoved = true;
+    panX = panOriginX + dx;
+    panY = panOriginY + dy;
     applyTransform();
   });
 
@@ -1465,8 +1470,9 @@ function setupInteractions() {
     zoomAt(mouseX, mouseY, delta);
   }, { passive: false });
 
-  // Click on empty → close panel + reset category
+  // Click on empty → close panel + reset category (ignore if this was a drag)
   wrap.addEventListener('click', (e) => {
+    if (dragMoved) { dragMoved = false; return; }
     if (!e.target.closest('.concept-node') && !e.target.closest('.cat-node')) {
       closePanel();
     }
