@@ -8,7 +8,12 @@
     "plain": "When you earn interest, and then that interest earns more interest — it snowballs over time. The longer you leave it, the faster it grows.",
     "analogy": "A snowball rolling downhill. The longer it rolls, the bigger it gets — but stop it early and it stays small.",
     "prompt": "Where in your life are you letting something compound — positively or negatively — without paying attention to it?",
-    "collection_id": 10
+    "collection_id": 10,
+    "related_ids": [
+      41,
+      45,
+      122
+    ]
   },
   {
     "id": 2,
@@ -19,7 +24,12 @@
     "plain": "When you spend time or money on X, you automatically give up whatever Y you could have done instead. The real price of any decision includes what you didn't do.",
     "analogy": "Ordering a burger means you can't eat the steak with that same meal. The steak is your opportunity cost.",
     "prompt": "Think of a decision you made recently. What did you give up that you haven't fully acknowledged?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [
+      4,
+      45,
+      379
+    ]
   },
   {
     "id": 3,
@@ -30,7 +40,12 @@
     "plain": "Your brain filters information to match what you already believe — you unconsciously ignore evidence that proves you wrong and notice evidence that proves you right.",
     "analogy": "When you buy a red car, suddenly you see red cars everywhere. They were always there — you just notice them now because your brain is primed to.",
     "prompt": "What's a belief you hold strongly that you've never seriously tried to disprove?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [
+      19,
+      24,
+      203
+    ]
   },
   {
     "id": 4,
@@ -41,7 +56,12 @@
     "plain": "Continuing something just because you already spent time or money on it — even when quitting is clearly the smarter move. The past investment is gone either way.",
     "analogy": "Finishing a terrible movie because you paid for the ticket. The money is gone either way — but now you're also losing your time.",
     "prompt": "What are you currently continuing mainly because of how much you've already invested — not because it's actually worth continuing?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [
+      2,
+      19,
+      402
+    ]
   },
   {
     "id": 5,
@@ -52,7 +72,12 @@
     "plain": "Using someone else's money, time, or tools to get results bigger than you could get alone. Leverage multiplies both your wins and your losses.",
     "analogy": "A crowbar lifts a rock you can't lift barehanded. Leverage is the crowbar. But drop it wrong and you hurt yourself.",
     "prompt": "Where in your work or finances could you be using leverage — other people's resources — instead of only your own?",
-    "collection_id": 2
+    "collection_id": 2,
+    "related_ids": [
+      128,
+      189,
+      318
+    ]
   },
   {
     "id": 6,
@@ -63,7 +88,12 @@
     "plain": "People copy others' behavior, especially when uncertain about what to do. Used constantly in marketing, trends, and peer pressure — often without anyone noticing.",
     "analogy": "A restaurant is packed — you assume it's good. An empty one next door makes you doubt it, even if the food is better.",
     "prompt": "Where in your life are you doing something mainly because others are doing it — not because you've actually decided it's right for you?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [
+      25,
+      38,
+      309
+    ]
   },
   {
     "id": 7,
@@ -74,7 +104,12 @@
     "plain": "The more decisions and self-control you use throughout the day, the worse your choices get by evening. Your capacity for discipline is a finite daily resource.",
     "analogy": "Your phone's battery. You start at 100% — every decision drains it. By night, you're running on 10% and making poor calls.",
     "prompt": "What important decisions are you making late in the day that should probably happen in the morning instead?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [
+      44,
+      90,
+      226
+    ]
   },
   {
     "id": 8,
@@ -85,7 +120,12 @@
     "plain": "The invisible forces of who controls resources, status, or information — and how that shapes who decides what, who speaks freely, and who doesn't.",
     "analogy": "At work, your boss doesn't need to threaten you. Their position alone shifts how you speak and act around them — even when nothing is said.",
     "prompt": "In your most important relationship right now — work or personal — who holds more power, and how is that affecting your behavior?",
-    "collection_id": 3
+    "collection_id": 3,
+    "related_ids": [
+      39,
+      42,
+      151
+    ]
   },
   {
     "id": 9,
@@ -96,7 +136,12 @@
     "plain": "How information is presented changes how people react — even if the underlying facts are identical. The wrapper matters as much as the content.",
     "analogy": "'90% survival rate' vs '10% death rate.' Same surgery. Same odds. One feels safe, one feels terrifying.",
     "prompt": "Think of something you're trying to convince someone of. How could you reframe it so it lands better — without changing the truth?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [
+      40,
+      63,
+      169
+    ]
   },
   {
     "id": 10,
@@ -107,7 +152,12 @@
     "plain": "Assets (savings, property, investments) minus liabilities (debts, loans). The real number that measures financial health — not your salary, not your spending.",
     "analogy": "Your house is worth €300k but you owe €200k on the mortgage. Your net worth from it is €100k — not €300k.",
     "prompt": "Do you actually know your current net worth? If not — what would it reveal if you calculated it today?",
-    "collection_id": 2
+    "collection_id": 2,
+    "related_ids": [
+      14,
+      37,
+      265
+    ]
   },
   {
     "id": 11,
@@ -118,7 +168,12 @@
     "plain": "A mental mode where you focus so much on what's lacking that it affects your decisions, relationships, and ambitions — often causing you to act against your own interests.",
     "analogy": "Eating too fast at a buffet because you're afraid it'll run out — even when there's clearly more than enough for everyone.",
     "prompt": "Where in your life are you operating from scarcity — protecting, hoarding, or shrinking — when abundance would serve you better?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [
+      15,
+      232,
+      314
+    ]
   },
   {
     "id": 12,
@@ -129,7 +184,12 @@
     "plain": "The ability to recognize, understand, manage, and respond to emotions effectively in yourself and others. Often matters more than IQ in relationships and leadership.",
     "analogy": "A good driver doesn't just know the rules — they read traffic, anticipate others' moves, and stay calm when things go wrong.",
     "prompt": "Think of a recent conflict. What emotion was driving the other person that you didn't fully acknowledge in the moment?",
-    "collection_id": 3
+    "collection_id": 3,
+    "related_ids": [
+      58,
+      204,
+      229
+    ]
   },
   {
     "id": 13,
@@ -140,7 +200,12 @@
     "plain": "Zero-sum means the pie is fixed — your gain is my loss (chess, poker). Win-win means we grow the pie together so both sides gain (partnerships, trade).",
     "analogy": "Zero-sum: arm wrestling — one winner, one loser. Win-win: two people building a business together — both eat more because of it.",
     "prompt": "In your most important negotiation right now — are you treating it as zero-sum when it could actually be win-win?",
-    "collection_id": 3
+    "collection_id": 3,
+    "related_ids": [
+      42,
+      65,
+      304
+    ]
   },
   {
     "id": 14,
@@ -151,7 +216,12 @@
     "plain": "Prices rise, so the same amount of money buys less over time. If your savings don't grow faster than inflation, you are effectively getting poorer while feeling safe.",
     "analogy": "A loaf of bread that costs €2 today might cost €3 in 10 years. Same bread — your euro just got weaker.",
     "prompt": "Is the money sitting in your savings account actually growing faster than inflation — or slowly losing value while you feel secure?",
-    "collection_id": 2
+    "collection_id": 2,
+    "related_ids": [
+      1,
+      10,
+      348
+    ]
   },
   {
     "id": 15,
@@ -162,7 +232,12 @@
     "plain": "People feel losses roughly twice as intensely as equivalent gains. This drives many irrational financial and personal decisions — we work harder to avoid losing than to win.",
     "analogy": "You're more upset losing your wallet than happy finding one with the same amount inside.",
     "prompt": "Where are you currently making a decision based on avoiding loss — rather than pursuing what's actually best?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [
+      4,
+      23,
+      294
+    ]
   },
   {
     "id": 16,
@@ -173,7 +248,12 @@
     "plain": "When someone does something for us, we feel a deep social obligation to return the favor — even if we didn't ask for it and didn't want it.",
     "analogy": "A restaurant gives you a free mint with the bill. Studies show tips go up. You feel obligated without realizing it.",
     "prompt": "Who in your life have you been giving to consistently — and who do you wish would give more but haven't asked directly?",
-    "collection_id": 3
+    "collection_id": 3,
+    "related_ids": [
+      6,
+      190,
+      281
+    ]
   },
   {
     "id": 17,
@@ -184,7 +264,12 @@
     "plain": "Safe choices produce small gains. Big potential gains come with real chances of losing. The skill is matching your risk level to your actual situation — not avoiding risk entirely.",
     "analogy": "A savings account vs a startup investment. One is safe and slow, the other could double your money — or disappear entirely.",
     "prompt": "Are you taking too little risk in an area where you could afford to bet bigger — or too much risk where you can't afford to lose?",
-    "collection_id": 2
+    "collection_id": 2,
+    "related_ids": [
+      23,
+      72,
+      100
+    ]
   },
   {
     "id": 18,
@@ -195,7 +280,12 @@
     "plain": "Break a problem down to its most basic, undeniable truths — then build your answer up from there. Rather than copying how it's always been done, you question every assumption.",
     "analogy": "Instead of copying other pizza shops, ask: what is pizza really? Dough + sauce + topping + heat. Now rebuild it better from that foundation.",
     "prompt": "Pick one thing in your life or work you've always done a certain way. What would it look like if you questioned every assumption and rebuilt it from scratch?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [
+      33,
+      76,
+      470
+    ]
   },
   {
     "id": 19,
@@ -206,7 +296,12 @@
     "plain": "When your actions contradict your values, your brain feels tension — and usually rationalizes the behavior rather than actually changing it.",
     "analogy": "A doctor who smokes. He knows it's harmful. His brain works hard to justify it rather than simply quit.",
     "prompt": "Where in your life are your actions quietly contradicting your stated values — and what story are you telling yourself to make it okay?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [
+      3,
+      198,
+      339
+    ]
   },
   {
     "id": 20,
@@ -217,7 +312,12 @@
     "plain": "Clearly defined limits on what behavior you accept from others — in relationships, work, and family. Not walls to keep people out, but lines that protect your self-respect.",
     "analogy": "A property fence. It doesn't mean you hate your neighbor — it just shows where your land ends and theirs begins.",
     "prompt": "Where in your life are you accepting treatment you wouldn't accept if you valued yourself more?",
-    "collection_id": 3
+    "collection_id": 3,
+    "related_ids": [
+      108,
+      207,
+      227
+    ]
   },
   {
     "id": 21,
@@ -228,7 +328,12 @@
     "plain": "A meme (the original concept, not just funny images) is any idea, behavior, or phrase that spreads from person to person. 'Memetic' describes anything with that viral, self-replicating quality.",
     "analogy": "A catchy song stuck in your head that you start humming — then your friend starts humming it. The song is memetic.",
     "prompt": "What idea have you spread recently without realizing you were spreading it?",
-    "collection_id": 4
+    "collection_id": 4,
+    "related_ids": [
+      46,
+      94,
+      252
+    ]
   },
   {
     "id": 22,
@@ -239,7 +344,12 @@
     "plain": "Used to say that an action has a real, measurable effect — however small. The opposite of dismissing something as pointless. Every non-zero contribution adds up.",
     "analogy": "Donating €5 has non-zero impact on a charity. It's not huge, but it's genuinely not nothing either.",
     "prompt": "What small action have you been dismissing as pointless that actually has non-zero impact if you do it consistently?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [
+      41,
+      59,
+      376
+    ]
   },
   {
     "id": 23,
@@ -250,7 +360,12 @@
     "plain": "When the potential loss and gain are wildly unequal. Smart players seek situations where the upside is huge and the downside is capped. Dumb bets are the reverse.",
     "analogy": "Buying a €10 lottery ticket: max loss is €10, potential gain is millions. Or a bad loan: you risk everything to earn a little interest.",
     "prompt": "Think of a risk you're considering. Is the potential upside actually proportionate to what you stand to lose?",
-    "collection_id": 2
+    "collection_id": 2,
+    "related_ids": [
+      17,
+      64,
+      100
+    ]
   },
   {
     "id": 24,
@@ -261,7 +376,12 @@
     "plain": "Humans crave stories and cause-effect logic. We constantly invent tidy explanations for things that were actually just chance or coincidence.",
     "analogy": "A CEO claims his leadership caused profits to double. But oil prices also dropped that year. We credit the story, not the luck.",
     "prompt": "What success in your life have you been taking full credit for that might have had more luck involved than you admit?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [
+      3,
+      36,
+      80
+    ]
   },
   {
     "id": 25,
@@ -272,7 +392,12 @@
     "plain": "Actions, clothes, words, or purchases used to communicate status, values, or identity — often subconsciously. Most luxury goods exist primarily as signals, not for function.",
     "analogy": "A man drives a Ferrari not just to get from A to B — he's signaling success, taste, and status to everyone watching.",
     "prompt": "What are your most expensive or visible possessions actually signaling — and to whom?",
-    "collection_id": 3
+    "collection_id": 3,
+    "related_ids": [
+      6,
+      92,
+      292
+    ]
   },
   {
     "id": 26,
@@ -283,7 +408,12 @@
     "plain": "If you give advice but bear none of the consequences if it goes wrong — your advice is cheap. Real credibility requires having something meaningful to lose.",
     "analogy": "A financial advisor who invests his own money in what he recommends has skin in the game. One who doesn't, doesn't.",
     "prompt": "Who is giving you advice right now who has nothing to lose if that advice turns out to be wrong?",
-    "collection_id": 5
+    "collection_id": 5,
+    "related_ids": [
+      28,
+      56,
+      406
+    ]
   },
   {
     "id": 27,
@@ -294,7 +424,12 @@
     "plain": "A small minority of inputs drives the majority of outputs. In business, relationships, effort — the returns are never evenly distributed. Find the vital few.",
     "analogy": "20% of your customers generate 80% of your revenue. 20% of your habits drive 80% of your results. Find that 20% and protect it.",
     "prompt": "What 20% of your current efforts is producing 80% of your meaningful results — and are you actually protecting that time?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [
+      52,
+      228,
+      484
+    ]
   },
   {
     "id": 28,
@@ -305,7 +440,12 @@
     "plain": "If someone is shielded from the consequences of their actions, they take more risk than they otherwise would. Common in insurance, banking, and government bailouts.",
     "analogy": "A renter who knows the landlord has full insurance may be less careful with the property than an owner who would personally bear the cost of damage.",
     "prompt": "Where in your life or work is someone protected from consequences in a way that's making them behave recklessly?",
-    "collection_id": 2
+    "collection_id": 2,
+    "related_ids": [
+      26,
+      42,
+      263
+    ]
   },
   {
     "id": 29,
@@ -316,7 +456,12 @@
     "plain": "When we think highly of someone in one area, we unconsciously assume they're good in all areas. Attractive people are assumed smarter. Confident people are assumed competent.",
     "analogy": "A handsome politician gets assumed to be honest and capable — voters subconsciously transfer the physical impression to his entire character.",
     "prompt": "Who are you currently trusting or admiring in one area, while assuming without evidence that they're equally reliable in others?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [
+      30,
+      40,
+      292
+    ]
   },
   {
     "id": 30,
@@ -327,7 +472,12 @@
     "plain": "People with low knowledge in an area overestimate their competence. Experts, aware of the full complexity, tend to be more humble about what they don't know.",
     "analogy": "A man who watched one YouTube video about investing now confidently explains the market to everyone. The real analyst says 'it's complicated.'",
     "prompt": "Where are you most confident right now — and is that confidence earned through depth, or borrowed from surface-level exposure?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [
+      29,
+      66,
+      152
+    ]
   },
   {
     "id": 31,
@@ -338,7 +488,12 @@
     "plain": "The mean (average) gets pulled by extreme outliers and can be misleading. The median (middle value) is more honest about what's typical for most people.",
     "analogy": "In a room of 9 people earning €30k plus one billionaire — the average income looks huge. The median tells you most people earn €30k.",
     "prompt": "When you hear an average statistic used to make a point, ask yourself: what does the median look like — and does the story still hold?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [
+      51,
+      165,
+      186
+    ]
   },
   {
     "id": 32,
@@ -349,7 +504,12 @@
     "plain": "Having agency means you're the one making conscious decisions about your life — not being passively moved by others, systems, or circumstances.",
     "analogy": "A chess piece has no agency — it goes where it's moved. A chess player does. Which one are you being in a given situation?",
     "prompt": "Where in your life are you behaving like a chess piece — waiting to be moved — when you could be making a deliberate move yourself?",
-    "collection_id": 5
+    "collection_id": 5,
+    "related_ids": [
+      61,
+      97,
+      269
+    ]
   },
   {
     "id": 33,
@@ -360,7 +520,12 @@
     "plain": "Flip the problem. Instead of 'how do I be happy?' ask 'what makes me miserable and how do I eliminate it?' Avoiding bad outcomes is often easier than chasing good ones.",
     "analogy": "Instead of designing a better car, ask: what makes cars kill people? Fix those things first. The safety follows.",
     "prompt": "Take one goal you're chasing right now and invert it. What would guarantee failure — and are you doing any of those things?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [
+      18,
+      155,
+      476
+    ]
   },
   {
     "id": 34,
@@ -371,7 +536,12 @@
     "plain": "The network of relationships and reputation you've built over time. You can spend it to open doors, ask favors, and get opportunities — and you can deplete it through bad behavior.",
     "analogy": "Every good thing you do for someone deposits trust into a bank. Every time you let someone down, you withdraw it.",
     "prompt": "With the most important person in your professional life right now — are you depositing or withdrawing from your social capital account?",
-    "collection_id": 3
+    "collection_id": 3,
+    "related_ids": [
+      16,
+      140,
+      177
+    ]
   },
   {
     "id": 35,
@@ -382,7 +552,12 @@
     "plain": "After any major change — new car, promotion, or even tragedy — people return to their emotional baseline. Nothing stays thrilling or crushing forever.",
     "analogy": "The new phone that excited you is now just 'your phone' three weeks later. You adapted completely.",
     "prompt": "What in your life are you no longer appreciating because you've adapted to it — that you'd desperately miss if it disappeared?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [
+      90,
+      279,
+      377
+    ]
   },
   {
     "id": 36,
@@ -393,7 +568,12 @@
     "plain": "An event nobody saw coming that has massive consequences — and which everyone explains as 'obvious in hindsight' once it's happened.",
     "analogy": "The 2008 financial crash, COVID-19, the rise of the internet. Nobody predicted them. Everyone explained them confidently afterward.",
     "prompt": "What low-probability, high-impact event are you not preparing for at all — that would devastate you if it happened tomorrow?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [
+      24,
+      101,
+      435
+    ]
   },
   {
     "id": 37,
@@ -404,7 +584,12 @@
     "plain": "How easily an asset can be converted to cash without losing significant value. Cash is 100% liquid. A house is illiquid — it takes time and cost to sell.",
     "analogy": "Cash in your wallet = completely liquid. A house = illiquid. You can't sell a room at 3am when you urgently need €500.",
     "prompt": "If you needed €10,000 in cash within 48 hours — could you get it? What does that answer tell you about your financial setup?",
-    "collection_id": 2
+    "collection_id": 2,
+    "related_ids": [
+      10,
+      64,
+      355
+    ]
   },
   {
     "id": 38,
@@ -415,7 +600,12 @@
     "plain": "The instinct to form in-groups and view out-groups with suspicion or hostility. It drives politics, sports fandom, nationalism, and office politics — often without people realizing it.",
     "analogy": "Two football fan groups who've never met personally still feel contempt for each other purely based on the color of their team shirt.",
     "prompt": "Where in your life are you treating someone as 'other' based on group membership rather than actually knowing them?",
-    "collection_id": 3
+    "collection_id": 3,
+    "related_ids": [
+      43,
+      146,
+      254
+    ]
   },
   {
     "id": 39,
@@ -426,7 +616,12 @@
     "plain": "Best Alternative To a Negotiated Agreement. The stronger your BATNA, the more power you have at any negotiating table. Always know it before you enter the room.",
     "analogy": "Negotiating salary with one job offer is weak. With three competing offers in hand, you can walk away — and both sides know it.",
     "prompt": "In your most important current negotiation — what is your BATNA? If you don't have one, how could you build one before negotiating?",
-    "collection_id": 3
+    "collection_id": 3,
+    "related_ids": [
+      8,
+      151,
+      189
+    ]
   },
   {
     "id": 40,
@@ -437,7 +632,12 @@
     "plain": "Whatever number or idea is introduced first sticks in your mind and distorts your judgment on everything that follows — even when the anchor is arbitrary.",
     "analogy": "A jacket 'marked down from €800 to €300' feels like a deal — even if it was never worth €800. The anchor is €800, not the fair price.",
     "prompt": "What price, salary, or expectation were you first given in an important situation — and has that anchor been shaping your thinking ever since?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [
+      9,
+      29,
+      156
+    ]
   },
   {
     "id": 41,
@@ -448,7 +648,12 @@
     "plain": "Like compound interest but for habits and behavior. Tiny improvements or declines, repeated daily, produce massive results over time — in either direction.",
     "analogy": "Reading 10 pages a day feels pointless. Over a year that's 18 books. Over a decade — you've read more than most humans alive.",
     "prompt": "What small daily action, if you did it consistently for one year, would produce the most significant change in your life?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [
+      1,
+      45,
+      105
+    ]
   },
   {
     "id": 42,
@@ -459,7 +664,12 @@
     "plain": "People do what they're rewarded for. If you want to understand why someone acts a certain way — find out what they're incentivized financially, socially, or emotionally to do.",
     "analogy": "A car salesman steers you to the most expensive option — not because it's best for you, but because his commission depends on it.",
     "prompt": "Think of someone whose behavior confuses or frustrates you. What incentive structure might be driving them that you haven't considered?",
-    "collection_id": 3
+    "collection_id": 3,
+    "related_ids": [
+      8,
+      13,
+      56
+    ]
   },
   {
     "id": 43,
@@ -470,7 +680,12 @@
     "plain": "A process where a group or society splits into two extreme opposing camps with no middle ground — each side becoming more extreme as the divide grows.",
     "analogy": "A workplace argument that started mild — now half the team won't speak to the other half. The nuanced middle collapsed.",
     "prompt": "Where in your life or work is a situation becoming polarized that could still be resolved if someone stepped into the middle?",
-    "collection_id": 3
+    "collection_id": 3,
+    "related_ids": [
+      38,
+      67,
+      158
+    ]
   },
   {
     "id": 44,
@@ -481,7 +696,12 @@
     "plain": "The total amount of mental effort being used at any moment. Too many things to think about simultaneously degrades decisions, memory, and clarity.",
     "analogy": "Trying to remember a phone number while someone gives you directions and your kid is crying. You drop all three.",
     "prompt": "Where is your cognitive load highest right now — and what one thing could you remove or simplify to create more mental space?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [
+      7,
+      214,
+      341
+    ]
   },
   {
     "id": 45,
@@ -492,7 +712,12 @@
     "plain": "The ability to resist a short-term pleasure or reward in favor of a better long-term outcome. Strongly linked to success, health, and financial stability.",
     "analogy": "The marshmallow test: children who waited 15 minutes for a second marshmallow were shown to have better life outcomes across multiple measures decades later.",
     "prompt": "Where are you choosing immediate comfort over a better future outcome — and is the short-term pleasure actually worth it?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [
+      1,
+      2,
+      122
+    ]
   },
   {
     "id": 46,
@@ -503,7 +728,12 @@
     "plain": "The ability to shape how events, people, or ideas are perceived through the story you tell about them. Politicians, brands, and people all compete to control the narrative.",
     "analogy": "Two people describe the same argument. Each version sounds like they're the reasonable one. Who tells it first and most convincingly often wins.",
     "prompt": "In a situation where you've been misrepresented — did you let someone else's narrative define you, or did you tell your own story?",
-    "collection_id": 3
+    "collection_id": 3,
+    "related_ids": [
+      21,
+      25,
+      144
+    ]
   },
   {
     "id": 47,
@@ -514,7 +744,12 @@
     "plain": "A physics concept used broadly: systems naturally decay and become chaotic unless effort is continuously put in to maintain them. Applies to relationships, businesses, and health.",
     "analogy": "Leave a garden alone for a year. It becomes a mess. Relationships work the same — neglect them and they fall apart without any dramatic event.",
     "prompt": "What relationship or system in your life is slowly decaying through neglect — and what would it take to reverse the entropy?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [
+      50,
+      74,
+      453
+    ]
   },
   {
     "id": 48,
@@ -525,7 +760,12 @@
     "plain": "After an unusually good or bad event, outcomes tend to drift back toward the average over time. Mistaking temporary extremes for permanent trends is a common and costly error.",
     "analogy": "A basketball player who had the best game of his career will likely perform more average next game — not because he got worse, but because the peak was a statistical outlier.",
     "prompt": "Where are you extrapolating a recent extreme — unusually good or bad — as if it's going to continue indefinitely?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [
+      24,
+      36,
+      164
+    ]
   },
   {
     "id": 49,
@@ -536,7 +776,12 @@
     "plain": "When one party in a deal or relationship has significantly more knowledge than the other, they have a structural advantage that shapes the outcome in their favor.",
     "analogy": "A mechanic knows exactly what's wrong with your car. You don't. That knowledge gap is precisely why you might be overcharged.",
     "prompt": "In your most important current negotiation or decision — who has more information than you, and what can you do to close that gap?",
-    "collection_id": 3
+    "collection_id": 3,
+    "related_ids": [
+      8,
+      39,
+      185
+    ]
   },
   {
     "id": 50,
@@ -547,7 +792,12 @@
     "plain": "Looking at how all parts of a situation interact rather than focusing on one element in isolation. The solution to a problem is often found elsewhere in the system.",
     "analogy": "A city adds more roads to reduce traffic. Traffic gets worse — because more roads attract more drivers. You have to see the whole system, not just the obvious fix.",
     "prompt": "Think of a problem you're trying to solve. What part of the wider system might be causing it that you haven't looked at yet?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [
+      47,
+      155,
+      468
+    ]
   },
   {
     "id": 51,
@@ -5512,7 +5762,13 @@
     "collection_id": 515,
     "timestamp": 203,
     "editors_pick": true,
-    "related_ids": [15, 42, 89, 134, 178]
+    "related_ids": [
+      15,
+      42,
+      89,
+      134,
+      178
+    ]
   },
   {
     "id": 468,
@@ -5526,7 +5782,13 @@
     "collection_id": 515,
     "timestamp": 1440,
     "editors_pick": false,
-    "related_ids": [12, 67, 103, 145, 189]
+    "related_ids": [
+      12,
+      67,
+      103,
+      145,
+      189
+    ]
   },
   {
     "id": 469,
@@ -5540,7 +5802,13 @@
     "collection_id": 515,
     "timestamp": 165,
     "editors_pick": true,
-    "related_ids": [15, 42, 89, 134, 178]
+    "related_ids": [
+      15,
+      42,
+      89,
+      134,
+      178
+    ]
   },
   {
     "id": 470,
@@ -5554,7 +5822,13 @@
     "collection_id": 515,
     "timestamp": 1650,
     "editors_pick": true,
-    "related_ids": [23, 67, 112, 145, 189]
+    "related_ids": [
+      23,
+      67,
+      112,
+      145,
+      189
+    ]
   },
   {
     "id": 471,
@@ -5568,7 +5842,13 @@
     "collection_id": 515,
     "timestamp": 1680,
     "editors_pick": true,
-    "related_ids": [42, 89, 134, 156, 203]
+    "related_ids": [
+      42,
+      89,
+      134,
+      156,
+      203
+    ]
   },
   {
     "id": 472,
@@ -5582,7 +5862,13 @@
     "collection_id": 515,
     "timestamp": 1380,
     "editors_pick": false,
-    "related_ids": [12, 67, 103, 145, 189]
+    "related_ids": [
+      12,
+      67,
+      103,
+      145,
+      189
+    ]
   },
   {
     "id": 473,
@@ -5596,7 +5882,13 @@
     "collection_id": 515,
     "timestamp": 1734,
     "editors_pick": false,
-    "related_ids": [42, 89, 134, 167, 203]
+    "related_ids": [
+      42,
+      89,
+      134,
+      167,
+      203
+    ]
   },
   {
     "id": 474,
@@ -5610,7 +5902,13 @@
     "collection_id": 515,
     "timestamp": 432,
     "editors_pick": false,
-    "related_ids": [15, 42, 89, 134, 178]
+    "related_ids": [
+      15,
+      42,
+      89,
+      134,
+      178
+    ]
   },
   {
     "id": 475,
@@ -5624,7 +5922,13 @@
     "collection_id": 515,
     "timestamp": 1050,
     "editors_pick": false,
-    "related_ids": [42, 78, 134, 167, 203]
+    "related_ids": [
+      42,
+      78,
+      134,
+      167,
+      203
+    ]
   },
   {
     "id": 476,
@@ -5638,7 +5942,13 @@
     "collection_id": 515,
     "timestamp": 1830,
     "editors_pick": true,
-    "related_ids": [42, 89, 134, 156, 203]
+    "related_ids": [
+      42,
+      89,
+      134,
+      156,
+      203
+    ]
   },
   {
     "id": 477,
@@ -5652,7 +5962,13 @@
     "collection_id": 515,
     "timestamp": 665,
     "editors_pick": false,
-    "related_ids": [23, 67, 89, 112, 178]
+    "related_ids": [
+      23,
+      67,
+      89,
+      112,
+      178
+    ]
   },
   {
     "id": 478,
@@ -5666,7 +5982,13 @@
     "collection_id": 515,
     "timestamp": 900,
     "editors_pick": false,
-    "related_ids": [15, 89, 112, 156, 178]
+    "related_ids": [
+      15,
+      89,
+      112,
+      156,
+      178
+    ]
   },
   {
     "id": 479,
@@ -5680,7 +6002,13 @@
     "collection_id": 515,
     "timestamp": 605,
     "editors_pick": false,
-    "related_ids": [15, 89, 112, 156, 203]
+    "related_ids": [
+      15,
+      89,
+      112,
+      156,
+      203
+    ]
   },
   {
     "id": 480,
@@ -5694,7 +6022,13 @@
     "collection_id": 515,
     "timestamp": 724,
     "editors_pick": true,
-    "related_ids": [42, 78, 134, 167, 203]
+    "related_ids": [
+      42,
+      78,
+      134,
+      167,
+      203
+    ]
   },
   {
     "id": 481,
@@ -5708,7 +6042,13 @@
     "collection_id": 515,
     "timestamp": 2310,
     "editors_pick": false,
-    "related_ids": [89, 112, 145, 178, 189]
+    "related_ids": [
+      89,
+      112,
+      145,
+      178,
+      189
+    ]
   },
   {
     "id": 482,
@@ -5722,7 +6062,13 @@
     "collection_id": 515,
     "timestamp": 1800,
     "editors_pick": false,
-    "related_ids": [15, 42, 78, 134, 203]
+    "related_ids": [
+      15,
+      42,
+      78,
+      134,
+      203
+    ]
   },
   {
     "id": 483,
@@ -5736,7 +6082,13 @@
     "collection_id": 515,
     "timestamp": 1680,
     "editors_pick": false,
-    "related_ids": [42, 89, 134, 167, 203]
+    "related_ids": [
+      42,
+      89,
+      134,
+      167,
+      203
+    ]
   },
   {
     "id": 484,
@@ -5750,7 +6102,13 @@
     "collection_id": 515,
     "timestamp": 2250,
     "editors_pick": true,
-    "related_ids": [67, 103, 145, 189, 201]
+    "related_ids": [
+      67,
+      103,
+      145,
+      189,
+      201
+    ]
   },
   {
     "id": 485,
@@ -5764,7 +6122,13 @@
     "collection_id": 515,
     "timestamp": 1980,
     "editors_pick": true,
-    "related_ids": [67, 89, 112, 145, 189]
+    "related_ids": [
+      67,
+      89,
+      112,
+      145,
+      189
+    ]
   },
   {
     "id": 486,
@@ -5778,7 +6142,13 @@
     "collection_id": 515,
     "timestamp": 1260,
     "editors_pick": false,
-    "related_ids": [78, 89, 134, 167, 203]
+    "related_ids": [
+      78,
+      89,
+      134,
+      167,
+      203
+    ]
   },
   {
     "id": 487,
@@ -5792,7 +6162,13 @@
     "collection_id": 515,
     "timestamp": 2044,
     "editors_pick": false,
-    "related_ids": [15, 42, 89, 156, 203]
+    "related_ids": [
+      15,
+      42,
+      89,
+      156,
+      203
+    ]
   },
   {
     "id": 488,
@@ -5806,7 +6182,13 @@
     "collection_id": 515,
     "timestamp": 1110,
     "editors_pick": false,
-    "related_ids": [42, 78, 134, 156, 203]
+    "related_ids": [
+      42,
+      78,
+      134,
+      156,
+      203
+    ]
   },
   {
     "id": 489,
@@ -5820,7 +6202,13 @@
     "collection_id": 515,
     "timestamp": 2250,
     "editors_pick": false,
-    "related_ids": [23, 67, 89, 112, 178]
+    "related_ids": [
+      23,
+      67,
+      89,
+      112,
+      178
+    ]
   },
   {
     "id": 490,
@@ -5834,7 +6222,13 @@
     "collection_id": 515,
     "timestamp": 515,
     "editors_pick": false,
-    "related_ids": [42, 76, 103, 167, 201]
+    "related_ids": [
+      42,
+      76,
+      103,
+      167,
+      201
+    ]
   },
   {
     "id": 491,
@@ -5848,6 +6242,12 @@
     "collection_id": 515,
     "timestamp": 2355,
     "editors_pick": true,
-    "related_ids": [67, 89, 112, 145, 178]
+    "related_ids": [
+      67,
+      89,
+      112,
+      145,
+      178
+    ]
   }
 ]
