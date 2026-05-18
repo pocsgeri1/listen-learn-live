@@ -9,11 +9,7 @@
     "analogy": "A snowball rolling downhill. The longer it rolls, the bigger it gets — but stop it early and it stays small.",
     "prompt": "Where in your life are you letting something compound — positively or negatively — without paying attention to it?",
     "collection_id": 10,
-    "related_ids": [
-      41,
-      45,
-      122
-    ]
+    "related_ids": [41, 45, 122]
   },
   {
     "id": 2,
@@ -25,11 +21,7 @@
     "analogy": "Ordering a burger means you can't eat the steak with that same meal. The steak is your opportunity cost.",
     "prompt": "Think of a decision you made recently. What did you give up that you haven't fully acknowledged?",
     "collection_id": 1,
-    "related_ids": [
-      4,
-      45,
-      379
-    ]
+    "related_ids": [4, 45, 379]
   },
   {
     "id": 3,
@@ -41,11 +33,7 @@
     "analogy": "When you buy a red car, suddenly you see red cars everywhere. They were always there — you just notice them now because your brain is primed to.",
     "prompt": "What's a belief you hold strongly that you've never seriously tried to disprove?",
     "collection_id": 1,
-    "related_ids": [
-      19,
-      24,
-      203
-    ]
+    "related_ids": [19, 24, 203]
   },
   {
     "id": 4,
@@ -57,11 +45,7 @@
     "analogy": "Finishing a terrible movie because you paid for the ticket. The money is gone either way — but now you're also losing your time.",
     "prompt": "What are you currently continuing mainly because of how much you've already invested — not because it's actually worth continuing?",
     "collection_id": 1,
-    "related_ids": [
-      2,
-      19,
-      402
-    ]
+    "related_ids": [2, 19, 402]
   },
   {
     "id": 5,
@@ -73,11 +57,7 @@
     "analogy": "A crowbar lifts a rock you can't lift barehanded. Leverage is the crowbar. But drop it wrong and you hurt yourself.",
     "prompt": "Where in your work or finances could you be using leverage — other people's resources — instead of only your own?",
     "collection_id": 2,
-    "related_ids": [
-      128,
-      189,
-      318
-    ]
+    "related_ids": [128, 189, 318]
   },
   {
     "id": 6,
@@ -89,11 +69,7 @@
     "analogy": "A restaurant is packed — you assume it's good. An empty one next door makes you doubt it, even if the food is better.",
     "prompt": "Where in your life are you doing something mainly because others are doing it — not because you've actually decided it's right for you?",
     "collection_id": 1,
-    "related_ids": [
-      25,
-      38,
-      309
-    ]
+    "related_ids": [25, 38, 309]
   },
   {
     "id": 7,
@@ -105,11 +81,7 @@
     "analogy": "Your phone's battery. You start at 100% — every decision drains it. By night, you're running on 10% and making poor calls.",
     "prompt": "What important decisions are you making late in the day that should probably happen in the morning instead?",
     "collection_id": 1,
-    "related_ids": [
-      44,
-      90,
-      226
-    ]
+    "related_ids": [44, 90, 226]
   },
   {
     "id": 8,
@@ -121,11 +93,7 @@
     "analogy": "At work, your boss doesn't need to threaten you. Their position alone shifts how you speak and act around them — even when nothing is said.",
     "prompt": "In your most important relationship right now — work or personal — who holds more power, and how is that affecting your behavior?",
     "collection_id": 3,
-    "related_ids": [
-      39,
-      42,
-      151
-    ]
+    "related_ids": [39, 42, 151]
   },
   {
     "id": 9,
@@ -137,11 +105,7 @@
     "analogy": "'90% survival rate' vs '10% death rate.' Same surgery. Same odds. One feels safe, one feels terrifying.",
     "prompt": "Think of something you're trying to convince someone of. How could you reframe it so it lands better — without changing the truth?",
     "collection_id": 1,
-    "related_ids": [
-      40,
-      63,
-      169
-    ]
+    "related_ids": [40, 63, 169]
   },
   {
     "id": 10,
@@ -153,11 +117,7 @@
     "analogy": "Your house is worth €300k but you owe €200k on the mortgage. Your net worth from it is €100k — not €300k.",
     "prompt": "Do you actually know your current net worth? If not — what would it reveal if you calculated it today?",
     "collection_id": 2,
-    "related_ids": [
-      14,
-      37,
-      265
-    ]
+    "related_ids": [14, 37, 265]
   },
   {
     "id": 11,
@@ -169,11 +129,7 @@
     "analogy": "Eating too fast at a buffet because you're afraid it'll run out — even when there's clearly more than enough for everyone.",
     "prompt": "Where in your life are you operating from scarcity — protecting, hoarding, or shrinking — when abundance would serve you better?",
     "collection_id": 1,
-    "related_ids": [
-      15,
-      232,
-      314
-    ]
+    "related_ids": [15, 232, 314]
   },
   {
     "id": 12,
@@ -185,11 +141,7 @@
     "analogy": "A good driver doesn't just know the rules — they read traffic, anticipate others' moves, and stay calm when things go wrong.",
     "prompt": "Think of a recent conflict. What emotion was driving the other person that you didn't fully acknowledge in the moment?",
     "collection_id": 3,
-    "related_ids": [
-      58,
-      204,
-      229
-    ]
+    "related_ids": [58, 204, 229]
   },
   {
     "id": 13,
@@ -201,11 +153,7 @@
     "analogy": "Zero-sum: arm wrestling — one winner, one loser. Win-win: two people building a business together — both eat more because of it.",
     "prompt": "In your most important negotiation right now — are you treating it as zero-sum when it could actually be win-win?",
     "collection_id": 3,
-    "related_ids": [
-      42,
-      65,
-      304
-    ]
+    "related_ids": [42, 65, 304]
   },
   {
     "id": 14,
@@ -217,11 +165,7 @@
     "analogy": "A loaf of bread that costs €2 today might cost €3 in 10 years. Same bread — your euro just got weaker.",
     "prompt": "Is the money sitting in your savings account actually growing faster than inflation — or slowly losing value while you feel secure?",
     "collection_id": 2,
-    "related_ids": [
-      1,
-      10,
-      348
-    ]
+    "related_ids": [1, 10, 348]
   },
   {
     "id": 15,
@@ -233,11 +177,7 @@
     "analogy": "You're more upset losing your wallet than happy finding one with the same amount inside.",
     "prompt": "Where are you currently making a decision based on avoiding loss — rather than pursuing what's actually best?",
     "collection_id": 1,
-    "related_ids": [
-      4,
-      23,
-      294
-    ]
+    "related_ids": [4, 23, 294]
   },
   {
     "id": 16,
@@ -249,11 +189,7 @@
     "analogy": "A restaurant gives you a free mint with the bill. Studies show tips go up. You feel obligated without realizing it.",
     "prompt": "Who in your life have you been giving to consistently — and who do you wish would give more but haven't asked directly?",
     "collection_id": 3,
-    "related_ids": [
-      6,
-      190,
-      281
-    ]
+    "related_ids": [6, 190, 281]
   },
   {
     "id": 17,
@@ -265,11 +201,7 @@
     "analogy": "A savings account vs a startup investment. One is safe and slow, the other could double your money — or disappear entirely.",
     "prompt": "Are you taking too little risk in an area where you could afford to bet bigger — or too much risk where you can't afford to lose?",
     "collection_id": 2,
-    "related_ids": [
-      23,
-      72,
-      100
-    ]
+    "related_ids": [23, 72, 100]
   },
   {
     "id": 18,
@@ -281,11 +213,7 @@
     "analogy": "Instead of copying other pizza shops, ask: what is pizza really? Dough + sauce + topping + heat. Now rebuild it better from that foundation.",
     "prompt": "Pick one thing in your life or work you've always done a certain way. What would it look like if you questioned every assumption and rebuilt it from scratch?",
     "collection_id": 1,
-    "related_ids": [
-      33,
-      76,
-      470
-    ]
+    "related_ids": [33, 76, 470]
   },
   {
     "id": 19,
@@ -297,11 +225,7 @@
     "analogy": "A doctor who smokes. He knows it's harmful. His brain works hard to justify it rather than simply quit.",
     "prompt": "Where in your life are your actions quietly contradicting your stated values — and what story are you telling yourself to make it okay?",
     "collection_id": 1,
-    "related_ids": [
-      3,
-      198,
-      339
-    ]
+    "related_ids": [3, 198, 339]
   },
   {
     "id": 20,
@@ -313,11 +237,7 @@
     "analogy": "A property fence. It doesn't mean you hate your neighbor — it just shows where your land ends and theirs begins.",
     "prompt": "Where in your life are you accepting treatment you wouldn't accept if you valued yourself more?",
     "collection_id": 3,
-    "related_ids": [
-      108,
-      207,
-      227
-    ]
+    "related_ids": [108, 207, 227]
   },
   {
     "id": 21,
@@ -329,11 +249,7 @@
     "analogy": "A catchy song stuck in your head that you start humming — then your friend starts humming it. The song is memetic.",
     "prompt": "What idea have you spread recently without realizing you were spreading it?",
     "collection_id": 4,
-    "related_ids": [
-      46,
-      94,
-      252
-    ]
+    "related_ids": [46, 94, 252]
   },
   {
     "id": 22,
@@ -345,11 +261,7 @@
     "analogy": "Donating €5 has non-zero impact on a charity. It's not huge, but it's genuinely not nothing either.",
     "prompt": "What small action have you been dismissing as pointless that actually has non-zero impact if you do it consistently?",
     "collection_id": 1,
-    "related_ids": [
-      41,
-      59,
-      376
-    ]
+    "related_ids": [41, 59, 376]
   },
   {
     "id": 23,
@@ -361,11 +273,7 @@
     "analogy": "Buying a €10 lottery ticket: max loss is €10, potential gain is millions. Or a bad loan: you risk everything to earn a little interest.",
     "prompt": "Think of a risk you're considering. Is the potential upside actually proportionate to what you stand to lose?",
     "collection_id": 2,
-    "related_ids": [
-      17,
-      64,
-      100
-    ]
+    "related_ids": [17, 64, 100]
   },
   {
     "id": 24,
@@ -377,11 +285,7 @@
     "analogy": "A CEO claims his leadership caused profits to double. But oil prices also dropped that year. We credit the story, not the luck.",
     "prompt": "What success in your life have you been taking full credit for that might have had more luck involved than you admit?",
     "collection_id": 1,
-    "related_ids": [
-      3,
-      36,
-      80
-    ]
+    "related_ids": [3, 36, 80]
   },
   {
     "id": 25,
@@ -393,11 +297,7 @@
     "analogy": "A man drives a Ferrari not just to get from A to B — he's signaling success, taste, and status to everyone watching.",
     "prompt": "What are your most expensive or visible possessions actually signaling — and to whom?",
     "collection_id": 3,
-    "related_ids": [
-      6,
-      92,
-      292
-    ]
+    "related_ids": [6, 92, 292]
   },
   {
     "id": 26,
@@ -409,11 +309,7 @@
     "analogy": "A financial advisor who invests his own money in what he recommends has skin in the game. One who doesn't, doesn't.",
     "prompt": "Who is giving you advice right now who has nothing to lose if that advice turns out to be wrong?",
     "collection_id": 5,
-    "related_ids": [
-      28,
-      56,
-      406
-    ]
+    "related_ids": [28, 56, 406]
   },
   {
     "id": 27,
@@ -425,11 +321,7 @@
     "analogy": "20% of your customers generate 80% of your revenue. 20% of your habits drive 80% of your results. Find that 20% and protect it.",
     "prompt": "What 20% of your current efforts is producing 80% of your meaningful results — and are you actually protecting that time?",
     "collection_id": 1,
-    "related_ids": [
-      52,
-      228,
-      484
-    ]
+    "related_ids": [52, 228, 484]
   },
   {
     "id": 28,
@@ -441,11 +333,7 @@
     "analogy": "A renter who knows the landlord has full insurance may be less careful with the property than an owner who would personally bear the cost of damage.",
     "prompt": "Where in your life or work is someone protected from consequences in a way that's making them behave recklessly?",
     "collection_id": 2,
-    "related_ids": [
-      26,
-      42,
-      263
-    ]
+    "related_ids": [26, 42, 263]
   },
   {
     "id": 29,
@@ -457,11 +345,7 @@
     "analogy": "A handsome politician gets assumed to be honest and capable — voters subconsciously transfer the physical impression to his entire character.",
     "prompt": "Who are you currently trusting or admiring in one area, while assuming without evidence that they're equally reliable in others?",
     "collection_id": 1,
-    "related_ids": [
-      30,
-      40,
-      292
-    ]
+    "related_ids": [30, 40, 292]
   },
   {
     "id": 30,
@@ -473,11 +357,7 @@
     "analogy": "A man who watched one YouTube video about investing now confidently explains the market to everyone. The real analyst says 'it's complicated.'",
     "prompt": "Where are you most confident right now — and is that confidence earned through depth, or borrowed from surface-level exposure?",
     "collection_id": 1,
-    "related_ids": [
-      29,
-      66,
-      152
-    ]
+    "related_ids": [29, 66, 152]
   },
   {
     "id": 31,
@@ -489,11 +369,7 @@
     "analogy": "In a room of 9 people earning €30k plus one billionaire — the average income looks huge. The median tells you most people earn €30k.",
     "prompt": "When you hear an average statistic used to make a point, ask yourself: what does the median look like — and does the story still hold?",
     "collection_id": 1,
-    "related_ids": [
-      51,
-      165,
-      186
-    ]
+    "related_ids": [51, 165, 186]
   },
   {
     "id": 32,
@@ -505,11 +381,7 @@
     "analogy": "A chess piece has no agency — it goes where it's moved. A chess player does. Which one are you being in a given situation?",
     "prompt": "Where in your life are you behaving like a chess piece — waiting to be moved — when you could be making a deliberate move yourself?",
     "collection_id": 5,
-    "related_ids": [
-      61,
-      97,
-      269
-    ]
+    "related_ids": [61, 97, 269]
   },
   {
     "id": 33,
@@ -521,11 +393,7 @@
     "analogy": "Instead of designing a better car, ask: what makes cars kill people? Fix those things first. The safety follows.",
     "prompt": "Take one goal you're chasing right now and invert it. What would guarantee failure — and are you doing any of those things?",
     "collection_id": 1,
-    "related_ids": [
-      18,
-      155,
-      476
-    ]
+    "related_ids": [18, 155, 476]
   },
   {
     "id": 34,
@@ -537,11 +405,7 @@
     "analogy": "Every good thing you do for someone deposits trust into a bank. Every time you let someone down, you withdraw it.",
     "prompt": "With the most important person in your professional life right now — are you depositing or withdrawing from your social capital account?",
     "collection_id": 3,
-    "related_ids": [
-      16,
-      140,
-      177
-    ]
+    "related_ids": [16, 140, 177]
   },
   {
     "id": 35,
@@ -553,11 +417,7 @@
     "analogy": "The new phone that excited you is now just 'your phone' three weeks later. You adapted completely.",
     "prompt": "What in your life are you no longer appreciating because you've adapted to it — that you'd desperately miss if it disappeared?",
     "collection_id": 1,
-    "related_ids": [
-      90,
-      279,
-      377
-    ]
+    "related_ids": [90, 279, 377]
   },
   {
     "id": 36,
@@ -569,11 +429,7 @@
     "analogy": "The 2008 financial crash, COVID-19, the rise of the internet. Nobody predicted them. Everyone explained them confidently afterward.",
     "prompt": "What low-probability, high-impact event are you not preparing for at all — that would devastate you if it happened tomorrow?",
     "collection_id": 1,
-    "related_ids": [
-      24,
-      101,
-      435
-    ]
+    "related_ids": [24, 101, 435]
   },
   {
     "id": 37,
@@ -585,11 +441,7 @@
     "analogy": "Cash in your wallet = completely liquid. A house = illiquid. You can't sell a room at 3am when you urgently need €500.",
     "prompt": "If you needed €10,000 in cash within 48 hours — could you get it? What does that answer tell you about your financial setup?",
     "collection_id": 2,
-    "related_ids": [
-      10,
-      64,
-      355
-    ]
+    "related_ids": [10, 64, 355]
   },
   {
     "id": 38,
@@ -601,11 +453,7 @@
     "analogy": "Two football fan groups who've never met personally still feel contempt for each other purely based on the color of their team shirt.",
     "prompt": "Where in your life are you treating someone as 'other' based on group membership rather than actually knowing them?",
     "collection_id": 3,
-    "related_ids": [
-      43,
-      146,
-      254
-    ]
+    "related_ids": [43, 146, 254]
   },
   {
     "id": 39,
@@ -617,11 +465,7 @@
     "analogy": "Negotiating salary with one job offer is weak. With three competing offers in hand, you can walk away — and both sides know it.",
     "prompt": "In your most important current negotiation — what is your BATNA? If you don't have one, how could you build one before negotiating?",
     "collection_id": 3,
-    "related_ids": [
-      8,
-      151,
-      189
-    ]
+    "related_ids": [8, 151, 189]
   },
   {
     "id": 40,
@@ -633,11 +477,7 @@
     "analogy": "A jacket 'marked down from €800 to €300' feels like a deal — even if it was never worth €800. The anchor is €800, not the fair price.",
     "prompt": "What price, salary, or expectation were you first given in an important situation — and has that anchor been shaping your thinking ever since?",
     "collection_id": 1,
-    "related_ids": [
-      9,
-      29,
-      156
-    ]
+    "related_ids": [9, 29, 156]
   },
   {
     "id": 41,
@@ -649,11 +489,7 @@
     "analogy": "Reading 10 pages a day feels pointless. Over a year that's 18 books. Over a decade — you've read more than most humans alive.",
     "prompt": "What small daily action, if you did it consistently for one year, would produce the most significant change in your life?",
     "collection_id": 1,
-    "related_ids": [
-      1,
-      45,
-      105
-    ]
+    "related_ids": [1, 45, 105]
   },
   {
     "id": 42,
@@ -665,11 +501,7 @@
     "analogy": "A car salesman steers you to the most expensive option — not because it's best for you, but because his commission depends on it.",
     "prompt": "Think of someone whose behavior confuses or frustrates you. What incentive structure might be driving them that you haven't considered?",
     "collection_id": 3,
-    "related_ids": [
-      8,
-      13,
-      56
-    ]
+    "related_ids": [8, 13, 56]
   },
   {
     "id": 43,
@@ -681,11 +513,7 @@
     "analogy": "A workplace argument that started mild — now half the team won't speak to the other half. The nuanced middle collapsed.",
     "prompt": "Where in your life or work is a situation becoming polarized that could still be resolved if someone stepped into the middle?",
     "collection_id": 3,
-    "related_ids": [
-      38,
-      67,
-      158
-    ]
+    "related_ids": [38, 67, 158]
   },
   {
     "id": 44,
@@ -697,11 +525,7 @@
     "analogy": "Trying to remember a phone number while someone gives you directions and your kid is crying. You drop all three.",
     "prompt": "Where is your cognitive load highest right now — and what one thing could you remove or simplify to create more mental space?",
     "collection_id": 1,
-    "related_ids": [
-      7,
-      214,
-      341
-    ]
+    "related_ids": [7, 214, 341]
   },
   {
     "id": 45,
@@ -713,11 +537,7 @@
     "analogy": "The marshmallow test: children who waited 15 minutes for a second marshmallow were shown to have better life outcomes across multiple measures decades later.",
     "prompt": "Where are you choosing immediate comfort over a better future outcome — and is the short-term pleasure actually worth it?",
     "collection_id": 1,
-    "related_ids": [
-      1,
-      2,
-      122
-    ]
+    "related_ids": [1, 2, 122]
   },
   {
     "id": 46,
@@ -729,11 +549,7 @@
     "analogy": "Two people describe the same argument. Each version sounds like they're the reasonable one. Who tells it first and most convincingly often wins.",
     "prompt": "In a situation where you've been misrepresented — did you let someone else's narrative define you, or did you tell your own story?",
     "collection_id": 3,
-    "related_ids": [
-      21,
-      25,
-      144
-    ]
+    "related_ids": [21, 25, 144]
   },
   {
     "id": 47,
@@ -745,11 +561,7 @@
     "analogy": "Leave a garden alone for a year. It becomes a mess. Relationships work the same — neglect them and they fall apart without any dramatic event.",
     "prompt": "What relationship or system in your life is slowly decaying through neglect — and what would it take to reverse the entropy?",
     "collection_id": 1,
-    "related_ids": [
-      50,
-      74,
-      453
-    ]
+    "related_ids": [50, 74, 453]
   },
   {
     "id": 48,
@@ -761,11 +573,7 @@
     "analogy": "A basketball player who had the best game of his career will likely perform more average next game — not because he got worse, but because the peak was a statistical outlier.",
     "prompt": "Where are you extrapolating a recent extreme — unusually good or bad — as if it's going to continue indefinitely?",
     "collection_id": 1,
-    "related_ids": [
-      24,
-      36,
-      164
-    ]
+    "related_ids": [24, 36, 164]
   },
   {
     "id": 49,
@@ -777,11 +585,7 @@
     "analogy": "A mechanic knows exactly what's wrong with your car. You don't. That knowledge gap is precisely why you might be overcharged.",
     "prompt": "In your most important current negotiation or decision — who has more information than you, and what can you do to close that gap?",
     "collection_id": 3,
-    "related_ids": [
-      8,
-      39,
-      185
-    ]
+    "related_ids": [8, 39, 185]
   },
   {
     "id": 50,
@@ -793,11 +597,7 @@
     "analogy": "A city adds more roads to reduce traffic. Traffic gets worse — because more roads attract more drivers. You have to see the whole system, not just the obvious fix.",
     "prompt": "Think of a problem you're trying to solve. What part of the wider system might be causing it that you haven't looked at yet?",
     "collection_id": 1,
-    "related_ids": [
-      47,
-      155,
-      468
-    ]
+    "related_ids": [47, 155, 468]
   },
   {
     "id": 51,
@@ -808,7 +608,8 @@
     "plain": "When we only see the success stories and draw incorrect conclusions about what leads to success — ignoring all the failures we never see because they disappeared quietly.",
     "analogy": "'Entrepreneurs who dropped out of college became billionaires!' — but we never hear about the thousands who dropped out and quietly went broke.",
     "prompt": "What advice or strategy are you following based mainly on visible success stories — without accounting for all the invisible failures who tried the same thing?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [24, 60, 143]
   },
   {
     "id": 52,
@@ -819,7 +620,8 @@
     "plain": "After a certain point, each additional unit of effort, money, or resource produces less and less gain. Knowing when you've hit this point is critical to efficiency.",
     "analogy": "The first coffee sharpens you. The second helps. The fifth makes you jittery and anxious. More stops being more — it becomes less.",
     "prompt": "Where in your work or life are you past the point of diminishing returns — putting in more effort for increasingly small gains?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [27, 96, 374]
   },
   {
     "id": 53,
@@ -830,7 +632,8 @@
     "plain": "People resist change not because the current situation is objectively good, but because it's familiar. Familiarity feels safe even when it's costing us.",
     "analogy": "Staying in a job you dislike for years because changing feels risky — even though staying is clearly costing you more in the long run.",
     "prompt": "What are you keeping 'as is' right now — a situation, relationship, or habit — mainly because change feels uncomfortable rather than because it's actually good?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [19, 74, 488]
   },
   {
     "id": 54,
@@ -841,7 +644,8 @@
     "plain": "People exert less effort in a group than when working alone. Everyone assumes someone else will pick up the slack — so collectively, less gets done.",
     "analogy": "A tug-of-war team: each person pulls less hard than they would alone. The rope doesn't lie — but nobody feels individually responsible.",
     "prompt": "Where in your work or personal life are you relying on a group — and secretly doing less than you would if you were the only one responsible?",
-    "collection_id": 3
+    "collection_id": 3,
+    "related_ids": [42, 67, 311]
   },
   {
     "id": 56,
@@ -852,7 +656,8 @@
     "plain": "When someone stands to gain financially, socially, or professionally from a particular result, their advice or position is biased — whether they admit it or not.",
     "analogy": "A real estate agent telling you it's a great time to buy. Maybe true. But they also earn a commission if you do.",
     "prompt": "Who are you taking advice from right now who has a personal stake in which direction you choose?",
-    "collection_id": 3
+    "collection_id": 3,
+    "related_ids": [26, 49, 70]
   },
   {
     "id": 57,
@@ -863,7 +668,8 @@
     "plain": "Presenting only two options as if they're the only possibilities, when in reality more options exist. Used to trap people into a limited choice that benefits the framer.",
     "analogy": "'You're either with us or against us.' Actually, you could be neutral, partially aligned, undecided — but that nuance gets deliberately erased.",
     "prompt": "Where in your life are you stuck between two options that someone else presented — when actually there are more paths you haven't considered?",
-    "collection_id": 4
+    "collection_id": 4,
+    "related_ids": [18, 78, 381]
   },
   {
     "id": 58,
@@ -874,7 +680,8 @@
     "plain": "Deliberately shifting the way you interpret a situation to change its emotional impact on you. A core tool in therapy and resilience — not denial, but perspective.",
     "analogy": "'I lost my job' reframed as 'I've been given time to figure out what I actually want to do next.' Same facts. Completely different emotional trajectory.",
     "prompt": "What difficult situation in your life right now could you reframe — not to deny it, but to find a more useful perspective on it?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [104, 202, 482]
   },
   {
     "id": 59,
@@ -885,7 +692,8 @@
     "plain": "Energy or capability that builds invisibly beneath the surface before producing visible results. Most meaningful progress is invisible for a long time before it becomes undeniable.",
     "analogy": "Water heating from 0° to 99°C produces no steam. One more degree and everything changes. The work before the breakthrough was never wasted.",
     "prompt": "Where are you about to give up on something because you can't see results yet — when you might actually be at 99 degrees?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [41, 77, 376]
   },
   {
     "id": 60,
@@ -896,7 +704,8 @@
     "plain": "The belief that outcomes are purely based on talent and hard work, ignoring structural advantages like inherited wealth, network, geography, timing, and luck.",
     "analogy": "Two runners in a race — but one started 50 meters ahead due to circumstances of birth. Saying 'the winner ran harder' ignores where they started from.",
     "prompt": "What advantages did you benefit from that you rarely acknowledge when explaining your own success or someone else's failure?",
-    "collection_id": 3
+    "collection_id": 3,
+    "related_ids": [51, 94, 270]
   },
   {
     "id": 61,
@@ -907,7 +716,8 @@
     "plain": "Internal locus: you believe you control your outcomes through your choices. External locus: you believe external forces control your life. The internal is strongly linked to resilience and long-term success.",
     "analogy": "Two people get rejected for the same job. One thinks 'I need to improve my interview skills.' The other thinks 'the system is rigged.' Same event — different trajectories.",
     "prompt": "In the area of your life where you feel most stuck — are you taking responsibility for what you can control, or waiting for external circumstances to change?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [32, 469, 490]
   },
   {
     "id": 62,
@@ -918,7 +728,8 @@
     "plain": "When the dominant mental model or framework of a field or society changes so fundamentally that old ways of thinking become obsolete almost overnight.",
     "analogy": "Before Copernicus, everyone knew the sun orbited Earth. After — the whole framework of understanding space permanently flipped.",
     "prompt": "What is the dominant assumption in your industry or field that, if proven wrong, would change everything?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [18, 77, 340]
   },
   {
     "id": 63,
@@ -929,7 +740,8 @@
     "plain": "When an earlier stimulus influences how you respond to a later one — without you noticing. Used in advertising, interviews, and negotiations constantly.",
     "analogy": "Researchers who held a warm coffee cup judged a stranger as a 'warmer' person than those who held an iced drink. The cup primed the judgment.",
     "prompt": "Before your next important meeting or decision — what environment, conversation, or content could you deliberately expose yourself to in order to be better primed?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [40, 179, 204]
   },
   {
     "id": 64,
@@ -940,7 +752,8 @@
     "plain": "Deliberately making choices that preserve future options rather than committing early. High value in uncertain environments — the more uncertain the future, the more you should value optionality.",
     "analogy": "Getting an MBA doesn't lock you into finance — it opens 10 different career paths. That flexibility is often the real value, not the specific knowledge.",
     "prompt": "What decision are you about to make that would permanently close off options — and is the commitment actually worth that cost?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [100, 137, 189]
   },
   {
     "id": 65,
@@ -951,7 +764,8 @@
     "plain": "When your actions have consequences — positive or negative — for people who weren't part of the decision. Companies often privatize profits while externalizing costs onto society.",
     "analogy": "A factory pollutes a river. Local residents bear the health costs. The company profits. The pollution is a negative externality — someone else pays the real price.",
     "prompt": "What costs of your decisions — professional or personal — are you currently externalizing onto other people without fully acknowledging it?",
-    "collection_id": 3
+    "collection_id": 3,
+    "related_ids": [28, 70, 144]
   },
   {
     "id": 66,
@@ -962,7 +776,8 @@
     "plain": "Acknowledging the limits of your own knowledge and being genuinely open to being wrong. Rare, valuable, and the foundation of good reasoning and real wisdom.",
     "analogy": "A doctor who says 'I'm 80% confident in this diagnosis — let's run one more test to be sure' is showing epistemic humility. That's not weakness. That's wisdom.",
     "prompt": "What are you most confident about right now — and what would it take to make you change your mind? If nothing would, that's a warning sign.",
-    "collection_id": 5
+    "collection_id": 5,
+    "related_ids": [30, 78, 486]
   },
   {
     "id": 67,
@@ -973,7 +788,8 @@
     "plain": "When a group suppresses dissent and critical thinking in order to maintain consensus and avoid conflict — often leading to catastrophically bad decisions that nobody individually wanted.",
     "analogy": "Every meeting attendee agreed the product launch was ready. Nobody wanted to be the one to delay it again. It launched and failed.",
     "prompt": "In your team or close social group — what uncomfortable truth is nobody saying out loud because the social cost of saying it feels too high?",
-    "collection_id": 3
+    "collection_id": 3,
+    "related_ids": [38, 43, 79]
   },
   {
     "id": 69,
@@ -984,7 +800,8 @@
     "plain": "When one person shares something honest and personal, the other feels safe to do the same — creating a trust loop that deepens relationships faster than any other mechanism.",
     "analogy": "You tell a colleague you're genuinely struggling with something. They open up about their own difficulty. Within one conversation, the relationship jumped six months forward.",
     "prompt": "What's something honest about yourself that you've been withholding from someone important — that, if shared, might deepen the relationship?",
-    "collection_id": 3
+    "collection_id": 3,
+    "related_ids": [79, 211, 386]
   },
   {
     "id": 70,
@@ -995,7 +812,8 @@
     "plain": "When regulatory agencies meant to protect the public gradually become controlled or heavily influenced by the very industries they're supposed to regulate.",
     "analogy": "A government food safety agency staffed almost entirely with executives from the food companies it's supposed to be independently inspecting.",
     "prompt": "In your industry or field — who is supposed to be the watchdog, and who actually funds or staffs them?",
-    "collection_id": 3
+    "collection_id": 3,
+    "related_ids": [42, 56, 144]
   },
   {
     "id": 71,
@@ -1006,7 +824,8 @@
     "plain": "The internal autobiography we construct to make sense of our lives. It shapes our beliefs, choices, and self-worth — and crucially, it can be consciously rewritten.",
     "analogy": "'I'm someone who always quits when things get hard' vs 'I'm someone who takes on hard things and figures it out.' Same history — completely different story.",
     "prompt": "What is the core story you tell about yourself — and is that story serving you, or keeping you smaller than you actually are?",
-    "collection_id": 5
+    "collection_id": 5,
+    "related_ids": [105, 237, 467]
   },
   {
     "id": 72,
@@ -1017,7 +836,8 @@
     "plain": "Taking a second position that offsets the risk from the first. You sacrifice some upside to insure against catastrophic loss. Used in investing, business, and life decisions.",
     "analogy": "You bet on Team A winning the tournament — but also place a smaller bet on Team B. If A loses, the B bet softens the blow significantly.",
     "prompt": "What's the biggest unhedged risk in your life right now — and what's the simplest thing you could do to create some protection against it?",
-    "collection_id": 2
+    "collection_id": 2,
+    "related_ids": [17, 23, 100]
   },
   {
     "id": 73,
@@ -1028,7 +848,8 @@
     "plain": "The argument that one action will inevitably lead to a chain of increasingly extreme outcomes. Sometimes a legitimate concern — often used as a scare tactic to block reasonable change.",
     "analogy": "'If we allow X, next thing you know we'll have Y and Z.' Sometimes true and worth heeding. Often used to exaggerate and shut down nuanced thinking.",
     "prompt": "When someone uses a slippery slope argument against an idea you have — ask yourself honestly: is this a real risk or a rhetorical move to block change?",
-    "collection_id": 4
+    "collection_id": 4,
+    "related_ids": [57, 294, 419]
   },
   {
     "id": 74,
@@ -1039,7 +860,8 @@
     "plain": "Past decisions constrain future options — even when the original reason for those decisions no longer exists. We inherit the choices of the past without always questioning them.",
     "analogy": "Keyboards still use the QWERTY layout — originally designed to slow typists down and prevent old typewriter jams. The typewriter is gone. The layout remains.",
     "prompt": "What system, habit, or structure in your life exists mainly because of historical decisions that no longer make sense today?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [47, 62, 159]
   },
   {
     "id": 75,
@@ -1050,7 +872,8 @@
     "plain": "A manipulation tactic where someone makes another person doubt their memory, perception, or sanity — often to gain control, avoid accountability, or deflect blame.",
     "analogy": "After an argument where he said something clearly hurtful, he insists 'that never happened' — repeatedly and calmly — until she doubts her own memory.",
     "prompt": "Have you ever been in a situation where you were made to feel like your accurate perception of events was wrong — and believed it?",
-    "collection_id": 3
+    "collection_id": 3,
+    "related_ids": [8, 204, 420]
   },
   {
     "id": 76,
@@ -1061,7 +884,8 @@
     "plain": "Moving from specific, concrete things to general concepts. Useful for thinking clearly, communicating big ideas, and seeing patterns that repeat across different domains.",
     "analogy": "'This car' → 'vehicles' → 'transportation' → 'human mobility.' Each step is more abstract — further from the specific, closer to the universal concept.",
     "prompt": "Take a problem you're stuck in the details of. Zoom out two levels of abstraction — what pattern or principle becomes visible from up there?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [18, 50, 470]
   },
   {
     "id": 77,
@@ -1072,7 +896,8 @@
     "plain": "The critical threshold at which something — a trend, a disease, an idea, a social movement — goes from slow, invisible build to rapid, unstoppable spread.",
     "analogy": "A pile of sand is stable as you add grains. Then you add one too many and the whole side collapses. That last grain is the tipping point.",
     "prompt": "What change in your life or work, if you pushed it just a little further, might be closer to a tipping point than you realize?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [59, 62, 164]
   },
   {
     "id": 78,
@@ -1083,7 +908,8 @@
     "plain": "The opposite of strawmanning. Instead of weakening an opponent's argument to defeat it easily, you build the strongest possible version of it before you respond.",
     "analogy": "Before arguing against remote work, you make the absolute strongest possible case for it. If you can still counter it after that — your position is genuinely solid.",
     "prompt": "What position do you most strongly disagree with right now — and can you articulate the steelman version of it well enough that its proponents would approve?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [66, 99, 210]
   },
   {
     "id": 79,
@@ -1094,7 +920,8 @@
     "plain": "In a team or relationship, the belief that it's safe to take risks, say what you actually think, admit mistakes, and ask questions without fear of judgment or retaliation.",
     "analogy": "The difference between a meeting where everyone stays quiet versus one where a junior employee confidently challenges the CEO — and everyone gets smarter.",
     "prompt": "In your team or household — do people say what they actually think, or what they think is safe to say? What's driving that difference?",
-    "collection_id": 3
+    "collection_id": 3,
+    "related_ids": [67, 69, 227]
   },
   {
     "id": 80,
@@ -1105,7 +932,8 @@
     "plain": "Mentally simulating alternate versions of events — used to learn from mistakes, assess decisions properly, and avoid the bad reasoning of 'it worked out, so it was the right decision.'",
     "analogy": "'We launched and it succeeded.' But what if we'd launched 6 months earlier or later? Counterfactual thinking forces you to ask those questions seriously.",
     "prompt": "Think of a recent success. What counterfactual factors — luck, timing, other people's actions — contributed that you haven't fully acknowledged?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [107, 155, 294]
   },
   {
     "id": 81,
@@ -1116,7 +944,8 @@
     "plain": "A double standard buried in how we think about our upbringing: we externalize the bad (it's their fault) but internalize the good (that's just me). Both actually came from the same source.",
     "analogy": "You blame your pushy parents for your perfectionism — but never credit them for the ambition and discipline that same pressure gave you.",
     "prompt": "What strength do you take full credit for that was actually shaped by the same experiences you blame for your struggles?",
-    "collection_id": 5
+    "collection_id": 5,
+    "related_ids": [82, 147, 487]
   },
   {
     "id": 82,
@@ -1127,7 +956,8 @@
     "plain": "A pattern — named after the Greek titan — where you compulsively absorb blame for other people's failures in order to maintain harmony, even when it clearly wasn't your fault.",
     "analogy": "A project collapses. Six other people dropped the ball. But you're the one lying awake at 2am replaying how you could have prevented it.",
     "prompt": "In your closest relationships or team — are you the person who always ends up holding the bag? Who benefits from that arrangement?",
-    "collection_id": 5
+    "collection_id": 5,
+    "related_ids": [20, 81, 205]
   },
   {
     "id": 83,
@@ -1138,7 +968,8 @@
     "plain": "The mistake of obsessing over how much effort you put in (inputs) rather than whether that effort is actually producing meaningful results (outputs). You can work 12 hours and move backwards.",
     "analogy": "A person who tracks every minute of study time but never checks whether their test scores are actually improving. The metric isn't the mission.",
     "prompt": "In your most important current project — are you measuring effort or outcomes? What does the output data actually say?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [118, 407, 484]
   },
   {
     "id": 84,
@@ -1149,7 +980,8 @@
     "plain": "People who most need certain advice are often immune to it. People who already lean in a direction take advice about it to a harmful extreme. Guidance exaggerates predisposition rather than correcting imbalance.",
     "analogy": "'Don't be pushy with women' made anxious men even more timid. The men who were actually steamrolling boundaries ignored it entirely.",
     "prompt": "What personal development advice have you taken to an extreme that might actually be reinforcing your existing tendencies rather than correcting them?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [203, 278, 393]
   },
   {
     "id": 85,
@@ -1160,7 +992,8 @@
     "plain": "Real stoicism is about managing emotions wisely. Toxic stoicism uses emotional shutdown as an identity — mistaking numbness, detachment, and 'I don't care' for strength.",
     "analogy": "A man who never cries, never admits fear, never shows love — and calls it discipline. It's not strength. It's a shell where a person used to be.",
     "prompt": "Where in your life are you confusing emotional suppression with emotional strength — and what is that suppression actually costing you?",
-    "collection_id": 5
+    "collection_id": 5,
+    "related_ids": [86, 213, 290]
   },
   {
     "id": 86,
@@ -1171,7 +1004,8 @@
     "plain": "In an online culture that rewards detachment, sarcasm, and ironic distance, genuinely caring about something and openly showing it is actually the most courageous act available.",
     "analogy": "Posting something you genuinely believe — without hedging it with 'but what do I know' — and being willing to stand behind it when people push back.",
     "prompt": "What do you actually care deeply about that you've been hedging in public because caring openly felt too exposed or uncool?",
-    "collection_id": 5
+    "collection_id": 5,
+    "related_ids": [85, 337, 394]
   },
   {
     "id": 87,
@@ -1182,7 +1016,8 @@
     "plain": "When people construct a carefully curated 'no-filter' persona online or in life. The stripped-back, behind-the-scenes look that is actually meticulously designed to appear natural.",
     "analogy": "An influencer's 'raw unfiltered moment' that took 3 hours of setup, 40 takes, and a ring light just out of frame.",
     "prompt": "Where are you performing authenticity — presenting a carefully constructed version of 'the real you' — rather than actually being unguarded?",
-    "collection_id": 5
+    "collection_id": 5,
+    "related_ids": [25, 245, 248]
   },
   {
     "id": 88,
@@ -1193,7 +1028,8 @@
     "plain": "The low-level existential unease many people feel about societal direction — decline in institutions, culture wars, technology acceleration — that compounds personal stress without a clear target.",
     "analogy": "Doom-scrolling news every morning and feeling vaguely hopeless by 9am — not because anything specific happened to you, but because collective dread seeped in.",
     "prompt": "How much of your daily anxiety is about your actual life — and how much is absorbed from a media environment designed to keep you in a state of low-grade alarm?",
-    "collection_id": 3
+    "collection_id": 3,
+    "related_ids": [43, 255]
   },
   {
     "id": 89,
@@ -1204,7 +1040,8 @@
     "plain": "Happiness is a feeling — temporary and hedonic. Meaning comes from pursuing something bigger than yourself, which often involves discomfort, sacrifice, and delayed reward.",
     "analogy": "Raising a child is exhausting, expensive, and stressful — not 'happy' in any simple sense. But parents consistently rate it as the most meaningful thing they've ever done.",
     "prompt": "In the areas of your life where you're most pursuing comfort and happiness — are you trading away the possibility of something more meaningful?",
-    "collection_id": 5
+    "collection_id": 5,
+    "related_ids": [35, 97, 416]
   },
   {
     "id": 90,
@@ -1215,7 +1052,8 @@
     "plain": "Modern life is so effective at making us comfortable that the capacity to tolerate difficulty, boredom, or frustration quietly atrophies — making everything harder than it needs to be.",
     "analogy": "A person who reaches for their phone every time they feel the slightest boredom or restlessness. The tolerance for even a moment of silence has dropped to near zero.",
     "prompt": "What discomfort are you systematically avoiding that — if you faced it regularly — would make you significantly stronger or more capable?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [91, 96, 374]
   },
   {
     "id": 91,
@@ -1226,7 +1064,8 @@
     "plain": "Humans evolved for small tribes, scarcity, and physical danger. Most of our psychological problems come from hardwired responses that don't fit modern environments at all.",
     "analogy": "Craving sugar and fat made perfect sense when calories were scarce and survival was uncertain. Now the same instinct is driving an obesity epidemic. The software is outdated but still running.",
     "prompt": "What instinct or emotional reaction do you have regularly that would have been useful 100,000 years ago — but is actively harmful in your current life?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [90, 283, 300]
   },
   {
     "id": 92,
@@ -1237,7 +1076,8 @@
     "plain": "The chronic worry about how you rank in others' estimation — your career, wealth, appearance, relationships. Named and explored by philosopher Alain de Botton.",
     "analogy": "The man who can't enjoy a perfectly good holiday because he's calculating whether his resort is impressive enough to mention when people ask where he went.",
     "prompt": "How many of your decisions in the last month were shaped by how they would look to others rather than what you actually wanted?",
-    "collection_id": 3
+    "collection_id": 3,
+    "related_ids": [25, 94, 332]
   },
   {
     "id": 93,
@@ -1248,7 +1088,8 @@
     "plain": "Luck isn't purely random — it consistently favors people who put themselves out there. The more things you attempt, share, and initiate, the more chances serendipity has to find you.",
     "analogy": "You won't win the lottery if you never buy a ticket. You won't get the life-changing collaboration if no one outside your immediate circle even knows you exist.",
     "prompt": "What would you do differently this week if you genuinely believed that doing more visible things — even imperfect ones — increases your luck?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [134, 141, 346]
   },
   {
     "id": 94,
@@ -1259,7 +1100,8 @@
     "plain": "From Will Storr: human behavior — careers, consumption, political opinions, social media — is largely driven by the desire to raise or maintain status within our tribal group.",
     "analogy": "Two men debate a political topic — but neither has read a single policy document. They're not exchanging ideas. They're performing intelligence for the people watching.",
     "prompt": "What's something you believe or argue for publicly that, if you're honest, is partly about signaling status to your tribe rather than actual conviction?",
-    "collection_id": 3
+    "collection_id": 3,
+    "related_ids": [25, 38, 92]
   },
   {
     "id": 95,
@@ -1270,7 +1112,8 @@
     "plain": "Men are increasingly isolated, with fewer deep friendships and weakening social structures. Social disconnection is one of the strongest predictors of poor mental and physical health outcomes.",
     "analogy": "Women call their friends when something goes wrong. Men often have nobody to call — because the friendship never got past surface-level banter and shared activities.",
     "prompt": "If something went seriously wrong in your life tomorrow — who would you call? If the list is shorter than you'd like, what's one concrete step to change that?",
-    "collection_id": 3
+    "collection_id": 3,
+    "related_ids": [38, 177, 304]
   },
   {
     "id": 96,
@@ -1281,7 +1124,8 @@
     "plain": "As you progress, the things that once challenged you become easy. If you don't continuously push the edge, comfort becomes the new default and genuine growth stops.",
     "analogy": "The person who was proud of lifting 60kg eventually lifts 60kg without thinking. If they never add weight, they stop getting stronger — no matter how consistently they show up.",
     "prompt": "What challenge felt genuinely difficult 12 months ago that now feels easy — and have you actually moved the bar since then?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [41, 52, 373]
   },
   {
     "id": 97,
@@ -1292,7 +1136,8 @@
     "plain": "The active, deliberate construction of a life around your actual values — rather than drifting into the job, relationship, habits, and location that just happened to appear.",
     "analogy": "Two people end up in the same town, same job, same apartment. One designed it through conscious choices. One just stayed where they landed. Their trajectories will diverge dramatically over 10 years.",
     "prompt": "If you stripped away what happened to you and what others expected — what would your life actually look like if you designed it from scratch today?",
-    "collection_id": 5
+    "collection_id": 5,
+    "related_ids": [32, 372, 474]
   },
   {
     "id": 98,
@@ -1303,7 +1148,8 @@
     "plain": "An emotional pattern — common in people with certain childhood experiences — where even small rejections trigger disproportionate pain, causing avoidance before any attempt is made.",
     "analogy": "A man doesn't ask for the promotion because he's already rejected himself in his head. The loss happened before any attempt — which means no attempt ever gets made.",
     "prompt": "Where in your life have you pre-rejected yourself — decided someone would say no before even asking — and never found out if you were right?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [81, 198, 301]
   },
   {
     "id": 99,
@@ -1314,7 +1160,8 @@
     "plain": "The ability to disagree with someone while maintaining the relationship and remaining genuinely open to being wrong. Rare, extremely valuable, and a mark of real intellectual maturity.",
     "analogy": "Two scientists who disagree on a hypothesis don't attack each other — they design experiments. The goal is to find truth, not to be declared right.",
     "prompt": "In your last significant disagreement — were you genuinely open to being wrong, or were you collecting evidence for a position you'd already decided on?",
-    "collection_id": 3
+    "collection_id": 3,
+    "related_ids": [78, 79, 108]
   },
   {
     "id": 100,
@@ -1325,7 +1172,8 @@
     "plain": "From Nassim Taleb: instead of a moderate approach to everything, deliberately operate at two extremes — very safe in one area and very bold in another. Avoid the mushy, mediocre middle.",
     "analogy": "80% of your money in ultra-safe assets, 20% in high-risk high-upside bets. Or: work deeply for 6 focused hours, then fully switch off. No lukewarm half-measures.",
     "prompt": "Where in your life are you stuck in the moderate middle — not safe enough to be protected, not bold enough to break through — when an extreme in either direction would serve you better?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [23, 64, 72]
   },
   {
     "id": 101,
@@ -1336,7 +1184,8 @@
     "plain": "From Nassim Taleb: beyond resilience (bouncing back). Anti-fragile systems actually improve under stress, challenge, and volatility. The immune system, muscles, and hard-won experience are all anti-fragile.",
     "analogy": "Bones don't just survive physical stress — they grow denser when you load them. Anti-fragility is being the bone, not the glass.",
     "prompt": "What stressful experience are you currently trying to just get through — that you could instead be mining for the specific strength it's building in you?",
-    "collection_id": 1
+    "collection_id": 1,
+    "related_ids": [100, 106, 261]
   },
   {
     "id": 102,
@@ -1347,7 +1196,8 @@
     "plain": "The competitive market where apps, media, and platforms compete for your focus — because your attention is what gets monetized. The more hooked you are, the more valuable you are to them.",
     "analogy": "Facebook and TikTok are free because you're not the customer — you're the product. Your attention and behavioral data are what they sell to advertisers.",
     "prompt": "If you tracked exactly where your attention went for one full day — how much of it was directed by your choices versus captured by someone else's algorithm?",
-    "collection_id": 3
+    "collection_id": 3,
+    "related_ids": [161, 240, 352]
   },
   {
     "id": 103,
