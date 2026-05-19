@@ -14,6 +14,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js"></script>
+<script defer src="https://cloud.umami.is/script.js" data-website-id="0bb07ad6-a205-4d9d-ae92-b7e184e7fa4f"></script>
 <style>
   :root {
     --bg: #0d0d0d;
@@ -4028,6 +4029,10 @@ const STORAGE_KEYS = {
   streak: 'lll_streak_v1'
 };
 
+function track(n, d) {
+  try { if (window.umami) d ? umami.track(n, d) : umami.track(n); } catch (e) {}
+}
+
 function saveMastered() {
   try {
     const asArray = Array.from(mastered);
@@ -4402,7 +4407,7 @@ function toggleCard(id) {
 function toggleMaster(e, id) {
   e.stopPropagation();
   const isMastering = !mastered.has(id);
-  if (isMastering) { mastered.add(id); playVaultSFX(); }
+  if (isMastering) { mastered.add(id); playVaultSFX(); track('concept_mastered', { id: id }); }
   else mastered.delete(id);
   saveMastered();
   updateProgress();
@@ -4424,6 +4429,7 @@ function shareCard(e, id) {
   e.stopPropagation();
   const c = CONCEPTS.find(x => x.id === id);
   if (!c) return;
+  track('share_clicked', { id: id });
   _shareConceptId = id;
   generateShareImage(c);
   document.getElementById('shareModalOverlay').classList.add('open');
@@ -5379,6 +5385,7 @@ function openCotd() {
 // Nav-triggered version — always renders a concept regardless of dismissed state
 function openCotdFromNav() {
   if (!CONCEPTS || CONCEPTS.length === 0) return;
+  track('cotd_opened');
   const concept = pickTodaysConcept(CONCEPTS);
   if (!concept) return;
   renderCotd(concept);
@@ -5490,6 +5497,7 @@ function initConceptOfTheDay() {
       const data = await response.json();
       
       if (response.ok) {
+        track('newsletter_signup');
         showMessage('You\'re in. Check your inbox — first concepts on the way.', 'success');
         emailInput.value = '';
         btnLabel.textContent = 'Subscribed';
@@ -5572,6 +5580,7 @@ function getQuizPool() {
 }
 
 function openQuiz() {
+  track('quiz_started');
   // Ripple effect
   const btn = document.getElementById('navQuizBtn');
   if (btn) {
