@@ -587,6 +587,7 @@
     .nav-island { display: none; }
   }
 </style>
+<script defer src="https://cloud.umami.is/script.js" data-website-id="0bb07ad6-a205-4d9d-ae92-b7e184e7fa4f"></script>
 </head>
 <body>
 
@@ -721,6 +722,9 @@ let panX = 0, panY = 0, scale = 1;
 let isPanning = false, panStartX = 0, panStartY = 0, panOriginX = 0, panOriginY = 0;
 
 // SVG elements map
+function track(n, d) {
+  try { if (window.umami) d ? umami.track(n, d) : umami.track(n); } catch (e) {}
+}
 const nodeEls = {}; // id → g element
 
 // ═══════════════════════════════════════════════
@@ -915,7 +919,7 @@ function buildMap() {
     circle.classList.add('concept-circle');
 
     g.appendChild(circle);
-    g.addEventListener('click', (e) => { e.stopPropagation(); openConceptPanel(c, color); });
+    g.addEventListener('click', (e) => { e.stopPropagation(); track('map_node_click', { id: c.id }); openConceptPanel(c, color); });
 
     // Hover: show term label
     const hoverLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
