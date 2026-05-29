@@ -2,9 +2,11 @@
 <!-- Build state markers — grep these before assuming the file is current.
      If any of these comments are missing, drawer perf fixes have regressed:
      - PERF: fadeUp-removed-on-concept-card
-     - PERF: drawer-open-sections-visibility-hidden  (NOT display:none — display:none = 800ms INP)
-     - PERF: drawer-open-class-immediate-on-add
-     - PERF: drawer-open-class-immediate-on-remove
+     - PERF: no-body-drawer-open-class  (page sections NEVER hidden — opaque backdrop covers)
+     - PERF: backdrop-fully-opaque  (rgba(13,13,13,1) — NOT 0.92)
+     Lesson: any approach that toggles display/visibility on the 600+ card DOM
+     will cost layout or paint work. The only way to <100ms INP is to never
+     touch those sections at all. Make the backdrop opaque instead.
      Update this block when you change perf-critical code. -->
 <html lang="en">
 <head>
@@ -381,7 +383,7 @@
     transition: background 0.25s ease;
   }
   .ep-drawer-backdrop.open {
-    background: rgba(0,0,0,0.92);
+    background: rgba(13,13,13,1);
     pointer-events: all;
   }
   .ep-drawer {
@@ -798,17 +800,9 @@
     height: 62px;
     border-color: rgba(255,255,255,0.05);
   }
-  body.drawer-open nav,
-  body.drawer-open .hero,
-  body.drawer-open .episodes-section,
-  body.drawer-open #shortsSection,
-  body.drawer-open .app > .app-controls,
-  body.drawer-open #netflixRows,
-  body.drawer-open .newsletter,
-  body.drawer-open .divider,
-  body.drawer-open .daily-goal {
-    visibility: hidden;
-  }
+  /* body.drawer-open removed — opaque backdrop covers the page fully.
+     No need to display:none or visibility:hidden anything.
+     PERF: this is what gets us under 100ms INP. */
   .nav-logo {
     font-family: 'Playfair Display', serif;
     font-size: 1.365rem;
@@ -4683,7 +4677,6 @@ function openEpisodeDrawer(collectionId) {
   document.getElementById('epDrawerGrid').innerHTML = '<div class="ep-empty">Loading…</div>';
   document.getElementById('epBackdrop').classList.add('open');
   document.getElementById('epDrawer').classList.add('open');
-  document.body.classList.add('drawer-open');
   document.body.style.overflow = 'hidden';
 
   // Phase 2 (next frame): render the drawer content while the slide is animating.
@@ -4856,12 +4849,11 @@ function initMagneticDrawerPills() {
   });
 }
 function closeEpisodeDrawer() {
-  // body.drawer-open uses visibility:hidden (paint-only, zero layout cost).
-  // Safe to remove immediately — matches build marker
-  // "PERF: drawer-open-class-immediate-on-remove".
+  // Zero DOM work in this handler — only class toggles on the drawer itself.
+  // body.drawer-open is gone; opaque backdrop covers page sections instead.
+  // PERF: this is what keeps INP under 100ms.
   document.getElementById('epBackdrop').classList.remove('open');
   document.getElementById('epDrawer').classList.remove('open');
-  document.body.classList.remove('drawer-open');
   document.body.style.overflow = '';
 
   // No scrollTo needed — visibility:hidden preserves layout & scroll automatically.
