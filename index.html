@@ -794,6 +794,7 @@
   body.drawer-open nav,
   body.drawer-open .hero,
   body.drawer-open .episodes-section,
+  body.drawer-open #shortsSection,
   body.drawer-open .app > .app-controls,
   body.drawer-open #netflixRows,
   body.drawer-open .newsletter,
@@ -2473,11 +2474,15 @@
      No category pill on the front — the column header is the category.
      Only transform animates — GPU-composited, no layout cost. */
 
-  .ep-cat-column { perspective: 1400px; }
+  .ep-cat-column {
+    perspective: 1400px;
+    contain: layout paint;
+  }
 
   .ep-cat-column .concept-card {
     width: 100%;
     height: 340px;
+    contain: layout paint;
     overflow: visible;
     border: none;
     background: transparent;
@@ -4663,10 +4668,29 @@ function openEpisodeDrawer(collectionId) {
   const col = COLLECTIONS_BY_ID[collectionId];
   if (!col) return;
 
+  // Open the drawer IMMEDIATELY — empty shell, instant slide-up.
+  // Then fill it on the next frame so the heavy DOM work doesn't block the animation.
+  window._epScrollY = window.scrollY;
+  document.getElementById('epDrawerTitle').textContent = col.title.trim();
+  document.getElementById('epDrawerPills').innerHTML = '';
+  document.getElementById('epDrawerCatFilter').innerHTML = '';
+  document.getElementById('epDrawerGrid').innerHTML = '<div class="ep-empty">Loading…</div>';
+  document.getElementById('epBackdrop').classList.add('open');
+  document.getElementById('epDrawer').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  document.body.classList.add('drawer-open');
+
+  // Render the actual content after the browser has painted the slide-up frame.
+  // Two rAFs = guaranteed paint between them.
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    _renderDrawerContent(col, collectionId);
+  }));
+}
+
+function _renderDrawerContent(col, collectionId) {
   const epConcepts = CONCEPTS.filter(c => c.collection_id === collectionId).reverse();
 
   // Header
-  document.getElementById('epDrawerTitle').textContent = col.title.trim();
 
   // Pills: people + concept count + listen link
   const pills = document.getElementById('epDrawerPills');
@@ -4775,13 +4799,7 @@ function openEpisodeDrawer(collectionId) {
     }
   }
 
-  // Open — save scroll position so we can restore it on close (sections get display:none)
-  window._epScrollY = window.scrollY;
-  document.getElementById('epBackdrop').classList.add('open');
-  document.getElementById('epDrawer').classList.add('open');
-  document.body.style.overflow = 'hidden';
-  document.body.classList.add('drawer-open');
-}
+  }
 
 function filterDrawerCat(catKey) {
   document.querySelectorAll('.ep-drawer-cat-pill').forEach(p => {
@@ -4879,15 +4897,23 @@ function toggleEpMaster(e, id) {
   if (mastered.has(id)) mastered.delete(id);
   else { mastered.add(id); playVaultSFX(); }
   saveMastered();
-  // Refresh both the drawer card and the main grid card if visible
+  // Update the drawer card in-place
   const epCard = document.getElementById('epcc'+id);
   if (epCard) {
     epCard.classList.toggle('mastered', mastered.has(id));
-    epCard.querySelector('.btn-master').textContent = mastered.has(id) ? '✓ VAULT' : '⊕ VAULT';
+    const btn = epCard.querySelector('.btn-master');
+    if (btn) btn.textContent = mastered.has(id) ? '✓ VAULT' : '⊕ VAULT';
+  }
+  // Update the matching main-grid card in-place (no full rebuild)
+  const gridCard = document.getElementById('cc'+id);
+  if (gridCard) {
+    gridCard.classList.toggle('mastered', mastered.has(id));
+    const gbtn = gridCard.querySelector('.btn-master');
+    if (gbtn) gbtn.textContent = mastered.has(id) ? '✓ VAULT' : '⊕ VAULT';
+    const badge = gridCard.querySelector('.mastered-badge');
+    if (badge) badge.style.display = mastered.has(id) ? 'block' : 'none';
   }
   updateProgress();
-  // Silently refresh main grid without closing drawer
-  if (typeof buildGrid === 'function') buildGrid();
 }
 
 // Esc key closes drawer
