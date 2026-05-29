@@ -2,7 +2,8 @@
 <!-- Build state markers — grep these before assuming the file is current.
      If any of these comments are missing, drawer perf fixes have regressed:
      - PERF: fadeUp-removed-on-concept-card
-     - PERF: drawer-open-class-deferred-on-add
+     - PERF: drawer-open-sections-visibility-hidden  (NOT display:none — display:none = 800ms INP)
+     - PERF: drawer-open-class-immediate-on-add
      - PERF: drawer-open-class-immediate-on-remove
      Update this block when you change perf-critical code. -->
 <html lang="en">
@@ -806,7 +807,7 @@
   body.drawer-open .newsletter,
   body.drawer-open .divider,
   body.drawer-open .daily-goal {
-    display: none;
+    visibility: hidden;
   }
   .nav-logo {
     font-family: 'Playfair Display', serif;
@@ -4673,29 +4674,22 @@ function openEpisodeDrawer(collectionId) {
   const col = COLLECTIONS_BY_ID[collectionId];
   if (!col) return;
 
-  // Phase 1 (instant — touch only the drawer): start the slide-up animation.
-  // We do NOT set body.drawer-open here, because that triggers display:none
-  // on 8 page sections and blocks the animation frame.
-  window._epScrollY = window.scrollY;
+  // Phase 1 (instant): start the slide-up animation.
+  // body.drawer-open uses visibility:hidden — paint-only, zero layout cost,
+  // so we can add it immediately without blocking the animation frame.
   document.getElementById('epDrawerTitle').textContent = col.title.trim();
   document.getElementById('epDrawerPills').innerHTML = '';
   document.getElementById('epDrawerCatFilter').innerHTML = '';
   document.getElementById('epDrawerGrid').innerHTML = '<div class="ep-empty">Loading…</div>';
   document.getElementById('epBackdrop').classList.add('open');
   document.getElementById('epDrawer').classList.add('open');
+  document.body.classList.add('drawer-open');
   document.body.style.overflow = 'hidden';
 
   // Phase 2 (next frame): render the drawer content while the slide is animating.
   requestAnimationFrame(() => requestAnimationFrame(() => {
     _renderDrawerContent(col, collectionId);
   }));
-
-  // Phase 3 (after slide-up completes): NOW hide the page sections with
-  // display:none. The user can't see them anyway (drawer covers them), and
-  // this avoids the heavy layout cost during the animation.
-  setTimeout(() => {
-    document.body.classList.add('drawer-open');
-  }, 420);
 }
 
 function _renderDrawerContent(col, collectionId) {
@@ -4862,27 +4856,25 @@ function initMagneticDrawerPills() {
   });
 }
 function closeEpisodeDrawer() {
-  // Phase 1 (instant — cheap only): start the slide-down. Do NOT touch
-  // body.drawer-open here — that unhides 8 sections and causes a 700ms layout.
+  // body.drawer-open uses visibility:hidden (paint-only, zero layout cost).
+  // Safe to remove immediately — matches build marker
+  // "PERF: drawer-open-class-immediate-on-remove".
   document.getElementById('epBackdrop').classList.remove('open');
   document.getElementById('epDrawer').classList.remove('open');
+  document.body.classList.remove('drawer-open');
   document.body.style.overflow = '';
 
-  // Reset drawer card state (drawer DOM only — no page layout impact)
+  // No scrollTo needed — visibility:hidden preserves layout & scroll automatically.
+
+  // Reset drawer card state (drawer DOM only)
   const grid = document.getElementById('epDrawerGrid');
   if (grid) {
     grid.classList.remove('has-open');
     grid.querySelectorAll('.concept-card.open').forEach(c => c.classList.remove('open'));
   }
 
-  // Phase 2 (after slide-down completes): NOW unhide page sections + restore scroll.
-  // The drawer has already slid away, so the layout recalc happens off-screen.
+  // Empty drawer DOM after slide-down completes (free memory)
   setTimeout(() => {
-    document.body.classList.remove('drawer-open');
-    if (typeof window._epScrollY === 'number') {
-      window.scrollTo(0, window._epScrollY);
-      window._epScrollY = null;
-    }
     const g = document.getElementById('epDrawerGrid');
     if (g) g.innerHTML = '';
   }, 420);
