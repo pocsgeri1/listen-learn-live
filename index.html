@@ -2903,9 +2903,10 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
-  .concept-card {
-    animation: fadeUp 0.35s ease both;
-  }
+  /* fadeUp animation removed — it re-fires when sections come back from
+     display:none after drawer close, causing a flash. Cards still feel
+     responsive because they're in a horizontal scroll row that fades in
+     naturally with the page itself. */
 
   .nf-row.dragging { scroll-snap-type: none; user-select: none; cursor: grabbing; }
 
@@ -4668,8 +4669,9 @@ function openEpisodeDrawer(collectionId) {
   const col = COLLECTIONS_BY_ID[collectionId];
   if (!col) return;
 
-  // Open the drawer IMMEDIATELY — empty shell, instant slide-up.
-  // Then fill it on the next frame so the heavy DOM work doesn't block the animation.
+  // Phase 1 (instant — touch only the drawer): start the slide-up animation.
+  // We do NOT set body.drawer-open here, because that triggers display:none
+  // on 8 page sections and blocks the animation frame.
   window._epScrollY = window.scrollY;
   document.getElementById('epDrawerTitle').textContent = col.title.trim();
   document.getElementById('epDrawerPills').innerHTML = '';
@@ -4678,13 +4680,18 @@ function openEpisodeDrawer(collectionId) {
   document.getElementById('epBackdrop').classList.add('open');
   document.getElementById('epDrawer').classList.add('open');
   document.body.style.overflow = 'hidden';
-  document.body.classList.add('drawer-open');
 
-  // Render the actual content after the browser has painted the slide-up frame.
-  // Two rAFs = guaranteed paint between them.
+  // Phase 2 (next frame): render the drawer content while the slide is animating.
   requestAnimationFrame(() => requestAnimationFrame(() => {
     _renderDrawerContent(col, collectionId);
   }));
+
+  // Phase 3 (after slide-up completes): NOW hide the page sections with
+  // display:none. The user can't see them anyway (drawer covers them), and
+  // this avoids the heavy layout cost during the animation.
+  setTimeout(() => {
+    document.body.classList.add('drawer-open');
+  }, 420);
 }
 
 function _renderDrawerContent(col, collectionId) {
@@ -4851,32 +4858,34 @@ function initMagneticDrawerPills() {
   });
 }
 function closeEpisodeDrawer() {
-  // Phase 1 (instant): start the slide-down animation. Drawer is still position:fixed,
-  // body sections still display:none — so nothing heavy happens this frame.
+  // Phase 1 (instant): start the slide-down animation + remove drawer-open class
+  // BEFORE the slide finishes. This way the page sections re-layout while still
+  // hidden behind the drawer that's sliding away. Order matters here.
   document.getElementById('epBackdrop').classList.remove('open');
   document.getElementById('epDrawer').classList.remove('open');
+  document.body.classList.remove('drawer-open');
+  document.body.style.overflow = '';
 
-  // Reset any open-card state inside the drawer (cheap — drawer DOM only)
+  // Restore scroll position immediately — the page sections just came back
+  // from display:none, so scroll anchor is lost. Restoring synchronously here
+  // means the slide-down animation reveals the page already at the right scroll.
+  if (typeof window._epScrollY === 'number') {
+    window.scrollTo(0, window._epScrollY);
+    window._epScrollY = null;
+  }
+
+  // Reset drawer card state (cheap — drawer DOM only)
   const grid = document.getElementById('epDrawerGrid');
   if (grid) {
     grid.classList.remove('has-open');
     grid.querySelectorAll('.concept-card.open').forEach(c => c.classList.remove('open'));
   }
 
-  // Phase 2 (after the slide finishes): reveal page sections and restore scroll.
-  // We wait for the actual transition end so the heavy layout happens AFTER
-  // the user already sees the drawer gone. 400ms matches the CSS transition.
+  // Phase 2 (after slide-down completes): empty the drawer DOM to free memory.
   setTimeout(() => {
-    document.body.classList.remove('drawer-open');
-    document.body.style.overflow = '';
-    if (typeof window._epScrollY === 'number') {
-      window.scrollTo(0, window._epScrollY);
-      window._epScrollY = null;
-    }
-    // Clear the drawer content so it's not sitting in memory until next open
-    const grid = document.getElementById('epDrawerGrid');
-    if (grid) grid.innerHTML = '';
-  }, 400);
+    const g = document.getElementById('epDrawerGrid');
+    if (g) g.innerHTML = '';
+  }, 420);
 }
 
 function toggleEpCard(id) {
