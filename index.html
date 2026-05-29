@@ -3677,23 +3677,6 @@
   <div class="cat-card vault-pill" id="vaultPill" onclick="toggleVault()" style="color:var(--accent);margin-left:4px;">⊠ VAULT</div>
 </div>
 
-        <!-- EPISODE DRAWER -->
-        <div class="ep-drawer-backdrop" id="epBackdrop" onclick="closeEpisodeDrawer()"></div>
-        <div class="ep-drawer" id="epDrawer">
-          <div class="ep-drawer-handle"></div>
-          <div class="ep-drawer-header">
-            <div class="ep-drawer-meta">
-              <div class="ep-drawer-title" id="epDrawerTitle"></div>
-              <div class="ep-drawer-pills" id="epDrawerPills"></div>
-            </div>
-            <button class="ep-drawer-close" onclick="closeEpisodeDrawer()">✕</button>
-          </div>
-          <div class="ep-drawer-mix" id="epDrawerMix"></div>
-          <div class="ep-drawer-cat-filter" id="epDrawerCatFilter"></div>
-          <div class="ep-drawer-body">
-            <div class="ep-drawer-grid" id="epDrawerGrid"></div>
-          </div>
-        </div>
   <!-- CATEGORIES — pill filter row -->
   <div class="cat-grid" id="catGrid"></div>
 
@@ -3706,6 +3689,24 @@
 </section>
 
 <div class="divider"></div>
+
+<!-- EPISODE DRAWER (top-level so display:none on page sections doesn't hide it) -->
+<div class="ep-drawer-backdrop" id="epBackdrop" onclick="closeEpisodeDrawer()"></div>
+<div class="ep-drawer" id="epDrawer">
+  <div class="ep-drawer-handle"></div>
+  <div class="ep-drawer-header">
+    <div class="ep-drawer-meta">
+      <div class="ep-drawer-title" id="epDrawerTitle"></div>
+      <div class="ep-drawer-pills" id="epDrawerPills"></div>
+    </div>
+    <button class="ep-drawer-close" onclick="closeEpisodeDrawer()">✕</button>
+  </div>
+  <div class="ep-drawer-mix" id="epDrawerMix"></div>
+  <div class="ep-drawer-cat-filter" id="epDrawerCatFilter"></div>
+  <div class="ep-drawer-body">
+    <div class="ep-drawer-grid" id="epDrawerGrid"></div>
+  </div>
+</div>
 
 <!-- NEWSLETTER CAPTURE -->
 <section class="newsletter" id="signup">
