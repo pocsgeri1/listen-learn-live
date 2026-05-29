@@ -2165,7 +2165,6 @@
     cursor: pointer;
     transition: border-color 0.2s, background 0.2s;
     white-space: nowrap;
-    will-change: transform;
   }
   .cat-card:hover { border-color: currentColor; }
   .cat-card.active {
@@ -4863,33 +4862,27 @@ function initMagneticDrawerPills() {
   });
 }
 function closeEpisodeDrawer() {
-  // Phase 1 (instant): start the slide-down animation + reveal page sections
-  // simultaneously. The page sections re-layout while still hidden behind the
-  // drawer that's sliding away — so the user never sees the layout shift.
-  // This is the OPPOSITE of "defer the heavy work" — we WANT the heavy work
-  // now, hidden under the moving drawer, instead of mid-flight or after.
+  // Phase 1 (instant — cheap only): start the slide-down. Do NOT touch
+  // body.drawer-open here — that unhides 8 sections and causes a 700ms layout.
   document.getElementById('epBackdrop').classList.remove('open');
   document.getElementById('epDrawer').classList.remove('open');
-  document.body.classList.remove('drawer-open');
   document.body.style.overflow = '';
 
-  // Restore scroll position immediately — page sections just came back from
-  // display:none, so the scroll anchor is lost. Synchronous restore here means
-  // the slide-down reveals the page already at the right scroll position.
-  if (typeof window._epScrollY === 'number') {
-    window.scrollTo(0, window._epScrollY);
-    window._epScrollY = null;
-  }
-
-  // Reset drawer card state (cheap — drawer DOM only, no layout impact)
+  // Reset drawer card state (drawer DOM only — no page layout impact)
   const grid = document.getElementById('epDrawerGrid');
   if (grid) {
     grid.classList.remove('has-open');
     grid.querySelectorAll('.concept-card.open').forEach(c => c.classList.remove('open'));
   }
 
-  // Phase 2 (after slide-down completes): empty the drawer DOM to free memory.
+  // Phase 2 (after slide-down completes): NOW unhide page sections + restore scroll.
+  // The drawer has already slid away, so the layout recalc happens off-screen.
   setTimeout(() => {
+    document.body.classList.remove('drawer-open');
+    if (typeof window._epScrollY === 'number') {
+      window.scrollTo(0, window._epScrollY);
+      window._epScrollY = null;
+    }
     const g = document.getElementById('epDrawerGrid');
     if (g) g.innerHTML = '';
   }, 420);
