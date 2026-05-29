@@ -4851,21 +4851,32 @@ function initMagneticDrawerPills() {
   });
 }
 function closeEpisodeDrawer() {
+  // Phase 1 (instant): start the slide-down animation. Drawer is still position:fixed,
+  // body sections still display:none — so nothing heavy happens this frame.
   document.getElementById('epBackdrop').classList.remove('open');
   document.getElementById('epDrawer').classList.remove('open');
-  document.body.style.overflow = '';
-  document.body.classList.remove('drawer-open');
-  // Reset any open-card state in the drawer so it opens clean next time
+
+  // Reset any open-card state inside the drawer (cheap — drawer DOM only)
   const grid = document.getElementById('epDrawerGrid');
   if (grid) {
     grid.classList.remove('has-open');
     grid.querySelectorAll('.concept-card.open').forEach(c => c.classList.remove('open'));
   }
-  // Restore scroll position (sections were display:none, browser loses anchor)
-  if (typeof window._epScrollY === 'number') {
-    window.scrollTo(0, window._epScrollY);
-    window._epScrollY = null;
-  }
+
+  // Phase 2 (after the slide finishes): reveal page sections and restore scroll.
+  // We wait for the actual transition end so the heavy layout happens AFTER
+  // the user already sees the drawer gone. 400ms matches the CSS transition.
+  setTimeout(() => {
+    document.body.classList.remove('drawer-open');
+    document.body.style.overflow = '';
+    if (typeof window._epScrollY === 'number') {
+      window.scrollTo(0, window._epScrollY);
+      window._epScrollY = null;
+    }
+    // Clear the drawer content so it's not sitting in memory until next open
+    const grid = document.getElementById('epDrawerGrid');
+    if (grid) grid.innerHTML = '';
+  }, 400);
 }
 
 function toggleEpCard(id) {
