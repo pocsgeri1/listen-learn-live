@@ -4857,23 +4857,25 @@ function initMagneticDrawerPills() {
   });
 }
 function closeEpisodeDrawer() {
-  // Phase 1 (instant): start the slide-down animation + remove drawer-open class
-  // BEFORE the slide finishes. This way the page sections re-layout while still
-  // hidden behind the drawer that's sliding away. Order matters here.
+  // Phase 1 (instant): start the slide-down animation + reveal page sections
+  // simultaneously. The page sections re-layout while still hidden behind the
+  // drawer that's sliding away — so the user never sees the layout shift.
+  // This is the OPPOSITE of "defer the heavy work" — we WANT the heavy work
+  // now, hidden under the moving drawer, instead of mid-flight or after.
   document.getElementById('epBackdrop').classList.remove('open');
   document.getElementById('epDrawer').classList.remove('open');
   document.body.classList.remove('drawer-open');
   document.body.style.overflow = '';
 
-  // Restore scroll position immediately — the page sections just came back
-  // from display:none, so scroll anchor is lost. Restoring synchronously here
-  // means the slide-down animation reveals the page already at the right scroll.
+  // Restore scroll position immediately — page sections just came back from
+  // display:none, so the scroll anchor is lost. Synchronous restore here means
+  // the slide-down reveals the page already at the right scroll position.
   if (typeof window._epScrollY === 'number') {
     window.scrollTo(0, window._epScrollY);
     window._epScrollY = null;
   }
 
-  // Reset drawer card state (cheap — drawer DOM only)
+  // Reset drawer card state (cheap — drawer DOM only, no layout impact)
   const grid = document.getElementById('epDrawerGrid');
   if (grid) {
     grid.classList.remove('has-open');
