@@ -1,13 +1,4 @@
 <!DOCTYPE html>
-<!-- Build state markers — grep these before assuming the file is current.
-     If any of these comments are missing, drawer perf fixes have regressed:
-     - PERF: fadeUp-removed-on-concept-card
-     - PERF: no-body-drawer-open-class  (page sections NEVER hidden — opaque backdrop covers)
-     - PERF: backdrop-fully-opaque  (rgba(13,13,13,1) — NOT 0.92)
-     Lesson: any approach that toggles display/visibility on the 600+ card DOM
-     will cost layout or paint work. The only way to <100ms INP is to never
-     touch those sections at all. Make the backdrop opaque instead.
-     Update this block when you change perf-critical code. -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -383,7 +374,7 @@
     transition: background 0.25s ease;
   }
   .ep-drawer-backdrop.open {
-    background: rgba(13,13,13,1);
+    background: rgba(0,0,0,0.92);
     pointer-events: all;
   }
   .ep-drawer {
@@ -800,9 +791,17 @@
     height: 62px;
     border-color: rgba(255,255,255,0.05);
   }
-  /* body.drawer-open removed — opaque backdrop covers the page fully.
-     No need to display:none or visibility:hidden anything.
-     PERF: this is what gets us under 100ms INP. */
+  body.drawer-open nav,
+  body.drawer-open .hero,
+  body.drawer-open .episodes-section,
+  body.drawer-open #shortsSection,
+  body.drawer-open .app > .app-controls,
+  body.drawer-open #netflixRows,
+  body.drawer-open .newsletter,
+  body.drawer-open .divider,
+  body.drawer-open .daily-goal {
+    display: none;
+  }
   .nav-logo {
     font-family: 'Playfair Display', serif;
     font-size: 1.365rem;
@@ -2160,6 +2159,7 @@
     cursor: pointer;
     transition: border-color 0.2s, background 0.2s;
     white-space: nowrap;
+    will-change: transform;
   }
   .cat-card:hover { border-color: currentColor; }
   .cat-card.active {
@@ -2218,6 +2218,7 @@
   }
   .concept-card.editors-pick { border-color: rgba(232,213,163,0.45); }
   .concept-card.editors-pick:hover { border-color: rgba(232,213,163,0.7); }
+  .concept-card.mastered { opacity: 0.45; }
 
   .pick-badge {
     font-family: 'DM Mono', monospace;
@@ -2902,10 +2903,9 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
-  /* fadeUp animation removed — it re-fires when sections come back from
-     display:none after drawer close, causing a flash. Cards still feel
-     responsive because they're in a horizontal scroll row that fades in
-     naturally with the page itself. */
+  .concept-card {
+    animation: fadeUp 0.35s ease both;
+  }
 
   .nf-row.dragging { scroll-snap-type: none; user-select: none; cursor: grabbing; }
 
@@ -4668,9 +4668,9 @@ function openEpisodeDrawer(collectionId) {
   const col = COLLECTIONS_BY_ID[collectionId];
   if (!col) return;
 
-  // Phase 1 (instant): start the slide-up animation.
-  // body.drawer-open uses visibility:hidden — paint-only, zero layout cost,
-  // so we can add it immediately without blocking the animation frame.
+  // Open the drawer IMMEDIATELY — empty shell, instant slide-up.
+  // Then fill it on the next frame so the heavy DOM work doesn't block the animation.
+  window._epScrollY = window.scrollY;
   document.getElementById('epDrawerTitle').textContent = col.title.trim();
   document.getElementById('epDrawerPills').innerHTML = '';
   document.getElementById('epDrawerCatFilter').innerHTML = '';
@@ -4678,8 +4678,10 @@ function openEpisodeDrawer(collectionId) {
   document.getElementById('epBackdrop').classList.add('open');
   document.getElementById('epDrawer').classList.add('open');
   document.body.style.overflow = 'hidden';
+  document.body.classList.add('drawer-open');
 
-  // Phase 2 (next frame): render the drawer content while the slide is animating.
+  // Render the actual content after the browser has painted the slide-up frame.
+  // Two rAFs = guaranteed paint between them.
   requestAnimationFrame(() => requestAnimationFrame(() => {
     _renderDrawerContent(col, collectionId);
   }));
@@ -4849,27 +4851,32 @@ function initMagneticDrawerPills() {
   });
 }
 function closeEpisodeDrawer() {
-  // Zero DOM work in this handler — only class toggles on the drawer itself.
-  // body.drawer-open is gone; opaque backdrop covers page sections instead.
-  // PERF: this is what keeps INP under 100ms.
+  // Phase 1 (instant): start the slide-down animation. Drawer is still position:fixed,
+  // body sections still display:none — so nothing heavy happens this frame.
   document.getElementById('epBackdrop').classList.remove('open');
   document.getElementById('epDrawer').classList.remove('open');
-  document.body.style.overflow = '';
 
-  // No scrollTo needed — visibility:hidden preserves layout & scroll automatically.
-
-  // Reset drawer card state (drawer DOM only)
+  // Reset any open-card state inside the drawer (cheap — drawer DOM only)
   const grid = document.getElementById('epDrawerGrid');
   if (grid) {
     grid.classList.remove('has-open');
     grid.querySelectorAll('.concept-card.open').forEach(c => c.classList.remove('open'));
   }
 
-  // Empty drawer DOM after slide-down completes (free memory)
+  // Phase 2 (after the slide finishes): reveal page sections and restore scroll.
+  // We wait for the actual transition end so the heavy layout happens AFTER
+  // the user already sees the drawer gone. 400ms matches the CSS transition.
   setTimeout(() => {
-    const g = document.getElementById('epDrawerGrid');
-    if (g) g.innerHTML = '';
-  }, 420);
+    document.body.classList.remove('drawer-open');
+    document.body.style.overflow = '';
+    if (typeof window._epScrollY === 'number') {
+      window.scrollTo(0, window._epScrollY);
+      window._epScrollY = null;
+    }
+    // Clear the drawer content so it's not sitting in memory until next open
+    const grid = document.getElementById('epDrawerGrid');
+    if (grid) grid.innerHTML = '';
+  }, 400);
 }
 
 function toggleEpCard(id) {
