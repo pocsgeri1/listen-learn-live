@@ -12,8 +12,9 @@
 <link rel="shortcut icon" href="/favicon.ico">
 <meta name="theme-color" content="#0d0d0d">
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js"></script>
 <script defer src="https://cloud.umami.is/script.js" data-website-id="0bb07ad6-a205-4d9d-ae92-b7e184e7fa4f"></script>
 <style>
   :root {
@@ -782,9 +783,7 @@
     padding: 0 2.5rem;
     height: 76px;
     border-bottom: 1px solid var(--border);
-    background: rgba(13,13,13,0.92);
-    backdrop-filter: blur(3px);
-    -webkit-backdrop-filter: blur(3px);
+    background: rgba(13,13,13,0.96);
     transition: height 0.3s ease, border-color 0.3s ease;
   }
 
@@ -800,11 +799,7 @@
   body.drawer-open .newsletter,
   body.drawer-open .divider,
   body.drawer-open .daily-goal {
-    visibility: hidden;
-  }
-  body.drawer-open .ep-drawer-backdrop,
-  body.drawer-open .ep-drawer {
-    visibility: visible;
+    display: none;
   }
   .nav-logo {
     font-family: 'Playfair Display', serif;
@@ -841,7 +836,6 @@
     cursor: pointer;
     background: none;
     border: none;
-    will-change: transform;
   }
   .nav-link:hover { color: var(--text); background: rgba(255,255,255,0.06); }
 .nav-link.nav-link--active { color: var(--accent); }
@@ -2309,6 +2303,10 @@
   /* ── FLIP CARDS — nf-row only ── */
   .nf-row { perspective: 1400px; }
 
+  /* Reserve grid height upfront so the JSON load doesn't cause a layout shift */
+  #netflixRows { min-height: 1800px; }
+  #netflixRows:empty { min-height: 0; }
+
   .nf-row .concept-card {
     flex: 0 0 280px;
     min-width: 280px;
@@ -2350,13 +2348,13 @@
     padding: 22px 22px 18px;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.04);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.04);
     transition: border-color 0.2s, box-shadow 0.2s, transform 0.25s ease;
     transform: rotate(-0.8deg);
   }
   .nf-row .concept-card:hover .card-front {
     border-color: rgba(255,255,255,0.13);
-    box-shadow: 0 12px 32px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.06);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.06);
     transform: rotate(0deg) translateY(-6px);
   }
   .nf-row .concept-card.open .card-front {
@@ -2414,7 +2412,7 @@
     display: flex;
     flex-direction: column;
     gap: 0;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.45);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.45);
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: var(--border-hover) transparent;
@@ -2486,7 +2484,6 @@
     border-radius: 14px;
     transition: transform 0.4s cubic-bezier(0.22,0.61,0.36,1),
                 opacity 0.32s ease;
-    will-change: transform;
   }
 
   .ep-cat-column .card-inner {
@@ -2515,7 +2512,7 @@
     box-shadow: 0 22px 60px -20px rgba(0,0,0,0.85);
   }
   /* every other card in the drawer dims to 0.1 while one is open */
-  #epDrawerGrid:has(.concept-card.open) .concept-card:not(.open) {
+  #epDrawerGrid.has-open .concept-card:not(.open) {
     opacity: 0.1;
     pointer-events: none;
   }
@@ -2547,11 +2544,11 @@
     padding: 20px 20px 16px;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.04);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.04);
     transition: border-color 0.2s, box-shadow 0.2s;
   }
   .ep-cat-column .concept-card:hover .card-front {
-    box-shadow: 0 8px 24px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.04);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.04);
   }
   .ep-cat-column .concept-card.editors-pick .card-front {
     border-color: rgba(232,213,163,0.4);
@@ -2601,7 +2598,7 @@
     display: flex;
     flex-direction: column;
     gap: 0;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.45);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.45);
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: var(--border-hover) transparent;
@@ -4160,9 +4157,8 @@ function filtered() {
 function buildGrid() {
   const container = document.getElementById('netflixRows');
   if (!container) return;
-  // Only hold min-height when showing all cats (prevents CLS on initial load).
-  // When filtered to one category, collapse naturally.
-  container.style.minHeight = (activeCat === 'all' && !searchQ) ? '1800px' : '0';
+  // Collapse the reserved min-height once we're filtering (CSS handles the default 1800px).
+  container.style.minHeight = (activeCat === 'all' && !searchQ) ? '' : '0';
 
   const q = searchQ.toLowerCase();
   const isVault = vaultActive;
@@ -4339,56 +4335,7 @@ function updateArrowVisibility(row) {
   }
 }
 function initMagneticCards() {
-  return; // disabled — was main cause of scroll lag
-  const container = document.getElementById('netflixRows');
-  if (!container || container._magneticBound) return;
-  container._magneticBound = true;
-
-  let activeCard = null;
-
-  let _rafPending = false;
-container.addEventListener('mousemove', (e) => {
-  if (_rafPending) return;
-  _rafPending = true;
-  requestAnimationFrame(() => { _rafPending = false;
-    const card = e.target.closest('.concept-card');
-
-    // If we moved onto a new card, trigger enter logic
-    if (card !== activeCard) {
-      // Leave old card
-      if (activeCard) {
-        activeCard.style.transition = 'transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94), border-color 0.2s';
-        activeCard.style.transform = 'translateY(0)';
-        setTimeout(() => {
-          if (activeCard) activeCard.style.transition = 'border-color 0.2s, transform 0.2s ease';
-        }, 350);
-      }
-      // Enter new card
-      if (card && !card.classList.contains('open')) {
-        card.style.transition = 'transform 0.12s ease, border-color 0.2s';
-      }
-      activeCard = card;
-    }
-
-    // Apply magnetic transform
-    if (!card || card.classList.contains('open')) return;
-    const rect = card.getBoundingClientRect();
-    const dx = e.clientX - (rect.left + rect.width / 2);
-    const dy = e.clientY - (rect.top + rect.height / 2);
-    card.style.transform = `translateY(-8px) translate(${dx * STRENGTH}px, ${dy * STRENGTH}px)`;
-    });  // closes rAF
-  });    // closes mousemove
-
-  container.addEventListener('mouseleave', function() {
-    if (activeCard) {
-      activeCard.style.transition = 'transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94), border-color 0.2s';
-      activeCard.style.transform = 'translateY(0)';
-      setTimeout(() => {
-        if (activeCard) activeCard.style.transition = 'border-color 0.2s, transform 0.2s ease';
-      }, 350);
-      activeCard = null;
-    }
-  });
+  // Disabled — was the main cause of scroll lag. Kept as a no-op so existing call sites don't error.
 }
 function render() { buildCats(); initMagneticPills(); buildGrid(); updateProgress(); buildEpisodes(); buildShorts(); }
 
@@ -4827,7 +4774,8 @@ function openEpisodeDrawer(collectionId) {
     }
   }
 
-  // Open
+  // Open — save scroll position so we can restore it on close (sections get display:none)
+  window._epScrollY = window.scrollY;
   document.getElementById('epBackdrop').classList.add('open');
   document.getElementById('epDrawer').classList.add('open');
   document.body.style.overflow = 'hidden';
@@ -4845,9 +4793,8 @@ function filterDrawerCat(catKey) {
     // Re-trigger the swoosh animation each time this column is shown
     if (match) {
       col.style.animation = 'none';
-      // force reflow so the animation restarts
-      void col.offsetWidth;
-      col.style.animation = '';
+      // Let the next frame restart the animation — avoids a forced synchronous layout
+      requestAnimationFrame(() => { col.style.animation = ''; });
     }
   });
   // Reset scroll to top of the drawer body when switching category
@@ -4889,6 +4836,17 @@ function closeEpisodeDrawer() {
   document.getElementById('epDrawer').classList.remove('open');
   document.body.style.overflow = '';
   document.body.classList.remove('drawer-open');
+  // Reset any open-card state in the drawer so it opens clean next time
+  const grid = document.getElementById('epDrawerGrid');
+  if (grid) {
+    grid.classList.remove('has-open');
+    grid.querySelectorAll('.concept-card.open').forEach(c => c.classList.remove('open'));
+  }
+  // Restore scroll position (sections were display:none, browser loses anchor)
+  if (typeof window._epScrollY === 'number') {
+    window.scrollTo(0, window._epScrollY);
+    window._epScrollY = null;
+  }
 }
 
 function toggleEpCard(id) {
@@ -4902,6 +4860,12 @@ function toggleEpCard(id) {
   const wasOpen = el.classList.contains('open');
   // Each card flips independently — match Browse-concepts behaviour.
   el.classList.toggle('open');
+  // Toggle a class on the grid container so non-open cards dim (replaces :has() selector for perf)
+  const grid = document.getElementById('epDrawerGrid');
+  if (grid) {
+    const anyOpen = grid.querySelector('.concept-card.open') !== null;
+    grid.classList.toggle('has-open', anyOpen);
+  }
   if (!wasOpen && !openedToday.has(id)) {
     openedToday.add(id);
     saveDailyGoal();
