@@ -2903,9 +2903,10 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
-  .concept-card {
-    animation: fadeUp 0.35s ease both;
-  }
+  /* fadeUp animation removed — it re-fires on every concept card when
+     sections come back from display:none after drawer close, which felt
+     like a "page reload" flash. Removing it costs nothing visible because
+     the cards are in horizontal scroll rows that fade in with the page. */
 
   .nf-row.dragging { scroll-snap-type: none; user-select: none; cursor: grabbing; }
 
