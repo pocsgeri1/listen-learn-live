@@ -864,9 +864,9 @@
   font-size: 0.72rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--muted2);
-  background: none;
-  border: 0.5px solid var(--border);
+  color: var(--teal);
+  background: rgba(90,191,175,0.06);
+  border: 0.5px solid rgba(90,191,175,0.35);
   border-radius: 999px;
   padding: 6px 13px;
   cursor: pointer;
@@ -875,10 +875,10 @@
 }
 
 .nav-quiz-btn:hover {
-  color: var(--accent);
-  border-color: var(--accent);
-  background: rgba(232,213,163,0.06);
-  box-shadow: 0 0 12px rgba(232,213,163,0.18);
+  color: var(--teal);
+  border-color: var(--teal);
+  background: rgba(90,191,175,0.12);
+  box-shadow: 0 0 12px rgba(90,191,175,0.18);
 }
 .nav-map-btn {
   color: var(--accent);
@@ -2848,35 +2848,37 @@
     min-width: 0;
   }
 
+  /* Desktop: top-row is invisible passthrough — bar stays as single flex row */
+  .daily-goal-top-row {
+    display: contents;
+  }
+
   @media (max-width: 600px) {
     .daily-goal {
-      flex-direction: column;
-      align-items: stretch;
       padding: 8px 1.25rem 10px;
-      gap: 6px;
+      flex-wrap: wrap;
     }
     .daily-goal-top-row {
       display: flex;
+      width: 100%;
       align-items: center;
       justify-content: space-between;
+      gap: 0.5rem;
     }
     .daily-goal-left {
       flex: 1;
+      min-width: 0;
     }
     .daily-goal-right {
-      justify-content: flex-end;
+      flex-shrink: 0;
+      gap: 0.5rem;
+    }
+    .daily-msg {
+      display: none;
     }
     .streak-display {
       margin-left: 0;
     }
-  }
-
-  /* Desktop: top-row is a transparent passthrough flex */
-  .daily-goal-top-row {
-    display: contents;
-  }
-  @media (max-width: 600px) {
-    .daily-goal-top-row { display: flex; width: 100%; }
   }
 
   .daily-label {
@@ -5939,7 +5941,6 @@ function renderRound2() {
   }
 
   // Hint: progressively reveals characters of the answer
-  let _r2hintRevealed = [];
   window.r2RevealHint = function() {
     const input = document.getElementById('quizBlankInput');
     if (!input || input.disabled) return;
