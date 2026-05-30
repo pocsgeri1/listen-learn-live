@@ -4875,8 +4875,10 @@ function closeEpisodeDrawer() {
     document.body.classList.remove('drawer-open');
     document.body.style.overflow = '';
     if (typeof sy === 'number') {
+      document.documentElement.style.scrollBehavior = 'auto';
       document.documentElement.scrollTop = sy;
       document.body.scrollTop = sy;  // Safari fallback
+      requestAnimationFrame(() => { document.documentElement.style.scrollBehavior = ''; });
     }
     const g = document.getElementById('epDrawerGrid');
     if (g) g.innerHTML = '';
