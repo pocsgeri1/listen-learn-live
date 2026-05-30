@@ -4868,15 +4868,18 @@ function closeEpisodeDrawer() {
   // We wait for the actual transition end so the heavy layout happens AFTER
   // the user already sees the drawer gone. 400ms matches the CSS transition.
   setTimeout(() => {
+    // Restore scroll BEFORE re-showing sections so the browser paints
+    // them at the correct position in one go — no visible jump.
+    const sy = window._epScrollY;
+    window._epScrollY = null;
     document.body.classList.remove('drawer-open');
     document.body.style.overflow = '';
-    if (typeof window._epScrollY === 'number') {
-      window.scrollTo(0, window._epScrollY);
-      window._epScrollY = null;
+    if (typeof sy === 'number') {
+      document.documentElement.scrollTop = sy;
+      document.body.scrollTop = sy;  // Safari fallback
     }
-    // Clear the drawer content so it's not sitting in memory until next open
-    const grid = document.getElementById('epDrawerGrid');
-    if (grid) grid.innerHTML = '';
+    const g = document.getElementById('epDrawerGrid');
+    if (g) g.innerHTML = '';
   }, 400);
 }
 
