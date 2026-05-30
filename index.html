@@ -849,6 +849,16 @@
   flex-shrink: 0;
 }
 
+/* Wider gap before the tools cluster */
+.nav-tools-divider {
+  width: 0.5px;
+  height: 20px;
+  background: var(--border-hover);
+  margin: 0 8px;
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+
 .nav-quiz-btn {
   font-family: 'DM Mono', monospace;
   font-size: 0.72rem;
@@ -2838,6 +2848,37 @@
     min-width: 0;
   }
 
+  @media (max-width: 600px) {
+    .daily-goal {
+      flex-direction: column;
+      align-items: stretch;
+      padding: 8px 1.25rem 10px;
+      gap: 6px;
+    }
+    .daily-goal-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .daily-goal-left {
+      flex: 1;
+    }
+    .daily-goal-right {
+      justify-content: flex-end;
+    }
+    .streak-display {
+      margin-left: 0;
+    }
+  }
+
+  /* Desktop: top-row is a transparent passthrough flex */
+  .daily-goal-top-row {
+    display: contents;
+  }
+  @media (max-width: 600px) {
+    .daily-goal-top-row { display: flex; width: 100%; }
+  }
+
   .daily-label {
     font-family: 'DM Mono', monospace;
     font-size: 0.65rem;
@@ -3428,13 +3469,14 @@
   <div class="nav-logo"><em>Epistemic.</em></div>  
 
   <div class="nav-island" id="navIsland">
-    <a class="nav-link nav-map-btn" href="/map" onclick="track('map_opened')">◈ Map</a>
     <a class="nav-link" onclick="scrollToSection('episodesSection')">Episodes</a>
     <a class="nav-link" onclick="scrollToSection('shortsSection')">Shorts</a>
     <a class="nav-link" onclick="scrollToSection('app')">Concepts</a>
     <a class="nav-link" onclick="toggleVault();scrollToSection('app')">Vault</a>
     <a class="nav-link" onclick="openCotdFromNav()">Today</a>
     <a class="nav-link" onclick="scrollToSection('signup')">Sign up</a>
+    <div class="nav-tools-divider"></div>
+    <a class="nav-link nav-map-btn" href="/map" onclick="track('map_opened')">◈ Map</a>
     <div class="nav-divider"></div>
     <button class="nav-quiz-btn" id="navQuizBtn" onclick="openQuiz()">◈ Quiz</button>
   </div>
@@ -3532,6 +3574,7 @@
         <span id="cotdMarkLabel">⊕ VAULT</span>
       </button>
       <button class="cotd-btn" id="cotdNextBtn">→ Try Another</button>
+      <button class="cotd-btn" id="cotdShareBtn" onclick="shareCotd()">↑ Share</button>
     </div>
 
     <div class="cotd-footer">
@@ -3754,22 +3797,24 @@
 <!-- /SHARE CARD MODAL -->
 <!-- DAILY GOAL BAR -->
 <div class="daily-goal">
-  <div class="daily-goal-left">
-    <div class="daily-label">Today's goal</div>
-    <div class="daily-dots" id="dailyDots">
-      <div class="daily-dot"></div>
-      <div class="daily-dot"></div>
-      <div class="daily-dot"></div>
-      <div class="daily-dot"></div>
-      <div class="daily-dot"></div>
+  <div class="daily-goal-top-row">
+    <div class="daily-goal-left">
+      <div class="daily-label">Today's goal</div>
+      <div class="daily-dots" id="dailyDots">
+        <div class="daily-dot"></div>
+        <div class="daily-dot"></div>
+        <div class="daily-dot"></div>
+        <div class="daily-dot"></div>
+        <div class="daily-dot"></div>
+      </div>
     </div>
-  </div>
-  <div class="daily-goal-right">
-    <div class="daily-msg" id="dailyMsg"><strong>0 of 5</strong> concepts opened today</div>
-    <div class="streak-display">
-      <span id="streakFlame" style="opacity:0.35">🔥</span>
-      <span id="streakCount">0</span>
-      <span class="streak-label">day streak</span>
+    <div class="daily-goal-right">
+      <div class="daily-msg" id="dailyMsg"><strong>0 of 5</strong> concepts opened today</div>
+      <div class="streak-display">
+        <span id="streakFlame" style="opacity:0.35">🔥</span>
+        <span id="streakCount">0</span>
+        <span class="streak-label">day streak</span>
+      </div>
     </div>
   </div>
 </div>
@@ -4345,11 +4390,22 @@ function initMagneticCards() {
 }
 function render() { buildCats(); initMagneticPills(); buildGrid(); updateProgress(); buildEpisodes(); buildShorts(); }
 
+let _currentOpenCardId = null;
+
 function toggleCard(id) {
   const el = document.getElementById('cc'+id);
   if (!el) return;
   const wasOpen = el.classList.contains('open');
+
+  // Close previously open card (if different)
+  if (_currentOpenCardId !== null && _currentOpenCardId !== id) {
+    const prev = document.getElementById('cc' + _currentOpenCardId);
+    if (prev) prev.classList.remove('open');
+  }
+
   el.classList.toggle('open');
+  _currentOpenCardId = el.classList.contains('open') ? id : null;
+
   if (!wasOpen) {
     openedToday.add(id);
     saveDailyGoal();
@@ -4452,19 +4508,19 @@ function generateShareImage(c) {
   const canvas = document.getElementById('shareCanvas');
   const ctx = canvas.getContext('2d');
 
-  // Square: 1080×1080 — Instagram, WhatsApp, universal
-  const W = 1080, H = 1080;
+  // Portrait: 1080×1350 — optimal for Instagram, Stories, universal share
+  const W = 1080, H = 1350;
   canvas.width = W; canvas.height = H;
 
   const catColor = CATEGORY_COLORS[c.category] || '#e8d5a3';
   const catName = (CATEGORIES.find(x => x.id === c.category)||{}).name || c.category;
-  const PAD = 80;
+  const PAD = 72;
 
   // ── BACKGROUND ──
   ctx.fillStyle = '#141414';
   ctx.fillRect(0, 0, W, H);
 
-  // Outer card border (full bleed — the canvas IS the card)
+  // Outer card border
   ctx.strokeStyle = 'rgba(255,255,255,0.08)';
   ctx.lineWidth = 1.5;
   ctx.strokeRect(0.75, 0.75, W - 1.5, H - 1.5);
@@ -4473,41 +4529,7 @@ function generateShareImage(c) {
   ctx.fillStyle = catColor;
   ctx.fillRect(0, 0, W, 5);
 
-  // ── CATEGORY PILL ──
-  ctx.font = '500 22px monospace';
-  const pillText = catName.toUpperCase();
-  const pillTextW = ctx.measureText(pillText).width;
-  const pillPadX = 20, pillH = 36, pillR = 6;
-  const pillW = pillTextW + pillPadX * 2;
-  const pillX = PAD, pillY = PAD;
-
-  // Pill background
-  ctx.fillStyle = catColor + '20';
-  roundRect(ctx, pillX, pillY, pillW, pillH, pillR);
-  ctx.fill();
-  // Pill border
-  ctx.strokeStyle = catColor;
-  ctx.lineWidth = 1;
-  roundRect(ctx, pillX, pillY, pillW, pillH, pillR);
-  ctx.stroke();
-  // Pill text
-  ctx.fillStyle = catColor;
-  ctx.textBaseline = 'middle';
-  ctx.fillText(pillText, pillX + pillPadX, pillY + pillH / 2);
-
-  // Concept ID — top right
-  ctx.font = '400 22px monospace';
-  ctx.fillStyle = 'rgba(255,255,255,0.2)';
-  ctx.textAlign = 'right';
-  ctx.textBaseline = 'middle';
-  ctx.fillText('#' + String(c.id).padStart(3, '0'), W - PAD, pillY + pillH / 2);
-  ctx.textAlign = 'left';
-
-  // ── TERM — large serif, lower third of card ──
-  ctx.textBaseline = 'alphabetic';
-  ctx.fillStyle = '#f0ede8';
-
-  // Measure and wrap term
+  // ── TEXT WRAP HELPER ──
   function wrapLines(text, maxWidth, fontStr) {
     ctx.font = fontStr;
     const words = text.split(' ');
@@ -4526,48 +4548,99 @@ function generateShareImage(c) {
     return lines;
   }
 
-  const termFont = 'bold 88px Georgia, serif';
-  const termLines = wrapLines(c.term, W - PAD * 2, termFont);
-  const termLineH = 100;
-  const termBlockH = termLines.length * termLineH;
+  // ── TEXT BLOCK HELPER — returns bottom Y ──
+  function drawBlock(label, body, startY, labelColor, bodyFont, bodyColor, maxLines) {
+    // Label
+    ctx.font = '500 18px monospace';
+    ctx.fillStyle = labelColor;
+    ctx.textBaseline = 'alphabetic';
+    ctx.textAlign = 'left';
+    ctx.fillText(label.toUpperCase(), PAD, startY);
+    let y = startY + 28;
 
-  // Position term in the lower-centre zone
-  const termStartY = H * 0.56;
+    // Body
+    const lines = wrapLines(body, W - PAD * 2, bodyFont);
+    ctx.font = bodyFont;
+    ctx.fillStyle = bodyColor;
+    const lh = parseInt(bodyFont) * 1.5;
+    lines.slice(0, maxLines || 99).forEach(line => {
+      ctx.fillText(line, PAD, y);
+      y += lh;
+    });
+    return y;
+  }
+
+  // ── CATEGORY PILL ──
+  ctx.font = '500 22px monospace';
+  const pillText = catName.toUpperCase();
+  const pillTextW = ctx.measureText(pillText).width;
+  const pillPadX = 20, pillH = 36, pillR = 6;
+  const pillW = pillTextW + pillPadX * 2;
+  const pillX = PAD, pillY = PAD;
+
+  ctx.fillStyle = catColor + '20';
+  roundRect(ctx, pillX, pillY, pillW, pillH, pillR);
+  ctx.fill();
+  ctx.strokeStyle = catColor;
+  ctx.lineWidth = 1;
+  roundRect(ctx, pillX, pillY, pillW, pillH, pillR);
+  ctx.stroke();
+  ctx.fillStyle = catColor;
+  ctx.textBaseline = 'middle';
+  ctx.fillText(pillText, pillX + pillPadX, pillY + pillH / 2);
+
+  // Concept ID — top right
+  ctx.font = '400 22px monospace';
+  ctx.fillStyle = 'rgba(255,255,255,0.2)';
+  ctx.textAlign = 'right';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('#' + String(c.id).padStart(3, '0'), W - PAD, pillY + pillH / 2);
+  ctx.textAlign = 'left';
+
+  // ── TERM ──
+  ctx.textBaseline = 'alphabetic';
+  const termFont = 'bold 76px Georgia, serif';
+  const termLines = wrapLines(c.term, W - PAD * 2, termFont);
+  const termStartY = pillY + pillH + 52;
   ctx.font = termFont;
   ctx.fillStyle = '#f0ede8';
-  termLines.forEach((line, i) => {
-    ctx.fillText(line, PAD, termStartY + i * termLineH);
-  });
-  const termEndY = termStartY + termBlockH;
+  const termLineH = 90;
+  termLines.forEach((line, i) => ctx.fillText(line, PAD, termStartY + i * termLineH));
+  let y = termStartY + termLines.length * termLineH + 12;
 
-  // ── HOOK — italic, below term ──
-  const hookFont = 'italic 34px Georgia, serif';
-  const hookLines = wrapLines(c.hook, W - PAD * 2, hookFont);
-  const hookLineH = 50;
-  ctx.font = hookFont;
-  ctx.fillStyle = '#9a9a9a';
-  hookLines.slice(0, 3).forEach((line, i) => {
-    ctx.fillText(line, PAD, termEndY + 36 + i * hookLineH);
-  });
+  // ── HOOK ──
+  ctx.font = 'italic 30px Georgia, serif';
+  ctx.fillStyle = catColor;
+  const hookLines = wrapLines(c.hook, W - PAD * 2, 'italic 30px Georgia, serif');
+  hookLines.slice(0, 3).forEach(line => { ctx.fillText(line, PAD, y); y += 44; });
+  y += 28;
 
-  // ── DIVIDER — thin horizontal rule above term ──
-  const dividerY = termStartY - 44;
-  ctx.strokeStyle = 'rgba(255,255,255,0.08)';
-  ctx.lineWidth = 1;
-  ctx.beginPath();
-  ctx.moveTo(PAD, dividerY);
-  ctx.lineTo(W - PAD, dividerY);
-  ctx.stroke();
+  // ── DIVIDER ──
+  function rule(ry) {
+    ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(PAD, ry);
+    ctx.lineTo(W - PAD, ry);
+    ctx.stroke();
+  }
+  rule(y); y += 36;
 
-  // ── URL HINT — above divider ──
-  ctx.font = '400 20px monospace';
-  ctx.fillStyle = 'rgba(255,255,255,0.22)';
-  ctx.fillText('epistemic.live', PAD, dividerY - 22);
+  // ── THE IDEA (plain) ──
+  y = drawBlock('The Idea', c.plain, y, 'rgba(255,255,255,0.3)', '26px Georgia, serif', '#c8c4be', 4);
+  y += 24;
+  rule(y); y += 36;
+
+  // ── THE PICTURE (analogy) ──
+  y = drawBlock('The Picture', c.analogy, y, 'rgba(255,255,255,0.3)', 'italic 24px Georgia, serif', '#9a9a9a', 3);
+  y += 24;
+  rule(y); y += 36;
+
+  // ── USE IT TODAY (prompt) ──
+  y = drawBlock('Use it today', c.prompt, y, 'rgba(255,255,255,0.3)', '24px Georgia, serif', '#c8c4be', 3);
 
   // ── FOOTER ──
-  const footerY = H - PAD + 20;
-
-  // Footer rule
+  const footerY = H - PAD + 12;
   ctx.strokeStyle = 'rgba(255,255,255,0.06)';
   ctx.lineWidth = 1;
   ctx.beginPath();
@@ -4575,14 +4648,13 @@ function generateShareImage(c) {
   ctx.lineTo(W - PAD, footerY - 28);
   ctx.stroke();
 
-  // Epistemic. — italic serif, gold
-  ctx.font = 'italic 32px Georgia, serif';
+  ctx.font = 'italic 30px Georgia, serif';
   ctx.fillStyle = '#e8d5a3';
   ctx.textBaseline = 'middle';
+  ctx.textAlign = 'left';
   ctx.fillText('Epistemic.', PAD, footerY);
 
-  // epistemic.live — right aligned, muted mono
-  ctx.font = '400 22px monospace';
+  ctx.font = '400 20px monospace';
   ctx.fillStyle = 'rgba(255,255,255,0.25)';
   ctx.textAlign = 'right';
   ctx.fillText('epistemic.live', W - PAD, footerY);
@@ -5417,6 +5489,23 @@ function closeCotd(persist) {
   if (persist) markDismissedToday();
 }
 
+function shareCotd() {
+  // Get current concept ID from the rendered COTD
+  const idNum = parseInt(
+    document.getElementById('cotdConceptNum').textContent.replace(/\D/g, ''), 10
+  );
+  if (!idNum || !CONCEPTS) return;
+  const concept = CONCEPTS.find(x => x.id === idNum);
+  if (!concept) return;
+  // Reuse the main share flow
+  _shareConceptId = concept.id;
+  track('share_clicked', { id: concept.id, source: 'cotd' });
+  generateShareImage(concept);
+  document.getElementById('shareModalOverlay').classList.add('open');
+  const nativeBtn = document.getElementById('shareNativeBtn');
+  if (nativeBtn) nativeBtn.style.display = navigator.share ? '' : 'none';
+}
+
 function initConceptOfTheDay() {
   if (!CONCEPTS || CONCEPTS.length === 0) {
     console.warn('COTD: no concepts loaded');
@@ -5785,8 +5874,10 @@ function renderRound2() {
   const concepts = quizState.pool.slice(4, 8); // concepts 4–7
   let qi = 0;
   let roundScore = 0;
+  let _r2hintRevealed = [];
 
   function renderQ() {
+    _r2hintRevealed = [];
     if (qi >= concepts.length) {
       quizState.round = 2;
       const messages = ['Sharp recall.', 'Your memory is working.', 'Active recall — the real test.'];
@@ -5810,8 +5901,8 @@ function renderRound2() {
       '<em style="color:var(--accent);font-style:normal;font-weight:700">_____</em>'
     );
 
-    // Generate 3 letter hints from the term
-    const hints = generateHints(term);
+    // Generate 3 letter hints from the term (used by r2RevealHint progressively)
+    // hints variable not used directly in template anymore
 
     const body = document.getElementById('quizBody');
     body.innerHTML = `
@@ -5831,11 +5922,12 @@ function renderRound2() {
         />
         <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
           <button class="quiz-submit-btn" id="quizBlankSubmit" onclick="r2Submit()">Check →</button>
-          <div class="quiz-hint-row" id="quizHintRow">
-            ${hints.map(h => `<span class="quiz-hint-letter" onclick="r2Hint('${h}')">${h}</span>`).join('')}
-          </div>
+          <button class="quiz-submit-btn" id="quizHintBtn" onclick="r2RevealHint()" style="background:none;border:0.5px solid var(--border-hover);color:var(--muted2)">Hint</button>
         </div>
         <div id="quizBlankFeedback" style="min-height:20px;font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted)"></div>
+        <div id="quizContinueRow" style="display:none;margin-top:12px">
+          <button class="quiz-submit-btn" onclick="r2Continue()">Continue →</button>
+        </div>
       </div>`;
 
     // Allow Enter key to submit
@@ -5846,28 +5938,44 @@ function renderRound2() {
     });
   }
 
-  // Hint letters: first letter, a middle letter, last letter
-  function generateHints(term) {
-    const clean = term.replace(/[^a-zA-Z]/g, '');
-    const first = clean[0];
-    const mid   = clean[Math.floor(clean.length / 2)];
-    const last  = clean[clean.length - 1];
-    // Deduplicate
-    return [...new Set([first, mid, last])].map(l => l.toUpperCase());
-  }
-
-  // Clicking a hint letter appends it to the input
-  window.r2Hint = function(letter) {
+  // Hint: progressively reveals characters of the answer
+  let _r2hintRevealed = [];
+  window.r2RevealHint = function() {
     const input = document.getElementById('quizBlankInput');
     if (!input || input.disabled) return;
-    input.value += letter;
-    input.focus();
+    const concept = concepts[qi];
+    const answer = concept.term;
+    // Build list of indices not yet revealed (skip spaces)
+    const allIdx = [];
+    for (let i = 0; i < answer.length; i++) {
+      if (answer[i] !== ' ' && !_r2hintRevealed.includes(i)) allIdx.push(i);
+    }
+    if (allIdx.length === 0) return;
+    // Reveal first, middle, then last character sequentially
+    const pick = allIdx[Math.floor(allIdx.length / 2)];
+    _r2hintRevealed.push(pick);
+    // Build hint string showing revealed chars and blanks
+    const hint = answer.split('').map((ch, i) => {
+      if (ch === ' ') return ' ';
+      return _r2hintRevealed.includes(i) ? ch : '·';
+    }).join('');
+    const btn = document.getElementById('quizHintBtn');
+    if (btn) btn.textContent = hint;
+    if (_r2hintRevealed.length >= 3) { if (btn) btn.disabled = true; }
+  };
+
+  window.r2Continue = function() {
+    _r2hintRevealed = [];
+    qi++;
+    renderQ();
   };
 
   window.r2Submit = function() {
     const input = document.getElementById('quizBlankInput');
     const submitBtn = document.getElementById('quizBlankSubmit');
+    const hintBtn = document.getElementById('quizHintBtn');
     const feedback = document.getElementById('quizBlankFeedback');
+    const continueRow = document.getElementById('quizContinueRow');
     if (!input || input.disabled) return;
 
     const answer = input.value.trim();
@@ -5882,6 +5990,7 @@ function renderRound2() {
 
     input.disabled = true;
     submitBtn.disabled = true;
+    if (hintBtn) hintBtn.disabled = true;
 
     if (isCorrect) {
       input.classList.add('correct');
@@ -5889,7 +5998,7 @@ function renderRound2() {
       addScore(15);
       roundScore += 15;
       feedback.style.color = 'var(--green)';
-      feedback.textContent = '✓ Correct';
+      feedback.textContent = '✓ Correct — ' + correct;
     } else {
       input.classList.add('wrong');
       playTone('wrong');
@@ -5897,10 +6006,8 @@ function renderRound2() {
       feedback.textContent = `✗  The answer was: ${correct}`;
     }
 
-    setTimeout(() => {
-      qi++;
-      renderQ();
-    }, 1400);
+    // Show Continue button — user advances manually
+    if (continueRow) continueRow.style.display = 'block';
   };
 
   renderQ();
