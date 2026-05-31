@@ -236,22 +236,22 @@
     align-items: center;
     background: none;
     border: none;
-    padding: 0;
+    padding: 0 4px;
     cursor: pointer;
     flex-shrink: 0;
-    height: 76px; /* match nav height */
+    align-self: stretch; /* fills full nav height automatically */
   }
 
   .theme-toggle-track {
     position: relative;
     display: flex;
     align-items: center;
-    width: 56px;
-    height: 28px;
+    width: 68px;
+    height: 30px;
     border-radius: 999px;
     border: 0.5px solid var(--border-hover);
     background: var(--surface2);
-    transition: background 0.25s, border-color 0.25s;
+    transition: background 0.2s, border-color 0.2s;
     overflow: hidden;
   }
 
@@ -1040,15 +1040,7 @@
 
   html { scroll-behavior: smooth; }
 
-  /* Smooth token transitions when theme switches */
-  body, nav, .daily-goal, .concept-card, .card-front, .card-back,
-  .ep-drawer, .cotd-card, .quiz-sheet, .hiw-modal, .share-modal,
-  .progress-bar, .search-wrap, .step, .newsletter,
-  .episode-card, .short-card, .nav-mobile-menu, .vault-pill {
-    transition-property: background, border-color, color;
-    transition-duration: 0.25s;
-    transition-timing-function: ease;
-  }
+  /* Theme transitions: only the toggle track animates. All other surfaces switch instantly — no INP cost. */
 
   body {
     background: var(--bg);
@@ -1200,6 +1192,8 @@
     letter-spacing: 0.08em;
     text-transform: uppercase;
     white-space: nowrap;
+    flex-shrink: 0; /* prevent pill from collapsing */
+    align-self: center; /* don't stretch to nav height */
   }
 
   .nav-dot {
@@ -3771,7 +3765,6 @@
   </div>
 
   <div class="nav-right">
-    <button class="hiw-trigger" onclick="openHiw()">How it works</button>
     <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode" onclick="toggleTheme()">
       <span class="theme-toggle-track">
         <span class="theme-toggle-thumb"></span>
