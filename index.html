@@ -983,15 +983,7 @@
 
   html { scroll-behavior: smooth; }
 
-  /* Smooth token transitions when theme switches */
-  body, nav, .daily-goal, .concept-card, .card-front, .card-back,
-  .ep-drawer, .cotd-card, .quiz-sheet, .hiw-modal, .share-modal,
-  .progress-bar, .search-wrap, .step, .newsletter,
-  .episode-card, .short-card, .nav-mobile-menu, .vault-pill {
-    transition-property: background, border-color, color;
-    transition-duration: 0.25s;
-    transition-timing-function: ease;
-  }
+  /* Theme switch is instant — no transition cascade. Individual components handle their own hover/state transitions. */
 
   body {
     background: var(--bg);
@@ -3714,8 +3706,8 @@
   </div>
 
   <div class="nav-right">
-    <button class="hiw-trigger" onclick="openHiw()">How it works</button>
     <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode" onclick="toggleTheme()">☽</button>
+    <button class="hiw-trigger" onclick="openHiw()">How it works</button>
     <div class="nav-pill">
       <div class="nav-dot"></div>
       <span id="navConceptCount">—</span> free
