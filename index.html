@@ -6009,7 +6009,7 @@ let quizState = {
 // ── FIB eligibility heuristic ──
 // Round 2 (fill-in-the-blank) should only use terms that are real/coined concepts,
 // not invented episode-specific phrases or sentence fragments.
-function isFibEligible(term) {
+function isFibEligible(term, plain) {
   if (!term) return false;
   const words = term.trim().split(/\s+/);
   // Too many words → likely a phrase, not a term
@@ -6028,6 +6028,12 @@ function isFibEligible(term) {
   if (/\bas\s+[A-Z][a-z]/.test(term)) return false;
   // "X for [Proper Noun]" where proper noun is specific/unusual
   if (/\bfor\s+[A-Z][A-Za-z]+s?\b$/.test(term) && !/\bfor\s+(You|Me|Us|Life|Growth|Goals)\b/i.test(term)) return false;
+  // Plain text gives away the answer: term appears verbatim in the definition
+  if (plain) {
+    const normTerm = term.toLowerCase().replace(/[^a-z0-9\s]/g, '').trim();
+    const normPlain = plain.toLowerCase().replace(/[^a-z0-9\s]/g, '');
+    if (normPlain.includes(normTerm)) return false;
+  }
   return true;
 }
 
@@ -6190,7 +6196,7 @@ window.qsStart = function() {
 
   // Ensure Round 2 FIB concepts are eligible; pad with eligible concepts if needed
   // pool[4..7] = Round 2. Replace ineligible ones from rest of pool.
-  const fibPool = shuffle(pool.filter(c => isFibEligible(c.term)));
+  const fibPool = shuffle(pool.filter(c => isFibEligible(c.term, c.plain)));
   if (fibPool.length >= 4) {
     const r2replacements = fibPool.filter(c => !quizState.pool.slice(4,8).find(x => x.id === c.id)).slice(0, 4);
     if (r2replacements.length === 4) {
@@ -6301,9 +6307,10 @@ function renderRound1() {
     }
 
     const correct = concepts[qi];
-    // Pick 3 wrong options from rest of pool (different categories preferred)
+    // Pick 3 wrong options from the full concept library for maximum variety
+    const fullPool = window.CONCEPTS || quizState.pool;
     const wrongPool = shuffle(
-      quizState.pool.filter(c => c.id !== correct.id)
+      fullPool.filter(c => c.id !== correct.id && c.term && c.hook)
     ).slice(0, 3);
     const options = shuffle([correct, ...wrongPool]);
     const catColor = CAT_COLORS[correct.category] || '#e8d5a3';
@@ -6476,9 +6483,24 @@ function renderRound2() {
     const concept = concepts[qi];
     const correct = concept.term;
 
-    // Normalise: lowercase, strip punctuation
-    const norm = s => s.toLowerCase().replace(/[^a-z0-9\s]/g, '').trim();
-    const isCorrect = norm(answer) === norm(correct);
+    // Normalise: lowercase, strip punctuation and extra spaces
+    const norm = s => s.toLowerCase().replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, ' ').trim();
+    // Fuzzy: also accept if ≥80% of characters match (handles hyphens, minor typos)
+    function similarity(a, b) {
+      a = norm(a); b = norm(b);
+      if (a === b) return 1;
+      const longer = a.length > b.length ? a : b;
+      const shorter = a.length > b.length ? b : a;
+      if (longer.length === 0) return 1;
+      // Count matching chars via edit distance approximation
+      let matches = 0;
+      let si = 0;
+      for (let li = 0; li < longer.length && si < shorter.length; li++) {
+        if (longer[li] === shorter[si]) { matches++; si++; }
+      }
+      return matches / longer.length;
+    }
+    const isCorrect = similarity(answer, correct) >= 0.80;
 
     input.disabled = true;
     submitBtn.disabled = true;
