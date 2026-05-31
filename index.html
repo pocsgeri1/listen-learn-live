@@ -3750,17 +3750,25 @@
 
   .quiz-end-concept-row {
     display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 9px 12px;
+    flex-direction: column;
+    gap: 0;
+    padding: 0;
     border-radius: 8px;
     background: var(--surface2);
     border: 1px solid var(--border);
     transition: border-color 0.18s;
+    overflow: hidden;
   }
 
   .quiz-end-concept-row.vaulted {
     border-color: rgba(122,175,138,0.4);
+  }
+
+  .quiz-end-concept-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
   }
 
   .quiz-end-concept-term {
@@ -3773,6 +3781,25 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
+
+  .quiz-end-expand-btn {
+    flex-shrink: 0;
+    padding: 4px 12px;
+    border-radius: 999px;
+    border: 0.5px solid var(--border-hover);
+    background: none;
+    color: var(--muted2);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.52rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.18s;
+    white-space: nowrap;
+  }
+
+  .quiz-end-expand-btn:hover { border-color: var(--border-hover); color: var(--text); }
+  .quiz-end-expand-btn.open  { border-color: var(--accent); color: var(--accent); }
 
   .quiz-end-vault-btn {
     flex-shrink: 0;
@@ -3792,6 +3819,45 @@
 
   .quiz-end-vault-btn:hover { border-color: var(--green); color: var(--green); }
   .quiz-end-vault-btn.vaulted { border-color: var(--green); color: var(--green); background: rgba(122,175,138,0.08); }
+
+  .quiz-end-expand-panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .quiz-end-expand-panel.open {
+    max-height: 400px;
+  }
+
+  .quiz-end-expand-inner {
+    border-top: 1px solid var(--border);
+    padding: 12px 14px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .quiz-end-expand-field {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .quiz-end-expand-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.5rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .quiz-end-expand-text {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    color: var(--muted2);
+    line-height: 1.55;
+  }
 
   /* ---- Quiz setup screen ---- */
   .quiz-setup {
@@ -6887,13 +6953,32 @@ function renderEndScreen() {
             const catColor = CAT_COLORS[c.category] || '#e8d5a3';
             return `
               <div class="quiz-end-concept-row ${alreadyVaulted ? 'vaulted' : ''}" id="qec-${c.id}">
-                <span class="quiz-review-cat" style="color:${catColor};border-color:${catColor};flex-shrink:0">${c.category}</span>
-                <span class="quiz-end-concept-term">${c.term}</span>
-                <button
-                  class="quiz-end-vault-btn ${alreadyVaulted ? 'vaulted' : ''}"
-                  id="qecbtn-${c.id}"
-                  onclick="qecVault(${c.id})"
-                >${alreadyVaulted ? '✓ Vaulted' : '⊕ Vault'}</button>
+                <div class="quiz-end-concept-header">
+                  <span class="quiz-review-cat" style="color:${catColor};border-color:${catColor};flex-shrink:0">${c.category}</span>
+                  <span class="quiz-end-concept-term">${c.term}</span>
+                  <button class="quiz-end-expand-btn" id="qecexp-${c.id}" onclick="qecExpand(${c.id})">↓ More</button>
+                  <button
+                    class="quiz-end-vault-btn ${alreadyVaulted ? 'vaulted' : ''}"
+                    id="qecbtn-${c.id}"
+                    onclick="qecVault(${c.id})"
+                  >${alreadyVaulted ? '✓ Vaulted' : '⊕ Vault'}</button>
+                </div>
+                <div class="quiz-end-expand-panel" id="qecpanel-${c.id}">
+                  <div class="quiz-end-expand-inner">
+                    <div class="quiz-end-expand-field">
+                      <span class="quiz-end-expand-label">What it means</span>
+                      <span class="quiz-end-expand-text">${c.plain}</span>
+                    </div>
+                    <div class="quiz-end-expand-field">
+                      <span class="quiz-end-expand-label">Analogy</span>
+                      <span class="quiz-end-expand-text">${c.analogy}</span>
+                    </div>
+                    <div class="quiz-end-expand-field">
+                      <span class="quiz-end-expand-label">Prompt</span>
+                      <span class="quiz-end-expand-text" style="color:var(--accent);font-style:italic">${c.prompt}</span>
+                    </div>
+                  </div>
+                </div>
               </div>`;
           }).join('')}
         </div>
@@ -6908,6 +6993,25 @@ function renderEndScreen() {
   // Play a satisfying finish tone
   playFinishTone();
 }
+
+window.qecExpand = function(id) {
+  const panel = document.getElementById('qecpanel-' + id);
+  const btn   = document.getElementById('qecexp-' + id);
+  if (!panel) return;
+  const isOpen = panel.classList.contains('open');
+  // Close any other open panel first (accordion — one open at a time)
+  document.querySelectorAll('.quiz-end-expand-panel.open').forEach(p => {
+    p.classList.remove('open');
+    const otherId = p.id.replace('qecpanel-', '');
+    const otherBtn = document.getElementById('qecexp-' + otherId);
+    if (otherBtn) { otherBtn.classList.remove('open'); otherBtn.textContent = '↓ More'; }
+  });
+  if (!isOpen) {
+    panel.classList.add('open');
+    btn.classList.add('open');
+    btn.textContent = '↑ Less';
+  }
+};
 
 window.qecVault = function(id) {
   const alreadyVaulted = typeof mastered !== 'undefined' && mastered.has(id);
