@@ -3670,6 +3670,129 @@
 
   .quiz-end-close:hover { border-color: var(--border-hover); color: var(--text); }
 
+  /* ---- Quiz setup screen ---- */
+  .quiz-setup {
+    padding: 32px 36px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .quiz-setup-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.4rem, 4vw, 1.8rem);
+    font-weight: 400;
+    color: var(--text);
+    line-height: 1.3;
+  }
+
+  .quiz-setup-title em {
+    color: var(--accent);
+    font-style: italic;
+  }
+
+  .quiz-setup-section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  .quiz-mode-options {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .quiz-mode-btn {
+    padding: 10px 20px;
+    border-radius: 999px;
+    border: 1px solid var(--border-hover);
+    background: none;
+    color: var(--muted2);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: all 0.18s;
+  }
+
+  .quiz-mode-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #0d0d0d;
+    font-weight: 500;
+  }
+
+  .quiz-mode-btn:hover:not(.active) {
+    border-color: var(--border-hover);
+    color: var(--text);
+  }
+
+  .quiz-cat-selector {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 4px;
+  }
+
+  .quiz-cat-selector.disabled {
+    opacity: 0.3;
+    pointer-events: none;
+  }
+
+  .quiz-cat-pill {
+    padding: 5px 13px;
+    border-radius: 999px;
+    border: 1px solid currentColor;
+    background: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: pointer;
+    opacity: 0.45;
+    transition: opacity 0.18s, background 0.18s;
+  }
+
+  .quiz-cat-pill.selected {
+    opacity: 1;
+    background: rgba(255,255,255,0.05);
+  }
+
+  .quiz-setup-footer {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .quiz-start-btn {
+    padding: 12px 32px;
+    border-radius: 999px;
+    background: var(--accent);
+    color: #0d0d0d;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s, opacity 0.2s;
+  }
+
+  .quiz-start-btn:hover:not(:disabled) { background: #f0e0b0; transform: translateY(-1px); }
+  .quiz-start-btn:disabled { opacity: 0.35; cursor: default; transform: none; }
+
+  .quiz-setup-note {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+  }
+
   /* Entry ripple from button */
   .quiz-ripple {
     position: fixed;
@@ -5883,25 +6006,54 @@ let quizState = {
   answered: false
 };
 
-// ── Pool is built once after CONCEPTS loads, not on click ──
-let _quizPoolCache = null;
+// ── FIB eligibility heuristic ──
+// Round 2 (fill-in-the-blank) should only use terms that are real/coined concepts,
+// not invented episode-specific phrases or sentence fragments.
+function isFibEligible(term) {
+  if (!term) return false;
+  const words = term.trim().split(/\s+/);
+  // Too many words → likely a phrase, not a term
+  if (words.length > 5) return false;
+  // Contains punctuation suggesting a sentence or special structure
+  if (/[→➜,;!?]/.test(term)) return false;
+  // Starts with a verb conjugation pattern (full sentence feel)
+  if (/^(choosing|practicing|starting|knowing|writing|using|building|making|getting|doing|having|being|telling|feeling)\b/i.test(term)) return false;
+  // Contains "vs" or "/" suggesting a comparison label
+  if (/\bvs\.?\b|\//i.test(term)) return false;
+  // Ellipsis → trailing sentence
+  if (/\.{2,}/.test(term)) return false;
+  // Ends with ! (imperative sentence)
+  if (/!$/.test(term.trim())) return false;
+  // "X as [Process/Noun]" pattern → invented episode framing
+  if (/\bas\s+[A-Z][a-z]/.test(term)) return false;
+  // "X for [Proper Noun]" where proper noun is specific/unusual
+  if (/\bfor\s+[A-Z][A-Za-z]+s?\b$/.test(term) && !/\bfor\s+(You|Me|Us|Life|Growth|Goals)\b/i.test(term)) return false;
+  return true;
+}
 
-function getQuizPool() {
-  // Always read from CONCEPTS directly — never cache a stale empty array
+function getQuizPool(categories) {
   const source = window.CONCEPTS || [];
   if (source.length < 12) {
     console.warn('Quiz: not enough concepts loaded yet, got', source.length);
     return [];
   }
-  const eligible = source.filter(c =>
+  let eligible = source.filter(c =>
     c.hook && c.plain && c.analogy && c.term &&
     c.hook.length > 5 && c.analogy.length > 10
   );
+  // Filter by selected categories if provided
+  if (categories && categories.length > 0) {
+    eligible = eligible.filter(c => categories.includes(c.category));
+  }
   return shuffle([...eligible]);
 }
 
+// ── Setup screen state ──
+let _quizSetupMode = 'all'; // 'all' | 'pick'
+let _quizSelectedCats = [];
+
 function openQuiz() {
-  track('quiz_started');
+  track('quiz_opened');
   // Ripple effect
   const btn = document.getElementById('navQuizBtn');
   if (btn) {
@@ -5914,29 +6066,145 @@ function openQuiz() {
     setTimeout(() => ripple.remove(), 600);
   }
 
-  // Build fresh pool every open — CONCEPTS is guaranteed loaded by now
-  const pool = getQuizPool();
-  if (pool.length < 12) {
-    alert('Concepts still loading — try again in a moment.');
+  _quizSetupMode = 'all';
+  _quizSelectedCats = [];
+
+  const overlay = document.getElementById('quizOverlay');
+  overlay.classList.add('quiz-open');
+  document.body.style.overflow = 'hidden';
+
+  renderQuizSetup();
+}
+
+function renderQuizSetup() {
+  // Hide progress bar / header during setup
+  document.getElementById('quizProgressFill').style.width = '0%';
+  document.getElementById('quizRoundNum').textContent = '—';
+  document.getElementById('quizScoreNum').textContent = '0';
+
+  const ALL_CATS = ['finance','psychology','thinking','power','relationships','language','business','identity','health','philosophy','society','creativity','science','tech-ai'];
+
+  const body = document.getElementById('quizBody');
+  body.innerHTML = `
+    <div class="quiz-setup">
+      <div class="quiz-setup-title">Ready to test<br>your <em>knowledge?</em></div>
+
+      <div>
+        <div class="quiz-setup-section-label">Mode</div>
+        <div class="quiz-mode-options">
+          <button class="quiz-mode-btn active" id="qsModeAll" onclick="qsSetMode('all')">All categories</button>
+          <button class="quiz-mode-btn" id="qsModePick" onclick="qsSetMode('pick')">Pick categories</button>
+        </div>
+      </div>
+
+      <div>
+        <div class="quiz-setup-section-label">Categories</div>
+        <div class="quiz-cat-selector disabled" id="qsCatSelector">
+          ${ALL_CATS.map(cat => `
+            <button
+              class="quiz-cat-pill"
+              data-cat="${cat}"
+              style="color:${CAT_COLORS[cat]};border-color:${CAT_COLORS[cat]}"
+              onclick="qsToggleCat('${cat}')"
+            >${cat}</button>
+          `).join('')}
+        </div>
+      </div>
+
+      <div class="quiz-setup-footer">
+        <button class="quiz-start-btn" id="qsStartBtn" onclick="qsStart()">Start quiz →</button>
+        <span class="quiz-setup-note" id="qsNote">3 rounds · 12 concepts</span>
+      </div>
+    </div>`;
+}
+
+window.qsSetMode = function(mode) {
+  _quizSetupMode = mode;
+  document.getElementById('qsModeAll').classList.toggle('active', mode === 'all');
+  document.getElementById('qsModePick').classList.toggle('active', mode === 'pick');
+  const sel = document.getElementById('qsCatSelector');
+  if (mode === 'pick') {
+    sel.classList.remove('disabled');
+  } else {
+    sel.classList.add('disabled');
+    _quizSelectedCats = [];
+    document.querySelectorAll('.quiz-cat-pill').forEach(p => p.classList.remove('selected'));
+  }
+  qsUpdateNote();
+};
+
+window.qsToggleCat = function(cat) {
+  const idx = _quizSelectedCats.indexOf(cat);
+  if (idx === -1) _quizSelectedCats.push(cat);
+  else _quizSelectedCats.splice(idx, 1);
+  document.querySelectorAll('.quiz-cat-pill').forEach(p => {
+    p.classList.toggle('selected', _quizSelectedCats.includes(p.dataset.cat));
+  });
+  qsUpdateNote();
+};
+
+function qsUpdateNote() {
+  const note = document.getElementById('qsNote');
+  const btn = document.getElementById('qsStartBtn');
+  if (_quizSetupMode === 'all') {
+    note.textContent = '3 rounds · 12 concepts';
+    btn.disabled = false;
     return;
   }
+  if (_quizSelectedCats.length === 0) {
+    note.textContent = 'Pick at least one category';
+    btn.disabled = true;
+    return;
+  }
+  // Check enough concepts available
+  const pool = getQuizPool(_quizSelectedCats);
+  if (pool.length < 12) {
+    note.textContent = `Only ${pool.length} concepts in selection — pick more categories`;
+    btn.disabled = pool.length < 4; // allow if at least 4 (rounds will recycle)
+  } else {
+    note.textContent = `${pool.length} concepts available`;
+    btn.disabled = false;
+  }
+}
+
+window.qsStart = function() {
+  const cats = _quizSetupMode === 'pick' && _quizSelectedCats.length > 0 ? _quizSelectedCats : null;
+  const pool = getQuizPool(cats);
+  if (pool.length < 4) {
+    alert('Not enough concepts in this selection. Pick more categories.');
+    return;
+  }
+
+  track('quiz_started', { mode: _quizSetupMode, cats: cats ? cats.join(',') : 'all' });
 
   quizState.score = 0;
   quizState.round = 0;
   quizState._r1score = 0;
   quizState._r2score = 0;
   quizState._r3score = 0;
-  // Take 12 from a random offset so every session is different
-  const offset = Math.floor(Math.random() * Math.max(1, pool.length - 12));
-  quizState.pool = pool.slice(offset, offset + 12);
 
-  const overlay = document.getElementById('quizOverlay');
-  overlay.classList.add('quiz-open');
-  document.body.style.overflow = 'hidden';
+  // Build pool of 12 (or fewer if selection is small — rounds will sample within what's available)
+  const take = Math.min(12, pool.length);
+  const offset = Math.floor(Math.random() * Math.max(1, pool.length - take));
+  quizState.pool = pool.slice(offset, offset + take);
+
+  // Ensure Round 2 FIB concepts are eligible; pad with eligible concepts if needed
+  // pool[4..7] = Round 2. Replace ineligible ones from rest of pool.
+  const fibPool = shuffle(pool.filter(c => isFibEligible(c.term)));
+  if (fibPool.length >= 4) {
+    const r2replacements = fibPool.filter(c => !quizState.pool.slice(4,8).find(x => x.id === c.id)).slice(0, 4);
+    if (r2replacements.length === 4) {
+      quizState.pool = [
+        ...quizState.pool.slice(0, 4),
+        ...r2replacements,
+        ...quizState.pool.slice(8, 12)
+      ];
+    }
+  }
 
   updateQuizProgress();
   renderRound();
-}
+};
 
 function closeQuiz() {
   document.getElementById('quizOverlay').classList.remove('quiz-open');
