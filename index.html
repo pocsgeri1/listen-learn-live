@@ -3670,6 +3670,129 @@
 
   .quiz-end-close:hover { border-color: var(--border-hover); color: var(--text); }
 
+  /* ---- Round review screen ---- */
+  .quiz-review {
+    padding: 28px 36px 36px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .quiz-review-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .quiz-review-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .quiz-review-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+  }
+
+  .quiz-review-row.correct { border-color: rgba(122,175,138,0.3); }
+  .quiz-review-row.wrong   { border-color: rgba(212,113,90,0.25); }
+
+  .quiz-review-icon {
+    font-size: 0.75rem;
+    flex-shrink: 0;
+    width: 18px;
+    text-align: center;
+  }
+
+  .quiz-review-term {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.95rem;
+    color: var(--text);
+    flex: 1;
+  }
+
+  .quiz-review-hook {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.72rem;
+    color: var(--muted);
+    line-height: 1.4;
+    margin-top: 2px;
+  }
+
+  .quiz-review-cat {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.5rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 999px;
+    border: 0.5px solid currentColor;
+    flex-shrink: 0;
+    opacity: 0.7;
+  }
+
+  /* ---- End screen concept list ---- */
+  .quiz-end-concepts {
+    margin: 4px 0 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    text-align: left;
+  }
+
+  .quiz-end-concept-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    border-radius: 8px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    transition: border-color 0.18s;
+  }
+
+  .quiz-end-concept-row.vaulted {
+    border-color: rgba(122,175,138,0.4);
+  }
+
+  .quiz-end-concept-term {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.9rem;
+    color: var(--text);
+    flex: 1;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .quiz-end-vault-btn {
+    flex-shrink: 0;
+    padding: 4px 12px;
+    border-radius: 999px;
+    border: 0.5px solid var(--border-hover);
+    background: none;
+    color: var(--muted2);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.52rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.18s;
+    white-space: nowrap;
+  }
+
+  .quiz-end-vault-btn:hover { border-color: var(--green); color: var(--green); }
+  .quiz-end-vault-btn.vaulted { border-color: var(--green); color: var(--green); background: rgba(122,175,138,0.08); }
+
   /* ---- Quiz setup screen ---- */
   .quiz-setup {
     padding: 32px 36px 40px;
@@ -6003,7 +6126,8 @@ let quizState = {
   round: 0,
   score: 0,
   pool: [],
-  answered: false
+  answered: false,
+  _results: []
 };
 
 // ── FIB eligibility heuristic ──
@@ -6188,6 +6312,7 @@ window.qsStart = function() {
   quizState._r1score = 0;
   quizState._r2score = 0;
   quizState._r3score = 0;
+  quizState._results = [];
 
   // Build pool of 12 (or fewer if selection is small — rounds will sample within what's available)
   const take = Math.min(12, pool.length);
@@ -6281,6 +6406,40 @@ function showInterstitial(title, sub, xpText, onNext) {
   document.getElementById('quizNextBtn').onclick = onNext;
 }
 
+// ── ROUND REVIEW — shown after Round 1 ──
+function showRoundReview(roundNum, results, onNext) {
+  const correct = results.filter(r => r.isCorrect).length;
+  const total = results.length;
+  const pts = quizState[`_r${roundNum}score`] || 0;
+  const body = document.getElementById('quizBody');
+
+  body.innerHTML = `
+    <div class="quiz-review">
+      <div>
+        <div class="quiz-type-label">Round ${roundNum} complete &nbsp;·&nbsp; ${correct}/${total} correct &nbsp;·&nbsp; +${pts} pts</div>
+        <div class="quiz-review-title">Quick review</div>
+      </div>
+      <div class="quiz-review-list">
+        ${results.map(r => {
+          const c = r.concept;
+          const catColor = CAT_COLORS[c.category] || '#e8d5a3';
+          return `
+            <div class="quiz-review-row ${r.isCorrect ? 'correct' : 'wrong'}">
+              <span class="quiz-review-icon" style="color:${r.isCorrect ? 'var(--green)' : 'var(--red)'}">${r.isCorrect ? '✓' : '✗'}</span>
+              <div style="flex:1;min-width:0">
+                <div class="quiz-review-term">${c.term}</div>
+                <div class="quiz-review-hook">${c.hook}</div>
+              </div>
+              <span class="quiz-review-cat" style="color:${catColor};border-color:${catColor}">${c.category}</span>
+            </div>`;
+        }).join('')}
+      </div>
+      <button class="quiz-next-btn" id="quizReviewNext">Round 2 →</button>
+    </div>`;
+
+  document.getElementById('quizReviewNext').onclick = onNext;
+}
+
 // ════════════════════════════════════════════
 // ROUND 1 — Hook Match (Multiple Choice)
 // Show the hook. Pick the correct term from 4.
@@ -6290,19 +6449,16 @@ function renderRound1() {
   const concepts = quizState.pool.slice(0, 4);
   let qi = 0; // current question index within this round
   let roundScore = 0;
+  const r1Results = []; // track per-question results for review
 
   function renderQ() {
     if (qi >= concepts.length) {
-      // Round complete
+      // Round complete — show review screen before Round 2
       quizState.round = 1;
-      const messages = ['Solid start.', 'Nice work.', 'Keep it going.'];
       quizState._r1score = roundScore;
-      showInterstitial(
-        'Round 1 complete',
-        messages[Math.floor(Math.random() * messages.length)],
-        `+${roundScore} pts`,
-        () => renderRound()
-      );
+      // Save results into global state
+      r1Results.forEach(r => quizState._results.push(r));
+      showRoundReview(1, r1Results, () => renderRound());
       return;
     }
 
@@ -6339,6 +6495,10 @@ function renderRound1() {
 
     const chosen = btn.dataset.id;
     const isCorrect = String(chosen) === String(correctId);
+    const concept = concepts[qi];
+
+    // Record result
+    r1Results.push({ concept, isCorrect, round: 1 });
 
     if (isCorrect) {
       btn.classList.add('correct');
@@ -6689,7 +6849,7 @@ function renderEndScreen() {
         font-size:0.85rem;
         color:var(--muted2);
         line-height:1.6;
-        margin-bottom:32px;
+        margin-bottom:28px;
         max-width:340px;
         margin-left:auto;
         margin-right:auto;
@@ -6719,6 +6879,26 @@ function renderEndScreen() {
         </div>
       </div>
 
+      <div style="text-align:left;margin-bottom:8px">
+        <div style="font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:10px">Concepts in this session — vault the ones that clicked</div>
+        <div class="quiz-end-concepts" id="quizEndConcepts">
+          ${quizState.pool.map(c => {
+            const alreadyVaulted = typeof mastered !== 'undefined' && mastered.has(c.id);
+            const catColor = CAT_COLORS[c.category] || '#e8d5a3';
+            return `
+              <div class="quiz-end-concept-row ${alreadyVaulted ? 'vaulted' : ''}" id="qec-${c.id}">
+                <span class="quiz-review-cat" style="color:${catColor};border-color:${catColor};flex-shrink:0">${c.category}</span>
+                <span class="quiz-end-concept-term">${c.term}</span>
+                <button
+                  class="quiz-end-vault-btn ${alreadyVaulted ? 'vaulted' : ''}"
+                  id="qecbtn-${c.id}"
+                  onclick="qecVault(${c.id})"
+                >${alreadyVaulted ? '✓ Vaulted' : '⊕ Vault'}</button>
+              </div>`;
+          }).join('')}
+        </div>
+      </div>
+
       <div class="quiz-end-actions">
         <button class="quiz-play-again" onclick="openQuiz()">Play again →</button>
         <button class="quiz-end-close" onclick="closeQuiz()">Done</button>
@@ -6728,6 +6908,22 @@ function renderEndScreen() {
   // Play a satisfying finish tone
   playFinishTone();
 }
+
+window.qecVault = function(id) {
+  const alreadyVaulted = typeof mastered !== 'undefined' && mastered.has(id);
+  if (!alreadyVaulted) {
+    if (typeof mastered !== 'undefined') { mastered.add(id); if (typeof saveMastered === 'function') saveMastered(); }
+    playVaultSFX();
+    track('concept_mastered', { id, source: 'quiz_end' });
+  } else {
+    if (typeof mastered !== 'undefined') { mastered.delete(id); if (typeof saveMastered === 'function') saveMastered(); }
+  }
+  const now = typeof mastered !== 'undefined' && mastered.has(id);
+  const row = document.getElementById('qec-' + id);
+  const btn = document.getElementById('qecbtn-' + id);
+  if (row) row.classList.toggle('vaulted', now);
+  if (btn) { btn.classList.toggle('vaulted', now); btn.textContent = now ? '✓ Vaulted' : '⊕ Vault'; }
+};
 
 function playFinishTone() {
   try {
