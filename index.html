@@ -234,26 +234,83 @@
   .theme-toggle {
     display: flex;
     align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    flex-shrink: 0;
+    height: 76px; /* match nav height */
+  }
+
+  .theme-toggle-track {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 56px;
+    height: 28px;
     border-radius: 999px;
     border: 0.5px solid var(--border-hover);
-    background: transparent;
-    color: var(--muted2);
-    cursor: pointer;
-    font-size: 0.88rem;
-    line-height: 1;
-    transition: color 0.2s, border-color 0.2s, background 0.2s;
+    background: var(--surface2);
+    transition: background 0.25s, border-color 0.25s;
+    overflow: hidden;
+  }
+
+  .theme-toggle:hover .theme-toggle-track {
+    border-color: var(--accent);
+  }
+
+  .theme-toggle-thumb {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--accent);
+    left: 3px;
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1;
     flex-shrink: 0;
   }
-  .theme-toggle:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-    background: rgba(255,255,255,0.04);
+
+  /* In light mode thumb slides to the right (sun side) */
+  [data-theme="light"] .theme-toggle-thumb {
+    transform: translateX(28px);
   }
-  [data-theme="light"] .theme-toggle:hover {
-    background: rgba(0,0,0,0.04);
+
+  .theme-toggle-icon {
+    position: absolute;
+    font-size: 0.7rem;
+    line-height: 1;
+    z-index: 2;
+    pointer-events: none;
+    transition: opacity 0.2s;
+  }
+
+  /* Moon on the left */
+  .theme-toggle-moon {
+    left: 6px;
+    color: #0d0d0d;
+    opacity: 1;
+  }
+
+  /* Sun on the right */
+  .theme-toggle-sun {
+    right: 6px;
+    color: var(--muted2);
+    opacity: 0.6;
+  }
+
+  /* Light mode: sun is active (thumb covers moon) */
+  [data-theme="light"] .theme-toggle-moon {
+    color: var(--muted2);
+    opacity: 0.6;
+  }
+  [data-theme="light"] .theme-toggle-sun {
+    color: #1a1814;
+    opacity: 1;
+  }
+
+  @media (max-width: 768px) {
+    .theme-toggle { display: none; } /* handled by mobile menu if needed */
   }
 
   .short-filter-pill.active {
@@ -3715,8 +3772,14 @@
 
   <div class="nav-right">
     <button class="hiw-trigger" onclick="openHiw()">How it works</button>
-    <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode" onclick="toggleTheme()">☽</button>
-    <div class="nav-pill">
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode" onclick="toggleTheme()">
+      <span class="theme-toggle-track">
+        <span class="theme-toggle-thumb"></span>
+        <span class="theme-toggle-icon theme-toggle-sun">☀</span>
+        <span class="theme-toggle-icon theme-toggle-moon">☽</span>
+      </span>
+    </button>
+    <button class="hiw-trigger" onclick="openHiw()">How it works</button>
       <div class="nav-dot"></div>
       <span id="navConceptCount">—</span> free
     </div>
@@ -6475,21 +6538,14 @@ function toggleTheme() {
   html.setAttribute('data-theme', next);
   localStorage.setItem('lll_theme', next);
 
-  // Update button icon
-  const btn = document.getElementById('themeToggle');
-  if (btn) btn.textContent = next === 'light' ? '☀' : '☽';
+  // Icon positions handled purely by CSS [data-theme] rules
 
   // Update meta theme-color for mobile browser chrome
   const meta = document.getElementById('themeColorMeta');
   if (meta) meta.content = next === 'light' ? '#f5f2ed' : '#0d0d0d';
 }
 
-// Apply correct icon on load (theme already set by inline head script)
-(function() {
-  const isLight = document.documentElement.getAttribute('data-theme') === 'light';
-  const btn = document.getElementById('themeToggle');
-  if (btn) btn.textContent = isLight ? '☀' : '☽';
-})();
+// Theme icon state is handled entirely by CSS — no JS needed on load.
 
 // Vault SFX — two-note positive chime, plays when a concept is added to vault
 function playVaultSFX() {
