@@ -2197,6 +2197,140 @@
       justify-content: center;
     }
   }
+  /* FEEDBACK MODAL */
+  .feedback-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(13,13,13,0.96);
+    z-index: 1100;
+  }
+  .feedback-backdrop.open { display: block; }
+
+  .feedback-sheet {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 480px;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-radius: 16px 16px 0 0;
+    padding: 36px 28px 40px;
+    z-index: 1101;
+    box-sizing: border-box;
+  }
+  .feedback-sheet.open { display: block; }
+
+  .feedback-close-btn {
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    background: none;
+    border: none;
+    color: var(--muted2);
+    font-size: 1rem;
+    cursor: pointer;
+    line-height: 1;
+    padding: 4px;
+  }
+  .feedback-close-btn:hover { color: var(--text); }
+
+  .feedback-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .feedback-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    color: var(--text);
+    margin: 0 0 6px;
+  }
+  .feedback-sub {
+    font-size: 0.82rem;
+    color: var(--muted2);
+    margin: 0 0 22px;
+  }
+
+  .feedback-fields { display: flex; flex-direction: column; gap: 14px; }
+
+  .feedback-field { display: flex; flex-direction: column; gap: 5px; }
+
+  .feedback-field-label {
+    font-size: 0.75rem;
+    color: var(--muted2);
+    letter-spacing: 0.02em;
+  }
+
+  .feedback-select,
+  .feedback-input {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    padding: 9px 12px;
+    width: 100%;
+    box-sizing: border-box;
+    appearance: none;
+    -webkit-appearance: none;
+    outline: none;
+  }
+  .feedback-select:focus,
+  .feedback-input:focus {
+    border-color: var(--border-hover);
+  }
+  .feedback-select option { background: var(--surface2); }
+
+  .feedback-submit-btn {
+    margin-top: 20px;
+    width: 100%;
+    background: var(--accent);
+    color: #0d0d0d;
+    border: none;
+    border-radius: 6px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    padding: 12px;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .feedback-submit-btn:hover { opacity: 0.88; }
+  .feedback-submit-btn:disabled { opacity: 0.5; cursor: default; }
+
+  .feedback-skip-btn {
+    display: block;
+    margin: 10px auto 0;
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 0.78rem;
+    cursor: pointer;
+    padding: 4px;
+  }
+  .feedback-skip-btn:hover { color: var(--muted2); }
+
+  .feedback-sent {
+    text-align: center;
+    padding: 20px 0 10px;
+    color: var(--muted2);
+    font-size: 0.9rem;
+  }
+  .feedback-sent-icon {
+    font-size: 1.6rem;
+    color: var(--green);
+    margin-bottom: 8px;
+  }
+  /* /FEEDBACK MODAL */
+
   /* DIVIDER */
   .divider {
     width: 100%;
@@ -4298,7 +4432,7 @@
   <div class="newsletter-inner">
     <div class="newsletter-label">The Weekly Drop</div>
     <h2 class="newsletter-heading">5 concepts. <em>Every Sunday.</em></h2>
-    <p class="newsletter-sub">Join ambitious readers who retain what they hear. No fluff, no filler — just the sharpest ideas from the week's best podcasts, delivered in under 3 minutes of reading.</p>
+    <p class="newsletter-sub">Join now and get <strong>6 months of Pro — free</strong> when we launch. No catch. Just the sharpest ideas from the week's best podcasts, in under 3 minutes of reading.</p>
     
     <form class="newsletter-form" id="newsletterForm">
       <input 
@@ -4316,10 +4450,65 @@
     </form>
     
     <div class="newsletter-message" id="newsletterMessage"></div>
-    <div class="newsletter-trust">No spam. Unsubscribe anytime. First email lands in minutes.</div>
+    <div class="newsletter-trust">Free forever. No spam. Unsubscribe anytime.</div>
   </div>
 </section>
 <!-- /NEWSLETTER CAPTURE -->
+
+<!-- FEEDBACK MODAL -->
+<div class="feedback-backdrop" id="feedbackBackdrop" onclick="closeFeedbackModal(event)"></div>
+<div class="feedback-sheet" id="feedbackSheet" role="dialog" aria-modal="true" aria-label="Quick feedback">
+  <button class="feedback-close-btn" onclick="closeFeedbackModal()" aria-label="Close">✕</button>
+  <div class="feedback-label">30 seconds of your time</div>
+  <h3 class="feedback-heading">Quick question before you go</h3>
+  <p class="feedback-sub">Help us build exactly what you need.</p>
+
+  <div class="feedback-fields" id="feedbackFields">
+    <div class="feedback-field">
+      <label class="feedback-field-label" for="fbSource">How did you find Epistemic?</label>
+      <select class="feedback-select" id="fbSource">
+        <option value="">Select one…</option>
+        <option value="Twitter/X">Twitter / X</option>
+        <option value="LinkedIn">LinkedIn</option>
+        <option value="Podcast">Podcast</option>
+        <option value="Friend">Friend or colleague</option>
+        <option value="Google">Google</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+
+    <div class="feedback-field">
+      <label class="feedback-field-label" for="fbFreq">How often do you currently visit?</label>
+      <select class="feedback-select" id="fbFreq">
+        <option value="">Select one…</option>
+        <option value="Daily">Daily</option>
+        <option value="Few times a week">Few times a week</option>
+        <option value="Weekly">Weekly</option>
+        <option value="Just found it">Just found it</option>
+      </select>
+    </div>
+
+    <div class="feedback-field">
+      <label class="feedback-field-label" for="fbProWant">What's the #1 thing you'd want from Pro?</label>
+      <input type="text" class="feedback-input" id="fbProWant" maxlength="150" placeholder="e.g. spaced repetition, audio summaries…" />
+    </div>
+
+    <div class="feedback-field">
+      <label class="feedback-field-label" for="fbFrustration">Biggest frustration with the free version?</label>
+      <input type="text" class="feedback-input" id="fbFrustration" maxlength="150" placeholder="e.g. not enough concepts, no search…" />
+    </div>
+  </div>
+
+  <div class="feedback-sent" id="feedbackSent" style="display:none;">
+    <div class="feedback-sent-icon">✓</div>
+    <p>Thanks — this genuinely helps.</p>
+  </div>
+
+  <button class="feedback-submit-btn" id="feedbackSubmitBtn" onclick="submitFeedback()">Send feedback</button>
+  <button class="feedback-skip-btn" onclick="closeFeedbackModal()">Skip</button>
+</div>
+<!-- /FEEDBACK MODAL -->
+
 <!-- SHARE CARD MODAL -->
 <div class="share-modal-overlay" id="shareModalOverlay" onclick="closeShareModal(event)">
   <div class="share-modal">
@@ -6133,7 +6322,8 @@ function initConceptOfTheDay() {
         track('newsletter_signup');
         showMessage('You\'re in. Check your inbox — first concepts on the way.', 'success');
         emailInput.value = '';
-        btnLabel.textContent = 'Subscribed';
+        btnLabel.textContent = 'Subscribed ✓';
+        openFeedbackModal(email);
       } else {
         showMessage(data.error || 'Something went wrong. Try again.', 'error');
         btnLabel.textContent = 'Subscribe';
@@ -6152,6 +6342,68 @@ function initConceptOfTheDay() {
     message.className = 'newsletter-message ' + type;
   }
 })();
+
+// ============================================
+// FEEDBACK MODAL
+// ============================================
+let _feedbackEmail = '';
+
+function openFeedbackModal(email) {
+  _feedbackEmail = email || '';
+  document.getElementById('feedbackBackdrop').classList.add('open');
+  document.getElementById('feedbackSheet').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeFeedbackModal(e) {
+  if (e && e.target !== document.getElementById('feedbackBackdrop')) return;
+  document.getElementById('feedbackBackdrop').classList.remove('open');
+  document.getElementById('feedbackSheet').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// Allow close via ✕ button (no event arg)
+const _origClose = closeFeedbackModal;
+window.closeFeedbackModal = function(e) {
+  if (e === undefined || (e && e.target === document.getElementById('feedbackBackdrop'))) {
+    document.getElementById('feedbackBackdrop').classList.remove('open');
+    document.getElementById('feedbackSheet').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+};
+
+async function submitFeedback() {
+  const btn = document.getElementById('feedbackSubmitBtn');
+  btn.disabled = true;
+  btn.textContent = 'Sending…';
+
+  const payload = {
+    email: _feedbackEmail,
+    source: document.getElementById('fbSource').value,
+    visit_freq: document.getElementById('fbFreq').value,
+    pro_want: document.getElementById('fbProWant').value.trim(),
+    frustration: document.getElementById('fbFrustration').value.trim(),
+  };
+
+  try {
+    await fetch('/api/feedback', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+  } catch (_) { /* silent fail — feedback is best-effort */ }
+
+  // Show thank-you state regardless of network outcome
+  document.getElementById('feedbackFields').style.display = 'none';
+  document.getElementById('feedbackSent').style.display = 'block';
+  btn.style.display = 'none';
+  document.querySelector('.feedback-skip-btn').textContent = 'Close';
+
+  setTimeout(() => window.closeFeedbackModal(), 2200);
+}
+// ============================================
+// END FEEDBACK MODAL
+// ============================================
 </script>
   <!-- ============================================
      QUIZ MODE OVERLAY
