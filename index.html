@@ -10,7 +10,16 @@
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="shortcut icon" href="/favicon.ico">
-<meta name="theme-color" content="#0d0d0d">
+<meta name="theme-color" content="#0d0d0d" id="themeColorMeta">
+<script>
+  (function(){
+    var t = localStorage.getItem('lll_theme');
+    if(t === 'light') {
+      document.documentElement.setAttribute('data-theme','light');
+      document.getElementById('themeColorMeta').content = '#f5f2ed';
+    }
+  })();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -34,6 +43,217 @@
     --purple: #a08fd4;
     --pink: #c47a9f;
     --teal: #5abfaf;
+  }
+
+  /* ============================================
+     LIGHT MODE TOKENS
+     ============================================ */
+  [data-theme="light"] {
+    --bg: #f5f2ed;
+    --surface: #ede9e2;
+    --surface2: #e3ddd4;
+    --border: rgba(0,0,0,0.09);
+    --border-hover: rgba(0,0,0,0.2);
+    --text: #1a1814;
+    --muted: #7a7570;
+    --muted2: #5a5550;
+    --accent: #b8860b;
+    --accent2: #9a700a;
+    --red: #c0442a;
+    --green: #3d7a50;
+    --blue: #2e6fa0;
+    --purple: #6a4fc0;
+    --pink: #a04878;
+    --teal: #1a9080;
+  }
+
+  /* Noise is heavy on warm parchment — reduce */
+  [data-theme="light"] body::before { opacity: 0.07; }
+
+  /* Nav bg in light */
+  [data-theme="light"] nav {
+    background: rgba(245,242,237,0.97);
+    border-bottom-color: rgba(0,0,0,0.1);
+  }
+  [data-theme="light"] nav.scrolled {
+    border-color: rgba(0,0,0,0.07);
+  }
+
+  /* Mobile menu in light */
+  [data-theme="light"] .nav-mobile-menu {
+    background: rgba(245,242,237,0.99);
+  }
+
+  /* Nav hover in light */
+  [data-theme="light"] .nav-link:hover {
+    background: rgba(0,0,0,0.05);
+  }
+
+  /* Nav quiz teal button in light */
+  [data-theme="light"] .nav-quiz-btn {
+    background: rgba(26,144,128,0.08);
+    border-color: rgba(26,144,128,0.4);
+  }
+  [data-theme="light"] .nav-quiz-btn:hover {
+    background: rgba(26,144,128,0.15);
+  }
+
+  /* Nav map btn in light */
+  [data-theme="light"] .nav-map-btn {
+    border-color: rgba(184,134,11,0.35);
+    background: rgba(184,134,11,0.08);
+  }
+  [data-theme="light"] .nav-map-btn:hover {
+    background: rgba(184,134,11,0.15);
+  }
+
+  /* Scroll arrows in light */
+  [data-theme="light"] .scroll-arrow {
+    background: rgba(237,233,226,0.97);
+  }
+  [data-theme="light"] .scroll-arrow:hover {
+    background: rgba(227,221,212,0.97);
+  }
+
+  /* Episode drawer backdrop in light */
+  [data-theme="light"] .ep-drawer-backdrop.open {
+    background: rgba(0,0,0,0.65);
+  }
+
+  /* Drawer body scrollbar in light */
+  [data-theme="light"] .ep-drawer-body {
+    scrollbar-color: rgba(0,0,0,0.2) transparent;
+  }
+
+  /* Quiz backdrop in light */
+  [data-theme="light"] .quiz-backdrop {
+    background: rgba(245,242,237,0.97);
+  }
+
+  /* COTD overlay in light */
+  [data-theme="light"] .cotd-overlay {
+    background: rgba(245,242,237,0.97);
+  }
+
+  /* HIW overlay in light */
+  [data-theme="light"] .hiw-overlay {
+    background: rgba(0,0,0,0.6);
+  }
+
+  /* Share modal overlay in light */
+  [data-theme="light"] .share-modal-overlay {
+    background: rgba(0,0,0,0.6);
+  }
+
+  /* Vault pill active bg in light */
+  [data-theme="light"] .vault-pill.vault-active {
+    background: rgba(184,134,11,0.08);
+  }
+
+  /* Cat card active in light */
+  [data-theme="light"] .cat-card.active {
+    background: rgba(0,0,0,0.06);
+  }
+
+  /* NF flip card front shadow in light */
+  [data-theme="light"] .nf-row .concept-card .card-front {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.6);
+  }
+  [data-theme="light"] .nf-row .concept-card:hover .card-front {
+    box-shadow: 0 6px 16px rgba(0,0,0,0.16), inset 0 1px 0 rgba(255,255,255,0.6);
+    border-color: rgba(0,0,0,0.2);
+  }
+
+  /* Card back shadow in light */
+  [data-theme="light"] .nf-row .concept-card .card-back,
+  [data-theme="light"] .ep-cat-column .concept-card .card-back {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+
+  /* Goal bar in light */
+  [data-theme="light"] .daily-goal {
+    background: #f5f2ed;
+    border-top-color: rgba(0,0,0,0.1);
+  }
+
+  /* Hero radial glow in light — remove (looks odd on parchment) */
+  [data-theme="light"] .hero::before {
+    opacity: 0;
+  }
+
+  /* Hero card face shadow in light */
+  [data-theme="light"] .hero-card-face {
+    box-shadow:
+      0 0 0 1px rgba(0,0,0,0.06),
+      0 12px 32px rgba(0,0,0,0.12),
+      inset 0 1px 0 rgba(255,255,255,0.7);
+  }
+
+  /* Short-card play overlay in light */
+  [data-theme="light"] .short-thumb-play {
+    background: rgba(0,0,0,0.55);
+    color: var(--accent);
+  }
+
+  /* daily-dot default in light */
+  [data-theme="light"] .daily-dot {
+    background: var(--surface2);
+    border-color: var(--border-hover);
+  }
+
+  /* btn-share-download text always near-black (accent bg) */
+  [data-theme="light"] .btn-share-download { color: #1a1814; }
+
+  /* COTD use-today block in light */
+  [data-theme="light"] .cotd-use-today {
+    background: rgba(184,134,11,0.05);
+    border-color: rgba(184,134,11,0.15);
+  }
+
+  /* Back prompt block in light */
+  [data-theme="light"] .ep-cat-column .back-prompt,
+  [data-theme="light"] .nf-row .concept-card .back-prompt {
+    background: rgba(184,134,11,0.06);
+    border-color: rgba(184,134,11,0.16);
+  }
+
+  /* hc-back-prompt in light */
+  [data-theme="light"] .hc-back-prompt {
+    background: rgba(184,134,11,0.05);
+    border-color: rgba(184,134,11,0.14);
+  }
+
+  /* Theme toggle button — light state */
+  [data-theme="light"] .theme-toggle {
+    color: var(--muted2);
+  }
+
+  /* ============================================
+     THEME TOGGLE PILL
+     ============================================ */
+  .theme-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 999px;
+    border: 0.5px solid var(--border-hover);
+    background: transparent;
+    color: var(--muted2);
+    cursor: pointer;
+    font-size: 0.88rem;
+    line-height: 1;
+    transition: color 0.2s, border-color 0.2s, background 0.2s;
+    flex-shrink: 0;
+  }
+  .theme-toggle:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(255,255,255,0.04);
+  }
+  [data-theme="light"] .theme-toggle:hover {
+    background: rgba(0,0,0,0.04);
   }
 
   .short-filter-pill.active {
@@ -170,7 +390,7 @@
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    background: rgba(20, 20, 20, 0.95);
+    background: rgba(20,20,20,0.95); /* overridden by [data-theme="light"] */
     border: 0.5px solid var(--border-hover);
     color: var(--text);
     font-family: 'DM Mono', monospace;
@@ -185,7 +405,7 @@
     transition: opacity 0.2s, background 0.2s, border-color 0.2s;
   }
   .scroll-arrow:hover {
-    background: rgba(28, 28, 28, 0.95);
+    background: rgba(28,28,28,0.95); /* overridden by [data-theme="light"] */
     border-color: var(--accent);
     color: var(--accent);
   }
@@ -763,6 +983,16 @@
 
   html { scroll-behavior: smooth; }
 
+  /* Smooth token transitions when theme switches */
+  body, nav, .daily-goal, .concept-card, .card-front, .card-back,
+  .ep-drawer, .cotd-card, .quiz-sheet, .hiw-modal, .share-modal,
+  .progress-bar, .search-wrap, .step, .newsletter,
+  .episode-card, .short-card, .nav-mobile-menu, .vault-pill {
+    transition-property: background, border-color, color;
+    transition-duration: 0.25s;
+    transition-timing-function: ease;
+  }
+
   body {
     background: var(--bg);
     color: var(--text);
@@ -784,7 +1014,7 @@
     height: 76px;
     border-bottom: 1px solid var(--border);
     background: rgba(13,13,13,0.96);
-    transition: height 0.3s ease, border-color 0.3s ease;
+    transition: height 0.3s ease, border-color 0.3s ease, background 0.3s ease;
   }
 
   nav.scrolled {
@@ -941,7 +1171,7 @@
     position: fixed;
     top: 76px;
     left: 0; right: 0;
-    background: rgba(13,13,13,0.99);
+    background: rgba(13,13,13,0.99); /* overridden by [data-theme="light"] */
     border-bottom: 1px solid var(--border);
     padding: 1rem 2rem 1.5rem;
     z-index: 99;
@@ -2814,7 +3044,7 @@
   .daily-goal {
     position: fixed;
     bottom: 0; left: 0; right: 0;
-    background: #0d0d0d;
+    background: var(--bg);
     border-top: 1px solid var(--border);
     padding: 10px 1.25rem;
     display: flex;
@@ -3485,6 +3715,7 @@
 
   <div class="nav-right">
     <button class="hiw-trigger" onclick="openHiw()">How it works</button>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode" onclick="toggleTheme()">☽</button>
     <div class="nav-pill">
       <div class="nav-dot"></div>
       <span id="navConceptCount">—</span> free
@@ -6233,6 +6464,32 @@ function playFinishTone() {
     });
   } catch(e) {}
 }
+
+// ════════════════════════════════════════════
+// THEME TOGGLE
+// ════════════════════════════════════════════
+function toggleTheme() {
+  const html = document.documentElement;
+  const isLight = html.getAttribute('data-theme') === 'light';
+  const next = isLight ? 'dark' : 'light';
+  html.setAttribute('data-theme', next);
+  localStorage.setItem('lll_theme', next);
+
+  // Update button icon
+  const btn = document.getElementById('themeToggle');
+  if (btn) btn.textContent = next === 'light' ? '☀' : '☽';
+
+  // Update meta theme-color for mobile browser chrome
+  const meta = document.getElementById('themeColorMeta');
+  if (meta) meta.content = next === 'light' ? '#f5f2ed' : '#0d0d0d';
+}
+
+// Apply correct icon on load (theme already set by inline head script)
+(function() {
+  const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+  const btn = document.getElementById('themeToggle');
+  if (btn) btn.textContent = isLight ? '☀' : '☽';
+})();
 
 // Vault SFX — two-note positive chime, plays when a concept is added to vault
 function playVaultSFX() {
