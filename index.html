@@ -2253,7 +2253,9 @@
     background: var(--surface);
     border-top: 1px solid var(--border);
     border-radius: 16px 16px 0 0;
-    padding: 36px 28px 40px;
+    padding: 28px 20px 20px;
+    max-height: 88vh;
+    overflow-y: auto;
     z-index: 1101;
     box-sizing: border-box;
   }
@@ -4493,11 +4495,11 @@
 <div class="feedback-backdrop" id="feedbackBackdrop" onclick="closeFeedbackModal(event)"></div>
 <div class="feedback-sheet" id="feedbackSheet" role="dialog" aria-modal="true" aria-label="Quick feedback">
   <button class="feedback-close-btn" onclick="closeFeedbackModal()" aria-label="Close">✕</button>
-  <div class="feedback-label">30 seconds of your time</div>
-  <h3 class="feedback-heading">Quick question before you go</h3>
-  <p class="feedback-sub">Help us build exactly what you need.</p>
+  <div class="feedback-label">Founding Member Survey</div>
+  <h3 class="feedback-heading">Help shape what we build</h3>
+  <p class="feedback-sub">2 minutes. Your answers directly influence the roadmap.</p>
 
-  <div class="feedback-fields" id="feedbackFields">
+  <div class="feedback-fields" id="feedbackFields" style="display:none;">
     <div class="feedback-field">
       <label class="feedback-field-label" for="fbSource">How did you find Epistemic?</label>
       <select class="feedback-select" id="fbSource">
@@ -4538,9 +4540,18 @@
     <p>Thanks — this genuinely helps.</p>
   </div>
 
-  <button class="feedback-submit-btn" id="feedbackSubmitBtn" onclick="submitFeedback()">Send feedback</button>
-  <button class="feedback-skip-btn" onclick="closeFeedbackModal()">Skip</button>
-</div>
+  <iframe
+    data-tally-src="https://tally.so/embed/81MMOA?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
+    loading="lazy"
+    width="100%"
+    height="560"
+    frameborder="0"
+    marginheight="0"
+    marginwidth="0"
+    style="border:none; margin-top: 8px;"
+    title="Founding Member Survey"
+  ></iframe>
+  <script>var d=document,w="https://tally.so/widgets/embed.js",v=function(){"undefined"!=typeof Tally?Tally.loadEmbeds():d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach((function(e){e.src=e.dataset.tallySrc}))};if("undefined"!=typeof Tally)v();else if(d.querySelector('script[src="'+w+'"]')==null){var s=d.createElement("script");s.src=w,s.onload=v,s.onerror=v,d.body.appendChild(s);}</script>
 <!-- /FEEDBACK MODAL -->
 
 <!-- SHARE CARD MODAL -->
