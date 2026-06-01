@@ -1055,7 +1055,8 @@
   body.drawer-open #netflixRows,
   body.drawer-open .newsletter,
   body.drawer-open .divider,
-  body.drawer-open .daily-goal {
+  body.drawer-open .daily-goal,
+  body.feedback-open .daily-goal {
     display: none;
   }
   .nav-logo {
@@ -6419,6 +6420,7 @@ function openFeedbackModal(email) {
   document.getElementById('feedbackBackdrop').classList.add('open');
   document.getElementById('feedbackSheet').classList.add('open');
   document.body.style.overflow = 'hidden';
+  document.body.classList.add('feedback-open');
 }
 
 function closeFeedbackModal(e) {
@@ -6435,6 +6437,7 @@ window.closeFeedbackModal = function(e) {
     document.getElementById('feedbackBackdrop').classList.remove('open');
     document.getElementById('feedbackSheet').classList.remove('open');
     document.body.style.overflow = '';
+    document.body.classList.remove('feedback-open');
   }
 };
 
