@@ -4144,7 +4144,7 @@
     <a class="nav-link" onclick="scrollToSection('app')">Concepts</a>
     <a class="nav-link" onclick="toggleVault();scrollToSection('app')">Vault</a>
     <a class="nav-link" onclick="openCotdFromNav()">Today</a>
-    <a class="nav-link" onclick="scrollToSection('signup')">Sign up</a>
+    <a class="nav-link" id="navSignupLink" onclick="scrollToSection('signup')">Sign up</a>
     <div class="nav-tools-divider"></div>
     <a class="nav-link nav-map-btn" href="/map" onclick="track('map_opened')">◈ Map</a>
     <div class="nav-divider"></div>
@@ -4430,9 +4430,9 @@
 <!-- NEWSLETTER CAPTURE -->
 <section class="newsletter" id="signup">
   <div class="newsletter-inner">
-    <div class="newsletter-label">The Weekly Drop</div>
-    <h2 class="newsletter-heading">5 concepts. <em>Every Sunday.</em></h2>
-    <p class="newsletter-sub">Join now and get <strong>6 months of Pro — free</strong> when we launch. No catch. Just the sharpest ideas from the week's best podcasts, in under 3 minutes of reading.</p>
+    <div class="newsletter-label">Founding Members</div>
+    <h2 class="newsletter-heading"><em>Ideas</em> worth keeping.</h2>
+    <p class="newsletter-sub">Listening to podcasts is entertainment. Owning what you heard is power.<br><br>Sign up for free&nbsp;➜&nbsp;Shape what Pro becomes&nbsp;➜&nbsp;Lock in 50% off for life.</p>
     
     <form class="newsletter-form" id="newsletterForm">
       <input 
@@ -4444,13 +4444,13 @@
         aria-label="Email address"
       />
       <button type="submit" class="newsletter-btn" id="newsletterBtn">
-        <span class="btn-label">Subscribe</span>
+        <span class="btn-label" id="signupBtnLabel">Free Founding Access</span>
         <svg class="btn-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M8 3l5 5-5 5"/></svg>
       </button>
     </form>
     
     <div class="newsletter-message" id="newsletterMessage"></div>
-    <div class="newsletter-trust">Free forever. No spam. Unsubscribe anytime.</div>
+    <div class="newsletter-trust">No credit card. No catch. No spam. Founding members lock in their discount before launch.</div>
   </div>
 </section>
 <!-- /NEWSLETTER CAPTURE -->
@@ -4612,6 +4612,10 @@ function closeMobileNav() {
 // Shrink nav on scroll
 window.addEventListener('scroll', function() {
   document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 40);
+  const signupLink = document.getElementById('navSignupLink');
+  if (signupLink) {
+    signupLink.textContent = window.scrollY > window.innerHeight * 0.3 ? 'Free Founding Access' : 'Sign up';
+  }
 }, { passive: true });
 
 // Magnetic effect on nav island links
