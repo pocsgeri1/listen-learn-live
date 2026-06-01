@@ -897,6 +897,40 @@
   }
   .hiw-trigger:hover { color: var(--accent); border-color: var(--accent); }
 
+  .nav-signup-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #0d0d0d;
+    background: var(--accent);
+    border: 0.5px solid var(--accent);
+    border-radius: 999px;
+    padding: 5px 14px;
+    cursor: pointer;
+    position: relative;
+    transition: background 0.2s, color 0.2s, transform 0.2s;
+    white-space: nowrap;
+  }
+  .nav-signup-btn:hover {
+    background: #f0e0b0;
+    border-color: #f0e0b0;
+  }
+  .nav-signup-btn::after {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 999px;
+    border: 1px solid var(--accent);
+    opacity: 0;
+    animation: signup-pulse 2.4s ease-out infinite;
+  }
+  @keyframes signup-pulse {
+    0%   { transform: scale(1);    opacity: 0.55; }
+    70%  { transform: scale(1.55); opacity: 0; }
+    100% { transform: scale(1.55); opacity: 0; }
+  }
+
   .hiw-overlay {
     position: fixed;
     inset: 0;
@@ -1199,6 +1233,7 @@
     .nav-pill { display: none; }
     .nav-mobile-toggle { display: block; }
     .nav-right { gap: 0.5rem; }
+    .hiw-trigger { display: none; }
   }
 
   /* HERO */
@@ -4144,7 +4179,6 @@
     <a class="nav-link" onclick="scrollToSection('app')">Concepts</a>
     <a class="nav-link" onclick="toggleVault();scrollToSection('app')">Vault</a>
     <a class="nav-link" onclick="openCotdFromNav()">Today</a>
-    <a class="nav-link" id="navSignupLink" onclick="scrollToSection('signup')">Sign up</a>
     <div class="nav-tools-divider"></div>
     <a class="nav-link nav-map-btn" href="/map" onclick="track('map_opened')">◈ Map</a>
     <div class="nav-divider"></div>
@@ -4154,6 +4188,7 @@
   <div class="nav-right">
     <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode" onclick="toggleTheme()">☽</button>
     <button class="hiw-trigger" onclick="openHiw()">How it works</button>
+    <button class="nav-signup-btn" id="navSignupBtn" onclick="scrollToSection('signup')">Sign Up 🎁</button>
     <div class="nav-pill">
       <div class="nav-dot"></div>
       <span id="navConceptCount">—</span> free
@@ -4170,7 +4205,7 @@
   <button class="nav-mobile-link" onclick="scrollToSection('app');closeMobileNav()">◈ Concepts</button>
   <button class="nav-mobile-link" onclick="toggleVault();scrollToSection('app');closeMobileNav()">◆ Vault</button>
   <button class="nav-mobile-link" onclick="openCotdFromNav();closeMobileNav()">◇ Today's Concept</button>
-  <button class="nav-mobile-link" onclick="scrollToSection('signup');closeMobileNav()">◉ Sign up — Free</button>
+  <button class="nav-mobile-link" onclick="scrollToSection('signup');closeMobileNav()">◉ Sign Up 🎁 — Free Founding Access</button>
   <button class="nav-mobile-link" onclick="openHiw();closeMobileNav()">◌ How it works</button>
   <button class="nav-mobile-link" style="color:var(--accent);border-top:1px solid var(--border);" onclick="openQuiz();closeMobileNav()">◈ Quiz mode</button>
 </div>
@@ -4612,10 +4647,6 @@ function closeMobileNav() {
 // Shrink nav on scroll
 window.addEventListener('scroll', function() {
   document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 40);
-  const signupLink = document.getElementById('navSignupLink');
-  if (signupLink) {
-    signupLink.textContent = window.scrollY > window.innerHeight * 0.3 ? 'Free Founding Access' : 'Sign up';
-  }
 }, { passive: true });
 
 // Magnetic effect on nav island links
@@ -4638,6 +4669,27 @@ function initMagneticNav() {
       link.style.transition = 'transform 0.1s ease, color 0.2s, background 0.2s';
     });
   });
+
+  // Magnetic effect on signup button
+  const signupBtn = document.getElementById('navSignupBtn');
+  if (signupBtn) {
+    signupBtn.addEventListener('mousemove', function(e) {
+      const rect = signupBtn.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dx = (e.clientX - cx) * 0.3;
+      const dy = (e.clientY - cy) * 0.3;
+      signupBtn.style.transform = `translate(${dx}px, ${dy}px)`;
+    });
+    signupBtn.addEventListener('mouseleave', function() {
+      signupBtn.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), background 0.2s, color 0.2s';
+      signupBtn.style.transform = 'translate(0,0)';
+      setTimeout(() => { signupBtn.style.transition = 'background 0.2s, color 0.2s, transform 0.2s'; }, 400);
+    });
+    signupBtn.addEventListener('mouseenter', function() {
+      signupBtn.style.transition = 'transform 0.1s ease, background 0.2s, color 0.2s';
+    });
+  }
 }
 
 // Call after DOM ready
