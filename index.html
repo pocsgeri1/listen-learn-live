@@ -229,16 +229,25 @@
     filter: brightness(0.68) saturate(1.4);
   }
 
-  /* Tally iframe background fix in light mode */
-  [data-theme="light"] iframe[data-tally-src],
-  [data-theme="light"] iframe[src*="tally.so"] {
-    background: var(--surface) !important;
-    border-radius: 8px;
-  }
+  /* Tally iframe background fix — neutral warm-dark surface that reads
+     acceptably on both dark and light themes. Not a perfect match for
+     either, but avoids the jarring white bleed. */
   .tally-wrap {
     border-radius: 8px;
     overflow: hidden;
-    background: var(--surface);
+    background: #2a2724;
+    padding: 4px;
+  }
+  [data-theme="light"] .tally-wrap {
+    background: #d4cfc8;
+  }
+
+  /* Quiz category pills — inline colour override, CSS filter can't reach them.
+     Darken in light mode so they're legible on parchment. */
+  [data-theme="light"] .quiz-cat-pill,
+  [data-theme="light"] .quiz-review-cat,
+  [data-theme="light"] .quiz-cat-chip {
+    filter: brightness(0.6) saturate(1.5);
   }
 
   /* Back prompt block in light */
@@ -7439,14 +7448,14 @@ function toggleTheme() {
   if (btn) btn.textContent = isLight ? '☀' : '☽';
 })();
 
-// Card flip SFX — light mechanical click, ~80ms, no external files.
+// Card flip SFX — soft whoosh, like a page turning through air.
 // Skipped if user prefers reduced motion (accessibility).
 function playCardFlipSFX(isOpening) {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   try {
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    // Noise burst: a short white-noise click via buffer source
-    const bufLen = Math.floor(ctx.sampleRate * 0.06); // 60ms
+    const dur = 0.18;
+    const bufLen = Math.floor(ctx.sampleRate * dur);
     const buf = ctx.createBuffer(1, bufLen, ctx.sampleRate);
     const data = buf.getChannelData(0);
     for (let i = 0; i < bufLen; i++) data[i] = (Math.random() * 2 - 1);
@@ -7454,21 +7463,22 @@ function playCardFlipSFX(isOpening) {
     const src = ctx.createBufferSource();
     src.buffer = buf;
 
-    // Band-pass filter — gives it a "card snap" character vs raw noise
-    const bp = ctx.createBiquadFilter();
-    bp.type = 'bandpass';
-    bp.frequency.value = isOpening ? 3200 : 2000; // higher = brighter open; lower = deeper close
-    bp.Q.value = 0.8;
+    // Low-pass filter sweeps up on open (airy lift), down on close (settling)
+    const lp = ctx.createBiquadFilter();
+    lp.type = 'lowpass';
+    lp.frequency.setValueAtTime(isOpening ? 400 : 800, ctx.currentTime);
+    lp.frequency.exponentialRampToValueAtTime(isOpening ? 2200 : 300, ctx.currentTime + dur);
 
     const gain = ctx.createGain();
-    gain.gain.setValueAtTime(0.18, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.07);
+    gain.gain.setValueAtTime(0, ctx.currentTime);
+    gain.gain.linearRampToValueAtTime(0.12, ctx.currentTime + 0.04);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
 
-    src.connect(bp);
-    bp.connect(gain);
+    src.connect(lp);
+    lp.connect(gain);
     gain.connect(ctx.destination);
     src.start(ctx.currentTime);
-    src.stop(ctx.currentTime + 0.08);
+    src.stop(ctx.currentTime + dur);
   } catch(e) {}
 }
 
