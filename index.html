@@ -100,11 +100,13 @@
 
   /* Nav map btn in light */
   [data-theme="light"] .nav-map-btn {
-    border-color: rgba(184,134,11,0.35);
-    background: rgba(184,134,11,0.08);
+    color: var(--purple);
+    border-color: rgba(106,79,192,0.3);
+    background: rgba(106,79,192,0.07);
   }
   [data-theme="light"] .nav-map-btn:hover {
-    background: rgba(184,134,11,0.15);
+    background: rgba(106,79,192,0.13);
+    border-color: var(--purple);
   }
 
   /* Scroll arrows in light */
@@ -1266,15 +1268,15 @@
   box-shadow: 0 0 12px rgba(90,191,175,0.18);
 }
 .nav-map-btn {
-  color: var(--accent);
-  border: 1px solid rgba(232,213,163,0.3);
-  background: rgba(232,213,163,0.06);
+  color: var(--purple);
+  border: 1px solid rgba(160,143,212,0.3);
+  background: rgba(160,143,212,0.07);
   font-weight: 500;
 }
 .nav-map-btn:hover {
-  background: rgba(232,213,163,0.12);
-  border-color: var(--accent);
-  color: var(--accent);
+  background: rgba(160,143,212,0.14);
+  border-color: var(--purple);
+  color: var(--purple);
 }
   /* RIGHT CLUSTER */
   .nav-right {
@@ -2912,7 +2914,7 @@
 
   /* FLIP — FRONT FACE */
   .nf-row .concept-card .card-front {
-    background: var(--surface);
+    background: color-mix(in srgb, var(--cat-color, var(--surface)) 11%, var(--surface));
     border: 1px solid var(--border);
     padding: 22px 22px 18px;
     display: flex;
@@ -3112,7 +3114,7 @@
 
   /* FRONT FACE */
   .ep-cat-column .concept-card .card-front {
-    background: var(--surface);
+    background: color-mix(in srgb, var(--cat-color, var(--surface)) 11%, var(--surface));
     border: 1px solid var(--border);
     padding: 20px 20px 16px;
     display: flex;
@@ -5230,7 +5232,7 @@ function buildGrid() {
             ${cards.map((c, i) => {
               const color = CAT_COLOR[c.category] || '#e8d5a3';
               const isMastered = mastered.has(c.id);
-              return `<div class="concept-card${isMastered?' mastered':''}${c.editors_pick===true?' editors-pick':''}" id="cc${c.id}" style="--cat-color:${color};background:${hexToRgba(color,0.07)}" onclick="toggleCard(${c.id})">
+              return `<div class="concept-card${isMastered?' mastered':''}${c.editors_pick===true?' editors-pick':''}" id="cc${c.id}" style="--cat-color:${color}" onclick="toggleCard(${c.id})">
                 <div class="card-inner">
                   <div class="card-front">
                     <div class="card-meta">
@@ -5794,7 +5796,7 @@ function _renderDrawerContent(col, collectionId) {
       const cards = catGroups[catKey].map(c => {
         const isMastered = mastered.has(c.id);
         return `
-        <div class="concept-card${isMastered?' mastered':''}${c.editors_pick===true?' editors-pick':''}" id="epcc${c.id}" style="--cat-color:${catColor};background:${hexToRgba(catColor,0.07)}" onclick="toggleEpCard(${c.id})">
+        <div class="concept-card${isMastered?' mastered':''}${c.editors_pick===true?' editors-pick':''}" id="epcc${c.id}" style="--cat-color:${catColor}" onclick="toggleEpCard(${c.id})">
           <div class="card-inner">
             <div class="card-front">
               <div class="card-meta">
