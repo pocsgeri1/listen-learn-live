@@ -210,6 +210,37 @@
     border-color: rgba(184,134,11,0.15);
   }
 
+  /* Darken category pills + card accent borders in light mode.
+     The inline hex colors are designed for dark-bg; on parchment they're too pale.
+     A combined brightness+saturation filter fixes this without touching each hex. */
+  [data-theme="light"] .cat-card:not(.vault-pill) {
+    filter: brightness(0.72) saturate(1.4);
+  }
+  [data-theme="light"] .cat-card.active:not(.vault-pill) {
+    filter: brightness(0.65) saturate(1.5);
+  }
+  [data-theme="light"] .nf-row .concept-card .card-back {
+    border-color: color-mix(in srgb, var(--cat-color, var(--accent)) 55%, transparent);
+  }
+  [data-theme="light"] .nf-row .back-analogy {
+    border-left-color: color-mix(in srgb, var(--cat-color, var(--accent)) 70%, transparent);
+  }
+  [data-theme="light"] .card-cat {
+    filter: brightness(0.68) saturate(1.4);
+  }
+
+  /* Tally iframe background fix in light mode */
+  [data-theme="light"] iframe[data-tally-src],
+  [data-theme="light"] iframe[src*="tally.so"] {
+    background: var(--surface) !important;
+    border-radius: 8px;
+  }
+  .tally-wrap {
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--surface);
+  }
+
   /* Back prompt block in light */
   [data-theme="light"] .ep-cat-column .back-prompt,
   [data-theme="light"] .nf-row .concept-card .back-prompt {
@@ -4540,6 +4571,7 @@
     <p>Thanks — this genuinely helps.</p>
   </div>
 
+  <div class="tally-wrap">
   <iframe
     data-tally-src="https://tally.so/embed/81MMOA?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
     loading="lazy"
@@ -4551,6 +4583,7 @@
     style="border:none; margin-top: 8px;"
     title="Founding Member Survey"
   ></iframe>
+  </div>
   <script>var d=document,w="https://tally.so/widgets/embed.js",v=function(){"undefined"!=typeof Tally?Tally.loadEmbeds():d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach((function(e){e.src=e.dataset.tallySrc}))};if("undefined"!=typeof Tally)v();else if(d.querySelector('script[src="'+w+'"]')==null){var s=d.createElement("script");s.src=w,s.onload=v,s.onerror=v,d.body.appendChild(s);}</script>
   <button class="feedback-skip-btn" onclick="closeFeedbackModal()" style="margin-top:12px;">Close</button>
 </div>
@@ -4857,7 +4890,15 @@ const CAT_COLOR = {
   society:'#7090a8', 'tech-ai':'#b8a07a', thinking:'#7aaf8a'
 };
 
-let activeCat = 'all', searchQ = ''; 
+// Pick a random category per day (deterministic — same for all visitors on same day).
+// Falls back to 'all' only if CATEGORIES isn't ready (shouldn't happen, but safe).
+function getDailyCat() {
+  const nonAll = ['business','creativity','finance','health','identity','language',
+                  'philosophy','power','psychology','relationships','science','society','tech-ai','thinking'];
+  const dayIndex = Math.floor(Date.now() / 86400000); // integer day number since epoch
+  return nonAll[dayIndex % nonAll.length];
+}
+let activeCat = getDailyCat(), searchQ = ''; 
 let mastered = new Set();
 let openedToday = new Set();
   
@@ -5198,7 +5239,9 @@ function toggleCard(id) {
   }
 
   el.classList.toggle('open');
-  _currentOpenCardId = el.classList.contains('open') ? id : null;
+  const isNowOpen = el.classList.contains('open');
+  _currentOpenCardId = isNowOpen ? id : null;
+  playCardFlipSFX(isNowOpen);
 
   if (!wasOpen) {
     openedToday.add(id);
@@ -7396,7 +7439,39 @@ function toggleTheme() {
   if (btn) btn.textContent = isLight ? '☀' : '☽';
 })();
 
-// Vault SFX — two-note positive chime, plays when a concept is added to vault
+// Card flip SFX — light mechanical click, ~80ms, no external files.
+// Skipped if user prefers reduced motion (accessibility).
+function playCardFlipSFX(isOpening) {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    // Noise burst: a short white-noise click via buffer source
+    const bufLen = Math.floor(ctx.sampleRate * 0.06); // 60ms
+    const buf = ctx.createBuffer(1, bufLen, ctx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < bufLen; i++) data[i] = (Math.random() * 2 - 1);
+
+    const src = ctx.createBufferSource();
+    src.buffer = buf;
+
+    // Band-pass filter — gives it a "card snap" character vs raw noise
+    const bp = ctx.createBiquadFilter();
+    bp.type = 'bandpass';
+    bp.frequency.value = isOpening ? 3200 : 2000; // higher = brighter open; lower = deeper close
+    bp.Q.value = 0.8;
+
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(0.18, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.07);
+
+    src.connect(bp);
+    bp.connect(gain);
+    gain.connect(ctx.destination);
+    src.start(ctx.currentTime);
+    src.stop(ctx.currentTime + 0.08);
+  } catch(e) {}
+}
+
 function playVaultSFX() {
   try {
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
