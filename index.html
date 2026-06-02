@@ -2778,7 +2778,7 @@
 
   /* ── CONCEPT CARD — shared base ── */
   .concept-card {
-    background: color-mix(in srgb, var(--cat-color, transparent) 6%, var(--surface));
+    background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 12px;
     cursor: pointer;
@@ -5030,6 +5030,15 @@ const CAT_COLOR = {
   society:'#7090a8', 'tech-ai':'#b8a07a', thinking:'#7aaf8a'
 };
 
+// Convert a hex color to rgba() with given opacity — used for card bg tints.
+function hexToRgba(hex, alpha) {
+  const h = hex.replace('#','');
+  const r = parseInt(h.slice(0,2),16);
+  const g = parseInt(h.slice(2,4),16);
+  const b = parseInt(h.slice(4,6),16);
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
 // Pick a random category per day (deterministic — same for all visitors on same day).
 // Falls back to 'all' only if CATEGORIES isn't ready (shouldn't happen, but safe).
 function getDailyCat() {
@@ -5221,7 +5230,7 @@ function buildGrid() {
             ${cards.map((c, i) => {
               const color = CAT_COLOR[c.category] || '#e8d5a3';
               const isMastered = mastered.has(c.id);
-              return `<div class="concept-card${isMastered?' mastered':''}${c.editors_pick===true?' editors-pick':''}" id="cc${c.id}" style="--cat-color:${color}" onclick="toggleCard(${c.id})">
+              return `<div class="concept-card${isMastered?' mastered':''}${c.editors_pick===true?' editors-pick':''}" id="cc${c.id}" style="--cat-color:${color};background:${hexToRgba(color,0.07)}" onclick="toggleCard(${c.id})">
                 <div class="card-inner">
                   <div class="card-front">
                     <div class="card-meta">
@@ -5785,7 +5794,7 @@ function _renderDrawerContent(col, collectionId) {
       const cards = catGroups[catKey].map(c => {
         const isMastered = mastered.has(c.id);
         return `
-        <div class="concept-card${isMastered?' mastered':''}${c.editors_pick===true?' editors-pick':''}" id="epcc${c.id}" style="--cat-color:${catColor}" onclick="toggleEpCard(${c.id})">
+        <div class="concept-card${isMastered?' mastered':''}${c.editors_pick===true?' editors-pick':''}" id="epcc${c.id}" style="--cat-color:${catColor};background:${hexToRgba(catColor,0.07)}" onclick="toggleEpCard(${c.id})">
           <div class="card-inner">
             <div class="card-front">
               <div class="card-meta">
