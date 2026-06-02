@@ -86,9 +86,11 @@
   }
 
   .nav-link {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.78rem;
-    font-weight: 500;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
     color: var(--muted2);
     text-decoration: none;
     padding: 0.35rem 0.85rem;
@@ -753,7 +755,7 @@ async function init() {
     CONCEPTS = [];
   }
 
-  document.getElementById('navConceptCount').textContent = CONCEPTS.length;
+  document.getElementById('navConceptCount').textContent = CONCEPTS.filter(c => !c.duplicate_of).length;
 
   // Build bidirectional relationship index
   window.RELATED_INDEX = {};
@@ -794,11 +796,12 @@ function computeLayout() {
   const { w, h } = getViewport();
   const cx = w / 2;
   const cy = h / 2;
-  const orbitRadius = Math.min(w, h) * 0.36;
+  const orbitRadius = Math.min(w, h) * 0.44;
 
   // Group concepts by category
   const byCategory = {};
   CONCEPTS.forEach(c => {
+    if (c.duplicate_of) return;
     if (!byCategory[c.category]) byCategory[c.category] = [];
     byCategory[c.category].push(c);
   });
@@ -820,7 +823,7 @@ function computeLayout() {
   const conceptNodes = [];
   catNodes.forEach(cn => {
     const concepts = byCategory[cn.cat] || [];
-    const innerR = 60 + Math.min(concepts.length, 40) * 1.2;
+    const innerR = 80 + Math.min(concepts.length, 40) * 1.8;
     concepts.forEach((c, i) => {
       const angle = (i / concepts.length) * Math.PI * 2 + Math.random() * 0.3;
       // Slight jitter for organic feel
