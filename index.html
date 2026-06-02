@@ -422,6 +422,100 @@
     pointer-events: none;
     z-index: 2;
   }
+  /* PODCAST FILTER PILLS */
+  .ep-podcast-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    max-width: 1100px;
+    margin: 0 auto 1.75rem;
+    padding: 0 2rem;
+  }
+  .ep-podcast-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted2);
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 5px 14px;
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s, background 0.15s;
+    white-space: nowrap;
+  }
+  .ep-podcast-pill:hover {
+    color: var(--text);
+    border-color: var(--border-hover);
+  }
+  .ep-podcast-pill.active {
+    color: var(--accent);
+    border-color: var(--accent);
+    background: rgba(232,213,163,0.06);
+  }
+
+  /* CLICKABLE PODCAST HEADING */
+  .ep-heading-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted2);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    max-width: 1100px;
+    margin: 0 auto 1rem;
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    transition: color 0.15s;
+  }
+  .ep-heading-btn:hover { color: var(--accent); }
+  .ep-heading-btn span {
+    color: var(--muted);
+    margin-left: 0.6rem;
+  }
+
+  /* GALLERY GRID (single-podcast selected) */
+  .episodes-gallery {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+  .episodes-gallery .episode-card {
+    width: 100%;
+    min-width: unset;
+    max-width: unset;
+    flex: unset;
+  }
+  @media (max-width: 700px) {
+    .episodes-gallery {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
+      padding: 0 1rem;
+    }
+    .episodes-gallery .episode-card {
+      font-size: 0.8em;
+    }
+    .episodes-gallery .episode-thumb {
+      height: 100px;
+    }
+  }
+  @media (max-width: 420px) {
+    .episodes-gallery {
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+    }
+  }
+
   /* ── Scroll arrows (works for both episode rows and category rows) ── */
   .scroll-arrow {
     position: absolute;
@@ -951,6 +1045,7 @@
     position: relative;
     transition: background 0.2s, color 0.2s, transform 0.2s;
     white-space: nowrap;
+    box-shadow: 0 0 10px rgba(232,213,163,0.35);
   }
   .nav-signup-btn:hover {
     background: #f0e0b0;
@@ -961,14 +1056,8 @@
     position: absolute;
     inset: -3px;
     border-radius: 999px;
-    border: 1px solid var(--accent);
-    opacity: 0;
-    animation: signup-pulse 2.4s ease-out infinite;
-  }
-  @keyframes signup-pulse {
-    0%   { transform: scale(1);    opacity: 0.55; }
-    70%  { transform: scale(1.55); opacity: 0; }
-    100% { transform: scale(1.55); opacity: 0; }
+    border: 1px solid rgba(232,213,163,0.35);
+    pointer-events: none;
   }
 
   .hiw-overlay {
@@ -2169,6 +2258,43 @@
     font-weight: 300;
   }
   
+  /* NUMBERED STEPS */
+  .newsletter-steps {
+    list-style: none;
+    counter-reset: ns;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    max-width: 320px;
+    margin: 0 auto 2.5rem;
+    text-align: left;
+  }
+  .newsletter-steps li {
+    counter-increment: ns;
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    color: var(--muted2);
+    font-weight: 300;
+  }
+  .newsletter-steps li::before {
+    content: counter(ns);
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 1px solid rgba(232,213,163,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--accent);
+    line-height: 1;
+  }
+
   /* THE INLINE BAR */
   .newsletter-form {
     display: flex;
@@ -2652,7 +2778,7 @@
 
   /* ── CONCEPT CARD — shared base ── */
   .concept-card {
-    background: var(--surface);
+    background: color-mix(in srgb, var(--cat-color, transparent) 6%, var(--surface));
     border: 1px solid var(--border);
     border-radius: 12px;
     cursor: pointer;
@@ -4377,7 +4503,7 @@
 
   <!-- RIGHT: Showcase card -->
   <div class="hero-card-col">
-    <div class="hero-card-wrap" id="heroCard" onclick="this.classList.toggle('flipped')" title="Click to flip">
+    <div class="hero-card-wrap" id="heroCard" onclick="this.classList.toggle('flipped');playCardFlipSFX(this.classList.contains('flipped'))" title="Click to flip">
       <div class="hero-card-inner">
 
         <!-- FRONT -->
@@ -4508,7 +4634,12 @@
   <div class="newsletter-inner">
     <div class="newsletter-label">Founding Members</div>
     <h2 class="newsletter-heading"><em>Ideas</em> worth keeping.</h2>
-    <p class="newsletter-sub">Listening to podcasts is entertainment. Owning what you heard is power.<br><br>Sign up for free&nbsp;➜&nbsp;Shape what Pro becomes&nbsp;➜&nbsp;Lock in 50% off for life.</p>
+    <p class="newsletter-sub">Listening to podcasts is entertainment. Owning what you heard is power.</p>
+    <ol class="newsletter-steps">
+      <li><span>Sign up for free</span></li>
+      <li><span>Shape what Pro becomes</span></li>
+      <li><span>Lock in 50% off for life</span></li>
+    </ol>
     
     <form class="newsletter-form" id="newsletterForm">
       <input 
@@ -5068,7 +5199,7 @@ function buildGrid() {
   const matchIds = q ? fuzzyMatchIds(searchQ) : null;
 
   catsToShow.forEach(cat => {
-    let cards = CONCEPTS.filter(c => c.category === cat.id);
+    let cards = CONCEPTS.filter(c => c.category === cat.id && !c.duplicate_of);
     if (isVault) cards = cards.filter(c => mastered.has(c.id));
     if (matchIds) cards = cards.filter(c => matchIds.has(c.id));
     cards = cards.reverse();
@@ -5937,6 +6068,11 @@ function buildEpisodes() {
     return diff !== 0 ? diff : a.localeCompare(b);
   });
 
+  // Active podcast filter (persisted across re-renders)
+  if (typeof window._activePodcast === 'undefined') window._activePodcast = 'all';
+  // If the active podcast no longer exists in current filtered set, reset
+  if (window._activePodcast !== 'all' && !grouped[window._activePodcast]) window._activePodcast = 'all';
+
   // Helper: render one episode card
   function renderCard(col) {
     const epConcepts = CONCEPTS.filter(c => c.collection_id === col.id);
@@ -5973,16 +6109,37 @@ function buildEpisodes() {
     `;
   }
 
-  // Render one group (heading + scrollable row of cards) per podcast
-  row.innerHTML = podcastNames.map(podcastName => {
+  // Build podcast pills HTML
+  const allPill = `<button class="ep-podcast-pill${window._activePodcast === 'all' ? ' active' : ''}" onclick="setEpisodePodcast('all')">All</button>`;
+  const podcastPills = podcastNames.map(name =>
+    `<button class="ep-podcast-pill${window._activePodcast === name ? ' active' : ''}" onclick="setEpisodePodcast('${name.replace(/'/g, "\\'")}')">${name}</button>`
+  ).join('');
+
+  // Determine which podcasts to show
+  const visiblePodcasts = window._activePodcast === 'all' ? podcastNames : [window._activePodcast];
+
+  // Gallery view (single podcast selected) vs scroll-row view (all)
+  const isGallery = window._activePodcast !== 'all';
+
+  let groupsHtml = visiblePodcasts.map(podcastName => {
     const cols = grouped[podcastName];
     const count = cols.length;
     const cards = cols.map(renderCard).join('');
+    const headingClickable = podcastNames.length > 1 ?
+      `<button class="episodes-podcast-heading ep-heading-btn" onclick="setEpisodePodcast('${podcastName.replace(/'/g, "\\'")}')">${podcastName}<span>${count} episode${count !== 1 ? 's' : ''}</span></button>` :
+      `<div class="episodes-podcast-heading">${podcastName}<span>${count} episode${count !== 1 ? 's' : ''}</span></div>`;
+
+    if (isGallery) {
+      return `
+        <div class="episodes-podcast-group">
+          ${headingClickable}
+          <div class="episodes-gallery">${cards}</div>
+        </div>
+      `;
+    }
     return `
       <div class="episodes-podcast-group">
-        <div class="episodes-podcast-heading">
-          ${podcastName}<span>${count} episode${count !== 1 ? 's' : ''}</span>
-        </div>
+        ${headingClickable}
         <div class="episodes-scroll-wrap">
           <button class="scroll-arrow left" aria-label="Scroll left" onclick="scrollRow(this, -1)">‹</button>
           <button class="scroll-arrow right" aria-label="Scroll right" onclick="scrollRow(this, 1)">›</button>
@@ -5994,10 +6151,19 @@ function buildEpisodes() {
     `;
   }).join('');
 
+  row.innerHTML = `
+    <div class="ep-podcast-pills">${allPill}${podcastPills}</div>
+    ${groupsHtml}
+  `;
+
   // Re-init drag-scroll after fresh render
   initDragScroll();
   // Update arrow visibility for each row
   document.querySelectorAll('.episodes-row').forEach(updateArrowVisibility);
+}
+function setEpisodePodcast(name) {
+  window._activePodcast = name;
+  buildEpisodes();
 }
 function buildShorts() {
   const shortCollections = Object.values(COLLECTIONS_BY_ID)
@@ -7450,10 +7616,20 @@ function toggleTheme() {
 
 // Card flip SFX — soft whoosh, like a page turning through air.
 // Skipped if user prefers reduced motion (accessibility).
+// AudioContext is resumed on first user gesture to handle browser autoplay policy.
+let _sfxCtxPool = null;
+function _getSfxCtx() {
+  if (!_sfxCtxPool) _sfxCtxPool = new (window.AudioContext || window.webkitAudioContext)();
+  if (_sfxCtxPool.state === 'suspended') _sfxCtxPool.resume();
+  return _sfxCtxPool;
+}
+document.addEventListener('mousedown', function() { _getSfxCtx(); }, { once: true });
+document.addEventListener('touchstart', function() { _getSfxCtx(); }, { once: true });
+
 function playCardFlipSFX(isOpening) {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const ctx = _getSfxCtx();
     const dur = 0.18;
     const bufLen = Math.floor(ctx.sampleRate * dur);
     const buf = ctx.createBuffer(1, bufLen, ctx.sampleRate);
@@ -7484,7 +7660,7 @@ function playCardFlipSFX(isOpening) {
 
 function playVaultSFX() {
   try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const ctx = _getSfxCtx();
     const notes = [659, 880]; // E5 → A5 — short rising two-note
     notes.forEach((freq, i) => {
       const o = ctx.createOscillator();
