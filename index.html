@@ -1358,6 +1358,42 @@
   .nav-mobile-link:last-child { border-bottom: none; }
   .nav-mobile-link:hover { color: var(--accent); }
 
+  /* Mobile nav divider */
+  .nav-mobile-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 0.25rem 0;
+    flex-shrink: 0;
+  }
+
+  /* Mobile nav — signup (gold, matches desktop nav-signup-btn) */
+  .nav-mobile-signup {
+    color: #0d0d0d !important;
+    background: var(--accent) !important;
+    border-bottom-color: transparent !important;
+    border-radius: 6px;
+    padding: 0.6rem 0.75rem;
+    margin-bottom: 0.1rem;
+    font-weight: 500;
+    box-shadow: 0 0 10px rgba(232,213,163,0.25);
+  }
+  .nav-mobile-signup:hover { background: #f0e0b0 !important; color: #0d0d0d !important; }
+  [data-theme="light"] .nav-mobile-signup { color: #0d0d0d !important; }
+
+  /* Mobile nav — map (purple, matches desktop nav-map-btn) */
+  .nav-mobile-map {
+    color: var(--purple) !important;
+    border-bottom-color: rgba(160,143,212,0.2) !important;
+  }
+  .nav-mobile-map:hover { color: var(--purple) !important; background: rgba(160,143,212,0.07) !important; }
+
+  /* Mobile nav — quiz (teal, matches desktop nav-quiz-btn) */
+  .nav-mobile-quiz {
+    color: var(--teal) !important;
+    border-bottom-color: rgba(90,191,175,0.2) !important;
+  }
+  .nav-mobile-quiz:hover { color: var(--teal) !important; background: rgba(90,191,175,0.06) !important; }
+
   @media (max-width: 768px) {
     nav { grid-template-columns: 1fr auto; }
     .nav-island { display: none; }
@@ -4348,16 +4384,16 @@
     <a class="nav-link" onclick="scrollToSection('shortsSection')">Shorts</a>
     <a class="nav-link" onclick="scrollToSection('app')">Concepts</a>
     <a class="nav-link" onclick="toggleVault();scrollToSection('app')">Vault</a>
-    <a class="nav-link" onclick="openCotdFromNav()">Today</a>
+    <a class="nav-link" onclick="openCotdFromNav();playNavSFX()">Today</a>
     <div class="nav-tools-divider"></div>
-    <a class="nav-link nav-map-btn" href="/map" onclick="track('map_opened')">◈ Map</a>
+    <a class="nav-link nav-map-btn" href="/map" onclick="track('map_opened');playNavSFX()">◈ Map</a>
     <div class="nav-divider"></div>
-    <button class="nav-quiz-btn" id="navQuizBtn" onclick="openQuiz()">◈ Quiz</button>
+    <button class="nav-quiz-btn" id="navQuizBtn" onclick="playNavSFX();openQuiz()">◈ Quiz</button>
   </div>
 
   <div class="nav-right">
     <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode" onclick="toggleTheme()">☽</button>
-    <button class="nav-signup-btn" id="navSignupBtn" onclick="scrollToSection('signup')">Sign Up 🎁</button>
+    <button class="nav-signup-btn" id="navSignupBtn" onclick="playNavSFX();scrollToSection('signup')">Sign Up 🎁</button>
     <div class="nav-pill">
       <div class="nav-dot"></div>
       <span id="navConceptCount">—</span> ideas
@@ -4368,15 +4404,18 @@
 
 <!-- MOBILE NAV MENU -->
 <div class="nav-mobile-menu" id="navMobileMenu">
-  <button class="nav-mobile-link" style="color:var(--accent);" onclick="track('map_opened');window.location='/map'">◈ Map</button>
+  <button class="nav-mobile-link nav-mobile-signup" onclick="playNavSFX();scrollToSection('signup');closeMobileNav()">◉ Sign Up 🎁 — Free Founding Access</button>
+  <div class="nav-mobile-divider"></div>
+  <button class="nav-mobile-link nav-mobile-map" onclick="playNavSFX();track('map_opened');window.location='/map'">◈ Map</button>
+  <button class="nav-mobile-link nav-mobile-quiz" onclick="playNavSFX();openQuiz();closeMobileNav()">◈ Quiz</button>
+  <div class="nav-mobile-divider"></div>
   <button class="nav-mobile-link" onclick="scrollToSection('episodesSection');closeMobileNav()">◎ Episodes</button>
   <button class="nav-mobile-link" onclick="scrollToSection('shortsSection');closeMobileNav()">◈ Shorts</button>
   <button class="nav-mobile-link" onclick="scrollToSection('app');closeMobileNav()">◈ Concepts</button>
   <button class="nav-mobile-link" onclick="toggleVault();scrollToSection('app');closeMobileNav()">◆ Vault</button>
-  <button class="nav-mobile-link" onclick="openCotdFromNav();closeMobileNav()">◇ Today's Concept</button>
-  <button class="nav-mobile-link" onclick="scrollToSection('signup');closeMobileNav()">◉ Sign Up 🎁 — Free Founding Access</button>
+  <button class="nav-mobile-link" onclick="playNavSFX();openCotdFromNav();closeMobileNav()">◇ Today's Concept</button>
+  <div class="nav-mobile-divider"></div>
   <button class="nav-mobile-link" onclick="openHiw();closeMobileNav()">◌ How it works</button>
-  <button class="nav-mobile-link" style="color:var(--accent);border-top:1px solid var(--border);" onclick="openQuiz();closeMobileNav()">◈ Quiz mode</button>
 </div>
 
 <!-- HOW IT WORKS MODAL -->
@@ -5082,7 +5121,9 @@ function loadMastered() {
     if (!raw) return new Set();
     const arr = JSON.parse(raw);
     if (!Array.isArray(arr)) return new Set();
-    return new Set(arr);
+    // Coerce to integers — map.html stores string IDs; index.html checks integer IDs.
+    // parseInt on an integer is a no-op, so existing integer entries are safe.
+    return new Set(arr.map(v => parseInt(v, 10)).filter(v => !isNaN(v)));
   } catch (e) {
     console.warn('Could not load mastered concepts:', e);
     return new Set();
@@ -5723,7 +5764,7 @@ function updateDailyGoal() {
   }
 }
 
-function setCat(cat) { activeCat = cat; render(); }
+function setCat(cat) { playPillSFX(); activeCat = cat; render(); }
 function openEpisodeDrawer(collectionId) {
   const col = COLLECTIONS_BY_ID[collectionId];
   if (!col) return;
@@ -5862,6 +5903,7 @@ function _renderDrawerContent(col, collectionId) {
   }
 
 function filterDrawerCat(catKey) {
+  playPillSFX();
   document.querySelectorAll('.ep-drawer-cat-pill').forEach(p => {
     p.classList.toggle('active', p.dataset.cat === catKey);
   });
@@ -6173,6 +6215,7 @@ function buildEpisodes() {
   document.querySelectorAll('.episodes-row').forEach(updateArrowVisibility);
 }
 function setEpisodePodcast(name) {
+  playPillSFX();
   window._activePodcast = name;
   buildEpisodes();
 }
@@ -6258,6 +6301,7 @@ function initMagneticShortPills() {
   });
 }
 function filterShorts(person, searchText) {
+  if (person !== null) playPillSFX();
   const collections = window._shortCollections || [];
   const search = (searchText !== undefined ? searchText : (document.getElementById('shortsSearch')?.value || '')).toLowerCase();
   const activePerson = person !== null ? person : (document.querySelector('.short-filter-pill.active')?.dataset.person || 'all');
@@ -7684,6 +7728,42 @@ function playVaultSFX() {
       g.gain.linearRampToValueAtTime(0.1, t + 0.04);
       g.gain.exponentialRampToValueAtTime(0.001, t + 0.38);
       o.start(t); o.stop(t + 0.4);
+    });
+  } catch(e) {}
+}
+
+// Pill SFX — glass tap (C). Plays on category / people / episode pill clicks.
+function playPillSFX() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  try {
+    const ctx = _getSfxCtx();
+    const now = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const g = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.value = 900;
+    osc.connect(g); g.connect(ctx.destination);
+    g.gain.setValueAtTime(0.13, now);
+    g.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+    osc.start(now); osc.stop(now + 0.05);
+  } catch(e) {}
+}
+
+// Nav SFX — double tick (2). Plays on Map / Quiz / Signup / Today nav clicks.
+function playNavSFX() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  try {
+    const ctx = _getSfxCtx();
+    const now = ctx.currentTime;
+    [0, 0.035].forEach((delay, i) => {
+      const osc = ctx.createOscillator();
+      const g = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = i === 0 ? 200 : 300;
+      osc.connect(g); g.connect(ctx.destination);
+      g.gain.setValueAtTime(0.13, now + delay);
+      g.gain.exponentialRampToValueAtTime(0.001, now + delay + 0.04);
+      osc.start(now + delay); osc.stop(now + delay + 0.05);
     });
   } catch(e) {}
 }
