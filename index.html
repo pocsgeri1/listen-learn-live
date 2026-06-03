@@ -5759,7 +5759,7 @@ function updateDailyGoal() {
   if (n >= 5) {
     msg.innerHTML = '<strong>🎉 Goal complete!</strong> Come back tomorrow for 5 more.';
     checkAndUpdateStreak();
-    if (n === 5) playStreakMilestoneSFX(); // fire once when exactly hitting the goal
+    if (n === 5 && typeof playStreakMilestoneSFX === 'function') playStreakMilestoneSFX(); // fire once when exactly hitting the goal
   } else {
     msg.innerHTML = '<strong>' + n + ' of 5</strong> concepts opened today';
   }
