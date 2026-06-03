@@ -2408,13 +2408,19 @@
     font-size: 0.88rem; line-height: 1.55; color: var(--muted2);
     font-style: italic; padding-left: 10px;
     border-left: 2px solid var(--accent);
+    display: flex; flex-direction: column; gap: 2px;
+  }
+  .cs-opener-idx {
+    font-family: 'DM Mono', monospace; font-size: 0.58rem;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--accent); font-style: normal;
   }
   .cs-pitfall {
     font-size: 0.82rem; color: var(--muted2); line-height: 1.5;
     padding-left: 10px; border-left: 2px solid #d4715a;
   }
 
-  /* Meta row */
+  /* Meta row — now at top under headline */
   .cs-meta-row {
     display: flex; align-items: center; gap: 10px;
     margin-bottom: 1rem;
@@ -2430,7 +2436,41 @@
     opacity: 0.85;
   }
 
-  /* Related accordion pills */
+  /* Related label */
+  .cs-related-label {
+    font-family: 'DM Mono', monospace; font-size: 0.6rem;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 8px; margin-top: 0.25rem;
+  }
+
+  /* Generate button */
+  .cs-generate-row {
+    margin-bottom: 0.75rem;
+  }
+  .cs-generate-btn {
+    width: 100%;
+    font-family: 'DM Mono', monospace; font-size: 0.68rem;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    background: transparent;
+    border: 1px dashed var(--border);
+    color: var(--muted2); border-radius: 8px;
+    padding: 10px 18px; cursor: pointer;
+    transition: border-color 0.2s, color 0.2s, background 0.2s;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .cs-generate-btn:hover {
+    border-color: var(--accent); color: var(--accent);
+    border-style: solid;
+  }
+  .cs-generate-btn:disabled {
+    opacity: 0.5; cursor: not-allowed;
+  }
+  .cs-generate-btn.loading {
+    border-style: solid; border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* Related accordion */
   .cs-related-row {
     display: flex; gap: 8px; flex-wrap: wrap;
     margin-bottom: 1.2rem; min-height: 28px;
@@ -2516,8 +2556,6 @@
 
   /* END CONVERSATION STARTER */
   /* NEWSLETTER */
-  .newsletter {
-    position: relative;
   .newsletter {
     position: relative;
     z-index: 1;
@@ -4790,7 +4828,13 @@
       <span class="cs-eyebrow-date" id="csDate"></span>
     </div>
 
-    <h2 class="cs-headline" id="csHeadline">Today's Conversation Starter</h2>
+    <h2 class="cs-headline" id="csHeadline">Today’s Conversation Starter</h2>
+
+    <!-- Concept source + category — directly under headline -->
+    <div class="cs-meta-row">
+      <span class="cs-concept-label">From: <span class="cs-concept-term" id="csConceptTerm">—</span></span>
+      <span class="cs-cat-badge" id="csCatBadge"></span>
+    </div>
 
     <!-- Category filter pills -->
     <div class="cs-cat-row" id="csCatRow"></div>
@@ -4805,7 +4849,6 @@
 
     <!-- Swipeable prompt block -->
     <div class="cs-prompt-block" id="csPromptBlock">
-      <!-- Loading skeleton -->
       <div class="cs-skeleton" id="csSkeleton" style="display:none">
         <div class="cs-skel-line cs-skel-line--short"></div>
         <div class="cs-skel-line"></div>
@@ -4815,12 +4858,16 @@
         <div class="cs-opener" id="csOpener">Tonight with your partner:</div>
         <p class="cs-prompt-text" id="csPromptText">—</p>
       </div>
-      <!-- Swipe indicators -->
       <div class="cs-swipe-x" id="csSwipeX">✕</div>
       <div class="cs-swipe-save" id="csSwipeSave">♡ Saved</div>
     </div>
 
-    <!-- Coaching layer (openers + pitfall) -->
+    <!-- Generate button — user-triggered -->
+    <div class="cs-generate-row" id="csGenerateRow">
+      <button class="cs-generate-btn" id="csGenerateBtn">✶ Generate conversation starters</button>
+    </div>
+
+    <!-- Coaching layer — hidden until generated -->
     <div class="cs-coaching" id="csCoaching" style="display:none">
       <div class="cs-coaching-section">
         <div class="cs-coaching-label">You could say:</div>
@@ -4832,13 +4879,8 @@
       </div>
     </div>
 
-    <!-- Concept source + category -->
-    <div class="cs-meta-row">
-      <span class="cs-concept-label">From: <span class="cs-concept-term" id="csConceptTerm">—</span></span>
-      <span class="cs-cat-badge" id="csCatBadge"></span>
-    </div>
-
     <!-- Related concepts accordion -->
+    <div class="cs-related-label" id="csRelatedLabel" style="display:none">Related concepts</div>
     <div class="cs-related-row" id="csRelatedRow"></div>
 
     <!-- Report back -->
@@ -7045,7 +7087,7 @@ function initConversationStarter() {
   _renderCSShell(_csConcept);
   _wireCSEvents();
   openCS();
-  _loadAI(_csConcept);
+  // AI generation is user-triggered — no auto-load
 }
 
 // Called from nav — always opens regardless of dismissed state
@@ -7059,7 +7101,7 @@ function openCSFromNav() {
     _wireCSEvents();
   }
   openCS();
-  if (!_csAIData) _loadAI(_csConcept);
+  // AI generation is user-triggered — no auto-load
 }
 
 // ---- CATEGORY FILTER ----
@@ -7114,8 +7156,9 @@ function _csLoadNewConcept(concept) {
   _csConcept = concept;
   _csAIData  = null;
   _renderCSShell(concept);
-  _showCSLoading(true);
-  _loadAI(concept);
+  // Reset generate button
+  const btn = document.getElementById('csGenerateBtn');
+  if (btn) { btn.disabled = false; btn.classList.remove('loading'); btn.textContent = '✦ Generate conversation starters'; }
 }
 
 // ---- RENDER ----
@@ -7134,9 +7177,13 @@ function _renderCSShell(concept) {
   badge.style.color = color;
   badge.style.borderColor = color + '60';
 
-  // Hide coaching until AI arrives
+  // Hide coaching until generated; show/reset generate button
   document.getElementById('csCoaching').style.display = 'none';
   document.getElementById('csFeedbackRow').style.display = 'none';
+  const genBtn = document.getElementById('csGenerateBtn');
+  const genRow = document.getElementById('csGenerateRow');
+  if (genBtn) { genBtn.disabled = false; genBtn.classList.remove('loading'); genBtn.textContent = '✦ Generate conversation starters'; }
+  if (genRow) genRow.style.display = 'block';
   _renderRelated(concept);
 }
 
@@ -7151,11 +7198,15 @@ function _applyAIToCtx(ctx) {
   // Coaching layer
   const coaching = document.getElementById('csCoaching');
   const openersList = document.getElementById('csOpenersList');
-  openersList.innerHTML = (d.openers || []).map(o =>
-    `<div class="cs-opener-line">${_escHtml(o)}</div>`
+  openersList.innerHTML = (d.openers || []).map((o, i) =>
+    `<div class="cs-opener-line"><span class="cs-opener-idx">Idea ${i+1}</span>${_escHtml(o)}</div>`
   ).join('');
   document.getElementById('csPitfall').textContent = d.pitfall || '';
   coaching.style.display = 'block';
+
+  // Hide generate button — already generated
+  const genRow = document.getElementById('csGenerateRow');
+  if (genRow) genRow.style.display = 'none';
 
   // Show feedback row after 2s
   setTimeout(function() {
@@ -7166,6 +7217,7 @@ function _applyAIToCtx(ctx) {
 
 function _renderRelated(concept) {
   const row = document.getElementById('csRelatedRow');
+  const label = document.getElementById('csRelatedLabel');
   row.innerHTML = '';
 
   let pool = [];
@@ -7228,6 +7280,8 @@ function _renderRelated(concept) {
     wrap.appendChild(expand);
     row.appendChild(wrap);
   });
+  // Show "Related concepts" label only if we have pills
+  if (label) label.style.display = pool.length > 0 ? 'block' : 'none';
 }
 
 // ---- AI CALL ----
@@ -7355,6 +7409,19 @@ function _csSwipeRight() {
 // ---- WIRE EVENTS ----
 
 function _wireCSEvents() {
+  // Generate button — user-triggered AI call
+  const genBtn = document.getElementById('csGenerateBtn');
+  if (genBtn) {
+    genBtn.addEventListener('click', function() {
+      if (!_csConcept || _csLoading) return;
+      genBtn.disabled = true;
+      genBtn.classList.add('loading');
+      genBtn.textContent = '✦ Generating…';
+      track('cs_generate_clicked', { concept_id: _csConcept.id });
+      _loadAI(_csConcept);
+    });
+  }
+
   // Context buttons
   document.querySelectorAll('.cs-ctx-btn').forEach(btn => {
     btn.addEventListener('click', function() {
