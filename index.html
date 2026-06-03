@@ -5091,6 +5091,7 @@ function getDailyCat() {
 let activeCat = getDailyCat(), searchQ = ''; 
 let mastered = new Set();
 let openedToday = new Set();
+let _streakMilestonePlayed = false; // prevent repeat fires within a session
   
 // ---------- STORAGE HELPERS ----------
 // All talk-to-localStorage logic lives here. If we ever move to a real
@@ -5759,7 +5760,10 @@ function updateDailyGoal() {
   if (n >= 5) {
     msg.innerHTML = '<strong>🎉 Goal complete!</strong> Come back tomorrow for 5 more.';
     checkAndUpdateStreak();
-    if (n === 5 && typeof playStreakMilestoneSFX === 'function') playStreakMilestoneSFX(); // fire once when exactly hitting the goal
+    if (n === 5 && typeof playStreakMilestoneSFX === 'function' && !_streakMilestonePlayed) {
+      _streakMilestonePlayed = true;
+      playStreakMilestoneSFX();
+    }
   } else {
     msg.innerHTML = '<strong>' + n + ' of 5</strong> concepts opened today';
   }
