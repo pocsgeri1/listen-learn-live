@@ -2242,6 +2242,216 @@
   /* ============================================
      END CONCEPT OF THE DAY
      ============================================ */
+
+  /* ============================================
+     CONVERSATION STARTER MODAL — v1.67
+     ============================================ */
+
+  .cs-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: rgba(13, 13, 13, 0.96);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    overflow-y: auto;
+    padding: 6vh 1.5rem 4vh;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+  }
+  .cs-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+  .cs-card {
+    position: relative;
+    width: 100%;
+    max-width: 580px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 36px 40px 32px;
+    margin: auto 0;
+    animation: csSlideUp 0.45s ease both;
+  }
+  @keyframes csSlideUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .cs-close {
+    position: absolute;
+    top: 16px; right: 16px;
+    background: none; border: none;
+    color: var(--muted); font-size: 1.1rem;
+    cursor: pointer; padding: 4px 8px;
+    line-height: 1;
+    transition: color 0.2s;
+  }
+  .cs-close:hover { color: var(--text); }
+  .cs-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1.25rem;
+  }
+  .cs-eyebrow-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: csPulse 2.4s ease-in-out infinite;
+  }
+  @keyframes csPulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.4; }
+  }
+  .cs-eyebrow-date { margin-left: auto; }
+  .cs-headline {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.55rem;
+    font-weight: 700;
+    color: var(--text);
+    margin: 0 0 1.5rem;
+    line-height: 1.25;
+  }
+  .cs-context-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .cs-ctx-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--muted2);
+    border-radius: 999px;
+    padding: 6px 16px;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+  }
+  .cs-ctx-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .cs-ctx-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #0d0d0d;
+  }
+  .cs-prompt-block {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 22px;
+    margin-bottom: 1rem;
+  }
+  .cs-opener {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .cs-prompt-text {
+    font-size: 1.05rem;
+    line-height: 1.65;
+    color: var(--text);
+    margin: 0;
+  }
+  .cs-concept-label {
+    font-size: 0.72rem;
+    color: var(--muted);
+    margin-bottom: 1.25rem;
+  }
+  .cs-concept-label span {
+    color: var(--muted2);
+    font-style: italic;
+  }
+  .cs-related-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 1.75rem;
+    min-height: 30px;
+  }
+  .cs-related-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.64rem;
+    letter-spacing: 0.08em;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 5px 12px;
+    color: var(--muted2);
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 180px;
+  }
+  .cs-related-pill:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .cs-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .cs-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted2);
+    border-radius: 8px;
+    padding: 10px 18px;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .cs-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .cs-btn--primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #0d0d0d;
+  }
+  .cs-btn--primary:hover {
+    background: color-mix(in srgb, var(--accent) 85%, white);
+    border-color: color-mix(in srgb, var(--accent) 85%, white);
+    color: #0d0d0d;
+  }
+  @media (max-width: 600px) {
+    .cs-card { padding: 28px 22px 24px; }
+    .cs-headline { font-size: 1.25rem; }
+    .cs-prompt-text { font-size: 0.95rem; }
+    .cs-actions { flex-direction: column; }
+    .cs-btn { text-align: center; }
+  }
+
+  /* ============================================
+     STREAK WARNING STATE — v1.67
+     ============================================ */
+  .streak-display.streak-warning #streakFlame { opacity: 1; }
+  .streak-display.streak-warning #streakCount { color: #e8a030; }
+  .streak-display.streak-warning .streak-label { color: #e8a030; opacity: 0.85; }
+  .streak-display.streak-saved #streakFlame { opacity: 1; }
+  .streak-display.streak-saved #streakCount { color: var(--accent); }
+
+  /* END CONVERSATION STARTER */
   /* NEWSLETTER */
   .newsletter {
     position: relative;
@@ -4445,6 +4655,8 @@
   </div>
 </div>
 <!-- /HOW IT WORKS MODAL -->
+<!-- COTD disabled v1.67 — preserved for reactivation. Replaced by Conversation Starter modal. -->
+<!--
 <!-- CONCEPT OF THE DAY — MODAL -->
 <div class="cotd-overlay" id="cotdOverlay" role="dialog" aria-modal="true" aria-labelledby="cotdTerm">
   <div class="cotd-card" id="cotdCard">
@@ -4497,6 +4709,45 @@
   </div>
 </div>
 <!-- /CONCEPT OF THE DAY -->
+-->
+<!-- END COTD disabled block -->
+
+<!-- CONVERSATION STARTER MODAL — v1.67 -->
+<div class="cs-overlay" id="csOverlay" role="dialog" aria-modal="true" aria-labelledby="csHeadline">
+  <div class="cs-card" id="csCard">
+    <button class="cs-close" id="csClose" aria-label="Close conversation starter">✕</button>
+
+    <div class="cs-eyebrow">
+      <span class="cs-eyebrow-dot"></span>
+      <span>Daily Prompt</span>
+      <span class="cs-eyebrow-date" id="csDate"></span>
+    </div>
+
+    <h2 class="cs-headline" id="csHeadline">Today's Conversation Starter</h2>
+
+    <div class="cs-context-row">
+      <button class="cs-ctx-btn active" data-ctx="partner">Partner</button>
+      <button class="cs-ctx-btn" data-ctx="friend">Friend</button>
+      <button class="cs-ctx-btn" data-ctx="colleague">Colleague</button>
+      <button class="cs-ctx-btn" data-ctx="meeting">Meeting</button>
+    </div>
+
+    <div class="cs-prompt-block">
+      <div class="cs-opener" id="csOpener">Tonight with your partner:</div>
+      <p class="cs-prompt-text" id="csPromptText">—</p>
+    </div>
+
+    <div class="cs-concept-label">From the concept: <span id="csConceptTerm">—</span></div>
+
+    <div class="cs-related-row" id="csRelatedRow"></div>
+
+    <div class="cs-actions">
+      <button class="cs-btn cs-btn--primary" id="csShareBtn">↑ Copy &amp; Share</button>
+      <button class="cs-btn" id="csCloseBtn">Continue to library →</button>
+    </div>
+  </div>
+</div>
+<!-- /CONVERSATION STARTER MODAL -->
 
 <!-- HERO -->
 <section class="hero">
@@ -5207,6 +5458,19 @@ function initStreakDisplay() {
   const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
   const activeStreak = (lastDate === today || lastDate === yesterday) ? count : 0;
   updateStreakDisplay(activeStreak);
+
+  // Streak loss-aversion warning: show once per session if streak > 2 and goal not done
+  if (activeStreak > 2) {
+    const goalDone = openedToday.size >= 5;
+    const warnKey = 'lll_streak_warn_' + today;
+    if (!goalDone && !sessionStorage.getItem(warnKey)) {
+      sessionStorage.setItem(warnKey, '1');
+      const sd = document.querySelector('.streak-display');
+      if (sd) sd.classList.add('streak-warning');
+      const label = document.querySelector('.streak-label');
+      if (label) label.textContent = 'day streak — keep it!';
+    }
+  }
 }
 // ---------- END STORAGE HELPERS ----------
 
@@ -5440,6 +5704,7 @@ function toggleCard(id) {
     openedToday.add(id);
     saveDailyGoal();
     updateDailyGoal();
+    track('concept_opened', { id: id });
   }
 }
 
@@ -5763,6 +6028,10 @@ function updateDailyGoal() {
     if (n === 5 && typeof playStreakMilestoneSFX === 'function' && !_streakMilestonePlayed) {
       _streakMilestonePlayed = true;
       playStreakMilestoneSFX();
+      track('goal_completed');
+      // Switch streak display to saved state
+      const sd = document.querySelector('.streak-display');
+      if (sd) { sd.classList.remove('streak-warning'); sd.classList.add('streak-saved'); }
     }
   } else {
     msg.innerHTML = '<strong>' + n + ' of 5</strong> concepts opened today';
@@ -6389,9 +6658,11 @@ openedToday = loadDailyGoal();
 initStreakDisplay();
 updateDailyGoal();
 
-// Load concepts, then show concept of the day once they're ready
+// Load concepts, then show Conversation Starter once they're ready
 loadConcepts().then(() => {
-  initConceptOfTheDay();
+  // COTD disabled v1.67 — replaced by Conversation Starter
+  // initConceptOfTheDay();
+  initConversationStarter();
 });
 
 // ============================================
@@ -6630,6 +6901,157 @@ function initConceptOfTheDay() {
     }
   });
 }
+// ============================================
+// CONVERSATION STARTER MODAL — v1.67
+// ============================================
+
+const CS_STORAGE_KEY = 'lll_cs_v1'; // tracks daily dismissal (same pattern as COTD)
+
+const CS_OPENERS = {
+  partner:   'Tonight with your partner:',
+  friend:    'At lunch with a friend:',
+  colleague: 'With a colleague today:',
+  meeting:   'In your next meeting:'
+};
+
+let _csConcept = null;
+let _csCtx = 'partner';
+
+function initConversationStarter() {
+  if (!CONCEPTS || CONCEPTS.length === 0) return;
+  if (isDismissedTodayCS()) return;
+
+  _csConcept = pickTodaysConcept(CONCEPTS);
+  if (!_csConcept) return;
+
+  renderCS(_csConcept, _csCtx);
+  openCS();
+
+  // Wire context buttons
+  document.querySelectorAll('.cs-ctx-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.cs-ctx-btn').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      _csCtx = this.dataset.ctx;
+      document.getElementById('csOpener').textContent = CS_OPENERS[_csCtx] || '';
+    });
+  });
+
+  document.getElementById('csClose').onclick = function() { closeCS(true); };
+  document.getElementById('csCloseBtn').onclick = function() { closeCS(true); };
+
+  document.getElementById('csShareBtn').onclick = function() {
+    const opener = CS_OPENERS[_csCtx] || '';
+    const prompt = _csConcept ? _csConcept.prompt : '';
+    const term = _csConcept ? _csConcept.term : '';
+    const text = opener + ' ' + prompt + '\n\n— From Epistemic (epistemic.live) · Concept: ' + term;
+    try {
+      navigator.clipboard.writeText(text).then(function() {
+        const btn = document.getElementById('csShareBtn');
+        btn.textContent = '✓ Copied!';
+        setTimeout(function() { btn.textContent = '↑ Copy & Share'; }, 2000);
+      });
+    } catch(e) {
+      // Fallback: select a temp textarea
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+    }
+    track('prompt_shared', { ctx: _csCtx, concept_id: _csConcept ? _csConcept.id : null });
+  };
+
+  // Click overlay backdrop to close
+  document.getElementById('csOverlay').addEventListener('click', function(e) {
+    if (e.target === this) closeCS(true);
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && document.getElementById('csOverlay').classList.contains('active')) {
+      closeCS(true);
+    }
+  });
+}
+
+function renderCS(concept, ctx) {
+  if (!concept) return;
+  document.getElementById('csDate').textContent = formatTodayLabel();
+  document.getElementById('csOpener').textContent = CS_OPENERS[ctx] || '';
+  document.getElementById('csPromptText').textContent = concept.prompt;
+  document.getElementById('csConceptTerm').textContent = concept.term;
+
+  // Related pills — from related_ids, or fallback to 3 random same-category
+  const relatedRow = document.getElementById('csRelatedRow');
+  relatedRow.innerHTML = '';
+  let relatedConcepts = [];
+
+  if (concept.related_ids && concept.related_ids.length > 0) {
+    concept.related_ids.slice(0, 3).forEach(function(rid) {
+      const found = CONCEPTS.find(function(c) { return c.id === rid; });
+      if (found) relatedConcepts.push(found);
+    });
+  }
+
+  // Fallback: random from same category (excluding self)
+  if (relatedConcepts.length < 3) {
+    const pool = CONCEPTS.filter(function(c) {
+      return c.category === concept.category && c.id !== concept.id &&
+             !relatedConcepts.find(function(r) { return r.id === c.id; });
+    });
+    // Fisher-Yates shuffle limited to what we need
+    for (let i = pool.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const tmp = pool[i]; pool[i] = pool[j]; pool[j] = tmp;
+    }
+    const needed = 3 - relatedConcepts.length;
+    relatedConcepts = relatedConcepts.concat(pool.slice(0, needed));
+  }
+
+  relatedConcepts.forEach(function(rc) {
+    const pill = document.createElement('button');
+    pill.className = 'cs-related-pill';
+    pill.textContent = rc.term;
+    pill.title = rc.hook || rc.term;
+    pill.onclick = function() {
+      // Scroll to concept in the library (just close and let user browse)
+      closeCS(true);
+    };
+    relatedRow.appendChild(pill);
+  });
+}
+
+function openCS() {
+  document.getElementById('csOverlay').classList.add('active');
+  document.body.classList.add('cotd-open'); // reuse same body lock class
+}
+
+function closeCS(persist) {
+  document.getElementById('csOverlay').classList.remove('active');
+  document.body.classList.remove('cotd-open');
+  if (persist) markDismissedTodayCS();
+}
+
+function isDismissedTodayCS() {
+  try {
+    const raw = localStorage.getItem(CS_STORAGE_KEY);
+    if (!raw) return false;
+    const data = JSON.parse(raw);
+    return data && data.date === todayISO();
+  } catch(e) { return false; }
+}
+
+function markDismissedTodayCS() {
+  try {
+    localStorage.setItem(CS_STORAGE_KEY, JSON.stringify({ date: todayISO() }));
+  } catch(e) {}
+}
+
+// ============================================
+// END CONVERSATION STARTER MODAL
+// ============================================
+
 // ============================================
 // END CONCEPT OF THE DAY
 // ============================================
