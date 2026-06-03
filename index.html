@@ -1278,6 +1278,17 @@
   border-color: var(--purple);
   color: var(--purple);
 }
+.nav-cs-btn {
+  color: var(--accent);
+  border: 1px solid rgba(232,213,163,0.3);
+  background: rgba(232,213,163,0.07);
+  font-weight: 500;
+}
+.nav-cs-btn:hover {
+  background: rgba(232,213,163,0.14);
+  border-color: var(--accent);
+  color: var(--accent);
+}
   /* RIGHT CLUSTER */
   .nav-right {
     display: flex;
@@ -2244,199 +2255,251 @@
      ============================================ */
 
   /* ============================================
-     CONVERSATION STARTER MODAL — v1.67
+     CONVERSATION STARTER MODAL — v1.68
      ============================================ */
 
   .cs-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 200;
+    position: fixed; inset: 0; z-index: 200;
     background: rgba(13, 13, 13, 0.96);
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    overflow-y: auto;
-    padding: 6vh 1.5rem 4vh;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.35s ease;
+    display: flex; align-items: flex-start; justify-content: center;
+    overflow-y: auto; padding: 5vh 1.5rem 4vh;
+    opacity: 0; pointer-events: none; transition: opacity 0.35s ease;
   }
-  .cs-overlay.active {
-    opacity: 1;
-    pointer-events: all;
-  }
+  .cs-overlay.active { opacity: 1; pointer-events: all; }
+
   .cs-card {
-    position: relative;
-    width: 100%;
-    max-width: 580px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 36px 40px 32px;
-    margin: auto 0;
+    position: relative; width: 100%; max-width: 600px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 14px; padding: 32px 38px 28px; margin: auto 0;
     animation: csSlideUp 0.45s ease both;
   }
   @keyframes csSlideUp {
     from { opacity: 0; transform: translateY(24px); }
     to   { opacity: 1; transform: translateY(0); }
   }
+
   .cs-close {
-    position: absolute;
-    top: 16px; right: 16px;
-    background: none; border: none;
-    color: var(--muted); font-size: 1.1rem;
-    cursor: pointer; padding: 4px 8px;
-    line-height: 1;
+    position: absolute; top: 16px; right: 16px;
+    background: none; border: none; color: var(--muted);
+    font-size: 1.1rem; cursor: pointer; padding: 4px 8px; line-height: 1;
     transition: color 0.2s;
   }
   .cs-close:hover { color: var(--text); }
+
   .cs-eyebrow {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 1.25rem;
+    display: flex; align-items: center; gap: 8px;
+    font-family: 'DM Mono', monospace; font-size: 0.65rem;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 1rem;
   }
   .cs-eyebrow-dot {
-    width: 6px; height: 6px;
-    border-radius: 50%;
+    width: 6px; height: 6px; border-radius: 50%;
     background: var(--accent);
     animation: csPulse 2.4s ease-in-out infinite;
   }
-  @keyframes csPulse {
-    0%, 100% { opacity: 1; }
-    50%       { opacity: 0.4; }
-  }
+  @keyframes csPulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
   .cs-eyebrow-date { margin-left: auto; }
+
   .cs-headline {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.55rem;
-    font-weight: 700;
-    color: var(--text);
-    margin: 0 0 1.5rem;
-    line-height: 1.25;
+    font-family: 'Playfair Display', serif; font-size: 1.5rem;
+    font-weight: 700; color: var(--text); margin: 0 0 1.1rem; line-height: 1.25;
   }
+
+  /* Category filter row */
+  .cs-cat-row {
+    display: flex; gap: 6px; flex-wrap: nowrap;
+    overflow-x: auto; margin-bottom: 1rem; padding-bottom: 4px;
+    scrollbar-width: none;
+  }
+  .cs-cat-row::-webkit-scrollbar { display: none; }
+  .cs-cat-pill {
+    font-family: 'DM Mono', monospace; font-size: 0.6rem;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    border: 1px solid var(--border); background: var(--surface2);
+    border-radius: 999px; padding: 4px 12px; cursor: pointer;
+    color: var(--muted2); white-space: nowrap;
+    transition: border-color 0.15s, color 0.15s, background 0.15s;
+    flex-shrink: 0;
+  }
+  .cs-cat-pill:hover { border-color: var(--accent); color: var(--accent); }
+  .cs-cat-pill.active { color: #0d0d0d; }
+
+  /* Context buttons */
   .cs-context-row {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 1.5rem;
-    flex-wrap: wrap;
+    display: flex; gap: 8px; margin-bottom: 1.2rem; flex-wrap: wrap;
   }
   .cs-ctx-btn {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.68rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    color: var(--muted2);
-    border-radius: 999px;
-    padding: 6px 16px;
-    cursor: pointer;
-    transition: background 0.15s, border-color 0.15s, color 0.15s;
+    font-family: 'DM Mono', monospace; font-size: 0.68rem;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    background: var(--surface2); border: 1px solid var(--border);
+    color: var(--muted2); border-radius: 999px; padding: 6px 16px;
+    cursor: pointer; transition: background 0.15s, border-color 0.15s, color 0.15s;
   }
-  .cs-ctx-btn:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-  }
-  .cs-ctx-btn.active {
-    background: var(--accent);
-    border-color: var(--accent);
-    color: #0d0d0d;
-  }
+  .cs-ctx-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .cs-ctx-btn.active { background: var(--accent); border-color: var(--accent); color: #0d0d0d; }
+
+  /* Swipeable prompt block */
   .cs-prompt-block {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 20px 22px;
-    margin-bottom: 1rem;
+    position: relative; background: var(--surface2);
+    border: 1px solid var(--border); border-radius: 10px;
+    padding: 20px 22px; margin-bottom: 0.9rem;
+    cursor: grab; user-select: none; overflow: hidden;
+    transition: transform 0.15s ease, border-color 0.2s;
+    touch-action: pan-y;
   }
+  .cs-prompt-block:active { cursor: grabbing; }
+  .cs-prompt-block.swiping-left  { border-color: #d4715a; }
+  .cs-prompt-block.swiping-right { border-color: #7aaf8a; }
+
+  /* Swipe indicators */
+  .cs-swipe-x, .cs-swipe-save {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    font-family: 'DM Mono', monospace; font-size: 0.75rem;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    opacity: 0; transition: opacity 0.15s; pointer-events: none;
+    font-weight: 600;
+  }
+  .cs-swipe-x    { left: 14px;  color: #d4715a; }
+  .cs-swipe-save { right: 14px; color: #7aaf8a; }
+  .cs-prompt-block.swiping-left  .cs-swipe-x    { opacity: 1; }
+  .cs-prompt-block.swiping-right .cs-swipe-save { opacity: 1; }
+
+  /* Skeleton loader */
+  .cs-skeleton { padding: 4px 0; }
+  .cs-skel-line {
+    height: 14px; border-radius: 6px;
+    background: linear-gradient(90deg, var(--surface2) 25%, var(--border) 50%, var(--surface2) 75%);
+    background-size: 200% 100%;
+    animation: csSkelShimmer 1.4s infinite;
+    margin-bottom: 10px; width: 100%;
+  }
+  .cs-skel-line--short { width: 45%; }
+  .cs-skel-line--med   { width: 70%; }
+  @keyframes csSkelShimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
   .cs-opener {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 10px;
+    font-family: 'DM Mono', monospace; font-size: 0.65rem;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 10px;
   }
   .cs-prompt-text {
-    font-size: 1.05rem;
-    line-height: 1.65;
-    color: var(--text);
-    margin: 0;
+    font-size: 1.05rem; line-height: 1.65; color: var(--text); margin: 0;
+  }
+
+  /* Coaching layer */
+  .cs-coaching {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-top: none; border-radius: 0 0 10px 10px;
+    padding: 14px 22px 16px; margin-top: -2px; margin-bottom: 0.9rem;
+  }
+  .cs-coaching-section { margin-bottom: 10px; }
+  .cs-coaching-section:last-child { margin-bottom: 0; }
+  .cs-coaching-label {
+    font-family: 'DM Mono', monospace; font-size: 0.6rem;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 6px;
+  }
+  .cs-coaching-label--warn { color: #d4715a; opacity: 0.8; }
+  .cs-openers-list { display: flex; flex-direction: column; gap: 6px; }
+  .cs-opener-line {
+    font-size: 0.88rem; line-height: 1.55; color: var(--muted2);
+    font-style: italic; padding-left: 10px;
+    border-left: 2px solid var(--accent);
+  }
+  .cs-pitfall {
+    font-size: 0.82rem; color: var(--muted2); line-height: 1.5;
+    padding-left: 10px; border-left: 2px solid #d4715a;
+  }
+
+  /* Meta row */
+  .cs-meta-row {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 1rem;
   }
   .cs-concept-label {
-    font-size: 0.72rem;
-    color: var(--muted);
-    margin-bottom: 1.25rem;
+    font-size: 0.72rem; color: var(--muted); flex: 1;
   }
-  .cs-concept-label span {
-    color: var(--muted2);
-    font-style: italic;
+  .cs-concept-term { color: var(--muted2); font-style: italic; }
+  .cs-cat-badge {
+    font-family: 'DM Mono', monospace; font-size: 0.6rem;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    border: 1px solid; border-radius: 999px; padding: 3px 10px;
+    opacity: 0.85;
   }
+
+  /* Related accordion pills */
   .cs-related-row {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-bottom: 1.75rem;
-    min-height: 30px;
+    display: flex; gap: 8px; flex-wrap: wrap;
+    margin-bottom: 1.2rem; min-height: 28px;
   }
-  .cs-related-pill {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.64rem;
-    letter-spacing: 0.08em;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    padding: 5px 12px;
-    color: var(--muted2);
-    cursor: pointer;
+  .cs-related-wrap { width: 100%; }
+  .cs-related-pill-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: 'DM Mono', monospace; font-size: 0.63rem;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 999px; padding: 5px 12px 5px 14px;
+    color: var(--muted2); cursor: pointer;
     transition: border-color 0.2s, color 0.2s;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 180px;
   }
-  .cs-related-pill:hover {
-    border-color: var(--accent);
-    color: var(--accent);
+  .cs-related-pill-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .cs-related-pill-btn.expanded { border-color: var(--accent); color: var(--accent); }
+  .cs-pill-arrow { font-size: 0.55rem; transition: transform 0.2s; display: inline-block; }
+  .cs-related-pill-btn.expanded .cs-pill-arrow { transform: rotate(180deg); }
+  .cs-related-expand {
+    display: none; margin-top: 6px;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 12px 14px; font-size: 0.83rem;
+    line-height: 1.6; color: var(--muted2);
   }
-  .cs-actions {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
+  .cs-related-expand.open { display: block; }
+  .cs-expand-section { margin-bottom: 8px; }
+  .cs-expand-section:last-child { margin-bottom: 0; }
+  .cs-expand-label {
+    font-family: 'DM Mono', monospace; font-size: 0.58rem;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 4px;
   }
+
+  /* Report back */
+  .cs-feedback-row {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 1.1rem; animation: fadeIn 0.4s ease both;
+  }
+  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+  .cs-feedback-label {
+    font-family: 'DM Mono', monospace; font-size: 0.65rem;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
+  }
+  .cs-fb-btn {
+    background: none; border: 1px solid var(--border);
+    border-radius: 999px; padding: 4px 12px; font-size: 1rem;
+    cursor: pointer; transition: border-color 0.2s, transform 0.15s;
+  }
+  .cs-fb-btn:hover { border-color: var(--accent); transform: scale(1.15); }
+
+  /* Actions */
+  .cs-actions { display: flex; gap: 10px; flex-wrap: wrap; }
   .cs-btn {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    border: 1px solid var(--border);
-    background: transparent;
-    color: var(--muted2);
-    border-radius: 8px;
-    padding: 10px 18px;
-    cursor: pointer;
-    transition: border-color 0.2s, color 0.2s;
+    font-family: 'DM Mono', monospace; font-size: 0.7rem;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    border: 1px solid var(--border); background: transparent;
+    color: var(--muted2); border-radius: 8px; padding: 10px 18px;
+    cursor: pointer; transition: border-color 0.2s, color 0.2s;
   }
   .cs-btn:hover { border-color: var(--accent); color: var(--accent); }
-  .cs-btn--primary {
-    background: var(--accent);
-    border-color: var(--accent);
-    color: #0d0d0d;
-  }
+  .cs-btn--primary { background: var(--accent); border-color: var(--accent); color: #0d0d0d; }
   .cs-btn--primary:hover {
     background: color-mix(in srgb, var(--accent) 85%, white);
-    border-color: color-mix(in srgb, var(--accent) 85%, white);
-    color: #0d0d0d;
+    border-color: color-mix(in srgb, var(--accent) 85%, white); color: #0d0d0d;
   }
+
   @media (max-width: 600px) {
-    .cs-card { padding: 28px 22px 24px; }
-    .cs-headline { font-size: 1.25rem; }
+    .cs-card { padding: 24px 18px 20px; }
+    .cs-headline { font-size: 1.2rem; }
     .cs-prompt-text { font-size: 0.95rem; }
     .cs-actions { flex-direction: column; }
     .cs-btn { text-align: center; }
@@ -2453,6 +2516,8 @@
 
   /* END CONVERSATION STARTER */
   /* NEWSLETTER */
+  .newsletter {
+    position: relative;
   .newsletter {
     position: relative;
     z-index: 1;
@@ -4595,6 +4660,7 @@
     <a class="nav-link" onclick="playNavSFX();scrollToSection('app')">Concepts</a>
     <a class="nav-link" onclick="playNavSFX();toggleVault();scrollToSection('app')">Vault</a>
     <a class="nav-link" onclick="openCotdFromNav();playNavSFX()">Today</a>
+    <a class="nav-link nav-cs-btn" onclick="openCSFromNav();playNavSFX()" title="Conversation Starters">💬 Prompts</a>
     <div class="nav-tools-divider"></div>
     <a class="nav-link nav-map-btn" href="/map" onclick="track('map_opened');playNavSFX()">◈ Map</a>
     <div class="nav-divider"></div>
@@ -4624,6 +4690,7 @@
   <button class="nav-mobile-link" onclick="playNavSFX();scrollToSection('app');closeMobileNav()">◈ Concepts</button>
   <button class="nav-mobile-link" onclick="playNavSFX();toggleVault();scrollToSection('app');closeMobileNav()">◆ Vault</button>
   <button class="nav-mobile-link" onclick="playNavSFX();openCotdFromNav();closeMobileNav()">◇ Today's Concept</button>
+  <button class="nav-mobile-link nav-mobile-cs" onclick="playNavSFX();openCSFromNav();closeMobileNav()">💬 Conversation Starters</button>
   <div class="nav-mobile-divider"></div>
   <button class="nav-mobile-link" onclick="openHiw();closeMobileNav()">◌ How it works</button>
 </div>
@@ -4712,7 +4779,7 @@
 -->
 <!-- END COTD disabled block -->
 
-<!-- CONVERSATION STARTER MODAL — v1.67 -->
+<!-- CONVERSATION STARTER MODAL — v1.68 -->
 <div class="cs-overlay" id="csOverlay" role="dialog" aria-modal="true" aria-labelledby="csHeadline">
   <div class="cs-card" id="csCard">
     <button class="cs-close" id="csClose" aria-label="Close conversation starter">✕</button>
@@ -4725,6 +4792,10 @@
 
     <h2 class="cs-headline" id="csHeadline">Today's Conversation Starter</h2>
 
+    <!-- Category filter pills -->
+    <div class="cs-cat-row" id="csCatRow"></div>
+
+    <!-- Context buttons -->
     <div class="cs-context-row">
       <button class="cs-ctx-btn active" data-ctx="partner">Partner</button>
       <button class="cs-ctx-btn" data-ctx="friend">Friend</button>
@@ -4732,14 +4803,50 @@
       <button class="cs-ctx-btn" data-ctx="meeting">Meeting</button>
     </div>
 
-    <div class="cs-prompt-block">
-      <div class="cs-opener" id="csOpener">Tonight with your partner:</div>
-      <p class="cs-prompt-text" id="csPromptText">—</p>
+    <!-- Swipeable prompt block -->
+    <div class="cs-prompt-block" id="csPromptBlock">
+      <!-- Loading skeleton -->
+      <div class="cs-skeleton" id="csSkeleton" style="display:none">
+        <div class="cs-skel-line cs-skel-line--short"></div>
+        <div class="cs-skel-line"></div>
+        <div class="cs-skel-line cs-skel-line--med"></div>
+      </div>
+      <div id="csPromptInner">
+        <div class="cs-opener" id="csOpener">Tonight with your partner:</div>
+        <p class="cs-prompt-text" id="csPromptText">—</p>
+      </div>
+      <!-- Swipe indicators -->
+      <div class="cs-swipe-x" id="csSwipeX">✕</div>
+      <div class="cs-swipe-save" id="csSwipeSave">♡ Saved</div>
     </div>
 
-    <div class="cs-concept-label">From the concept: <span id="csConceptTerm">—</span></div>
+    <!-- Coaching layer (openers + pitfall) -->
+    <div class="cs-coaching" id="csCoaching" style="display:none">
+      <div class="cs-coaching-section">
+        <div class="cs-coaching-label">You could say:</div>
+        <div class="cs-openers-list" id="csOpenersList"></div>
+      </div>
+      <div class="cs-coaching-section cs-pitfall-wrap">
+        <div class="cs-coaching-label cs-coaching-label--warn">Watch out for:</div>
+        <div class="cs-pitfall" id="csPitfall"></div>
+      </div>
+    </div>
 
+    <!-- Concept source + category -->
+    <div class="cs-meta-row">
+      <span class="cs-concept-label">From: <span class="cs-concept-term" id="csConceptTerm">—</span></span>
+      <span class="cs-cat-badge" id="csCatBadge"></span>
+    </div>
+
+    <!-- Related concepts accordion -->
     <div class="cs-related-row" id="csRelatedRow"></div>
+
+    <!-- Report back -->
+    <div class="cs-feedback-row" id="csFeedbackRow" style="display:none">
+      <span class="cs-feedback-label">Did it land?</span>
+      <button class="cs-fb-btn" id="csFbUp" aria-label="Yes">👍</button>
+      <button class="cs-fb-btn" id="csFbDown" aria-label="No">👎</button>
+    </div>
 
     <div class="cs-actions">
       <button class="cs-btn cs-btn--primary" id="csShareBtn">↑ Copy &amp; Share</button>
@@ -6902,11 +7009,15 @@ function initConceptOfTheDay() {
   });
 }
 // ============================================
-// CONVERSATION STARTER MODAL — v1.67
+// ============================================
+// CONVERSATION STARTER MODAL — v1.68
 // ============================================
 
-const CS_STORAGE_KEY = 'lll_cs_v1'; // tracks daily dismissal (same pattern as COTD)
+const CS_STORAGE_KEY  = 'lll_cs_v1';       // daily dismissal
+const CS_SAVED_KEY    = 'lll_cs_saved_v1'; // saved concept IDs
+const CS_SESSION_KEY  = 'lll_cs_ai_'; // + conceptId → cached AI response
 
+// Static opener prefixes (used during loading / fallback only)
 const CS_OPENERS = {
   partner:   'Tonight with your partner:',
   friend:    'At lunch with a friend:',
@@ -6914,117 +7025,412 @@ const CS_OPENERS = {
   meeting:   'In your next meeting:'
 };
 
-let _csConcept = null;
-let _csCtx = 'partner';
+let _csConcept   = null;   // currently displayed concept
+let _csCtx       = 'partner';
+let _csAIData    = null;   // { partner, friend, colleague, meeting } from API
+let _csLoading   = false;
+let _csCat       = 'all';  // active category filter
+
+// ---- INIT ----
 
 function initConversationStarter() {
   if (!CONCEPTS || CONCEPTS.length === 0) return;
-  if (isDismissedTodayCS()) return;
 
-  _csConcept = pickTodaysConcept(CONCEPTS);
+  _buildCsCatRow();
+
+  // Pick today's concept (day-deterministic for default)
+  _csConcept = _csPickForCat('all', true);
   if (!_csConcept) return;
 
-  renderCS(_csConcept, _csCtx);
+  _renderCSShell(_csConcept);
+  _wireCSEvents();
   openCS();
+  _loadAI(_csConcept);
+}
 
-  // Wire context buttons
+// Called from nav — always opens regardless of dismissed state
+function openCSFromNav() {
+  if (!CONCEPTS || CONCEPTS.length === 0) return;
+  track('cs_opened', { source: 'nav' });
+  if (!_csConcept) {
+    _csConcept = _csPickForCat(_csCat, false);
+    if (!_csConcept) return;
+    _renderCSShell(_csConcept);
+    _wireCSEvents();
+  }
+  openCS();
+  if (!_csAIData) _loadAI(_csConcept);
+}
+
+// ---- CATEGORY FILTER ----
+
+function _buildCsCatRow() {
+  const row = document.getElementById('csCatRow');
+  if (!row) return;
+  const cats = [
+    { id: 'all', name: 'All' },
+    { id: 'psychology',    name: 'Psychology'    },
+    { id: 'thinking',      name: 'Thinking'      },
+    { id: 'relationships', name: 'Relationships' },
+    { id: 'philosophy',    name: 'Philosophy'    },
+    { id: 'business',      name: 'Business'      },
+    { id: 'identity',      name: 'Identity'      },
+    { id: 'power',         name: 'Power'         },
+    { id: 'creativity',    name: 'Creativity'    },
+    { id: 'finance',       name: 'Finance'       },
+    { id: 'health',        name: 'Health'        },
+    { id: 'language',      name: 'Language'      },
+    { id: 'science',       name: 'Science'       },
+    { id: 'society',       name: 'Society'       },
+    { id: 'tech-ai',       name: 'Tech-AI'       },
+  ];
+  row.innerHTML = cats.map(c => {
+    const color = CAT_COLOR[c.id] || 'var(--accent)';
+    const isActive = c.id === _csCat;
+    return `<button class="cs-cat-pill${isActive ? ' active' : ''}" data-cat="${c.id}"
+      style="${isActive ? `background:${color};border-color:${color};` : `color:${color};border-color:${color}40;`}"
+      onclick="_csSwitchCat('${c.id}')">${c.name}</button>`;
+  }).join('');
+}
+
+function _csSwitchCat(cat) {
+  _csCat = cat;
+  _buildCsCatRow();
+  const concept = _csPickForCat(cat, false);
+  if (!concept) return;
+  _csLoadNewConcept(concept);
+}
+
+function _csPickForCat(cat, deterministic) {
+  const pool = (cat === 'all')
+    ? CONCEPTS.filter(c => !c.duplicate_of)
+    : CONCEPTS.filter(c => c.category === cat && !c.duplicate_of);
+  if (!pool.length) return null;
+  if (deterministic) return pickTodaysConcept(pool);
+  return pool[Math.floor(Math.random() * pool.length)];
+}
+
+function _csLoadNewConcept(concept) {
+  _csConcept = concept;
+  _csAIData  = null;
+  _renderCSShell(concept);
+  _showCSLoading(true);
+  _loadAI(concept);
+}
+
+// ---- RENDER ----
+
+function _renderCSShell(concept) {
+  if (!concept) return;
+  document.getElementById('csDate').textContent = formatTodayLabel();
+  document.getElementById('csPromptText').textContent = concept.prompt;
+  document.getElementById('csOpener').textContent = CS_OPENERS[_csCtx] || '';
+  document.getElementById('csConceptTerm').textContent = concept.term;
+
+  // Category badge
+  const badge = document.getElementById('csCatBadge');
+  const color = CAT_COLOR[concept.category] || 'var(--accent)';
+  badge.textContent = concept.category;
+  badge.style.color = color;
+  badge.style.borderColor = color + '60';
+
+  // Hide coaching until AI arrives
+  document.getElementById('csCoaching').style.display = 'none';
+  document.getElementById('csFeedbackRow').style.display = 'none';
+  _renderRelated(concept);
+}
+
+function _applyAIToCtx(ctx) {
+  if (!_csAIData) return;
+  const d = _csAIData[ctx];
+  if (!d) return;
+
+  document.getElementById('csOpener').textContent = CS_OPENERS[ctx] || '';
+  document.getElementById('csPromptText').textContent = d.prompt;
+
+  // Coaching layer
+  const coaching = document.getElementById('csCoaching');
+  const openersList = document.getElementById('csOpenersList');
+  openersList.innerHTML = (d.openers || []).map(o =>
+    `<div class="cs-opener-line">${_escHtml(o)}</div>`
+  ).join('');
+  document.getElementById('csPitfall').textContent = d.pitfall || '';
+  coaching.style.display = 'block';
+
+  // Show feedback row after 2s
+  setTimeout(function() {
+    const fr = document.getElementById('csFeedbackRow');
+    if (fr) fr.style.display = 'flex';
+  }, 2000);
+}
+
+function _renderRelated(concept) {
+  const row = document.getElementById('csRelatedRow');
+  row.innerHTML = '';
+
+  let pool = [];
+  if (concept.related_ids && concept.related_ids.length > 0) {
+    concept.related_ids.slice(0, 3).forEach(function(rid) {
+      const found = CONCEPTS.find(c => c.id === rid);
+      if (found) pool.push(found);
+    });
+  }
+  // Fallback: random same-category
+  if (pool.length < 3) {
+    const fallback = CONCEPTS.filter(c =>
+      c.category === concept.category && c.id !== concept.id &&
+      !pool.find(r => r.id === c.id) && !c.duplicate_of
+    );
+    for (let i = fallback.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [fallback[i], fallback[j]] = [fallback[j], fallback[i]];
+    }
+    pool = pool.concat(fallback.slice(0, 3 - pool.length));
+  }
+
+  let _openPillId = null;
+  pool.forEach(function(rc) {
+    const wrap = document.createElement('div');
+    wrap.className = 'cs-related-wrap';
+
+    const btn = document.createElement('button');
+    btn.className = 'cs-related-pill-btn';
+    btn.dataset.id = rc.id;
+    btn.innerHTML = `${_escHtml(rc.term)} <span class="cs-pill-arrow">▾</span>`;
+
+    const expand = document.createElement('div');
+    expand.className = 'cs-related-expand';
+    expand.innerHTML = `
+      <div class="cs-expand-section">
+        <div class="cs-expand-label">Analogy</div>
+        <div>${_escHtml(rc.analogy || '')}</div>
+      </div>
+      <div class="cs-expand-section">
+        <div class="cs-expand-label">Use it</div>
+        <div>${_escHtml(rc.prompt || '')}</div>
+      </div>`;
+
+    btn.addEventListener('click', function() {
+      const isOpen = expand.classList.contains('open');
+      // Collapse any open one
+      if (_openPillId && _openPillId !== rc.id) {
+        const prev = row.querySelector('.cs-related-pill-btn.expanded');
+        const prevExp = row.querySelector('.cs-related-expand.open');
+        if (prev) prev.classList.remove('expanded');
+        if (prevExp) prevExp.classList.remove('open');
+      }
+      expand.classList.toggle('open', !isOpen);
+      btn.classList.toggle('expanded', !isOpen);
+      _openPillId = !isOpen ? rc.id : null;
+    });
+
+    wrap.appendChild(btn);
+    wrap.appendChild(expand);
+    row.appendChild(wrap);
+  });
+}
+
+// ---- AI CALL ----
+
+function _loadAI(concept) {
+  if (_csLoading) return;
+  // Check session cache
+  const cacheKey = CS_SESSION_KEY + concept.id;
+  try {
+    const cached = sessionStorage.getItem(cacheKey);
+    if (cached) {
+      _csAIData = JSON.parse(cached);
+      _showCSLoading(false);
+      _applyAIToCtx(_csCtx);
+      return;
+    }
+  } catch(e) {}
+
+  _csLoading = true;
+  _showCSLoading(true);
+
+  fetch('/api/cs-generate', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ concept: {
+      term: concept.term,
+      hook: concept.hook,
+      plain: concept.plain,
+      analogy: concept.analogy,
+      prompt: concept.prompt,
+      category: concept.category
+    }})
+  })
+  .then(r => r.json())
+  .then(data => {
+    _csLoading = false;
+    if (data && data.contexts) {
+      _csAIData = data.contexts;
+      // Cache in sessionStorage
+      try { sessionStorage.setItem(cacheKey, JSON.stringify(_csAIData)); } catch(e) {}
+      _showCSLoading(false);
+      _applyAIToCtx(_csCtx);
+    } else {
+      _showCSLoading(false); // Show fallback (original prompt already rendered)
+    }
+  })
+  .catch(function() {
+    _csLoading = false;
+    _showCSLoading(false); // Fail silently — original prompt still shown
+  });
+}
+
+function _showCSLoading(on) {
+  const skel = document.getElementById('csSkeleton');
+  const inner = document.getElementById('csPromptInner');
+  if (!skel || !inner) return;
+  skel.style.display  = on ? 'block' : 'none';
+  inner.style.display = on ? 'none'  : 'block';
+}
+
+// ---- SWIPE ----
+
+function _wireSwipe() {
+  const block = document.getElementById('csPromptBlock');
+  if (!block) return;
+  let startX = 0, currentX = 0, dragging = false;
+  const THRESHOLD = 80;
+
+  function onStart(x) { startX = x; dragging = true; }
+  function onMove(x) {
+    if (!dragging) return;
+    currentX = x;
+    const dx = currentX - startX;
+    block.style.transform = `translateX(${dx * 0.35}px) rotate(${dx * 0.015}deg)`;
+    block.classList.toggle('swiping-left',  dx < -30);
+    block.classList.toggle('swiping-right', dx >  30);
+  }
+  function onEnd() {
+    if (!dragging) return; dragging = false;
+    const dx = currentX - startX;
+    block.style.transform = '';
+    block.classList.remove('swiping-left', 'swiping-right');
+    if (dx < -THRESHOLD) _csSwipeLeft();
+    else if (dx > THRESHOLD) _csSwipeRight();
+    startX = 0; currentX = 0;
+  }
+
+  block.addEventListener('mousedown',  e => onStart(e.clientX));
+  block.addEventListener('mousemove',  e => { if (e.buttons === 1) onMove(e.clientX); });
+  block.addEventListener('mouseup',    onEnd);
+  block.addEventListener('mouseleave', onEnd);
+  block.addEventListener('touchstart', e => onStart(e.touches[0].clientX), { passive: true });
+  block.addEventListener('touchmove',  e => onMove(e.touches[0].clientX),  { passive: true });
+  block.addEventListener('touchend',   onEnd);
+}
+
+function _csSwipeLeft() {
+  // Skip — load next random concept in same category
+  track('cs_swiped', { dir: 'left', concept_id: _csConcept ? _csConcept.id : null });
+  const next = _csPickForCat(_csCat, false);
+  if (next && next.id !== (_csConcept && _csConcept.id)) {
+    _csLoadNewConcept(next);
+  }
+}
+
+function _csSwipeRight() {
+  // Save concept
+  if (!_csConcept) return;
+  track('cs_swiped', { dir: 'right', concept_id: _csConcept.id });
+  try {
+    const saved = JSON.parse(localStorage.getItem(CS_SAVED_KEY) || '[]');
+    if (!saved.includes(_csConcept.id)) {
+      saved.push(_csConcept.id);
+      localStorage.setItem(CS_SAVED_KEY, JSON.stringify(saved));
+    }
+  } catch(e) {}
+  // Brief confirmation
+  const saveInd = document.getElementById('csSwipeSave');
+  if (saveInd) {
+    saveInd.style.opacity = '1';
+    setTimeout(() => { saveInd.style.opacity = ''; }, 900);
+  }
+}
+
+// ---- WIRE EVENTS ----
+
+function _wireCSEvents() {
+  // Context buttons
   document.querySelectorAll('.cs-ctx-btn').forEach(btn => {
     btn.addEventListener('click', function() {
       document.querySelectorAll('.cs-ctx-btn').forEach(b => b.classList.remove('active'));
       this.classList.add('active');
       _csCtx = this.dataset.ctx;
-      document.getElementById('csOpener').textContent = CS_OPENERS[_csCtx] || '';
+      if (_csAIData) {
+        _applyAIToCtx(_csCtx);
+      } else {
+        document.getElementById('csOpener').textContent = CS_OPENERS[_csCtx] || '';
+      }
     });
   });
 
-  document.getElementById('csClose').onclick = function() { closeCS(true); };
+  // Close buttons
+  document.getElementById('csClose').onclick   = function() { closeCS(true); };
   document.getElementById('csCloseBtn').onclick = function() { closeCS(true); };
 
+  // Share / copy
   document.getElementById('csShareBtn').onclick = function() {
-    const opener = CS_OPENERS[_csCtx] || '';
-    const prompt = _csConcept ? _csConcept.prompt : '';
+    const opener = _csAIData ? CS_OPENERS[_csCtx] : (CS_OPENERS[_csCtx] || '');
+    const promptTxt = _csAIData
+      ? (_csAIData[_csCtx] && _csAIData[_csCtx].prompt) || (_csConcept && _csConcept.prompt)
+      : (_csConcept && _csConcept.prompt || '');
     const term = _csConcept ? _csConcept.term : '';
-    const text = opener + ' ' + prompt + '\n\n— From Epistemic (epistemic.live) · Concept: ' + term;
+    const text = opener + ' ' + promptTxt + '\n\n— Epistemic · epistemic.live · Concept: ' + term;
     try {
       navigator.clipboard.writeText(text).then(function() {
         const btn = document.getElementById('csShareBtn');
+        const orig = btn.textContent;
         btn.textContent = '✓ Copied!';
-        setTimeout(function() { btn.textContent = '↑ Copy & Share'; }, 2000);
+        setTimeout(function() { btn.textContent = orig; }, 2000);
       });
     } catch(e) {
-      // Fallback: select a temp textarea
       const ta = document.createElement('textarea');
-      ta.value = text;
-      ta.style.position = 'fixed'; ta.style.opacity = '0';
-      document.body.appendChild(ta); ta.select();
-      document.execCommand('copy');
+      ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select(); document.execCommand('copy');
       document.body.removeChild(ta);
     }
     track('prompt_shared', { ctx: _csCtx, concept_id: _csConcept ? _csConcept.id : null });
   };
 
-  // Click overlay backdrop to close
+  // Report back thumbs
+  document.getElementById('csFbUp').onclick = function() {
+    track('prompt_feedback', { result: 'up', concept_id: _csConcept ? _csConcept.id : null, ctx: _csCtx });
+    _csFeedbackDone();
+  };
+  document.getElementById('csFbDown').onclick = function() {
+    track('prompt_feedback', { result: 'down', concept_id: _csConcept ? _csConcept.id : null, ctx: _csCtx });
+    _csFeedbackDone();
+  };
+
+  // Backdrop + Esc
   document.getElementById('csOverlay').addEventListener('click', function(e) {
     if (e.target === this) closeCS(true);
   });
-
   document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && document.getElementById('csOverlay').classList.contains('active')) {
-      closeCS(true);
-    }
+    if (e.key === 'Escape' && document.getElementById('csOverlay').classList.contains('active')) closeCS(true);
   });
+
+  _wireSwipe();
 }
 
-function renderCS(concept, ctx) {
-  if (!concept) return;
-  document.getElementById('csDate').textContent = formatTodayLabel();
-  document.getElementById('csOpener').textContent = CS_OPENERS[ctx] || '';
-  document.getElementById('csPromptText').textContent = concept.prompt;
-  document.getElementById('csConceptTerm').textContent = concept.term;
-
-  // Related pills — from related_ids, or fallback to 3 random same-category
-  const relatedRow = document.getElementById('csRelatedRow');
-  relatedRow.innerHTML = '';
-  let relatedConcepts = [];
-
-  if (concept.related_ids && concept.related_ids.length > 0) {
-    concept.related_ids.slice(0, 3).forEach(function(rid) {
-      const found = CONCEPTS.find(function(c) { return c.id === rid; });
-      if (found) relatedConcepts.push(found);
-    });
-  }
-
-  // Fallback: random from same category (excluding self)
-  if (relatedConcepts.length < 3) {
-    const pool = CONCEPTS.filter(function(c) {
-      return c.category === concept.category && c.id !== concept.id &&
-             !relatedConcepts.find(function(r) { return r.id === c.id; });
-    });
-    // Fisher-Yates shuffle limited to what we need
-    for (let i = pool.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      const tmp = pool[i]; pool[i] = pool[j]; pool[j] = tmp;
-    }
-    const needed = 3 - relatedConcepts.length;
-    relatedConcepts = relatedConcepts.concat(pool.slice(0, needed));
-  }
-
-  relatedConcepts.forEach(function(rc) {
-    const pill = document.createElement('button');
-    pill.className = 'cs-related-pill';
-    pill.textContent = rc.term;
-    pill.title = rc.hook || rc.term;
-    pill.onclick = function() {
-      // Scroll to concept in the library (just close and let user browse)
-      closeCS(true);
-    };
-    relatedRow.appendChild(pill);
-  });
+function _csFeedbackDone() {
+  const fr = document.getElementById('csFeedbackRow');
+  if (!fr) return;
+  fr.innerHTML = '<span class="cs-feedback-label" style="color:var(--accent)">Thanks 🙏</span>';
+  setTimeout(function() { fr.style.display = 'none'; }, 2000);
 }
+
+// ---- OPEN / CLOSE ----
 
 function openCS() {
   document.getElementById('csOverlay').classList.add('active');
-  document.body.classList.add('cotd-open'); // reuse same body lock class
+  document.body.classList.add('cotd-open');
+  playCotdSFX(); // reuse COTD sound
 }
 
 function closeCS(persist) {
@@ -7033,19 +7439,24 @@ function closeCS(persist) {
   if (persist) markDismissedTodayCS();
 }
 
+// ---- PERSISTENCE ----
+
 function isDismissedTodayCS() {
   try {
     const raw = localStorage.getItem(CS_STORAGE_KEY);
     if (!raw) return false;
-    const data = JSON.parse(raw);
-    return data && data.date === todayISO();
+    return JSON.parse(raw).date === todayISO();
   } catch(e) { return false; }
 }
 
 function markDismissedTodayCS() {
-  try {
-    localStorage.setItem(CS_STORAGE_KEY, JSON.stringify({ date: todayISO() }));
-  } catch(e) {}
+  try { localStorage.setItem(CS_STORAGE_KEY, JSON.stringify({ date: todayISO() })); } catch(e) {}
+}
+
+// ---- UTIL ----
+
+function _escHtml(str) {
+  return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
 // ============================================
