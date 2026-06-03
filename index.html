@@ -6283,6 +6283,7 @@ function buildShorts() {
 }
 function initMagneticShortPills() {
   if ('ontouchstart' in window || navigator.maxTouchPoints > 0) return;
+  const bar = document.querySelector('.shorts-filter-bar');
   if (!bar) return;
   bar.querySelectorAll('.short-filter-pill').forEach(pill => {
     pill.addEventListener('mousemove', function(e) {
