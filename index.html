@@ -4380,10 +4380,10 @@
   <div class="nav-logo"><em>Epistemic.</em></div>  
 
   <div class="nav-island" id="navIsland">
-    <a class="nav-link" onclick="scrollToSection('episodesSection')">Episodes</a>
-    <a class="nav-link" onclick="scrollToSection('shortsSection')">Shorts</a>
-    <a class="nav-link" onclick="scrollToSection('app')">Concepts</a>
-    <a class="nav-link" onclick="toggleVault();scrollToSection('app')">Vault</a>
+    <a class="nav-link" onclick="playNavSFX();scrollToSection('episodesSection')">Episodes</a>
+    <a class="nav-link" onclick="playNavSFX();scrollToSection('shortsSection')">Shorts</a>
+    <a class="nav-link" onclick="playNavSFX();scrollToSection('app')">Concepts</a>
+    <a class="nav-link" onclick="playNavSFX();toggleVault();scrollToSection('app')">Vault</a>
     <a class="nav-link" onclick="openCotdFromNav();playNavSFX()">Today</a>
     <div class="nav-tools-divider"></div>
     <a class="nav-link nav-map-btn" href="/map" onclick="track('map_opened');playNavSFX()">◈ Map</a>
@@ -4409,10 +4409,10 @@
   <button class="nav-mobile-link nav-mobile-map" onclick="playNavSFX();track('map_opened');window.location='/map'">◈ Map</button>
   <button class="nav-mobile-link nav-mobile-quiz" onclick="playNavSFX();openQuiz();closeMobileNav()">◈ Quiz</button>
   <div class="nav-mobile-divider"></div>
-  <button class="nav-mobile-link" onclick="scrollToSection('episodesSection');closeMobileNav()">◎ Episodes</button>
-  <button class="nav-mobile-link" onclick="scrollToSection('shortsSection');closeMobileNav()">◈ Shorts</button>
-  <button class="nav-mobile-link" onclick="scrollToSection('app');closeMobileNav()">◈ Concepts</button>
-  <button class="nav-mobile-link" onclick="toggleVault();scrollToSection('app');closeMobileNav()">◆ Vault</button>
+  <button class="nav-mobile-link" onclick="playNavSFX();scrollToSection('episodesSection');closeMobileNav()">◎ Episodes</button>
+  <button class="nav-mobile-link" onclick="playNavSFX();scrollToSection('shortsSection');closeMobileNav()">◈ Shorts</button>
+  <button class="nav-mobile-link" onclick="playNavSFX();scrollToSection('app');closeMobileNav()">◈ Concepts</button>
+  <button class="nav-mobile-link" onclick="playNavSFX();toggleVault();scrollToSection('app');closeMobileNav()">◆ Vault</button>
   <button class="nav-mobile-link" onclick="playNavSFX();openCotdFromNav();closeMobileNav()">◇ Today's Concept</button>
   <div class="nav-mobile-divider"></div>
   <button class="nav-mobile-link" onclick="openHiw();closeMobileNav()">◌ How it works</button>
@@ -4516,7 +4516,7 @@
 
     <p class="hero-sub">Most ideas evaporate within 24 hours. Not because the content is bad. Because passive listening is a broken learning format.<br><br><span class="hero-brand-name">Epistemic</span> fixes that.</p>
 
-    <a href="#app" class="hero-cta">
+    <a href="#app" class="hero-cta" onclick="playStartSFX()">
       Start Learning
       <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M8 3l5 5-5 5"/></svg>
     </a>
@@ -4809,8 +4809,7 @@
 <script>
 // MAGNETIC PILL EFFECT
 function initMagneticPills() {
-  const STRENGTH = 0.35;  // how far pills follow cursor (0 = none, 1 = full)
-  const RADIUS   = 80;    // px distance at which magnetism kicks in
+  if ('ontouchstart' in window || navigator.maxTouchPoints > 0) return; // no cursor on mobile
 
   let _pillRaf = false;
   const pillGrid = document.getElementById('catGrid');
@@ -4877,6 +4876,7 @@ window.addEventListener('scroll', function() {
 
 // Magnetic effect on nav island links
 function initMagneticNav() {
+  if ('ontouchstart' in window || navigator.maxTouchPoints > 0) return;
   document.querySelectorAll('.nav-link').forEach(link => {
     link.addEventListener('mousemove', function(e) {
       const rect = link.getBoundingClientRect();
@@ -5446,7 +5446,7 @@ function toggleMaster(e, id) {
   e.stopPropagation();
   const isMastering = !mastered.has(id);
   if (isMastering) { mastered.add(id); playVaultSFX(); track('concept_mastered', { id: id }); }
-  else mastered.delete(id);
+  else { mastered.delete(id); playVaultRemoveSFX(); }
   saveMastered();
   updateProgress();
 
@@ -5759,6 +5759,7 @@ function updateDailyGoal() {
   if (n >= 5) {
     msg.innerHTML = '<strong>🎉 Goal complete!</strong> Come back tomorrow for 5 more.';
     checkAndUpdateStreak();
+    if (n === 5) playStreakMilestoneSFX(); // fire once when exactly hitting the goal
   } else {
     msg.innerHTML = '<strong>' + n + ' of 5</strong> concepts opened today';
   }
@@ -5924,7 +5925,7 @@ function filterDrawerCat(catKey) {
 }
 
 function initMagneticDrawerPills() {
-  const STRENGTH = 0.3;
+  if ('ontouchstart' in window || navigator.maxTouchPoints > 0) return;
   const filterRow = document.getElementById('epDrawerCatFilter');
   if (!filterRow) return;
   let _raf = false;
@@ -6281,7 +6282,7 @@ function buildShorts() {
   initMagneticShortPills();
 }
 function initMagneticShortPills() {
-  const bar = document.querySelector('.shorts-filter-bar');
+  if ('ontouchstart' in window || navigator.maxTouchPoints > 0) return;
   if (!bar) return;
   bar.querySelectorAll('.short-filter-pill').forEach(pill => {
     pill.addEventListener('mousemove', function(e) {
@@ -6503,6 +6504,7 @@ function renderCotd(concept) {
   markBtn.onclick = function() {
     if (mastered.has(concept.id)) {
       mastered.delete(concept.id);
+      playVaultRemoveSFX();
     } else {
       mastered.add(concept.id);
       playVaultSFX();
@@ -6526,6 +6528,7 @@ function openCotd() {
   const overlay = document.getElementById('cotdOverlay');
   overlay.classList.add('active');
   document.body.classList.add('cotd-open');
+  playCotdSFX();
 }
 
 // Nav-triggered version — always renders a concept regardless of dismissed state
@@ -7652,6 +7655,7 @@ function toggleTheme() {
   const next = isLight ? 'dark' : 'light';
   html.setAttribute('data-theme', next);
   localStorage.setItem('lll_theme', next);
+  playThemeSFX(next);
 
   // Update button icon
   const btn = document.getElementById('themeToggle');
@@ -7732,6 +7736,26 @@ function playVaultSFX() {
   } catch(e) {}
 }
 
+// Vault remove SFX — descending A5→E5, muted. Mirror of vault-add but reversed + quieter.
+function playVaultRemoveSFX() {
+  try {
+    const ctx = _getSfxCtx();
+    const notes = [880, 659]; // A5 → E5 descending
+    notes.forEach((freq, i) => {
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.type = 'sine';
+      o.connect(g); g.connect(ctx.destination);
+      o.frequency.value = freq;
+      const t = ctx.currentTime + i * 0.10;
+      g.gain.setValueAtTime(0, t);
+      g.gain.linearRampToValueAtTime(0.065, t + 0.03);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 0.28);
+      o.start(t); o.stop(t + 0.30);
+    });
+  } catch(e) {}
+}
+
 // Pill SFX — glass tap (C). Plays on category / people / episode pill clicks.
 function playPillSFX() {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -7741,11 +7765,12 @@ function playPillSFX() {
     const osc = ctx.createOscillator();
     const g = ctx.createGain();
     osc.type = 'sine';
-    osc.frequency.value = 900;
+    osc.frequency.setValueAtTime(80, now);
+    osc.frequency.linearRampToValueAtTime(200, now + 0.06);
     osc.connect(g); g.connect(ctx.destination);
-    g.gain.setValueAtTime(0.13, now);
-    g.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
-    osc.start(now); osc.stop(now + 0.05);
+    g.gain.setValueAtTime(0.16, now);
+    g.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+    osc.start(now); osc.stop(now + 0.07);
   } catch(e) {}
 }
 
@@ -7764,6 +7789,119 @@ function playNavSFX() {
       g.gain.setValueAtTime(0.13, now + delay);
       g.gain.exponentialRampToValueAtTime(0.001, now + delay + 0.04);
       osc.start(now + delay); osc.stop(now + delay + 0.05);
+    });
+  } catch(e) {}
+}
+
+// Start Learning SFX — energetic slash: sub thud → noise burst → twin stabs.
+// Sword-drawn-from-scabbard energy. Plays once on hero CTA click.
+function playStartSFX() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  try {
+    const ctx = _getSfxCtx();
+    const now = ctx.currentTime;
+    // 1. Sub thud (60Hz, 40ms)
+    const thud = ctx.createOscillator();
+    const thudG = ctx.createGain();
+    thud.type = 'sine'; thud.frequency.value = 60;
+    thud.connect(thudG); thudG.connect(ctx.destination);
+    thudG.gain.setValueAtTime(0.3, now);
+    thudG.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+    thud.start(now); thud.stop(now + 0.05);
+    // 2. Noise burst — highpass swoosh (80ms)
+    const bufLen = Math.floor(ctx.sampleRate * 0.09);
+    const buf = ctx.createBuffer(1, bufLen, ctx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < bufLen; i++) data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / bufLen, 1.2);
+    const nSrc = ctx.createBufferSource();
+    nSrc.buffer = buf;
+    const hpf = ctx.createBiquadFilter(); hpf.type = 'highpass'; hpf.frequency.value = 2800;
+    const nG = ctx.createGain();
+    nSrc.connect(hpf); hpf.connect(nG); nG.connect(ctx.destination);
+    nG.gain.setValueAtTime(0.28, now + 0.01);
+    nG.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
+    nSrc.start(now + 0.01);
+    // 3. Twin stabs (800Hz + 1100Hz, 15ms each, 30ms apart)
+    [[800, now + 0.07], [1100, now + 0.10]].forEach(([freq, t]) => {
+      const o = ctx.createOscillator(); const g = ctx.createGain();
+      o.type = 'sine'; o.frequency.value = freq;
+      o.connect(g); g.connect(ctx.destination);
+      g.gain.setValueAtTime(0.12, t);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 0.015);
+      o.start(t); o.stop(t + 0.02);
+    });
+  } catch(e) {}
+}
+
+// Theme SFX — bright chirp for light, descending laser for dark.
+// Kept very short (≤120ms) to avoid repeat-toggle fatigue.
+function playThemeSFX(mode) {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  try {
+    const ctx = _getSfxCtx();
+    const now = ctx.currentTime;
+    if (mode === 'light') {
+      // Two ascending sine stabs: 880Hz → 1320Hz
+      [[880, now], [1320, now + 0.055]].forEach(([freq, t]) => {
+        const o = ctx.createOscillator(); const g = ctx.createGain();
+        o.type = 'sine'; o.frequency.value = freq;
+        o.connect(g); g.connect(ctx.destination);
+        g.gain.setValueAtTime(0.10, t);
+        g.gain.exponentialRampToValueAtTime(0.001, t + 0.055);
+        o.start(t); o.stop(t + 0.06);
+      });
+    } else {
+      // Descending laser: sine sweep 580→55Hz (110ms) + slight overdrive feel via gain punch
+      const o = ctx.createOscillator(); const g = ctx.createGain();
+      o.type = 'sawtooth'; // sawtooth gives the "laser" edge
+      o.frequency.setValueAtTime(580, now);
+      o.frequency.exponentialRampToValueAtTime(55, now + 0.11);
+      o.connect(g); g.connect(ctx.destination);
+      g.gain.setValueAtTime(0.09, now);
+      g.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+      o.start(now); o.stop(now + 0.13);
+    }
+  } catch(e) {}
+}
+
+// COTD modal SFX — soft materialise: filtered noise swell + sine sustain.
+function playCotdSFX() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  try {
+    const ctx = _getSfxCtx();
+    const now = ctx.currentTime;
+    const bufLen = Math.floor(ctx.sampleRate * 0.10);
+    const buf = ctx.createBuffer(1, bufLen, ctx.sampleRate);
+    const d = buf.getChannelData(0);
+    for (let i = 0; i < bufLen; i++) d[i] = (Math.random() * 2 - 1) * (i / bufLen);
+    const src = ctx.createBufferSource(); src.buffer = buf;
+    const lpf = ctx.createBiquadFilter(); lpf.type = 'lowpass'; lpf.frequency.value = 1200;
+    const nG = ctx.createGain();
+    src.connect(lpf); lpf.connect(nG); nG.connect(ctx.destination);
+    nG.gain.setValueAtTime(0.12, now); nG.gain.exponentialRampToValueAtTime(0.001, now + 0.10);
+    src.start(now);
+    const tone = ctx.createOscillator(); const tG = ctx.createGain();
+    tone.type = 'sine'; tone.frequency.value = 440;
+    tone.connect(tG); tG.connect(ctx.destination);
+    tG.gain.setValueAtTime(0.07, now + 0.06);
+    tG.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+    tone.start(now + 0.06); tone.stop(now + 0.23);
+  } catch(e) {}
+}
+
+// Streak milestone SFX — three-note ascending fanfare (C→E→G). Plays at 3/3 goal.
+function playStreakMilestoneSFX() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  try {
+    const ctx = _getSfxCtx();
+    [[523, 0], [659, 0.13], [784, 0.26]].forEach(([freq, delay]) => {
+      const o = ctx.createOscillator(); const g = ctx.createGain();
+      o.type = 'sine'; o.frequency.value = freq;
+      o.connect(g); g.connect(ctx.destination);
+      const t = ctx.currentTime + delay;
+      g.gain.setValueAtTime(0.10, t);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 0.28);
+      o.start(t); o.stop(t + 0.30);
     });
   } catch(e) {}
 }
