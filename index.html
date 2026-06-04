@@ -1298,6 +1298,8 @@
   color: var(--purple);
 }
 .nav-cs-btn {
+  display: inline-flex;
+  align-items: center;
   color: #c47a7a;
   border: 1px solid rgba(196,122,122,0.3);
   background: rgba(196,122,122,0.07);
@@ -2498,14 +2500,12 @@
   .cs-concept-expand {
     display: grid;
     grid-template-rows: 0fr;
-    background: var(--surface2); border: 1px solid #c47a7a;
+    background: var(--surface2); border: 1px solid transparent;
     border-top: none; border-radius: 0 0 10px 10px;
     overflow: hidden;
-    transition: grid-template-rows 0.35s ease;
+    transition: grid-template-rows 0.35s ease, border-color 0.2s;
   }
-  .cs-concept-expand > * { min-height: 0; }
-  .cs-concept-expand .cs-expand-inner { padding: 0 16px; transition: padding 0.35s ease; }
-  .cs-concept-expand.open { grid-template-rows: 1fr; }
+  .cs-concept-expand.open { border-color: #c47a7a; grid-template-rows: 1fr; }
   .cs-concept-expand.open .cs-expand-inner { padding: 14px 16px 16px; }
   .cs-concept-plain {
     font-size: 0.9rem; line-height: 1.65; color: var(--muted2);
