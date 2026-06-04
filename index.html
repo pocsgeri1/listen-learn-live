@@ -1310,6 +1310,16 @@
   border-color: #c47a7a;
   color: #c47a7a;
 }
+.nav-conv-btn {
+  color: var(--muted2);
+  border: 1px solid var(--border);
+  background: none;
+}
+.nav-conv-btn:hover {
+  border-color: #c47a7a;
+  color: #c47a7a;
+  background: rgba(196,122,122,0.07);
+}
 .cs-nav-emoji {
   display: inline-block;
   opacity: 0;
@@ -2505,6 +2515,8 @@
     overflow: hidden;
     transition: grid-template-rows 0.35s ease, border-color 0.2s;
   }
+  .cs-concept-expand > * { min-height: 0; }
+  .cs-concept-expand .cs-expand-inner { padding: 0 16px; transition: padding 0.35s ease; }
   .cs-concept-expand.open { border-color: #c47a7a; grid-template-rows: 1fr; }
   .cs-concept-expand.open .cs-expand-inner { padding: 14px 16px 16px; }
   .cs-concept-plain {
@@ -3806,7 +3818,24 @@
     gap: 5px;
   }
   .btn-listen:hover { background: rgba(232,213,163,0.08); border-color: var(--accent2); color: var(--accent2); }
-  /* SHARE CARD MODAL */
+
+  .btn-chat {
+    padding: 7px 12px;
+    border-radius: 6px;
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+    border: 1px solid rgba(196,122,122,0.35);
+    background: none;
+    color: #c47a7a;
+  }
+  .btn-chat:hover { border-color: #c47a7a; background: rgba(196,122,122,0.08); }
+  .btn-chat.saved { border-color: #c47a7a; background: rgba(196,122,122,0.12); }
+
 .share-modal-overlay {
   display: none;
   position: fixed;
@@ -4862,6 +4891,7 @@
     <a class="nav-link" onclick="playNavSFX();toggleVault();scrollToSection('app')">Vault</a>
     <a class="nav-link" onclick="openCotdFromNav();playNavSFX()">Today</a>
     <a class="nav-link nav-cs-btn" onclick="openCSFromNav();playNavSFX()" title="Conversation Starters"><span class="cs-nav-emoji" aria-hidden="true">💬</span>Prompts</a>
+    <a class="nav-link nav-conv-btn" onclick="openConversations();playNavSFX()" title="Saved Conversations">📚 Saved</a>
     <div class="nav-tools-divider"></div>
     <a class="nav-link nav-map-btn" href="/map" onclick="track('map_opened');playNavSFX()">◈ Map</a>
     <div class="nav-divider"></div>
@@ -4892,6 +4922,7 @@
   <button class="nav-mobile-link" onclick="playNavSFX();toggleVault();scrollToSection('app');closeMobileNav()">◆ Vault</button>
   <button class="nav-mobile-link" onclick="playNavSFX();openCotdFromNav();closeMobileNav()">◇ Today's Concept</button>
   <button class="nav-mobile-link nav-mobile-cs" onclick="playNavSFX();openCSFromNav();closeMobileNav()">💬 Conversation Starters</button>
+  <button class="nav-mobile-link nav-mobile-conv" onclick="playNavSFX();openConversations();closeMobileNav()">📚 Saved Conversations</button>
   <div class="nav-mobile-divider"></div>
   <button class="nav-mobile-link" onclick="openHiw();closeMobileNav()">◌ How it works</button>
 </div>
@@ -5882,6 +5913,7 @@ function buildGrid() {
                     <div class="card-actions card-actions-top">
                       <button class="btn-master" onclick="event.stopPropagation();toggleMaster(event,${c.id})">${isMastered?'✓ VAULT':'⊕ VAULT'}</button>
                       <button class="btn-share" onclick="event.stopPropagation();shareCard(event,${c.id})">↑ Share</button>
+                      <button class="btn-chat${_csIsSaved(c.id)?' saved':''}" onclick="event.stopPropagation();toggleChatSave(${c.id})" id="btnChat${c.id}" title="Save to Conversations">💬 CHAT</button>
                       ${(() => {
                         if (c.collection_id == null || typeof c.timestamp !== 'number') return '';
                         const col = COLLECTIONS_BY_ID[c.collection_id];
@@ -6454,6 +6486,7 @@ function _renderDrawerContent(col, collectionId) {
               <div class="card-actions card-actions-top">
                 <button class="btn-master" onclick="event.stopPropagation();toggleEpMaster(event,${c.id})">${isMastered?'✓ VAULT':'⊕ VAULT'}</button>
                 <button class="btn-share" onclick="event.stopPropagation();shareCard(event,${c.id})">↑ Share</button>
+                <button class="btn-chat${_csIsSaved(c.id)?' saved':''}" onclick="event.stopPropagation();toggleChatSave(${c.id})" id="btnChatEp${c.id}" title="Save to Conversations">💬 CHAT</button>
                 ${(() => {
                   if (typeof c.timestamp !== 'number' || !col || !col.episode_url) return '';
                   const url = buildTimestampedUrl(col.episode_url, c.timestamp);
@@ -7238,9 +7271,76 @@ function initConceptOfTheDay() {
 // ============================================
 
 const CS_STORAGE_KEY  = 'lll_cs_v1';       // daily dismissal
-const CS_SAVED_KEY    = 'lll_cs_saved_v1'; // saved concept IDs
+const CS_SAVED_KEY    = 'lll_cs_saved_v1'; // saved concepts (full schema)
+const CS_HISTORY_KEY  = 'lll_cs_history_v1'; // recently viewed CS concepts
+const CS_HISTORY_MAX  = 50;
+const CS_SAVED_WARN   = 90;  // warn at this many saved entries
+const CS_SAVED_MAX    = 100; // soft cap (warn, don't block)
 let _csFromDrawer = false; // true when CS opened the drawer (show back button)
 const CS_SESSION_KEY  = 'lll_cs_ai_'; // + conceptId → cached AI response
+
+// ---- SHARED STORAGE HELPERS ----
+
+// Upsert a concept into lll_cs_saved_v1. Merges on ID.
+// aiData may be null (saved from card without generation).
+function _csSaveConcept(concept, aiData) {
+  try {
+    const saved = JSON.parse(localStorage.getItem(CS_SAVED_KEY) || '[]');
+    const entry = {
+      id: concept.id,
+      term: concept.term,
+      category: concept.category || '',
+      savedAt: new Date().toISOString(),
+      aiData: aiData || null
+    };
+    const idx = saved.findIndex(s => s && s.id === concept.id);
+    if (idx >= 0) {
+      // Preserve existing aiData if new entry has none
+      if (!entry.aiData && saved[idx].aiData) entry.aiData = saved[idx].aiData;
+      saved[idx] = entry;
+    } else {
+      saved.push(entry);
+    }
+    localStorage.setItem(CS_SAVED_KEY, JSON.stringify(saved));
+    return true;
+  } catch(e) { return false; }
+}
+
+// Remove a concept from lll_cs_saved_v1 by ID.
+function _csUnsaveConcept(id) {
+  try {
+    const saved = JSON.parse(localStorage.getItem(CS_SAVED_KEY) || '[]');
+    const filtered = saved.filter(s => s && s.id !== id);
+    localStorage.setItem(CS_SAVED_KEY, JSON.stringify(filtered));
+    return true;
+  } catch(e) { return false; }
+}
+
+// Check if a concept is saved.
+function _csIsSaved(id) {
+  try {
+    const saved = JSON.parse(localStorage.getItem(CS_SAVED_KEY) || '[]');
+    return saved.some(s => s && s.id === id);
+  } catch(e) { return false; }
+}
+
+// Log a CS concept view to history (ring buffer, max CS_HISTORY_MAX).
+function _csLogHistory(concept, ctx) {
+  try {
+    const hist = JSON.parse(localStorage.getItem(CS_HISTORY_KEY) || '[]');
+    hist.unshift({
+      id: concept.id,
+      term: concept.term,
+      category: concept.category || '',
+      ctx: ctx || 'partner',
+      ts: new Date().toISOString()
+    });
+    // Trim to ring buffer size
+    if (hist.length > CS_HISTORY_MAX) hist.length = CS_HISTORY_MAX;
+    localStorage.setItem(CS_HISTORY_KEY, JSON.stringify(hist));
+  } catch(e) {} // fire-and-forget
+}
+
 
 // Static opener prefixes (used during loading / fallback only)
 const CS_OPENERS = {
@@ -7348,6 +7448,7 @@ function _csLoadNewConcept(concept) {
 
 function _renderCSShell(concept) {
   if (!concept) return;
+  _csLogHistory(concept, _csCtx); // history log — fire-and-forget
   document.getElementById('csDate').textContent = formatTodayLabel();
   document.getElementById('csPromptText').textContent = concept.prompt;
   document.getElementById('csOpener').textContent = CS_OPENERS[_csCtx] || '';
@@ -7699,13 +7800,7 @@ function _csSwipeRight() {
   // Save concept
   if (!_csConcept) return;
   track('cs_swiped', { dir: 'right', concept_id: _csConcept.id });
-  try {
-    const saved = JSON.parse(localStorage.getItem(CS_SAVED_KEY) || '[]');
-    if (!saved.includes(_csConcept.id)) {
-      saved.push(_csConcept.id);
-      localStorage.setItem(CS_SAVED_KEY, JSON.stringify(saved));
-    }
-  } catch(e) {}
+  _csSaveConcept(_csConcept, _csAIData);
   // Brief confirmation
   const saveInd = document.getElementById('csSwipeSave');
   if (saveInd) {
@@ -7777,19 +7872,7 @@ function _wireCSEvents() {
   if (saveAllBtn) {
     saveAllBtn.addEventListener('click', function() {
       if (!_csConcept) return;
-      // Store concept ID + all 4 AI variations in localStorage
-      try {
-        const saved = JSON.parse(localStorage.getItem(CS_SAVED_KEY) || '[]');
-        const entry = {
-          id: _csConcept.id,
-          term: _csConcept.term,
-          savedAt: new Date().toISOString(),
-          aiData: _csAIData || null
-        };
-        const idx = saved.findIndex(s => s.id === _csConcept.id);
-        if (idx >= 0) saved[idx] = entry; else saved.push(entry);
-        localStorage.setItem(CS_SAVED_KEY, JSON.stringify(saved));
-      } catch(e) {}
+      _csSaveConcept(_csConcept, _csAIData);
       saveAllBtn.textContent = '\u2665 Saved';
       saveAllBtn.classList.add('saved');
       track('cs_saved', { concept_id: _csConcept.id });
@@ -7860,6 +7943,27 @@ function markDismissedTodayCS() {
 
 function _escHtml(str) {
   return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// Toggle a concept card's saved-to-CS state (called from card btn-chat)
+function toggleChatSave(id) {
+  const concept = CONCEPTS.find(x => x.id === id);
+  if (!concept) return;
+  const nowSaved = _csIsSaved(id);
+  if (nowSaved) {
+    _csUnsaveConcept(id);
+  } else {
+    _csSaveConcept(concept, null); // aiData null — generated later in Conversations
+    track('concept_saved_to_cs', { id: id });
+  }
+  // Update all btn-chat buttons for this concept in the DOM
+  document.querySelectorAll(`#btnChat${id}, #btnChatEp${id}`).forEach(btn => {
+    btn.classList.toggle('saved', !nowSaved);
+  });
+  // If Conversations is open, refresh its list
+  if (document.getElementById('convOverlay').classList.contains('active')) {
+    _convRenderSaved();
+  }
 }
 
 // ============================================
@@ -9146,6 +9250,686 @@ function playStreakMilestoneSFX() {
     });
   } catch(e) {}
 }
+</script>
+<!-- CONVERSATIONS OVERLAY — v1.69 -->
+<style>
+/* ── CONVERSATIONS OVERLAY ─────────────────────────────── */
+.conv-overlay {
+  position: fixed; inset: 0; z-index: 1100;
+  display: none;
+  background: rgba(13,13,13,0.7);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+.conv-overlay.active { display: flex; justify-content: flex-end; }
+
+.conv-panel {
+  width: min(520px, 100vw);
+  height: 100%;
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 0.32s cubic-bezier(0.22,0.61,0.36,1);
+  overflow: hidden;
+}
+.conv-overlay.active .conv-panel { transform: translateX(0); }
+
+/* Header */
+.conv-header {
+  display: flex; align-items: center; gap: 12px;
+  padding: 20px 22px 0;
+  flex-shrink: 0;
+}
+.conv-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem; font-weight: 700;
+  color: var(--text); flex: 1;
+}
+.conv-close {
+  background: none; border: none; cursor: pointer;
+  color: var(--muted); font-size: 1rem; padding: 6px;
+  border-radius: 6px; transition: color 0.2s;
+}
+.conv-close:hover { color: var(--text); }
+
+/* Tabs */
+.conv-tabs {
+  display: flex; gap: 0;
+  padding: 14px 22px 0;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.conv-tab {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem; letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted); padding: 8px 14px;
+  background: none; border: none; cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color 0.2s, border-color 0.2s;
+}
+.conv-tab.active { color: #c47a7a; border-bottom-color: #c47a7a; }
+.conv-tab:hover { color: var(--muted2); }
+
+/* Search + filter */
+.conv-search-bar {
+  padding: 14px 22px 0;
+  flex-shrink: 0;
+}
+.conv-search-input {
+  width: 100%; box-sizing: border-box;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 8px; padding: 9px 13px;
+  font-family: 'DM Sans', sans-serif; font-size: 0.85rem;
+  color: var(--text); outline: none;
+  transition: border-color 0.2s;
+}
+.conv-search-input::placeholder { color: var(--muted); }
+.conv-search-input:focus { border-color: #c47a7a; }
+
+.conv-filter-row {
+  display: flex; gap: 6px; padding: 10px 22px 0;
+  overflow-x: auto; scrollbar-width: none; flex-shrink: 0;
+}
+.conv-filter-row::-webkit-scrollbar { display: none; }
+.conv-filter-pill {
+  font-family: 'DM Mono', monospace; font-size: 0.58rem;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 5px 11px; border-radius: 999px;
+  border: 1px solid var(--border); background: none;
+  color: var(--muted); cursor: pointer; white-space: nowrap;
+  transition: all 0.15s;
+}
+.conv-filter-pill.active {
+  border-color: #c47a7a; color: #c47a7a;
+  background: rgba(196,122,122,0.1);
+}
+
+.conv-ctx-filter-row {
+  display: flex; gap: 6px; padding: 8px 22px 0;
+  flex-shrink: 0;
+}
+.conv-ctx-pill {
+  font-family: 'DM Mono', monospace; font-size: 0.58rem;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 4px 10px; border-radius: 6px;
+  border: 1px solid var(--border); background: none;
+  color: var(--muted); cursor: pointer;
+  transition: all 0.15s;
+}
+.conv-ctx-pill.active { border-color: #c47a7a; color: #c47a7a; background: rgba(196,122,122,0.08); }
+
+/* Storage note */
+.conv-storage-note {
+  font-family: 'DM Mono', monospace; font-size: 0.58rem;
+  letter-spacing: 0.08em; color: var(--muted);
+  padding: 8px 22px 0; flex-shrink: 0;
+}
+
+/* List */
+.conv-list {
+  flex: 1; overflow-y: auto;
+  padding: 12px 22px 24px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-hover) transparent;
+}
+.conv-list::-webkit-scrollbar { width: 3px; }
+.conv-list::-webkit-scrollbar-thumb { background: var(--border-hover); border-radius: 2px; }
+
+/* Entry row */
+.conv-entry {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  margin-bottom: 8px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.conv-entry:hover { border-color: rgba(196,122,122,0.4); }
+
+.conv-entry-head {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 14px;
+  cursor: pointer; background: var(--surface2);
+  transition: background 0.15s;
+}
+.conv-entry-head:hover { background: color-mix(in srgb, var(--surface2) 80%, rgba(196,122,122,0.1)); }
+
+.conv-entry-term {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.95rem; font-weight: 700;
+  color: var(--text); flex: 1;
+}
+.conv-entry-cat {
+  font-family: 'DM Mono', monospace; font-size: 0.55rem;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 3px 8px; border-radius: 999px;
+  border: 1px solid currentColor;
+  background: none; flex-shrink: 0;
+}
+.conv-entry-date {
+  font-family: 'DM Mono', monospace; font-size: 0.55rem;
+  letter-spacing: 0.06em; color: var(--muted);
+  flex-shrink: 0;
+}
+.conv-entry-arrow {
+  font-size: 0.65rem; color: var(--muted);
+  transition: transform 0.2s; flex-shrink: 0;
+}
+.conv-entry.open .conv-entry-arrow { transform: rotate(180deg); }
+
+/* Entry detail (expand) */
+.conv-entry-detail {
+  display: grid; grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s ease;
+  background: var(--surface);
+}
+.conv-entry.open .conv-entry-detail { grid-template-rows: 1fr; }
+.conv-entry-detail > * { min-height: 0; }
+.conv-entry-inner { padding: 0 14px; transition: padding 0.3s ease; overflow: hidden; }
+.conv-entry.open .conv-entry-inner { padding: 14px 14px 16px; }
+
+/* Inside detail: scenario tabs */
+.conv-ctx-tabs {
+  display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap;
+}
+.conv-ctx-tab {
+  font-family: 'DM Mono', monospace; font-size: 0.58rem;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 5px 11px; border-radius: 6px;
+  border: 1px solid var(--border); background: none;
+  color: var(--muted); cursor: pointer; transition: all 0.15s;
+}
+.conv-ctx-tab.active { border-color: #c47a7a; color: #c47a7a; background: rgba(196,122,122,0.08); }
+
+.conv-generate-btn {
+  width: 100%; padding: 11px;
+  border: 1px dashed rgba(196,122,122,0.4);
+  border-radius: 8px; background: none;
+  color: #c47a7a; cursor: pointer;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem; letter-spacing: 0.12em;
+  text-transform: uppercase; margin-bottom: 10px;
+  transition: all 0.2s;
+}
+.conv-generate-btn:hover { border-color: #c47a7a; background: rgba(196,122,122,0.06); }
+
+.conv-prompt-label {
+  font-family: 'DM Mono', monospace; font-size: 0.58rem;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 6px;
+}
+.conv-prompt-text {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.95rem; line-height: 1.65;
+  color: var(--text); margin-bottom: 12px;
+}
+.conv-opener-label {
+  font-family: 'DM Mono', monospace; font-size: 0.58rem;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 5px;
+}
+.conv-opener {
+  font-size: 0.82rem; color: var(--muted2);
+  line-height: 1.55; margin-bottom: 4px;
+  padding-left: 8px;
+  border-left: 2px solid rgba(196,122,122,0.4);
+}
+.conv-pitfall-label {
+  font-family: 'DM Mono', monospace; font-size: 0.58rem;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: #d4715a; margin: 10px 0 5px; opacity: 0.85;
+}
+.conv-pitfall {
+  font-size: 0.82rem; color: var(--muted2);
+  line-height: 1.55;
+  padding-left: 8px;
+  border-left: 2px solid rgba(212,113,90,0.4);
+}
+
+/* Entry footer actions */
+.conv-entry-actions {
+  display: flex; gap: 8px; margin-top: 14px; align-items: center;
+}
+.conv-action-btn {
+  font-family: 'DM Mono', monospace; font-size: 0.58rem;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 5px 11px; border-radius: 6px;
+  border: 1px solid var(--border); background: none;
+  color: var(--muted); cursor: pointer; transition: all 0.15s;
+}
+.conv-action-btn:hover { border-color: var(--border-hover); color: var(--muted2); }
+.conv-delete-btn { color: #d4715a; border-color: rgba(212,113,90,0.3); }
+.conv-delete-btn:hover { border-color: #d4715a; background: rgba(212,113,90,0.06); }
+
+/* History entry (simpler) */
+.conv-hist-entry {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+.conv-hist-entry:last-child { border-bottom: none; }
+.conv-hist-term {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.88rem; font-weight: 700;
+  color: var(--text); flex: 1;
+}
+.conv-hist-meta {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.55rem; letter-spacing: 0.08em;
+  color: var(--muted); text-align: right;
+  flex-shrink: 0;
+}
+
+/* Empty state */
+.conv-empty {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 12px; padding: 48px 24px;
+  text-align: center;
+}
+.conv-empty-icon { font-size: 2rem; opacity: 0.5; }
+.conv-empty-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem; color: var(--muted2);
+}
+.conv-empty-sub {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem; color: var(--muted);
+  line-height: 1.6; max-width: 280px;
+}
+
+/* Undo toast */
+.conv-undo-toast {
+  position: absolute; bottom: 20px; left: 50%;
+  transform: translateX(-50%) translateY(60px);
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 8px; padding: 10px 16px;
+  display: flex; align-items: center; gap: 12px;
+  font-family: 'DM Mono', monospace; font-size: 0.62rem;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted2); white-space: nowrap;
+  transition: transform 0.25s ease; z-index: 10;
+  pointer-events: none;
+}
+.conv-undo-toast.visible {
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+.conv-undo-btn {
+  background: none; border: none; cursor: pointer;
+  color: #c47a7a; font-family: inherit; font-size: inherit;
+  letter-spacing: inherit; text-transform: inherit; padding: 0;
+}
+.conv-warn-banner {
+  font-family: 'DM Mono', monospace; font-size: 0.58rem;
+  letter-spacing: 0.08em; color: var(--accent);
+  background: rgba(232,213,163,0.07); border: 1px solid rgba(232,213,163,0.2);
+  border-radius: 6px; padding: 7px 12px; margin: 0 22px 8px;
+  flex-shrink: 0;
+}
+
+/* Mobile: full-width, no left border */
+@media (max-width: 600px) {
+  .conv-panel {
+    width: 100vw;
+    border-left: none;
+    border-top: 1px solid var(--border);
+  }
+}
+</style>
+
+<div class="conv-overlay" id="convOverlay" role="dialog" aria-modal="true" aria-label="Saved Conversations">
+  <div class="conv-panel" id="convPanel">
+    <div class="conv-header">
+      <div class="conv-title">📚 Saved</div>
+      <button class="conv-close" id="convClose" aria-label="Close">✕</button>
+    </div>
+
+    <div class="conv-tabs">
+      <button class="conv-tab active" id="convTabSaved" onclick="convSwitchTab('saved')">Saved</button>
+      <button class="conv-tab" id="convTabHistory" onclick="convSwitchTab('history')">History</button>
+    </div>
+
+    <!-- Saved tab controls -->
+    <div id="convSavedControls">
+      <div class="conv-search-bar">
+        <input class="conv-search-input" id="convSearch" placeholder="Search concepts…" oninput="_convRenderSaved()" />
+      </div>
+      <div class="conv-filter-row" id="convCatFilters"></div>
+      <div class="conv-ctx-filter-row" id="convCtxFilters">
+        <button class="conv-ctx-pill active" data-ctx="all" onclick="_convSetCtxFilter(this,'all')">All scenarios</button>
+        <button class="conv-ctx-pill" data-ctx="partner" onclick="_convSetCtxFilter(this,'partner')">Partner</button>
+        <button class="conv-ctx-pill" data-ctx="friend" onclick="_convSetCtxFilter(this,'friend')">Friend</button>
+        <button class="conv-ctx-pill" data-ctx="colleague" onclick="_convSetCtxFilter(this,'colleague')">Colleague</button>
+        <button class="conv-ctx-pill" data-ctx="meeting" onclick="_convSetCtxFilter(this,'meeting')">Meeting</button>
+      </div>
+      <div class="conv-storage-note">Saved on this device only · <a href="#" style="color:var(--muted)" onclick="return false">what does this mean?</a></div>
+    </div>
+
+    <div id="convWarnBanner" class="conv-warn-banner" style="display:none"></div>
+
+    <div class="conv-list" id="convList"></div>
+
+    <div class="conv-undo-toast" id="convUndoToast">
+      <span id="convUndoMsg">Removed</span>
+      <button class="conv-undo-btn" id="convUndoBtn">Undo</button>
+    </div>
+  </div>
+</div>
+<!-- /CONVERSATIONS OVERLAY -->
+
+<script>
+// ============================================
+// CONVERSATIONS OVERLAY — v1.69
+// ============================================
+
+let _convTab = 'saved';
+let _convCatFilter = 'all';
+let _convCtxFilter = 'all';
+let _convUndoEntry = null;
+let _convUndoTimer = null;
+
+function openConversations() {
+  const overlay = document.getElementById('convOverlay');
+  overlay.classList.add('active');
+  document.body.classList.add('cotd-open'); // reuse scroll-lock class
+  _convBuildCatFilters();
+  _convRenderSaved();
+  _convCheckWarn();
+
+  // Wire close
+  document.getElementById('convClose').onclick = closeConversations;
+  overlay.addEventListener('click', function(e) {
+    if (e.target === overlay) closeConversations();
+  });
+  document.addEventListener('keydown', _convEscHandler);
+}
+
+function closeConversations() {
+  document.getElementById('convOverlay').classList.remove('active');
+  document.body.classList.remove('cotd-open');
+  document.removeEventListener('keydown', _convEscHandler);
+}
+
+function _convEscHandler(e) {
+  if (e.key === 'Escape') closeConversations();
+}
+
+function convSwitchTab(tab) {
+  _convTab = tab;
+  document.getElementById('convTabSaved').classList.toggle('active', tab === 'saved');
+  document.getElementById('convTabHistory').classList.toggle('active', tab === 'history');
+  document.getElementById('convSavedControls').style.display = tab === 'saved' ? '' : 'none';
+  document.getElementById('convWarnBanner').style.display = 'none';
+  if (tab === 'saved') { _convRenderSaved(); _convCheckWarn(); }
+  else _convRenderHistory();
+}
+
+// ---- CATEGORY FILTER PILLS ----
+
+function _convBuildCatFilters() {
+  const saved = _convGetSaved();
+  const cats = ['all', ...new Set(saved.map(s => s.category).filter(Boolean))];
+  const row = document.getElementById('convCatFilters');
+  row.innerHTML = cats.map(cat => {
+    const color = CAT_COLOR[cat] || '#e8d5a3';
+    const label = cat === 'all' ? 'All' : (cat.charAt(0).toUpperCase() + cat.slice(1));
+    return `<button class="conv-filter-pill${cat === _convCatFilter ? ' active' : ''}"
+      data-cat="${cat}" style="${cat !== 'all' ? `color:${color};border-color:${color};opacity:0.75` : ''}"
+      onclick="_convSetCatFilter(this,'${cat}')">${label}</button>`;
+  }).join('');
+}
+
+function _convSetCatFilter(btn, cat) {
+  _convCatFilter = cat;
+  document.querySelectorAll('.conv-filter-pill').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  _convRenderSaved();
+}
+
+function _convSetCtxFilter(btn, ctx) {
+  _convCtxFilter = ctx;
+  document.querySelectorAll('.conv-ctx-pill').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  _convRenderSaved();
+}
+
+// ---- DATA HELPERS ----
+
+function _convGetSaved() {
+  try { return JSON.parse(localStorage.getItem(CS_SAVED_KEY) || '[]').filter(Boolean); }
+  catch(e) { return []; }
+}
+
+function _convGetHistory() {
+  try { return JSON.parse(localStorage.getItem(CS_HISTORY_KEY) || '[]').filter(Boolean); }
+  catch(e) { return []; }
+}
+
+function _convCheckWarn() {
+  const saved = _convGetSaved();
+  const banner = document.getElementById('convWarnBanner');
+  if (saved.length >= CS_SAVED_WARN) {
+    banner.textContent = `You have ${saved.length} saved concepts — approaching the 100 limit.`;
+    banner.style.display = '';
+  } else {
+    banner.style.display = 'none';
+  }
+}
+
+// ---- RENDER: SAVED ----
+
+function _convRenderSaved() {
+  const list = document.getElementById('convList');
+  let saved = _convGetSaved();
+
+  // Search filter
+  const q = (document.getElementById('convSearch').value || '').trim().toLowerCase();
+  if (q) saved = saved.filter(s => (s.term || '').toLowerCase().includes(q));
+
+  // Category filter
+  if (_convCatFilter !== 'all') saved = saved.filter(s => s.category === _convCatFilter);
+
+  // Scenario filter — only entries that HAVE aiData for the chosen ctx
+  if (_convCtxFilter !== 'all') {
+    saved = saved.filter(s => s.aiData && s.aiData[_convCtxFilter]);
+  }
+
+  // Sort: newest first
+  saved.sort((a, b) => (b.savedAt || '') > (a.savedAt || '') ? 1 : -1);
+
+  if (!saved.length) {
+    list.innerHTML = `<div class="conv-empty">
+      <div class="conv-empty-icon">💬</div>
+      <div class="conv-empty-title">Nothing saved yet</div>
+      <div class="conv-empty-sub">Save concepts from the Prompts modal or tap 💬 CHAT on any concept card.</div>
+    </div>`;
+    return;
+  }
+
+  list.innerHTML = saved.map(entry => _convEntryHTML(entry)).join('');
+}
+
+function _convEntryHTML(entry) {
+  const catColor = CAT_COLOR[entry.category] || '#e8d5a3';
+  const dateStr = entry.savedAt ? new Date(entry.savedAt).toLocaleDateString('en-GB', {day:'numeric',month:'short'}) : '';
+  const hasAI = !!(entry.aiData);
+
+  return `<div class="conv-entry" id="convEntry${entry.id}">
+    <div class="conv-entry-head" onclick="_convToggleEntry(${entry.id})">
+      <div class="conv-entry-term">${_escHtml(entry.term)}</div>
+      <span class="conv-entry-cat" style="color:${catColor}">${entry.category || ''}</span>
+      <span class="conv-entry-date">${dateStr}</span>
+      <span class="conv-entry-arrow">▾</span>
+    </div>
+    <div class="conv-entry-detail">
+      <div class="conv-entry-inner">
+        ${hasAI ? _convDetailHTML(entry) : _convNoAIHTML(entry)}
+        <div class="conv-entry-actions">
+          <button class="conv-action-btn conv-delete-btn" onclick="_convDelete(${entry.id})">✕ Remove</button>
+          <button class="conv-action-btn" onclick="_convOpenConcept(${entry.id})">Open card →</button>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function _convNoAIHTML(entry) {
+  return `<button class="conv-generate-btn" onclick="_convOpenCS(${entry.id})">💬 Generate conversation starters →</button>`;
+}
+
+function _convDetailHTML(entry) {
+  const contexts = ['partner','friend','colleague','meeting'];
+  const labels = { partner:'Partner', friend:'Friend', colleague:'Colleague', meeting:'Meeting' };
+  const firstCtx = contexts.find(c => entry.aiData[c]) || 'partner';
+  const tabs = contexts.map(c => entry.aiData[c]
+    ? `<button class="conv-ctx-tab${c===firstCtx?' active':''}" onclick="_convSwitchCtx(${entry.id},'${c}')">${labels[c]}</button>`
+    : '').join('');
+  const d = entry.aiData[firstCtx] || {};
+  return `
+    <div class="conv-ctx-tabs">${tabs}</div>
+    <div id="convCtxContent${entry.id}">${_convCtxBlock(d)}</div>`;
+}
+
+function _convCtxBlock(d) {
+  if (!d) return '';
+  const openers = (d.openers || []).map(o => `<div class="conv-opener">${_escHtml(o)}</div>`).join('');
+  return `
+    <div class="conv-prompt-label">Conversation prompt</div>
+    <div class="conv-prompt-text">${_escHtml(d.prompt || '')}</div>
+    ${openers ? `<div class="conv-opener-label">Try saying</div>${openers}` : ''}
+    ${d.pitfall ? `<div class="conv-pitfall-label">Watch out for</div><div class="conv-pitfall">${_escHtml(d.pitfall)}</div>` : ''}`;
+}
+
+function _convSwitchCtx(id, ctx) {
+  // get entry from storage
+  const saved = _convGetSaved();
+  const entry = saved.find(s => s.id === id);
+  if (!entry || !entry.aiData) return;
+  const d = entry.aiData[ctx] || {};
+  const content = document.getElementById(`convCtxContent${id}`);
+  if (content) content.innerHTML = _convCtxBlock(d);
+  // update tab active states
+  const entryEl = document.getElementById(`convEntry${id}`);
+  if (entryEl) {
+    entryEl.querySelectorAll('.conv-ctx-tab').forEach(t => {
+      t.classList.toggle('active', t.textContent.toLowerCase() === ctx);
+    });
+  }
+}
+
+function _convToggleEntry(id) {
+  const el = document.getElementById(`convEntry${id}`);
+  if (!el) return;
+  el.classList.toggle('open');
+}
+
+function _convDelete(id) {
+  // Capture for undo
+  try {
+    const saved = _convGetSaved();
+    _convUndoEntry = saved.find(s => s.id === id) || null;
+  } catch(e) { _convUndoEntry = null; }
+
+  _csUnsaveConcept(id);
+  _convRenderSaved();
+  _convBuildCatFilters();
+  _convCheckWarn();
+
+  // Update card btn-chat states in background
+  document.querySelectorAll(`#btnChat${id}, #btnChatEp${id}`).forEach(btn => {
+    btn.classList.remove('saved');
+  });
+
+  // Show undo toast
+  clearTimeout(_convUndoTimer);
+  const toast = document.getElementById('convUndoToast');
+  const undoBtn = document.getElementById('convUndoBtn');
+  toast.classList.add('visible');
+  undoBtn.onclick = function() {
+    if (_convUndoEntry) {
+      try {
+        const saved = _convGetSaved();
+        saved.push(_convUndoEntry);
+        localStorage.setItem(CS_SAVED_KEY, JSON.stringify(saved));
+        _convUndoEntry = null;
+      } catch(e) {}
+      _convRenderSaved();
+      _convBuildCatFilters();
+      _convCheckWarn();
+    }
+    toast.classList.remove('visible');
+    clearTimeout(_convUndoTimer);
+  };
+  _convUndoTimer = setTimeout(() => {
+    toast.classList.remove('visible');
+    _convUndoEntry = null;
+  }, 4000);
+}
+
+function _convOpenCS(id) {
+  // Open CS modal pre-loaded with this concept
+  closeConversations();
+  const concept = CONCEPTS.find(x => x.id === id);
+  if (concept) {
+    setTimeout(() => {
+      _csConcept = concept;
+      _csAIData = null;
+      _renderCSShell(concept);
+      openCS();
+    }, 200);
+  }
+}
+
+function _convOpenConcept(id) {
+  // Close overlay and scroll to concept card
+  closeConversations();
+  const el = document.getElementById('cc' + id) || document.getElementById('epcc' + id);
+  if (el) {
+    setTimeout(() => {
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      if (!el.classList.contains('open')) el.click();
+    }, 350);
+  }
+}
+
+// ---- RENDER: HISTORY ----
+
+function _convRenderHistory() {
+  const list = document.getElementById('convList');
+  const hist = _convGetHistory();
+
+  if (!hist.length) {
+    list.innerHTML = `<div class="conv-empty">
+      <div class="conv-empty-icon">📖</div>
+      <div class="conv-empty-title">No history yet</div>
+      <div class="conv-empty-sub">Concepts you view in the Prompts modal will appear here.</div>
+    </div>`;
+    return;
+  }
+
+  const ctxLabel = { partner:'Partner', friend:'Friend', colleague:'Colleague', meeting:'Meeting' };
+  list.innerHTML = hist.map(h => {
+    const catColor = CAT_COLOR[h.category] || '#e8d5a3';
+    const dateStr = h.ts ? new Date(h.ts).toLocaleString('en-GB', {day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}) : '';
+    return `<div class="conv-hist-entry">
+      <div>
+        <div class="conv-hist-term">${_escHtml(h.term || '')}</div>
+        <span class="conv-entry-cat" style="color:${catColor};margin-top:3px;display:inline-block">${h.category || ''}</span>
+      </div>
+      <div class="conv-hist-meta">
+        ${ctxLabel[h.ctx] || h.ctx || ''}<br>${dateStr}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ============================================
+// END CONVERSATIONS OVERLAY
+// ============================================
 </script>
 </body>
 </html>
