@@ -1311,14 +1311,31 @@
   color: #c47a7a;
 }
 .nav-conv-btn {
-  color: var(--muted2);
-  border: 1px solid var(--border);
-  background: none;
+  display: inline-flex;
+  align-items: center;
+  color: #a85e5e;
+  border: 1px solid rgba(168,94,94,0.35);
+  background: rgba(168,94,94,0.07);
+  font-weight: 500;
 }
 .nav-conv-btn:hover {
-  border-color: #c47a7a;
-  color: #c47a7a;
-  background: rgba(196,122,122,0.07);
+  border-color: #a85e5e;
+  color: #a85e5e;
+  background: rgba(168,94,94,0.13);
+}
+.conv-nav-emoji {
+  display: inline-block;
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+  transition: opacity 0.2s, width 0.2s;
+  margin-right: 0;
+}
+.nav-conv-btn:hover .conv-nav-emoji {
+  opacity: 1;
+  width: 1.2em;
+  margin-right: 3px;
+  animation: csEmojiPop 0.4s ease;
 }
 .cs-nav-emoji {
   display: inline-block;
@@ -2678,6 +2695,16 @@
     letter-spacing: 0.12em; text-transform: uppercase;
     color: var(--muted); margin-bottom: 4px;
   }
+  .cs-use-instead-btn {
+    margin-top: 10px;
+    font-family: 'DM Mono', monospace; font-size: 0.6rem;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    background: none; border: 1px solid rgba(196,122,122,0.4);
+    border-radius: 6px; padding: 5px 12px;
+    color: #c47a7a; cursor: pointer;
+    transition: all 0.2s; display: block; width: 100%;
+  }
+  .cs-use-instead-btn:hover { border-color: #c47a7a; background: rgba(196,122,122,0.08); }
 
   /* Report back */
   .cs-feedback-row {
@@ -4890,8 +4917,9 @@
     <a class="nav-link" onclick="playNavSFX();scrollToSection('app')">Concepts</a>
     <a class="nav-link" onclick="playNavSFX();toggleVault();scrollToSection('app')">Vault</a>
     <a class="nav-link" onclick="openCotdFromNav();playNavSFX()">Today</a>
+    <div class="nav-tools-divider"></div>
     <a class="nav-link nav-cs-btn" onclick="openCSFromNav();playNavSFX()" title="Conversation Starters"><span class="cs-nav-emoji" aria-hidden="true">💬</span>Prompts</a>
-    <a class="nav-link nav-conv-btn" onclick="openConversations();playNavSFX()" title="Saved Conversations">📚 Saved</a>
+    <a class="nav-link nav-conv-btn" onclick="openConversations();playNavSFX()" title="Saved Conversations"><span class="conv-nav-emoji" aria-hidden="true">📚</span>Saved</a>
     <div class="nav-tools-divider"></div>
     <a class="nav-link nav-map-btn" href="/map" onclick="track('map_opened');playNavSFX()">◈ Map</a>
     <div class="nav-divider"></div>
@@ -7597,7 +7625,9 @@ function _renderRelated(concept) {
       <div class="cs-expand-section">
         <div class="cs-expand-label">Use it</div>
         <div>${_escHtml(rc.prompt || '')}</div>
-      </div></div>`;
+      </div>
+      <button class="cs-use-instead-btn" onclick="_csSwapConcept(${rc.id})">↑ Use this instead</button>
+    </div>`;
 
     btn.addEventListener('click', function() {
       const isOpen = expand.classList.contains('open');
@@ -7621,6 +7651,50 @@ function _renderRelated(concept) {
   });
   // Show "Related concepts" label only if we have pills
   if (label) label.style.display = pool.length > 0 ? 'block' : 'none';
+}
+
+// ---- USE THIS INSTEAD ----
+// Swaps the active CS concept with a related one — full reset, ready to generate.
+function _csSwapConcept(id) {
+  const concept = CONCEPTS.find(c => c.id === id);
+  if (!concept) return;
+
+  // Clear cached AI data for the new concept (force fresh generation)
+  _csConcept = concept;
+  _csAIData  = null;
+
+  // Re-render the shell (updates pill, prompt text, date, related pills)
+  _renderCSShell(concept);
+
+  // Reset generate button
+  const genBtn = document.getElementById('csGenerateBtn');
+  const genRow = document.getElementById('csGenerateRow');
+  if (genBtn) { genBtn.disabled = false; genBtn.classList.remove('loading'); genBtn.textContent = '\u2736 Generate conversation starters'; }
+  if (genRow) genRow.style.display = 'block';
+
+  // Reset context display to default opener text
+  document.getElementById('csOpener').textContent = CS_OPENERS[_csCtx] || '';
+  document.getElementById('csPromptText').textContent = concept.prompt;
+  const coachEl = document.getElementById('csCoaching');
+  if (coachEl) coachEl.style.display = 'none';
+
+  // Reset save button state
+  const saveBtn = document.getElementById('csSaveAllBtn');
+  if (saveBtn) { saveBtn.classList.remove('saved'); saveBtn.textContent = '\u2661 Save all'; }
+
+  // Collapse the concept pill expand if open
+  const pill = document.getElementById('csConceptPill');
+  const expand = document.getElementById('csConceptExpand');
+  if (pill) { pill.classList.remove('expanded'); }
+  if (expand) { expand.classList.remove('open'); }
+
+  // Brief flash on the concept pill to confirm the swap
+  const pillWrap = document.getElementById('csConceptPillWrap');
+  if (pillWrap) {
+    pillWrap.style.transition = 'opacity 0.15s';
+    pillWrap.style.opacity = '0.4';
+    setTimeout(() => { pillWrap.style.opacity = ''; }, 180);
+  }
 }
 
 // ---- AI CALL ----
