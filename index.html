@@ -121,6 +121,15 @@
   [data-theme="light"] .ep-drawer-backdrop.open {
     background: rgba(0,0,0,0.65);
   }
+  /* Drawer category pills — more visible in light mode */
+  [data-theme="light"] .ep-drawer-cat-pill {
+    opacity: 0.75;
+  }
+  [data-theme="light"] .ep-drawer-cat-pill:hover { opacity: 1; }
+  [data-theme="light"] .ep-drawer-cat-pill.active {
+    opacity: 1;
+    background: color-mix(in srgb, var(--col-color, var(--accent)) 22%, transparent);
+  }
 
   /* Drawer body scrollbar in light */
   [data-theme="light"] .ep-drawer-body {
@@ -814,6 +823,16 @@
     white-space: nowrap;
   }
   .ep-drawer-listen:hover { color: var(--accent); border-color: var(--accent); }
+  .ep-drawer-back-cs {
+    font-family: 'DM Mono', monospace; font-size: 0.62rem;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    background: none; border: 1px solid rgba(196,122,122,0.4);
+    border-radius: 6px; padding: 5px 12px;
+    color: #c47a7a; cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    align-self: center;
+  }
+  .ep-drawer-back-cs:hover { border-color: #c47a7a; background: rgba(196,122,122,0.08); }
   .ep-drawer-close {
     background: none;
     border: 0.5px solid var(--border-hover);
@@ -2398,6 +2417,12 @@
     0%   { background-position: 200% 0; }
     100% { background-position: -200% 0; }
   }
+  .cs-skel-msg {
+    font-family: 'DM Sans', sans-serif; font-size: 0.8rem;
+    color: var(--muted); font-style: italic;
+    margin-top: 10px; line-height: 1.5;
+    min-height: 1.2em;
+  }
 
   .cs-opener {
     font-family: 'DM Mono', monospace; font-size: 0.65rem;
@@ -2461,6 +2486,7 @@
     font-size: 0.82rem; color: var(--muted2);
     line-height: 1.45; flex: 1;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    align-self: center;
   }
   .cs-pill-arrow {
     font-size: 0.7rem; color: var(--muted);
@@ -2470,33 +2496,47 @@
   .cs-concept-pill.expanded .cs-pill-arrow { transform: rotate(180deg); }
   .cs-concept-pill.expanded { border-color: #c47a7a; border-radius: 10px 10px 0 0; border-bottom: none; }
   .cs-concept-expand {
-    display: none;
+    display: grid;
+    grid-template-rows: 0fr;
     background: var(--surface2); border: 1px solid #c47a7a;
     border-top: none; border-radius: 0 0 10px 10px;
-    padding: 14px 16px 16px; margin-bottom: 0;
+    overflow: hidden;
+    transition: grid-template-rows 0.35s ease;
   }
-  .cs-concept-expand.open { display: block; }
+  .cs-concept-expand > * { min-height: 0; }
+  .cs-concept-expand .cs-expand-inner { padding: 0 16px; transition: padding 0.35s ease; }
+  .cs-concept-expand.open { grid-template-rows: 1fr; }
+  .cs-concept-expand.open .cs-expand-inner { padding: 14px 16px 16px; }
   .cs-concept-plain {
     font-size: 0.9rem; line-height: 1.65; color: var(--muted2);
     margin-bottom: 10px;
   }
-  .cs-concept-meta {
-    font-family: 'DM Mono', monospace; font-size: 0.62rem;
-    letter-spacing: 0.1em; text-transform: uppercase;
-    color: var(--muted); display: flex; gap: 10px; flex-wrap: wrap;
-    margin-bottom: 10px;
+  .cs-episode-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: 'DM Mono', monospace; font-size: 0.6rem;
+    letter-spacing: 0.09em; text-transform: uppercase;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 6px; padding: 5px 11px;
+    color: var(--muted2); margin-bottom: 10px;
+    max-width: 100%; overflow: hidden; text-overflow: ellipsis;
+    white-space: nowrap;
   }
-  .cs-concept-meta a { color: var(--muted2); text-decoration: none; }
-  .cs-concept-meta a:hover { color: #c47a7a; }
-  .cs-open-episode-btn {
-    font-family: 'DM Mono', monospace; font-size: 0.62rem;
+  .cs-episode-pill-icon { opacity: 0.5; flex-shrink: 0; }
+  .cs-episode-actions {
+    display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+  }
+  .cs-episode-action-btn {
+    font-family: 'DM Mono', monospace; font-size: 0.6rem;
     letter-spacing: 0.1em; text-transform: uppercase;
     background: none; border: 1px solid var(--border);
-    border-radius: 6px; padding: 5px 12px;
-    color: var(--muted2); cursor: pointer;
+    border-radius: 6px; padding: 5px 11px;
+    color: var(--muted2); cursor: pointer; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 5px;
     transition: border-color 0.2s, color 0.2s;
   }
-  .cs-open-episode-btn:hover { border-color: #c47a7a; color: #c47a7a; }
+  .cs-episode-action-btn:hover { border-color: #c47a7a; color: #c47a7a; }
+  /* keep old class name as alias for JS that still uses it */
+  .cs-open-episode-btn { display: none; }
 
   /* Divider */
   .cs-modal-divider {
@@ -2607,12 +2647,18 @@
   .cs-pill-arrow { font-size: 0.55rem; transition: transform 0.2s; display: inline-block; }
   .cs-related-pill-btn.expanded .cs-pill-arrow { transform: rotate(180deg); }
   .cs-related-expand {
-    display: none; margin-top: 6px;
+    display: grid;
+    grid-template-rows: 0fr;
+    margin-top: 6px;
     background: var(--surface2); border: 1px solid var(--border);
-    border-radius: 8px; padding: 12px 14px; font-size: 0.83rem;
-    line-height: 1.6; color: var(--muted2);
+    border-radius: 8px; overflow: hidden;
+    font-size: 0.83rem; line-height: 1.6; color: var(--muted2);
+    transition: grid-template-rows 0.32s ease;
   }
-  .cs-related-expand.open { display: block; }
+  .cs-related-expand > * { min-height: 0; }
+  .cs-related-expand .cs-expand-inner-r { padding: 0 14px; transition: padding 0.32s ease; }
+  .cs-related-expand.open { grid-template-rows: 1fr; }
+  .cs-related-expand.open .cs-expand-inner-r { padding: 12px 14px; }
   .cs-expand-section { margin-bottom: 8px; }
   .cs-expand-section:last-child { margin-bottom: 0; }
   .cs-expand-label {
@@ -4955,11 +5001,10 @@
         <span class="cs-pill-arrow" id="csConceptPillArrow">▾</span>
       </button>
       <div class="cs-concept-expand" id="csConceptExpand">
-        <div class="cs-concept-plain" id="csConceptPlain"></div>
-        <div class="cs-concept-meta" id="csConceptMeta"></div>
-        <button class="cs-open-episode-btn" id="csOpenEpisodeBtn" style="display:none">
-          ↳ See more from this episode
-        </button>
+        <div class="cs-expand-inner">
+          <div class="cs-concept-plain" id="csConceptPlain"></div>
+          <div class="cs-concept-meta" id="csConceptMeta"></div>
+        </div>
       </div>
     </div>
 
@@ -5193,7 +5238,8 @@
       <div class="ep-drawer-title" id="epDrawerTitle"></div>
       <div class="ep-drawer-pills" id="epDrawerPills"></div>
     </div>
-    <button class="ep-drawer-close" onclick="closeEpisodeDrawer()">✕</button>
+    <button class="ep-drawer-back-cs" id="epDrawerBackCS" style="display:none" onclick="closeEpisodeDrawer();openCSFromNav()">← Prompts</button>
+  <button class="ep-drawer-close" onclick="closeEpisodeDrawer()">✕</button>
   </div>
   <div class="ep-drawer-mix" id="epDrawerMix"></div>
   <div class="ep-drawer-cat-filter" id="epDrawerCatFilter"></div>
@@ -6508,6 +6554,10 @@ function initMagneticDrawerPills() {
   });
 }
 function closeEpisodeDrawer() {
+  // If returning from CS, hide the back button
+  const backBtn = document.getElementById('epDrawerBackCS');
+  if (backBtn) backBtn.style.display = 'none';
+  _csFromDrawer = false;
   // Phase 1 (instant): start the slide-down animation. Drawer is still position:fixed,
   // body sections still display:none — so nothing heavy happens this frame.
   document.getElementById('epBackdrop').classList.remove('open');
@@ -7189,6 +7239,7 @@ function initConceptOfTheDay() {
 
 const CS_STORAGE_KEY  = 'lll_cs_v1';       // daily dismissal
 const CS_SAVED_KEY    = 'lll_cs_saved_v1'; // saved concept IDs
+let _csFromDrawer = false; // true when CS opened the drawer (show back button)
 const CS_SESSION_KEY  = 'lll_cs_ai_'; // + conceptId → cached AI response
 
 // Static opener prefixes (used during loading / fallback only)
@@ -7310,32 +7361,43 @@ function _renderCSShell(concept) {
   const plainTrunc = plain.length > 130 ? plain.slice(0, 127) + '…' : plain;
   document.getElementById('csConceptPlain').textContent = plain; // full text (visible when expanded)
 
-  // Source + timestamp link
+  // Source + timestamp link — redesigned as pill + action row
   const col = concept.collection_id != null ? COLLECTIONS_BY_ID[concept.collection_id] : null;
   const metaEl = document.getElementById('csConceptMeta');
-  let metaParts = [];
-  if (col) metaParts.push(col.title.length > 48 ? col.title.slice(0,45)+'…' : col.title);
+
+  let metaHtml = '';
+  // Action row: Watch at timestamp + See more — one line
+  const actions = [];
   if (col && concept.timestamp && col.episode_url) {
-    const base = col.episode_url.split('?')[0];
-    const tsUrl = base + '?t=' + concept.timestamp;
+    const tsUrl = buildTimestampedUrl(col.episode_url, concept.timestamp);
     const mins = Math.floor(concept.timestamp / 60);
     const secs = String(concept.timestamp % 60).padStart(2, '0');
-    metaParts.push(`<a href="${tsUrl}" target="_blank" rel="noopener">↗ Watch at ${mins}:${secs}</a>`);
+    if (tsUrl) actions.push(`<a class="cs-episode-action-btn" href="${tsUrl}" target="_blank" rel="noopener">▷ Watch at ${mins}:${secs}</a>`);
   } else if (col && col.episode_url) {
-    metaParts.push(`<a href="${col.episode_url}" target="_blank" rel="noopener">↗ Watch episode</a>`);
+    actions.push(`<a class="cs-episode-action-btn" href="${col.episode_url}" target="_blank" rel="noopener">↗ Watch episode</a>`);
   }
-  metaEl.innerHTML = metaParts.join('<span style="opacity:0.3">·</span>');
-
-  // "See more from this episode" button
-  const epBtn = document.getElementById('csOpenEpisodeBtn');
   if (col && col.id != null) {
-    epBtn.style.display = 'inline-block';
-    epBtn.onclick = function() {
-      closeCS(true);
+    actions.push(`<button class="cs-episode-action-btn" id="csOpenEpisodeBtn">↳ More from this episode</button>`);
+  }
+  if (actions.length) metaHtml += `<div class="cs-episode-actions">${actions.join('')}</div>`;
+
+  // Episode title pill — below actions
+  if (col) {
+    const epTitle = col.title.length > 55 ? col.title.slice(0,52)+'…' : col.title;
+    metaHtml += `<div class="cs-episode-pill" style="margin-top:8px"><span class="cs-episode-pill-icon">◎</span>${_escHtml(epTitle)}</div>`;
+  }
+  metaEl.innerHTML = metaHtml;
+
+  // Re-wire the dynamically created episode button
+  const epBtnDyn = document.getElementById('csOpenEpisodeBtn');
+  if (epBtnDyn && col) {
+    epBtnDyn.onclick = function() {
+      closeCS(false); // don't mark dismissed — user may return
+      _csFromDrawer = true;
       openEpisodeDrawer(col.id);
+      const backBtn = document.getElementById('epDrawerBackCS');
+      if (backBtn) backBtn.style.display = 'inline-block';
     };
-  } else {
-    epBtn.style.display = 'none';
   }
 
   // Wire concept pill toggle
@@ -7344,6 +7406,7 @@ function _renderCSShell(concept) {
   pill.onclick = function() {
     const open = expand.classList.toggle('open');
     pill.classList.toggle('expanded', open);
+    playExpandSFX(open);
   };
 
   // Hide coaching until generated; show/reset generate button
@@ -7425,7 +7488,7 @@ function _renderRelated(concept) {
 
     const expand = document.createElement('div');
     expand.className = 'cs-related-expand';
-    expand.innerHTML = `
+    expand.innerHTML = `<div class="cs-expand-inner-r">
       <div class="cs-expand-section">
         <div class="cs-expand-label">Analogy</div>
         <div>${_escHtml(rc.analogy || '')}</div>
@@ -7433,7 +7496,7 @@ function _renderRelated(concept) {
       <div class="cs-expand-section">
         <div class="cs-expand-label">Use it</div>
         <div>${_escHtml(rc.prompt || '')}</div>
-      </div>`;
+      </div></div>`;
 
     btn.addEventListener('click', function() {
       const isOpen = expand.classList.contains('open');
@@ -7444,9 +7507,11 @@ function _renderRelated(concept) {
         if (prev) prev.classList.remove('expanded');
         if (prevExp) prevExp.classList.remove('open');
       }
-      expand.classList.toggle('open', !isOpen);
-      btn.classList.toggle('expanded', !isOpen);
-      _openPillId = !isOpen ? rc.id : null;
+      const opening = !isOpen;
+      expand.classList.toggle('open', opening);
+      btn.classList.toggle('expanded', opening);
+      _openPillId = opening ? rc.id : null;
+      playExpandSFX(opening);
     });
 
     wrap.appendChild(btn);
@@ -7469,12 +7534,13 @@ function _loadAI(concept) {
       _csAIData = JSON.parse(cached);
       _showCSLoading(false);
       _applyAIToCtx(_csCtx);
-      return;
+      return; // cached — no loading messages needed
     }
   } catch(e) {}
 
   _csLoading = true;
   _showCSLoading(true);
+  _startLoadingMessages();
 
   fetch('/api/cs-generate', {
     method: 'POST',
@@ -7495,16 +7561,85 @@ function _loadAI(concept) {
       _csAIData = data.contexts;
       // Cache in sessionStorage
       try { sessionStorage.setItem(cacheKey, JSON.stringify(_csAIData)); } catch(e) {}
+      _stopLoadingMessages();
       _showCSLoading(false);
       _applyAIToCtx(_csCtx);
     } else {
+      _stopLoadingMessages();
       _showCSLoading(false); // Show fallback (original prompt already rendered)
     }
   })
   .catch(function() {
     _csLoading = false;
+    _stopLoadingMessages();
     _showCSLoading(false); // Fail silently — original prompt still shown
   });
+}
+
+// Loading phase messages — shown in the skeleton area during AI generation
+const _CS_LOAD_MSGS = [
+  "Setting the mood for you and your partner… 🕯️",
+  "Making sure you won't accidentally offend your friend…",
+  "Brainstorming material your colleagues will actually respect…",
+  "Ensuring you're the most interesting person in the room… 😎",
+];
+let _loadMsgTimer = null;
+let _loadMsgIdx = 0;
+
+function _startLoadingMessages() {
+  _loadMsgIdx = 0;
+  _updateLoadMsg();
+  _loadMsgTimer = setInterval(function() {
+    _loadMsgIdx = (_loadMsgIdx + 1) % _CS_LOAD_MSGS.length;
+    _updateLoadMsg();
+  }, 2800);
+}
+
+function _updateLoadMsg() {
+  const skel = document.getElementById('csSkeleton');
+  if (!skel) return;
+  // Replace last skel-line content with the message
+  let msgEl = skel.querySelector('.cs-skel-msg');
+  if (!msgEl) {
+    msgEl = document.createElement('div');
+    msgEl.className = 'cs-skel-msg';
+    skel.appendChild(msgEl);
+  }
+  msgEl.style.opacity = '0';
+  msgEl.style.transition = 'opacity 0.4s';
+  requestAnimationFrame(function() {
+    msgEl.textContent = _CS_LOAD_MSGS[_loadMsgIdx];
+    msgEl.style.opacity = '1';
+  });
+}
+
+function _stopLoadingMessages() {
+  if (_loadMsgTimer) { clearInterval(_loadMsgTimer); _loadMsgTimer = null; }
+  const skel = document.getElementById('csSkeleton');
+  if (skel) { const m = skel.querySelector('.cs-skel-msg'); if (m) m.remove(); }
+}
+
+// Lightweight expand/collapse swoosh SFX
+function playExpandSFX(opening) {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  try {
+    const ctx = _getSfxCtx();
+    const now = ctx.currentTime;
+    const dur = 0.12;
+    const buf = ctx.createBuffer(1, Math.floor(ctx.sampleRate * dur), ctx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < data.length; i++) data[i] = (Math.random() * 2 - 1);
+    const src = ctx.createBufferSource(); src.buffer = buf;
+    const lp = ctx.createBiquadFilter(); lp.type = 'lowpass';
+    lp.frequency.setValueAtTime(opening ? 300 : 900, now);
+    lp.frequency.exponentialRampToValueAtTime(opening ? 1800 : 200, now + dur);
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(0, now);
+    gain.gain.linearRampToValueAtTime(0.07, now + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + dur);
+    src.connect(lp); lp.connect(gain); gain.connect(ctx.destination);
+    src.start(now); src.stop(now + dur);
+  } catch(e) {}
 }
 
 function _showCSLoading(on) {
