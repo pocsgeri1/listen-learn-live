@@ -2652,6 +2652,18 @@
     letter-spacing: 0.14em; text-transform: uppercase;
     color: var(--muted); margin-bottom: 8px; margin-top: 0.25rem;
   }
+  /* v1.71 related toggle */
+  .cs-related-toggle-btn {
+    display: flex; align-items: center; justify-content: space-between;
+    width: 100%; background: none; border: none;
+    border-top: 1px solid var(--border);
+    padding: 10px 0; cursor: pointer;
+    font-family: 'DM Mono', monospace; font-size: 0.62rem;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--muted2); transition: color 0.2s;
+  }
+  .cs-related-toggle-btn:hover { color: var(--text); }
+  .cs-related-toggle-arrow { transition: transform 0.2s; }
 
   /* Generate button */
   .cs-generate-row {
@@ -4937,9 +4949,10 @@
 
   <div class="nav-island" id="navIsland">
     <!-- v1.70: nav collapsed to 3 items. Hidden items preserved below. -->
-    <a class="nav-link" onclick="openCSFromNav();playNavSFX()">Today</a>
-    <a class="nav-link" onclick="playNavSFX();scrollToSection('app')">Library</a>
-    <a class="nav-link nav-conv-btn" onclick="openConversations();playNavSFX()" title="Saved ideas" id="navSavedLink"><span id="navSavedBadge" class="nav-saved-badge" style="display:none"></span>Saved</a>
+    <a class="nav-link nav-spark-btn" onclick="openCSFromNav();playNavSFX()">Spark</a>
+    <a class="nav-link nav-browse-btn" onclick="playNavSFX();scrollToSection('app')">Browse</a>
+    <a class="nav-link nav-conv-btn" onclick="openConversations();playNavSFX()" title="Saved ideas" id="navSavedLink"><span id="navSavedBadge" class="nav-saved-badge" style="display:none"></span><span class="nav-stash-emoji">🔖 </span>Stash</a>
+    <a class="nav-link nav-epic-btn" id="navEpicBtn" onclick="openEgg();playNavSFX()" title="I feel epic!">😎 I feel epic!</a>
     <!-- hidden v1.70: Episodes, Shorts, Vault, Map, Quiz, Prompts, Today(COTD) -->
     <!-- <a class="nav-link" onclick="playNavSFX();scrollToSection('episodesSection')">Episodes</a> -->
     <!-- <a class="nav-link" onclick="playNavSFX();scrollToSection('shortsSection')">Shorts</a> -->
@@ -4963,14 +4976,12 @@
 
 <!-- MOBILE NAV MENU -->
 <div class="nav-mobile-menu" id="navMobileMenu">
-  <!-- v1.70: mobile nav collapsed to 3 items + sign up + how it works -->
+  <!-- v1.71: mobile nav — Spark | Browse | Stash | Sign Up -->
+  <button class="nav-mobile-link" onclick="openCSFromNav();playNavSFX();closeMobileNav()">◎ Spark</button>
+  <button class="nav-mobile-link" onclick="playNavSFX();scrollToSection('app');closeMobileNav()">◈ Browse</button>
+  <button class="nav-mobile-link nav-mobile-conv" onclick="playNavSFX();openConversations();closeMobileNav()">◆ Stash</button>
+  <div class="nav-mobile-divider"></div>
   <button class="nav-mobile-link nav-mobile-signup" onclick="playNavSFX();scrollToSection('signup');closeMobileNav()">◉ Sign Up 🎁 — Free Founding Access</button>
-  <div class="nav-mobile-divider"></div>
-  <button class="nav-mobile-link" onclick="openCSFromNav();playNavSFX();closeMobileNav()">◎ Today</button>
-  <button class="nav-mobile-link" onclick="playNavSFX();scrollToSection('app');closeMobileNav()">◈ Library</button>
-  <button class="nav-mobile-link nav-mobile-conv" onclick="playNavSFX();openConversations();closeMobileNav()">📚 Saved</button>
-  <div class="nav-mobile-divider"></div>
-  <button class="nav-mobile-link" onclick="openHiw();closeMobileNav()">◌ How it works</button>
   <!-- hidden v1.70 — preserved:
   <button class="nav-mobile-link nav-mobile-map" onclick="playNavSFX();track('map_opened');window.location='/map'">◈ Map</button>
   <button class="nav-mobile-link nav-mobile-quiz" onclick="playNavSFX();openQuiz();closeMobileNav()">◈ Quiz</button>
@@ -5129,20 +5140,25 @@
 -->
 <!-- END COTD disabled block -->
 
-<!-- CONVERSATION STARTER MODAL — v1.68 -->
+<!-- CONVERSATION STARTER MODAL — v1.71 -->
 <div class="cs-overlay" id="csOverlay" role="dialog" aria-modal="true" aria-labelledby="csHeadline">
   <div class="cs-card" id="csCard">
     <button class="cs-close" id="csClose" aria-label="Close">✕</button>
 
     <div class="cs-eyebrow">
       <span class="cs-eyebrow-dot"></span>
-      <span>Daily Prompt</span>
+      <span>Daily Spark</span>
       <span class="cs-eyebrow-date" id="csDate"></span>
     </div>
 
-    <h2 class="cs-headline" id="csHeadline">Today’s Conversation Starter</h2>
+    <h2 class="cs-headline" id="csHeadline">Today's Conversation Starter</h2>
 
-    <!-- Concept expandable pill -->
+    <!-- 1. Category selector -->
+    <div class="cs-section-label">Category</div>
+    <div class="cs-cat-row" id="csCatRow"></div>
+
+    <!-- 2. Concept expandable pill -->
+    <div class="cs-section-label" style="margin-top:0.75rem">Concept</div>
     <div class="cs-concept-pill-wrap" id="csConceptPillWrap">
       <button class="cs-concept-pill" id="csConceptPill">
         <span class="cs-concept-pill-term" id="csConceptPillTerm">—</span>
@@ -5157,14 +5173,8 @@
       </div>
     </div>
 
-    <div class="cs-modal-divider"></div>
-
-    <!-- Category filter -->
-    <div class="cs-section-label">Category</div>
-    <div class="cs-cat-row" id="csCatRow"></div>
-
-    <!-- Scenario buttons -->
-    <div class="cs-section-label">Scenario</div>
+    <!-- 3. Scenario selector -->
+    <div class="cs-section-label" style="margin-top:0.75rem">Scenario</div>
     <div class="cs-context-row">
       <button class="cs-ctx-btn active" data-ctx="partner">Partner</button>
       <button class="cs-ctx-btn" data-ctx="friend">Friend</button>
@@ -5172,7 +5182,12 @@
       <button class="cs-ctx-btn" data-ctx="meeting">Meeting</button>
     </div>
 
-    <!-- Swipeable prompt block -->
+    <!-- 4. Generate button -->
+    <div class="cs-generate-row" id="csGenerateRow">
+      <button class="cs-generate-btn" id="csGenerateBtn">✶ Generate conversation starter</button>
+    </div>
+
+    <!-- 5. Swipeable prompt block -->
     <div class="cs-prompt-block" id="csPromptBlock">
       <div class="cs-skeleton" id="csSkeleton" style="display:none">
         <div class="cs-skel-line cs-skel-line--short"></div>
@@ -5187,12 +5202,7 @@
       <div class="cs-swipe-save" id="csSwipeSave">♡ Saved</div>
     </div>
 
-    <!-- Generate button -->
-    <div class="cs-generate-row" id="csGenerateRow">
-      <button class="cs-generate-btn" id="csGenerateBtn">✶ Generate conversation starters</button>
-    </div>
-
-    <!-- Coaching layer -->
+    <!-- 6. Coaching layer -->
     <div class="cs-coaching" id="csCoaching" style="display:none">
       <div class="cs-coaching-section">
         <div class="cs-coaching-label">You could say:</div>
@@ -5204,22 +5214,34 @@
       </div>
     </div>
 
-    <!-- Related concepts -->
-    <div class="cs-related-label" id="csRelatedLabel" style="display:none">Related concepts</div>
-    <div class="cs-related-row" id="csRelatedRow"></div>
+    <!-- 7. Divider -->
+    <div class="cs-modal-divider" style="margin:1rem 0 0.75rem"></div>
 
-    <!-- Report back -->
+    <!-- 8. Report back + feedback message -->
     <div class="cs-feedback-row" id="csFeedbackRow" style="display:none">
       <span class="cs-feedback-label">Did it land?</span>
       <button class="cs-fb-btn" id="csFbUp" aria-label="Yes">👍</button>
       <button class="cs-fb-btn" id="csFbDown" aria-label="No">👎</button>
     </div>
+    <div class="cs-feedback-msg" id="csFeedbackMsg" style="display:none;font-family:'DM Sans',sans-serif;font-size:0.82rem;color:var(--accent);line-height:1.5;margin-bottom:0.75rem;font-style:italic"></div>
 
+    <!-- 9. Actions — Continue removed -->
     <div class="cs-actions">
       <button class="cs-btn cs-btn--primary" id="csShareBtn">↑ Copy &amp; Share</button>
-      <button class="cs-btn cs-btn--save" id="csSaveAllBtn">♡ Save all</button>
-      <button class="cs-btn" id="csCloseBtn">Continue →</button>
+      <button class="cs-btn cs-btn--save" id="csSaveAllBtn">♡ Save</button>
     </div>
+
+    <!-- 10. Related concepts — collapsed by default -->
+    <div id="csRelatedToggle" style="display:none">
+      <button class="cs-related-toggle-btn" id="csRelatedToggleBtn" onclick="_csToggleRelated()">
+        <span>Related concepts</span><span class="cs-related-toggle-arrow">▾</span>
+      </button>
+      <div id="csRelatedCollapse" style="display:none">
+        <div class="cs-related-label" id="csRelatedLabel" style="display:none">Related concepts</div>
+        <div class="cs-related-row" id="csRelatedRow"></div>
+      </div>
+    </div>
+
   </div>
 </div>
 <!-- /CONVERSATION STARTER MODAL -->
@@ -5242,7 +5264,7 @@
 
     <p class="hero-sub">The people who always have something interesting to say aren't smarter.<br>They just don't let good ideas die in their earbuds.<br><br>Neither does <span class="hero-brand-name">Epistemic</span>.</p>
 
-    <a href="#app" class="hero-cta" onclick="playStartSFX()">
+    <a class="hero-cta" onclick="openCSFromNav();return false;" href="#">
       Say something worth saying
       <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M8 3l5 5-5 5"/></svg>
     </a>
@@ -5331,7 +5353,7 @@
 <!-- /EPISODES SECTION -->
 
 <!-- SHORTS SECTION -->
-<div id="shortsSection" class="episodes-section" style="display:none; background: var(--bg);">
+<div id="shortsSection" class="episodes-section" style="display:none!important; visibility:hidden; background: var(--bg);">
   <div class="episodes-controls">
     <div class="episodes-app-header">
       <div class="app-title">Browse <em>shorts</em></div>
@@ -5349,13 +5371,9 @@
   <div class="app-controls">
   <div class="app-header">
     <div class="app-title">Browse <em>concepts</em></div>
-    <div style="display:flex;align-items:center;gap:1rem;">
-      <!-- v1.70: subtle quiz entry inside library -->
-      <button onclick="playNavSFX();openQuiz()" style="font-family:'DM Mono',monospace;font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--teal);background:none;border:none;cursor:pointer;opacity:0.7;transition:opacity 0.2s;" onmouseenter="this.style.opacity='1'" onmouseleave="this.style.opacity='0.7'" title="Test yourself">◈ Quiz</button>
-      <div class="search-wrap">
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M10 10l3.5 3.5"/></svg>
-        <input type="text" id="search" placeholder="Search concepts..." />
-      </div>
+    <div class="search-wrap">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M10 10l3.5 3.5"/></svg>
+      <input type="text" id="search" placeholder="Search concepts..." />
     </div>
   </div>
 
@@ -5514,8 +5532,8 @@
   </div>
 </div>
 <!-- /SHARE CARD MODAL -->
-<!-- DAILY GOAL BAR -->
-<div class="daily-goal">
+<!-- DAILY GOAL BAR — v1.71 hidden: no streak/gamification for target persona -->
+<div class="daily-goal" style="display:none" aria-hidden="true">
   <div class="daily-goal-top-row">
     <div class="daily-goal-left">
       <div class="daily-label">Today's goal</div>
@@ -5966,7 +5984,7 @@ function buildCats() {
     <div class="cat-card${activeCat===cat.id?' active':''}" data-cat="${cat.id}" onclick="setCat('${cat.id}')" style="color:${cat.color}">
       <span class="cat-icon">${cat.icon}</span><span class="cat-name">${cat.name}</span>
     </div>
-  `).join('');
+  `).join('') + `<div class="cat-card cat-quiz-pill" onclick="playNavSFX();openQuiz()" title="Test yourself">◈ Quiz</div>`;
 }
 
 function filtered() {
@@ -6035,7 +6053,7 @@ function buildGrid() {
                   </div>
                   <div class="card-back">
                     <div class="card-actions card-actions-top">
-                      <button class="btn-master" onclick="event.stopPropagation();toggleMaster(event,${c.id})">${isMastered?'✓ VAULT':'⊕ VAULT'}</button>
+                      <!-- v1.71: vault/master hidden — <button class="btn-master" ...> preserved below -->
                       <button class="btn-share" onclick="event.stopPropagation();shareCard(event,${c.id})">↑ Share</button>
                       <button class="btn-chat${_csIsSaved(c.id)?' saved':''}" onclick="event.stopPropagation();toggleChatSave(${c.id})" id="btnChat${c.id}" title="Save to Conversations">💬 CHAT</button>
                       ${(() => {
@@ -6608,7 +6626,7 @@ function _renderDrawerContent(col, collectionId) {
             </div>
             <div class="card-back">
               <div class="card-actions card-actions-top">
-                <button class="btn-master" onclick="event.stopPropagation();toggleEpMaster(event,${c.id})">${isMastered?'✓ VAULT':'⊕ VAULT'}</button>
+                <!-- v1.71: vault/master hidden -->
                 <button class="btn-share" onclick="event.stopPropagation();shareCard(event,${c.id})">↑ Share</button>
                 <button class="btn-chat${_csIsSaved(c.id)?' saved':''}" onclick="event.stopPropagation();toggleChatSave(${c.id})" id="btnChatEp${c.id}" title="Save to Conversations">💬 CHAT</button>
                 ${(() => {
@@ -7406,11 +7424,26 @@ const CS_SESSION_KEY  = 'lll_cs_ai_'; // + conceptId → cached AI response
 // ---- SHARED STORAGE HELPERS ----
 
 // v1.70 — Saved badge: reads lll_cs_saved_v1, updates nav badge live.
+// Badge count resets daily (visual only — concepts stay permanently).
+const _NAV_BADGE_DATE_KEY = 'lll_badge_date_v1';
+const _NAV_BADGE_COUNT_KEY = 'lll_badge_count_v1';
+
+function _getTodayStr() {
+  return new Date().toISOString().slice(0, 10);
+}
+
 function refreshNavBadge() {
   const badge = document.getElementById('navSavedBadge');
   if (!badge) return;
   try {
-    const count = JSON.parse(localStorage.getItem(CS_SAVED_KEY) || '[]').filter(Boolean).length;
+    const today = _getTodayStr();
+    const storedDate = localStorage.getItem(_NAV_BADGE_DATE_KEY);
+    if (storedDate !== today) {
+      // New day — reset count
+      localStorage.setItem(_NAV_BADGE_DATE_KEY, today);
+      localStorage.setItem(_NAV_BADGE_COUNT_KEY, '0');
+    }
+    const count = parseInt(localStorage.getItem(_NAV_BADGE_COUNT_KEY) || '0', 10);
     if (count === 0) {
       badge.style.display = 'none';
     } else {
@@ -7419,6 +7452,27 @@ function refreshNavBadge() {
       badge.classList.toggle('badge-alert', count >= 5);
     }
   } catch(e) { badge.style.display = 'none'; }
+}
+
+function _incrementNavBadge() {
+  try {
+    const today = _getTodayStr();
+    if (localStorage.getItem(_NAV_BADGE_DATE_KEY) !== today) {
+      localStorage.setItem(_NAV_BADGE_DATE_KEY, today);
+      localStorage.setItem(_NAV_BADGE_COUNT_KEY, '0');
+    }
+    const cur = parseInt(localStorage.getItem(_NAV_BADGE_COUNT_KEY) || '0', 10);
+    localStorage.setItem(_NAV_BADGE_COUNT_KEY, String(cur + 1));
+    refreshNavBadge();
+  } catch(e) {}
+}
+
+function _decrementNavBadge() {
+  try {
+    const cur = parseInt(localStorage.getItem(_NAV_BADGE_COUNT_KEY) || '0', 10);
+    localStorage.setItem(_NAV_BADGE_COUNT_KEY, String(Math.max(0, cur - 1)));
+    refreshNavBadge();
+  } catch(e) {}
 }
 
 // Upsert a concept into lll_cs_saved_v1. Merges on ID.
@@ -7443,6 +7497,7 @@ function _csSaveConcept(concept, aiData) {
     }
     localStorage.setItem(CS_SAVED_KEY, JSON.stringify(saved));
     refreshNavBadge();
+    _incrementNavBadge();
     return true;
   } catch(e) { return false; }
 }
@@ -7454,6 +7509,7 @@ function _csUnsaveConcept(id) {
     const filtered = saved.filter(s => s && s.id !== id);
     localStorage.setItem(CS_SAVED_KEY, JSON.stringify(filtered));
     refreshNavBadge();
+    _decrementNavBadge();
     return true;
   } catch(e) { return false; }
 }
@@ -7467,9 +7523,14 @@ function _csIsSaved(id) {
 }
 
 // Log a CS concept view to history (ring buffer, max CS_HISTORY_MAX).
+// v1.71: deduplicates — same concept on same day logs only once.
 function _csLogHistory(concept, ctx) {
   try {
     const hist = JSON.parse(localStorage.getItem(CS_HISTORY_KEY) || '[]');
+    const todayStr = new Date().toISOString().slice(0, 10);
+    // Deduplicate: skip if same concept already logged today
+    const alreadyToday = hist.some(h => h.id === concept.id && h.ts && h.ts.slice(0, 10) === todayStr);
+    if (alreadyToday) return;
     hist.unshift({
       id: concept.id,
       term: concept.term,
@@ -7477,10 +7538,9 @@ function _csLogHistory(concept, ctx) {
       ctx: ctx || 'partner',
       ts: new Date().toISOString()
     });
-    // Trim to ring buffer size
     if (hist.length > CS_HISTORY_MAX) hist.length = CS_HISTORY_MAX;
     localStorage.setItem(CS_HISTORY_KEY, JSON.stringify(hist));
-  } catch(e) {} // fire-and-forget
+  } catch(e) {}
 }
 
 
@@ -7669,7 +7729,15 @@ function _renderCSShell(concept) {
 function _applyAIToCtx(ctx) {
   if (!_csAIData) return;
   const d = _csAIData[ctx];
-  if (!d) return;
+  if (!d) {
+    // This ctx hasn't been generated yet — show generate button again
+    const genRow = document.getElementById('csGenerateRow');
+    const genBtn = document.getElementById('csGenerateBtn');
+    if (genRow) genRow.style.display = 'block';
+    if (genBtn) { genBtn.disabled = false; genBtn.classList.remove('loading'); genBtn.textContent = '✶ Generate conversation starter'; }
+    document.getElementById('csCoaching').style.display = 'none';
+    return;
+  }
 
   document.getElementById('csOpener').textContent = CS_OPENERS[ctx] || '';
   document.getElementById('csPromptText').textContent = d.prompt;
@@ -7763,8 +7831,23 @@ function _renderRelated(concept) {
     wrap.appendChild(expand);
     row.appendChild(wrap);
   });
-  // Show "Related concepts" label only if we have pills
-  if (label) label.style.display = pool.length > 0 ? 'block' : 'none';
+  // Show toggle wrapper only if we have pills
+  const toggleWrap = document.getElementById('csRelatedToggle');
+  if (toggleWrap) toggleWrap.style.display = pool.length > 0 ? 'block' : 'none';
+  // Reset collapsed state on new concept
+  const collapse = document.getElementById('csRelatedCollapse');
+  const arrow = document.querySelector('.cs-related-toggle-arrow');
+  if (collapse) collapse.style.display = 'none';
+  if (arrow) arrow.style.transform = '';
+}
+
+function _csToggleRelated() {
+  const collapse = document.getElementById('csRelatedCollapse');
+  const arrow = document.querySelector('.cs-related-toggle-arrow');
+  if (!collapse) return;
+  const open = collapse.style.display === 'none';
+  collapse.style.display = open ? 'block' : 'none';
+  if (arrow) arrow.style.transform = open ? 'rotate(180deg)' : '';
 }
 
 // ---- USE THIS INSTEAD ----
@@ -7811,75 +7894,111 @@ function _csSwapConcept(id) {
   }
 }
 
-// ---- AI CALL ----
+// ---- AI CALL — v1.71: generates only for selected scenario ----
+// _csAIData is now keyed by ctx: { partner: {...}, friend: {...}, ... }
+// Only the requested ctx is generated; others generated on-demand when user switches tab.
 
-function _loadAI(concept) {
+function _loadAI(concept, ctx) {
   if (_csLoading) return;
-  // Check session cache
-  const cacheKey = CS_SESSION_KEY + concept.id;
+  ctx = ctx || _csCtx;
+
+  // Check per-ctx session cache
+  const cacheKey = CS_SESSION_KEY + concept.id + '_' + ctx;
   try {
     const cached = sessionStorage.getItem(cacheKey);
     if (cached) {
-      _csAIData = JSON.parse(cached);
+      if (!_csAIData) _csAIData = {};
+      _csAIData[ctx] = JSON.parse(cached);
       _showCSLoading(false);
-      _applyAIToCtx(_csCtx);
-      return; // cached — no loading messages needed
+      _applyAIToCtx(ctx);
+      return;
     }
   } catch(e) {}
 
   _csLoading = true;
   _showCSLoading(true);
-  _startLoadingMessages();
+  _startLoadingMessages(ctx);
 
   fetch('/api/cs-generate', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ concept: {
-      term: concept.term,
-      hook: concept.hook,
-      plain: concept.plain,
-      analogy: concept.analogy,
-      prompt: concept.prompt,
-      category: concept.category
-    }})
+    body: JSON.stringify({
+      concept: {
+        term: concept.term,
+        hook: concept.hook,
+        plain: concept.plain,
+        analogy: concept.analogy,
+        prompt: concept.prompt,
+        category: concept.category
+      },
+      ctx: ctx
+    })
   })
   .then(r => r.json())
   .then(data => {
     _csLoading = false;
-    if (data && data.contexts) {
-      _csAIData = data.contexts;
-      // Cache in sessionStorage
-      try { sessionStorage.setItem(cacheKey, JSON.stringify(_csAIData)); } catch(e) {}
-      _stopLoadingMessages();
-      _showCSLoading(false);
-      _applyAIToCtx(_csCtx);
-    } else {
-      _stopLoadingMessages();
-      _showCSLoading(false); // Show fallback (original prompt already rendered)
+    _stopLoadingMessages();
+    _showCSLoading(false);
+    // Support both single-ctx response { ctx: {...} } and legacy all-ctx { contexts: {...} }
+    let ctxData = null;
+    if (data && data.ctx) {
+      ctxData = data.ctx;
+    } else if (data && data.contexts && data.contexts[ctx]) {
+      ctxData = data.contexts[ctx];
+    }
+    if (ctxData) {
+      if (!_csAIData) _csAIData = {};
+      _csAIData[ctx] = ctxData;
+      try { sessionStorage.setItem(cacheKey, JSON.stringify(ctxData)); } catch(e) {}
+      _applyAIToCtx(ctx);
     }
   })
   .catch(function() {
     _csLoading = false;
     _stopLoadingMessages();
-    _showCSLoading(false); // Fail silently — original prompt still shown
+    _showCSLoading(false);
   });
 }
 
-// Loading phase messages — shown in the skeleton area during AI generation
-const _CS_LOAD_MSGS = [
-  "Setting the mood for you and your partner… 🕯️",
-  "Making sure you won't accidentally offend your friend…",
-  "Brainstorming material your colleagues will actually respect…",
-  "Ensuring you're the most interesting person in the room… 😎",
-];
+// Loading phase messages — per scenario, with emojis, rotating every 2.8s
+const _CS_LOAD_MSGS = {
+  partner: [
+    "Setting the mood for tonight's conversation… 🕯️",
+    "Finding something worth saying that doesn't sound rehearsed… 💬",
+    "Making sure you don't accidentally start a philosophy lecture… 😅",
+    "Warming up the right words for the right person… ✨"
+  ],
+  friend: [
+    "Finding something your friend will actually find interesting… 🍺",
+    "Making sure you won't sound like you just read a self-help book… 📖",
+    "Looking for a conversation that doesn't end in 'anyway, how are you'… 😄",
+    "Sourcing the right tangent for a proper catch-up… 🎯"
+  ],
+  colleague: [
+    "Finding something smart to say that doesn't sound like a TED talk… 💼",
+    "Making sure you're the most interesting person in the next meeting… 😎",
+    "Locating an idea that lands between too casual and too intense… ⚖️",
+    "Brainstorming material your colleagues will actually respect… 🧠"
+  ],
+  meeting: [
+    "Preparing something worth saying out loud in a room full of people… 🎤",
+    "Finding the insight that makes everyone go quiet in a good way… 🤫",
+    "Making sure you won't just nod along again… 🙋",
+    "Drafting something that survives eye contact across a conference table… 👀"
+  ]
+};
+
 let _loadMsgTimer = null;
 let _loadMsgIdx = 0;
+let _loadMsgCtx = 'partner';
 
-function _startLoadingMessages() {
+function _startLoadingMessages(ctx) {
+  _loadMsgCtx = ctx || _csCtx || 'partner';
   _loadMsgIdx = 0;
   _updateLoadMsg();
   _loadMsgTimer = setInterval(function() {
-    _loadMsgIdx = (_loadMsgIdx + 1) % _CS_LOAD_MSGS.length;
+    const pool = _CS_LOAD_MSGS[_loadMsgCtx] || _CS_LOAD_MSGS.partner;
+    _loadMsgIdx = (_loadMsgIdx + 1) % pool.length;
     _updateLoadMsg();
   }, 2800);
 }
@@ -7887,17 +8006,17 @@ function _startLoadingMessages() {
 function _updateLoadMsg() {
   const skel = document.getElementById('csSkeleton');
   if (!skel) return;
-  // Replace last skel-line content with the message
   let msgEl = skel.querySelector('.cs-skel-msg');
   if (!msgEl) {
     msgEl = document.createElement('div');
     msgEl.className = 'cs-skel-msg';
     skel.appendChild(msgEl);
   }
+  const pool = _CS_LOAD_MSGS[_loadMsgCtx] || _CS_LOAD_MSGS.partner;
   msgEl.style.opacity = '0';
   msgEl.style.transition = 'opacity 0.4s';
   requestAnimationFrame(function() {
-    msgEl.textContent = _CS_LOAD_MSGS[_loadMsgIdx];
+    msgEl.textContent = pool[_loadMsgIdx];
     msgEl.style.opacity = '1';
   });
 }
@@ -8001,7 +8120,7 @@ function _csSwipeRight() {
 // ---- WIRE EVENTS ----
 
 function _wireCSEvents() {
-  // Generate button — user-triggered AI call
+  // Generate button — user-triggered AI call for selected scenario only
   const genBtn = document.getElementById('csGenerateBtn');
   if (genBtn) {
     genBtn.addEventListener('click', function() {
@@ -8009,28 +8128,32 @@ function _wireCSEvents() {
       genBtn.disabled = true;
       genBtn.classList.add('loading');
       genBtn.textContent = '✦ Generating…';
-      track('cs_generate_clicked', { concept_id: _csConcept.id });
-      _loadAI(_csConcept);
+      track('cs_generate_clicked', { concept_id: _csConcept.id, ctx: _csCtx });
+      _loadAI(_csConcept, _csCtx);
     });
   }
 
-  // Context buttons
+  // Context buttons — auto-generate for new scenario if already generated once
   document.querySelectorAll('.cs-ctx-btn').forEach(btn => {
     btn.addEventListener('click', function() {
       document.querySelectorAll('.cs-ctx-btn').forEach(b => b.classList.remove('active'));
       this.classList.add('active');
       _csCtx = this.dataset.ctx;
-      if (_csAIData) {
+      if (_csAIData && _csAIData[_csCtx]) {
+        // Already cached for this ctx
         _applyAIToCtx(_csCtx);
+      } else if (_csAIData) {
+        // Generated at least once — auto-generate for this new ctx
+        _loadAI(_csConcept, _csCtx);
       } else {
+        // Nothing generated yet — just update opener label
         document.getElementById('csOpener').textContent = CS_OPENERS[_csCtx] || '';
       }
     });
   });
 
   // Close buttons
-  document.getElementById('csClose').onclick   = function() { closeCS(true); };
-  document.getElementById('csCloseBtn').onclick = function() { closeCS(true); };
+  document.getElementById('csClose').onclick = function() { closeCS(true); };
 
   // Share / copy
   document.getElementById('csShareBtn').onclick = function() {
@@ -8073,13 +8196,13 @@ function _wireCSEvents() {
     this.classList.add('voted-up');
     document.getElementById('csFbDown').classList.remove('voted-down');
     track('prompt_feedback', { result: 'up', concept_id: _csConcept ? _csConcept.id : null, ctx: _csCtx });
-    setTimeout(() => _csFeedbackDone(), 800);
+    setTimeout(() => _csFeedbackDone(true), 800);
   };
   document.getElementById('csFbDown').onclick = function() {
     this.classList.add('voted-down');
     document.getElementById('csFbUp').classList.remove('voted-up');
     track('prompt_feedback', { result: 'down', concept_id: _csConcept ? _csConcept.id : null, ctx: _csCtx });
-    setTimeout(() => _csFeedbackDone(), 800);
+    setTimeout(() => _csFeedbackDone(false), 800);
   };
 
   // Backdrop + Esc
@@ -8093,11 +8216,38 @@ function _wireCSEvents() {
   _wireSwipe();
 }
 
-function _csFeedbackDone() {
+const _CS_FB_UP_MSGS = [
+  "That's one real conversation this actually helped with. The rest of the internet just wanted your attention.",
+  "Most apps want your time. This one wants you to leave and go talk to someone. Glad it worked.",
+  "One idea. One real exchange. That's the whole point.",
+  "You just did the thing most people only think about doing. Nice.",
+  "The best ideas aren't the ones you remember — they're the ones you actually use.",
+  "Someone had a better evening because of that. Go you.",
+  "That's the only metric that matters. Well done.",
+  "See you tomorrow. Bring more curiosity."
+];
+const _CS_FB_DOWN_MSGS = [
+  "Fair enough. Try another concept — the right one is in there somewhere.",
+  "Not every idea lands in every room. Pick a different one and try again.",
+  "That's useful to know. The concept library has 500+ more where that came from.",
+  "Some ideas need the right moment. This one's just warming up.",
+  "No worries. Swipe to a different concept and see what clicks.",
+  "The miss is data too. Try a different category — sometimes that's all it takes.",
+  "Noted. Not every idea fits every crowd. Find your crowd's concept.",
+  "Happens. Try another scenario — sometimes 'friend' works where 'colleague' doesn't."
+];
+
+function _csFeedbackDone(isUp) {
   const fr = document.getElementById('csFeedbackRow');
-  if (!fr) return;
-  fr.innerHTML = '<span class="cs-feedback-label" style="color:var(--accent)">Thanks 🙏</span>';
-  setTimeout(function() { fr.style.display = 'none'; }, 2000);
+  const msg = document.getElementById('csFeedbackMsg');
+  if (fr) fr.style.display = 'none';
+  if (msg) {
+    const pool = isUp ? _CS_FB_UP_MSGS : _CS_FB_DOWN_MSGS;
+    msg.textContent = pool[Math.floor(Math.random() * pool.length)];
+    msg.style.display = 'block';
+    setTimeout(() => { if (msg) msg.style.display = 'none'; }, 6000);
+  }
+}
 }
 
 // ---- OPEN / CLOSE ----
@@ -9503,11 +9653,105 @@ function playStreakMilestoneSFX() {
 .conv-overlay {
   position: fixed; inset: 0; z-index: 1100;
   display: none;
-  background: rgba(13,13,13,0.7);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  background: rgba(13,13,13,0.55);
+  /* v1.71: backdrop-filter removed — caused 500-1300ms pointer lag on desktop */
 }
 .conv-overlay.active { display: flex; justify-content: flex-end; }
+
+/* v1.71 quiz pill in category row */
+.cat-quiz-pill {
+  background: rgba(122,175,138,0.15) !important;
+  color: #7aaf8a !important;
+  border-color: rgba(122,175,138,0.5) !important;
+  font-weight: 600;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.06em;
+}
+.cat-quiz-pill:hover {
+  background: rgba(122,175,138,0.28) !important;
+  border-color: #7aaf8a !important;
+  transform: translateY(-1px);
+}
+.nav-epic-btn {
+  opacity: 0;
+  pointer-events: none;
+  max-width: 0;
+  overflow: hidden;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  transition: opacity 0.25s, max-width 0.3s, padding 0.3s;
+  white-space: nowrap;
+  color: var(--accent) !important;
+  border-color: rgba(232,213,163,0.3) !important;
+}
+.nav-island:hover .nav-epic-btn {
+  opacity: 1;
+  pointer-events: all;
+  max-width: 160px;
+  padding-left: 12px !important;
+  padding-right: 12px !important;
+}
+/* v1.71 — hover emojis for Spark / Browse / Stash */
+.nav-spark-btn::before,
+.nav-browse-btn::before,
+.nav-conv-btn .nav-hover-emoji {
+  display: inline-block;
+  opacity: 0; width: 0; overflow: hidden;
+  transition: opacity 0.2s, width 0.2s, margin 0.2s;
+  margin-right: 0;
+}
+.nav-spark-btn:hover::before  { content: '💬 '; opacity: 1; width: auto; margin-right: 2px; }
+.nav-browse-btn:hover::before { content: '📚 '; opacity: 1; width: auto; margin-right: 2px; }
+.nav-stash-emoji {
+  display: inline-block; opacity: 0; width: 0; overflow: hidden;
+  transition: opacity 0.2s, width 0.2s; margin-right: 0;
+}
+.nav-conv-btn:hover .nav-stash-emoji { opacity: 1; width: auto; margin-right: 2px; }
+.conv-date-group { margin-bottom: 4px; }
+.conv-date-divider {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted2);
+  padding: 14px 18px 6px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2px;
+}
+/* v1.71 history entry layout */
+.conv-hist-entry {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--border);
+}
+.conv-hist-left { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 0; }
+.conv-hist-ts {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--muted2);
+  white-space: nowrap;
+  text-align: right;
+  padding-top: 2px;
+  flex-shrink: 0;
+}
+.conv-hist-action-btn {
+  margin-top: 6px;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  background: none;
+  border: 1px solid rgba(232,213,163,0.3);
+  border-radius: 999px;
+  padding: 4px 12px;
+  cursor: pointer;
+  width: fit-content;
+  transition: border-color 0.2s, color 0.2s;
+}
+.conv-hist-action-btn:hover { border-color: var(--accent); }
 
 .conv-panel {
   width: min(520px, 100vw);
@@ -9830,7 +10074,7 @@ function playStreakMilestoneSFX() {
 <div class="conv-overlay" id="convOverlay" role="dialog" aria-modal="true" aria-label="Saved Conversations">
   <div class="conv-panel" id="convPanel">
     <div class="conv-header">
-      <div class="conv-title">📚 Saved</div>
+      <div class="conv-title">🔖 Stash</div>
       <button class="conv-close" id="convClose" aria-label="Close">✕</button>
     </div>
 
@@ -9845,13 +10089,14 @@ function playStreakMilestoneSFX() {
         <input class="conv-search-input" id="convSearch" placeholder="Search concepts…" oninput="_convRenderSaved()" />
       </div>
       <div class="conv-filter-row" id="convCatFilters"></div>
-      <div class="conv-ctx-filter-row" id="convCtxFilters">
+      <!-- v1.71: scenario filter hidden — all cards show all scenarios -->
+      <!-- <div class="conv-ctx-filter-row" id="convCtxFilters">
         <button class="conv-ctx-pill active" data-ctx="all" onclick="_convSetCtxFilter(this,'all')">All scenarios</button>
         <button class="conv-ctx-pill" data-ctx="partner" onclick="_convSetCtxFilter(this,'partner')">Partner</button>
         <button class="conv-ctx-pill" data-ctx="friend" onclick="_convSetCtxFilter(this,'friend')">Friend</button>
         <button class="conv-ctx-pill" data-ctx="colleague" onclick="_convSetCtxFilter(this,'colleague')">Colleague</button>
         <button class="conv-ctx-pill" data-ctx="meeting" onclick="_convSetCtxFilter(this,'meeting')">Meeting</button>
-      </div>
+      </div> -->
       <div class="conv-storage-note">Saved on this device only · <a href="#" style="color:var(--muted)" onclick="return false">what does this mean?</a></div>
     </div>
 
@@ -9979,11 +10224,6 @@ function _convRenderSaved() {
   // Category filter
   if (_convCatFilter !== 'all') saved = saved.filter(s => s.category === _convCatFilter);
 
-  // Scenario filter — only entries that HAVE aiData for the chosen ctx
-  if (_convCtxFilter !== 'all') {
-    saved = saved.filter(s => s.aiData && s.aiData[_convCtxFilter]);
-  }
-
   // Sort: newest first
   saved.sort((a, b) => (b.savedAt || '') > (a.savedAt || '') ? 1 : -1);
 
@@ -9991,12 +10231,37 @@ function _convRenderSaved() {
     list.innerHTML = `<div class="conv-empty">
       <div class="conv-empty-icon">💬</div>
       <div class="conv-empty-title">Nothing saved yet</div>
-      <div class="conv-empty-sub">Save concepts from the Prompts modal or tap 💬 CHAT on any concept card.</div>
+      <div class="conv-empty-sub">Save concepts from the Spark modal or tap 💬 CHAT on any concept card.</div>
     </div>`;
     return;
   }
 
-  list.innerHTML = saved.map(entry => _convEntryHTML(entry)).join('');
+  // Group by date
+  const groups = {};
+  const groupOrder = [];
+  saved.forEach(entry => {
+    const dateKey = entry.savedAt ? entry.savedAt.slice(0, 10) : 'unknown';
+    if (!groups[dateKey]) { groups[dateKey] = []; groupOrder.push(dateKey); }
+    groups[dateKey].push(entry);
+  });
+
+  const todayStr = new Date().toISOString().slice(0, 10);
+  const yesterdayStr = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+
+  function formatGroupDate(dateKey) {
+    if (dateKey === todayStr) return 'Today';
+    if (dateKey === yesterdayStr) return 'Yesterday';
+    if (dateKey === 'unknown') return 'Earlier';
+    const d = new Date(dateKey + 'T12:00:00');
+    return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long' });
+  }
+
+  list.innerHTML = groupOrder.map(dateKey => `
+    <div class="conv-date-group">
+      <div class="conv-date-divider">${formatGroupDate(dateKey)}</div>
+      ${groups[dateKey].map(entry => _convEntryHTML(entry)).join('')}
+    </div>
+  `).join('');
 }
 
 function _convEntryHTML(entry) {
@@ -10152,25 +10417,36 @@ function _convRenderHistory() {
     list.innerHTML = `<div class="conv-empty">
       <div class="conv-empty-icon">📖</div>
       <div class="conv-empty-title">No history yet</div>
-      <div class="conv-empty-sub">Concepts you view in the Prompts modal will appear here.</div>
+      <div class="conv-empty-sub">Concepts you view in the Spark modal will appear here.</div>
     </div>`;
     return;
   }
 
-  const ctxLabel = { partner:'Partner', friend:'Friend', colleague:'Colleague', meeting:'Meeting' };
   list.innerHTML = hist.map(h => {
     const catColor = CAT_COLOR[h.category] || '#e8d5a3';
     const dateStr = h.ts ? new Date(h.ts).toLocaleString('en-GB', {day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}) : '';
     return `<div class="conv-hist-entry">
-      <div>
+      <div class="conv-hist-left">
         <div class="conv-hist-term">${_escHtml(h.term || '')}</div>
-        <span class="conv-entry-cat" style="color:${catColor};margin-top:3px;display:inline-block">${h.category || ''}</span>
+        <span class="conv-entry-cat" style="color:${catColor}">${h.category || ''}</span>
+        <button class="conv-hist-action-btn" onclick="_convOpenCSById(${h.id})">Ready to talk about it?</button>
       </div>
-      <div class="conv-hist-meta">
-        ${ctxLabel[h.ctx] || h.ctx || ''}<br>${dateStr}
-      </div>
+      <div class="conv-hist-ts">${dateStr}</div>
     </div>`;
   }).join('');
+}
+
+function _convOpenCSById(id) {
+  closeConversations();
+  const concept = CONCEPTS.find(x => x.id === id);
+  if (concept) {
+    setTimeout(() => {
+      _csConcept = concept;
+      _csAIData = null;
+      _renderCSShell(concept);
+      openCS();
+    }, 200);
+  }
 }
 
 // ============================================
