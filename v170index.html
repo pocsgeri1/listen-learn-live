@@ -4950,7 +4950,7 @@
   <div class="nav-island" id="navIsland">
     <!-- v1.70: nav collapsed to 3 items. Hidden items preserved below. -->
     <a class="nav-link nav-spark-btn" onclick="openCSFromNav();playNavSFX()">Spark</a>
-    <a class="nav-link nav-browse-btn" onclick="playNavSFX();scrollToSection('app')">Browse</a>
+    <a class="nav-link nav-browse-btn" onclick="playNavSFX();scrollToSection('episodesSection')">Browse</a>
     <a class="nav-link nav-conv-btn" onclick="openConversations();playNavSFX()" title="Saved ideas" id="navSavedLink"><span id="navSavedBadge" class="nav-saved-badge" style="display:none"></span><span class="nav-stash-emoji">🔖 </span>Stash</a>
     <a class="nav-link nav-epic-btn" id="navEpicBtn" onclick="openEgg();playNavSFX()" title="I feel epic!">😎 I feel epic!</a>
     <!-- hidden v1.70: Episodes, Shorts, Vault, Map, Quiz, Prompts, Today(COTD) -->
@@ -4978,7 +4978,7 @@
 <div class="nav-mobile-menu" id="navMobileMenu">
   <!-- v1.71: mobile nav — Spark | Browse | Stash | Sign Up -->
   <button class="nav-mobile-link" onclick="openCSFromNav();playNavSFX();closeMobileNav()">◎ Spark</button>
-  <button class="nav-mobile-link" onclick="playNavSFX();scrollToSection('app');closeMobileNav()">◈ Browse</button>
+  <button class="nav-mobile-link" onclick="playNavSFX();scrollToSection('episodesSection');closeMobileNav()">◈ Browse</button>
   <button class="nav-mobile-link nav-mobile-conv" onclick="playNavSFX();openConversations();closeMobileNav()">◆ Stash</button>
   <div class="nav-mobile-divider"></div>
   <button class="nav-mobile-link nav-mobile-signup" onclick="playNavSFX();scrollToSection('signup');closeMobileNav()">◉ Sign Up 🎁 — Free Founding Access</button>
@@ -5338,7 +5338,7 @@
 
 </section>
 <!-- EPISODES SECTION -->
-<div id="episodesSection" class="episodes-section" style="display:none">
+<div id="episodesSection" class="episodes-section">
   <div class="episodes-controls">
     <div class="episodes-app-header">
       <div class="app-title">Browse <em>episodes</em></div>
@@ -7571,8 +7571,7 @@ function initConversationStarter() {
 
   _renderCSShell(_csConcept);
   _wireCSEvents();
-  openCS();
-  // AI generation is user-triggered — no auto-load
+  // v1.71: do NOT auto-open on page load — user opens via Spark nav button
 }
 
 // Called from nav — always opens regardless of dismissed state
@@ -8247,7 +8246,6 @@ function _csFeedbackDone(isUp) {
     msg.style.display = 'block';
     setTimeout(() => { if (msg) msg.style.display = 'none'; }, 6000);
   }
-}
 }
 
 // ---- OPEN / CLOSE ----
