@@ -2390,6 +2390,9 @@
   }
   @keyframes csPulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
   .cs-eyebrow-date { margin-left: auto; }
+  @media (max-width: 600px) {
+    .cs-eyebrow { padding-right: 2rem; } /* prevent date overlapping ✕ button */
+  }
 
   .cs-headline {
     font-family: 'Playfair Display', serif; font-size: 1.5rem;
@@ -2781,6 +2784,11 @@
     .cs-prompt-text { font-size: 0.95rem; }
     .cs-actions { flex-direction: column; }
     .cs-btn { text-align: center; }
+    /* P18: prevent concept expand content overflow */
+    .cs-concept-plain { font-size: 0.82rem; line-height: 1.55; }
+    .cs-episode-actions { flex-wrap: nowrap; overflow-x: auto; gap: 6px; }
+    .cs-episode-action-btn { flex-shrink: 0; font-size: 0.55rem; padding: 4px 8px; }
+    .cs-episode-pill { font-size: 0.55rem; }
   }
 
   /* ============================================
@@ -4952,7 +4960,6 @@
     <a class="nav-link nav-spark-btn" onclick="openCSFromNav();playNavSFX()">Spark</a>
     <a class="nav-link nav-browse-btn" onclick="playNavSFX();scrollToSection('episodesSection')">Browse</a>
     <a class="nav-link nav-conv-btn" onclick="openConversations();playNavSFX()" title="Saved ideas" id="navSavedLink"><span id="navSavedBadge" class="nav-saved-badge" style="display:none"></span><span class="nav-stash-emoji">🔖 </span>Stash</a>
-    <a class="nav-link nav-epic-btn" id="navEpicBtn" onclick="openEgg();playNavSFX()" title="I feel epic!">😎 I feel epic!</a>
     <!-- hidden v1.70: Episodes, Shorts, Vault, Map, Quiz, Prompts, Today(COTD) -->
     <!-- <a class="nav-link" onclick="playNavSFX();scrollToSection('episodesSection')">Episodes</a> -->
     <!-- <a class="nav-link" onclick="playNavSFX();scrollToSection('shortsSection')">Shorts</a> -->
@@ -4962,6 +4969,8 @@
     <!-- <a class="nav-link nav-map-btn" href="/map" onclick="track('map_opened');playNavSFX()">◈ Map</a> -->
     <!-- <button class="nav-quiz-btn" id="navQuizBtn" onclick="playNavSFX();openQuiz()">◈ Quiz</button> -->
   </div>
+  <!-- v1.71: epic button standalone, outside island, fades in on nav hover -->
+  <a class="nav-epic-standalone" id="navEpicBtn" onclick="openEgg();playNavSFX()" title="I feel epic!">😎 I feel epic!</a>
 
   <div class="nav-right">
     <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode" onclick="toggleTheme()">☽</button>
@@ -5034,11 +5043,29 @@
 .egg-close:hover { color: var(--text); }
 .egg-prompt {
   font-family: 'Playfair Display', serif;
-  font-size: clamp(1.1rem, 3vw, 1.4rem);
+  font-size: clamp(1.05rem, 2.5vw, 1.25rem);
   font-style: italic;
-  line-height: 1.5;
-  color: var(--accent);
+  line-height: 1.55;
+  color: var(--text);
   margin-bottom: 1.75rem;
+}
+.egg-lead {
+  display: block;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  font-style: normal;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.6rem;
+}
+.egg-question {
+  display: block;
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.15rem, 3vw, 1.45rem);
+  font-style: italic;
+  color: var(--text);
+  line-height: 1.5;
 }
 .egg-another {
   font-family: 'DM Mono', monospace;
@@ -5229,14 +5256,13 @@
     <div class="cs-actions">
       <button class="cs-btn cs-btn--primary" id="csShareBtn">↑ Copy &amp; Share</button>
       <button class="cs-btn cs-btn--save" id="csSaveAllBtn">♡ Save</button>
+      <button class="cs-btn" id="csRelatedBtn" onclick="_csToggleRelated()" style="display:none">◈ Related</button>
     </div>
 
     <!-- 10. Related concepts — collapsed by default -->
-    <div id="csRelatedToggle" style="display:none">
-      <button class="cs-related-toggle-btn" id="csRelatedToggleBtn" onclick="_csToggleRelated()">
-        <span>Related concepts</span><span class="cs-related-toggle-arrow">▾</span>
-      </button>
+    <div id="csRelatedToggle">
       <div id="csRelatedCollapse" style="display:none">
+        <div class="cs-modal-divider" style="margin:0.75rem 0 0.5rem"></div>
         <div class="cs-related-label" id="csRelatedLabel" style="display:none">Related concepts</div>
         <div class="cs-related-row" id="csRelatedRow"></div>
       </div>
@@ -5353,7 +5379,7 @@
 <!-- /EPISODES SECTION -->
 
 <!-- SHORTS SECTION -->
-<div id="shortsSection" class="episodes-section" style="display:none!important; visibility:hidden; background: var(--bg);">
+<div id="shortsSection" class="episodes-section" style="display:none!important;visibility:hidden;height:0;overflow:hidden;padding:0;margin:0;">
   <div class="episodes-controls">
     <div class="episodes-app-header">
       <div class="app-title">Browse <em>shorts</em></div>
@@ -7830,23 +7856,23 @@ function _renderRelated(concept) {
     wrap.appendChild(expand);
     row.appendChild(wrap);
   });
-  // Show toggle wrapper only if we have pills
-  const toggleWrap = document.getElementById('csRelatedToggle');
-  if (toggleWrap) toggleWrap.style.display = pool.length > 0 ? 'block' : 'none';
+  // Show Related button only if we have pills
+  const relatedBtn = document.getElementById('csRelatedBtn');
+  if (relatedBtn) relatedBtn.style.display = pool.length > 0 ? '' : 'none';
   // Reset collapsed state on new concept
   const collapse = document.getElementById('csRelatedCollapse');
-  const arrow = document.querySelector('.cs-related-toggle-arrow');
+  const relBtnEl = document.getElementById('csRelatedBtn');
   if (collapse) collapse.style.display = 'none';
-  if (arrow) arrow.style.transform = '';
+  if (relBtnEl) relBtnEl.classList.remove('active');
 }
 
 function _csToggleRelated() {
   const collapse = document.getElementById('csRelatedCollapse');
-  const arrow = document.querySelector('.cs-related-toggle-arrow');
+  const btn = document.getElementById('csRelatedBtn');
   if (!collapse) return;
   const open = collapse.style.display === 'none';
   collapse.style.display = open ? 'block' : 'none';
-  if (arrow) arrow.style.transform = open ? 'rotate(180deg)' : '';
+  if (btn) btn.classList.toggle('active', open);
 }
 
 // ---- USE THIS INSTEAD ----
@@ -9514,7 +9540,17 @@ function eggNext(skipAnim) {
   _eggLastIdx = idx;
   const card = document.getElementById('eggCard');
   if (!skipAnim) { card.style.animation = 'none'; void card.offsetWidth; card.style.animation = ''; }
-  document.getElementById('eggPrompt').textContent = EGG_PROMPTS[idx];
+  // Split "Lead-in: question" format — colon is the separator
+  const raw = EGG_PROMPTS[idx];
+  const colonIdx = raw.indexOf(':');
+  const promptEl = document.getElementById('eggPrompt');
+  if (colonIdx > -1 && colonIdx < 60) {
+    const lead = raw.slice(0, colonIdx).trim();
+    const question = raw.slice(colonIdx + 1).trim();
+    promptEl.innerHTML = `<span class="egg-lead">${lead}</span><span class="egg-question">${question}</span>`;
+  } else {
+    promptEl.innerHTML = `<span class="egg-question">${raw}</span>`;
+  }
 }
 function closeEgg(e) {
   if (e && e.target !== document.getElementById('eggOverlay')) return;
@@ -9656,39 +9692,42 @@ function playStreakMilestoneSFX() {
 }
 .conv-overlay.active { display: flex; justify-content: flex-end; }
 
-/* v1.71 quiz pill in category row */
+/* v1.71 quiz pill in category row — matches cat-card exactly, teal fill */
 .cat-quiz-pill {
-  background: rgba(122,175,138,0.15) !important;
-  color: #7aaf8a !important;
-  border-color: rgba(122,175,138,0.5) !important;
+  background: rgba(90,191,175,0.15) !important;
+  color: #5abfaf !important;
+  border-color: rgba(90,191,175,0.5) !important;
   font-weight: 600;
-  font-family: 'DM Mono', monospace;
-  letter-spacing: 0.06em;
 }
 .cat-quiz-pill:hover {
-  background: rgba(122,175,138,0.28) !important;
-  border-color: #7aaf8a !important;
-  transform: translateY(-1px);
+  background: rgba(90,191,175,0.28) !important;
+  border-color: #5abfaf !important;
 }
-.nav-epic-btn {
+/* v1.71 — epic standalone pill fades in on nav hover */
+.nav-epic-standalone {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--surface2);
+  border: 1px solid rgba(232,213,163,0.25);
+  border-radius: 999px;
+  padding: 7px 14px;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
   opacity: 0;
   pointer-events: none;
-  max-width: 0;
-  overflow: hidden;
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-  transition: opacity 0.25s, max-width 0.3s, padding 0.3s;
-  white-space: nowrap;
-  color: var(--accent) !important;
-  border-color: rgba(232,213,163,0.3) !important;
+  transform: translateX(-4px);
+  transition: opacity 0.22s, transform 0.22s, border-color 0.2s;
 }
-.nav-island:hover .nav-epic-btn {
+#mainNav:hover .nav-epic-standalone {
   opacity: 1;
   pointer-events: all;
-  max-width: 160px;
-  padding-left: 12px !important;
-  padding-right: 12px !important;
+  transform: translateX(0);
 }
+.nav-epic-standalone:hover { border-color: rgba(232,213,163,0.6); }
 /* v1.71 — hover emojis for Spark / Browse / Stash */
 .nav-spark-btn::before,
 .nav-browse-btn::before,
@@ -9896,6 +9935,8 @@ function playStreakMilestoneSFX() {
   padding: 3px 8px; border-radius: 999px;
   border: 1px solid currentColor;
   background: none; flex-shrink: 0;
+  max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  display: inline-block;
 }
 .conv-entry-date {
   font-family: 'DM Mono', monospace; font-size: 0.55rem;
@@ -10394,15 +10435,25 @@ function _convOpenCS(id) {
 }
 
 function _convOpenConcept(id) {
-  // Close overlay and scroll to concept card
   closeConversations();
-  const el = document.getElementById('cc' + id) || document.getElementById('epcc' + id);
-  if (el) {
-    setTimeout(() => {
+  setTimeout(() => {
+    // If current category filter would hide this card, reset to 'all'
+    const concept = CONCEPTS.find(c => c.id === id);
+    if (concept && activeCat !== 'all' && activeCat !== concept.category) {
+      setCat('all');
+    }
+    // Try main grid card first, then episode drawer card
+    const el = document.getElementById('cc' + id) || document.getElementById('epcc' + id);
+    if (el) {
       el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      if (!el.classList.contains('open')) el.click();
-    }, 350);
-  }
+      setTimeout(() => {
+        if (!el.classList.contains('open')) {
+          if (document.getElementById('cc' + id)) toggleCard(id);
+          else if (document.getElementById('epcc' + id)) toggleEpCard(id);
+        }
+      }, 400);
+    }
+  }, 350);
 }
 
 // ---- RENDER: HISTORY ----
@@ -10437,14 +10488,19 @@ function _convRenderHistory() {
 function _convOpenCSById(id) {
   closeConversations();
   const concept = CONCEPTS.find(x => x.id === id);
-  if (concept) {
-    setTimeout(() => {
-      _csConcept = concept;
-      _csAIData = null;
-      _renderCSShell(concept);
-      openCS();
-    }, 200);
-  }
+  if (!concept) return;
+  setTimeout(() => {
+    // Reset CS state for this concept
+    _csConcept = concept;
+    _csAIData = null;
+    _csCat = concept.category || 'all';
+    // Rebuild category row with correct active category
+    _buildCsCatRow();
+    _renderCSShell(concept);
+    // Ensure events wired (safe to re-wire)
+    _wireCSEvents();
+    openCS();
+  }, 200);
 }
 
 // ============================================
