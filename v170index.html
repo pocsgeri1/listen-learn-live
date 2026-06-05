@@ -1339,8 +1339,8 @@
   transition: background 0.2s;
 }
 .nav-saved-badge.badge-alert {
-  background: #c0392b;
-  color: #fff;
+  background: #5abfaf;
+  color: #0d0d0d;
 }
 .nav-conv-btn:hover {
   border-color: #a85e5e;
@@ -1376,9 +1376,8 @@
   animation: csEmojiPop 0.4s ease;
 }
 @keyframes csEmojiPop {
-  0%   { transform: scale(0.7) rotate(-10deg); }
-  60%  { transform: scale(1.2) rotate(4deg); }
-  100% { transform: scale(1) rotate(0); }
+  0%   { transform: scale(0.85); opacity: 0; }
+  100% { transform: scale(1);    opacity: 1; }
 }
   /* RIGHT CLUSTER */
   .nav-right {
@@ -2784,11 +2783,12 @@
     .cs-prompt-text { font-size: 0.95rem; }
     .cs-actions { flex-direction: column; }
     .cs-btn { text-align: center; }
-    /* P18: prevent concept expand content overflow */
-    .cs-concept-plain { font-size: 0.82rem; line-height: 1.55; }
-    .cs-episode-actions { flex-wrap: nowrap; overflow-x: auto; gap: 6px; }
-    .cs-episode-action-btn { flex-shrink: 0; font-size: 0.55rem; padding: 4px 8px; }
-    .cs-episode-pill { font-size: 0.55rem; }
+    /* P18: prevent concept expand content overflow — no internal scroll */
+    .cs-concept-plain { font-size: 0.78rem; line-height: 1.5; }
+    .cs-episode-actions { flex-wrap: wrap; gap: 5px; }
+    .cs-episode-action-btn { font-size: 0.55rem; padding: 4px 8px; }
+    .cs-episode-pill { font-size: 0.55rem; max-width: 100%; }
+    .cs-concept-expand .cs-expand-inner { padding-left: 10px; padding-right: 10px; }
   }
 
   /* ============================================
@@ -4957,8 +4957,8 @@
 
   <div class="nav-island" id="navIsland">
     <!-- v1.70: nav collapsed to 3 items. Hidden items preserved below. -->
-    <a class="nav-link nav-spark-btn" onclick="openCSFromNav();playNavSFX()">Spark</a>
-    <a class="nav-link nav-browse-btn" onclick="playNavSFX();scrollToSection('episodesSection')">Browse</a>
+    <a class="nav-link nav-spark-btn" onclick="openCSFromNav();playNavSFX()"><span class="nav-spark-emoji">💬</span>Spark</a>
+    <a class="nav-link nav-browse-btn" onclick="playNavSFX();scrollToSection('episodesSection')"><span class="nav-browse-emoji">📚</span>Browse</a>
     <a class="nav-link nav-conv-btn" onclick="openConversations();playNavSFX()" title="Saved ideas" id="navSavedLink"><span id="navSavedBadge" class="nav-saved-badge" style="display:none"></span><span class="nav-stash-emoji">🔖 </span>Stash</a>
     <!-- hidden v1.70: Episodes, Shorts, Vault, Map, Quiz, Prompts, Today(COTD) -->
     <!-- <a class="nav-link" onclick="playNavSFX();scrollToSection('episodesSection')">Episodes</a> -->
@@ -5288,7 +5288,7 @@
       <span class="h1-indent"><em>Then what?</em></span>
     </h1>
 
-    <p class="hero-sub">The people who always have something interesting to say aren't smarter.<br>They just don't let good ideas die in their earbuds.<br><br>Neither does <span class="hero-brand-name">Epistemic</span>.</p>
+    <p class="hero-sub">The people who always have something interesting to say aren't smarter. They just don't let good ideas die in their earbuds.<br><br>Neither does <span class="hero-brand-name">Epistemic</span>.</p>
 
     <a class="hero-cta" onclick="openCSFromNav();return false;" href="#">
       Say something worth saying
@@ -7976,12 +7976,23 @@ function _loadAI(concept, ctx) {
       _csAIData[ctx] = ctxData;
       try { sessionStorage.setItem(cacheKey, JSON.stringify(ctxData)); } catch(e) {}
       _applyAIToCtx(ctx);
+    } else {
+      // Server returned error JSON — reset button so user can retry
+      const genBtn = document.getElementById('csGenerateBtn');
+      const genRow = document.getElementById('csGenerateRow');
+      if (genBtn) { genBtn.disabled = false; genBtn.classList.remove('loading'); genBtn.textContent = '✶ Generate conversation starter'; }
+      if (genRow) genRow.style.display = 'block';
     }
   })
   .catch(function() {
     _csLoading = false;
     _stopLoadingMessages();
     _showCSLoading(false);
+    // Reset button so user can retry
+    const genBtn = document.getElementById('csGenerateBtn');
+    const genRow = document.getElementById('csGenerateRow');
+    if (genBtn) { genBtn.disabled = false; genBtn.classList.remove('loading'); genBtn.textContent = '✶ Try again'; }
+    if (genRow) genRow.style.display = 'block';
   });
 }
 
@@ -9732,22 +9743,27 @@ function playStreakMilestoneSFX() {
   padding-right: 14px;
 }
 .nav-epic-standalone:hover { border-color: rgba(232,213,163,0.6); }
-/* v1.71 — hover emojis for Spark / Browse / Stash */
-.nav-spark-btn::before,
-.nav-browse-btn::before,
-.nav-conv-btn .nav-hover-emoji {
-  display: inline-block;
-  opacity: 0; width: 0; overflow: hidden;
-  transition: opacity 0.2s, width 0.2s, margin 0.2s;
-  margin-right: 0;
-}
-.nav-spark-btn:hover::before  { content: '💬 '; opacity: 1; width: auto; margin-right: 2px; }
-.nav-browse-btn:hover::before { content: '📚 '; opacity: 1; width: auto; margin-right: 2px; }
+/* v1.71 — hover emojis for Spark / Browse / Stash — span-based for alignment */
+.nav-spark-emoji,
+.nav-browse-emoji,
 .nav-stash-emoji {
-  display: inline-block; opacity: 0; width: 0; overflow: hidden;
-  transition: opacity 0.2s, width 0.2s; margin-right: 0;
+  display: inline-block;
+  opacity: 0;
+  max-width: 0;
+  overflow: hidden;
+  vertical-align: middle;
+  line-height: 1;
+  transition: opacity 0.35s ease, max-width 0.35s ease, margin-right 0.35s ease;
+  margin-right: 0;
+  font-size: 0.8rem;
 }
-.nav-conv-btn:hover .nav-stash-emoji { opacity: 1; width: auto; margin-right: 2px; }
+.nav-spark-btn:hover .nav-spark-emoji,
+.nav-browse-btn:hover .nav-browse-emoji,
+.nav-conv-btn:hover .nav-stash-emoji {
+  opacity: 1;
+  max-width: 1.4em;
+  margin-right: 4px;
+}
 .conv-date-group { margin-bottom: 4px; }
 .conv-date-divider {
   font-family: 'DM Mono', monospace;
@@ -10440,24 +10456,23 @@ function _convOpenCS(id) {
 
 function _convOpenConcept(id) {
   closeConversations();
+  const concept = CONCEPTS.find(c => c.id === id);
+  if (!concept) return;
   setTimeout(() => {
-    // If current category filter would hide this card, reset to 'all'
-    const concept = CONCEPTS.find(c => c.id === id);
-    if (concept && activeCat !== 'all' && activeCat !== concept.category) {
-      setCat('all');
+    // Set to the concept's own category — renders only that category, not all
+    if (activeCat !== concept.category) {
+      activeCat = concept.category;
+      buildCats();  // just re-styles pills, no full grid rebuild
+      buildGrid();  // renders only this category — lightweight
     }
-    // Try main grid card first, then episode drawer card
-    const el = document.getElementById('cc' + id) || document.getElementById('epcc' + id);
+    const el = document.getElementById('cc' + id);
     if (el) {
       el.scrollIntoView({ behavior: 'smooth', block: 'center' });
       setTimeout(() => {
-        if (!el.classList.contains('open')) {
-          if (document.getElementById('cc' + id)) toggleCard(id);
-          else if (document.getElementById('epcc' + id)) toggleEpCard(id);
-        }
-      }, 400);
+        if (!el.classList.contains('open')) toggleCard(id);
+      }, 380);
     }
-  }, 350);
+  }, 300);
 }
 
 // ---- RENDER: HISTORY ----
