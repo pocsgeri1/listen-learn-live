@@ -4969,10 +4969,11 @@
     <!-- <a class="nav-link nav-map-btn" href="/map" onclick="track('map_opened');playNavSFX()">◈ Map</a> -->
     <!-- <button class="nav-quiz-btn" id="navQuizBtn" onclick="playNavSFX();openQuiz()">◈ Quiz</button> -->
   </div>
-  <!-- v1.71: epic button standalone, outside island, fades in on nav hover -->
-  <a class="nav-epic-standalone" id="navEpicBtn" onclick="openEgg();playNavSFX()" title="I feel epic!">😎 I feel epic!</a>
+  <!-- v1.71: epic button is now inside nav-right -->
 
   <div class="nav-right">
+    <!-- v1.71: epic button lives in nav-right, hidden until nav hover -->
+    <a class="nav-epic-standalone" id="navEpicBtn" onclick="openEgg();playNavSFX()" title="I feel epic!">😎 I feel epic!</a>
     <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode" onclick="toggleTheme()">☽</button>
     <button class="nav-signup-btn" id="navSignupBtn" onclick="playNavSFX();scrollToSection('signup')">Sign Up 🎁</button>
     <div class="nav-pill">
@@ -5015,9 +5016,8 @@
 .egg-overlay {
   position: fixed; inset: 0; z-index: 1200;
   display: none; align-items: center; justify-content: center;
-  background: rgba(13,13,13,0.82);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: rgba(13,13,13,0.78);
+  /* no backdrop-filter — causes GPU lag */
 }
 .egg-overlay.active { display: flex; }
 .egg-card {
@@ -6010,7 +6010,7 @@ function buildCats() {
     <div class="cat-card${activeCat===cat.id?' active':''}" data-cat="${cat.id}" onclick="setCat('${cat.id}')" style="color:${cat.color}">
       <span class="cat-icon">${cat.icon}</span><span class="cat-name">${cat.name}</span>
     </div>
-  `).join('') + `<div class="cat-card cat-quiz-pill" onclick="playNavSFX();openQuiz()" title="Test yourself">◈ Quiz</div>`;
+  `).join('') + `<div class="cat-card cat-quiz-pill" onclick="playNavSFX();openQuiz()" title="Test yourself"><span class="cat-icon">◈</span><span class="cat-name">Quiz</span></div>`;
 }
 
 function filtered() {
@@ -9692,12 +9692,11 @@ function playStreakMilestoneSFX() {
 }
 .conv-overlay.active { display: flex; justify-content: flex-end; }
 
-/* v1.71 quiz pill in category row — matches cat-card exactly, teal fill */
+/* v1.71 quiz pill — inherits cat-card + cat-name styles exactly, teal colour */
 .cat-quiz-pill {
   background: rgba(90,191,175,0.15) !important;
   color: #5abfaf !important;
   border-color: rgba(90,191,175,0.5) !important;
-  font-weight: 600;
 }
 .cat-quiz-pill:hover {
   background: rgba(90,191,175,0.28) !important;
@@ -9710,7 +9709,7 @@ function playStreakMilestoneSFX() {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--accent);
-  background: var(--surface2);
+  background: transparent;
   border: 1px solid rgba(232,213,163,0.25);
   border-radius: 999px;
   padding: 7px 14px;
@@ -9719,13 +9718,18 @@ function playStreakMilestoneSFX() {
   white-space: nowrap;
   opacity: 0;
   pointer-events: none;
-  transform: translateX(-4px);
-  transition: opacity 0.22s, transform 0.22s, border-color 0.2s;
+  max-width: 0;
+  overflow: hidden;
+  padding-left: 0;
+  padding-right: 0;
+  transition: opacity 0.2s, max-width 0.25s, padding 0.25s, border-color 0.2s;
 }
 #mainNav:hover .nav-epic-standalone {
   opacity: 1;
   pointer-events: all;
-  transform: translateX(0);
+  max-width: 160px;
+  padding-left: 14px;
+  padding-right: 14px;
 }
 .nav-epic-standalone:hover { border-color: rgba(232,213,163,0.6); }
 /* v1.71 — hover emojis for Spark / Browse / Stash */
