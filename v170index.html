@@ -1313,11 +1313,16 @@
 .nav-conv-btn {
   display: inline-flex;
   align-items: center;
-  color: #a85e5e;
-  border: 1px solid rgba(168,94,94,0.35);
-  background: rgba(168,94,94,0.07);
-  font-weight: 500;
+  color: var(--muted2);
+  border: none;
+  background: none;
+  font-weight: inherit;
   position: relative;
+}
+.nav-conv-btn:hover {
+  color: var(--text);
+  background: rgba(255,255,255,0.06);
+  border: none;
 }
 /* v1.70 — Saved badge */
 .nav-saved-badge {
@@ -1341,11 +1346,6 @@
 .nav-saved-badge.badge-alert {
   background: #5abfaf;
   color: #0d0d0d;
-}
-.nav-conv-btn:hover {
-  border-color: #a85e5e;
-  color: #a85e5e;
-  background: rgba(168,94,94,0.13);
 }
 .conv-nav-emoji {
   display: inline-block;
@@ -9733,7 +9733,7 @@ function playStreakMilestoneSFX() {
   overflow: hidden;
   padding-left: 0;
   padding-right: 0;
-  transition: opacity 0.2s, max-width 0.25s, padding 0.25s, border-color 0.2s;
+  transition: opacity 0.4s ease, max-width 0.5s cubic-bezier(0.25,0.46,0.45,0.94), padding 0.5s cubic-bezier(0.25,0.46,0.45,0.94), border-color 0.3s ease;
 }
 #mainNav:hover .nav-epic-standalone {
   opacity: 1;
