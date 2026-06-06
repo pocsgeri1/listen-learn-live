@@ -2431,6 +2431,7 @@
   }
   .cs-ctx-btn:hover { border-color: var(--accent); color: var(--accent); }
   .cs-ctx-btn.active { background: var(--accent); border-color: var(--accent); color: #0d0d0d; }
+  .cs-ctx-btn.has-prompt { border-left: 3px solid #7aaf8a; }
 
   /* Swipeable prompt block */
   .cs-prompt-block {
@@ -2494,6 +2495,7 @@
     background: var(--surface2); border: 1px solid var(--border);
     border-top: none; border-radius: 0 0 10px 10px;
     padding: 14px 22px 16px; margin-top: -2px; margin-bottom: 0.9rem;
+    transition: opacity 0.2s ease;
   }
   .cs-coaching-section { margin-bottom: 10px; }
   .cs-coaching-section:last-child { margin-bottom: 0; }
@@ -2806,6 +2808,7 @@
     transition: border-color 0.2s, color 0.2s;
     display: flex; align-items: center; gap: 5px;
   }
+  .cs-nav-btn span { font-size: 1rem; line-height: 1; }
   .cs-nav-btn:hover { border-color: var(--border-hover); color: var(--muted2); }
   .cs-nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
@@ -3019,8 +3022,9 @@
   /* Voted state border colours — explicit fix v1.72 */
   .cs-fb-btn.voted-up   { border-color: #5a9e6f !important; box-shadow: 0 0 0 2px rgba(90,158,111,0.25); }
   .cs-fb-btn.voted-down { border-color: #c47a7a !important; box-shadow: 0 0 0 2px rgba(196,122,122,0.25); }
-    display: flex; align-items: center; gap: 10px;
-    margin-bottom: 1.1rem; animation: fadeIn 0.4s ease both;
+  .cs-feedback-row {
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 1.4rem; animation: fadeIn 0.4s ease both;
   }
   @keyframes fadeIn { from{opacity:0} to{opacity:1} }
   .cs-feedback-label {
@@ -5455,9 +5459,10 @@
       <button class="cs-help-btn" id="csHelpBtn" onclick="_csHelpClick()" aria-label="How does this work">
         ❓
         <div class="cs-help-bubble" id="csHelpBubble">
-          <div class="cs-help-step"><span class="cs-help-num">01</span><span>A real concept from a podcast gets picked for you. Tap it to see what it means — plain English, no fluff.</span></div>
-          <div class="cs-help-step"><span class="cs-help-num">02</span><span>A conversation starter gets generated, tailored to who you're talking to. Use it tonight, at lunch, wherever.</span></div>
-          <div class="cs-help-step"><span class="cs-help-num">03</span><span>Did it land? Tell us. Save the ones worth keeping. Change topic or scenario below the prompt anytime.</span></div>
+          <div class="cs-help-step"><span class="cs-help-num">01</span><span>An interesting idea from a podcast gets picked for you. Tap it to see what it means in plain English, no BS.</span></div>
+          <div class="cs-help-step"><span class="cs-help-num">02</span><span>You'll get a conversation starter, tailored to who you're talking to. Change topic or scenario below the prompt anytime.</span></div>
+          <div class="cs-help-step"><span class="cs-help-num">03</span><span>Did it land? Do tell us! Save the ones worth keeping for later conversations.</span></div>
+          <div style="margin-top:10px;font-size:0.8rem;font-style:italic;color:var(--accent);font-family:'Playfair Display',serif">Enjoy your next conversations — say something worth saying. ✦</div>
         </div>
       </button>
     </div>
@@ -5467,13 +5472,14 @@
       <div class="cs-help-overlay-card">
         <button class="cs-help-overlay-close" onclick="_csHelpOverlayClose()">✕</button>
         <div class="cs-help-overlay-title">How does this work?</div>
-        <div class="cs-help-step"><span class="cs-help-num">01</span><span>A real concept from a podcast gets picked for you. Tap it to see what it means — plain English, no fluff.</span></div>
-        <div class="cs-help-step" style="margin-top:10px"><span class="cs-help-num">02</span><span>A conversation starter gets generated, tailored to who you're talking to. Use it tonight, at lunch, wherever.</span></div>
-        <div class="cs-help-step" style="margin-top:10px"><span class="cs-help-num">03</span><span>Did it land? Tell us. Save the ones worth keeping. Change topic or scenario below the prompt anytime.</span></div>
+        <div class="cs-help-step"><span class="cs-help-num">01</span><span>An interesting idea from a podcast gets picked for you. Tap it to see what it means in plain English, no BS.</span></div>
+        <div class="cs-help-step" style="margin-top:10px"><span class="cs-help-num">02</span><span>You'll get a conversation starter, tailored to who you're talking to. Change topic or scenario below the prompt anytime.</span></div>
+        <div class="cs-help-step" style="margin-top:10px"><span class="cs-help-num">03</span><span>Did it land? Do tell us! Save the ones worth keeping for later conversations.</span></div>
+        <div style="margin-top:14px;font-size:0.9rem;font-style:italic;color:var(--accent);font-family:'Playfair Display',serif;text-align:center">Enjoy your next conversations — say something worth saying. ✦</div>
       </div>
     </div>
     <!-- Concept expandable pill — term only -->
-    <div class="cs-source-label" id="csSourceLabel">An epic idea to discuss</div>
+    <div class="cs-source-label" id="csSourceLabel">An Epic Idea To Discuss:</div>
     <div class="cs-concept-pill-wrap" id="csConceptPillWrap">
       <button class="cs-concept-pill" id="csConceptPill">
         <span class="cs-concept-pill-term" id="csConceptPillTerm">—</span>
@@ -5580,8 +5586,8 @@
       <button class="cs-btn cs-btn--save" id="csSaveAllBtn">♡ Save</button>
       <button class="cs-btn cs-btn--surprise" id="csSurpriseBtn">✦ Surprise me</button>
       <div style="margin-left:auto;display:flex;gap:6px">
-        <button class="cs-nav-btn" id="csPrevBtn" title="Previous concept" disabled>⤺</button>
-        <button class="cs-nav-btn" id="csNextBtn" title="Next concept">⤻</button>
+        <button class="cs-nav-btn" id="csPrevBtn" title="Previous concept" disabled><span>⤺</span></button>
+        <button class="cs-nav-btn" id="csNextBtn" title="Next concept"><span>⤻</span></button>
       </div>
     </div>
 
@@ -7830,8 +7836,12 @@ function _csSaveConcept(concept, aiData) {
     };
     const idx = saved.findIndex(s => s && s.id === concept.id);
     if (idx >= 0) {
-      // Preserve existing aiData if new entry has none
-      if (!entry.aiData && saved[idx].aiData) entry.aiData = saved[idx].aiData;
+      // Deep-merge aiData per-ctx: preserve contexts already saved that aren't in the new snapshot
+      if (saved[idx].aiData && entry.aiData) {
+        entry.aiData = Object.assign({}, saved[idx].aiData, entry.aiData);
+      } else if (!entry.aiData && saved[idx].aiData) {
+        entry.aiData = saved[idx].aiData;
+      }
       saved[idx] = entry;
     } else {
       saved.push(entry);
@@ -8062,11 +8072,11 @@ function _renderCSShell(concept) {
   if (sourceLabelEl) {
     const col = concept.collection_id != null ? COLLECTIONS_BY_ID[concept.collection_id] : null;
     if (col && col.podcast) {
-      sourceLabelEl.textContent = 'From ' + col.podcast;
+      sourceLabelEl.textContent = 'An Epic Idea To Discuss From ' + col.podcast + ':';
     } else if (col && col.type === 'episode') {
-      sourceLabelEl.textContent = 'From this episode';
+      sourceLabelEl.textContent = 'An Epic Idea To Discuss:';
     } else {
-      sourceLabelEl.textContent = 'An epic idea to discuss';
+      sourceLabelEl.textContent = 'An Epic Idea To Discuss:';
     }
   }
 
@@ -8157,13 +8167,22 @@ function _applyAIToCtx(ctx) {
     document.getElementById('csPromptText').textContent = d.prompt;
   }
 
-  // Coaching layer
+  // Coaching layer — fade out, swap, fade in
   const coaching = document.getElementById('csCoaching');
   const openersList = document.getElementById('csOpenersList');
-  openersList.innerHTML = (d.openers || []).map((o, i) =>
-    `<div class="cs-opener-line"><span class="cs-opener-idx">${i === 0 ? 'Try saying' : 'Or try'}</span>${_escHtml(o)}</div>`
-  ).join('');
-  document.getElementById('csPitfall').textContent = d.pitfall || '';
+  function _applyCoachingContent() {
+    openersList.innerHTML = (d.openers || []).map((o, i) =>
+      `<div class="cs-opener-line"><span class="cs-opener-idx">${i === 0 ? 'Try saying' : 'Or try'}</span>${_escHtml(o)}</div>`
+    ).join('');
+    document.getElementById('csPitfall').textContent = d.pitfall || '';
+    if (coaching) coaching.style.opacity = '1';
+  }
+  if (coaching && coaching.classList.contains('cs-visible')) {
+    coaching.style.opacity = '0';
+    setTimeout(_applyCoachingContent, 180);
+  } else {
+    _applyCoachingContent();
+  }
 
   // Auto-save generated prompt to history (with prompt text) — v1.72
   _csLogHistoryWithPrompt(_csConcept, ctx, d.prompt);
@@ -8188,6 +8207,9 @@ function _applyAIToCtx(ctx) {
   if (surBtn && surBtn.textContent.indexOf('Surprise') > -1) {
     // keep label until first surprise click
   }
+
+  // Update green badge on scenario buttons — v1.73
+  _csUpdateScenarioBadges();
 }
 
 function _renderRelated(concept) {
@@ -8367,7 +8389,13 @@ function _csLogHistoryWithPrompt(concept, ctx, promptText) {
   } catch(e) {}
 }
 
-// Prev / Next concept navigation — v1.72c
+// Update green border on scenario buttons that already have a generated prompt — v1.73
+function _csUpdateScenarioBadges() {
+  document.querySelectorAll('.cs-ctx-btn').forEach(btn => {
+    const ctx = btn.dataset.ctx;
+    btn.classList.toggle('has-prompt', !!(ctx && _csAIData && _csAIData[ctx]));
+  });
+}
 function _csPushToStack(concept) {
   if (!concept) return;
   // Trim forward history when branching
@@ -8664,14 +8692,15 @@ function _showCSLoading(on) {
 function _wireSwipe() {
   const block = document.getElementById('csPromptBlock');
   if (!block) return;
-  let startX = 0, currentX = 0, dragging = false;
+  let startX = 0, currentX = 0, dragging = false, moved = false;
   const THRESHOLD = 80;
 
-  function onStart(x) { startX = x; dragging = true; }
+  function onStart(x) { startX = x; currentX = x; dragging = true; moved = false; }
   function onMove(x) {
     if (!dragging) return;
     currentX = x;
     const dx = currentX - startX;
+    if (Math.abs(dx) > 8) moved = true;
     block.style.transform = `translateX(${dx * 0.35}px) rotate(${dx * 0.015}deg)`;
     block.classList.toggle('swiping-left',  dx < -30);
     block.classList.toggle('swiping-right', dx >  30);
@@ -8681,9 +8710,9 @@ function _wireSwipe() {
     const dx = currentX - startX;
     block.style.transform = '';
     block.classList.remove('swiping-left', 'swiping-right');
-    if (dx < -THRESHOLD) _csSwipeLeft();
-    else if (dx > THRESHOLD) _csSwipeRight();
-    startX = 0; currentX = 0;
+    if (moved && dx < -THRESHOLD) _csSwipeLeft();
+    else if (moved && dx > THRESHOLD) _csSwipeRight();
+    startX = 0; currentX = 0; moved = false;
   }
 
   block.addEventListener('mousedown',  e => onStart(e.clientX));
@@ -8738,6 +8767,8 @@ function _wireCSEvents() {
       document.querySelectorAll('.cs-ctx-btn').forEach(b => b.classList.remove('active'));
       this.classList.add('active');
       _csCtx = this.dataset.ctx;
+      // Update scenario label immediately so it reflects new ctx even during loading
+      document.getElementById('csOpener').textContent = CS_OPENERS[_csCtx] || '';
       // Collapse scenario section
       const sec = document.getElementById('csScenarioSection');
       if (sec) sec.classList.remove('open');
@@ -10712,6 +10743,8 @@ function playStreakMilestoneSFX() {
 .conv-action-btn:hover { border-color: var(--border-hover); color: var(--muted2); }
 .conv-delete-btn { color: #d4715a; border-color: rgba(212,113,90,0.3); }
 .conv-delete-btn:hover { border-color: #d4715a; background: rgba(212,113,90,0.06); }
+.conv-more-scenarios-btn { color: var(--accent); border-color: rgba(232,213,163,0.3); }
+.conv-more-scenarios-btn:hover { border-color: var(--accent); background: rgba(232,213,163,0.06); }
 
 /* History entry (simpler) */
 .conv-hist-entry {
@@ -10847,18 +10880,17 @@ function openConversations() {
   overlay.classList.add('active');
   document.body.classList.add('cotd-open'); // reuse scroll-lock class
 
-  // Sync tab UI to last-active tab state
-  document.getElementById('convTabSaved').classList.toggle('active', _convTab === 'saved');
-  document.getElementById('convTabHistory').classList.toggle('active', _convTab === 'history');
-  document.getElementById('convSavedControls').style.display = _convTab === 'saved' ? '' : 'none';
+  // Always open on Saved tab — v1.73
+  _convTab = 'saved';
 
-  if (_convTab === 'saved') {
-    _convBuildCatFilters();
-    _convRenderSaved();
-    _convCheckWarn();
-  } else {
-    _convRenderHistory();
-  }
+  // Sync tab UI to saved tab
+  document.getElementById('convTabSaved').classList.add('active');
+  document.getElementById('convTabHistory').classList.remove('active');
+  document.getElementById('convSavedControls').style.display = '';
+
+  _convBuildCatFilters();
+  _convRenderSaved();
+  _convCheckWarn();
 
   // Wire close
   document.getElementById('convClose').onclick = closeConversations;
@@ -11014,6 +11046,7 @@ function _convEntryHTML(entry) {
         <div class="conv-entry-actions">
           <button class="conv-action-btn conv-delete-btn" onclick="_convDelete(${entry.id})">✕ Remove</button>
           <button class="conv-action-btn" onclick="_convOpenConcept(${entry.id})">Open card →</button>
+          <button class="conv-action-btn conv-more-scenarios-btn" onclick="_convOpenCSWithScenario(${entry.id})">More scenarios ↗</button>
         </div>
       </div>
     </div>
@@ -11127,6 +11160,51 @@ function _convOpenCS(id) {
   }
 }
 
+// Open CS modal with scenario section pre-expanded — from "More scenarios" in Stash
+function _convOpenCSWithScenario(id) {
+  closeConversations();
+  const concept = CONCEPTS.find(x => x.id === id);
+  if (!concept) return;
+  // Pull existing aiData from saved so prior scenario prompts are available
+  try {
+    const savedArr = JSON.parse(localStorage.getItem(CS_SAVED_KEY) || '[]');
+    const savedEntry = savedArr.find(s => s && s.id === id);
+    if (savedEntry && savedEntry.aiData) {
+      _csAIData = JSON.parse(JSON.stringify(savedEntry.aiData));
+    } else {
+      _csAIData = null;
+    }
+  } catch(e) { _csAIData = null; }
+  setTimeout(() => {
+    _csConcept = concept;
+    _csCat = concept.category || 'psychology';
+    _buildCsCatRow();
+    _renderCSShell(concept);
+    _wireCSEvents();
+    // Apply first available ctx or default
+    const contexts = ['partner','friend','colleague','meeting'];
+    const firstCtx = _csAIData ? (contexts.find(c => _csAIData[c]) || _csCtx) : _csCtx;
+    _csCtx = firstCtx;
+    document.querySelectorAll('.cs-ctx-btn').forEach(b => {
+      b.classList.toggle('active', b.dataset.ctx === _csCtx);
+    });
+    if (_csAIData && _csAIData[_csCtx]) {
+      _applyAIToCtx(_csCtx);
+    } else {
+      const genRow = document.getElementById('csGenerateRow');
+      if (genRow) genRow.style.display = 'block';
+    }
+    openCS();
+    // Open scenario section after modal is visible
+    setTimeout(() => {
+      const sec = document.getElementById('csScenarioSection');
+      const lnk = document.getElementById('csRevealScenario');
+      if (sec) sec.classList.add('open');
+      if (lnk) lnk.classList.add('active');
+    }, 350);
+  }, 200);
+}
+
 function _convOpenConcept(id) {
   closeConversations();
   const concept = CONCEPTS.find(c => c.id === id);
@@ -11207,11 +11285,22 @@ function _convOpenCSById(id, ctx) {
     if (savedPrompt && savedPrompt.promptText) {
       // Restore the saved generated prompt — no new API call
       if (!_csAIData) _csAIData = {};
-      _csAIData[_csCtx] = {
-        prompt: savedPrompt.promptText,
-        openers: [],
-        pitfall: ''
-      };
+      // Try to pull full aiData from saved entry (openers + pitfall preserved there)
+      try {
+        const savedArr = JSON.parse(localStorage.getItem(CS_SAVED_KEY) || '[]');
+        const savedEntry = savedArr.find(s => s && s.id === id);
+        if (savedEntry && savedEntry.aiData) {
+          _csAIData = JSON.parse(JSON.stringify(savedEntry.aiData));
+        }
+      } catch(e) {}
+      // Ensure the requested ctx has at least the prompt from history
+      if (!_csAIData[_csCtx] || !_csAIData[_csCtx].prompt) {
+        _csAIData[_csCtx] = {
+          prompt: savedPrompt.promptText,
+          openers: (_csAIData[_csCtx] && _csAIData[_csCtx].openers) || [],
+          pitfall: (_csAIData[_csCtx] && _csAIData[_csCtx].pitfall) || ''
+        };
+      }
       // Update opener label and show prompt
       document.getElementById('csOpener').textContent = CS_OPENERS[_csCtx] || '';
       const inner = document.getElementById('csPromptInner');
