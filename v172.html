@@ -1459,6 +1459,7 @@
   }
   .nav-mobile-link:last-child { border-bottom: none; }
   .nav-mobile-link:hover { color: var(--accent); }
+  .nav-mobile-epic { color: var(--accent); opacity: 0.85; }
 
   /* Mobile nav divider */
   .nav-mobile-divider {
@@ -2431,7 +2432,9 @@
   }
   .cs-ctx-btn:hover { border-color: var(--accent); color: var(--accent); }
   .cs-ctx-btn.active { background: var(--accent); border-color: var(--accent); color: #0d0d0d; }
-  .cs-ctx-btn.has-prompt { border-left: 3px solid #7aaf8a; }
+  .cs-ctx-btn.has-prompt { border-color: rgba(90,191,175,0.55); color: #5abfaf; }
+  .cs-ctx-btn.has-prompt:hover { border-color: #5abfaf; color: #5abfaf; }
+  .cs-ctx-btn.active.has-prompt { background: var(--accent); border-color: var(--accent); color: #0d0d0d; }
 
   /* Swipeable prompt block */
   .cs-prompt-block {
@@ -2495,7 +2498,6 @@
     background: var(--surface2); border: 1px solid var(--border);
     border-top: none; border-radius: 0 0 10px 10px;
     padding: 14px 22px 16px; margin-top: -2px; margin-bottom: 0.9rem;
-    transition: opacity 0.2s ease;
   }
   .cs-coaching-section { margin-bottom: 10px; }
   .cs-coaching-section:last-child { margin-bottom: 0; }
@@ -2675,36 +2677,37 @@
 
   /* Generate button */
   .cs-generate-row {
-    margin: 1rem 0 0.75rem;
+    margin: 0.75rem 0 0.5rem;
+    display: flex; justify-content: center;
   }
   .cs-generate-btn {
-    width: 100%;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.92rem;
-    font-weight: 600;
-    letter-spacing: 0.01em;
-    background: rgba(232,213,163,0.12);
-    border: 1.5px solid var(--accent);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    background: none;
+    border: 1px solid rgba(232,213,163,0.35);
     color: var(--accent);
-    border-radius: 10px;
-    padding: 13px 20px;
+    border-radius: 999px;
+    padding: 8px 22px;
     cursor: pointer;
-    transition: background 0.2s, color 0.2s, transform 0.15s;
-    display: flex; align-items: center; justify-content: center; gap: 10px;
+    transition: border-color 0.2s, background 0.2s, opacity 0.2s;
+    display: inline-flex; align-items: center; gap: 8px;
   }
   .cs-generate-btn:hover {
-    background: rgba(232,213,163,0.2);
-    transform: translateY(-1px);
+    border-color: var(--accent);
+    background: rgba(232,213,163,0.07);
   }
-  .cs-generate-btn:active { transform: translateY(0); }
+  .cs-generate-btn:active { opacity: 0.75; }
   .cs-generate-btn:disabled {
-    opacity: 0.5; cursor: not-allowed; transform: none;
+    opacity: 0.4; cursor: not-allowed;
   }
   .cs-generate-btn.loading {
-    opacity: 0.7; cursor: wait;
+    opacity: 0.55; cursor: wait;
   }
   .cs-generate-btn-icon {
-    font-size: 1.1rem; opacity: 0.85;
+    font-size: 0.75rem; opacity: 0.7;
   }
 
   /* Related accordion */
@@ -2808,7 +2811,6 @@
     transition: border-color 0.2s, color 0.2s;
     display: flex; align-items: center; gap: 5px;
   }
-  .cs-nav-btn span { font-size: 1rem; line-height: 1; }
   .cs-nav-btn:hover { border-color: var(--border-hover); color: var(--muted2); }
   .cs-nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
@@ -2835,8 +2837,8 @@
   /* Speech bubble — desktop hover */
   .cs-help-bubble {
     position: absolute;
-    top: 30px; right: 0;
-    width: 260px;
+    top: 30px; left: 0;
+    width: 280px;
     background: var(--surface2);
     border: 1px solid var(--border-hover);
     border-radius: 10px;
@@ -2850,7 +2852,7 @@
   .cs-help-bubble::before {
     content: '';
     position: absolute;
-    top: -5px; right: 6px;
+    top: -5px; left: 8px;
     width: 9px; height: 9px;
     background: var(--surface2);
     border-left: 1px solid var(--border-hover);
@@ -3022,9 +3024,8 @@
   /* Voted state border colours — explicit fix v1.72 */
   .cs-fb-btn.voted-up   { border-color: #5a9e6f !important; box-shadow: 0 0 0 2px rgba(90,158,111,0.25); }
   .cs-fb-btn.voted-down { border-color: #c47a7a !important; box-shadow: 0 0 0 2px rgba(196,122,122,0.25); }
-  .cs-feedback-row {
-    display: flex; align-items: center; gap: 14px;
-    margin-bottom: 1.4rem; animation: fadeIn 0.4s ease both;
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 1.1rem; animation: fadeIn 0.4s ease both;
   }
   @keyframes fadeIn { from{opacity:0} to{opacity:1} }
   .cs-feedback-label {
@@ -5263,6 +5264,9 @@
 
 <!-- MOBILE NAV MENU -->
 <div class="nav-mobile-menu" id="navMobileMenu">
+  <!-- v1.73b: epic button first in mobile menu -->
+  <button class="nav-mobile-link nav-mobile-epic" onclick="openEgg();playNavSFX();closeMobileNav()">😎 I feel epic!</button>
+  <div class="nav-mobile-divider"></div>
   <!-- v1.71: mobile nav — Spark | Browse | Stash | Sign Up -->
   <button class="nav-mobile-link" onclick="openCSFromNav();playNavSFX();closeMobileNav()">◎ Spark</button>
   <button class="nav-mobile-link" onclick="playNavSFX();scrollToSection('episodesSection');closeMobileNav()">◈ Browse</button>
@@ -5459,10 +5463,10 @@
       <button class="cs-help-btn" id="csHelpBtn" onclick="_csHelpClick()" aria-label="How does this work">
         ❓
         <div class="cs-help-bubble" id="csHelpBubble">
-          <div class="cs-help-step"><span class="cs-help-num">01</span><span>An interesting idea from a podcast gets picked for you. Tap it to see what it means in plain English, no BS.</span></div>
-          <div class="cs-help-step"><span class="cs-help-num">02</span><span>You'll get a conversation starter, tailored to who you're talking to. Change topic or scenario below the prompt anytime.</span></div>
+          <div class="cs-help-step"><span class="cs-help-num">01</span><span>An interesting idea from a podcast gets picked for you. Tap it to see what it means — no BS.</span></div>
+          <div class="cs-help-step"><span class="cs-help-num">02</span><span>You'll get a conversation starter, tailored to who you're talking to. Change topic or scenario below anytime.</span></div>
           <div class="cs-help-step"><span class="cs-help-num">03</span><span>Did it land? Do tell us! Save the ones worth keeping for later conversations.</span></div>
-          <div style="margin-top:10px;font-size:0.8rem;font-style:italic;color:var(--accent);font-family:'Playfair Display',serif">Enjoy your next conversations — say something worth saying. ✦</div>
+          <div style="margin-top:10px;font-size:0.8rem;font-style:italic;color:var(--accent);font-family:'Playfair Display',serif">Now go say something worth saying! ✦</div>
         </div>
       </button>
     </div>
@@ -5472,14 +5476,14 @@
       <div class="cs-help-overlay-card">
         <button class="cs-help-overlay-close" onclick="_csHelpOverlayClose()">✕</button>
         <div class="cs-help-overlay-title">How does this work?</div>
-        <div class="cs-help-step"><span class="cs-help-num">01</span><span>An interesting idea from a podcast gets picked for you. Tap it to see what it means in plain English, no BS.</span></div>
-        <div class="cs-help-step" style="margin-top:10px"><span class="cs-help-num">02</span><span>You'll get a conversation starter, tailored to who you're talking to. Change topic or scenario below the prompt anytime.</span></div>
+        <div class="cs-help-step"><span class="cs-help-num">01</span><span>An interesting idea from a podcast gets picked for you. Tap it to see what it means — no BS.</span></div>
+        <div class="cs-help-step" style="margin-top:10px"><span class="cs-help-num">02</span><span>You'll get a conversation starter, tailored to who you're talking to. Change topic or scenario below anytime.</span></div>
         <div class="cs-help-step" style="margin-top:10px"><span class="cs-help-num">03</span><span>Did it land? Do tell us! Save the ones worth keeping for later conversations.</span></div>
-        <div style="margin-top:14px;font-size:0.9rem;font-style:italic;color:var(--accent);font-family:'Playfair Display',serif;text-align:center">Enjoy your next conversations — say something worth saying. ✦</div>
+        <div style="margin-top:14px;font-size:0.9rem;font-style:italic;color:var(--accent);font-family:'Playfair Display',serif;text-align:center">Now go say something worth saying! ✦</div>
       </div>
     </div>
     <!-- Concept expandable pill — term only -->
-    <div class="cs-source-label" id="csSourceLabel">An Epic Idea To Discuss:</div>
+    <div class="cs-source-label" id="csSourceLabel">An epic idea to discuss</div>
     <div class="cs-concept-pill-wrap" id="csConceptPillWrap">
       <button class="cs-concept-pill" id="csConceptPill">
         <span class="cs-concept-pill-term" id="csConceptPillTerm">—</span>
@@ -5583,11 +5587,11 @@
     <!-- Actions: Copy & Share · Save · Surprise Me + Prev/Next -->
     <div class="cs-actions cs-post-prompt cs-hidden" id="csActions">
       <button class="cs-btn cs-btn--primary" id="csShareBtn">↑ Copy &amp; Share</button>
-      <button class="cs-btn cs-btn--save" id="csSaveAllBtn">♡ Save</button>
+      <button class="cs-btn cs-btn--save" id="csSaveAllBtn">♡ Stash</button>
       <button class="cs-btn cs-btn--surprise" id="csSurpriseBtn">✦ Surprise me</button>
       <div style="margin-left:auto;display:flex;gap:6px">
-        <button class="cs-nav-btn" id="csPrevBtn" title="Previous concept" disabled><span>⤺</span></button>
-        <button class="cs-nav-btn" id="csNextBtn" title="Next concept"><span>⤻</span></button>
+        <button class="cs-nav-btn" id="csPrevBtn" title="Previous concept" disabled>⤺</button>
+        <button class="cs-nav-btn" id="csNextBtn" title="Next concept">⤻</button>
       </div>
     </div>
 
@@ -7836,12 +7840,8 @@ function _csSaveConcept(concept, aiData) {
     };
     const idx = saved.findIndex(s => s && s.id === concept.id);
     if (idx >= 0) {
-      // Deep-merge aiData per-ctx: preserve contexts already saved that aren't in the new snapshot
-      if (saved[idx].aiData && entry.aiData) {
-        entry.aiData = Object.assign({}, saved[idx].aiData, entry.aiData);
-      } else if (!entry.aiData && saved[idx].aiData) {
-        entry.aiData = saved[idx].aiData;
-      }
+      // Preserve existing aiData if new entry has none
+      if (!entry.aiData && saved[idx].aiData) entry.aiData = saved[idx].aiData;
       saved[idx] = entry;
     } else {
       saved.push(entry);
@@ -8017,13 +8017,18 @@ function _csSwitchCat(cat) {
   _csPushToStack(concept);
   _csHidePostPrompt();
 
+  // Always keep nav controls visible — v1.73b
+  ['csRevealRow','csActions'].forEach(function(id) {
+    const el = document.getElementById(id);
+    if (el) { el.classList.remove('cs-hidden'); el.classList.add('cs-visible'); }
+  });
+
   // Auto-open scenario section so user picks who they're talking to
   const scenSec = document.getElementById('csScenarioSection');
   const scenLnk = document.getElementById('csRevealScenario');
   if (scenSec) scenSec.classList.add('open');
   if (scenLnk) scenLnk.classList.add('active');
 
-  // Also keep cat section reference open in pills (visual clarity)
   // Show the generate button so it's clear something will happen
   const genRow = document.getElementById('csGenerateRow');
   const genBtn = document.getElementById('csGenerateBtn');
@@ -8045,11 +8050,13 @@ function _csLoadNewConcept(concept) {
   _csAIData  = null;
   _renderCSShell(concept);
   _csPushToStack(concept);
-  // Hide all post-prompt elements
+  // Hide coaching/divider/feedback but keep nav controls visible
   _csHidePostPrompt();
-  // Reset reveal row (shown via _csShowPostPrompt)
-  const revealRow = document.getElementById('csRevealRow');
-  if (revealRow) { revealRow.classList.add('cs-hidden'); revealRow.classList.remove('cs-visible'); }
+  // Show reveal row + actions so user can always navigate — v1.73b
+  ['csRevealRow','csActions'].forEach(function(id) {
+    const el = document.getElementById(id);
+    if (el) { el.classList.remove('cs-hidden'); el.classList.add('cs-visible'); }
+  });
   // Reset surprise button label
   const surBtn = document.getElementById('csSurpriseBtn');
   if (surBtn) surBtn.textContent = '✦ Surprise me';
@@ -8072,11 +8079,11 @@ function _renderCSShell(concept) {
   if (sourceLabelEl) {
     const col = concept.collection_id != null ? COLLECTIONS_BY_ID[concept.collection_id] : null;
     if (col && col.podcast) {
-      sourceLabelEl.textContent = 'An Epic Idea To Discuss From ' + col.podcast + ':';
+      sourceLabelEl.textContent = 'From ' + col.podcast;
     } else if (col && col.type === 'episode') {
-      sourceLabelEl.textContent = 'An Epic Idea To Discuss:';
+      sourceLabelEl.textContent = 'From this episode';
     } else {
-      sourceLabelEl.textContent = 'An Epic Idea To Discuss:';
+      sourceLabelEl.textContent = 'An epic idea to discuss';
     }
   }
 
@@ -8136,9 +8143,8 @@ function _renderCSShell(concept) {
   // Hide coaching and post-prompt elements until generated
   _csHidePostPrompt();
   document.getElementById('csFeedbackRow').classList.add('cs-hidden');
-  // Reset save button
-  const saveBtn = document.getElementById('csSaveAllBtn');
-  if (saveBtn) { saveBtn.classList.remove('saved'); saveBtn.textContent = '\u2661 Save'; }
+  // Reflect saved state on button — v1.73b (don't always reset to unsaved)
+  _csUpdateSaveBtn();
 
   _renderRelated(concept);
 }
@@ -8167,22 +8173,13 @@ function _applyAIToCtx(ctx) {
     document.getElementById('csPromptText').textContent = d.prompt;
   }
 
-  // Coaching layer — fade out, swap, fade in
+  // Coaching layer
   const coaching = document.getElementById('csCoaching');
   const openersList = document.getElementById('csOpenersList');
-  function _applyCoachingContent() {
-    openersList.innerHTML = (d.openers || []).map((o, i) =>
-      `<div class="cs-opener-line"><span class="cs-opener-idx">${i === 0 ? 'Try saying' : 'Or try'}</span>${_escHtml(o)}</div>`
-    ).join('');
-    document.getElementById('csPitfall').textContent = d.pitfall || '';
-    if (coaching) coaching.style.opacity = '1';
-  }
-  if (coaching && coaching.classList.contains('cs-visible')) {
-    coaching.style.opacity = '0';
-    setTimeout(_applyCoachingContent, 180);
-  } else {
-    _applyCoachingContent();
-  }
+  openersList.innerHTML = (d.openers || []).map((o, i) =>
+    `<div class="cs-opener-line"><span class="cs-opener-idx">${i === 0 ? 'Try saying' : 'Or try'}</span>${_escHtml(o)}</div>`
+  ).join('');
+  document.getElementById('csPitfall').textContent = d.pitfall || '';
 
   // Auto-save generated prompt to history (with prompt text) — v1.72
   _csLogHistoryWithPrompt(_csConcept, ctx, d.prompt);
@@ -8208,8 +8205,9 @@ function _applyAIToCtx(ctx) {
     // keep label until first surprise click
   }
 
-  // Update green badge on scenario buttons — v1.73
+  // Update scenario badges + save state — v1.73b
   _csUpdateScenarioBadges();
+  _csUpdateSaveBtn();
 }
 
 function _renderRelated(concept) {
@@ -8293,7 +8291,9 @@ function _renderRelated(concept) {
 // ---- v1.72 HELPERS ----
 
 function _csHidePostPrompt() {
-  ['csCoaching','csDivider','csFeedbackRow','csActions','csRevealRow'].forEach(function(id) {
+  // Hide coaching, divider, feedback — but keep reveal row + actions visible
+  // so user can always navigate prev/next and change topic/scenario — v1.73b
+  ['csCoaching','csDivider','csFeedbackRow'].forEach(function(id) {
     const el = document.getElementById(id);
     if (el) { el.classList.add('cs-hidden'); el.classList.remove('cs-visible'); }
   });
@@ -8305,6 +8305,14 @@ function _csHidePostPrompt() {
   ['csRevealTopic','csRevealScenario','csRevealRelated'].forEach(function(id) {
     const el = document.getElementById(id);
     if (el) el.classList.remove('active');
+  });
+}
+
+// Full hide — used only on modal open before first concept loads
+function _csHideAll() {
+  ['csCoaching','csDivider','csFeedbackRow','csActions','csRevealRow'].forEach(function(id) {
+    const el = document.getElementById(id);
+    if (el) { el.classList.add('cs-hidden'); el.classList.remove('cs-visible'); }
   });
 }
 
@@ -8389,13 +8397,66 @@ function _csLogHistoryWithPrompt(concept, ctx, promptText) {
   } catch(e) {}
 }
 
-// Update green border on scenario buttons that already have a generated prompt — v1.73
+// Restore aiData from session cache or saved storage; fall back to fresh generate.
+// Fixes prev/next reliability — concept already generated in session is restored, not re-generated. — v1.73b
+function _csRestoreOrLoad(concept) {
+  // 1. Try session cache for all ctxs first
+  var restoredAny = false;
+  var newAiData = {};
+  ['partner','friend','colleague','meeting'].forEach(function(c) {
+    var ck = (typeof CS_SESSION_KEY !== 'undefined' ? CS_SESSION_KEY : 'lll_cs_session_') + concept.id + '_' + c;
+    try {
+      var cv = sessionStorage.getItem(ck);
+      if (cv) { newAiData[c] = JSON.parse(cv); restoredAny = true; }
+    } catch(e) {}
+  });
+  if (restoredAny) {
+    _csAIData = newAiData;
+    if (_csAIData[_csCtx]) {
+      _applyAIToCtx(_csCtx);
+      _csUpdateSaveBtn();
+      return;
+    }
+  }
+  // 2. Try saved storage
+  try {
+    var savedArr = JSON.parse(localStorage.getItem(CS_SAVED_KEY) || '[]');
+    var savedEntry = savedArr.find(function(s) { return s && s.id === concept.id; });
+    if (savedEntry && savedEntry.aiData && savedEntry.aiData[_csCtx]) {
+      _csAIData = JSON.parse(JSON.stringify(savedEntry.aiData));
+      _applyAIToCtx(_csCtx);
+      _csUpdateSaveBtn();
+      return;
+    }
+  } catch(e) {}
+  // 3. Fresh generate — show controls before API fires
+  _csAIData = null;
+  ['csRevealRow','csActions'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) { el.classList.remove('cs-hidden'); el.classList.add('cs-visible'); }
+  });
+  _csUpdateSaveBtn();
+  _loadAI(concept, _csCtx, false);
+}
+
+// Reflect saved state on the Stash button — v1.73b
+function _csUpdateSaveBtn() {
+  var saveBtn = document.getElementById('csSaveAllBtn');
+  if (!saveBtn || !_csConcept) return;
+  var isSaved = _csIsSaved(_csConcept.id);
+  saveBtn.textContent = isSaved ? '\u2665 Stash' : '\u2661 Stash';
+  if (isSaved) saveBtn.classList.add('saved'); else saveBtn.classList.remove('saved');
+}
+
+// Update scenario badge markers — v1.73
 function _csUpdateScenarioBadges() {
-  document.querySelectorAll('.cs-ctx-btn').forEach(btn => {
-    const ctx = btn.dataset.ctx;
+  document.querySelectorAll('.cs-ctx-btn').forEach(function(btn) {
+    var ctx = btn.dataset.ctx;
     btn.classList.toggle('has-prompt', !!(ctx && _csAIData && _csAIData[ctx]));
   });
 }
+
+// Prev / Next concept navigation — v1.72c
 function _csPushToStack(concept) {
   if (!concept) return;
   // Trim forward history when branching
@@ -8424,12 +8485,12 @@ function _csPrev() {
   const concept = CONCEPTS.find(c => c.id === id);
   if (!concept) return;
   _csConcept = concept;
-  _csAIData = null;
   _csCat = concept.category || 'psychology';
   _buildCsCatRow();
   _renderCSShell(concept);
   _csUpdateNavBtns();
-  _loadAI(concept, _csCtx, false);
+  // Restore cached aiData from session or saved storage — v1.73b
+  _csRestoreOrLoad(concept);
 }
 
 function _csNext() {
@@ -8439,12 +8500,12 @@ function _csNext() {
   const concept = CONCEPTS.find(c => c.id === id);
   if (!concept) return;
   _csConcept = concept;
-  _csAIData = null;
   _csCat = concept.category || 'psychology';
   _buildCsCatRow();
   _renderCSShell(concept);
   _csUpdateNavBtns();
-  _loadAI(concept, _csCtx, false);
+  // Restore cached aiData from session or saved storage — v1.73b
+  _csRestoreOrLoad(concept);
 }
 
 // Related reveal toggle — v1.72c
@@ -8489,6 +8550,11 @@ function _csSwapConcept(id) {
   _renderCSShell(concept);
   _csPushToStack(concept);
   _csHidePostPrompt();
+  // Keep nav controls visible — v1.73b
+  ['csRevealRow','csActions'].forEach(function(id) {
+    const el = document.getElementById(id);
+    if (el) { el.classList.remove('cs-hidden'); el.classList.add('cs-visible'); }
+  });
   const relSec = document.getElementById('csRelatedSection');
   if (relSec) relSec.classList.remove('open');
   const relLnk = document.getElementById('csRevealRelated');
@@ -8683,6 +8749,20 @@ function _showCSLoading(on) {
   if (on) {
     inner.classList.add('cs-prompt-hidden');
     inner.classList.remove('cs-prompt-visible');
+    // Collapse coaching smoothly — v1.73b
+    const coaching = document.getElementById('csCoaching');
+    if (coaching && coaching.classList.contains('cs-visible')) {
+      coaching.style.opacity = '0';
+      setTimeout(function() {
+        coaching.classList.add('cs-hidden');
+        coaching.classList.remove('cs-visible');
+        coaching.style.opacity = '';
+        const openersList = document.getElementById('csOpenersList');
+        const pitfall = document.getElementById('csPitfall');
+        if (openersList) openersList.innerHTML = '';
+        if (pitfall) pitfall.textContent = '';
+      }, 200);
+    }
   }
   // When turning off (on=false), _applyAIToCtx handles the fade-in via rAF
 }
@@ -8692,15 +8772,14 @@ function _showCSLoading(on) {
 function _wireSwipe() {
   const block = document.getElementById('csPromptBlock');
   if (!block) return;
-  let startX = 0, currentX = 0, dragging = false, moved = false;
+  let startX = 0, currentX = 0, dragging = false;
   const THRESHOLD = 80;
 
-  function onStart(x) { startX = x; currentX = x; dragging = true; moved = false; }
+  function onStart(x) { startX = x; dragging = true; }
   function onMove(x) {
     if (!dragging) return;
     currentX = x;
     const dx = currentX - startX;
-    if (Math.abs(dx) > 8) moved = true;
     block.style.transform = `translateX(${dx * 0.35}px) rotate(${dx * 0.015}deg)`;
     block.classList.toggle('swiping-left',  dx < -30);
     block.classList.toggle('swiping-right', dx >  30);
@@ -8710,9 +8789,9 @@ function _wireSwipe() {
     const dx = currentX - startX;
     block.style.transform = '';
     block.classList.remove('swiping-left', 'swiping-right');
-    if (moved && dx < -THRESHOLD) _csSwipeLeft();
-    else if (moved && dx > THRESHOLD) _csSwipeRight();
-    startX = 0; currentX = 0; moved = false;
+    if (dx < -THRESHOLD) _csSwipeLeft();
+    else if (dx > THRESHOLD) _csSwipeRight();
+    startX = 0; currentX = 0;
   }
 
   block.addEventListener('mousedown',  e => onStart(e.clientX));
@@ -8767,8 +8846,6 @@ function _wireCSEvents() {
       document.querySelectorAll('.cs-ctx-btn').forEach(b => b.classList.remove('active'));
       this.classList.add('active');
       _csCtx = this.dataset.ctx;
-      // Update scenario label immediately so it reflects new ctx even during loading
-      document.getElementById('csOpener').textContent = CS_OPENERS[_csCtx] || '';
       // Collapse scenario section
       const sec = document.getElementById('csScenarioSection');
       if (sec) sec.classList.remove('open');
@@ -8828,7 +8905,7 @@ function _wireCSEvents() {
       const conceptSnap = _csConcept;
       const aiSnap = _csAIData;
       _csSaveConcept(conceptSnap, aiSnap);
-      saveAllBtn.textContent = '\u2665 Saved';
+      saveAllBtn.textContent = '\u2665 Stash';
       saveAllBtn.classList.add('saved');
       track('cs_saved', { concept_id: conceptSnap.id });
     });
@@ -10441,6 +10518,10 @@ function playStreakMilestoneSFX() {
   padding-right: 0;
   transition: opacity 0.2s, max-width 0.25s, padding 0.25s, border-color 0.2s;
 }
+/* Hide on mobile — lives in hamburger menu instead — v1.73b */
+@media (max-width: 768px) {
+  .nav-epic-standalone { display: none !important; }
+}
 #mainNav:hover .nav-epic-standalone {
   opacity: 1;
   pointer-events: all;
@@ -10673,7 +10754,7 @@ function playStreakMilestoneSFX() {
 
 /* Inside detail: scenario tabs */
 .conv-ctx-tabs {
-  display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap;
+  display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; align-items: center;
 }
 .conv-ctx-tab {
   font-family: 'DM Mono', monospace; font-size: 0.58rem;
@@ -10683,6 +10764,14 @@ function playStreakMilestoneSFX() {
   color: var(--muted); cursor: pointer; transition: all 0.15s;
 }
 .conv-ctx-tab.active { border-color: #c47a7a; color: #c47a7a; background: rgba(196,122,122,0.08); }
+.conv-more-scen-btn {
+  font-family: 'DM Mono', monospace; font-size: 0.7rem;
+  letter-spacing: 0; padding: 4px 9px; border-radius: 6px;
+  border: 1px solid rgba(232,213,163,0.3); background: none;
+  color: var(--accent); cursor: pointer; transition: all 0.15s;
+  margin-left: auto; flex-shrink: 0; line-height: 1;
+}
+.conv-more-scen-btn:hover { border-color: var(--accent); background: rgba(232,213,163,0.07); }
 
 .conv-generate-btn {
   width: 100%; padding: 11px;
@@ -10743,8 +10832,6 @@ function playStreakMilestoneSFX() {
 .conv-action-btn:hover { border-color: var(--border-hover); color: var(--muted2); }
 .conv-delete-btn { color: #d4715a; border-color: rgba(212,113,90,0.3); }
 .conv-delete-btn:hover { border-color: #d4715a; background: rgba(212,113,90,0.06); }
-.conv-more-scenarios-btn { color: var(--accent); border-color: rgba(232,213,163,0.3); }
-.conv-more-scenarios-btn:hover { border-color: var(--accent); background: rgba(232,213,163,0.06); }
 
 /* History entry (simpler) */
 .conv-hist-entry {
@@ -10880,17 +10967,18 @@ function openConversations() {
   overlay.classList.add('active');
   document.body.classList.add('cotd-open'); // reuse scroll-lock class
 
-  // Always open on Saved tab — v1.73
-  _convTab = 'saved';
+  // Sync tab UI to last-active tab state
+  document.getElementById('convTabSaved').classList.toggle('active', _convTab === 'saved');
+  document.getElementById('convTabHistory').classList.toggle('active', _convTab === 'history');
+  document.getElementById('convSavedControls').style.display = _convTab === 'saved' ? '' : 'none';
 
-  // Sync tab UI to saved tab
-  document.getElementById('convTabSaved').classList.add('active');
-  document.getElementById('convTabHistory').classList.remove('active');
-  document.getElementById('convSavedControls').style.display = '';
-
-  _convBuildCatFilters();
-  _convRenderSaved();
-  _convCheckWarn();
+  if (_convTab === 'saved') {
+    _convBuildCatFilters();
+    _convRenderSaved();
+    _convCheckWarn();
+  } else {
+    _convRenderHistory();
+  }
 
   // Wire close
   document.getElementById('convClose').onclick = closeConversations;
@@ -11046,7 +11134,6 @@ function _convEntryHTML(entry) {
         <div class="conv-entry-actions">
           <button class="conv-action-btn conv-delete-btn" onclick="_convDelete(${entry.id})">✕ Remove</button>
           <button class="conv-action-btn" onclick="_convOpenConcept(${entry.id})">Open card →</button>
-          <button class="conv-action-btn conv-more-scenarios-btn" onclick="_convOpenCSWithScenario(${entry.id})">More scenarios ↗</button>
         </div>
       </div>
     </div>
@@ -11066,7 +11153,10 @@ function _convDetailHTML(entry) {
     : '').join('');
   const d = entry.aiData[firstCtx] || {};
   return `
-    <div class="conv-ctx-tabs">${tabs}</div>
+    <div class="conv-ctx-tabs">
+      ${tabs}
+      <button class="conv-more-scen-btn" onclick="_convOpenCSWithScenario(${entry.id})" title="Open in Spark with all scenarios">＋</button>
+    </div>
     <div id="convCtxContent${entry.id}">${_convCtxBlock(d)}</div>`;
 }
 
@@ -11155,54 +11245,20 @@ function _convOpenCS(id) {
       _csConcept = concept;
       _csAIData = null;
       _renderCSShell(concept);
+      _csPushToStack(concept);
+      // Always show nav controls — v1.73b
+      ['csRevealRow','csActions'].forEach(function(id) {
+        const el = document.getElementById(id);
+        if (el) { el.classList.remove('cs-hidden'); el.classList.add('cs-visible'); }
+      });
+      // Show generate button
+      const genRow = document.getElementById('csGenerateRow');
+      const genBtn = document.getElementById('csGenerateBtn');
+      if (genRow) genRow.style.display = 'block';
+      if (genBtn) { genBtn.disabled = false; genBtn.classList.remove('loading'); genBtn.innerHTML = '<span class="cs-generate-btn-icon">✦</span> Generate conversation starter'; }
       openCS();
     }, 200);
   }
-}
-
-// Open CS modal with scenario section pre-expanded — from "More scenarios" in Stash
-function _convOpenCSWithScenario(id) {
-  closeConversations();
-  const concept = CONCEPTS.find(x => x.id === id);
-  if (!concept) return;
-  // Pull existing aiData from saved so prior scenario prompts are available
-  try {
-    const savedArr = JSON.parse(localStorage.getItem(CS_SAVED_KEY) || '[]');
-    const savedEntry = savedArr.find(s => s && s.id === id);
-    if (savedEntry && savedEntry.aiData) {
-      _csAIData = JSON.parse(JSON.stringify(savedEntry.aiData));
-    } else {
-      _csAIData = null;
-    }
-  } catch(e) { _csAIData = null; }
-  setTimeout(() => {
-    _csConcept = concept;
-    _csCat = concept.category || 'psychology';
-    _buildCsCatRow();
-    _renderCSShell(concept);
-    _wireCSEvents();
-    // Apply first available ctx or default
-    const contexts = ['partner','friend','colleague','meeting'];
-    const firstCtx = _csAIData ? (contexts.find(c => _csAIData[c]) || _csCtx) : _csCtx;
-    _csCtx = firstCtx;
-    document.querySelectorAll('.cs-ctx-btn').forEach(b => {
-      b.classList.toggle('active', b.dataset.ctx === _csCtx);
-    });
-    if (_csAIData && _csAIData[_csCtx]) {
-      _applyAIToCtx(_csCtx);
-    } else {
-      const genRow = document.getElementById('csGenerateRow');
-      if (genRow) genRow.style.display = 'block';
-    }
-    openCS();
-    // Open scenario section after modal is visible
-    setTimeout(() => {
-      const sec = document.getElementById('csScenarioSection');
-      const lnk = document.getElementById('csRevealScenario');
-      if (sec) sec.classList.add('open');
-      if (lnk) lnk.classList.add('active');
-    }, 350);
-  }, 200);
 }
 
 function _convOpenConcept(id) {
@@ -11266,56 +11322,24 @@ function _convOpenCSById(id, ctx) {
   const concept = CONCEPTS.find(x => x.id === id);
   if (!concept) return;
 
-  // Find history entry with saved prompt text for this concept+ctx
-  let savedPrompt = null;
-  try {
-    const hist = JSON.parse(localStorage.getItem(CS_HISTORY_KEY) || '[]');
-    const entry = hist.find(h => h.id === id && (!ctx || h.ctx === ctx));
-    if (entry && entry.promptText) savedPrompt = entry;
-  } catch(e) {}
-
   setTimeout(() => {
     _csConcept = concept;
     _csCat = concept.category || 'psychology';
-    _csCtx = (savedPrompt && savedPrompt.ctx) || ctx || 'friend';
+    // Set ctx from arg; may be overridden by restored aiData
+    _csCtx = ctx || 'friend';
     _buildCsCatRow();
     _renderCSShell(concept);
     _wireCSEvents();
+    _csPushToStack(concept);
 
-    if (savedPrompt && savedPrompt.promptText) {
-      // Restore the saved generated prompt — no new API call
-      if (!_csAIData) _csAIData = {};
-      // Try to pull full aiData from saved entry (openers + pitfall preserved there)
-      try {
-        const savedArr = JSON.parse(localStorage.getItem(CS_SAVED_KEY) || '[]');
-        const savedEntry = savedArr.find(s => s && s.id === id);
-        if (savedEntry && savedEntry.aiData) {
-          _csAIData = JSON.parse(JSON.stringify(savedEntry.aiData));
-        }
-      } catch(e) {}
-      // Ensure the requested ctx has at least the prompt from history
-      if (!_csAIData[_csCtx] || !_csAIData[_csCtx].prompt) {
-        _csAIData[_csCtx] = {
-          prompt: savedPrompt.promptText,
-          openers: (_csAIData[_csCtx] && _csAIData[_csCtx].openers) || [],
-          pitfall: (_csAIData[_csCtx] && _csAIData[_csCtx].pitfall) || ''
-        };
-      }
-      // Update opener label and show prompt
-      document.getElementById('csOpener').textContent = CS_OPENERS[_csCtx] || '';
-      const inner = document.getElementById('csPromptInner');
-      document.getElementById('csPromptText').textContent = savedPrompt.promptText;
-      if (inner) {
-        inner.classList.remove('cs-prompt-hidden');
-        inner.classList.add('cs-prompt-visible');
-      }
-      // Show reveal row and actions
-      setTimeout(function() { _csShowPostPrompt(); }, 150);
-    } else {
-      // No saved prompt — fire a fresh generate
-      _loadAI(concept, _csCtx, false);
-    }
+    // Always show nav controls — v1.73b
+    ['csRevealRow','csActions'].forEach(function(id) {
+      const el = document.getElementById(id);
+      if (el) { el.classList.remove('cs-hidden'); el.classList.add('cs-visible'); }
+    });
 
+    // Restore using the same logic as prev/next — session → saved → generate
+    _csRestoreOrLoad(concept);
     openCS();
   }, 200);
 }
