@@ -1315,25 +1315,30 @@
   align-items: center;
   position: relative;
 }
-/* v1.70 — Saved badge */
+/* v1.72c — Saved badge: today's count, funky DM Mono */
 .nav-saved-badge {
   position: absolute;
-  top: -5px;
-  right: -5px;
-  min-width: 18px;
-  height: 18px;
+  top: -7px;
+  right: -10px;
+  min-width: 20px;
+  height: 20px;
   padding: 0 5px;
   border-radius: 999px;
   background: var(--accent);
   color: #0d0d0d;
   font-family: 'DM Mono', monospace;
-  font-size: 0.5rem;
+  font-size: 0.62rem;
   font-weight: 700;
-  line-height: 18px;
+  line-height: 20px;
   text-align: center;
-  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
   pointer-events: none;
-  transition: background 0.2s;
+  transition: background 0.25s, transform 0.15s;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.25);
 }
 .nav-saved-badge.badge-alert {
   background: #c47a7a;
@@ -2787,6 +2792,115 @@
     color: var(--accent); flex-shrink: 0; margin-top: 1px;
   }
 
+  /* Prev / Next concept navigation — v1.72c */
+  .cs-nav-row {
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 0.6rem;
+  }
+  .cs-nav-btn {
+    background: none; border: 1px solid var(--border);
+    border-radius: 999px; padding: 4px 11px;
+    font-family: 'DM Mono', monospace; font-size: 0.6rem;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--muted); cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .cs-nav-btn:hover { border-color: var(--border-hover); color: var(--muted2); }
+  .cs-nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  /* Help ? button + speech bubble — v1.72c */
+  .cs-headline-row {
+    display: flex; align-items: flex-start; gap: 10px;
+    margin-bottom: 1.1rem;
+  }
+  .cs-headline-row .cs-headline { margin-bottom: 0; flex: 1; }
+  .cs-help-btn {
+    flex-shrink: 0;
+    margin-top: 6px;
+    background: none; border: 1px solid var(--border);
+    border-radius: 50%;
+    width: 22px; height: 22px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem; font-weight: 700;
+    color: var(--muted); cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: border-color 0.2s, color 0.2s;
+    position: relative;
+  }
+  .cs-help-btn:hover { border-color: var(--accent); color: var(--accent); }
+  /* Speech bubble — desktop hover */
+  .cs-help-bubble {
+    position: absolute;
+    top: 30px; right: 0;
+    width: 260px;
+    background: var(--surface2);
+    border: 1px solid var(--border-hover);
+    border-radius: 10px;
+    padding: 14px 16px;
+    z-index: 200;
+    opacity: 0; pointer-events: none;
+    transform: translateY(-4px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    text-align: left;
+  }
+  .cs-help-bubble::before {
+    content: '';
+    position: absolute;
+    top: -5px; right: 6px;
+    width: 9px; height: 9px;
+    background: var(--surface2);
+    border-left: 1px solid var(--border-hover);
+    border-top: 1px solid var(--border-hover);
+    transform: rotate(45deg);
+  }
+  @media (hover: hover) {
+    .cs-help-btn:hover .cs-help-bubble {
+      opacity: 1; pointer-events: auto;
+      transform: translateY(0);
+    }
+  }
+  .cs-help-step {
+    font-family: 'DM Sans', sans-serif; font-size: 0.76rem;
+    color: var(--muted2); line-height: 1.5;
+    display: flex; gap: 8px; align-items: baseline;
+    margin-bottom: 8px;
+  }
+  .cs-help-step:last-child { margin-bottom: 0; }
+  .cs-help-num {
+    font-family: 'DM Mono', monospace; font-size: 0.55rem;
+    color: var(--accent); flex-shrink: 0;
+  }
+  /* Mobile: tap opens overlay */
+  .cs-help-overlay {
+    display: none;
+    position: fixed; inset: 0; z-index: 1400;
+    background: rgba(13,13,13,0.7);
+    align-items: center; justify-content: center;
+  }
+  .cs-help-overlay.active { display: flex; }
+  .cs-help-overlay-card {
+    background: var(--surface);
+    border: 1px solid var(--border-hover);
+    border-radius: 14px;
+    padding: 24px 22px;
+    max-width: 320px; width: calc(100% - 3rem);
+    animation: eggPop 0.25s ease both;
+  }
+  .cs-help-overlay-title {
+    font-family: 'DM Mono', monospace; font-size: 0.6rem;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 14px;
+  }
+  .cs-help-overlay-close {
+    float: right; background: none; border: none;
+    color: var(--muted); cursor: pointer; font-size: 1rem;
+    margin-top: -4px;
+  }
+
+  /* How-to old style — keep for fallback but hide */
+  .cs-howto { display: none; }
+
   /* Source label above concept pill — v1.72 */
   .cs-source-label {
     font-family: 'DM Mono', monospace;
@@ -2812,7 +2926,7 @@
     gap: 8px;
     flex-wrap: wrap;
   }
-  .cs-reveal-row.visible { display: flex; align-items: center; }
+  .cs-reveal-row.cs-visible { display: flex; align-items: center; }
   .cs-reveal-link {
     background: none;
     border: 1px solid var(--border);
@@ -5336,39 +5450,28 @@
       <span class="cs-eyebrow-date" id="csDate"></span>
     </div>
 
-    <h2 class="cs-headline" id="csHeadline">Today's Conversation Starter</h2>
-
-    <!-- How to use — expandable, v1.72 -->
-    <div class="cs-howto">
-      <button class="cs-howto-toggle" id="csHowtoToggle" onclick="_csToggleHowto()">
-        How does this work? <span class="cs-howto-arrow">▾</span>
-      </button>
-      <div class="cs-howto-body" id="csHowtoBody">
-        <div class="cs-howto-inner">
-          <div class="cs-howto-step">
-            <span class="cs-howto-num">01</span>
-            <span>A real concept from a podcast gets picked for you. Tap it to see what it actually means — plain English, no fluff.</span>
-          </div>
-          <div class="cs-howto-step">
-            <span class="cs-howto-num">02</span>
-            <span>A conversation starter gets generated — tailored to who you're talking to. Use it tonight, at lunch, wherever.</span>
-          </div>
-          <div class="cs-howto-step">
-            <span class="cs-howto-num">03</span>
-            <span>Did it land? Tell us. Save the ones worth keeping. Change the topic or scenario anytime below the prompt.</span>
-          </div>
+    <div class="cs-headline-row">
+      <h2 class="cs-headline" id="csHeadline">Today's Conversation Starter</h2>
+      <button class="cs-help-btn" id="csHelpBtn" onclick="_csHelpClick()" aria-label="How does this work">
+        ❓
+        <div class="cs-help-bubble" id="csHelpBubble">
+          <div class="cs-help-step"><span class="cs-help-num">01</span><span>A real concept from a podcast gets picked for you. Tap it to see what it means — plain English, no fluff.</span></div>
+          <div class="cs-help-step"><span class="cs-help-num">02</span><span>A conversation starter gets generated, tailored to who you're talking to. Use it tonight, at lunch, wherever.</span></div>
+          <div class="cs-help-step"><span class="cs-help-num">03</span><span>Did it land? Tell us. Save the ones worth keeping. Change topic or scenario below the prompt anytime.</span></div>
         </div>
-      </div>
-    </div>
-    <!-- Category selector — hidden by default, revealed via link below prompt -->
-    <div class="cs-reveal-section" id="csCatSection">
-      <div class="cs-reveal-section-inner">
-        <div class="cs-section-label" style="margin-bottom:0.5rem">Category</div>
-        <div class="cs-cat-row" id="csCatRow"></div>
-        <div style="height:0.5rem"></div>
-      </div>
+      </button>
     </div>
 
+    <!-- Help overlay for mobile -->
+    <div class="cs-help-overlay" id="csHelpOverlay" onclick="_csHelpOverlayClose(event)">
+      <div class="cs-help-overlay-card">
+        <button class="cs-help-overlay-close" onclick="_csHelpOverlayClose()">✕</button>
+        <div class="cs-help-overlay-title">How does this work?</div>
+        <div class="cs-help-step"><span class="cs-help-num">01</span><span>A real concept from a podcast gets picked for you. Tap it to see what it means — plain English, no fluff.</span></div>
+        <div class="cs-help-step" style="margin-top:10px"><span class="cs-help-num">02</span><span>A conversation starter gets generated, tailored to who you're talking to. Use it tonight, at lunch, wherever.</span></div>
+        <div class="cs-help-step" style="margin-top:10px"><span class="cs-help-num">03</span><span>Did it land? Tell us. Save the ones worth keeping. Change topic or scenario below the prompt anytime.</span></div>
+      </div>
+    </div>
     <!-- Concept expandable pill — term only -->
     <div class="cs-source-label" id="csSourceLabel">An epic idea to discuss</div>
     <div class="cs-concept-pill-wrap" id="csConceptPillWrap">
@@ -5406,28 +5509,7 @@
       <div class="cs-swipe-save" id="csSwipeSave">♡ Saved</div>
     </div>
 
-    <!-- Reveal links + scenario row — below prompt, v1.72 -->
-    <div class="cs-reveal-row" id="csRevealRow">
-      <button class="cs-reveal-link" id="csRevealTopic" onclick="_csToggleTopicReveal()">Change topic</button>
-      <span class="cs-reveal-sep">·</span>
-      <button class="cs-reveal-link" id="csRevealScenario" onclick="_csToggleScenarioReveal()">Change scenario</button>
-    </div>
-
-    <!-- Scenario selector — hidden by default, revealed via link -->
-    <div class="cs-reveal-section" id="csScenarioSection">
-      <div class="cs-reveal-section-inner">
-        <div style="height:0.5rem"></div>
-        <div class="cs-context-row">
-          <button class="cs-ctx-btn" data-ctx="partner">Partner</button>
-          <button class="cs-ctx-btn active" data-ctx="friend">Friend</button>
-          <button class="cs-ctx-btn" data-ctx="colleague">Colleague</button>
-          <button class="cs-ctx-btn" data-ctx="meeting">Meeting</button>
-        </div>
-        <div style="height:0.5rem"></div>
-      </div>
-    </div>
-
-    <!-- Coaching layer -->
+    <!-- Coaching layer — immediately after prompt -->
     <div class="cs-coaching cs-post-prompt cs-hidden" id="csCoaching">
       <div class="cs-coaching-section">
         <div class="cs-coaching-label">You could say:</div>
@@ -5439,10 +5521,52 @@
       </div>
     </div>
 
-    <!-- 8. Divider -->
-    <div class="cs-modal-divider cs-post-prompt cs-hidden" id="csDivider" style="margin:1rem 0 0.75rem"></div>
+    <!-- Bottom controls: Change topic · Change scenario · Related — v1.72c -->
+    <div class="cs-reveal-row cs-post-prompt cs-hidden" id="csRevealRow">
+      <button class="cs-reveal-link" id="csRevealTopic" onclick="_csToggleTopicReveal()">Change topic</button>
+      <span class="cs-reveal-sep">·</span>
+      <button class="cs-reveal-link" id="csRevealScenario" onclick="_csToggleScenarioReveal()">Change scenario</button>
+      <span class="cs-reveal-sep">·</span>
+      <button class="cs-reveal-link" id="csRevealRelated" onclick="_csToggleRelatedReveal()">Related</button>
+    </div>
 
-    <!-- 9. Report back + feedback message -->
+    <!-- Category pills — expands below the reveal row -->
+    <div class="cs-reveal-section" id="csCatSection">
+      <div class="cs-reveal-section-inner">
+        <div style="height:0.5rem"></div>
+        <div class="cs-cat-row" id="csCatRow"></div>
+        <div style="height:0.4rem"></div>
+      </div>
+    </div>
+
+    <!-- Scenario buttons — expands below the reveal row -->
+    <div class="cs-reveal-section" id="csScenarioSection">
+      <div class="cs-reveal-section-inner">
+        <div style="height:0.5rem"></div>
+        <div class="cs-context-row">
+          <button class="cs-ctx-btn" data-ctx="partner">Partner</button>
+          <button class="cs-ctx-btn active" data-ctx="friend">Friend</button>
+          <button class="cs-ctx-btn" data-ctx="colleague">Colleague</button>
+          <button class="cs-ctx-btn" data-ctx="meeting">Meeting</button>
+        </div>
+        <div style="height:0.4rem"></div>
+      </div>
+    </div>
+
+    <!-- Related concepts — expands below the reveal row -->
+    <div class="cs-reveal-section" id="csRelatedSection">
+      <div class="cs-reveal-section-inner">
+        <div style="height:0.5rem"></div>
+        <div class="cs-related-label" id="csRelatedLabel">Related concepts</div>
+        <div class="cs-related-row" id="csRelatedRow"></div>
+        <div style="height:0.4rem"></div>
+      </div>
+    </div>
+
+    <!-- Divider -->
+    <div class="cs-modal-divider cs-post-prompt cs-hidden" id="csDivider" style="margin:0.75rem 0 0.75rem"></div>
+
+    <!-- Report back + feedback message -->
     <div class="cs-feedback-row cs-post-prompt cs-hidden" id="csFeedbackRow">
       <span class="cs-feedback-label">Did it land?</span>
       <button class="cs-fb-btn" id="csFbUp" aria-label="Yes">👍</button>
@@ -5450,20 +5574,14 @@
     </div>
     <div class="cs-feedback-msg" id="csFeedbackMsg" style="display:none;font-family:'DM Sans',sans-serif;font-size:0.82rem;color:var(--accent);line-height:1.5;margin-bottom:0.75rem;font-style:italic"></div>
 
-    <!-- 10. Actions -->
+    <!-- Actions: Copy & Share · Save · Surprise Me + Prev/Next -->
     <div class="cs-actions cs-post-prompt cs-hidden" id="csActions">
       <button class="cs-btn cs-btn--primary" id="csShareBtn">↑ Copy &amp; Share</button>
       <button class="cs-btn cs-btn--save" id="csSaveAllBtn">♡ Save</button>
       <button class="cs-btn cs-btn--surprise" id="csSurpriseBtn">✦ Surprise me</button>
-      <button class="cs-btn" id="csRelatedBtn" onclick="_csToggleRelated()" style="display:none">◈ Related</button>
-    </div>
-
-    <!-- 11. Related concepts — collapsed by default -->
-    <div id="csRelatedToggle">
-      <div id="csRelatedCollapse" style="display:none">
-        <div class="cs-modal-divider" style="margin:0.75rem 0 0.5rem"></div>
-        <div class="cs-related-label" id="csRelatedLabel" style="display:none">Related concepts</div>
-        <div class="cs-related-row" id="csRelatedRow"></div>
+      <div style="margin-left:auto;display:flex;gap:6px">
+        <button class="cs-nav-btn" id="csPrevBtn" title="Previous concept" disabled>⤺</button>
+        <button class="cs-nav-btn" id="csNextBtn" title="Next concept">⤻</button>
       </div>
     </div>
 
@@ -7663,16 +7781,16 @@ function refreshNavBadge() {
   const badge = document.getElementById('navSavedBadge');
   if (!badge) return;
   try {
+    const todayStr = _getTodayStr();
     const saved = JSON.parse(localStorage.getItem(CS_SAVED_KEY) || '[]').filter(Boolean);
-    const count = saved.length;
-    if (count === 0) {
+    // Count only items saved today
+    const todayCount = saved.filter(s => s.savedAt && s.savedAt.slice(0, 10) === todayStr).length;
+    if (todayCount === 0) {
       badge.style.display = 'none';
     } else {
-      badge.style.display = 'inline-block';
-      // Diamond symbols: up to 5 ◈, then ◈◈◈◈◈ for 5+
-      const diamonds = Math.min(count, 5);
-      badge.textContent = '◈'.repeat(diamonds);
-      badge.classList.toggle('badge-alert', count >= 5);
+      badge.style.display = 'inline-flex';
+      badge.textContent = todayCount;
+      badge.classList.toggle('badge-alert', todayCount >= 5);
     }
   } catch(e) { badge.style.display = 'none'; }
 }
@@ -7780,6 +7898,8 @@ let _csCtx       = 'friend';
 let _csAIData    = null;   // { partner, friend, colleague, meeting } from API
 let _csLoading   = false;
 let _csCat       = 'psychology';  // default category v1.72
+let _csConceptStack = [];  // history for prev/next — array of concept IDs
+let _csStackIdx  = -1;     // current position in stack
 
 // ---- INIT ----
 
@@ -7798,6 +7918,7 @@ function initConversationStarter() {
   if (!_csConcept) return;
 
   _renderCSShell(_csConcept);
+  _csPushToStack(_csConcept);
   _wireCSEvents();
 
   // v1.72: auto-open immediately unless dismissed today
@@ -7870,15 +7991,34 @@ function _csSwitchCat(cat) {
   _csCat = cat;
   _buildCsCatRow();
   // Collapse category section after selection
-  const sec = document.getElementById('csCatSection');
-  if (sec) sec.classList.remove('open');
-  const lnk = document.getElementById('csRevealTopic');
-  if (lnk) lnk.classList.remove('active');
+  const catSec = document.getElementById('csCatSection');
+  if (catSec) catSec.classList.remove('open');
+  const catLnk = document.getElementById('csRevealTopic');
+  if (catLnk) catLnk.classList.remove('active');
+
+  // Pick concept from new category
   const concept = _csPickForCat(cat, false);
   if (!concept) return;
-  _csLoadNewConcept(concept);
-  // Auto-fire new generate for this concept + current ctx
-  _loadAI(concept, _csCtx, false);
+
+  // Load concept shell (no generate yet)
+  _csConcept = concept;
+  _csAIData = null;
+  _renderCSShell(concept);
+  _csPushToStack(concept);
+  _csHidePostPrompt();
+
+  // Auto-open scenario section so user picks who they're talking to
+  const scenSec = document.getElementById('csScenarioSection');
+  const scenLnk = document.getElementById('csRevealScenario');
+  if (scenSec) scenSec.classList.add('open');
+  if (scenLnk) scenLnk.classList.add('active');
+
+  // Also keep cat section reference open in pills (visual clarity)
+  // Show the generate button so it's clear something will happen
+  const genRow = document.getElementById('csGenerateRow');
+  const genBtn = document.getElementById('csGenerateBtn');
+  if (genRow) genRow.style.display = 'block';
+  if (genBtn) { genBtn.disabled = false; genBtn.classList.remove('loading'); genBtn.innerHTML = '<span class="cs-generate-btn-icon">✦</span> Generate conversation starter'; }
 }
 
 function _csPickForCat(cat, deterministic) {
@@ -7894,11 +8034,12 @@ function _csLoadNewConcept(concept) {
   _csConcept = concept;
   _csAIData  = null;
   _renderCSShell(concept);
+  _csPushToStack(concept);
   // Hide all post-prompt elements
   _csHidePostPrompt();
-  // Reset reveal row
+  // Reset reveal row (shown via _csShowPostPrompt)
   const revealRow = document.getElementById('csRevealRow');
-  if (revealRow) revealRow.classList.remove('visible');
+  if (revealRow) { revealRow.classList.add('cs-hidden'); revealRow.classList.remove('cs-visible'); }
   // Reset surprise button label
   const surBtn = document.getElementById('csSurpriseBtn');
   if (surBtn) surBtn.textContent = '✦ Surprise me';
@@ -7908,7 +8049,7 @@ function _csLoadNewConcept(concept) {
 
 function _renderCSShell(concept) {
   if (!concept) return;
-  _csLogHistory(concept, _csCtx); // history log — fire-and-forget
+  // NOTE: history is logged only in _csLogHistoryWithPrompt (after AI generates), not here
   document.getElementById('csDate').textContent = formatTodayLabel();
   document.getElementById('csPromptText').textContent = concept.prompt;
   document.getElementById('csOpener').textContent = CS_OPENERS[_csCtx] || '';
@@ -8031,9 +8172,7 @@ function _applyAIToCtx(ctx) {
   const genRow = document.getElementById('csGenerateRow');
   if (genRow) genRow.style.display = 'none';
 
-  // Show reveal links
-  const revealRow = document.getElementById('csRevealRow');
-  if (revealRow) revealRow.classList.add('visible');
+  // Reveal row is shown via _csShowPostPrompt — no extra action needed
 
   // Show post-prompt elements with staggered fade
   setTimeout(function() { _csShowPostPrompt(); }, 200);
@@ -8120,49 +8259,55 @@ function _renderRelated(concept) {
     wrap.appendChild(expand);
     row.appendChild(wrap);
   });
-  // Show Related button only if we have pills
-  const relatedBtn = document.getElementById('csRelatedBtn');
-  if (relatedBtn) relatedBtn.style.display = pool.length > 0 ? '' : 'none';
-  // Reset collapsed state on new concept
-  const collapse = document.getElementById('csRelatedCollapse');
-  const relBtnEl = document.getElementById('csRelatedBtn');
-  if (collapse) collapse.style.display = 'none';
-  if (relBtnEl) relBtnEl.classList.remove('active');
-}
-
-function _csToggleRelated() {
-  const collapse = document.getElementById('csRelatedCollapse');
-  const btn = document.getElementById('csRelatedBtn');
-  if (!collapse) return;
-  const open = collapse.style.display === 'none';
-  collapse.style.display = open ? 'block' : 'none';
-  if (btn) btn.classList.toggle('active', open);
+  // Show/hide Related reveal pill based on pool size
+  const relatedLnk = document.getElementById('csRevealRelated');
+  if (relatedLnk) relatedLnk.style.display = pool.length > 0 ? '' : 'none';
+  // Reset related section state on new concept
+  const relSec = document.getElementById('csRelatedSection');
+  if (relSec) relSec.classList.remove('open');
+  if (relatedLnk) relatedLnk.classList.remove('active');
 }
 
 // ---- v1.72 HELPERS ----
 
 function _csHidePostPrompt() {
-  ['csCoaching','csDivider','csFeedbackRow','csActions'].forEach(function(id) {
+  ['csCoaching','csDivider','csFeedbackRow','csActions','csRevealRow'].forEach(function(id) {
     const el = document.getElementById(id);
     if (el) { el.classList.add('cs-hidden'); el.classList.remove('cs-visible'); }
+  });
+  // Close all reveal sections
+  ['csCatSection','csScenarioSection','csRelatedSection'].forEach(function(id) {
+    const el = document.getElementById(id);
+    if (el) el.classList.remove('open');
+  });
+  ['csRevealTopic','csRevealScenario','csRevealRelated'].forEach(function(id) {
+    const el = document.getElementById(id);
+    if (el) el.classList.remove('active');
   });
 }
 
 function _csShowPostPrompt() {
-  ['csCoaching','csDivider','csActions'].forEach(function(id) {
+  ['csCoaching','csDivider','csActions','csRevealRow'].forEach(function(id) {
     const el = document.getElementById(id);
     if (el) { el.classList.remove('cs-hidden'); el.classList.add('cs-visible'); }
   });
 }
 
-// Toggle how-to-use panel
-function _csToggleHowto() {
-  const body = document.getElementById('csHowtoBody');
-  const toggle = document.getElementById('csHowtoToggle');
-  if (!body) return;
-  const open = body.classList.toggle('open');
-  if (toggle) toggle.classList.toggle('open', open);
+// Help ? button — mobile tap opens overlay, desktop hover shows bubble
+function _csHelpClick() {
+  // Only open overlay on touch devices (hover handles desktop)
+  if (window.matchMedia('(hover: none)').matches) {
+    document.getElementById('csHelpOverlay').classList.add('active');
+  }
 }
+function _csHelpOverlayClose(e) {
+  if (!e || e.target === document.getElementById('csHelpOverlay') || e.currentTarget.classList.contains('cs-help-overlay-close')) {
+    document.getElementById('csHelpOverlay').classList.remove('active');
+  }
+}
+
+// Toggle how-to-use panel (legacy — kept as no-op)
+function _csToggleHowto() {}
 
 // Toggle category reveal
 function _csToggleTopicReveal() {
@@ -8222,6 +8367,74 @@ function _csLogHistoryWithPrompt(concept, ctx, promptText) {
   } catch(e) {}
 }
 
+// Prev / Next concept navigation — v1.72c
+function _csPushToStack(concept) {
+  if (!concept) return;
+  // Trim forward history when branching
+  if (_csStackIdx < _csConceptStack.length - 1) {
+    _csConceptStack = _csConceptStack.slice(0, _csStackIdx + 1);
+  }
+  // Avoid duplicate consecutive pushes
+  if (_csConceptStack[_csStackIdx] !== concept.id) {
+    _csConceptStack.push(concept.id);
+    _csStackIdx = _csConceptStack.length - 1;
+  }
+  _csUpdateNavBtns();
+}
+
+function _csUpdateNavBtns() {
+  const prevBtn = document.getElementById('csPrevBtn');
+  const nextBtn = document.getElementById('csNextBtn');
+  if (prevBtn) prevBtn.disabled = _csStackIdx <= 0;
+  if (nextBtn) nextBtn.disabled = _csStackIdx >= _csConceptStack.length - 1;
+}
+
+function _csPrev() {
+  if (_csStackIdx <= 0) return;
+  _csStackIdx--;
+  const id = _csConceptStack[_csStackIdx];
+  const concept = CONCEPTS.find(c => c.id === id);
+  if (!concept) return;
+  _csConcept = concept;
+  _csAIData = null;
+  _csCat = concept.category || 'psychology';
+  _buildCsCatRow();
+  _renderCSShell(concept);
+  _csUpdateNavBtns();
+  _loadAI(concept, _csCtx, false);
+}
+
+function _csNext() {
+  if (_csStackIdx >= _csConceptStack.length - 1) return;
+  _csStackIdx++;
+  const id = _csConceptStack[_csStackIdx];
+  const concept = CONCEPTS.find(c => c.id === id);
+  if (!concept) return;
+  _csConcept = concept;
+  _csAIData = null;
+  _csCat = concept.category || 'psychology';
+  _buildCsCatRow();
+  _renderCSShell(concept);
+  _csUpdateNavBtns();
+  _loadAI(concept, _csCtx, false);
+}
+
+// Related reveal toggle — v1.72c
+function _csToggleRelatedReveal() {
+  const sec = document.getElementById('csRelatedSection');
+  const lnk = document.getElementById('csRevealRelated');
+  if (!sec) return;
+  const open = sec.classList.toggle('open');
+  if (lnk) lnk.classList.toggle('active', open);
+  // Close others
+  if (open) {
+    document.getElementById('csCatSection').classList.remove('open');
+    document.getElementById('csScenarioSection').classList.remove('open');
+    document.getElementById('csRevealTopic').classList.remove('active');
+    document.getElementById('csRevealScenario').classList.remove('active');
+  }
+}
+
 // Surprise me — random concept from any category
 function _csSurprise() {
   const pool = CONCEPTS.filter(c => !c.duplicate_of && (!_csConcept || c.id !== _csConcept.id));
@@ -8241,43 +8454,18 @@ function _csSurprise() {
 function _csSwapConcept(id) {
   const concept = CONCEPTS.find(c => c.id === id);
   if (!concept) return;
-
-  // Clear cached AI data for the new concept (force fresh generation)
   _csConcept = concept;
   _csAIData  = null;
-
-  // Re-render the shell (updates pill, prompt text, date, related pills)
+  _csCat = concept.category || _csCat;
+  _buildCsCatRow();
   _renderCSShell(concept);
-
-  // Reset generate button
-  const genBtn = document.getElementById('csGenerateBtn');
-  const genRow = document.getElementById('csGenerateRow');
-  if (genBtn) { genBtn.disabled = false; genBtn.classList.remove('loading'); genBtn.textContent = '\u2736 Generate conversation starters'; }
-  if (genRow) genRow.style.display = 'block';
-
-  // Reset context display to default opener text
-  document.getElementById('csOpener').textContent = CS_OPENERS[_csCtx] || '';
-  document.getElementById('csPromptText').textContent = concept.prompt;
-  const coachEl = document.getElementById('csCoaching');
-  if (coachEl) coachEl.style.display = 'none';
-
-  // Reset save button state
-  const saveBtn = document.getElementById('csSaveAllBtn');
-  if (saveBtn) { saveBtn.classList.remove('saved'); saveBtn.textContent = '\u2661 Save all'; }
-
-  // Collapse the concept pill expand if open
-  const pill = document.getElementById('csConceptPill');
-  const expand = document.getElementById('csConceptExpand');
-  if (pill) { pill.classList.remove('expanded'); }
-  if (expand) { expand.classList.remove('open'); }
-
-  // Brief flash on the concept pill to confirm the swap
-  const pillWrap = document.getElementById('csConceptPillWrap');
-  if (pillWrap) {
-    pillWrap.style.transition = 'opacity 0.15s';
-    pillWrap.style.opacity = '0.4';
-    setTimeout(() => { pillWrap.style.opacity = ''; }, 180);
-  }
+  _csPushToStack(concept);
+  _csHidePostPrompt();
+  const relSec = document.getElementById('csRelatedSection');
+  if (relSec) relSec.classList.remove('open');
+  const relLnk = document.getElementById('csRevealRelated');
+  if (relLnk) relLnk.classList.remove('active');
+  _loadAI(concept, _csCtx, false);
 }
 
 // ---- AI CALL — v1.71: generates only for selected scenario ----
@@ -8557,18 +8745,19 @@ function _wireCSEvents() {
       if (lnk) lnk.classList.remove('active');
 
       if (_csAIData && _csAIData[_csCtx]) {
+        // Cached — instant swap
         _applyAIToCtx(_csCtx);
-      } else if (_csAIData) {
-        // Have data from another ctx — auto-generate for this one
-        _loadAI(_csConcept, _csCtx, false);
       } else {
-        // No data at all — show generate button
-        const genRow = document.getElementById('csGenerateRow');
-        const genBtn = document.getElementById('csGenerateBtn');
-        if (genRow) genRow.style.display = 'block';
-        if (genBtn) { genBtn.disabled = false; genBtn.classList.remove('loading'); genBtn.innerHTML = '<span class="cs-generate-btn-icon">✦</span> Generate conversation starter'; }
-        document.getElementById('csOpener').textContent = CS_OPENERS[_csCtx] || '';
+        // Fire generate for this scenario
+        _loadAI(_csConcept, _csCtx, false);
       }
+      // Collapse both cat and scenario sections after selection
+      ['csCatSection','csScenarioSection'].forEach(id => {
+        const s = document.getElementById(id); if (s) s.classList.remove('open');
+      });
+      ['csRevealTopic','csRevealScenario'].forEach(id => {
+        const l = document.getElementById(id); if (l) l.classList.remove('active');
+      });
     });
   });
 
@@ -8617,6 +8806,12 @@ function _wireCSEvents() {
   // Surprise me button
   const surBtn = document.getElementById('csSurpriseBtn');
   if (surBtn) surBtn.addEventListener('click', _csSurprise);
+
+  // Prev / Next
+  const prevBtn = document.getElementById('csPrevBtn');
+  const nextBtn = document.getElementById('csNextBtn');
+  if (prevBtn) prevBtn.addEventListener('click', _csPrev);
+  if (nextBtn) nextBtn.addEventListener('click', _csNext);
 
   // Feedback thumbs
   document.getElementById('csFbUp').onclick = function() {
@@ -10651,9 +10846,19 @@ function openConversations() {
   const overlay = document.getElementById('convOverlay');
   overlay.classList.add('active');
   document.body.classList.add('cotd-open'); // reuse scroll-lock class
-  _convBuildCatFilters();
-  _convRenderSaved();
-  _convCheckWarn();
+
+  // Sync tab UI to last-active tab state
+  document.getElementById('convTabSaved').classList.toggle('active', _convTab === 'saved');
+  document.getElementById('convTabHistory').classList.toggle('active', _convTab === 'history');
+  document.getElementById('convSavedControls').style.display = _convTab === 'saved' ? '' : 'none';
+
+  if (_convTab === 'saved') {
+    _convBuildCatFilters();
+    _convRenderSaved();
+    _convCheckWarn();
+  } else {
+    _convRenderHistory();
+  }
 
   // Wire close
   document.getElementById('convClose').onclick = closeConversations;
@@ -10773,7 +10978,10 @@ function _convRenderSaved() {
   const yesterdayStr = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
 
   function formatGroupDate(dateKey) {
-    if (dateKey === todayStr) return 'Today';
+    if (dateKey === todayStr) {
+      const n = groups[dateKey].length;
+      return `Today <span style="font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--accent);font-variant-numeric:tabular-nums;letter-spacing:0;margin-left:6px">${n} saved</span>`;
+    }
     if (dateKey === yesterdayStr) return 'Yesterday';
     if (dateKey === 'unknown') return 'Earlier';
     const d = new Date(dateKey + 'T12:00:00');
@@ -11012,10 +11220,7 @@ function _convOpenCSById(id, ctx) {
         inner.classList.remove('cs-prompt-hidden');
         inner.classList.add('cs-prompt-visible');
       }
-      // Show reveal links
-      const revealRow = document.getElementById('csRevealRow');
-      if (revealRow) revealRow.classList.add('visible');
-      // Show actions (coaching will be empty — no openers/pitfall from history)
+      // Show reveal row and actions
       setTimeout(function() { _csShowPostPrompt(); }, 150);
     } else {
       // No saved prompt — fire a fresh generate
