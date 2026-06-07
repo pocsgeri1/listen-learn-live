@@ -1024,7 +1024,7 @@
     -webkit-user-select: none;
   }
   .nf-row::-webkit-scrollbar { display: none; }
-  /* Cards always show pointer — row grab cursor must not override */
+  /* Guarantee card pointer cursor — row must not override */
   .nf-row .concept-card { cursor: pointer; }
   .nf-row .concept-card {
     flex: 0 0 300px;
@@ -2930,8 +2930,9 @@
     margin: 8px 0 4px;
     gap: 8px;
     flex-wrap: wrap;
+    justify-content: center;
   }
-  .cs-reveal-row.cs-visible { display: flex; align-items: center; }
+  .cs-reveal-row.cs-visible { display: flex; align-items: center; justify-content: center; }
   .cs-reveal-link {
     background: none;
     border: 1px solid var(--border);
@@ -6479,10 +6480,8 @@ function initDragScroll() {
     }
 
     row.addEventListener('mousedown', (e) => {
-      // Skip drag if the click target is inside an open card or card-back
-      // This lets card-back scroll work without competing with row drag
+      // Don't start drag on open cards, card-back, or interactive elements
       if (e.target.closest('.concept-card.open') || e.target.closest('.card-back')) return;
-      // Skip drag on interactive elements (buttons, links, inputs)
       if (e.target.closest('button, a, input, select, textarea')) return;
       isDown = true;
       didDrag = false;
@@ -6494,16 +6493,13 @@ function initDragScroll() {
     row.addEventListener('mouseleave', resetDrag);
     row.addEventListener('mouseup', resetDrag);
 
-    // Fallback: if mouseup fires outside the row (e.g. user dragged off screen),
-    // isDown stays true and cursor sticks as grabbing forever. Fix with document-level handler.
+    // Fallback: mouseup outside row leaves isDown=true forever — fix with document handler
     const docUpHandler = () => { if (isDown) resetDrag(); };
     document.addEventListener('mouseup', docUpHandler, { passive: true });
-    // Store for cleanup if row is ever removed
     row._docUpHandler = docUpHandler;
 
     row.addEventListener('mousemove', (e) => {
       if (!isDown) return;
-      // If mouse drifted over an open card mid-drag, stop drag
       if (e.target.closest('.concept-card.open')) { resetDrag(); return; }
       e.preventDefault();
       const x = e.pageX - row.offsetLeft;
@@ -6512,29 +6508,23 @@ function initDragScroll() {
       row.scrollLeft = scrollLeftStart - walk;
     });
 
-    // Block click-through on cards if user actually dragged
+    // Block click-through on cards if user dragged
     row.addEventListener('click', (e) => {
       if (didDrag) {
         e.stopPropagation();
         e.preventDefault();
         didDrag = false;
       }
-    }, true); // capture phase
+    }, true);
 
-    // Stop wheel scroll on card-back from bubbling to row (horizontal scroll)
-    // so vertical scroll inside flipped cards works without fighting the row
+    // Prevent row horizontal scroll from hijacking card-back vertical scroll
     row.addEventListener('wheel', (e) => {
       const back = e.target.closest('.card-back');
-      if (back) {
-        // Only stop propagation if the card-back can actually scroll vertically
-        if (back.scrollHeight > back.clientHeight) {
-          e.stopPropagation();
-        }
-      }
+      if (back && back.scrollHeight > back.clientHeight) e.stopPropagation();
     }, { passive: true });
   });
 
-  // Also ensure card-back elements have the right touch-action for mobile
+  // Ensure card-back elements scroll reliably on touch
   document.querySelectorAll('.nf-row .card-back, .ep-cat-column .card-back').forEach(back => {
     if (!back._touchActionSet) {
       back._touchActionSet = true;
@@ -8465,26 +8455,41 @@ function _csRestoreOrLoad(concept) {
       if (cv) { newAiData[c] = JSON.parse(cv); restoredAny = true; }
     } catch(e) {}
   });
+
+  // 2. Merge saved storage for any ctxs not in session cache
+  // Always load ALL saved aiData — not just current ctx — so switching scenarios works
+  try {
+    var savedArr = JSON.parse(localStorage.getItem(CS_SAVED_KEY) || '[]');
+    var savedEntry = savedArr.find(function(s) { return s && s.id === concept.id; });
+    if (savedEntry && savedEntry.aiData) {
+      ['partner','friend','colleague','meeting'].forEach(function(c) {
+        if (!newAiData[c] && savedEntry.aiData[c]) {
+          newAiData[c] = savedEntry.aiData[c];
+          restoredAny = true;
+        }
+      });
+    }
+  } catch(e) {}
+
   if (restoredAny) {
     _csAIData = newAiData;
+    // Update has-prompt badges for all ctxs that have data
+    _csUpdateScenarioBadges();
     if (_csAIData[_csCtx]) {
       _applyAIToCtx(_csCtx);
       _csUpdateSaveBtn();
       return;
     }
+    // Current ctx has no data — show controls so user can generate
+    ['csRevealRow','csActions'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) { el.classList.remove('cs-hidden'); el.classList.add('cs-visible'); }
+    });
+    _csUpdateSaveBtn();
+    return;
   }
-  // 2. Try saved storage
-  try {
-    var savedArr = JSON.parse(localStorage.getItem(CS_SAVED_KEY) || '[]');
-    var savedEntry = savedArr.find(function(s) { return s && s.id === concept.id; });
-    if (savedEntry && savedEntry.aiData && savedEntry.aiData[_csCtx]) {
-      _csAIData = JSON.parse(JSON.stringify(savedEntry.aiData));
-      _applyAIToCtx(_csCtx);
-      _csUpdateSaveBtn();
-      return;
-    }
-  } catch(e) {}
-  // 3. Fresh generate — show controls before API fires
+
+  // 3. Nothing cached anywhere — fresh generate
   _csAIData = null;
   ['csRevealRow','csActions'].forEach(function(id) {
     var el = document.getElementById(id);
@@ -8495,8 +8500,7 @@ function _csRestoreOrLoad(concept) {
 }
 
 // Reflect saved state on the Stash button — per-scenario v1.74b
-// Green only if this concept has been saved WITH a prompt for the current scenario.
-// Unprompted scenario → shows unsaved even if concept exists in Stash.
+// Green only if this scenario has a stored prompt in lll_cs_saved_v1.
 function _csUpdateSaveBtn() {
   var saveBtn = document.getElementById('csSaveAllBtn');
   if (!saveBtn || !_csConcept) return;
@@ -8504,7 +8508,6 @@ function _csUpdateSaveBtn() {
   try {
     var savedArr = JSON.parse(localStorage.getItem(CS_SAVED_KEY) || '[]');
     var entry = savedArr.find(function(s) { return s && s.id === _csConcept.id; });
-    // Green only if this scenario has actual aiData saved
     isPromptedAndSaved = !!(entry && entry.aiData && entry.aiData[_csCtx]);
   } catch(e) {}
   saveBtn.textContent = isPromptedAndSaved ? '\u2665 Stash' : '\u2661 Stash';
@@ -8922,7 +8925,7 @@ function _wireCSEvents() {
         // Fire generate for this scenario
         _loadAI(_csConcept, _csCtx, false);
       }
-      // Update Stash button for new scenario
+      // Update Stash button state for new scenario
       _csUpdateSaveBtn();
       // Collapse topic section only — scenario stays open so user can switch again
       const catSec = document.getElementById('csCatSection');
@@ -10544,7 +10547,7 @@ function playStreakMilestoneSFX() {
 .conv-overlay {
   position: fixed; inset: 0; z-index: 1100;
   display: none;
-  background: rgba(13,13,13,0.45);
+  background: rgba(13,13,13,0.38);
   pointer-events: none;
   /* v1.71: backdrop-filter removed — caused 500-1300ms pointer lag on desktop */
 }
@@ -10655,7 +10658,7 @@ function playStreakMilestoneSFX() {
   display: flex;
   flex-direction: column;
   transform: translateX(100%);
-  transition: transform 0.32s cubic-bezier(0.22,0.61,0.36,1);
+  transition: transform 0.28s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   overflow: hidden;
 }
 .conv-overlay.active .conv-panel { transform: translateX(0); }
@@ -10834,6 +10837,13 @@ function playStreakMilestoneSFX() {
 .conv-ctx-tab.active { border-color: #c47a7a; color: #c47a7a; background: rgba(196,122,122,0.08); }
 .conv-ctx-tab.prompted { border-color: rgba(196,122,122,0.35); }
 .conv-ctx-tab.prompted:hover { border-color: rgba(196,122,122,0.6); }
+.conv-ctx-tab.ungenerated { border-style: dashed; color: var(--muted); opacity: 0.55; transition: border-color 0.4s, color 0.4s, opacity 0.3s, border-style 0.1s, background 0.3s; }
+.conv-ctx-tab.ungenerated:hover { opacity: 0.85; border-color: rgba(196,122,122,0.4); color: var(--muted2); }
+.conv-ctx-tab.generating { border-style: dashed; color: var(--muted); animation: convTabPulse 1s ease-in-out infinite; }
+@keyframes convTabPulse { 0%,100%{opacity:0.4} 50%{opacity:0.9} }
+.conv-ctx-content-wrap { transition: opacity 0.3s ease; }
+.conv-ctx-content-wrap.fading { opacity: 0; }
+.conv-ctx-generating-msg { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); padding: 14px 0 10px; animation: convTabPulse 1.2s ease-in-out infinite; }
 .conv-ctx-tab.ungenerated {
   border-style: dashed; color: var(--muted); opacity: 0.55;
   transition: border-color 0.4s, color 0.4s, opacity 0.3s, border-style 0.1s, background 0.3s;
@@ -11054,7 +11064,7 @@ let _convUndoTimer = null;
 function openConversations() {
   const overlay = document.getElementById('convOverlay');
   overlay.classList.add('active');
-  document.body.classList.add('cotd-open'); // reuse scroll-lock class
+  // Do NOT lock body scroll — user should be able to scroll the page while Stash is open
 
   // Sync tab UI to last-active tab state
   document.getElementById('convTabSaved').classList.toggle('active', _convTab === 'saved');
@@ -11071,16 +11081,32 @@ function openConversations() {
 
   // Wire close
   document.getElementById('convClose').onclick = closeConversations;
-  overlay.addEventListener('click', function(e) {
-    if (e.target === overlay) closeConversations();
-  });
   document.addEventListener('keydown', _convEscHandler);
+
+  // Smart outside-click: close only on non-interactive elements outside the panel
+  // Interactive = button, a, input, label, select, textarea, or anything with onclick/role
+  setTimeout(() => {
+    document.addEventListener('click', _convOutsideClickHandler, { capture: true });
+  }, 50); // small delay so the open-trigger click doesn't immediately close
+}
+
+function _convOutsideClickHandler(e) {
+  const panel = document.getElementById('convPanel');
+  if (!panel) return;
+  // Click inside panel — always keep open
+  if (panel.contains(e.target)) return;
+  // Click on an interactive element outside panel — keep open
+  const interactive = e.target.closest('button, a, input, select, textarea, label, [onclick], [role="button"], [tabindex]');
+  if (interactive) return;
+  // Non-interactive click outside — close
+  closeConversations();
 }
 
 function closeConversations() {
   document.getElementById('convOverlay').classList.remove('active');
-  document.body.classList.remove('cotd-open');
+  document.body.classList.remove('cotd-open'); // safety: remove if somehow set
   document.removeEventListener('keydown', _convEscHandler);
+  document.removeEventListener('click', _convOutsideClickHandler, { capture: true });
 }
 
 function _convEscHandler(e) {
@@ -11240,7 +11266,7 @@ function _convDetailHTML(entry) {
   const tabs = contexts.map(c => {
     const hasData = !!(entry.aiData && entry.aiData[c]);
     const isFirst = c === firstCtx;
-    const cls = ['conv-ctx-tab', isFirst ? 'active' : '', hasData ? 'prompted' : 'ungenerated'].filter(Boolean).join(' ');
+    const cls = ['conv-ctx-tab', isFirst ? 'active' : '', hasData ? '' : 'ungenerated'].filter(Boolean).join(' ');
     const label = hasData ? labels[c] : labels[c] + ' ＋';
     return `<button class="${cls}" data-ctx="${c}" onclick="_convSwitchCtx(${entry.id},'${c}')">${label}</button>`;
   }).join('');
@@ -11302,34 +11328,18 @@ function _convGenerateCtx(id, ctx, entry) {
     const tab = entryEl.querySelector(`.conv-ctx-tab[data-ctx="${ctx}"]`);
     if (tab) { tab.classList.remove('ungenerated'); tab.classList.add('generating'); tab.disabled = true; }
   }
-  // Show inline loading message — rotate through per-scenario messages
+  // Show inline loading message
   const content = document.getElementById(`convCtxContent${id}`);
-  const msgs = (window._CS_LOAD_MSGS && window._CS_LOAD_MSGS[ctx]) || [`Finding the right words for ${ctx}…`];
-  let msgIdx = 0;
-  let msgInterval = null;
-
-  function showMsg(msg) {
-    if (!content) return;
+  if (content) {
     content.classList.add('fading');
     setTimeout(() => {
-      content.innerHTML = `<div class="conv-ctx-generating-msg">${msg}</div>`;
+      content.innerHTML = `<div class="conv-ctx-generating-msg">Finding the right words for ${ctx}…</div>`;
       content.classList.remove('fading');
     }, 150);
   }
-
-  showMsg(msgs[msgIdx % msgs.length]);
-  msgInterval = setInterval(() => {
-    msgIdx++;
-    showMsg(msgs[msgIdx % msgs.length]);
-  }, 2200);
-
   // Find concept from CONCEPTS array
   const concept = (window.CONCEPTS || []).find(c => c.id === id);
-  if (!concept) {
-    clearInterval(msgInterval);
-    if (content) content.innerHTML = `<div class="conv-ctx-generating-msg" style="color:var(--red)">Concept not found — try refreshing.</div>`;
-    return;
-  }
+  if (!concept) { if (content) content.innerHTML = `<div class="conv-ctx-generating-msg" style="color:var(--red)">Concept not found — try refreshing.</div>`; return; }
 
   fetch('/api/cs-generate', {
     method: 'POST',
@@ -11341,13 +11351,12 @@ function _convGenerateCtx(id, ctx, entry) {
   })
   .then(r => r.json())
   .then(data => {
-    clearInterval(msgInterval);
     let ctxData = null;
     if (data && data.ctx) ctxData = data.ctx;
     else if (data && data.contexts && data.contexts[ctx]) ctxData = data.contexts[ctx];
 
     if (ctxData) {
-      // Merge into saved storage
+      // Merge into saved storage (localStorage)
       try {
         const savedArr = JSON.parse(localStorage.getItem(CS_SAVED_KEY) || '[]');
         const idx = savedArr.findIndex(s => s && s.id === id);
@@ -11357,6 +11366,11 @@ function _convGenerateCtx(id, ctx, entry) {
           localStorage.setItem(CS_SAVED_KEY, JSON.stringify(savedArr));
         }
       } catch(e) {}
+      // Also write to sessionStorage so CS modal picks it up immediately without re-generating
+      try {
+        const ck = (typeof CS_SESSION_KEY !== 'undefined' ? CS_SESSION_KEY : 'lll_cs_ai_') + id + '_' + ctx;
+        sessionStorage.setItem(ck, JSON.stringify(ctxData));
+      } catch(e) {}
       // Render content with fade-in
       if (content) {
         content.classList.add('fading');
@@ -11365,7 +11379,7 @@ function _convGenerateCtx(id, ctx, entry) {
           content.classList.remove('fading');
         }, 150);
       }
-      // Update tab: remove generating, remove ungenerated, remove ＋ from label, add prompted
+      // Update tab: remove generating/ungenerated, add prompted, remove ＋ from label
       if (entryEl) {
         const labels = { partner:'Partner', friend:'Friend', colleague:'Colleague', meeting:'Meeting' };
         const tab = entryEl.querySelector(`.conv-ctx-tab[data-ctx="${ctx}"]`);
@@ -11385,7 +11399,6 @@ function _convGenerateCtx(id, ctx, entry) {
     }
   })
   .catch(() => {
-    clearInterval(msgInterval);
     if (content) content.innerHTML = `<div class="conv-ctx-generating-msg" style="color:var(--red)">Network error — tap the tab to try again.</div>`;
     if (entryEl) {
       const tab = entryEl.querySelector(`.conv-ctx-tab[data-ctx="${ctx}"]`);
@@ -11469,37 +11482,27 @@ function _convOpenCS(id) {
 }
 
 function _convOpenConcept(id) {
-  // Save Stash panel scroll position before closing
-  const panel = document.getElementById('convPanel');
-  const stashScrollTop = panel ? panel.scrollTop : 0;
-
-  closeConversations();
+  // Keep Stash open — scroll + open the card in the background
   const concept = CONCEPTS.find(c => c.id === id);
   if (!concept) return;
+
+  // Switch to concept's category so the card is in the DOM
+  if (activeCat !== concept.category) {
+    activeCat = concept.category;
+    buildCats();
+    buildGrid();
+  }
+
+  // Small delay so grid rebuild paints before scroll
   setTimeout(() => {
-    // Switch to concept's category so card is in DOM
-    if (activeCat !== concept.category) {
-      activeCat = concept.category;
-      buildCats();
-      buildGrid();
-    }
     const el = document.getElementById('cc' + id);
     if (el) {
       el.scrollIntoView({ behavior: 'smooth', block: 'center' });
       setTimeout(() => {
         if (!el.classList.contains('open')) toggleCard(id);
-        // Re-open Stash at same scroll position after card is centred
-        setTimeout(() => {
-          openConversations();
-          // Restore scroll position inside panel
-          const panelEl = document.getElementById('convPanel');
-          if (panelEl) {
-            requestAnimationFrame(() => { panelEl.scrollTop = stashScrollTop; });
-          }
-        }, 320);
-      }, 400);
+      }, 420);
     }
-  }, 300);
+  }, 80);
 }
 
 // ---- RENDER: HISTORY ----
