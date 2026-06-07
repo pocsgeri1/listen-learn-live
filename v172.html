@@ -2431,10 +2431,10 @@
     cursor: pointer; transition: background 0.15s, border-color 0.15s, color 0.15s;
   }
   .cs-ctx-btn:hover { border-color: var(--accent); color: var(--accent); }
-  .cs-ctx-btn.active { background: var(--accent); border-color: var(--accent); color: #0d0d0d; }
-  .cs-ctx-btn.has-prompt { border-color: rgba(90,191,175,0.55); color: #5abfaf; }
-  .cs-ctx-btn.has-prompt:hover { border-color: #5abfaf; color: #5abfaf; }
-  .cs-ctx-btn.active.has-prompt { background: var(--accent); border-color: var(--accent); color: #0d0d0d; }
+  .cs-ctx-btn.has-prompt { border-color: rgba(196,122,122,0.6); color: #c47a7a; }
+  .cs-ctx-btn.has-prompt:hover { border-color: #c47a7a; color: #c47a7a; }
+  .cs-ctx-btn.active.has-prompt { background: rgba(196,122,122,0.18); border-color: #c47a7a; color: #c47a7a; }
+  .cs-ctx-btn.active:not(.has-prompt) { background: var(--accent); border-color: var(--accent); color: #0d0d0d; }
 
   /* Swipeable prompt block */
   .cs-prompt-block {
@@ -3024,8 +3024,9 @@
   /* Voted state border colours — explicit fix v1.72 */
   .cs-fb-btn.voted-up   { border-color: #5a9e6f !important; box-shadow: 0 0 0 2px rgba(90,158,111,0.25); }
   .cs-fb-btn.voted-down { border-color: #c47a7a !important; box-shadow: 0 0 0 2px rgba(196,122,122,0.25); }
-    display: flex; align-items: center; gap: 10px;
-    margin-bottom: 1.1rem; animation: fadeIn 0.4s ease both;
+  .cs-feedback-row {
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 1.4rem; animation: fadeIn 0.4s ease both;
   }
   @keyframes fadeIn { from{opacity:0} to{opacity:1} }
   .cs-feedback-label {
@@ -3959,10 +3960,13 @@
   .ep-cat-column .concept-card.open .card-back {
     box-shadow: 0 22px 60px -20px rgba(0,0,0,0.85);
   }
-  /* every other card in the drawer dims to 0.1 while one is open */
+  /* every other card in the drawer dims to 0.35 while one is open */
   #epDrawerGrid.has-open .concept-card:not(.open) {
-    opacity: 0.1;
+    opacity: 0.35;
     pointer-events: none;
+  }
+  [data-theme="light"] #epDrawerGrid.has-open .concept-card:not(.open) {
+    opacity: 0.45;
   }
 
   .ep-cat-column .concept-card .card-inner {
@@ -5464,7 +5468,7 @@
         ❓
         <div class="cs-help-bubble" id="csHelpBubble">
           <div class="cs-help-step"><span class="cs-help-num">01</span><span>An interesting idea from a podcast gets picked for you. Tap it to see what it means — no BS.</span></div>
-          <div class="cs-help-step"><span class="cs-help-num">02</span><span>You'll get a conversation starter, tailored to who you're talking to. Change topic or scenario below anytime.</span></div>
+          <div class="cs-help-step"><span class="cs-help-num">02</span><span>Read your conversation starter tailored to who you're talking to. Change topic or scenario below anytime.</span></div>
           <div class="cs-help-step"><span class="cs-help-num">03</span><span>Did it land? Do tell us! Save the ones worth keeping for later conversations.</span></div>
           <div style="margin-top:10px;font-size:0.8rem;font-style:italic;color:var(--accent);font-family:'Playfair Display',serif">Now go say something worth saying! ✦</div>
         </div>
@@ -5477,7 +5481,7 @@
         <button class="cs-help-overlay-close" onclick="_csHelpOverlayClose()">✕</button>
         <div class="cs-help-overlay-title">How does this work?</div>
         <div class="cs-help-step"><span class="cs-help-num">01</span><span>An interesting idea from a podcast gets picked for you. Tap it to see what it means — no BS.</span></div>
-        <div class="cs-help-step" style="margin-top:10px"><span class="cs-help-num">02</span><span>You'll get a conversation starter, tailored to who you're talking to. Change topic or scenario below anytime.</span></div>
+        <div class="cs-help-step" style="margin-top:10px"><span class="cs-help-num">02</span><span>Read your conversation starter tailored to who you're talking to. Change topic or scenario below anytime.</span></div>
         <div class="cs-help-step" style="margin-top:10px"><span class="cs-help-num">03</span><span>Did it land? Do tell us! Save the ones worth keeping for later conversations.</span></div>
         <div style="margin-top:14px;font-size:0.9rem;font-style:italic;color:var(--accent);font-family:'Playfair Display',serif;text-align:center">Now go say something worth saying! ✦</div>
       </div>
@@ -5537,7 +5541,7 @@
       <span class="cs-reveal-sep">·</span>
       <button class="cs-reveal-link" id="csRevealScenario" onclick="_csToggleScenarioReveal()">Change scenario</button>
       <span class="cs-reveal-sep">·</span>
-      <button class="cs-reveal-link" id="csRevealRelated" onclick="_csToggleRelatedReveal()">Related</button>
+      <button class="cs-reveal-link" id="csRevealRelated" onclick="_csToggleRelatedReveal()">Related concepts</button>
     </div>
 
     <!-- Category pills — expands below the reveal row -->
@@ -7099,6 +7103,7 @@ function closeEpisodeDrawer() {
     grid.classList.remove('has-open');
     grid.querySelectorAll('.concept-card.open').forEach(c => c.classList.remove('open'));
   }
+  _currentOpenEpCardId = null;
 
   // Phase 2 (after the slide finishes): reveal page sections and restore scroll.
   // We wait for the actual transition end so the heavy layout happens AFTER
@@ -7121,6 +7126,8 @@ function closeEpisodeDrawer() {
   }, 400);
 }
 
+let _currentOpenEpCardId = null;
+
 function toggleEpCard(id) {
   const el = document.getElementById('epcc'+id);
   if (!el) return;
@@ -7130,8 +7137,18 @@ function toggleEpCard(id) {
     filterDrawerCat(parentCol.dataset.cat);
   }
   const wasOpen = el.classList.contains('open');
-  // Each card flips independently — match Browse-concepts behaviour.
+
+  // Close previously open drawer card
+  if (_currentOpenEpCardId !== null && _currentOpenEpCardId !== id) {
+    const prev = document.getElementById('epcc' + _currentOpenEpCardId);
+    if (prev) prev.classList.remove('open');
+  }
+
   el.classList.toggle('open');
+  const isNowOpen = el.classList.contains('open');
+  _currentOpenEpCardId = isNowOpen ? id : null;
+  playCardFlipSFX(isNowOpen);
+
   // Toggle a class on the grid container so non-open cards dim (replaces :has() selector for perf)
   const grid = document.getElementById('epDrawerGrid');
   if (grid) {
@@ -8859,13 +8876,11 @@ function _wireCSEvents() {
         // Fire generate for this scenario
         _loadAI(_csConcept, _csCtx, false);
       }
-      // Collapse both cat and scenario sections after selection
-      ['csCatSection','csScenarioSection'].forEach(id => {
-        const s = document.getElementById(id); if (s) s.classList.remove('open');
-      });
-      ['csRevealTopic','csRevealScenario'].forEach(id => {
-        const l = document.getElementById(id); if (l) l.classList.remove('active');
-      });
+      // Collapse topic section only — scenario stays open so user can switch again
+      const catSec = document.getElementById('csCatSection');
+      if (catSec) catSec.classList.remove('open');
+      const catLnkEl = document.getElementById('csRevealTopic');
+      if (catLnkEl) catLnkEl.classList.remove('active');
     });
   });
 
@@ -10764,6 +10779,25 @@ function playStreakMilestoneSFX() {
   color: var(--muted); cursor: pointer; transition: all 0.15s;
 }
 .conv-ctx-tab.active { border-color: #c47a7a; color: #c47a7a; background: rgba(196,122,122,0.08); }
+.conv-ctx-tab.ungenerated {
+  border-style: dashed; color: var(--muted); opacity: 0.55;
+  transition: border-color 0.4s, color 0.4s, opacity 0.3s, border-style 0.1s, background 0.3s;
+}
+.conv-ctx-tab.ungenerated:hover { opacity: 0.85; border-color: rgba(196,122,122,0.4); color: var(--muted2); }
+.conv-ctx-tab.generating {
+  border-style: dashed; color: var(--muted);
+  animation: convTabPulse 1s ease-in-out infinite;
+}
+@keyframes convTabPulse { 0%,100%{opacity:0.4} 50%{opacity:0.9} }
+.conv-ctx-content-wrap {
+  transition: opacity 0.3s ease;
+}
+.conv-ctx-content-wrap.fading { opacity: 0; }
+.conv-ctx-generating-msg {
+  font-family: 'DM Mono', monospace; font-size: 0.62rem;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted); padding: 14px 0 10px; animation: convTabPulse 1.2s ease-in-out infinite;
+}
 .conv-more-scen-btn {
   font-family: 'DM Mono', monospace; font-size: 0.7rem;
   letter-spacing: 0; padding: 4px 9px; border-radius: 6px;
@@ -11147,17 +11181,18 @@ function _convNoAIHTML(entry) {
 function _convDetailHTML(entry) {
   const contexts = ['partner','friend','colleague','meeting'];
   const labels = { partner:'Partner', friend:'Friend', colleague:'Colleague', meeting:'Meeting' };
-  const firstCtx = contexts.find(c => entry.aiData[c]) || 'partner';
-  const tabs = contexts.map(c => entry.aiData[c]
-    ? `<button class="conv-ctx-tab${c===firstCtx?' active':''}" onclick="_convSwitchCtx(${entry.id},'${c}')">${labels[c]}</button>`
-    : '').join('');
-  const d = entry.aiData[firstCtx] || {};
+  const firstCtx = contexts.find(c => entry.aiData && entry.aiData[c]) || 'partner';
+  const tabs = contexts.map(c => {
+    const hasData = !!(entry.aiData && entry.aiData[c]);
+    const isFirst = c === firstCtx;
+    const cls = ['conv-ctx-tab', isFirst ? 'active' : '', hasData ? '' : 'ungenerated'].filter(Boolean).join(' ');
+    const label = hasData ? labels[c] : labels[c] + ' ＋';
+    return `<button class="${cls}" data-ctx="${c}" onclick="_convSwitchCtx(${entry.id},'${c}')">${label}</button>`;
+  }).join('');
+  const d = (entry.aiData && entry.aiData[firstCtx]) || null;
   return `
-    <div class="conv-ctx-tabs">
-      ${tabs}
-      <button class="conv-more-scen-btn" onclick="_convOpenCSWithScenario(${entry.id})" title="Open in Spark with all scenarios">＋</button>
-    </div>
-    <div id="convCtxContent${entry.id}">${_convCtxBlock(d)}</div>`;
+    <div class="conv-ctx-tabs">${tabs}</div>
+    <div id="convCtxContent${entry.id}" class="conv-ctx-content-wrap">${d ? _convCtxBlock(d) : _convUnpromptedBlock(firstCtx)}</div>`;
 }
 
 function _convCtxBlock(d) {
@@ -11170,21 +11205,119 @@ function _convCtxBlock(d) {
     ${d.pitfall ? `<div class="conv-pitfall-label">Watch out for</div><div class="conv-pitfall">${_escHtml(d.pitfall)}</div>` : ''}`;
 }
 
+function _convUnpromptedBlock(ctx) {
+  const labels = { partner:'partner', friend:'friend', colleague:'colleague', meeting:'a meeting' };
+  return `<div class="conv-ctx-generating-msg" style="animation:none;opacity:0.6">Tap the tab to generate a prompt for ${labels[ctx] || ctx}</div>`;
+}
+
 function _convSwitchCtx(id, ctx) {
-  // get entry from storage
   const saved = _convGetSaved();
   const entry = saved.find(s => s.id === id);
-  if (!entry || !entry.aiData) return;
-  const d = entry.aiData[ctx] || {};
-  const content = document.getElementById(`convCtxContent${id}`);
-  if (content) content.innerHTML = _convCtxBlock(d);
-  // update tab active states
+  if (!entry) return;
+
+  // Update active tab state
   const entryEl = document.getElementById(`convEntry${id}`);
   if (entryEl) {
     entryEl.querySelectorAll('.conv-ctx-tab').forEach(t => {
-      t.classList.toggle('active', t.textContent.toLowerCase() === ctx);
+      t.classList.toggle('active', t.dataset.ctx === ctx);
     });
   }
+
+  const hasData = !!(entry.aiData && entry.aiData[ctx]);
+  if (hasData) {
+    // Has data — swap with fade
+    const content = document.getElementById(`convCtxContent${id}`);
+    if (content) {
+      content.classList.add('fading');
+      setTimeout(() => {
+        content.innerHTML = _convCtxBlock(entry.aiData[ctx]);
+        content.classList.remove('fading');
+      }, 150);
+    }
+  } else {
+    // No data — generate inline
+    _convGenerateCtx(id, ctx, entry);
+  }
+}
+
+function _convGenerateCtx(id, ctx, entry) {
+  // Mark tab as generating
+  const entryEl = document.getElementById(`convEntry${id}`);
+  if (entryEl) {
+    const tab = entryEl.querySelector(`.conv-ctx-tab[data-ctx="${ctx}"]`);
+    if (tab) { tab.classList.remove('ungenerated'); tab.classList.add('generating'); tab.disabled = true; }
+  }
+  // Show inline loading message
+  const content = document.getElementById(`convCtxContent${id}`);
+  if (content) {
+    content.classList.add('fading');
+    setTimeout(() => {
+      content.innerHTML = `<div class="conv-ctx-generating-msg">Finding the right words for ${ctx}…</div>`;
+      content.classList.remove('fading');
+    }, 150);
+  }
+  // Find concept from CONCEPTS array
+  const concept = (window.CONCEPTS || []).find(c => c.id === id);
+  if (!concept) { if (content) content.innerHTML = `<div class="conv-ctx-generating-msg" style="color:var(--red)">Concept not found — try refreshing.</div>`; return; }
+
+  fetch('/api/cs-generate', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      concept: { term: concept.term, hook: concept.hook, plain: concept.plain, analogy: concept.analogy, prompt: concept.prompt, category: concept.category },
+      ctx: ctx
+    })
+  })
+  .then(r => r.json())
+  .then(data => {
+    let ctxData = null;
+    if (data && data.ctx) ctxData = data.ctx;
+    else if (data && data.contexts && data.contexts[ctx]) ctxData = data.contexts[ctx];
+
+    if (ctxData) {
+      // Merge into saved storage
+      try {
+        const savedArr = JSON.parse(localStorage.getItem(CS_SAVED_KEY) || '[]');
+        const idx = savedArr.findIndex(s => s && s.id === id);
+        if (idx >= 0) {
+          if (!savedArr[idx].aiData) savedArr[idx].aiData = {};
+          savedArr[idx].aiData[ctx] = ctxData;
+          localStorage.setItem(CS_SAVED_KEY, JSON.stringify(savedArr));
+        }
+      } catch(e) {}
+      // Render content with fade-in
+      if (content) {
+        content.classList.add('fading');
+        setTimeout(() => {
+          content.innerHTML = _convCtxBlock(ctxData);
+          content.classList.remove('fading');
+        }, 150);
+      }
+      // Update tab: remove generating, remove ungenerated, remove ＋ from label
+      if (entryEl) {
+        const labels = { partner:'Partner', friend:'Friend', colleague:'Colleague', meeting:'Meeting' };
+        const tab = entryEl.querySelector(`.conv-ctx-tab[data-ctx="${ctx}"]`);
+        if (tab) {
+          tab.classList.remove('generating', 'ungenerated');
+          tab.disabled = false;
+          tab.textContent = labels[ctx] || ctx;
+        }
+      }
+    } else {
+      if (content) content.innerHTML = `<div class="conv-ctx-generating-msg" style="color:var(--red)">Something went wrong — tap the tab to try again.</div>`;
+      if (entryEl) {
+        const tab = entryEl.querySelector(`.conv-ctx-tab[data-ctx="${ctx}"]`);
+        if (tab) { tab.classList.remove('generating'); tab.classList.add('ungenerated'); tab.disabled = false; }
+      }
+    }
+  })
+  .catch(() => {
+    if (content) content.innerHTML = `<div class="conv-ctx-generating-msg" style="color:var(--red)">Network error — tap the tab to try again.</div>`;
+    if (entryEl) {
+      const tab = entryEl.querySelector(`.conv-ctx-tab[data-ctx="${ctx}"]`);
+      if (tab) { tab.classList.remove('generating'); tab.classList.add('ungenerated'); tab.disabled = false; }
+    }
+  });
 }
 
 function _convToggleEntry(id) {
