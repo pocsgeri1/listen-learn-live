@@ -1020,12 +1020,12 @@
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     padding: 1rem 2rem 1.5rem;
-    cursor: grab;
     user-select: none;
     -webkit-user-select: none;
   }
-  .nf-row:active { cursor: grabbing; }
   .nf-row::-webkit-scrollbar { display: none; }
+  /* Cards always show pointer — row grab cursor must not override */
+  .nf-row .concept-card { cursor: pointer; }
   .nf-row .concept-card {
     flex: 0 0 300px;
     min-width: 300px;
@@ -3041,7 +3041,7 @@
   .cs-fb-btn:hover { border-color: var(--accent); transform: scale(1.15); }
 
   /* Actions */
-  .cs-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  .cs-actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; align-items: center; }
   .cs-btn {
     font-family: 'DM Mono', monospace; font-size: 0.7rem;
     letter-spacing: 0.1em; text-transform: uppercase;
@@ -3859,6 +3859,8 @@
     gap: 0;
     box-shadow: 0 4px 12px rgba(0,0,0,0.45);
     overflow-y: auto;
+    overscroll-behavior: contain;
+    touch-action: pan-y;
     scrollbar-width: thin;
     scrollbar-color: var(--border-hover) transparent;
   }
@@ -4052,6 +4054,8 @@
     gap: 0;
     box-shadow: 0 4px 12px rgba(0,0,0,0.45);
     overflow-y: auto;
+    overscroll-behavior: contain;
+    touch-action: pan-y;
     scrollbar-width: thin;
     scrollbar-color: var(--border-hover) transparent;
   }
@@ -5593,7 +5597,7 @@
       <button class="cs-btn cs-btn--primary" id="csShareBtn">↑ Copy &amp; Share</button>
       <button class="cs-btn cs-btn--save" id="csSaveAllBtn">♡ Stash</button>
       <button class="cs-btn cs-btn--surprise" id="csSurpriseBtn">✦ Surprise me</button>
-      <div style="margin-left:auto;display:flex;gap:6px">
+      <div style="display:flex;gap:6px">
         <button class="cs-nav-btn" id="csPrevBtn" title="Previous concept" disabled>⤺</button>
         <button class="cs-nav-btn" id="csNextBtn" title="Next concept">⤻</button>
       </div>
@@ -6468,7 +6472,18 @@ function initDragScroll() {
     let scrollLeftStart = 0;
     let didDrag = false;
 
+    function resetDrag() {
+      isDown = false;
+      didDrag = false;
+      row.style.cursor = '';
+    }
+
     row.addEventListener('mousedown', (e) => {
+      // Skip drag if the click target is inside an open card or card-back
+      // This lets card-back scroll work without competing with row drag
+      if (e.target.closest('.concept-card.open') || e.target.closest('.card-back')) return;
+      // Skip drag on interactive elements (buttons, links, inputs)
+      if (e.target.closest('button, a, input, select, textarea')) return;
       isDown = true;
       didDrag = false;
       startX = e.pageX - row.offsetLeft;
@@ -6476,18 +6491,20 @@ function initDragScroll() {
       row.style.cursor = 'grabbing';
     });
 
-    row.addEventListener('mouseleave', () => {
-      isDown = false;
-      row.style.cursor = '';
-    });
+    row.addEventListener('mouseleave', resetDrag);
+    row.addEventListener('mouseup', resetDrag);
 
-    row.addEventListener('mouseup', () => {
-      isDown = false;
-      row.style.cursor = '';
-    });
+    // Fallback: if mouseup fires outside the row (e.g. user dragged off screen),
+    // isDown stays true and cursor sticks as grabbing forever. Fix with document-level handler.
+    const docUpHandler = () => { if (isDown) resetDrag(); };
+    document.addEventListener('mouseup', docUpHandler, { passive: true });
+    // Store for cleanup if row is ever removed
+    row._docUpHandler = docUpHandler;
 
     row.addEventListener('mousemove', (e) => {
       if (!isDown) return;
+      // If mouse drifted over an open card mid-drag, stop drag
+      if (e.target.closest('.concept-card.open')) { resetDrag(); return; }
       e.preventDefault();
       const x = e.pageX - row.offsetLeft;
       const walk = (x - startX) * 1.4;
@@ -6503,6 +6520,27 @@ function initDragScroll() {
         didDrag = false;
       }
     }, true); // capture phase
+
+    // Stop wheel scroll on card-back from bubbling to row (horizontal scroll)
+    // so vertical scroll inside flipped cards works without fighting the row
+    row.addEventListener('wheel', (e) => {
+      const back = e.target.closest('.card-back');
+      if (back) {
+        // Only stop propagation if the card-back can actually scroll vertically
+        if (back.scrollHeight > back.clientHeight) {
+          e.stopPropagation();
+        }
+      }
+    }, { passive: true });
+  });
+
+  // Also ensure card-back elements have the right touch-action for mobile
+  document.querySelectorAll('.nf-row .card-back, .ep-cat-column .card-back').forEach(back => {
+    if (!back._touchActionSet) {
+      back._touchActionSet = true;
+      back.style.touchAction = 'pan-y';
+      back.style.overscrollBehavior = 'contain';
+    }
   });
 }
 function scrollRow(button, direction) {
@@ -8456,13 +8494,21 @@ function _csRestoreOrLoad(concept) {
   _loadAI(concept, _csCtx, false);
 }
 
-// Reflect saved state on the Stash button — v1.73b
+// Reflect saved state on the Stash button — per-scenario v1.74b
+// Green only if this concept has been saved WITH a prompt for the current scenario.
+// Unprompted scenario → shows unsaved even if concept exists in Stash.
 function _csUpdateSaveBtn() {
   var saveBtn = document.getElementById('csSaveAllBtn');
   if (!saveBtn || !_csConcept) return;
-  var isSaved = _csIsSaved(_csConcept.id);
-  saveBtn.textContent = isSaved ? '\u2665 Stash' : '\u2661 Stash';
-  if (isSaved) saveBtn.classList.add('saved'); else saveBtn.classList.remove('saved');
+  var isPromptedAndSaved = false;
+  try {
+    var savedArr = JSON.parse(localStorage.getItem(CS_SAVED_KEY) || '[]');
+    var entry = savedArr.find(function(s) { return s && s.id === _csConcept.id; });
+    // Green only if this scenario has actual aiData saved
+    isPromptedAndSaved = !!(entry && entry.aiData && entry.aiData[_csCtx]);
+  } catch(e) {}
+  saveBtn.textContent = isPromptedAndSaved ? '\u2665 Stash' : '\u2661 Stash';
+  if (isPromptedAndSaved) saveBtn.classList.add('saved'); else saveBtn.classList.remove('saved');
 }
 
 // Update scenario badge markers — v1.73
@@ -8666,7 +8712,7 @@ const _CS_BRAND_MSGS = [
 ];
 
 // Loading phase messages — per scenario, shown on manual re-generates
-const _CS_LOAD_MSGS = {
+const _CS_LOAD_MSGS = window._CS_LOAD_MSGS = {
   partner: [
     "Setting the mood for tonight's conversation… 🕯️",
     "Finding something worth saying that doesn't sound rehearsed… 💬",
@@ -8876,6 +8922,8 @@ function _wireCSEvents() {
         // Fire generate for this scenario
         _loadAI(_csConcept, _csCtx, false);
       }
+      // Update Stash button for new scenario
+      _csUpdateSaveBtn();
       // Collapse topic section only — scenario stays open so user can switch again
       const catSec = document.getElementById('csCatSection');
       if (catSec) catSec.classList.remove('open');
@@ -10496,10 +10544,12 @@ function playStreakMilestoneSFX() {
 .conv-overlay {
   position: fixed; inset: 0; z-index: 1100;
   display: none;
-  background: rgba(13,13,13,0.55);
+  background: rgba(13,13,13,0.45);
+  pointer-events: none;
   /* v1.71: backdrop-filter removed — caused 500-1300ms pointer lag on desktop */
 }
 .conv-overlay.active { display: flex; justify-content: flex-end; }
+.conv-panel { pointer-events: auto; }
 
 /* v1.71 quiz pill — inherits cat-card + cat-name styles exactly, teal colour */
 .cat-quiz-pill {
@@ -10666,9 +10716,12 @@ function playStreakMilestoneSFX() {
 
 .conv-filter-row {
   display: flex; gap: 6px; padding: 10px 22px 0;
-  overflow-x: auto; scrollbar-width: none; flex-shrink: 0;
+  flex-wrap: wrap; flex-shrink: 0;
 }
-.conv-filter-row::-webkit-scrollbar { display: none; }
+@media (max-width: 600px) {
+  .conv-filter-row { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+  .conv-filter-row::-webkit-scrollbar { display: none; }
+}
 .conv-filter-pill {
   font-family: 'DM Mono', monospace; font-size: 0.58rem;
   letter-spacing: 0.1em; text-transform: uppercase;
@@ -10779,6 +10832,8 @@ function playStreakMilestoneSFX() {
   color: var(--muted); cursor: pointer; transition: all 0.15s;
 }
 .conv-ctx-tab.active { border-color: #c47a7a; color: #c47a7a; background: rgba(196,122,122,0.08); }
+.conv-ctx-tab.prompted { border-color: rgba(196,122,122,0.35); }
+.conv-ctx-tab.prompted:hover { border-color: rgba(196,122,122,0.6); }
 .conv-ctx-tab.ungenerated {
   border-style: dashed; color: var(--muted); opacity: 0.55;
   transition: border-color 0.4s, color 0.4s, opacity 0.3s, border-style 0.1s, background 0.3s;
@@ -11185,7 +11240,7 @@ function _convDetailHTML(entry) {
   const tabs = contexts.map(c => {
     const hasData = !!(entry.aiData && entry.aiData[c]);
     const isFirst = c === firstCtx;
-    const cls = ['conv-ctx-tab', isFirst ? 'active' : '', hasData ? '' : 'ungenerated'].filter(Boolean).join(' ');
+    const cls = ['conv-ctx-tab', isFirst ? 'active' : '', hasData ? 'prompted' : 'ungenerated'].filter(Boolean).join(' ');
     const label = hasData ? labels[c] : labels[c] + ' ＋';
     return `<button class="${cls}" data-ctx="${c}" onclick="_convSwitchCtx(${entry.id},'${c}')">${label}</button>`;
   }).join('');
@@ -11247,18 +11302,34 @@ function _convGenerateCtx(id, ctx, entry) {
     const tab = entryEl.querySelector(`.conv-ctx-tab[data-ctx="${ctx}"]`);
     if (tab) { tab.classList.remove('ungenerated'); tab.classList.add('generating'); tab.disabled = true; }
   }
-  // Show inline loading message
+  // Show inline loading message — rotate through per-scenario messages
   const content = document.getElementById(`convCtxContent${id}`);
-  if (content) {
+  const msgs = (window._CS_LOAD_MSGS && window._CS_LOAD_MSGS[ctx]) || [`Finding the right words for ${ctx}…`];
+  let msgIdx = 0;
+  let msgInterval = null;
+
+  function showMsg(msg) {
+    if (!content) return;
     content.classList.add('fading');
     setTimeout(() => {
-      content.innerHTML = `<div class="conv-ctx-generating-msg">Finding the right words for ${ctx}…</div>`;
+      content.innerHTML = `<div class="conv-ctx-generating-msg">${msg}</div>`;
       content.classList.remove('fading');
     }, 150);
   }
+
+  showMsg(msgs[msgIdx % msgs.length]);
+  msgInterval = setInterval(() => {
+    msgIdx++;
+    showMsg(msgs[msgIdx % msgs.length]);
+  }, 2200);
+
   // Find concept from CONCEPTS array
   const concept = (window.CONCEPTS || []).find(c => c.id === id);
-  if (!concept) { if (content) content.innerHTML = `<div class="conv-ctx-generating-msg" style="color:var(--red)">Concept not found — try refreshing.</div>`; return; }
+  if (!concept) {
+    clearInterval(msgInterval);
+    if (content) content.innerHTML = `<div class="conv-ctx-generating-msg" style="color:var(--red)">Concept not found — try refreshing.</div>`;
+    return;
+  }
 
   fetch('/api/cs-generate', {
     method: 'POST',
@@ -11270,6 +11341,7 @@ function _convGenerateCtx(id, ctx, entry) {
   })
   .then(r => r.json())
   .then(data => {
+    clearInterval(msgInterval);
     let ctxData = null;
     if (data && data.ctx) ctxData = data.ctx;
     else if (data && data.contexts && data.contexts[ctx]) ctxData = data.contexts[ctx];
@@ -11293,12 +11365,13 @@ function _convGenerateCtx(id, ctx, entry) {
           content.classList.remove('fading');
         }, 150);
       }
-      // Update tab: remove generating, remove ungenerated, remove ＋ from label
+      // Update tab: remove generating, remove ungenerated, remove ＋ from label, add prompted
       if (entryEl) {
         const labels = { partner:'Partner', friend:'Friend', colleague:'Colleague', meeting:'Meeting' };
         const tab = entryEl.querySelector(`.conv-ctx-tab[data-ctx="${ctx}"]`);
         if (tab) {
           tab.classList.remove('generating', 'ungenerated');
+          tab.classList.add('prompted');
           tab.disabled = false;
           tab.textContent = labels[ctx] || ctx;
         }
@@ -11312,6 +11385,7 @@ function _convGenerateCtx(id, ctx, entry) {
     }
   })
   .catch(() => {
+    clearInterval(msgInterval);
     if (content) content.innerHTML = `<div class="conv-ctx-generating-msg" style="color:var(--red)">Network error — tap the tab to try again.</div>`;
     if (entryEl) {
       const tab = entryEl.querySelector(`.conv-ctx-tab[data-ctx="${ctx}"]`);
@@ -11395,22 +11469,35 @@ function _convOpenCS(id) {
 }
 
 function _convOpenConcept(id) {
+  // Save Stash panel scroll position before closing
+  const panel = document.getElementById('convPanel');
+  const stashScrollTop = panel ? panel.scrollTop : 0;
+
   closeConversations();
   const concept = CONCEPTS.find(c => c.id === id);
   if (!concept) return;
   setTimeout(() => {
-    // Set to the concept's own category — renders only that category, not all
+    // Switch to concept's category so card is in DOM
     if (activeCat !== concept.category) {
       activeCat = concept.category;
-      buildCats();  // just re-styles pills, no full grid rebuild
-      buildGrid();  // renders only this category — lightweight
+      buildCats();
+      buildGrid();
     }
     const el = document.getElementById('cc' + id);
     if (el) {
       el.scrollIntoView({ behavior: 'smooth', block: 'center' });
       setTimeout(() => {
         if (!el.classList.contains('open')) toggleCard(id);
-      }, 380);
+        // Re-open Stash at same scroll position after card is centred
+        setTimeout(() => {
+          openConversations();
+          // Restore scroll position inside panel
+          const panelEl = document.getElementById('convPanel');
+          if (panelEl) {
+            requestAnimationFrame(() => { panelEl.scrollTop = stashScrollTop; });
+          }
+        }, 320);
+      }, 400);
     }
   }, 300);
 }
