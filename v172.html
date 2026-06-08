@@ -3079,7 +3079,11 @@
   }
 
   /* Scenario branch animation */
-  .cs-scenario-branch-wrap { padding: 4px 0 6px; position: relative; min-height: 54px; }
+  .cs-scenario-branch-wrap {
+    position: relative;
+    padding-top: 48px; /* space for curves to draw into */
+    padding-bottom: 8px;
+  }
   .cs-scenario-branch-svg {
     display: block; position: absolute; top: 0; left: 0;
     width: 100%; height: 100%; overflow: visible; pointer-events: none;
@@ -3096,13 +3100,15 @@
   @keyframes branchCurve { to { stroke-dashoffset: 0; } }
 
   .cs-context-row--branched {
-    display: flex; justify-content: space-between;
-    gap: 0; flex-wrap: nowrap;
-    /* Constrain to center ~70% of row, matching the red-border confinement */
-    width: 80%; margin: 0 auto;
+    display: flex; justify-content: center;
+    gap: 6px; flex-wrap: nowrap;
+    /* Constrain to ~70% centered — matching Change Scenario pill width roughly */
+    width: 72%; margin: 0 auto;
+    position: relative; /* sits in normal flow at bottom of wrap after padding-top */
   }
   .cs-context-row--branched .cs-ctx-btn {
     flex: 1; text-align: center;
+    font-size: 0.5rem; padding: 1px 4px 2px; /* smaller to fit confined width */
     opacity: 0; transform: translateY(-3px);
     transition: opacity 0.15s ease, transform 0.15s ease, border-color 0.15s, color 0.15s;
   }
@@ -3226,6 +3232,10 @@
     .cs-episode-action-btn { font-size: 0.55rem; padding: 4px 8px; }
     .cs-episode-pill { font-size: 0.55rem; max-width: 100%; }
     .cs-concept-expand .cs-expand-inner { padding-left: 10px; padding-right: 10px; }
+    /* Branch wrap — less height on mobile */
+    .cs-scenario-branch-wrap { padding-top: 36px; padding-bottom: 6px; }
+    .cs-context-row--branched { width: 80%; gap: 4px; }
+    .cs-context-row--branched .cs-ctx-btn { font-size: 0.46rem; padding: 1px 3px 2px; }
   }
 
   /* ============================================
