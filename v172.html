@@ -2990,10 +2990,9 @@
   .cs-candidate {
     border: 1px solid var(--border); border-radius: 8px;
     margin-bottom: 6px; overflow: hidden;
-    opacity: 0; transform: translateY(6px);
-    transition: opacity 0.28s ease, transform 0.28s ease, border-color 0.18s;
+    opacity: 0; transform: scale(0.6);
+    transition: border-color 0.18s;
   }
-  .cs-candidate.visible { opacity: 1; transform: translateY(0); }
   .cs-candidate.expanding { border-color: var(--accent); }
 
   .cs-candidate-header {
@@ -3079,7 +3078,44 @@
     font-size: 0.78rem; color: var(--muted2); font-style: italic; line-height: 1.45;
   }
 
-  /* More ideas button */
+  /* Scenario branch animation */
+  .cs-scenario-branch-wrap { padding: 0 0 6px; position: relative; }
+  .cs-scenario-branch-svg {
+    display: block; width: 100%; height: 36px; margin-bottom: 0;
+    overflow: visible;
+  }
+  .cs-branch-h, .cs-branch-v {
+    stroke: var(--border); stroke-width: 0.8; fill: none;
+    stroke-dasharray: 200;
+    stroke-dashoffset: 200;
+  }
+  .cs-scenario-branch-svg.drawn .cs-branch-h {
+    animation: branchDraw 0.32s ease forwards;
+  }
+  .cs-scenario-branch-svg.drawn .cs-branch-v1 { animation: branchDrop 0.18s 0.28s ease forwards; }
+  .cs-scenario-branch-svg.drawn .cs-branch-v2 { animation: branchDrop 0.18s 0.32s ease forwards; }
+  .cs-scenario-branch-svg.drawn .cs-branch-v3 { animation: branchDrop 0.18s 0.36s ease forwards; }
+  .cs-scenario-branch-svg.drawn .cs-branch-v4 { animation: branchDrop 0.18s 0.40s ease forwards; }
+  @keyframes branchDraw {
+    to { stroke-dashoffset: 0; }
+  }
+  @keyframes branchDrop {
+    to { stroke-dashoffset: 0; }
+  }
+  .cs-context-row--branched {
+    display: flex; justify-content: space-between;
+    gap: 0; margin-bottom: 0; flex-wrap: nowrap;
+  }
+  .cs-context-row--branched .cs-ctx-btn {
+    flex: 1; text-align: center;
+    opacity: 0; transform: translateY(-3px);
+    transition: opacity 0.15s ease, transform 0.15s ease, border-color 0.15s, color 0.15s;
+  }
+  .cs-context-row--branched.btns-visible .cs-ctx-btn { opacity: 1; transform: translateY(0); }
+  .cs-context-row--branched.btns-visible .cs-ctx-btn:nth-child(1) { transition-delay: 0.38s; }
+  .cs-context-row--branched.btns-visible .cs-ctx-btn:nth-child(2) { transition-delay: 0.42s; }
+  .cs-context-row--branched.btns-visible .cs-ctx-btn:nth-child(3) { transition-delay: 0.46s; }
+  .cs-context-row--branched.btns-visible .cs-ctx-btn:nth-child(4) { transition-delay: 0.50s; }
   .cs-picker-more-btn {
     font-family: 'DM Mono', monospace; font-size: 0.6rem;
     letter-spacing: 0.09em; text-transform: uppercase;
@@ -5694,14 +5730,25 @@
     <!-- Scenario buttons — expands below the reveal row -->
     <div class="cs-reveal-section" id="csScenarioSection">
       <div class="cs-reveal-section-inner">
-        <div style="height:0.5rem"></div>
-        <div class="cs-context-row">
-          <button class="cs-ctx-btn" data-ctx="partner">Partner</button>
-          <button class="cs-ctx-btn active" data-ctx="friend">Friend</button>
-          <button class="cs-ctx-btn" data-ctx="colleague">Colleague</button>
-          <button class="cs-ctx-btn" data-ctx="meeting">Meeting</button>
+        <div class="cs-scenario-branch-wrap">
+          <!-- SVG hairline drawn from center, extending left+right then dropping to buttons -->
+          <svg class="cs-scenario-branch-svg" id="csScenarioBranchSvg" viewBox="0 0 320 36" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- horizontal bar: from center (160) to left (16) and right (304) -->
+            <line class="cs-branch-h" x1="160" y1="6" x2="16" y2="6"/>
+            <line class="cs-branch-h" x1="160" y1="6" x2="304" y2="6"/>
+            <!-- vertical drops to each of 4 buttons at ~x=16,106,214,304 -->
+            <line class="cs-branch-v cs-branch-v1" x1="16"  y1="6" x2="16"  y2="30"/>
+            <line class="cs-branch-v cs-branch-v2" x1="106" y1="6" x2="106" y2="30"/>
+            <line class="cs-branch-v cs-branch-v3" x1="214" y1="6" x2="214" y2="30"/>
+            <line class="cs-branch-v cs-branch-v4" x1="304" y1="6" x2="304" y2="30"/>
+          </svg>
+          <div class="cs-context-row cs-context-row--branched">
+            <button class="cs-ctx-btn" data-ctx="partner">Partner</button>
+            <button class="cs-ctx-btn active" data-ctx="friend">Friend</button>
+            <button class="cs-ctx-btn" data-ctx="colleague">Colleague</button>
+            <button class="cs-ctx-btn" data-ctx="meeting">Meeting</button>
+          </div>
         </div>
-        <div style="height:0.4rem"></div>
       </div>
     </div>
 
@@ -8214,11 +8261,13 @@ function _csPickerShowMain() {
   // Restore main state after picker closes
   const pill = document.getElementById('csConceptPill');
   const src = document.getElementById('csSourceLabel');
+  const block = document.getElementById('csPromptBlock');
   if (pill) pill.style.display = '';
   if (src) src.style.visibility = '';
-  // prompt block / coaching only shown if we have aiData
+  if (block) block.style.display = '';
+  // Re-render prompt + coaching if we have data — _csShowPostPrompt alone doesn't re-render text
   if (_csConcept && _csAIData && _csAIData[_csCtx]) {
-    _csShowPostPrompt();
+    _applyAIToCtx(_csCtx);
   }
 }
 
@@ -8238,19 +8287,33 @@ function _csClosePicker() {
 function _csPickerBuildCatRow(activeCatId) {
   const row = document.getElementById('csPickerCatRow');
   if (!row) return;
+  // activeCatId passed but not pre-selected visually — user must choose
   row.innerHTML = CATEGORIES.filter(c => c.id !== 'all').map(c => {
     const col = CAT_COLOR[c.id] || '#e8d5a3';
-    const isActive = c.id === activeCatId;
+    const isActive = c.id === activeCatId && !!activeCatId;
     const activeStyle = isActive ? `background:${col};border-color:${col};color:#0d0d0d;` : `border-color:${col}40;color:${col};`;
     return `<button class="cs-picker-cat-btn${isActive ? ' active' : ''}"
-      style="${activeStyle}"
+      style="${activeStyle};opacity:0;transform:scale(0.6);"
       onmouseover="if(!this.classList.contains('active')){this.style.borderColor='${col}';this.style.color='${col}';}"
       onmouseout="if(!this.classList.contains('active')){this.style.borderColor='${col}40';this.style.color='${col}';}"
       onclick="_csSwitchCat('${c.id}')">${c.name}</button>`;
   }).join('');
+  // Stagger stamp-in animation: scale(0.6) opacity:0 → scale(1.08) → scale(1)
+  const btns = row.querySelectorAll('.cs-picker-cat-btn');
+  btns.forEach(function(btn, i) {
+    setTimeout(function() {
+      btn.style.transition = 'transform 0.12s cubic-bezier(0.34,1.56,0.64,1), opacity 0.1s ease';
+      btn.style.opacity = '1';
+      btn.style.transform = 'scale(1.08)';
+      setTimeout(function() {
+        btn.style.transform = 'scale(1)';
+      }, 100);
+    }, i * 55);
+  });
 }
 
 function _csPickerLoad(cat) {
+  if (!cat) return; // no category selected yet
   const pool = CONCEPTS.filter(c =>
     c.category === cat && !c.duplicate_of && !_csPickerSeenIds.includes(c.id)
   );
@@ -8294,14 +8357,17 @@ function _csPickerLoad(cat) {
     ).length;
     if (moreBtn) { moreBtn.style.display = ''; moreBtn.disabled = remaining === 0; }
 
-    // Stagger fade-in
+    // Stagger stamp-in animation for candidate cards
     const cards = list.querySelectorAll('.cs-candidate');
     cards.forEach(function(card, i) {
-      setTimeout(function() { card.classList.add('visible'); }, i * 70);
+      setTimeout(function() {
+        card.style.transition = 'transform 0.14s cubic-bezier(0.34,1.56,0.64,1), opacity 0.12s ease, border-color 0.18s';
+        card.style.opacity = '1';
+        card.style.transform = 'scale(1.03)';
+        setTimeout(function() { card.style.transform = 'scale(1)'; }, 110); 
+      }, i * 80);
     });
-
-    // Auto-expand first card
-    if (shuffled.length > 0) _csPickerToggle(shuffled[0].id);
+    // No auto-expand — user taps to open a card
   }, shuffled.length > 0 ? 160 : 0);
 }
 
@@ -8405,6 +8471,12 @@ function _csPickerGenerate(conceptId) {
     // Auto-save to Stash
     var aiDataSnap = {}; aiDataSnap[ctx] = d;
     _csSaveConcept(concept, aiDataSnap);
+    // Live-refresh Stash panel if it's open on the saved tab
+    const convPanel = document.getElementById('convPanel');
+    const savedTab = document.querySelector('.conv-tab[data-tab="saved"]');
+    if (convPanel && convPanel.classList.contains('open') && savedTab && savedTab.classList.contains('active')) {
+      _convRenderSaved();
+    }
   })
   .catch(function() {
     genBtn.disabled = false; genBtn.classList.remove('loading');
@@ -8459,14 +8531,16 @@ function _csPickerCommit() {
   try { d = JSON.parse(sessionStorage.getItem(sessionKey) || 'null'); } catch(e) {}
   if (!d) return;
 
-  // Commit concept + aiData to main modal state
+  // Commit concept + aiData to main modal state — start fresh, no bleed from previous concept
   _csConcept = concept;
   _csCtx = ctx;
-  if (!_csAIData) _csAIData = {};
+  _csAIData = {}; // always fresh — only committed ctx's data
   _csAIData[ctx] = d;
+  // Clear has-prompt badges then re-apply for committed ctx only
+  document.querySelectorAll('.cs-ctx-btn').forEach(function(b) { b.classList.remove('has-prompt'); });
   _csPushToStack(concept);
   _renderCSShell(concept);
-  _applyAIToCtx(_csAIData, ctx);
+  _applyAIToCtx(ctx);
   _csClosePicker();
 }
 
@@ -8481,7 +8555,9 @@ function _csPickForCat(cat, deterministic) {
 
 function _csLoadNewConcept(concept) {
   _csConcept = concept;
-  _csAIData  = null;
+  _csAIData  = null; // clear ALL previous concept's aiData — prevents badge bleed
+  // Clear has-prompt badges immediately
+  document.querySelectorAll('.cs-ctx-btn').forEach(function(b) { b.classList.remove('has-prompt'); });
   _renderCSShell(concept);
   _csPushToStack(concept);
   // Hide coaching/divider/feedback but keep nav controls visible
@@ -8587,6 +8663,10 @@ function _applyAIToCtx(ctx) {
   if (!_csAIData) return;
   const d = _csAIData[ctx];
   if (!d) return;
+
+  // Reset feedback row so it re-appears for every new generated prompt
+  const frReset = document.getElementById('csFeedbackRow');
+  if (frReset) { frReset.classList.add('cs-hidden'); frReset.classList.remove('cs-visible'); }
 
   document.getElementById('csOpener').textContent = CS_OPENERS[ctx] || '';
 
@@ -8807,24 +8887,21 @@ function _csToggleTopicReveal() {
   // Hide concept pill + prompt block
   _csPickerHideMain();
 
-  // Build category pill row pre-selected to current cat
-  _csPickerBuildCatRow(_csCat || 'psychology');
+  // Build category pill row — no pre-selection, user must choose
+  _csPickerBuildCatRow(null);
 
-  // Show picker — cats animate in first, candidates load on cat click
+  // Show picker — cats animate in, candidates wait for cat click
   wrap.classList.add('active');
   _csPickerSeenIds = [];
-  _csPickerCurrentCat = _csCat || 'psychology';
+  _csPickerCurrentCat = null;
   // Clear any previous candidates
   const list = document.getElementById('csCandidateList');
   if (list) list.innerHTML = '';
   const moreBtn = document.getElementById('csPickerMoreBtn');
   if (moreBtn) moreBtn.style.display = 'none';
-  // Auto-load candidates for the pre-selected category after a short delay
-  // so the cat pills animate in first (they fade via .active class on wrap)
-  setTimeout(function() { _csPickerLoad(_csPickerCurrentCat); }, 180);
 }
 
-// Toggle scenario reveal
+// Toggle scenario reveal — stays open until clicked again
 function _csToggleScenarioReveal() {
   const sec = document.getElementById('csScenarioSection');
   const lnk = document.getElementById('csRevealScenario');
@@ -8837,6 +8914,11 @@ function _csToggleScenarioReveal() {
     if (tc) tc.classList.remove('open');
     const tl = document.getElementById('csRevealTopic');
     if (tl) tl.classList.remove('active');
+    // Trigger branch draw animation
+    const svg = document.getElementById('csScenarioBranchSvg');
+    const row = sec.querySelector('.cs-context-row--branched');
+    if (svg) { svg.classList.remove('drawn'); requestAnimationFrame(function() { svg.classList.add('drawn'); }); }
+    if (row) { row.classList.remove('btns-visible'); setTimeout(function() { row.classList.add('btns-visible'); }, 50); }
   }
 }
 
@@ -9022,6 +9104,9 @@ function _csSurprise() {
 function _csSwapConcept(id) {
   const concept = CONCEPTS.find(c => c.id === id);
   if (!concept) return;
+  // Close picker if open — ensures prompt block is visible before loading
+  const pickerWrap = document.getElementById('csTopicPickerWrap');
+  if (pickerWrap && pickerWrap.classList.contains('active')) _csClosePicker();
   _csConcept = concept;
   _csAIData  = null;
   _csCat = concept.category || _csCat;
@@ -9038,7 +9123,10 @@ function _csSwapConcept(id) {
   if (relSec) relSec.classList.remove('open');
   const relLnk = document.getElementById('csRevealRelated');
   if (relLnk) relLnk.classList.remove('active');
-  _loadAI(concept, _csCtx, false);
+  // Ensure prompt block is visible so shimmer renders inside it
+  const pb = document.getElementById('csPromptBlock');
+  if (pb) pb.style.display = '';
+  _csRestoreOrLoad(concept);
 }
 
 // ---- AI CALL — v1.71: generates only for selected scenario ----
