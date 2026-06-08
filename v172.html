@@ -2930,9 +2930,9 @@
     margin: 8px 0 4px;
     gap: 8px;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: flex-start;
   }
-  .cs-reveal-row.cs-visible { display: flex; align-items: center; justify-content: center; }
+  .cs-reveal-row.cs-visible { display: flex; align-items: center; justify-content: flex-start; }
   .cs-reveal-link {
     background: none;
     border: 1px solid var(--border);
@@ -3042,7 +3042,7 @@
   .cs-fb-btn:hover { border-color: var(--accent); transform: scale(1.15); }
 
   /* Actions */
-  .cs-actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; align-items: center; }
+  .cs-actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-start; align-items: center; }
   .cs-btn {
     font-family: 'DM Mono', monospace; font-size: 0.7rem;
     letter-spacing: 0.1em; text-transform: uppercase;
@@ -5472,9 +5472,9 @@
       <button class="cs-help-btn" id="csHelpBtn" onclick="_csHelpClick()" aria-label="How does this work">
         ❓
         <div class="cs-help-bubble" id="csHelpBubble">
-          <div class="cs-help-step"><span class="cs-help-num">01</span><span>An interesting idea from a podcast gets picked for you. Tap it to see what it means — no BS.</span></div>
+          <div class="cs-help-step"><span class="cs-help-num">01</span><span>An interesting idea from a podcast gets picked for you. Tap it to see what it means — in plain English.</span></div>
           <div class="cs-help-step"><span class="cs-help-num">02</span><span>Read your conversation starter tailored to who you're talking to. Change topic or scenario below anytime.</span></div>
-          <div class="cs-help-step"><span class="cs-help-num">03</span><span>Did it land? Do tell us! Save the ones worth keeping for later conversations.</span></div>
+          <div class="cs-help-step"><span class="cs-help-num">03</span><span>Did it land? Do tell us! Stash saves the ones worth keeping for later.</span></div>
           <div style="margin-top:10px;font-size:0.8rem;font-style:italic;color:var(--accent);font-family:'Playfair Display',serif">Now go say something worth saying! ✦</div>
         </div>
       </button>
@@ -5485,9 +5485,9 @@
       <div class="cs-help-overlay-card">
         <button class="cs-help-overlay-close" onclick="_csHelpOverlayClose()">✕</button>
         <div class="cs-help-overlay-title">How does this work?</div>
-        <div class="cs-help-step"><span class="cs-help-num">01</span><span>An interesting idea from a podcast gets picked for you. Tap it to see what it means — no BS.</span></div>
+        <div class="cs-help-step"><span class="cs-help-num">01</span><span>An interesting idea from a podcast gets picked for you. Tap it to see what it means — in plain English.</span></div>
         <div class="cs-help-step" style="margin-top:10px"><span class="cs-help-num">02</span><span>Read your conversation starter tailored to who you're talking to. Change topic or scenario below anytime.</span></div>
-        <div class="cs-help-step" style="margin-top:10px"><span class="cs-help-num">03</span><span>Did it land? Do tell us! Save the ones worth keeping for later conversations.</span></div>
+        <div class="cs-help-step" style="margin-top:10px"><span class="cs-help-num">03</span><span>Did it land? Do tell us! Stash saves the ones worth keeping for later.</span></div>
         <div style="margin-top:14px;font-size:0.9rem;font-style:italic;color:var(--accent);font-family:'Playfair Display',serif;text-align:center">Now go say something worth saying! ✦</div>
       </div>
     </div>
@@ -5596,9 +5596,8 @@
     <!-- Actions: Copy & Share · Save · Surprise Me + Prev/Next -->
     <div class="cs-actions cs-post-prompt cs-hidden" id="csActions">
       <button class="cs-btn cs-btn--primary" id="csShareBtn">↑ Copy &amp; Share</button>
-      <button class="cs-btn cs-btn--save" id="csSaveAllBtn">♡ Stash</button>
       <button class="cs-btn cs-btn--surprise" id="csSurpriseBtn">✦ Surprise me</button>
-      <div style="display:flex;gap:6px">
+      <div style="display:flex;gap:6px;margin-left:auto">
         <button class="cs-nav-btn" id="csPrevBtn" title="Previous concept" disabled>⤺</button>
         <button class="cs-nav-btn" id="csNextBtn" title="Next concept">⤻</button>
       </div>
@@ -8229,6 +8228,9 @@ function _applyAIToCtx(ctx) {
   // Auto-save generated prompt to history (with prompt text) — v1.72
   _csLogHistoryWithPrompt(_csConcept, ctx, d.prompt);
 
+  // Auto-save to Stash — no manual save needed — v1.74d
+  if (_csConcept) _csSaveConcept(_csConcept, _csAIData);
+
   // Hide generate button
   const genRow = document.getElementById('csGenerateRow');
   if (genRow) genRow.style.display = 'none';
@@ -8501,18 +8503,7 @@ function _csRestoreOrLoad(concept) {
 
 // Reflect saved state on the Stash button — per-scenario v1.74b
 // Green only if this scenario has a stored prompt in lll_cs_saved_v1.
-function _csUpdateSaveBtn() {
-  var saveBtn = document.getElementById('csSaveAllBtn');
-  if (!saveBtn || !_csConcept) return;
-  var isPromptedAndSaved = false;
-  try {
-    var savedArr = JSON.parse(localStorage.getItem(CS_SAVED_KEY) || '[]');
-    var entry = savedArr.find(function(s) { return s && s.id === _csConcept.id; });
-    isPromptedAndSaved = !!(entry && entry.aiData && entry.aiData[_csCtx]);
-  } catch(e) {}
-  saveBtn.textContent = isPromptedAndSaved ? '\u2665 Stash' : '\u2661 Stash';
-  if (isPromptedAndSaved) saveBtn.classList.add('saved'); else saveBtn.classList.remove('saved');
-}
+function _csUpdateSaveBtn() { /* retired — auto-save replaces manual save button v1.74d */ }
 
 // Update scenario badge markers — v1.73
 function _csUpdateScenarioBadges() {
@@ -8838,14 +8829,17 @@ function _showCSLoading(on) {
 function _wireSwipe() {
   const block = document.getElementById('csPromptBlock');
   if (!block) return;
-  let startX = 0, currentX = 0, dragging = false;
+  let startX = 0, currentX = 0, dragging = false, moved = false;
   const THRESHOLD = 80;
+  const MOVE_GUARD = 8; // must drag at least 8px before it counts as a swipe
 
-  function onStart(x) { startX = x; dragging = true; }
+  function onStart(x) { startX = x; currentX = x; dragging = true; moved = false; }
   function onMove(x) {
     if (!dragging) return;
     currentX = x;
     const dx = currentX - startX;
+    if (!moved && Math.abs(dx) > MOVE_GUARD) moved = true;
+    if (!moved) return;
     block.style.transform = `translateX(${dx * 0.35}px) rotate(${dx * 0.015}deg)`;
     block.classList.toggle('swiping-left',  dx < -30);
     block.classList.toggle('swiping-right', dx >  30);
@@ -8855,9 +8849,11 @@ function _wireSwipe() {
     const dx = currentX - startX;
     block.style.transform = '';
     block.classList.remove('swiping-left', 'swiping-right');
-    if (dx < -THRESHOLD) _csSwipeLeft();
-    else if (dx > THRESHOLD) _csSwipeRight();
-    startX = 0; currentX = 0;
+    if (moved) {
+      if (dx < -THRESHOLD) _csSwipeLeft();
+      else if (dx > THRESHOLD) _csSwipeRight();
+    }
+    startX = 0; currentX = 0; moved = false;
   }
 
   block.addEventListener('mousedown',  e => onStart(e.clientX));
@@ -8961,21 +8957,6 @@ function _wireCSEvents() {
     }
     track('prompt_shared', { ctx: _csCtx, concept_id: _csConcept ? _csConcept.id : null });
   };
-
-  // Save button — moves to Stash (explicit intent)
-  const saveAllBtn = document.getElementById('csSaveAllBtn');
-  if (saveAllBtn) {
-    saveAllBtn.addEventListener('click', function() {
-      if (!_csConcept) return;
-      // Snapshot at click time — guard against race with Surprise Me
-      const conceptSnap = _csConcept;
-      const aiSnap = _csAIData;
-      _csSaveConcept(conceptSnap, aiSnap);
-      saveAllBtn.textContent = '\u2665 Stash';
-      saveAllBtn.classList.add('saved');
-      track('cs_saved', { concept_id: conceptSnap.id });
-    });
-  }
 
   // Surprise me button
   const surBtn = document.getElementById('csSurpriseBtn');
@@ -10931,6 +10912,13 @@ function playStreakMilestoneSFX() {
 .conv-action-btn:hover { border-color: var(--border-hover); color: var(--muted2); }
 .conv-delete-btn { color: #d4715a; border-color: rgba(212,113,90,0.3); }
 .conv-delete-btn:hover { border-color: #d4715a; background: rgba(212,113,90,0.06); }
+.conv-ctx-remove-btn {
+  background: none; border: none; padding: 0 0 0 6px;
+  color: var(--muted); font-size: 0.68rem; cursor: pointer;
+  line-height: 1; opacity: 0.5; transition: opacity 0.15s, color 0.15s;
+  flex-shrink: 0;
+}
+.conv-ctx-remove-btn:hover { opacity: 1; color: var(--red); }
 
 /* History entry (simpler) */
 .conv-hist-entry {
@@ -11273,14 +11261,15 @@ function _convDetailHTML(entry) {
   const d = (entry.aiData && entry.aiData[firstCtx]) || null;
   return `
     <div class="conv-ctx-tabs">${tabs}</div>
-    <div id="convCtxContent${entry.id}" class="conv-ctx-content-wrap">${d ? _convCtxBlock(d) : _convUnpromptedBlock(firstCtx)}</div>`;
+    <div id="convCtxContent${entry.id}" class="conv-ctx-content-wrap">${d ? _convCtxBlock(d, entry.id, firstCtx) : _convUnpromptedBlock(firstCtx)}</div>`;
 }
 
-function _convCtxBlock(d) {
+function _convCtxBlock(d, id, ctx) {
   if (!d) return '';
   const openers = (d.openers || []).map(o => `<div class="conv-opener">${_escHtml(o)}</div>`).join('');
+  const removeBtn = (id != null && ctx) ? `<button class="conv-ctx-remove-btn" onclick="_convRemoveCtx(${id},'${ctx}')" title="Remove this scenario from Stash">✕</button>` : '';
   return `
-    <div class="conv-prompt-label">Conversation prompt</div>
+    <div class="conv-prompt-label" style="display:flex;align-items:center;justify-content:space-between">Conversation prompt${removeBtn}</div>
     <div class="conv-prompt-text">${_escHtml(d.prompt || '')}</div>
     ${openers ? `<div class="conv-opener-label">Try saying</div>${openers}` : ''}
     ${d.pitfall ? `<div class="conv-pitfall-label">Watch out for</div><div class="conv-pitfall">${_escHtml(d.pitfall)}</div>` : ''}`;
@@ -11311,7 +11300,7 @@ function _convSwitchCtx(id, ctx) {
     if (content) {
       content.classList.add('fading');
       setTimeout(() => {
-        content.innerHTML = _convCtxBlock(entry.aiData[ctx]);
+        content.innerHTML = _convCtxBlock(entry.aiData[ctx], id, ctx);
         content.classList.remove('fading');
       }, 150);
     }
@@ -11375,7 +11364,7 @@ function _convGenerateCtx(id, ctx, entry) {
       if (content) {
         content.classList.add('fading');
         setTimeout(() => {
-          content.innerHTML = _convCtxBlock(ctxData);
+          content.innerHTML = _convCtxBlock(ctxData, id, ctx);
           content.classList.remove('fading');
         }, 150);
       }
@@ -11456,6 +11445,22 @@ function _convDelete(id) {
   }, 4000);
 }
 
+// Remove a single scenario's aiData from a Stash entry — v1.74d
+function _convRemoveCtx(id, ctx) {
+  try {
+    const saved = _convGetSaved();
+    const idx = saved.findIndex(s => s.id === id);
+    if (idx < 0) return;
+    if (saved[idx].aiData) {
+      delete saved[idx].aiData[ctx];
+      const remaining = Object.keys(saved[idx].aiData || {});
+      if (!remaining.length) saved[idx].aiData = null;
+    }
+    localStorage.setItem(CS_SAVED_KEY, JSON.stringify(saved));
+  } catch(e) {}
+  _convRenderSaved();
+}
+
 function _convOpenCS(id) {
   // Open CS modal pre-loaded with this concept
   closeConversations();
@@ -11482,7 +11487,7 @@ function _convOpenCS(id) {
 }
 
 function _convOpenConcept(id) {
-  // Keep Stash open — scroll + open the card in the background
+  // Keep Stash open — scroll card to center of the visible area (excluding the panel)
   const concept = CONCEPTS.find(c => c.id === id);
   if (!concept) return;
 
@@ -11496,12 +11501,35 @@ function _convOpenConcept(id) {
   // Small delay so grid rebuild paints before scroll
   setTimeout(() => {
     const el = document.getElementById('cc' + id);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      setTimeout(() => {
-        if (!el.classList.contains('open')) toggleCard(id);
-      }, 420);
-    }
+    if (!el) return;
+
+    // Calculate the width of the Stash panel so we can offset the scroll target
+    const panel = document.getElementById('convPanel');
+    const panelW = (panel && panel.offsetWidth) ? panel.offsetWidth : 0;
+
+    // Available viewport width is the full window minus the panel on the right
+    const availableW = window.innerWidth - panelW;
+
+    // Card rect relative to viewport
+    const rect = el.getBoundingClientRect();
+
+    // We want the card horizontally centered in the available viewport.
+    // Calculate how far we need to scroll so the card center lands at availableW/2.
+    const cardCenterX = rect.left + rect.width / 2;
+    const targetCenterX = availableW / 2;
+    const scrollDeltaX = cardCenterX - targetCenterX;
+
+    // Vertically: center in full viewport (panel doesn't block vertical)
+    const cardCenterY = rect.top + rect.height / 2;
+    const targetCenterY = window.innerHeight / 2;
+    const scrollDeltaY = cardCenterY - targetCenterY;
+
+    window.scrollBy({ left: scrollDeltaX, top: scrollDeltaY, behavior: 'smooth' });
+
+    // Flip open after scroll settles
+    setTimeout(() => {
+      if (!el.classList.contains('open')) toggleCard(id);
+    }, 450);
   }, 80);
 }
 
