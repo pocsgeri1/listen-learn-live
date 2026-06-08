@@ -11498,39 +11498,47 @@ function _convOpenConcept(id) {
     buildGrid();
   }
 
-  // Small delay so grid rebuild paints before scroll
-  setTimeout(() => {
-    const el = document.getElementById('cc' + id);
-    if (!el) return;
+  // Double-rAF: first frame lets innerHTML paint, second frame lets browser do layout pass
+  // so getBoundingClientRect() returns real pixel values, not 0,0
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      const el = document.getElementById('cc' + id);
+      if (!el) return;
 
-    // Calculate the width of the Stash panel so we can offset the scroll target
-    const panel = document.getElementById('convPanel');
-    const panelW = (panel && panel.offsetWidth) ? panel.offsetWidth : 0;
+      // Scroll the card's row into horizontal view first (cards live in a horizontal scroll row)
+      el.scrollIntoView({ behavior: 'instant', block: 'nearest', inline: 'center' });
 
-    // Available viewport width is the full window minus the panel on the right
-    const availableW = window.innerWidth - panelW;
+      // Now read the rect AFTER the row has scrolled the card into view
+      requestAnimationFrame(() => {
+        const rect = el.getBoundingClientRect();
 
-    // Card rect relative to viewport
-    const rect = el.getBoundingClientRect();
+        // Calculate the width of the Stash panel so we can offset the scroll target
+        const panel = document.getElementById('convPanel');
+        const panelW = (panel && panel.offsetParent !== null && panel.offsetWidth) ? panel.offsetWidth : 0;
 
-    // We want the card horizontally centered in the available viewport.
-    // Calculate how far we need to scroll so the card center lands at availableW/2.
-    const cardCenterX = rect.left + rect.width / 2;
-    const targetCenterX = availableW / 2;
-    const scrollDeltaX = cardCenterX - targetCenterX;
+        // Available viewport width is the full window minus the panel on the right
+        const availableW = window.innerWidth - panelW;
 
-    // Vertically: center in full viewport (panel doesn't block vertical)
-    const cardCenterY = rect.top + rect.height / 2;
-    const targetCenterY = window.innerHeight / 2;
-    const scrollDeltaY = cardCenterY - targetCenterY;
+        // Center card vertically in full viewport
+        const cardCenterY = rect.top + rect.height / 2;
+        const targetCenterY = window.innerHeight / 2;
+        const scrollDeltaY = cardCenterY - targetCenterY;
 
-    window.scrollBy({ left: scrollDeltaX, top: scrollDeltaY, behavior: 'smooth' });
+        // Center card horizontally within the available (non-panel) viewport
+        const cardCenterX = rect.left + rect.width / 2;
+        const targetCenterX = availableW / 2;
+        const scrollDeltaX = cardCenterX - targetCenterX;
 
-    // Flip open after scroll settles
-    setTimeout(() => {
-      if (!el.classList.contains('open')) toggleCard(id);
-    }, 450);
-  }, 80);
+        window.scrollBy({ left: scrollDeltaX, top: scrollDeltaY, behavior: 'smooth' });
+
+        // Flip open after smooth scroll settles (~500ms)
+        setTimeout(() => {
+          const elNow = document.getElementById('cc' + id);
+          if (elNow && !elNow.classList.contains('open')) toggleCard(id);
+        }, 520);
+      });
+    });
+  });
 }
 
 // ---- RENDER: HISTORY ----
