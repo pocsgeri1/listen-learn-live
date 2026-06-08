@@ -2977,14 +2977,12 @@
     display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 0.85rem;
   }
   .cs-picker-cat-btn {
-    font-family: 'DM Mono', monospace; font-size: 0.58rem;
+    font-family: 'DM Mono', monospace; font-size: 0.55rem;
     letter-spacing: 0.09em; text-transform: uppercase;
-    background: transparent; border: 1px solid var(--border);
-    color: var(--muted); border-radius: 999px; padding: 3px 11px;
+    background: transparent; border: 1px solid;
+    border-radius: 999px; padding: 3px 10px;
     cursor: pointer; transition: border-color 0.15s, color 0.15s, background 0.15s;
   }
-  .cs-picker-cat-btn:hover { border-color: var(--accent); color: var(--accent); }
-  .cs-picker-cat-btn.active { background: var(--accent); border-color: var(--accent); color: #0d0d0d; }
 
   /* Candidate concept cards */
   .cs-candidate-list { display: flex; flex-direction: column; gap: 0; }
@@ -3015,13 +3013,11 @@
 
   /* Accordion body */
   .cs-candidate-body {
-    display: grid; grid-template-rows: 0fr;
-    transition: grid-template-rows 0.26s ease;
-    overflow: hidden;
+    max-height: 0; overflow: hidden;
+    transition: max-height 0.28s ease;
   }
-  .cs-candidate.open .cs-candidate-body { grid-template-rows: 1fr; }
+  .cs-candidate.open .cs-candidate-body { max-height: 600px; }
   .cs-candidate-body-inner {
-    min-height: 0; overflow: hidden;
     padding: 0 14px 14px;
   }
   .cs-candidate-plain {
@@ -3060,8 +3056,27 @@
     letter-spacing: 0.1em; text-transform: uppercase;
     color: var(--accent); margin-bottom: 4px;
   }
-  .cs-candidate-coaching {
-    margin-top: 6px; font-size: 0.78rem; color: var(--muted2); font-style: italic; line-height: 1.5;
+  .cs-candidate-loading {
+    font-size: 0.78rem; color: var(--muted); font-style: italic; padding: 4px 0;
+  }
+  .cs-candidate-prompt-text {
+    font-size: 0.88rem; color: var(--text); line-height: 1.55; margin-bottom: 8px;
+  }
+  .cs-candidate-openers { margin-bottom: 6px; }
+  .cs-candidate-opener {
+    font-size: 0.78rem; color: var(--muted2); line-height: 1.5;
+    border-left: 2px solid var(--border); padding-left: 8px; margin-bottom: 4px;
+  }
+  .cs-candidate-opener-lbl {
+    display: block; font-family: 'DM Mono', monospace; font-size: 0.52rem;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 2px;
+  }
+  .cs-candidate-pitfall-lbl {
+    font-family: 'DM Mono', monospace; font-size: 0.52rem;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 6px 0 2px;
+  }
+  .cs-candidate-pitfall {
+    font-size: 0.78rem; color: var(--muted2); font-style: italic; line-height: 1.45;
   }
 
   /* More ideas button */
@@ -3070,7 +3085,7 @@
     letter-spacing: 0.09em; text-transform: uppercase;
     background: none; border: 1px solid var(--border);
     color: var(--muted); border-radius: 6px; padding: 6px 14px;
-    cursor: pointer; margin-top: 4px; width: 100%;
+    cursor: pointer; margin-top: 6px; margin-bottom: 16px; width: 100%;
     transition: border-color 0.15s, color 0.15s;
   }
   .cs-picker-more-btn:hover { border-color: var(--accent); color: var(--accent); }
@@ -8164,7 +8179,7 @@ function _csSwitchCat(cat) {
   const wrap = document.getElementById('csTopicPickerWrap');
   if (wrap && wrap.classList.contains('active')) {
     _csPickerCurrentCat = cat;
-    _csPickerSeenIds = [];
+    _csPickerSeenIds = []; // fresh batch for new category
     _csPickerBuildCatRow(cat);
     _csPickerLoad(cat);
     return;
@@ -8213,15 +8228,26 @@ function _csClosePicker() {
   _csPickerShowMain();
   const lnk = document.getElementById('csRevealTopic');
   if (lnk) lnk.classList.remove('active');
+  // Restore scenario + related pills
+  const sl = document.getElementById('csRevealScenario');
+  const rl = document.getElementById('csRevealRelated');
+  if (sl) sl.style.display = '';
+  if (rl) rl.style.display = '';
 }
 
 function _csPickerBuildCatRow(activeCatId) {
   const row = document.getElementById('csPickerCatRow');
   if (!row) return;
-  row.innerHTML = CATEGORIES.filter(c => c.id !== 'all').map(c =>
-    `<button class="cs-picker-cat-btn${c.id === activeCatId ? ' active' : ''}"
-      onclick="_csSwitchCat('${c.id}')">${c.name}</button>`
-  ).join('');
+  row.innerHTML = CATEGORIES.filter(c => c.id !== 'all').map(c => {
+    const col = CAT_COLOR[c.id] || '#e8d5a3';
+    const isActive = c.id === activeCatId;
+    const activeStyle = isActive ? `background:${col};border-color:${col};color:#0d0d0d;` : `border-color:${col}40;color:${col};`;
+    return `<button class="cs-picker-cat-btn${isActive ? ' active' : ''}"
+      style="${activeStyle}"
+      onmouseover="if(!this.classList.contains('active')){this.style.borderColor='${col}';this.style.color='${col}';}"
+      onmouseout="if(!this.classList.contains('active')){this.style.borderColor='${col}40';this.style.color='${col}';}"
+      onclick="_csSwitchCat('${c.id}')">${c.name}</button>`;
+  }).join('');
 }
 
 function _csPickerLoad(cat) {
@@ -8261,12 +8287,12 @@ function _csPickerLoad(cat) {
       </div>`;
     }).join('');
 
-    // Disable "More ideas" if pool is exhausted after this batch
+    // Show/disable "More ideas" based on remaining pool
     const moreBtn = document.getElementById('csPickerMoreBtn');
     const remaining = CONCEPTS.filter(c =>
       c.category === cat && !c.duplicate_of && !_csPickerSeenIds.includes(c.id)
     ).length;
-    if (moreBtn) moreBtn.disabled = remaining === 0;
+    if (moreBtn) { moreBtn.style.display = ''; moreBtn.disabled = remaining === 0; }
 
     // Stagger fade-in
     const cards = list.querySelectorAll('.cs-candidate');
@@ -8340,6 +8366,9 @@ function _csPickerGenerate(conceptId) {
   genBtn.disabled = true;
   genBtn.classList.add('loading');
   genBtn.textContent = '…';
+  // Show loading state inside output area
+  out.innerHTML = `<div class="cs-candidate-loading">Finding the right angle…</div>`;
+  out.classList.add('visible');
 
   fetch('/api/cs-generate', {
     method: 'POST',
@@ -8368,6 +8397,10 @@ function _csPickerGenerate(conceptId) {
     }
     // Cache to session
     try { sessionStorage.setItem(sessionKey, JSON.stringify(d)); } catch(e) {}
+    // Update _csAIData so main modal badge + restore knows about this prompt
+    if (!_csAIData) _csAIData = {};
+    _csAIData[ctx] = d;
+    _csUpdateScenarioBadges();
     _csPickerShowResult(conceptId, ctx, concept, d);
     // Auto-save to Stash
     var aiDataSnap = {}; aiDataSnap[ctx] = d;
@@ -8385,10 +8418,17 @@ function _csPickerShowResult(conceptId, ctx, concept, d) {
   if (!out) return;
 
   const opener = CS_OPENERS[ctx] || ('With a ' + ctx + ':');
+  const openers = (d.openers || []).map((o, i) =>
+    `<div class="cs-candidate-opener"><span class="cs-candidate-opener-lbl">${i === 0 ? 'Try saying' : 'Or try'}</span>${_escHtml(o)}</div>`
+  ).join('');
+  const pitfall = d.pitfall ? `<div class="cs-candidate-pitfall-lbl">Watch out for</div><div class="cs-candidate-pitfall">${_escHtml(d.pitfall)}</div>` : '';
+
   out.innerHTML = `
     <div class="cs-candidate-label">${_escHtml(opener)}</div>
-    <div>${_escHtml(d.prompt)}</div>
+    <div class="cs-candidate-prompt-text">${_escHtml(d.prompt || '')}</div>
+    ${openers ? `<div class="cs-candidate-openers">${openers}</div>` : ''}
     ${d.coaching ? `<div class="cs-candidate-coaching">${_escHtml(d.coaching)}</div>` : ''}
+    ${pitfall}
   `;
   out.classList.add('visible');
 
@@ -8397,8 +8437,6 @@ function _csPickerShowResult(conceptId, ctx, concept, d) {
     genBtn.textContent = '↻ Regenerate';
   }
 
-  // Commit this concept as active when Copy & Share is used
-  // Track which picker concept was last generated
   _csPickerLastConceptId = conceptId;
   _csPickerLastCtx = ctx;
 }
@@ -8759,7 +8797,12 @@ function _csToggleTopicReveal() {
   const sc = document.getElementById('csScenarioSection');
   const sl = document.getElementById('csRevealScenario');
   if (sc) sc.classList.remove('open');
-  if (sl) sl.classList.remove('active');
+  if (sl) { sl.classList.remove('active'); sl.style.display = 'none'; }
+  // Hide related pill too — picker state is topic-only
+  const rl = document.getElementById('csRevealRelated');
+  const rs = document.getElementById('csRelatedSection');
+  if (rl) rl.style.display = 'none';
+  if (rs) rs.classList.remove('open');
 
   // Hide concept pill + prompt block
   _csPickerHideMain();
@@ -8767,11 +8810,18 @@ function _csToggleTopicReveal() {
   // Build category pill row pre-selected to current cat
   _csPickerBuildCatRow(_csCat || 'psychology');
 
-  // Show picker + load first 3 candidates
+  // Show picker — cats animate in first, candidates load on cat click
   wrap.classList.add('active');
   _csPickerSeenIds = [];
   _csPickerCurrentCat = _csCat || 'psychology';
-  _csPickerLoad(_csPickerCurrentCat);
+  // Clear any previous candidates
+  const list = document.getElementById('csCandidateList');
+  if (list) list.innerHTML = '';
+  const moreBtn = document.getElementById('csPickerMoreBtn');
+  if (moreBtn) moreBtn.style.display = 'none';
+  // Auto-load candidates for the pre-selected category after a short delay
+  // so the cat pills animate in first (they fade via .active class on wrap)
+  setTimeout(function() { _csPickerLoad(_csPickerCurrentCat); }, 180);
 }
 
 // Toggle scenario reveal
