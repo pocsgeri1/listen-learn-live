@@ -2421,20 +2421,21 @@
 
   /* Context buttons */
   .cs-context-row {
-    display: flex; gap: 8px; margin-bottom: 1.2rem; flex-wrap: wrap;
+    display: flex; gap: 6px; margin-bottom: 0.9rem; flex-wrap: wrap;
   }
   .cs-ctx-btn {
-    font-family: 'DM Mono', monospace; font-size: 0.68rem;
-    letter-spacing: 0.12em; text-transform: uppercase;
-    background: var(--surface2); border: 1px solid var(--border);
-    color: var(--muted2); border-radius: 999px; padding: 6px 16px;
-    cursor: pointer; transition: background 0.15s, border-color 0.15s, color 0.15s;
+    font-family: 'DM Mono', monospace; font-size: 0.54rem;
+    letter-spacing: 0.09em; text-transform: uppercase;
+    background: transparent; border: none;
+    border-bottom: 1.5px solid var(--border);
+    color: var(--muted); border-radius: 0 0 3px 3px; padding: 2px 8px 3px;
+    cursor: pointer; transition: border-color 0.15s, color 0.15s;
   }
-  .cs-ctx-btn:hover { border-color: var(--accent); color: var(--accent); }
-  .cs-ctx-btn.has-prompt { border-color: rgba(196,122,122,0.6); color: #c47a7a; }
-  .cs-ctx-btn.has-prompt:hover { border-color: #c47a7a; color: #c47a7a; }
-  .cs-ctx-btn.active.has-prompt { background: rgba(196,122,122,0.18); border-color: #c47a7a; color: #c47a7a; }
-  .cs-ctx-btn.active:not(.has-prompt) { background: var(--accent); border-color: var(--accent); color: #0d0d0d; }
+  .cs-ctx-btn:hover { border-bottom-color: var(--accent); color: var(--accent); }
+  .cs-ctx-btn.has-prompt { border-bottom-color: rgba(196,122,122,0.6); color: #c47a7a; }
+  .cs-ctx-btn.has-prompt:hover { border-bottom-color: #c47a7a; color: #c47a7a; }
+  .cs-ctx-btn.active.has-prompt { border-bottom-color: #c47a7a; border-bottom-width: 2px; color: #c47a7a; font-weight:600; }
+  .cs-ctx-btn.active:not(.has-prompt) { border-bottom-color: var(--accent); border-bottom-width: 2px; color: var(--accent); font-weight:600; }
 
   /* Swipeable prompt block */
   .cs-prompt-block {
@@ -2964,6 +2965,116 @@
   .cs-reveal-section.open { grid-template-rows: 1fr; }
   .cs-reveal-section > * { min-height: 0; }
   .cs-reveal-section-inner { overflow: hidden; padding-bottom: 2px; }
+
+  /* ---- Topic picker (Change topic → candidate cards) ---- */
+  #csTopicPickerWrap {
+    display: none; margin-top: 0.75rem;
+  }
+  #csTopicPickerWrap.active { display: block; }
+
+  /* Inline category pill row inside topic picker */
+  .cs-picker-cat-row {
+    display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 0.85rem;
+  }
+  .cs-picker-cat-btn {
+    font-family: 'DM Mono', monospace; font-size: 0.58rem;
+    letter-spacing: 0.09em; text-transform: uppercase;
+    background: transparent; border: 1px solid var(--border);
+    color: var(--muted); border-radius: 999px; padding: 3px 11px;
+    cursor: pointer; transition: border-color 0.15s, color 0.15s, background 0.15s;
+  }
+  .cs-picker-cat-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .cs-picker-cat-btn.active { background: var(--accent); border-color: var(--accent); color: #0d0d0d; }
+
+  /* Candidate concept cards */
+  .cs-candidate-list { display: flex; flex-direction: column; gap: 0; }
+
+  .cs-candidate {
+    border: 1px solid var(--border); border-radius: 8px;
+    margin-bottom: 6px; overflow: hidden;
+    opacity: 0; transform: translateY(6px);
+    transition: opacity 0.28s ease, transform 0.28s ease, border-color 0.18s;
+  }
+  .cs-candidate.visible { opacity: 1; transform: translateY(0); }
+  .cs-candidate.expanding { border-color: var(--accent); }
+
+  .cs-candidate-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 11px 14px; cursor: pointer;
+    user-select: none;
+  }
+  .cs-candidate-term {
+    font-family: 'Playfair Display', serif; font-size: 0.95rem;
+    font-weight: 700; color: var(--text); line-height: 1.3;
+  }
+  .cs-candidate-chevron {
+    font-size: 0.7rem; color: var(--muted);
+    transition: transform 0.22s ease; flex-shrink: 0; margin-left: 10px;
+  }
+  .cs-candidate.open .cs-candidate-chevron { transform: rotate(180deg); }
+
+  /* Accordion body */
+  .cs-candidate-body {
+    display: grid; grid-template-rows: 0fr;
+    transition: grid-template-rows 0.26s ease;
+    overflow: hidden;
+  }
+  .cs-candidate.open .cs-candidate-body { grid-template-rows: 1fr; }
+  .cs-candidate-body-inner {
+    min-height: 0; overflow: hidden;
+    padding: 0 14px 14px;
+  }
+  .cs-candidate-plain {
+    font-size: 0.82rem; color: var(--muted2); line-height: 1.6;
+    margin-bottom: 10px;
+  }
+
+  /* Scenario row inside candidate card */
+  .cs-candidate-ctx-row {
+    display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px;
+  }
+
+  /* Generate button inside candidate card */
+  .cs-candidate-generate-btn {
+    font-family: 'DM Mono', monospace; font-size: 0.62rem;
+    letter-spacing: 0.09em; text-transform: uppercase;
+    background: none; border: 1px solid rgba(232,213,163,0.35);
+    color: var(--accent); border-radius: 6px; padding: 6px 14px;
+    cursor: pointer; width: 100%;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .cs-candidate-generate-btn:hover { background: rgba(232,213,163,0.08); border-color: var(--accent); }
+  .cs-candidate-generate-btn:disabled { opacity: 0.4; cursor: default; }
+  .cs-candidate-generate-btn.loading { opacity: 0.6; }
+
+  /* Generated prompt inside candidate card */
+  .cs-candidate-prompt-out {
+    margin-top: 10px; padding: 10px 12px;
+    background: var(--surface2); border-radius: 6px;
+    font-size: 0.82rem; color: var(--text); line-height: 1.6;
+    display: none;
+  }
+  .cs-candidate-prompt-out.visible { display: block; }
+  .cs-candidate-label {
+    font-family: 'DM Mono', monospace; font-size: 0.58rem;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 4px;
+  }
+  .cs-candidate-coaching {
+    margin-top: 6px; font-size: 0.78rem; color: var(--muted2); font-style: italic; line-height: 1.5;
+  }
+
+  /* More ideas button */
+  .cs-picker-more-btn {
+    font-family: 'DM Mono', monospace; font-size: 0.6rem;
+    letter-spacing: 0.09em; text-transform: uppercase;
+    background: none; border: 1px solid var(--border);
+    color: var(--muted); border-radius: 6px; padding: 6px 14px;
+    cursor: pointer; margin-top: 4px; width: 100%;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .cs-picker-more-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .cs-picker-more-btn:disabled { opacity: 0.3; cursor: default; }
 
   /* "Give me another one" / Surprise me button — v1.72 */
   .cs-btn--surprise {
@@ -5558,6 +5669,13 @@
       </div>
     </div>
 
+    <!-- Topic picker — shown when Change topic is active (State 2+) -->
+    <div id="csTopicPickerWrap">
+      <div class="cs-picker-cat-row" id="csPickerCatRow"></div>
+      <div class="cs-candidate-list" id="csCandidateList"></div>
+      <button class="cs-picker-more-btn" id="csPickerMoreBtn" onclick="_csPickerMore()">More ideas →</button>
+    </div>
+
     <!-- Scenario buttons — expands below the reveal row -->
     <div class="cs-reveal-section" id="csScenarioSection">
       <div class="cs-reveal-section-inner">
@@ -8042,42 +8160,276 @@ function _buildCsCatRow() {
 }
 
 function _csSwitchCat(cat) {
+  // If picker is active, switching cat loads new candidates for that cat
+  const wrap = document.getElementById('csTopicPickerWrap');
+  if (wrap && wrap.classList.contains('active')) {
+    _csPickerCurrentCat = cat;
+    _csPickerSeenIds = [];
+    _csPickerBuildCatRow(cat);
+    _csPickerLoad(cat);
+    return;
+  }
+  // Fallback (picker not open) — update internal cat only
   _csCat = cat;
   _buildCsCatRow();
-  // Collapse category section after selection
-  const catSec = document.getElementById('csCatSection');
-  if (catSec) catSec.classList.remove('open');
-  const catLnk = document.getElementById('csRevealTopic');
-  if (catLnk) catLnk.classList.remove('active');
+}
 
-  // Pick concept from new category
-  const concept = _csPickForCat(cat, false);
-  if (!concept) return;
+// ---- TOPIC PICKER (Change topic → State 2/3/4) ---- v1.74d
 
-  // Load concept shell (no generate yet)
-  _csConcept = concept;
-  _csAIData = null;
-  _renderCSShell(concept);
-  _csPushToStack(concept);
-  _csHidePostPrompt();
+var _csPickerSeenIds = [];
+var _csPickerCurrentCat = null;
 
-  // Always keep nav controls visible — v1.73b
-  ['csRevealRow','csActions'].forEach(function(id) {
-    const el = document.getElementById(id);
-    if (el) { el.classList.remove('cs-hidden'); el.classList.add('cs-visible'); }
+function _csPickerHideMain() {
+  // Hide concept pill + prompt block when picker is open
+  const pill = document.getElementById('csConceptPill');
+  const block = document.getElementById('csPromptBlock');
+  const coaching = document.getElementById('csCoaching');
+  const divider = document.getElementById('csDivider');
+  const feedback = document.getElementById('csFeedbackRow');
+  const genRow = document.getElementById('csGenerateRow');
+  [pill, block, coaching, divider, feedback, genRow].forEach(function(el) {
+    if (el) el.style.display = 'none';
+  });
+  // Also hide source label sub-elements (keep header visible)
+  const src = document.getElementById('csSourceLabel');
+  if (src) src.style.visibility = 'hidden';
+}
+
+function _csPickerShowMain() {
+  // Restore main state after picker closes
+  const pill = document.getElementById('csConceptPill');
+  const src = document.getElementById('csSourceLabel');
+  if (pill) pill.style.display = '';
+  if (src) src.style.visibility = '';
+  // prompt block / coaching only shown if we have aiData
+  if (_csConcept && _csAIData && _csAIData[_csCtx]) {
+    _csShowPostPrompt();
+  }
+}
+
+function _csClosePicker() {
+  const wrap = document.getElementById('csTopicPickerWrap');
+  if (wrap) wrap.classList.remove('active');
+  _csPickerShowMain();
+  const lnk = document.getElementById('csRevealTopic');
+  if (lnk) lnk.classList.remove('active');
+}
+
+function _csPickerBuildCatRow(activeCatId) {
+  const row = document.getElementById('csPickerCatRow');
+  if (!row) return;
+  row.innerHTML = CATEGORIES.filter(c => c.id !== 'all').map(c =>
+    `<button class="cs-picker-cat-btn${c.id === activeCatId ? ' active' : ''}"
+      onclick="_csSwitchCat('${c.id}')">${c.name}</button>`
+  ).join('');
+}
+
+function _csPickerLoad(cat) {
+  const pool = CONCEPTS.filter(c =>
+    c.category === cat && !c.duplicate_of && !_csPickerSeenIds.includes(c.id)
+  );
+  // Shuffle and take 3
+  const shuffled = pool.sort(() => Math.random() - 0.5).slice(0, 3);
+  shuffled.forEach(c => _csPickerSeenIds.push(c.id));
+
+  const list = document.getElementById('csCandidateList');
+  if (!list) return;
+
+  // Fade out existing cards
+  Array.from(list.children).forEach(function(el) {
+    el.style.transition = 'opacity 0.18s ease, transform 0.18s ease';
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(-4px)';
   });
 
-  // Auto-open scenario section so user picks who they're talking to
-  const scenSec = document.getElementById('csScenarioSection');
-  const scenLnk = document.getElementById('csRevealScenario');
-  if (scenSec) scenSec.classList.add('open');
-  if (scenLnk) scenLnk.classList.add('active');
+  setTimeout(function() {
+    list.innerHTML = shuffled.map(function(c) {
+      return `<div class="cs-candidate" id="csc${c.id}" data-concept-id="${c.id}">
+        <div class="cs-candidate-header" onclick="_csPickerToggle(${c.id})">
+          <span class="cs-candidate-term">${_escHtml(c.term)}</span>
+          <span class="cs-candidate-chevron">▾</span>
+        </div>
+        <div class="cs-candidate-body">
+          <div class="cs-candidate-body-inner">
+            <div class="cs-candidate-plain">${_escHtml(c.plain || '')}</div>
+            <div class="cs-candidate-ctx-row">${_csPickerCtxButtons(c.id)}</div>
+            <button class="cs-candidate-generate-btn" id="cscGenBtn${c.id}"
+              onclick="_csPickerGenerate(${c.id})">✦ Generate conversation starter</button>
+            <div class="cs-candidate-prompt-out" id="cscOut${c.id}"></div>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
 
-  // Show the generate button so it's clear something will happen
-  const genRow = document.getElementById('csGenerateRow');
-  const genBtn = document.getElementById('csGenerateBtn');
-  if (genRow) genRow.style.display = 'block';
-  if (genBtn) { genBtn.disabled = false; genBtn.classList.remove('loading'); genBtn.innerHTML = '<span class="cs-generate-btn-icon">✦</span> Generate conversation starter'; }
+    // Disable "More ideas" if pool is exhausted after this batch
+    const moreBtn = document.getElementById('csPickerMoreBtn');
+    const remaining = CONCEPTS.filter(c =>
+      c.category === cat && !c.duplicate_of && !_csPickerSeenIds.includes(c.id)
+    ).length;
+    if (moreBtn) moreBtn.disabled = remaining === 0;
+
+    // Stagger fade-in
+    const cards = list.querySelectorAll('.cs-candidate');
+    cards.forEach(function(card, i) {
+      setTimeout(function() { card.classList.add('visible'); }, i * 70);
+    });
+
+    // Auto-expand first card
+    if (shuffled.length > 0) _csPickerToggle(shuffled[0].id);
+  }, shuffled.length > 0 ? 160 : 0);
+}
+
+function _csPickerCtxButtons(conceptId) {
+  return ['partner','friend','colleague','meeting'].map(function(ctx) {
+    const isActive = ctx === _csCtx;
+    return `<button class="cs-ctx-btn${isActive ? ' active' : ''}"
+      data-ctx="${ctx}" onclick="event.stopPropagation();_csPickerSetCtx(${conceptId},'${ctx}')">${ctx.charAt(0).toUpperCase()+ctx.slice(1)}</button>`;
+  }).join('');
+}
+
+function _csPickerSetCtx(conceptId, ctx) {
+  // Update the active scenario button within that candidate card only
+  const card = document.getElementById('csc' + conceptId);
+  if (!card) return;
+  card.querySelectorAll('.cs-ctx-btn').forEach(function(b) {
+    b.classList.toggle('active', b.dataset.ctx === ctx);
+  });
+  card.dataset.ctx = ctx;
+}
+
+function _csPickerToggle(conceptId) {
+  const card = document.getElementById('csc' + conceptId);
+  if (!card) return;
+  const isOpen = card.classList.contains('open');
+
+  // Close all cards first
+  document.querySelectorAll('.cs-candidate.open').forEach(function(c) {
+    c.classList.remove('open', 'expanding');
+  });
+
+  if (!isOpen) {
+    card.classList.add('open', 'expanding');
+    // Default ctx from parent modal's active ctx
+    if (!card.dataset.ctx) card.dataset.ctx = _csCtx || 'friend';
+  }
+}
+
+function _csPickerGenerate(conceptId) {
+  const card = document.getElementById('csc' + conceptId);
+  const genBtn = document.getElementById('cscGenBtn' + conceptId);
+  const out = document.getElementById('cscOut' + conceptId);
+  if (!card || !genBtn || !out) return;
+
+  const ctx = card.dataset.ctx || _csCtx || 'friend';
+  const concept = CONCEPTS.find(c => c.id === conceptId);
+  if (!concept) return;
+
+  // Check session/saved cache first
+  const sessionKey = (typeof CS_SESSION_KEY !== 'undefined' ? CS_SESSION_KEY : 'lll_cs_session_') + conceptId + '_' + ctx;
+  try {
+    const cached = sessionStorage.getItem(sessionKey);
+    if (cached) {
+      const d = JSON.parse(cached);
+      if (d && d.prompt) {
+        _csPickerShowResult(conceptId, ctx, concept, d);
+        return;
+      }
+    }
+  } catch(e) {}
+
+  genBtn.disabled = true;
+  genBtn.classList.add('loading');
+  genBtn.textContent = '…';
+
+  fetch('/api/cs-generate', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      concept: {
+        term: concept.term,
+        hook: concept.hook,
+        plain: concept.plain,
+        analogy: concept.analogy,
+        prompt: concept.prompt,
+        category: concept.category
+      },
+      ctx: ctx
+    })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    let d = null;
+    if (data && data.ctx) d = data.ctx;
+    else if (data && data.contexts && data.contexts[ctx]) d = data.contexts[ctx];
+    if (!d || !d.prompt) {
+      genBtn.disabled = false; genBtn.classList.remove('loading');
+      genBtn.textContent = '✦ Generate conversation starter';
+      return;
+    }
+    // Cache to session
+    try { sessionStorage.setItem(sessionKey, JSON.stringify(d)); } catch(e) {}
+    _csPickerShowResult(conceptId, ctx, concept, d);
+    // Auto-save to Stash
+    var aiDataSnap = {}; aiDataSnap[ctx] = d;
+    _csSaveConcept(concept, aiDataSnap);
+  })
+  .catch(function() {
+    genBtn.disabled = false; genBtn.classList.remove('loading');
+    genBtn.textContent = '✦ Generate conversation starter';
+  });
+}
+
+function _csPickerShowResult(conceptId, ctx, concept, d) {
+  const out = document.getElementById('cscOut' + conceptId);
+  const genBtn = document.getElementById('cscGenBtn' + conceptId);
+  if (!out) return;
+
+  const opener = CS_OPENERS[ctx] || ('With a ' + ctx + ':');
+  out.innerHTML = `
+    <div class="cs-candidate-label">${_escHtml(opener)}</div>
+    <div>${_escHtml(d.prompt)}</div>
+    ${d.coaching ? `<div class="cs-candidate-coaching">${_escHtml(d.coaching)}</div>` : ''}
+  `;
+  out.classList.add('visible');
+
+  if (genBtn) {
+    genBtn.disabled = false; genBtn.classList.remove('loading');
+    genBtn.textContent = '↻ Regenerate';
+  }
+
+  // Commit this concept as active when Copy & Share is used
+  // Track which picker concept was last generated
+  _csPickerLastConceptId = conceptId;
+  _csPickerLastCtx = ctx;
+}
+
+var _csPickerLastConceptId = null;
+var _csPickerLastCtx = null;
+
+function _csPickerMore() {
+  _csPickerLoad(_csPickerCurrentCat);
+}
+
+function _csPickerCommit() {
+  // Called when Copy & Share is clicked — commits the last generated picker concept
+  if (!_csPickerLastConceptId) return;
+  const concept = CONCEPTS.find(c => c.id === _csPickerLastConceptId);
+  if (!concept) return;
+  const ctx = _csPickerLastCtx || _csCtx || 'friend';
+  const sessionKey = (typeof CS_SESSION_KEY !== 'undefined' ? CS_SESSION_KEY : 'lll_cs_session_') + _csPickerLastConceptId + '_' + ctx;
+  let d = null;
+  try { d = JSON.parse(sessionStorage.getItem(sessionKey) || 'null'); } catch(e) {}
+  if (!d) return;
+
+  // Commit concept + aiData to main modal state
+  _csConcept = concept;
+  _csCtx = ctx;
+  if (!_csAIData) _csAIData = {};
+  _csAIData[ctx] = d;
+  _csPushToStack(concept);
+  _renderCSShell(concept);
+  _applyAIToCtx(_csAIData, ctx);
+  _csClosePicker();
 }
 
 function _csPickForCat(cat, deterministic) {
@@ -8240,11 +8592,11 @@ function _applyAIToCtx(ctx) {
   // Show post-prompt elements with staggered fade
   setTimeout(function() { _csShowPostPrompt(); }, 200);
 
-  // Show feedback row after 2s
+  // Show feedback row after 8s — gives user time to read prompt before rating
   setTimeout(function() {
     const fr = document.getElementById('csFeedbackRow');
     if (fr) { fr.classList.remove('cs-hidden'); fr.classList.add('cs-visible'); }
-  }, 2000);
+  }, 8000);
 
   // Update Surprise me button to "Give me another one" after first use
   const surBtn = document.getElementById('csSurpriseBtn');
@@ -8388,18 +8740,38 @@ function _csToggleHowto() {}
 
 // Toggle category reveal
 function _csToggleTopicReveal() {
-  const sec = document.getElementById('csCatSection');
   const lnk = document.getElementById('csRevealTopic');
-  if (!sec) return;
-  const open = sec.classList.toggle('open');
-  if (lnk) lnk.classList.toggle('active', open);
-  // Close scenario if open
-  if (open) {
-    const sc = document.getElementById('csScenarioSection');
-    if (sc) sc.classList.remove('open');
-    const sl = document.getElementById('csRevealScenario');
-    if (sl) sl.classList.remove('active');
+  const wrap = document.getElementById('csTopicPickerWrap');
+  if (!wrap) return;
+  const isOpen = wrap.classList.contains('active');
+
+  if (isOpen) {
+    // Close picker — restore concept pill + prompt if we have a concept loaded
+    _csClosePicker();
+    if (lnk) lnk.classList.remove('active');
+    return;
   }
+
+  // Open picker
+  if (lnk) lnk.classList.add('active');
+
+  // Hide scenario if open
+  const sc = document.getElementById('csScenarioSection');
+  const sl = document.getElementById('csRevealScenario');
+  if (sc) sc.classList.remove('open');
+  if (sl) sl.classList.remove('active');
+
+  // Hide concept pill + prompt block
+  _csPickerHideMain();
+
+  // Build category pill row pre-selected to current cat
+  _csPickerBuildCatRow(_csCat || 'psychology');
+
+  // Show picker + load first 3 candidates
+  wrap.classList.add('active');
+  _csPickerSeenIds = [];
+  _csPickerCurrentCat = _csCat || 'psychology';
+  _csPickerLoad(_csPickerCurrentCat);
 }
 
 // Toggle scenario reveal
@@ -8936,6 +9308,14 @@ function _wireCSEvents() {
 
   // Share / copy
   document.getElementById('csShareBtn').onclick = function() {
+    // If picker is active, commit the last generated concept first
+    const pickerWrap = document.getElementById('csTopicPickerWrap');
+    if (pickerWrap && pickerWrap.classList.contains('active') && _csPickerLastConceptId) {
+      _csPickerCommit();
+      // Allow a frame for state to settle before copying
+      setTimeout(function() { document.getElementById('csShareBtn').click(); }, 80);
+      return;
+    }
     const opener = _csAIData ? CS_OPENERS[_csCtx] : (CS_OPENERS[_csCtx] || '');
     const promptTxt = _csAIData
       ? (_csAIData[_csCtx] && _csAIData[_csCtx].prompt) || (_csConcept && _csConcept.prompt)
@@ -8960,13 +9340,16 @@ function _wireCSEvents() {
 
   // Surprise me button
   const surBtn = document.getElementById('csSurpriseBtn');
-  if (surBtn) surBtn.addEventListener('click', _csSurprise);
+  if (surBtn) surBtn.addEventListener('click', function() {
+    _csClosePicker();
+    _csSurprise();
+  });
 
   // Prev / Next
   const prevBtn = document.getElementById('csPrevBtn');
   const nextBtn = document.getElementById('csNextBtn');
-  if (prevBtn) prevBtn.addEventListener('click', _csPrev);
-  if (nextBtn) nextBtn.addEventListener('click', _csNext);
+  if (prevBtn) prevBtn.addEventListener('click', function() { _csClosePicker(); _csPrev(); });
+  if (nextBtn) nextBtn.addEventListener('click', function() { _csClosePicker(); _csNext(); });
 
   // Feedback thumbs
   document.getElementById('csFbUp').onclick = function() {
