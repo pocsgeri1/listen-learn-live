@@ -3079,32 +3079,27 @@
   }
 
   /* Scenario branch animation */
-  .cs-scenario-branch-wrap { padding: 0 0 6px; position: relative; }
+  .cs-scenario-branch-wrap { padding: 4px 0 6px; position: relative; }
   .cs-scenario-branch-svg {
-    display: block; width: 100%; height: 36px; margin-bottom: 0;
-    overflow: visible;
+    display: block; width: 100%; height: 44px; overflow: visible;
   }
-  .cs-branch-h, .cs-branch-v {
-    stroke: var(--border); stroke-width: 0.8; fill: none;
-    stroke-dasharray: 200;
-    stroke-dashoffset: 200;
+  .cs-branch-curve {
+    fill: none;
+    stroke: var(--accent); stroke-width: 0.7; opacity: 0.35;
+    stroke-dasharray: 120;
+    stroke-dashoffset: 120;
   }
-  .cs-scenario-branch-svg.drawn .cs-branch-h {
-    animation: branchDraw 0.32s ease forwards;
-  }
-  .cs-scenario-branch-svg.drawn .cs-branch-v1 { animation: branchDrop 0.18s 0.28s ease forwards; }
-  .cs-scenario-branch-svg.drawn .cs-branch-v2 { animation: branchDrop 0.18s 0.32s ease forwards; }
-  .cs-scenario-branch-svg.drawn .cs-branch-v3 { animation: branchDrop 0.18s 0.36s ease forwards; }
-  .cs-scenario-branch-svg.drawn .cs-branch-v4 { animation: branchDrop 0.18s 0.40s ease forwards; }
-  @keyframes branchDraw {
-    to { stroke-dashoffset: 0; }
-  }
-  @keyframes branchDrop {
-    to { stroke-dashoffset: 0; }
-  }
+  .cs-scenario-branch-svg.drawn .cs-branch-c1 { animation: branchCurve 0.45s 0.05s cubic-bezier(0.4,0,0.2,1) forwards; }
+  .cs-scenario-branch-svg.drawn .cs-branch-c2 { animation: branchCurve 0.38s 0.10s cubic-bezier(0.4,0,0.2,1) forwards; }
+  .cs-scenario-branch-svg.drawn .cs-branch-c3 { animation: branchCurve 0.38s 0.15s cubic-bezier(0.4,0,0.2,1) forwards; }
+  .cs-scenario-branch-svg.drawn .cs-branch-c4 { animation: branchCurve 0.45s 0.20s cubic-bezier(0.4,0,0.2,1) forwards; }
+  @keyframes branchCurve { to { stroke-dashoffset: 0; } }
+
   .cs-context-row--branched {
     display: flex; justify-content: space-between;
-    gap: 0; margin-bottom: 0; flex-wrap: nowrap;
+    gap: 0; flex-wrap: nowrap;
+    /* Constrain to center ~70% of row, matching the red-border confinement */
+    width: 80%; margin: 0 auto;
   }
   .cs-context-row--branched .cs-ctx-btn {
     flex: 1; text-align: center;
@@ -5731,16 +5726,14 @@
     <div class="cs-reveal-section" id="csScenarioSection">
       <div class="cs-reveal-section-inner">
         <div class="cs-scenario-branch-wrap">
-          <!-- SVG hairline drawn from center, extending left+right then dropping to buttons -->
-          <svg class="cs-scenario-branch-svg" id="csScenarioBranchSvg" viewBox="0 0 320 36" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- horizontal bar: from center (160) to left (16) and right (304) -->
-            <line class="cs-branch-h" x1="160" y1="6" x2="16" y2="6"/>
-            <line class="cs-branch-h" x1="160" y1="6" x2="304" y2="6"/>
-            <!-- vertical drops to each of 4 buttons at ~x=16,106,214,304 -->
-            <line class="cs-branch-v cs-branch-v1" x1="16"  y1="6" x2="16"  y2="30"/>
-            <line class="cs-branch-v cs-branch-v2" x1="106" y1="6" x2="106" y2="30"/>
-            <line class="cs-branch-v cs-branch-v3" x1="214" y1="6" x2="214" y2="30"/>
-            <line class="cs-branch-v cs-branch-v4" x1="304" y1="6" x2="304" y2="30"/>
+          <!-- Curved hairlines from center — 4 bezier arcs, on-brand color -->
+          <svg class="cs-scenario-branch-svg" id="csScenarioBranchSvg" viewBox="0 0 240 44" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- All 4 paths originate from center top (120,2) and curve to each button center -->
+            <!-- Button centers at x: 18, 74, 166, 222 (4 equal slots in 240px) -->
+            <path class="cs-branch-curve cs-branch-c1" d="M120,2 C120,2 80,2 18,40"/>
+            <path class="cs-branch-curve cs-branch-c2" d="M120,2 C120,2 100,2 74,40"/>
+            <path class="cs-branch-curve cs-branch-c3" d="M120,2 C120,2 140,2 166,40"/>
+            <path class="cs-branch-curve cs-branch-c4" d="M120,2 C120,2 160,2 222,40"/>
           </svg>
           <div class="cs-context-row cs-context-row--branched">
             <button class="cs-ctx-btn" data-ctx="partner">Partner</button>
@@ -9412,17 +9405,12 @@ function _wireCSEvents() {
     });
   }
 
-  // Context buttons — auto-generate, collapse scenario section after pick
+  // Context buttons — auto-generate; section stays open until "Change scenario" re-clicked
   document.querySelectorAll('.cs-ctx-btn').forEach(btn => {
     btn.addEventListener('click', function() {
       document.querySelectorAll('.cs-ctx-btn').forEach(b => b.classList.remove('active'));
       this.classList.add('active');
       _csCtx = this.dataset.ctx;
-      // Collapse scenario section
-      const sec = document.getElementById('csScenarioSection');
-      if (sec) sec.classList.remove('open');
-      const lnk = document.getElementById('csRevealScenario');
-      if (lnk) lnk.classList.remove('active');
 
       if (_csAIData && _csAIData[_csCtx]) {
         // Cached — instant swap
@@ -9433,7 +9421,7 @@ function _wireCSEvents() {
       }
       // Update Stash button state for new scenario
       _csUpdateSaveBtn();
-      // Collapse topic section only — scenario stays open so user can switch again
+      // Collapse topic section only
       const catSec = document.getElementById('csCatSection');
       if (catSec) catSec.classList.remove('open');
       const catLnkEl = document.getElementById('csRevealTopic');
@@ -12109,7 +12097,6 @@ function _convOpenCSById(id, ctx) {
     _csCtx = ctx || 'friend';
     _buildCsCatRow();
     _renderCSShell(concept);
-    _wireCSEvents();
     _csPushToStack(concept);
 
     // Always show nav controls — v1.73b
