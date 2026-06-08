@@ -3079,15 +3079,15 @@
   }
 
   /* Scenario branch animation */
-  .cs-scenario-branch-wrap { padding: 4px 0 6px; position: relative; }
+  .cs-scenario-branch-wrap { padding: 4px 0 6px; position: relative; min-height: 54px; }
   .cs-scenario-branch-svg {
-    display: block; width: 100%; height: 44px; overflow: visible;
+    display: block; position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%; overflow: visible; pointer-events: none;
   }
   .cs-branch-curve {
     fill: none;
     stroke: var(--accent); stroke-width: 0.7; opacity: 0.35;
-    stroke-dasharray: 120;
-    stroke-dashoffset: 120;
+    /* dasharray/dashoffset set dynamically by JS per path length */
   }
   .cs-scenario-branch-svg.drawn .cs-branch-c1 { animation: branchCurve 0.45s 0.05s cubic-bezier(0.4,0,0.2,1) forwards; }
   .cs-scenario-branch-svg.drawn .cs-branch-c2 { animation: branchCurve 0.38s 0.10s cubic-bezier(0.4,0,0.2,1) forwards; }
@@ -5727,13 +5727,11 @@
       <div class="cs-reveal-section-inner">
         <div class="cs-scenario-branch-wrap">
           <!-- Curved hairlines from center — 4 bezier arcs, on-brand color -->
-          <svg class="cs-scenario-branch-svg" id="csScenarioBranchSvg" viewBox="0 0 240 44" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- All 4 paths originate from center top (120,2) and curve to each button center -->
-            <!-- Button centers at x: 18, 74, 166, 222 (4 equal slots in 240px) -->
-            <path class="cs-branch-curve cs-branch-c1" d="M120,2 C120,2 80,2 18,40"/>
-            <path class="cs-branch-curve cs-branch-c2" d="M120,2 C120,2 100,2 74,40"/>
-            <path class="cs-branch-curve cs-branch-c3" d="M120,2 C120,2 140,2 166,40"/>
-            <path class="cs-branch-curve cs-branch-c4" d="M120,2 C120,2 160,2 222,40"/>
+          <svg class="cs-scenario-branch-svg" id="csScenarioBranchSvg" viewBox="0 0 1 1" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="cs-branch-curve cs-branch-c1" d=""/>
+            <path class="cs-branch-curve cs-branch-c2" d=""/>
+            <path class="cs-branch-curve cs-branch-c3" d=""/>
+            <path class="cs-branch-curve cs-branch-c4" d=""/>
           </svg>
           <div class="cs-context-row cs-context-row--branched">
             <button class="cs-ctx-btn" data-ctx="partner">Partner</button>
@@ -8907,11 +8905,62 @@ function _csToggleScenarioReveal() {
     if (tc) tc.classList.remove('open');
     const tl = document.getElementById('csRevealTopic');
     if (tl) tl.classList.remove('active');
-    // Trigger branch draw animation
+    // Trigger branch draw animation — measure real positions first
     const svg = document.getElementById('csScenarioBranchSvg');
     const row = sec.querySelector('.cs-context-row--branched');
-    if (svg) { svg.classList.remove('drawn'); requestAnimationFrame(function() { svg.classList.add('drawn'); }); }
-    if (row) { row.classList.remove('btns-visible'); setTimeout(function() { row.classList.add('btns-visible'); }, 50); }
+    const scenarioBtn = document.getElementById('csRevealScenario');
+    if (svg && row && scenarioBtn) {
+      // Let the section open and paint before measuring
+      requestAnimationFrame(function() {
+        requestAnimationFrame(function() {
+          const svgRect   = svg.getBoundingClientRect();
+          const btnRect   = scenarioBtn.getBoundingClientRect();
+          const ctxBtns   = row.querySelectorAll('.cs-ctx-btn');
+
+          if (svgRect.width === 0 || !ctxBtns.length) return;
+
+          // Origin: center-bottom of "Change scenario" pill, relative to SVG
+          const ox = btnRect.left + btnRect.width / 2 - svgRect.left;
+          const oy = 2; // top of SVG (section just opened, SVG is at top)
+
+          // SVG viewBox matches real pixel size for 1:1 coordinates
+          const W = svgRect.width;
+          const H = svgRect.height;
+          svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+
+          // Destination: center-bottom of each scenario button
+          const paths = svg.querySelectorAll('.cs-branch-curve');
+          ctxBtns.forEach(function(btn, i) {
+            const br = btn.getBoundingClientRect();
+            const tx = br.left + br.width / 2 - svgRect.left;
+            const ty = H - 2;
+            // Control points: start near origin, end near target — creates elegant arc
+            const cp1x = ox;
+            const cp1y = H * 0.35;
+            const cp2x = tx;
+            const cp2y = H * 0.65;
+            if (paths[i]) {
+              paths[i].setAttribute('d',
+                'M' + ox + ',' + oy +
+                ' C' + cp1x + ',' + cp1y +
+                ' ' + cp2x + ',' + cp2y +
+                ' ' + tx + ',' + ty
+              );
+              // Reset dasharray to path length for clean draw animation
+              const len = paths[i].getTotalLength();
+              paths[i].style.strokeDasharray = len;
+              paths[i].style.strokeDashoffset = len;
+            }
+          });
+
+          // Now trigger the draw animation
+          svg.classList.remove('drawn');
+          requestAnimationFrame(function() { svg.classList.add('drawn'); });
+          row.classList.remove('btns-visible');
+          setTimeout(function() { row.classList.add('btns-visible'); }, 50);
+        });
+      });
+    }
   }
 }
 
