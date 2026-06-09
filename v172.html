@@ -3113,10 +3113,13 @@
     transition: opacity 0.15s ease, transform 0.15s ease, border-color 0.15s, color 0.15s;
   }
   .cs-context-row--branched.btns-visible .cs-ctx-btn { opacity: 1; transform: translateY(0); }
+  /* Stagger appear animation via delay */
   .cs-context-row--branched.btns-visible .cs-ctx-btn:nth-child(1) { transition-delay: 0.38s; }
   .cs-context-row--branched.btns-visible .cs-ctx-btn:nth-child(2) { transition-delay: 0.42s; }
   .cs-context-row--branched.btns-visible .cs-ctx-btn:nth-child(3) { transition-delay: 0.46s; }
   .cs-context-row--branched.btns-visible .cs-ctx-btn:nth-child(4) { transition-delay: 0.50s; }
+  /* Once settled, zero delay so hover responds instantly */
+  .cs-context-row--branched.btns-settled .cs-ctx-btn { transition-delay: 0s !important; }
   .cs-picker-more-btn {
     font-family: 'DM Mono', monospace; font-size: 0.6rem;
     letter-spacing: 0.09em; text-transform: uppercase;
@@ -8260,13 +8263,15 @@ function _csPickerHideMain() {
 
 function _csPickerShowMain() {
   // Restore main state after picker closes
-  const pill = document.getElementById('csConceptPill');
+  // _csPickerHideMain set inline display:none on all these — must clear ALL of them
+  // before _applyAIToCtx or _csShowPostPrompt can make coaching visible
+  ['csConceptPill','csPromptBlock','csCoaching','csDivider','csFeedbackRow','csGenerateRow'].forEach(function(id) {
+    const el = document.getElementById(id);
+    if (el) el.style.display = '';
+  });
   const src = document.getElementById('csSourceLabel');
-  const block = document.getElementById('csPromptBlock');
-  if (pill) pill.style.display = '';
   if (src) src.style.visibility = '';
-  if (block) block.style.display = '';
-  // Re-render prompt + coaching if we have data — _csShowPostPrompt alone doesn't re-render text
+  // Re-render prompt + coaching — _csShowPostPrompt alone doesn't re-render text
   if (_csConcept && _csAIData && _csAIData[_csCtx]) {
     _applyAIToCtx(_csCtx);
     return;
@@ -8937,6 +8942,11 @@ function _csToggleScenarioReveal() {
   if (!sec) return;
   const open = sec.classList.toggle('open');
   if (lnk) lnk.classList.toggle('active', open);
+  // Reset button animation state when closing so re-open animates fresh
+  if (!open) {
+    const row = sec.querySelector('.cs-context-row--branched');
+    if (row) row.classList.remove('btns-visible', 'btns-settled');
+  }
   // Close topic if open
   if (open) {
     const tc = document.getElementById('csCatSection');
@@ -8994,8 +9004,12 @@ function _csToggleScenarioReveal() {
           // Now trigger the draw animation
           svg.classList.remove('drawn');
           requestAnimationFrame(function() { svg.classList.add('drawn'); });
-          row.classList.remove('btns-visible');
-          setTimeout(function() { row.classList.add('btns-visible'); }, 50);
+          row.classList.remove('btns-visible', 'btns-settled');
+          setTimeout(function() {
+            row.classList.add('btns-visible');
+            // Zero transition-delay after all appear animations finish (~700ms)
+            setTimeout(function() { row.classList.add('btns-settled'); }, 700);
+          }, 50);
         });
       });
     }
@@ -9184,6 +9198,12 @@ function _csSurprise() {
   _csAIData = null;
   document.querySelectorAll('.cs-ctx-btn').forEach(function(b) { b.classList.remove('has-prompt'); });
 
+  // Clear any inline display:none left by _csPickerHideMain — otherwise coaching can never show
+  ['csCoaching','csDivider','csFeedbackRow','csGenerateRow','csConceptPill','csPromptBlock'].forEach(function(id) {
+    const el = document.getElementById(id);
+    if (el) el.style.display = '';
+  });
+
   // Render shell (sets static concept data) then immediately wipe prompt text + show shimmer
   _renderCSShell(concept);
   _csPushToStack(concept);
@@ -9217,6 +9237,11 @@ function _csSwapConcept(id) {
   // Close picker if open — ensures prompt block is visible before loading
   const pickerWrap = document.getElementById('csTopicPickerWrap');
   if (pickerWrap && pickerWrap.classList.contains('active')) _csClosePicker();
+  // Clear any inline display:none left by _csPickerHideMain
+  ['csCoaching','csDivider','csFeedbackRow','csGenerateRow','csConceptPill','csPromptBlock'].forEach(function(eid) {
+    const el = document.getElementById(eid);
+    if (el) el.style.display = '';
+  });
   _csConcept = concept;
   _csAIData  = null;
   _csCat = concept.category || _csCat;
@@ -9424,19 +9449,19 @@ function playBubblePopSFX() {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   try {
     const actx = _getSfxCtx();
-    const pops = 5;
+    const pops = 6;
     for (let i = 0; i < pops; i++) {
-      const t = actx.currentTime + i * 0.055;
+      const t = actx.currentTime + i * 0.11; // 110ms apart → ~0.55s spread
       const osc = actx.createOscillator();
       const gain = actx.createGain();
       osc.type = 'sine';
-      osc.frequency.setValueAtTime(520 + i * 60, t);
-      osc.frequency.exponentialRampToValueAtTime(180, t + 0.06);
+      osc.frequency.setValueAtTime(480 + i * 55, t);
+      osc.frequency.exponentialRampToValueAtTime(160, t + 0.18); // longer pitch slide
       gain.gain.setValueAtTime(0, t);
-      gain.gain.linearRampToValueAtTime(0.055, t + 0.008);
-      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.06);
+      gain.gain.linearRampToValueAtTime(0.06, t + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.18); // 180ms tail
       osc.connect(gain); gain.connect(actx.destination);
-      osc.start(t); osc.stop(t + 0.07);
+      osc.start(t); osc.stop(t + 0.2);
     }
   } catch(e) {}
 }
