@@ -3259,7 +3259,6 @@
 
   /* ── Story Mode button ── */
   .cs-story-btn {
-    display: none;
     font-family: 'DM Mono', monospace;
     font-size: 0.62rem;
     letter-spacing: 0.1em;
@@ -3272,9 +3271,10 @@
     cursor: pointer;
     margin-top: 10px;
     transition: background 0.18s, color 0.18s;
+    display: none;
   }
+  .cs-story-btn.cs-visible { display: inline-flex !important; align-items: center; gap: 5px; }
   .cs-story-btn:hover { background: var(--accent); color: #0d0d0d; }
-  .cs-story-btn.cs-visible { display: inline-flex; align-items: center; gap: 5px; }
   /* ── Story Mode panel (State 5) ── */
   .cs-story-panel { display: none; flex-direction: column; gap: 0; }
   .cs-story-panel.cs-visible { display: flex; }
@@ -5880,8 +5880,8 @@
     <div id="csTopicPickerWrap">
       <div class="cs-picker-cat-row" id="csPickerCatRow"></div>
       <div class="cs-candidate-list" id="csCandidateList"></div>
+      <button class="cs-story-btn" id="csPickerStoryBtn" onclick="_csOpenStoryMode()">★ See how these connect</button>
       <button class="cs-picker-more-btn" id="csPickerMoreBtn" onclick="_csPickerMore()">More ideas →</button>
-      <button class="cs-story-btn" id="csPickerStoryBtn" style="display:none" onclick="_csOpenStoryMode()">★ See how these connect</button>
     </div>
 
     <!-- Scenario buttons — expands below the reveal row -->
