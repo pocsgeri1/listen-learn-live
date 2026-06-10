@@ -3256,6 +3256,50 @@
 
   /* Actions */
   .cs-actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-start; align-items: center; padding-top: 12px; border-top: 1px solid var(--border); margin-top: 4px; }
+
+  /* ── Story Mode button ── */
+  .cs-story-btn {
+    display: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: transparent;
+    border: 1px solid var(--accent);
+    border-radius: 20px;
+    padding: 5px 14px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.18s, color 0.18s;
+  }
+  .cs-story-btn:hover { background: var(--accent); color: #0d0d0d; }
+  .cs-story-btn.cs-visible { display: inline-flex; align-items: center; gap: 5px; }
+  /* ── Story Mode panel (State 5) ── */
+  .cs-story-panel { display: none; flex-direction: column; gap: 0; }
+  .cs-story-panel.cs-visible { display: flex; }
+  .cs-story-back { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); background: transparent; border: none; padding: 0 0 12px 0; cursor: pointer; text-align: left; }
+  .cs-story-back:hover { color: var(--text); }
+  .cs-story-eyebrow { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+  .cs-story-text { font-family: 'Playfair Display', serif; font-size: 0.92rem; line-height: 1.9; color: var(--text); }
+  .cs-story-label { display: inline-block; font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.06em; text-transform: lowercase; color: var(--accent); border: 1px solid rgba(232,213,163,0.35); border-radius: 10px; padding: 1px 7px; margin-left: 4px; vertical-align: middle; position: relative; cursor: default; }
+  .cs-story-label .cs-story-tooltip { display: none; position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: #1a1a1a; border: 1px solid var(--accent); border-radius: 6px; padding: 7px 10px; width: 200px; font-family: 'DM Sans', sans-serif; font-size: 0.72rem; line-height: 1.5; color: var(--text); text-transform: none; letter-spacing: 0; z-index: 50; pointer-events: none; }
+  .cs-story-label:hover .cs-story-tooltip { display: block; }
+  .cs-story-divider { height: 1px; background: var(--border); margin: 14px 0; }
+  .cs-story-mini-cards { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 4px; }
+  .cs-story-mini-card { flex: 1 1 120px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; position: relative; overflow: hidden; }
+  .cs-story-mini-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--cat-color, var(--border)); }
+  .cs-story-mini-term { font-family: 'DM Sans', sans-serif; font-size: 0.78rem; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+  .cs-story-mini-hook { font-family: 'DM Sans', sans-serif; font-size: 0.68rem; color: var(--muted); line-height: 1.4; }
+  .cs-story-opener { background: #0d0d0d; border-left: 2px solid var(--accent); padding: 10px 14px; border-radius: 0 6px 6px 0; margin-top: 14px; }
+  .cs-story-opener-label { font-family: 'DM Mono', monospace; font-size: 0.56rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 5px; }
+  .cs-story-opener-text { font-family: 'DM Sans', sans-serif; font-size: 0.8rem; color: var(--accent); font-style: italic; line-height: 1.5; }
+  .cs-story-actions { display: flex; gap: 8px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); }
+  .cs-story-copy-btn { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; background: transparent; border: 1px solid var(--border); border-radius: 20px; padding: 5px 14px; color: var(--muted2); cursor: pointer; transition: border-color 0.18s, color 0.18s; }
+  .cs-story-copy-btn:hover { border-color: var(--text); color: var(--text); }
+  .cs-story-skeleton { display: flex; flex-direction: column; gap: 8px; padding: 4px 0; }
+  .cs-story-skeleton-line { height: 0.9em; border-radius: 4px; background: linear-gradient(90deg, var(--surface) 25%, var(--border) 50%, var(--surface) 75%); background-size: 200% 100%; animation: csStoryShimmer 1.4s infinite; }
+  @keyframes csStoryShimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
   .cs-btn {
     font-family: 'DM Mono', monospace; font-size: 0.7rem;
     letter-spacing: 0.1em; text-transform: uppercase;
@@ -5812,6 +5856,26 @@
         <div class="cs-related-label" id="csRelatedLabel">Related concepts</div>
         <div class="cs-related-row" id="csRelatedRow"></div>
         <div style="height:0.4rem"></div>
+      </div>
+    </div>
+
+    <!-- Story Mode button — only shows when concept has ≥2 related_ids -->
+    <button class="cs-story-btn cs-post-prompt cs-hidden" id="csStoryBtn" onclick="_csOpenStoryMode()">★ See how these connect</button>
+
+    <!-- State 5 — Story Mode panel -->
+    <div class="cs-story-panel" id="csStoryPanel">
+      <button class="cs-story-back" onclick="_csCloseStoryMode()">← Back to starter</button>
+      <div class="cs-story-eyebrow">A SHORT STORY</div>
+      <div class="cs-story-text" id="csStoryText"></div>
+      <div class="cs-story-opener" id="csStoryOpener" style="display:none">
+        <div class="cs-story-opener-label">Say this tonight →</div>
+        <div class="cs-story-opener-text" id="csStoryOpenerText"></div>
+      </div>
+      <div class="cs-story-divider"></div>
+      <div class="cs-story-mini-cards" id="csStoryMiniCards"></div>
+      <div class="cs-story-actions">
+        <button class="cs-story-copy-btn" id="csStoryCopyBtn" onclick="_csStoryCopy()">↑ Copy story</button>
+        <button class="cs-story-copy-btn" id="csStoryShareOpenerBtn" onclick="_csStoryShareOpener()">↑ Copy opener</button>
       </div>
     </div>
 
@@ -8649,6 +8713,9 @@ function _csPickerShowMain() {
     const el = document.getElementById(id);
     if (el) el.style.display = '';
   });
+  // Ensure story panel is hidden when returning to main
+  const storyPanel = document.getElementById('csStoryPanel');
+  if (storyPanel) storyPanel.classList.remove('cs-visible');
   const src = document.getElementById('csSourceLabel');
   if (src) src.style.visibility = '';
   // Re-render prompt + coaching — _csShowPostPrompt alone doesn't re-render text
@@ -9220,6 +9287,188 @@ function _renderRelated(concept) {
   if (relatedLnk) relatedLnk.classList.remove('active');
 }
 
+// ── STORY MODE — Phase D ──────────────────────────────────────────────────
+
+const CS_STORIES_KEY = 'lll_cs_stories_v1';
+const CS_STORIES_MAX = 20;
+
+// Parse story text: replace [[LABEL:Term]] markers with gold inline label HTML
+function _csParseStoryLabels(storyText, conceptsUsed) {
+  // Build a map of term → plain for tooltips
+  const plainMap = {};
+  conceptsUsed.forEach(function(c) { plainMap[c.term.toLowerCase()] = c.plain; });
+
+  // Replace [[LABEL:Term]] with a span
+  return storyText.replace(/\[\[LABEL:([^\]]+)\]\]/g, function(match, term) {
+    const plain = plainMap[term.toLowerCase()] || '';
+    const safeterm = term.replace(/"/g, '&quot;').replace(/</g, '&lt;');
+    const safeplain = plain.replace(/"/g, '&quot;').replace(/</g, '&lt;');
+    return `<span class="cs-story-label">${safeterm}<span class="cs-story-tooltip">${safeplain}</span></span>`;
+  });
+}
+
+// Open Story Mode (State 5)
+function _csOpenStoryMode() {
+  if (!_csConcept) return;
+
+  // Gather related concepts — pass all related_ids to API, let Claude pick
+  const relatedIds = (_csConcept.related_ids || []).slice(0, 5); // max 5 to API
+  const relatedConcepts = relatedIds
+    .map(function(rid) { return CONCEPTS.find(function(c) { return c.id === rid; }); })
+    .filter(Boolean);
+
+  if (relatedConcepts.length < 1) return; // need at least 1 related
+
+  // Hide main CS content, show story panel
+  ['csConceptPill','csPromptBlock','csCoaching','csDivider','csFeedbackRow',
+   'csActions','csRevealRow','csStoryBtn'].forEach(function(id) {
+    const el = document.getElementById(id);
+    if (el) { el.style.display = 'none'; }
+  });
+
+  const panel = document.getElementById('csStoryPanel');
+  panel.classList.add('cs-visible');
+
+  // Show skeleton
+  const textEl = document.getElementById('csStoryText');
+  textEl.innerHTML = '<div class="cs-story-skeleton">' +
+    '<div class="cs-story-skeleton-line" style="width:88%"></div>' +
+    '<div class="cs-story-skeleton-line" style="width:75%"></div>' +
+    '<div class="cs-story-skeleton-line" style="width:92%"></div>' +
+    '<div class="cs-story-skeleton-line" style="width:68%"></div>' +
+    '<div class="cs-story-skeleton-line" style="width:80%"></div>' +
+    '</div>';
+  document.getElementById('csStoryOpener').style.display = 'none';
+  document.getElementById('csStoryMiniCards').innerHTML = '';
+
+  // Build concept payload — primary + related
+  const allConcepts = [_csConcept].concat(relatedConcepts);
+  const payload = allConcepts.map(function(c) {
+    return { term: c.term, plain: c.plain, analogy: c.analogy };
+  });
+
+  // API call
+  fetch('/api/cs-generate', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      mode: 'story',
+      concepts: payload,
+      storyCtx: _csCtx || 'friend'
+    })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    if (!data.story) throw new Error('no story');
+
+    // Render story with inline labels
+    const parsed = _csParseStoryLabels(data.story, allConcepts);
+    textEl.innerHTML = parsed;
+
+    // Opener
+    if (data.opener) {
+      document.getElementById('csStoryOpenerText').textContent = data.opener;
+      document.getElementById('csStoryOpener').style.display = 'block';
+    }
+
+    // Mini-cards (related concepts only, not primary)
+    _csRenderStoryMiniCards(relatedConcepts);
+
+    // Auto-save to localStorage
+    _csSaveStory(_csConcept, relatedConcepts, data.story, data.opener);
+
+    // Store for copy actions
+    panel.dataset.storyText = data.story.replace(/\[\[LABEL:[^\]]+\]\]/g, '');
+    panel.dataset.openerText = data.opener || '';
+  })
+  .catch(function(e) {
+    textEl.textContent = 'Couldn\'t generate the story right now. Try again.';
+    console.error('Story mode error:', e);
+  });
+}
+
+// Close Story Mode — return to State 1 (post-generate)
+function _csCloseStoryMode() {
+  const panel = document.getElementById('csStoryPanel');
+  panel.classList.remove('cs-visible');
+
+  // Restore main CS content
+  ['csConceptPill','csPromptBlock','csCoaching','csDivider','csFeedbackRow',
+   'csActions','csRevealRow'].forEach(function(id) {
+    const el = document.getElementById(id);
+    if (el) { el.style.display = ''; }
+  });
+
+  // Re-show story button
+  if (_csConcept && _csConcept.related_ids && _csConcept.related_ids.length >= 2) {
+    const sb = document.getElementById('csStoryBtn');
+    if (sb) { sb.classList.remove('cs-hidden'); sb.classList.add('cs-visible'); }
+  }
+}
+
+// Render story mini-cards (term + hook, category color stripe, no interaction)
+function _csRenderStoryMiniCards(concepts) {
+  const container = document.getElementById('csStoryMiniCards');
+  container.innerHTML = '';
+  concepts.forEach(function(c) {
+    const color = (typeof CAT_COLOR !== 'undefined' && CAT_COLOR[c.category]) || '#555';
+    const card = document.createElement('div');
+    card.className = 'cs-story-mini-card';
+    card.style.setProperty('--cat-color', color);
+    card.innerHTML =
+      '<div class="cs-story-mini-term">' + _escHtml(c.term) + '</div>' +
+      '<div class="cs-story-mini-hook">' + _escHtml(c.hook || '') + '</div>';
+    container.appendChild(card);
+  });
+}
+
+// Save story to localStorage ring buffer
+function _csSaveStory(primaryConcept, relatedConcepts, storyText, opener) {
+  let stories = [];
+  try { stories = JSON.parse(localStorage.getItem(CS_STORIES_KEY)) || []; } catch(e) {}
+  const entry = {
+    id: primaryConcept.id,
+    term: primaryConcept.term,
+    conceptIds: [primaryConcept.id].concat(relatedConcepts.map(function(c) { return c.id; })),
+    conceptTerms: [primaryConcept.term].concat(relatedConcepts.map(function(c) { return c.term; })),
+    conceptCategories: [primaryConcept.category].concat(relatedConcepts.map(function(c) { return c.category; })),
+    story: storyText.replace(/\[\[LABEL:[^\]]+\]\]/g, ''), // clean text for storage
+    opener: opener || '',
+    ts: new Date().toISOString()
+  };
+  stories.unshift(entry);
+  if (stories.length > CS_STORIES_MAX) stories = stories.slice(0, CS_STORIES_MAX);
+  try { localStorage.setItem(CS_STORIES_KEY, JSON.stringify(stories)); } catch(e) {}
+}
+
+// Copy full story text
+function _csStoryCopy() {
+  const panel = document.getElementById('csStoryPanel');
+  const text = panel.dataset.storyText || '';
+  if (!text) return;
+  navigator.clipboard.writeText(text).then(function() {
+    const btn = document.getElementById('csStoryCopyBtn');
+    const orig = btn.textContent;
+    btn.textContent = '✓ Copied';
+    setTimeout(function() { btn.textContent = orig; }, 1800);
+  }).catch(function() {});
+}
+
+// Copy opener only
+function _csStoryShareOpener() {
+  const panel = document.getElementById('csStoryPanel');
+  const text = panel.dataset.openerText || '';
+  if (!text) return;
+  navigator.clipboard.writeText(text).then(function() {
+    const btn = document.getElementById('csStoryShareOpenerBtn');
+    const orig = btn.textContent;
+    btn.textContent = '✓ Copied';
+    setTimeout(function() { btn.textContent = orig; }, 1800);
+  }).catch(function() {});
+}
+
+// ── END STORY MODE ────────────────────────────────────────────────────────
+
 // ---- v1.72 HELPERS ----
 
 function _csHidePostPrompt() {
@@ -9238,11 +9487,14 @@ function _csHidePostPrompt() {
     const el = document.getElementById(id);
     if (el) el.classList.remove('active');
   });
+  // Hide story button when loading new concept
+  const sb = document.getElementById('csStoryBtn');
+  if (sb) { sb.classList.add('cs-hidden'); sb.classList.remove('cs-visible'); }
 }
 
 // Full hide — used only on modal open before first concept loads
 function _csHideAll() {
-  ['csCoaching','csDivider','csFeedbackRow','csActions','csRevealRow'].forEach(function(id) {
+  ['csCoaching','csDivider','csFeedbackRow','csActions','csRevealRow','csStoryBtn'].forEach(function(id) {
     const el = document.getElementById(id);
     if (el) { el.classList.add('cs-hidden'); el.classList.remove('cs-visible'); }
   });
@@ -9253,6 +9505,13 @@ function _csShowPostPrompt() {
     const el = document.getElementById(id);
     if (el) { el.classList.remove('cs-hidden'); el.classList.add('cs-visible'); }
   });
+  // Show story button only if current concept has ≥2 related concepts
+  const sb = document.getElementById('csStoryBtn');
+  if (sb && _csConcept) {
+    const hasEnough = _csConcept.related_ids && _csConcept.related_ids.length >= 2;
+    if (hasEnough) { sb.classList.remove('cs-hidden'); sb.classList.add('cs-visible'); }
+    else { sb.classList.add('cs-hidden'); sb.classList.remove('cs-visible'); }
+  }
 }
 
 // Help ? button — mobile tap opens overlay, desktop hover shows bubble
