@@ -1250,17 +1250,8 @@
     height: 62px;
     border-color: rgba(255,255,255,0.05);
   }
-  body.drawer-open nav,
-  body.drawer-open .hero,
-  body.drawer-open .episodes-section,
-  body.drawer-open #shortsSection,
-  body.drawer-open .app > .app-controls,
-  body.drawer-open #netflixRows,
-  body.drawer-open .newsletter,
-  body.drawer-open .divider,
-  body.drawer-open .daily-goal {
-    display: none;
-  }
+  /* spark.html v1.76 C2: drawer-open = scroll lock only (Stash bottom drawer) */
+  body.drawer-open { overflow: hidden; }
   .nav-logo {
     font-family: 'Playfair Display', serif;
     font-size: 1.365rem;
@@ -2427,21 +2418,27 @@
     top: 60px; right: 0;
     width: min(520px, 100vw);
     height: calc(100vh - 60px);
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow: visible; /* bubble must escape — inner wrapper handles scroll */
     z-index: 200;
     background: var(--surface);
     border-left: 1px solid var(--border);
     border-radius: 14px 0 0 0;
-    padding: 28px 28px 40px;
     transform: translateX(min(520px, 100vw));
     transition: transform 320ms cubic-bezier(0.4, 0, 0.2, 1),
                 box-shadow 320ms ease;
     box-shadow: none;
     box-sizing: border-box;
   }
-  /* Ensure nothing inside overflows horizontally */
-  .cs-card * { max-width: 100%; box-sizing: border-box; }
+  /* Inner scroll wrapper — actual scroll container */
+  .cs-card-inner-scroll {
+    max-height: calc(100vh - 60px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 28px 28px 40px;
+    box-sizing: border-box;
+  }
+  /* Ensure nothing inside overflows horizontally — except help bubble which escapes panel */
+  .cs-card *:not(.cs-help-bubble):not(.cs-help-bubble *) { max-width: 100%; box-sizing: border-box; }
   /* Panel open state */
   .cs-panel-open .cs-card {
     transform: translateX(0);
@@ -2461,13 +2458,18 @@
       top: auto; right: auto;
       width: 100%; max-width: 600px;
       height: auto;
-      overflow-x: hidden;
+      overflow: visible;
       transform: none !important;
       box-shadow: none !important;
       border-left: none;
       border: 1px solid var(--border);
       border-radius: 14px;
       margin: auto 0;
+    }
+    .cs-card-inner-scroll {
+      height: auto;
+      overflow: visible;
+      padding: 24px 18px 20px;
     }
     .cs-panel-open .cs-card { transform: none !important; box-shadow: none !important; }
   }
@@ -2492,7 +2494,8 @@
     display: flex; align-items: center; gap: 8px;
     font-family: 'DM Mono', monospace; font-size: 0.65rem;
     letter-spacing: 0.18em; text-transform: uppercase;
-    color: var(--muted); margin-bottom: 1rem;
+    color: var(--muted); margin-bottom: 0.4rem;
+    padding-right: 32px; /* clear the ✕ button */
   }
   .cs-eyebrow-dot {
     width: 6px; height: 6px; border-radius: 50%;
@@ -2500,9 +2503,12 @@
     animation: csPulse 2.4s ease-in-out infinite;
   }
   @keyframes csPulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
-  .cs-eyebrow-date { margin-left: auto; }
-  @media (max-width: 600px) {
-    .cs-eyebrow { padding-right: 2rem; } /* prevent date overlapping ✕ button */
+  .cs-eyebrow-date {
+    display: block;
+    font-family: 'DM Mono', monospace; font-size: 0.6rem;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 1rem;
+    padding-right: 32px;
   }
 
   .cs-headline {
@@ -2933,18 +2939,18 @@
   .cs-headline-row .cs-headline { margin-bottom: 0; flex: 1; }
   .cs-help-btn {
     flex-shrink: 0;
-    margin-top: 6px;
+    margin-top: 4px;
     background: none; border: 1px solid var(--border);
     border-radius: 50%;
-    width: 22px; height: 22px;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.68rem; font-weight: 700;
+    width: 26px; height: 26px;
+    font-size: 0.9rem;
     color: var(--muted); cursor: pointer;
     display: flex; align-items: center; justify-content: center;
     transition: border-color 0.2s, color 0.2s;
     position: relative;
+    overflow: visible;
   }
-  .cs-help-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .cs-help-btn:hover { border-color: var(--accent); }
   /* Speech bubble — opens leftward out of panel */
   .cs-help-bubble {
     position: absolute;
@@ -5739,13 +5745,14 @@
 <!-- CONVERSATION STARTER MODAL — v1.71 -->
 <div class="cs-overlay" id="csOverlay" role="dialog" aria-modal="true" aria-labelledby="csHeadline">
   <div class="cs-card" id="csCard">
+    <div class="cs-card-inner-scroll">
     <button class="cs-close" id="csClose" aria-label="Close">✕</button>
 
     <div class="cs-eyebrow">
       <span class="cs-eyebrow-dot"></span>
       <span>Daily Spark</span>
-      <span class="cs-eyebrow-date" id="csDate"></span>
     </div>
+    <span class="cs-eyebrow-date" id="csDate"></span>
 
     <div class="cs-headline-row">
       <button class="cs-help-btn" id="csHelpBtn" onclick="_csHelpClick()" aria-label="How does this work">
@@ -5897,6 +5904,7 @@
       </div>
     </div>
 
+  </div><!-- /cs-card-inner-scroll -->
   </div>
 </div>
 <!-- /CONVERSATION STARTER MODAL -->
@@ -11575,10 +11583,48 @@ function playStreakMilestoneSFX() {
   display: none;
   background: rgba(13,13,13,0.38);
   pointer-events: none;
-  /* v1.71: backdrop-filter removed — caused 500-1300ms pointer lag on desktop */
+  align-items: flex-end;
+  justify-content: center;
 }
-.conv-overlay.active { display: flex; justify-content: flex-end; }
-.conv-panel { pointer-events: auto; }
+.conv-overlay.active {
+  display: flex;
+  pointer-events: all;
+}
+
+.conv-panel {
+  pointer-events: auto;
+  width: 100%;
+  max-width: 100%;
+  height: 60vh;
+  max-height: 580px;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  border-radius: 12px 12px 0 0;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(100%);
+  transition: transform 0.28s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  overflow: hidden;
+}
+.conv-overlay.active .conv-panel { transform: translateY(0); }
+
+/* Drag handle */
+.conv-drag-handle {
+  width: 36px; height: 4px;
+  background: var(--border-hover);
+  border-radius: 999px;
+  margin: 10px auto 0;
+  flex-shrink: 0;
+}
+
+/* Mobile: taller drawer */
+@media (max-width: 600px) {
+  .conv-panel { height: 80dvh; max-height: 80dvh; }
+}
+
+/* Light mode */
+[data-theme="light"] .conv-overlay { background: rgba(0,0,0,0.2); }
+[data-theme="light"] .conv-panel { border-top-color: var(--border); }
 
 /* v1.71 quiz pill — inherits cat-card + cat-name styles exactly, teal colour */
 .cat-quiz-pill {
@@ -11676,18 +11722,7 @@ function playStreakMilestoneSFX() {
   flex-shrink: 0;
 }
 
-.conv-panel {
-  width: min(520px, 100vw);
-  height: 100%;
-  background: var(--surface);
-  border-left: 1px solid var(--border);
-  display: flex;
-  flex-direction: column;
-  transform: translateX(100%);
-  transition: transform 0.28s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  overflow: hidden;
-}
-.conv-overlay.active .conv-panel { transform: translateX(0); }
+/* conv-panel layout defined above with bottom drawer CSS */
 
 /* Header */
 .conv-header {
@@ -12032,14 +12067,7 @@ function playStreakMilestoneSFX() {
   flex-shrink: 0;
 }
 
-/* Mobile: full-width, no left border */
-@media (max-width: 600px) {
-  .conv-panel {
-    width: 100vw;
-    border-left: none;
-    border-top: 1px solid var(--border);
-  }
-}
+/* conv-panel mobile: handled by @media in bottom drawer CSS above */
 
 /* ============================================================
    SPARK.HTML — ZONE 1 HERO STYLES  (v1.76)
@@ -12459,6 +12487,7 @@ body.cs-panel-open .sp-trigger-hint { display: none; }
 
 <div class="conv-overlay" id="convOverlay" role="dialog" aria-modal="true" aria-label="Saved Conversations">
   <div class="conv-panel" id="convPanel">
+    <div class="conv-drag-handle"></div>
     <div class="conv-header">
       <div class="conv-title">🔖 Stash</div>
       <button class="conv-close" id="convClose" aria-label="Close">✕</button>
@@ -12512,7 +12541,7 @@ let _convUndoTimer = null;
 function openConversations() {
   const overlay = document.getElementById('convOverlay');
   overlay.classList.add('active');
-  // Do NOT lock body scroll — user should be able to scroll the page while Stash is open
+  document.body.classList.add('drawer-open'); // scroll lock while drawer open
 
   // Sync tab UI to last-active tab state
   document.getElementById('convTabSaved').classList.toggle('active', _convTab === 'saved');
@@ -12552,7 +12581,8 @@ function _convOutsideClickHandler(e) {
 
 function closeConversations() {
   document.getElementById('convOverlay').classList.remove('active');
-  document.body.classList.remove('cotd-open'); // safety: remove if somehow set
+  document.body.classList.remove('drawer-open');
+  document.body.classList.remove('cotd-open'); // safety
   document.removeEventListener('keydown', _convEscHandler);
   document.removeEventListener('click', _convOutsideClickHandler, { capture: true });
 }
