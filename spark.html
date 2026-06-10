@@ -438,9 +438,62 @@
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
+    flex: 1;
+  }
+
+  /* spark.html v1.76: pills + search in one row */
+  .ep-podcast-pills-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
     max-width: 1100px;
     margin: 0 auto 1.75rem;
     padding: 0 2rem;
+    flex-wrap: wrap;
+  }
+  .ep-search-inline {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 6px 12px;
+    flex-shrink: 0;
+    transition: border-color 0.2s;
+  }
+  .ep-search-inline:focus-within {
+    border-color: var(--border-hover);
+  }
+  .ep-search-inline svg {
+    width: 13px;
+    height: 13px;
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+  .ep-search-inline input {
+    background: none;
+    border: none;
+    outline: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    color: var(--text);
+    width: 160px;
+  }
+  .ep-search-inline input::placeholder { color: var(--muted); }
+
+  [data-theme="light"] .ep-search-inline {
+    background: var(--surface);
+    border-color: var(--border);
+  }
+  [data-theme="light"] .ep-search-inline input { color: var(--text); }
+  [data-theme="light"] .ep-search-inline input::placeholder { color: var(--muted); }
+
+  @media (max-width: 600px) {
+    .ep-podcast-pills-row { flex-direction: column; align-items: flex-start; }
+    .ep-search-inline { width: 100%; box-sizing: border-box; }
+    .ep-search-inline input { width: 100%; }
   }
   .ep-podcast-pill {
     font-family: 'DM Mono', monospace;
@@ -5793,11 +5846,6 @@
 <!-- ZONE 1 — Hero: spark.html v1.76 -->
 <section class="sp-hero" id="spHero">
 
-  <!-- Decorative card stack — desktop only (hidden <1100px via CSS) -->
-  <div class="sp-card-stack" id="spCardStack" aria-hidden="true">
-    <!-- Populated by initSparkHero() after CONCEPTS loads -->
-  </div>
-
   <!-- Center column: tagline + search + scenario pills -->
   <div class="sp-hero-col">
 
@@ -5839,10 +5887,6 @@
   <div class="episodes-controls">
     <div class="episodes-app-header">
       <div class="app-title" style="display:none">Browse <em>episodes</em></div>
-      <div class="search-wrap">
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M10 10l3.5 3.5"/></svg>
-        <input type="text" id="episodeSearch" placeholder="Search episodes..." />
-      </div>
     </div>
   </div>
   <div id="episodesRow"></div>
@@ -7397,7 +7441,7 @@ function buildTimestampedUrl(episodeUrl, timestampSeconds) {
 }
 function buildEpisodes() {
   const searchInput = document.getElementById('episodeSearch');
-  const query = (searchInput && searchInput.value || '').trim().toLowerCase();
+  const query = (searchInput ? searchInput.value : '').trim().toLowerCase();
 
   const episodeCollections = Object.values(COLLECTIONS_BY_ID)
     .filter(col => col.type === 'episode')
@@ -7526,7 +7570,13 @@ function buildEpisodes() {
   }).join('');
 
   row.innerHTML = `
-    <div class="ep-podcast-pills">${allPill}${podcastPills}</div>
+    <div class="ep-podcast-pills-row">
+      <div class="ep-podcast-pills">${allPill}${podcastPills}</div>
+      <div class="ep-search-inline">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M10 10l3.5 3.5"/></svg>
+        <input type="text" id="episodeSearch" placeholder="Search episodes…" oninput="buildEpisodes()" />
+      </div>
+    </div>
     ${groupsHtml}
   `;
 
@@ -7692,11 +7742,8 @@ document.getElementById('search').addEventListener('input', e => {
   _searchDebounce = setTimeout(() => buildGrid(), 180);
 });
 
-let _epSearchDebounce = null;
-document.getElementById('episodeSearch').addEventListener('input', () => {
-  clearTimeout(_epSearchDebounce);
-  _epSearchDebounce = setTimeout(() => buildEpisodes(), 180);
-});
+// spark.html v1.76: episodeSearch is now rendered dynamically inside buildEpisodes()
+// and uses inline oninput="buildEpisodes()" — no static listener needed here.
 
 // Restore saved progress BEFORE loading concepts, so the first render
 // already shows the correct mastered state.
@@ -7834,45 +7881,11 @@ function _spRenderFilteredGrid(pool) {
 
 // --- Hero card stack ---
 function initSparkHero() {
-  _spBuildCardStack();
   _spInitSearch();
-  // Apply settled class to pills after animation completes
+  // Apply settled class to pills after stagger animation completes
   setTimeout(() => {
     document.querySelectorAll('.sp-pill').forEach(p => p.classList.add('btns-settled'));
-  }, 700 + (4 * 300) + 100); // 4 pills × 300ms stagger + buffer
-}
-
-function _spBuildCardStack() {
-  const stack = document.getElementById('spCardStack');
-  if (!stack || !CONCEPTS || CONCEPTS.length === 0) return;
-
-  const picks = CONCEPTS.filter(c => c.editors_pick === true && !c.duplicate_of);
-  if (picks.length === 0) return;
-
-  // Pick 3 random, deterministic per session (shuffle by session timestamp bucket)
-  const seed = Math.floor(Date.now() / 3600000); // changes each hour
-  const shuffled = picks.slice().sort((a, b) => {
-    return ((a.id * 2654435761 + seed) % 997) - ((b.id * 2654435761 + seed) % 997);
-  });
-  const chosen = shuffled.slice(0, 3);
-  const catNameMap = {};
-  CATEGORIES.forEach(c => { catNameMap[c.id] = c.name; });
-
-  stack.innerHTML = chosen.map((c, i) => {
-    const color = CAT_COLOR[c.category] || '#e8d5a3';
-    return `<div class="sp-stack-card" style="transition-delay:${i * 300}ms">
-      <div class="sp-stack-card-cat" style="color:${color}">${catNameMap[c.category] || c.category}</div>
-      <div class="sp-stack-card-term">${c.term}</div>
-      <div class="sp-stack-card-hook">${c.hook}</div>
-    </div>`;
-  }).join('');
-
-  // Trigger appear animation on next frame
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      stack.querySelectorAll('.sp-stack-card').forEach(el => el.classList.add('visible'));
-    });
-  });
+  }, 1100);
 }
 
 // --- Hero search ---
@@ -11936,7 +11949,7 @@ function playStreakMilestoneSFX() {
    All classes prefixed sp- to avoid collisions with v172 rules
    ============================================================ */
 
-/* --- Hero wrapper --- */
+/* --- Hero wrapper — centered --- */
 .sp-hero {
   position: relative;
   min-height: 70vh;
@@ -11945,80 +11958,6 @@ function playStreakMilestoneSFX() {
   justify-content: center;
   padding: 100px 2rem 4rem;
   overflow: hidden;
-}
-
-/* Noise texture from body — inherited, no duplicate needed */
-
-/* Desktop two-column layout: card stack left, copy right */
-@media (min-width: 1100px) {
-  .sp-hero {
-    justify-content: flex-end;
-    padding-right: 8vw;
-  }
-}
-
-/* --- Decorative card stack (desktop ≥1100px only) --- */
-.sp-card-stack {
-  display: none; /* hidden by default; shown on wide viewport */
-  position: absolute;
-  left: 6vw;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 220px;
-  pointer-events: none;
-}
-@media (min-width: 1100px) {
-  .sp-card-stack { display: block; }
-}
-
-/* Each mini-card in the stack */
-.sp-stack-card {
-  position: absolute;
-  width: 220px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 16px;
-  box-sizing: border-box;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.5s ease, transform 0.5s ease;
-}
-.sp-stack-card.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-/* Staggered offsets so cards look like a physical deck */
-.sp-stack-card:nth-child(1) { top: 0;   left: 0;  z-index: 3; }
-.sp-stack-card:nth-child(2) { top: 18px; left: 10px; z-index: 2; }
-.sp-stack-card:nth-child(3) { top: 36px; left: 20px; z-index: 1; }
-
-.sp-stack-card-cat {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.6rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  margin-bottom: 8px;
-}
-.sp-stack-card-term {
-  font-family: 'Playfair Display', serif;
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: 6px;
-  line-height: 1.25;
-}
-.sp-stack-card-hook {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.72rem;
-  color: var(--muted2);
-  line-height: 1.45;
-}
-
-/* Light mode adjustments for stack cards */
-[data-theme="light"] .sp-stack-card {
-  background: var(--surface);
-  border-color: var(--border);
 }
 
 /* --- Center copy column --- */
@@ -12060,15 +11999,38 @@ function playStreakMilestoneSFX() {
   display: flex;
   align-items: center;
   background: var(--surface);
-  border: 1px solid var(--border-hover);
+  border: 1px solid rgba(232,213,163,0.2);
   border-radius: 10px;
   padding: 0 14px;
   gap: 10px;
-  transition: border-color 0.2s;
+  transition: border-color 0.25s, box-shadow 0.25s;
   margin-bottom: 0.25rem;
+  box-shadow:
+    0 0 0 1px rgba(232,213,163,0.04),
+    0 0 18px rgba(232,213,163,0.07),
+    0 2px 12px rgba(0,0,0,0.25);
 }
 .sp-search-wrap:focus-within {
-  border-color: var(--accent);
+  border-color: rgba(232,213,163,0.55);
+  box-shadow:
+    0 0 0 1px rgba(232,213,163,0.08),
+    0 0 28px rgba(232,213,163,0.14),
+    0 2px 16px rgba(0,0,0,0.3);
+}
+[data-theme="light"] .sp-search-wrap {
+  background: var(--surface);
+  border-color: rgba(184,134,11,0.25);
+  box-shadow:
+    0 0 0 1px rgba(184,134,11,0.05),
+    0 0 18px rgba(184,134,11,0.08),
+    0 2px 10px rgba(0,0,0,0.07);
+}
+[data-theme="light"] .sp-search-wrap:focus-within {
+  border-color: rgba(184,134,11,0.5);
+  box-shadow:
+    0 0 0 1px rgba(184,134,11,0.1),
+    0 0 26px rgba(184,134,11,0.14),
+    0 2px 14px rgba(0,0,0,0.09);
 }
 .sp-search-icon {
   width: 15px;
@@ -12101,10 +12063,6 @@ function playStreakMilestoneSFX() {
 }
 .sp-search-clear:hover { color: var(--text); }
 
-[data-theme="light"] .sp-search-wrap {
-  background: var(--surface);
-  border-color: var(--border-hover);
-}
 [data-theme="light"] .sp-search-input { color: var(--text); }
 [data-theme="light"] .sp-search-input::placeholder { color: var(--muted); }
 
