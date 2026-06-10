@@ -5872,6 +5872,16 @@
 <!-- ZONE 1 — Hero: spark.html v1.76 -->
 <section class="sp-hero" id="spHero">
 
+  <!-- Floating concept preview card — shown when user clicks a term in search dropdown -->
+  <div class="sp-preview-card" id="spPreviewCard" style="display:none" onclick="spDismissPreview()">
+    <div class="sp-preview-cat" id="spPreviewCat"></div>
+    <div class="sp-preview-term" id="spPreviewTerm"></div>
+    <div class="sp-preview-hook" id="spPreviewHook"></div>
+    <div class="sp-preview-footer">
+      <button class="sp-preview-talk-btn" id="spPreviewTalkBtn">💬 Talk about this →</button>
+    </div>
+  </div>
+
   <!-- Center column: tagline + search + scenario pills -->
   <div class="sp-hero-col">
 
@@ -7595,6 +7605,11 @@ function buildEpisodes() {
     `;
   }).join('');
 
+  // Preserve search value and focus before re-render
+  const prevSearch = document.getElementById('episodeSearch');
+  const prevVal = prevSearch ? prevSearch.value : '';
+  const prevFocused = prevSearch && document.activeElement === prevSearch;
+
   row.innerHTML = `
     <div class="ep-podcast-pills-row">
       <div class="ep-podcast-pills">${allPill}${podcastPills}</div>
@@ -7605,6 +7620,15 @@ function buildEpisodes() {
     </div>
     ${groupsHtml}
   `;
+
+  // Restore search value and focus
+  const newSearch = document.getElementById('episodeSearch');
+  if (newSearch && prevVal) {
+    newSearch.value = prevVal;
+    // Set cursor at end
+    newSearch.setSelectionRange(prevVal.length, prevVal.length);
+  }
+  if (newSearch && prevFocused) newSearch.focus();
 
   // Re-init drag-scroll after fresh render
   initDragScroll();
@@ -7989,8 +8013,8 @@ function _spShowResults(q) {
     ? CONCEPTS.filter(c => fuseIds.has(c.id) && !c.duplicate_of && !termMatchIds.has(c.id))
     : [];
 
-  // Merge: term matches first, then content, cap at 8 total
-  const results = [...termMatches, ...contentMatches].slice(0, 8);
+  // Merge: term matches first, then content, cap at 12 total
+  const results = [...termMatches, ...contentMatches].slice(0, 12);
 
   // Source label map
   const SOURCE_LABEL = { cw: 'Modern Wisdom', ah: 'Alex Hormozi', dk: 'Dan Koe', core: 'Epistemic' };
@@ -8002,9 +8026,9 @@ function _spShowResults(q) {
       const color = CAT_COLOR[c.category] || '#e8d5a3';
       const catName = (CATEGORIES.find(x => x.id === c.category) || {}).name || c.category;
       const srcLabel = SOURCE_LABEL[c.source] || c.source || '';
-      return `<div class="sp-drop-item" role="option" data-id="${c.id}" onclick="_spSelectConcept(${c.id})">
+      return `<div class="sp-drop-item" role="option" data-id="${c.id}">
         <div class="sp-drop-stripe" style="background:${color}"></div>
-        <div class="sp-drop-body">
+        <div class="sp-drop-body" onclick="_spPreviewCard(${c.id})">
           <div class="sp-drop-meta-row">
             <span class="sp-drop-term">${_spEsc(c.term)}</span>
             <span class="sp-drop-pills">
@@ -8030,6 +8054,7 @@ function _spHideDropdown() {
   dropdown.classList.remove('visible');
   setTimeout(() => { dropdown.style.display = 'none'; }, 160);
   _spFocusedIdx = -1;
+  spDismissPreview();
 }
 
 function _spHighlightItem(items) {
@@ -8040,21 +8065,57 @@ function _spSelectConcept(id) {
   const concept = CONCEPTS.find(x => x.id === id);
   if (!concept) return;
   _spHideDropdown();
+  spDismissPreview();
 
-  // If panel not yet initialised, do full init first then load concept
   if (!_csConcept) {
     _csCat = concept.category;
-    _csCtx = 'friend'; // default scenario
+    _csCtx = 'friend';
     _renderCSShell(concept);
     _wireCSEvents();
   }
-
-  // Load the concept — sets _csConcept, clears old AI data, re-renders shell
   _csLoadNewConcept(concept);
   _csOpenPanel();
-  // Fire AI generation for this concept + current scenario
   _loadAI(concept, _csCtx, true);
 }
+
+// Show floating concept preview card to the left of the hero col
+function _spPreviewCard(id) {
+  const concept = CONCEPTS.find(x => x.id === id);
+  if (!concept) return;
+  const card = document.getElementById('spPreviewCard');
+  if (!card) return;
+
+  const color = CAT_COLOR[concept.category] || '#e8d5a3';
+  const catName = (CATEGORIES.find(x => x.id === concept.category) || {}).name || concept.category;
+
+  document.getElementById('spPreviewCat').textContent = catName;
+  document.getElementById('spPreviewCat').style.color = color;
+  document.getElementById('spPreviewTerm').textContent = concept.term;
+  document.getElementById('spPreviewHook').textContent = concept.hook;
+  document.getElementById('spPreviewCard').style.setProperty('--preview-color', color);
+
+  const talkBtn = document.getElementById('spPreviewTalkBtn');
+  if (talkBtn) {
+    talkBtn.onclick = function(e) {
+      e.stopPropagation();
+      spDismissPreview();
+      _spSelectConcept(id);
+    };
+  }
+
+  // Show with pop animation
+  card.style.display = 'flex';
+  card.classList.remove('sp-preview-visible');
+  requestAnimationFrame(() => requestAnimationFrame(() => card.classList.add('sp-preview-visible')));
+}
+
+function spDismissPreview() {
+  const card = document.getElementById('spPreviewCard');
+  if (!card) return;
+  card.classList.remove('sp-preview-visible');
+  setTimeout(() => { card.style.display = 'none'; }, 260);
+}
+
 
 function _spEsc(str) {
   return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
@@ -9207,10 +9268,19 @@ function _csShowPostPrompt() {
 
 // Help ? button — mobile tap opens overlay, desktop hover shows bubble
 function _csHelpClick() {
-  // Only open overlay on touch devices (hover handles desktop)
+  const btn = document.getElementById('csHelpBtn');
+  const bubble = document.getElementById('csHelpBubble');
+  if (!btn || !bubble) return;
+  // Touch devices: show overlay
   if (window.matchMedia('(hover: none)').matches) {
     document.getElementById('csHelpOverlay').classList.add('active');
+    return;
   }
+  // Desktop: JS-position bubble to the left of the button, fixed coordinates
+  const rect = btn.getBoundingClientRect();
+  bubble.style.top = rect.top + 'px';
+  bubble.style.right = (window.innerWidth - rect.left + 10) + 'px';
+  bubble.style.left = 'auto';
 }
 function _csHelpOverlayClose(e) {
   if (!e || e.target === document.getElementById('csHelpOverlay') || e.currentTarget.classList.contains('cs-help-overlay-close')) {
@@ -9918,6 +9988,19 @@ function _csSwipeRight() {
 // ---- WIRE EVENTS ----
 
 function _wireCSEvents() {
+  // Wire help button mouseenter to JS-position bubble (works inside overflow-hidden panel)
+  const helpBtn = document.getElementById('csHelpBtn');
+  const helpBubble = document.getElementById('csHelpBubble');
+  if (helpBtn && helpBubble) {
+    helpBtn.addEventListener('mouseenter', function() {
+      const rect = helpBtn.getBoundingClientRect();
+      helpBubble.style.position = 'fixed';
+      helpBubble.style.top = rect.top + 'px';
+      helpBubble.style.right = (window.innerWidth - rect.left + 10) + 'px';
+      helpBubble.style.left = 'auto';
+    });
+  }
+
   // Generate button — shown when concept loaded but no AI data yet
   const genBtn = document.getElementById('csGenerateBtn');
   if (genBtn) {
@@ -10068,10 +10151,16 @@ function openCS() {
   overlay.classList.add('active');
   document.body.classList.add('cs-panel-open');
   if (window.innerWidth <= 899) document.body.classList.add('cotd-open');
-  panelSwitchTab('spark', true); // skipRender — CS handles its own render
+  panelSwitchTab('spark', true);
   playCotdSFX();
   const hint = document.getElementById('spTriggerHint');
   if (hint) hint.style.display = 'none';
+  // Wire close — same as openConversations
+  document.getElementById('convClose').onclick = closeCS.bind(null, true);
+  document.addEventListener('keydown', _convEscHandler);
+  setTimeout(() => {
+    document.addEventListener('click', _convOutsideClickHandler, { capture: true });
+  }, 50);
 }
 
 function closeCS(persist) {
@@ -12119,7 +12208,7 @@ function playStreakMilestoneSFX() {
   align-items: center;
   justify-content: center;
   padding: 100px 2rem 4rem;
-  overflow: hidden;
+  overflow: visible;
 }
 
 /* --- Center copy column --- */
@@ -12244,7 +12333,7 @@ function playStreakMilestoneSFX() {
   border-radius: 10px;
   overflow: hidden;
   overflow-y: auto;
-  max-height: 360px;
+  max-height: 480px;
   z-index: 200;
   box-shadow: 0 8px 32px rgba(0,0,0,0.35);
   opacity: 0;
@@ -12290,24 +12379,27 @@ function playStreakMilestoneSFX() {
   flex-direction: column;
   justify-content: center;
   gap: 4px;
+  text-align: left;
 }
-/* Term + pills on same row */
+/* Term left, pills pushed to far right */
 .sp-drop-meta-row {
   display: flex;
   align-items: center;
   gap: 8px;
-  flex-wrap: wrap;
 }
 .sp-drop-term {
   font-family: 'DM Sans', sans-serif;
   font-size: 0.85rem;
   font-weight: 600;
   color: var(--text);
+  flex: 1;
+  min-width: 0;
 }
 .sp-drop-pills {
   display: flex;
   gap: 5px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
 }
 .sp-drop-cat-pill {
   font-family: 'DM Mono', monospace;
@@ -12335,6 +12427,7 @@ function playStreakMilestoneSFX() {
   font-size: 0.75rem;
   color: var(--muted2);
   line-height: 1.4;
+  text-align: left;
 }
 /* Divider between body and CTA */
 .sp-drop-divider {
@@ -12407,21 +12500,32 @@ function playStreakMilestoneSFX() {
   padding: 8px 16px;
   cursor: pointer;
   white-space: nowrap;
-  transition: color 0.15s, border-color 0.15s, background 0.15s;
+  transition: color 0.15s, border-color 0.15s, background 0.18s;
 }
 .sp-pill:hover {
   color: var(--text);
-  border-color: var(--border-hover);
+  border-color: var(--accent);
+  background: rgba(232,213,163,0.08);
 }
 .sp-pill.active {
   color: var(--accent);
   border-color: var(--accent);
-  background: rgba(232,213,163,0.06);
+  background: rgba(232,213,163,0.10);
 }
+/* More button — visually secondary: dashed, smaller */
 .sp-pill-more {
   color: var(--muted);
+  border-style: dashed;
+  border-color: var(--border);
+  font-size: 0.62rem;
+  padding: 7px 13px;
+  letter-spacing: 0.1em;
 }
-.sp-pill-more:hover { color: var(--text); }
+.sp-pill-more:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: transparent;
+}
 
 [data-theme="light"] .sp-pill {
   background: var(--surface);
@@ -12430,12 +12534,21 @@ function playStreakMilestoneSFX() {
 }
 [data-theme="light"] .sp-pill:hover {
   color: var(--text);
-  border-color: var(--border-hover);
+  border-color: var(--accent);
+  background: rgba(184,134,11,0.07);
 }
 [data-theme="light"] .sp-pill.active {
   color: var(--accent);
   border-color: var(--accent);
-  background: rgba(184,134,11,0.06);
+  background: rgba(184,134,11,0.08);
+}
+[data-theme="light"] .sp-pill-more {
+  border-color: var(--border);
+}
+[data-theme="light"] .sp-pill-more:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: transparent;
 }
 
 /* Settled class resets hover transition-delay after stack animation */
@@ -12485,8 +12598,83 @@ function playStreakMilestoneSFX() {
   background: rgba(184,134,11,0.06);
 }
 
-/* --- nav-library-btn hover (mirrors existing nav-link style) --- */
-.nav-library-btn { /* inherits .nav-link; no extra styles needed */ }
+/* --- Concept preview card (floats left of hero col on term click) --- */
+.sp-preview-card {
+  position: absolute;
+  left: max(2rem, calc(50% - 580px));
+  top: 50%;
+  transform: translateY(-50%) scale(0.92);
+  width: 220px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--preview-color, #e8d5a3);
+  border-radius: 12px;
+  padding: 18px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.24s ease, transform 0.28s cubic-bezier(0.34, 1.4, 0.64, 1);
+  z-index: 50;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+}
+.sp-preview-card.sp-preview-visible {
+  opacity: 1;
+  transform: translateY(-50%) scale(1);
+  pointer-events: all;
+}
+.sp-preview-cat {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.sp-preview-term {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.25;
+}
+.sp-preview-hook {
+  font-size: 0.76rem;
+  color: var(--muted2);
+  line-height: 1.5;
+  font-style: italic;
+}
+.sp-preview-footer {
+  margin-top: 4px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+.sp-preview-talk-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.sp-preview-talk-btn:hover { opacity: 0.7; }
+
+/* Hide preview card on small screens — not enough space */
+@media (max-width: 1024px) {
+  .sp-preview-card { display: none !important; }
+}
+
+[data-theme="light"] .sp-preview-card {
+  background: var(--surface);
+  border-color: var(--border);
+  border-left-color: var(--preview-color, #b8890b);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.09);
+}
+
 
 /* search-wrap needs relative positioning for dropdown */
 #spHero .sp-search-wrap { position: relative; }
