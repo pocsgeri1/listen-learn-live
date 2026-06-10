@@ -15,7 +15,93 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'Server misconfigured: ANTHROPIC_API_KEY missing.' });
   }
 
-  const { concept, ctx } = req.body || {};
+  const { concept, ctx, mode, concepts: storyConcepts, storyCtx } = req.body || {};
+
+  // ── Story Mode ────────────────────────────────────────────────────────────
+  if (mode === 'story') {
+    if (!storyConcepts || storyConcepts.length < 2) {
+      return res.status(400).json({ error: 'story mode requires at least 2 concepts.' });
+    }
+
+    const CTX_SCENES = {
+      partner:   'a quiet evening at home together',
+      friend:    'dinner with a close friend',
+      colleague: 'a coffee catch-up with a colleague',
+      meeting:   'a work meeting or team lunch',
+    };
+    const scene = CTX_SCENES[storyCtx] || 'a dinner with a friend';
+
+    const conceptList = storyConcepts.map((c, i) =>
+      `${i + 1}. ${c.term}: ${c.plain}`
+    ).join('\n');
+
+    const labelList = storyConcepts.map(c => `"${c.term}"`).join(', ');
+
+    const storySystemPrompt = `You are a master storyteller who explains complex ideas in the simplest possible way — like Richard Feynman talking to a curious friend over dinner. You write short, vivid stories that make people say "huh, I'd never thought of it that way." Output only valid JSON — no markdown, no preamble.`;
+
+    const storyUserPrompt = `Here are ${storyConcepts.length} ideas from the world of podcasts and thinking:
+
+${conceptList}
+
+The person reading this is about to have ${scene}.
+
+Write a single short story (maximum 150 words) that weaves all ${storyConcepts.length} ideas together naturally.
+
+CRITICAL — label rule: immediately after the sentence where each concept is clearly illustrated, append the concept term as a plain inline label in this exact format: [[LABEL:${labelList.split(', ').map((l, i) => `${storyConcepts[i].term}`).join('|')}]] — use exactly [[LABEL:Term]] right after the relevant sentence ends, before the next sentence begins. One label per concept, placed after its moment in the story.
+
+Story rules:
+- Open with one sentence that makes the reader go "huh, that's interesting"
+- Set the scene in one real moment matching: ${scene}
+- Each idea appears once, shown through what happens, never defined directly
+- Close with one sentence the reader could actually say out loud
+- No jargon. No lists. No headers. Pure story.
+- Sound like a smart friend, not a teacher.
+
+Also write one short "opener" — a single sentence the reader could say out loud tonight to start a conversation about one of these ideas.
+
+Respond ONLY with valid JSON:
+{"story": "...story text with [[LABEL:Term]] markers...", "opener": "..."}`;
+
+    try {
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': ANTHROPIC_API_KEY,
+          'anthropic-version': '2023-06-01',
+        },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-5',
+          max_tokens: 600,
+          system: storySystemPrompt,
+          messages: [{ role: 'user', content: storyUserPrompt }],
+        }),
+      });
+
+      if (!response.ok) {
+        const err = await response.text();
+        console.error('Anthropic API error (story):', err);
+        return res.status(502).json({ error: 'Upstream API error.' });
+      }
+
+      const data = await response.json();
+      const raw = data?.content?.[0]?.text || '';
+      const clean = raw.replace(/```json|```/g, '').trim();
+      const parsed = JSON.parse(clean);
+
+      if (!parsed.story || !parsed.opener) {
+        return res.status(502).json({ error: 'Malformed story response.' });
+      }
+
+      return res.status(200).json({ story: parsed.story, opener: parsed.opener });
+
+    } catch (e) {
+      console.error('cs-generate story error:', e);
+      return res.status(500).json({ error: 'Internal server error.' });
+    }
+  }
+  // ── End Story Mode ────────────────────────────────────────────────────────
+
   if (!concept || !concept.term) {
     return res.status(400).json({ error: 'concept object with term is required.' });
   }
