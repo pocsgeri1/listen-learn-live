@@ -2416,7 +2416,9 @@
   .cs-card-inner-scroll *:not(.cs-help-bubble):not(.cs-help-bubble *) { max-width: 100%; box-sizing: border-box; }
 
   /* Help bubble: position fixed so it escapes panel overflow clipping */
-  .cs-help-btn { position: relative; overflow: visible; }
+  /* cs-help-btn: bubble teleported to body — no overflow trick needed */
+  .cs-help-btn { position: relative; }
+  /* cs-help-bubble: lives at body level, shown/hidden by JS class */
   .cs-help-bubble {
     position: fixed;
     width: 260px;
@@ -2424,7 +2426,7 @@
     border: 1px solid var(--border-hover);
     border-radius: 10px;
     padding: 14px 16px;
-    z-index: 1200;
+    z-index: 99999;
     opacity: 0; pointer-events: none;
     transform: translateX(4px);
     transition: opacity 0.2s ease, transform 0.2s ease;
@@ -2440,11 +2442,10 @@
     border-top: 1px solid var(--border-hover);
     transform: rotate(45deg);
   }
-  @media (hover: hover) {
-    .cs-help-btn:hover .cs-help-bubble {
-      opacity: 1; pointer-events: auto;
-      transform: translateX(0);
-    }
+  .cs-help-bubble--visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(0);
   }
 
   .cs-close {
@@ -2909,37 +2910,7 @@
     overflow: visible;
   }
   .cs-help-btn:hover { border-color: var(--accent); }
-  /* Speech bubble — opens leftward out of panel */
-  .cs-help-bubble {
-    position: absolute;
-    top: 0; right: calc(100% + 10px); left: auto;
-    width: 280px;
-    background: var(--surface2);
-    border: 1px solid var(--border-hover);
-    border-radius: 10px;
-    padding: 14px 16px;
-    z-index: 300;
-    opacity: 0; pointer-events: none;
-    transform: translateX(4px);
-    transition: opacity 0.2s ease, transform 0.2s ease;
-    text-align: left;
-  }
-  .cs-help-bubble::before {
-    content: '';
-    position: absolute;
-    top: 8px; right: -5px; left: auto;
-    width: 9px; height: 9px;
-    background: var(--surface2);
-    border-right: 1px solid var(--border-hover);
-    border-top: 1px solid var(--border-hover);
-    transform: rotate(45deg);
-  }
-  @media (hover: hover) {
-    .cs-help-btn:hover .cs-help-bubble {
-      opacity: 1; pointer-events: auto;
-      transform: translateX(0);
-    }
-  }
+  /* cs-help-bubble: canonical styles defined above; this block intentionally removed */
   .cs-help-step {
     font-family: 'DM Sans', sans-serif; font-size: 0.76rem;
     color: var(--muted2); line-height: 1.5;
@@ -5716,14 +5687,16 @@
     <div class="cs-headline-row">
       <button class="cs-help-btn" id="csHelpBtn" onclick="_csHelpClick()" aria-label="How does this work">
         ❓
-        <div class="cs-help-bubble" id="csHelpBubble">
-          <div class="cs-help-step"><span class="cs-help-num">01</span><span>An interesting idea from a podcast gets picked for you. Tap it to see what it means — in plain English.</span></div>
-          <div class="cs-help-step"><span class="cs-help-num">02</span><span>Read your conversation starter tailored to who you're talking to. Change topic or scenario below anytime.</span></div>
-          <div class="cs-help-step"><span class="cs-help-num">03</span><span>Did it land? Do tell us! Stash saves the ones worth keeping for later.</span></div>
-          <div style="margin-top:10px;font-size:0.8rem;font-style:italic;color:var(--accent);font-family:'Playfair Display',serif">Now go say something worth saying! ✦</div>
-        </div>
       </button>
       <h2 class="cs-headline" id="csHeadline">Today's Conversation Starter</h2>
+    </div>
+
+    <!-- Help bubble lives at body level so it escapes stacking contexts -->
+    <div class="cs-help-bubble" id="csHelpBubble" style="display:none">
+      <div class="cs-help-step"><span class="cs-help-num">01</span><span>An interesting idea from a podcast gets picked for you. Tap it to see what it means — in plain English.</span></div>
+      <div class="cs-help-step"><span class="cs-help-num">02</span><span>Read your conversation starter tailored to who you're talking to. Change topic or scenario below anytime.</span></div>
+      <div class="cs-help-step"><span class="cs-help-num">03</span><span>Did it land? Do tell us! Stash saves the ones worth keeping for later.</span></div>
+      <div style="margin-top:10px;font-size:0.8rem;font-style:italic;color:var(--accent);font-family:'Playfair Display',serif">Now go say something worth saying! ✦</div>
     </div>
 
     <!-- Help overlay for mobile -->
@@ -5873,14 +5846,7 @@
 <section class="sp-hero" id="spHero">
 
   <!-- Floating concept preview card — shown when user clicks a term in search dropdown -->
-  <div class="sp-preview-card" id="spPreviewCard" style="display:none" onclick="spDismissPreview()">
-    <div class="sp-preview-cat" id="spPreviewCat"></div>
-    <div class="sp-preview-term" id="spPreviewTerm"></div>
-    <div class="sp-preview-hook" id="spPreviewHook"></div>
-    <div class="sp-preview-footer">
-      <button class="sp-preview-talk-btn" id="spPreviewTalkBtn">💬 Talk about this →</button>
-    </div>
-  </div>
+  <div class="sp-preview-card" id="spPreviewCard" style="display:none" onclick="spDismissPreview()"></div>
 
   <!-- Center column: tagline + search + scenario pills -->
   <div class="sp-hero-col">
@@ -8000,6 +7966,15 @@ function _spShowResults(q) {
   if (!dropdown) return;
   _spFocusedIdx = -1;
 
+  // Position dropdown below search bar using fixed coordinates
+  const wrap = document.getElementById('spSearchWrap');
+  if (wrap) {
+    const r = wrap.getBoundingClientRect();
+    dropdown.style.top = (r.bottom + 6) + 'px';
+    dropdown.style.left = r.left + 'px';
+    dropdown.style.width = r.width + 'px';
+  }
+
   // Two-pass ranking: term matches first, then content matches
   const ql = q.toLowerCase();
   const termMatches = CONCEPTS.filter(c =>
@@ -8078,32 +8053,46 @@ function _spSelectConcept(id) {
   _loadAI(concept, _csCtx, true);
 }
 
-// Show floating concept preview card to the left of the hero col
+// Show floating concept preview card (back-face style: plain + analogy)
 function _spPreviewCard(id) {
   const concept = CONCEPTS.find(x => x.id === id);
   if (!concept) return;
   const card = document.getElementById('spPreviewCard');
   if (!card) return;
 
+  // On small screens the card is hidden via CSS — skip JS work
+  if (window.innerWidth <= 1024) return;
+
   const color = CAT_COLOR[concept.category] || '#e8d5a3';
   const catName = (CATEGORIES.find(x => x.id === concept.category) || {}).name || concept.category;
 
-  document.getElementById('spPreviewCat').textContent = catName;
-  document.getElementById('spPreviewCat').style.color = color;
-  document.getElementById('spPreviewTerm').textContent = concept.term;
-  document.getElementById('spPreviewHook').textContent = concept.hook;
-  document.getElementById('spPreviewCard').style.setProperty('--preview-color', color);
+  card.style.setProperty('--preview-color', color);
 
-  const talkBtn = document.getElementById('spPreviewTalkBtn');
-  if (talkBtn) {
-    talkBtn.onclick = function(e) {
-      e.stopPropagation();
-      spDismissPreview();
-      _spSelectConcept(id);
-    };
-  }
+  // Build back-face content: plain + analogy only
+  card.innerHTML = `
+    <div class="sp-preview-cat" style="color:${color}">${_spEsc(catName)}</div>
+    <div class="sp-preview-term">${_spEsc(concept.term)}</div>
+    <div class="sp-preview-section-label">What it means</div>
+    <div class="sp-preview-plain">${_spEsc(concept.plain || '')}</div>
+    <div class="sp-preview-section-label">Analogy</div>
+    <div class="sp-preview-analogy" style="border-left-color:${color}">${_spEsc(concept.analogy || '')}</div>
+    <div class="sp-preview-footer">
+      <button class="sp-preview-talk-btn" onclick="event.stopPropagation();spDismissPreview();_spSelectConcept(${id})">💬 Talk about this →</button>
+    </div>`;
 
-  // Show with pop animation
+  // Position: to the left of the hero col, vertically centred on viewport
+  // Find search bar for vertical reference
+  const searchWrap = document.getElementById('spSearchWrap');
+  const rect = searchWrap ? searchWrap.getBoundingClientRect() : null;
+  const top = rect ? Math.max(80, rect.top - 40) : 200;
+  const leftEdge = rect ? rect.left : window.innerWidth / 2 - 320;
+  const cardRight = leftEdge - 24; // 24px gap to the left of search bar left edge
+  const cardLeft = cardRight - 240;
+
+  card.style.top = top + 'px';
+  card.style.left = Math.max(12, cardLeft) + 'px';
+  card.style.right = 'auto';
+
   card.style.display = 'flex';
   card.classList.remove('sp-preview-visible');
   requestAnimationFrame(() => requestAnimationFrame(() => card.classList.add('sp-preview-visible')));
@@ -9268,19 +9257,10 @@ function _csShowPostPrompt() {
 
 // Help ? button — mobile tap opens overlay, desktop hover shows bubble
 function _csHelpClick() {
-  const btn = document.getElementById('csHelpBtn');
-  const bubble = document.getElementById('csHelpBubble');
-  if (!btn || !bubble) return;
-  // Touch devices: show overlay
+  // Touch devices: open overlay; desktop hover is wired in _wireCSEvents
   if (window.matchMedia('(hover: none)').matches) {
     document.getElementById('csHelpOverlay').classList.add('active');
-    return;
   }
-  // Desktop: JS-position bubble to the left of the button, fixed coordinates
-  const rect = btn.getBoundingClientRect();
-  bubble.style.top = rect.top + 'px';
-  bubble.style.right = (window.innerWidth - rect.left + 10) + 'px';
-  bubble.style.left = 'auto';
 }
 function _csHelpOverlayClose(e) {
   if (!e || e.target === document.getElementById('csHelpOverlay') || e.currentTarget.classList.contains('cs-help-overlay-close')) {
@@ -9988,16 +9968,27 @@ function _csSwipeRight() {
 // ---- WIRE EVENTS ----
 
 function _wireCSEvents() {
-  // Wire help button mouseenter to JS-position bubble (works inside overflow-hidden panel)
+  // Teleport cs-help-bubble to <body> so it escapes all stacking contexts
+  const bubble = document.getElementById('csHelpBubble');
+  if (bubble && bubble.parentElement !== document.body) {
+    document.body.appendChild(bubble);
+  }
+  if (bubble) bubble.style.display = '';
+
+  // Wire help button: show/hide bubble on mouseenter/leave + position via getBoundingClientRect
   const helpBtn = document.getElementById('csHelpBtn');
-  const helpBubble = document.getElementById('csHelpBubble');
-  if (helpBtn && helpBubble) {
+  if (helpBtn && bubble) {
     helpBtn.addEventListener('mouseenter', function() {
       const rect = helpBtn.getBoundingClientRect();
-      helpBubble.style.position = 'fixed';
-      helpBubble.style.top = rect.top + 'px';
-      helpBubble.style.right = (window.innerWidth - rect.left + 10) + 'px';
-      helpBubble.style.left = 'auto';
+      bubble.style.position = 'fixed';
+      bubble.style.top = rect.top + 'px';
+      bubble.style.right = (window.innerWidth - rect.left + 10) + 'px';
+      bubble.style.left = 'auto';
+      bubble.style.zIndex = '99999';
+      bubble.classList.add('cs-help-bubble--visible');
+    });
+    helpBtn.addEventListener('mouseleave', function() {
+      bubble.classList.remove('cs-help-bubble--visible');
     });
   }
 
@@ -12208,16 +12199,17 @@ function playStreakMilestoneSFX() {
   align-items: center;
   justify-content: center;
   padding: 100px 2rem 4rem;
-  overflow: visible;
+  overflow: hidden; /* restored — dropdown is absolute inside col */
 }
 
-/* --- Center copy column --- */
+/* --- Center copy column — overflow visible so preview card escapes --- */
 .sp-hero-col {
   position: relative;
   z-index: 1;
   width: 100%;
   max-width: 640px;
   text-align: center;
+  overflow: visible;
 }
 
 /* --- Tagline --- */
@@ -12324,17 +12316,16 @@ function playStreakMilestoneSFX() {
 
 /* --- Search dropdown --- */
 .sp-dropdown {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: calc(100% + 6px);
+  position: fixed;
+  width: 640px; /* matches search wrap max-width */
+  max-width: calc(100vw - 4rem);
   background: var(--surface);
   border: 1px solid var(--border-hover);
   border-radius: 10px;
   overflow: hidden;
   overflow-y: auto;
-  max-height: 480px;
-  z-index: 200;
+  max-height: 360px;
+  z-index: 500;
   box-shadow: 0 8px 32px rgba(0,0,0,0.35);
   opacity: 0;
   transform: translateY(-4px);
@@ -12598,54 +12589,74 @@ function playStreakMilestoneSFX() {
   background: rgba(184,134,11,0.06);
 }
 
-/* --- Concept preview card (floats left of hero col on term click) --- */
+/* --- Concept preview card (fixed position, shown when user clicks a term) --- */
 .sp-preview-card {
-  position: absolute;
-  left: max(2rem, calc(50% - 580px));
-  top: 50%;
-  transform: translateY(-50%) scale(0.92);
-  width: 220px;
-  background: var(--surface);
-  border: 1px solid var(--border);
+  position: fixed;
+  width: 240px;
+  background: var(--surface2);
+  border: 1px solid color-mix(in srgb, var(--preview-color, #e8d5a3) 35%, transparent);
   border-left: 3px solid var(--preview-color, #e8d5a3);
   border-radius: 12px;
-  padding: 18px 16px;
+  padding: 18px 16px 14px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 0;
   cursor: pointer;
   opacity: 0;
   pointer-events: none;
+  transform: scale(0.92) translateY(8px);
   transition: opacity 0.24s ease, transform 0.28s cubic-bezier(0.34, 1.4, 0.64, 1);
-  z-index: 50;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  z-index: 5000; /* above everything */
+  box-shadow: 0 8px 32px rgba(0,0,0,0.25);
 }
 .sp-preview-card.sp-preview-visible {
   opacity: 1;
-  transform: translateY(-50%) scale(1);
+  transform: scale(1) translateY(0);
   pointer-events: all;
 }
 .sp-preview-cat {
   font-family: 'DM Mono', monospace;
-  font-size: 0.58rem;
-  letter-spacing: 0.12em;
+  font-size: 0.56rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
+  margin-bottom: 8px;
 }
 .sp-preview-term {
   font-family: 'Playfair Display', serif;
-  font-size: 1rem;
+  font-size: 1.05rem;
   font-weight: 700;
   color: var(--text);
-  line-height: 1.25;
+  line-height: 1.2;
+  margin-bottom: 12px;
 }
-.sp-preview-hook {
-  font-size: 0.76rem;
+.sp-preview-section-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 5px;
+  margin-top: 12px;
+}
+.sp-preview-section-label:first-of-type { margin-top: 0; }
+.sp-preview-plain {
+  font-size: 0.78rem;
+  color: var(--text);
+  line-height: 1.65;
+  font-weight: 300;
+}
+.sp-preview-analogy {
+  font-size: 0.74rem;
   color: var(--muted2);
-  line-height: 1.5;
+  line-height: 1.6;
   font-style: italic;
+  border-left: 2px solid var(--preview-color, #e8d5a3);
+  opacity: 0.8;
+  padding-left: 9px;
+  margin-top: 0;
 }
 .sp-preview-footer {
-  margin-top: 4px;
+  margin-top: 14px;
   padding-top: 10px;
   border-top: 1px solid var(--border);
 }
@@ -12663,16 +12674,14 @@ function playStreakMilestoneSFX() {
 }
 .sp-preview-talk-btn:hover { opacity: 0.7; }
 
-/* Hide preview card on small screens — not enough space */
+/* Hide on small screens — no space */
 @media (max-width: 1024px) {
   .sp-preview-card { display: none !important; }
 }
 
 [data-theme="light"] .sp-preview-card {
   background: var(--surface);
-  border-color: var(--border);
-  border-left-color: var(--preview-color, #b8890b);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.09);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.10);
 }
 
 
