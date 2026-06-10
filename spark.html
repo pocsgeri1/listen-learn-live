@@ -2425,26 +2425,29 @@
   .cs-card {
     position: fixed;
     top: 60px; right: 0;
-    width: 380px;
+    width: min(520px, 100vw);
     height: calc(100vh - 60px);
     overflow-y: auto;
+    overflow-x: hidden;
     z-index: 200;
     background: var(--surface);
     border-left: 1px solid var(--border);
     border-radius: 14px 0 0 0;
     padding: 28px 28px 40px;
-    transform: translateX(380px);
+    transform: translateX(min(520px, 100vw));
     transition: transform 320ms cubic-bezier(0.4, 0, 0.2, 1),
                 box-shadow 320ms ease;
     box-shadow: none;
+    box-sizing: border-box;
   }
+  /* Ensure nothing inside overflows horizontally */
+  .cs-card * { max-width: 100%; box-sizing: border-box; }
   /* Panel open state */
   .cs-panel-open .cs-card {
     transform: translateX(0);
     box-shadow: -8px 0 40px rgba(0,0,0,0.35);
   }
 
-  /* Mobile (<900px): revert to centered modal overlay */
   @media (max-width: 899px) {
     .cs-overlay {
       background: rgba(13,13,13,0.92);
@@ -2458,6 +2461,7 @@
       top: auto; right: auto;
       width: 100%; max-width: 600px;
       height: auto;
+      overflow-x: hidden;
       transform: none !important;
       box-shadow: none !important;
       border-left: none;
@@ -2465,7 +2469,7 @@
       border-radius: 14px;
       margin: auto 0;
     }
-    .cs-panel-open .cs-card { transform: none; box-shadow: none; }
+    .cs-panel-open .cs-card { transform: none !important; box-shadow: none !important; }
   }
 
   /* Light mode panel border */
@@ -2941,35 +2945,35 @@
     position: relative;
   }
   .cs-help-btn:hover { border-color: var(--accent); color: var(--accent); }
-  /* Speech bubble — desktop hover */
+  /* Speech bubble — opens leftward out of panel */
   .cs-help-bubble {
     position: absolute;
-    top: 30px; left: 0;
+    top: 0; right: calc(100% + 10px); left: auto;
     width: 280px;
     background: var(--surface2);
     border: 1px solid var(--border-hover);
     border-radius: 10px;
     padding: 14px 16px;
-    z-index: 200;
+    z-index: 300;
     opacity: 0; pointer-events: none;
-    transform: translateY(-4px);
+    transform: translateX(4px);
     transition: opacity 0.2s ease, transform 0.2s ease;
     text-align: left;
   }
   .cs-help-bubble::before {
     content: '';
     position: absolute;
-    top: -5px; left: 8px;
+    top: 8px; right: -5px; left: auto;
     width: 9px; height: 9px;
     background: var(--surface2);
-    border-left: 1px solid var(--border-hover);
+    border-right: 1px solid var(--border-hover);
     border-top: 1px solid var(--border-hover);
     transform: rotate(45deg);
   }
   @media (hover: hover) {
     .cs-help-btn:hover .cs-help-bubble {
       opacity: 1; pointer-events: auto;
-      transform: translateY(0);
+      transform: translateX(0);
     }
   }
   .cs-help-step {
@@ -5744,7 +5748,6 @@
     </div>
 
     <div class="cs-headline-row">
-      <h2 class="cs-headline" id="csHeadline">Today's Conversation Starter</h2>
       <button class="cs-help-btn" id="csHelpBtn" onclick="_csHelpClick()" aria-label="How does this work">
         ❓
         <div class="cs-help-bubble" id="csHelpBubble">
@@ -5754,6 +5757,7 @@
           <div style="margin-top:10px;font-size:0.8rem;font-style:italic;color:var(--accent);font-family:'Playfair Display',serif">Now go say something worth saying! ✦</div>
         </div>
       </button>
+      <h2 class="cs-headline" id="csHeadline">Today's Conversation Starter</h2>
     </div>
 
     <!-- Help overlay for mobile -->
@@ -8003,24 +8007,46 @@ function _spShowResults(q) {
   if (!dropdown) return;
   _spFocusedIdx = -1;
 
-  const matchIds = fuzzyMatchIds(q);
-  let results = matchIds
-    ? CONCEPTS.filter(c => matchIds.has(c.id) && !c.duplicate_of)
+  // Two-pass ranking: term matches first, then content matches
+  const ql = q.toLowerCase();
+  const termMatches = CONCEPTS.filter(c =>
+    !c.duplicate_of && c.term.toLowerCase().includes(ql)
+  );
+  const termMatchIds = new Set(termMatches.map(c => c.id));
+
+  // Fuse pass for content matches — exclude term matches to avoid doubles
+  const fuseIds = fuzzyMatchIds(q);
+  const contentMatches = fuseIds
+    ? CONCEPTS.filter(c => fuseIds.has(c.id) && !c.duplicate_of && !termMatchIds.has(c.id))
     : [];
-  results = results.slice(0, 6);
+
+  // Merge: term matches first, then content, cap at 8 total
+  const results = [...termMatches, ...contentMatches].slice(0, 8);
+
+  // Source label map
+  const SOURCE_LABEL = { cw: 'Modern Wisdom', ah: 'Alex Hormozi', dk: 'Dan Koe', core: 'Epistemic' };
 
   if (results.length === 0) {
     dropdown.innerHTML = `<div class="sp-drop-empty">Nothing found for "<strong>${_spEsc(q)}</strong>" — try a topic like "habits" or "decision making"</div>`;
   } else {
-    dropdown.innerHTML = results.map((c, i) => {
+    dropdown.innerHTML = results.map((c) => {
       const color = CAT_COLOR[c.category] || '#e8d5a3';
+      const catName = (CATEGORIES.find(x => x.id === c.category) || {}).name || c.category;
+      const srcLabel = SOURCE_LABEL[c.source] || c.source || '';
       return `<div class="sp-drop-item" role="option" data-id="${c.id}" onclick="_spSelectConcept(${c.id})">
         <div class="sp-drop-stripe" style="background:${color}"></div>
         <div class="sp-drop-body">
-          <div class="sp-drop-term">${_spEsc(c.term)}</div>
+          <div class="sp-drop-meta-row">
+            <span class="sp-drop-term">${_spEsc(c.term)}</span>
+            <span class="sp-drop-pills">
+              <span class="sp-drop-cat-pill" style="color:${color};border-color:${color}">${_spEsc(catName)}</span>
+              ${srcLabel ? `<span class="sp-drop-src-pill">${_spEsc(srcLabel)}</span>` : ''}
+            </span>
+          </div>
           <div class="sp-drop-hook">${_spEsc(c.hook)}</div>
         </div>
-        <div class="sp-drop-cta">Talk about this →</div>
+        <div class="sp-drop-divider"></div>
+        <button class="sp-drop-cta-btn" onclick="event.stopPropagation();_spSelectConcept(${c.id})">Talk about this →</button>
       </div>`;
     }).join('');
   }
@@ -8042,10 +8068,23 @@ function _spHighlightItem(items) {
 }
 
 function _spSelectConcept(id) {
-  const c = CONCEPTS.find(x => x.id === id);
-  if (c) { _csPushToStack(id); }
+  const concept = CONCEPTS.find(x => x.id === id);
+  if (!concept) return;
   _spHideDropdown();
-  _csOpenPanel(); // Phase C1: panel entry via search result
+
+  // If panel not yet initialised, do full init first then load concept
+  if (!_csConcept) {
+    _csCat = concept.category;
+    _csCtx = 'friend'; // default scenario
+    _renderCSShell(concept);
+    _wireCSEvents();
+  }
+
+  // Load the concept — sets _csConcept, clears old AI data, re-renders shell
+  _csLoadNewConcept(concept);
+  _csOpenPanel();
+  // Fire AI generation for this concept + current scenario
+  _loadAI(concept, _csCtx, true);
 }
 
 function _spEsc(str) {
@@ -12139,6 +12178,8 @@ function playStreakMilestoneSFX() {
   border: 1px solid var(--border-hover);
   border-radius: 10px;
   overflow: hidden;
+  overflow-y: auto;
+  max-height: 360px;
   z-index: 200;
   box-shadow: 0 8px 32px rgba(0,0,0,0.35);
   opacity: 0;
@@ -12158,13 +12199,13 @@ function playStreakMilestoneSFX() {
 
 .sp-drop-item {
   display: flex;
-  align-items: center;
-  gap: 0;
-  height: 52px;
+  align-items: stretch;
   cursor: pointer;
   transition: background 0.12s;
   overflow: hidden;
+  border-bottom: 1px solid var(--border);
 }
+.sp-drop-item:last-child { border-bottom: none; }
 .sp-drop-item:hover,
 .sp-drop-item.focused { background: var(--surface2); }
 
@@ -12175,43 +12216,89 @@ function playStreakMilestoneSFX() {
   width: 3px;
   align-self: stretch;
   flex-shrink: 0;
-  border-radius: 0;
 }
 .sp-drop-body {
   flex: 1;
   min-width: 0;
-  padding: 0 12px;
+  padding: 10px 12px;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  gap: 4px;
+}
+/* Term + pills on same row */
+.sp-drop-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 .sp-drop-term {
   font-family: 'DM Sans', sans-serif;
   font-size: 0.85rem;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--text);
+}
+.sp-drop-pills {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+.sp-drop-cat-pill {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 1px solid;
+  border-radius: 999px;
+  padding: 2px 7px;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+}
+.sp-drop-src-pill {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 2px 7px;
+  white-space: nowrap;
 }
 .sp-drop-hook {
   font-family: 'DM Sans', sans-serif;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   color: var(--muted2);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  line-height: 1.4;
 }
-.sp-drop-cta {
+/* Divider between body and CTA */
+.sp-drop-divider {
+  width: 1px;
+  background: var(--border);
+  align-self: stretch;
+  flex-shrink: 0;
+  margin: 8px 0;
+}
+/* Talk about this button */
+.sp-drop-cta-btn {
   font-family: 'DM Mono', monospace;
   font-size: 0.62rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--accent);
   white-space: nowrap;
-  padding-right: 14px;
+  padding: 0 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
   flex-shrink: 0;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  transition: background 0.12s;
 }
+.sp-drop-cta-btn:hover { background: rgba(232,213,163,0.07); }
+[data-theme="light"] .sp-drop-cta-btn:hover { background: rgba(184,134,11,0.07); }
 
 .sp-drop-empty {
   padding: 18px 16px;
