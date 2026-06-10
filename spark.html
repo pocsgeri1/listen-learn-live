@@ -11966,6 +11966,7 @@ function playStreakMilestoneSFX() {
   z-index: 1;
   width: 100%;
   max-width: 640px;
+  text-align: center;
 }
 
 /* --- Tagline --- */
@@ -11990,7 +11991,11 @@ function playStreakMilestoneSFX() {
   color: var(--muted2);
   line-height: 1.6;
   margin: 0 0 2rem;
-  max-width: 520px;
+  max-width: 100%;
+  white-space: nowrap;
+}
+@media (max-width: 600px) {
+  .sp-sub { white-space: normal; }
 }
 
 /* --- Search bar --- */
@@ -12166,14 +12171,18 @@ function playStreakMilestoneSFX() {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+  justify-content: center;
 }
 .sp-pills-row2 {
   transition: max-height 0.28s ease, opacity 0.22s ease;
   opacity: 0;
+  overflow: hidden;
+  padding-top: 0;
 }
 .sp-pills-row2.open {
   max-height: 200px !important;
   opacity: 1;
+  padding-top: 8px;
 }
 
 .sp-pill {
