@@ -8908,7 +8908,7 @@ function _csPickerLoad(cat) {
     // Show story button now that we have 3 candidates
     var storyBtn = document.getElementById('csPickerStoryBtn');
     if (storyBtn && shuffled.length >= 2) {
-      setTimeout(function() { storyBtn.style.display = ''; }, (shuffled.length * 80) + 200);
+      setTimeout(function() { storyBtn.classList.add('cs-visible'); }, (shuffled.length * 80) + 200);
     }
   }, shuffled.length > 0 ? 160 : 0);
 }
@@ -9405,7 +9405,7 @@ function _csOpenStoryMode() {
   var pickerWrap = document.getElementById('csTopicPickerWrap');
   var storyBtn = document.getElementById('csPickerStoryBtn');
   if (pickerWrap) pickerWrap.style.display = 'none';
-  if (storyBtn) storyBtn.style.display = 'none';
+  if (storyBtn) storyBtn.classList.remove('cs-visible');
 
   var panel = document.getElementById('csStoryPanel');
   panel.classList.add('cs-visible');
@@ -9552,7 +9552,7 @@ function _csCloseStoryMode() {
   if (pickerWrap) pickerWrap.style.display = '';
   var storyBtn = document.getElementById('csPickerStoryBtn');
   if (storyBtn && document.querySelectorAll('#csCandidateList .cs-candidate').length >= 2) {
-    storyBtn.style.display = '';
+    storyBtn.classList.add('cs-visible');
   }
   // Restore generate buttons in candidate cards
   document.querySelectorAll('.cs-candidate-generate-btn').forEach(function(btn) {
@@ -9784,7 +9784,7 @@ function _csToggleTopicReveal() {
   if (moreBtn) moreBtn.style.display = 'none';
   // Hide story button and panel when picker resets
   var sb2 = document.getElementById('csPickerStoryBtn');
-  if (sb2) sb2.style.display = 'none';
+  if (sb2) sb2.classList.remove('cs-visible');
   var sp2 = document.getElementById('csStoryPanel');
   if (sp2) sp2.classList.remove('cs-visible');
 }
