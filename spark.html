@@ -2377,9 +2377,9 @@
     border-color: var(--accent);
   }
 
-  /* Lock body scroll while modal is open */
-  body.cotd-open {
-    overflow: hidden;
+  /* Lock body scroll while CS panel open — mobile only; desktop panel is fixed */
+  @media (max-width: 899px) {
+    body.cotd-open { overflow: hidden; }
   }
 
   /* MOBILE */
@@ -2403,24 +2403,77 @@
      CONVERSATION STARTER MODAL — v1.68
      ============================================ */
 
-  .cs-overlay {
-    position: fixed; inset: 0; z-index: 200;
-    background: rgba(13, 13, 13, 0.96);
-    display: flex; align-items: flex-start; justify-content: center;
-    overflow-y: auto; padding: 5vh 1.5rem 4vh;
-    opacity: 0; pointer-events: none; transition: opacity 0.35s ease;
-  }
-  .cs-overlay.active { opacity: 1; pointer-events: all; }
+  /* ============================================
+     CS PANEL — spark.html v1.76 Phase C1
+     cs-overlay = transparent click-outside scrim
+     cs-card    = fixed right sidebar panel
+     ============================================ */
 
-  .cs-card {
-    position: relative; width: 100%; max-width: 600px;
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 14px; padding: 32px 38px 28px; margin: auto 0;
-    animation: csSlideUp 0.45s ease both;
+  /* Scrim: invisible by default, catches outside clicks when panel open */
+  .cs-overlay {
+    position: fixed; inset: 0; z-index: 199;
+    background: transparent;
+    display: block;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.32s ease;
   }
-  @keyframes csSlideUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to   { opacity: 1; transform: translateY(0); }
+  .cs-overlay.active {
+    opacity: 1; pointer-events: all;
+  }
+
+  /* Desktop panel — fixed right sidebar */
+  .cs-card {
+    position: fixed;
+    top: 60px; right: 0;
+    width: 380px;
+    height: calc(100vh - 60px);
+    overflow-y: auto;
+    z-index: 200;
+    background: var(--surface);
+    border-left: 1px solid var(--border);
+    border-radius: 14px 0 0 0;
+    padding: 28px 28px 40px;
+    transform: translateX(380px);
+    transition: transform 320ms cubic-bezier(0.4, 0, 0.2, 1),
+                box-shadow 320ms ease;
+    box-shadow: none;
+  }
+  /* Panel open state */
+  .cs-panel-open .cs-card {
+    transform: translateX(0);
+    box-shadow: -8px 0 40px rgba(0,0,0,0.35);
+  }
+
+  /* Mobile (<900px): revert to centered modal overlay */
+  @media (max-width: 899px) {
+    .cs-overlay {
+      background: rgba(13,13,13,0.92);
+      display: flex; align-items: flex-start; justify-content: center;
+      overflow-y: auto; padding: 5vh 1.5rem 4vh;
+      transition: opacity 0.3s ease;
+    }
+    .cs-overlay.active { opacity: 1; pointer-events: all; }
+    .cs-card {
+      position: relative;
+      top: auto; right: auto;
+      width: 100%; max-width: 600px;
+      height: auto;
+      transform: none !important;
+      box-shadow: none !important;
+      border-left: none;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      margin: auto 0;
+    }
+    .cs-panel-open .cs-card { transform: none; box-shadow: none; }
+  }
+
+  /* Light mode panel border */
+  [data-theme="light"] .cs-card {
+    border-left-color: var(--border);
+  }
+  [data-theme="light"] .cs-panel-open .cs-card {
+    box-shadow: -8px 0 40px rgba(0,0,0,0.1);
   }
 
   .cs-close {
@@ -3232,9 +3285,11 @@
     justify-content: center;
   }
 
-  /* CS modal entrance animation — v1.72 */
-  .cs-overlay.active .cs-card {
-    animation: csCardIn 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+  /* CS modal entrance animation — mobile only in C1 */
+  @media (max-width: 899px) {
+    .cs-overlay.active .cs-card {
+      animation: csCardIn 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
   }
   @keyframes csCardIn {
     from { opacity: 0; transform: translateY(18px) scale(0.97); }
@@ -7987,14 +8042,10 @@ function _spHighlightItem(items) {
 }
 
 function _spSelectConcept(id) {
-  // PHASE C: replace openCSFromNav() with _csOpenPanel(id) when CS Panel is built
   const c = CONCEPTS.find(x => x.id === id);
-  if (c) {
-    // Pre-load the concept into CS by setting the stack then opening
-    _csPushToStack(id);
-  }
+  if (c) { _csPushToStack(id); }
   _spHideDropdown();
-  openCSFromNav();
+  _csOpenPanel(); // Phase C1: panel entry via search result
 }
 
 function _spEsc(str) {
@@ -8019,12 +8070,9 @@ function spToggleMorePills() {
 }
 
 function spScenarioPill(el, scenario) {
-  // Mark active
   document.querySelectorAll('.sp-pill').forEach(p => p.classList.remove('active'));
   el.classList.add('active');
-  // PHASE C: replace with _csOpenPanel({scenario}) when CS Panel is built
-  // For now, open existing CS modal as interim bridge
-  openCSFromNav();
+  _csOpenPanel(); // Phase C1: panel entry via scenario pill
   if (typeof track === 'function') track('sp_scenario_pill', { scenario });
 }
 
@@ -9978,15 +10026,25 @@ function _csFeedbackDone(isUp) {
 
 function openCS() {
   document.getElementById('csOverlay').classList.add('active');
-  document.body.classList.add('cotd-open');
+  document.body.classList.add('cs-panel-open');
+  // Mobile only: lock scroll
+  if (window.innerWidth <= 899) document.body.classList.add('cotd-open');
   playCotdSFX(); // reuse COTD sound
+  // Hide spark trigger hint after first open
+  const hint = document.getElementById('spTriggerHint');
+  if (hint) hint.style.display = 'none';
 }
 
 function closeCS(persist) {
   document.getElementById('csOverlay').classList.remove('active');
+  document.body.classList.remove('cs-panel-open');
   document.body.classList.remove('cotd-open');
   if (persist) markDismissedTodayCS();
 }
+
+// Aliases used by PHASE C wiring
+function _csOpenPanel() { openCSFromNav(); }
+function _csClosePanel(persist) { closeCS(persist); }
 
 // ---- PERSISTENCE ----
 
@@ -12280,6 +12338,36 @@ function playStreakMilestoneSFX() {
 
 /* search-wrap needs relative positioning for dropdown */
 #spHero .sp-search-wrap { position: relative; }
+
+/* --- Spark trigger hint (✦ at right edge, desktop only) --- */
+.sp-trigger-hint {
+  position: fixed;
+  right: 0;
+  top: 50vh;
+  transform: translateY(-50%);
+  z-index: 198;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-right: none;
+  border-radius: 8px 0 0 8px;
+  padding: 10px 8px 10px 10px;
+  font-size: 0.9rem;
+  color: var(--accent);
+  opacity: 0.35;
+  cursor: pointer;
+  transition: opacity 0.2s, border-color 0.2s;
+  line-height: 1;
+}
+.sp-trigger-hint:hover { opacity: 0.85; border-color: var(--border-hover); }
+body.cs-panel-open .sp-trigger-hint { display: none; }
+@media (max-width: 899px) {
+  .sp-trigger-hint { display: none !important; }
+}
+[data-theme="light"] .sp-trigger-hint {
+  background: var(--surface);
+  border-color: var(--border);
+  color: var(--accent);
+}
 </style>
 
 <div class="conv-overlay" id="convOverlay" role="dialog" aria-modal="true" aria-label="Saved Conversations">
@@ -12891,5 +12979,8 @@ function _convOpenCSById(id, ctx) {
 // END CONVERSATIONS OVERLAY
 // ============================================
 </script>
+<!-- Spark trigger hint — desktop only; hides after first panel open -->
+<button class="sp-trigger-hint" id="spTriggerHint" onclick="_csOpenPanel();this.style.display='none'" aria-label="Open conversation starter" title="Start a conversation">✦</button>
+
 </body>
 </html>
