@@ -5948,6 +5948,25 @@
 
 </section>
 <!-- /ZONE 1 -->
+
+<!-- STATS COUNTER — between hero pills and episodes -->
+<div class="sp-stats-bar" id="spStatsBar">
+  <div class="sp-stat">
+    <span class="sp-stat-num" id="heroConceptCount">—</span>
+    <span class="sp-stat-label">ideas</span>
+  </div>
+  <div class="sp-stat-sep"></div>
+  <div class="sp-stat">
+    <span class="sp-stat-num" id="heroEpisodeCount">—</span>
+    <span class="sp-stat-label">episodes</span>
+  </div>
+  <div class="sp-stat-sep"></div>
+  <div class="sp-stat">
+    <span class="sp-stat-num" id="heroCategoryCount">—</span>
+    <span class="sp-stat-label">categories</span>
+  </div>
+</div>
+
 <!-- EPISODES SECTION -->
 <div id="episodesSection" class="episodes-section">
   <div class="episodes-controls">
@@ -9392,17 +9411,23 @@ function _csCloseStoryMode() {
   const panel = document.getElementById('csStoryPanel');
   panel.classList.remove('cs-visible');
 
-  // Restore main CS content
-  ['csConceptPill','csPromptBlock','csCoaching','csDivider','csFeedbackRow',
-   'csActions','csRevealRow'].forEach(function(id) {
+  // Restore inline display overrides set by _csOpenStoryMode
+  ['csConceptPill','csPromptBlock','csGenerateRow'].forEach(function(id) {
     const el = document.getElementById(id);
-    if (el) { el.style.display = ''; }
+    if (el) el.style.display = '';
+  });
+  // These are class-controlled — clear the inline override, let the class decide
+  ['csCoaching','csDivider','csFeedbackRow','csActions','csRevealRow'].forEach(function(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.style.display = '';
+    // If they should be visible (cs-visible class), make sure they are
   });
 
-  // Re-show story button
+  // Re-show story button if concept still has enough related
   if (_csConcept && _csConcept.related_ids && _csConcept.related_ids.length >= 2) {
     const sb = document.getElementById('csStoryBtn');
-    if (sb) { sb.classList.remove('cs-hidden'); sb.classList.add('cs-visible'); }
+    if (sb) { sb.style.display = ''; sb.classList.remove('cs-hidden'); sb.classList.add('cs-visible'); }
   }
 }
 
@@ -12775,6 +12800,51 @@ function playStreakMilestoneSFX() {
   color: var(--accent);
   border-color: var(--accent);
   background: transparent;
+}
+/* --- Stats counter bar (between hero and episodes) --- */
+.sp-stats-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.4rem 2rem 2rem;
+  max-width: 640px;
+  margin: 0 auto;
+}
+.sp-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  min-width: 80px;
+}
+.sp-stat-num {
+  font-family: 'DM Mono', monospace;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 400;
+  color: var(--accent);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.sp-stat-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.sp-stat-sep {
+  width: 1px;
+  height: 28px;
+  background: var(--border);
+  margin: 0 2rem;
+  flex-shrink: 0;
+  align-self: center;
+}
+@media (max-width: 600px) {
+  .sp-stats-bar { padding: 1rem 1rem 1.5rem; }
+  .sp-stat { min-width: 60px; }
+  .sp-stat-num { font-size: 1.3rem; }
+  .sp-stat-sep { margin: 0 1.2rem; }
 }
 
 [data-theme="light"] .sp-pill {
