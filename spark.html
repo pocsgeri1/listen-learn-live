@@ -5881,6 +5881,7 @@
       <div class="cs-picker-cat-row" id="csPickerCatRow"></div>
       <div class="cs-candidate-list" id="csCandidateList"></div>
       <button class="cs-picker-more-btn" id="csPickerMoreBtn" onclick="_csPickerMore()">More ideas →</button>
+      <button class="cs-story-btn" id="csPickerStoryBtn" style="display:none" onclick="_csOpenStoryMode()">★ See how these connect</button>
     </div>
 
     <!-- Scenario buttons — expands below the reveal row -->
@@ -5913,9 +5914,6 @@
         <div style="height:0.4rem"></div>
       </div>
     </div>
-
-    <!-- Story Mode button — only shows when concept has ≥2 related_ids -->
-    <button class="cs-story-btn cs-post-prompt cs-hidden" id="csStoryBtn" onclick="_csOpenStoryMode()">★ See how these connect</button>
 
     <!-- State 5 — Story Mode panel -->
     <div class="cs-story-panel" id="csStoryPanel">
@@ -8068,6 +8066,11 @@ function _spInitSearch() {
       _spHideDropdown();
     }
   });
+
+  // Close on scroll
+  window.addEventListener('scroll', function() {
+    _spHideDropdown();
+  }, { passive: true });
 }
 
 function spClearSearch() {
@@ -8902,6 +8905,11 @@ function _csPickerLoad(cat) {
     // 3-pop SFX as cards stamp in
     _playCandidateSFX();
     // No auto-expand — user taps to open a card
+    // Show story button now that we have 3 candidates
+    var storyBtn = document.getElementById('csPickerStoryBtn');
+    if (storyBtn && shuffled.length >= 2) {
+      setTimeout(function() { storyBtn.style.display = ''; }, (shuffled.length * 80) + 200);
+    }
   }, shuffled.length > 0 ? 160 : 0);
 }
 
@@ -9384,46 +9392,63 @@ function _csParseStoryLabels(storyText, conceptsUsed) {
 
 // Open Story Mode (State 5)
 function _csOpenStoryMode() {
-  if (!_csConcept) return;
   _csDismissTermPopups();
 
-  // Gather related concepts — pass all related_ids to API, let Claude pick
-  const relatedIds = (_csConcept.related_ids || []).slice(0, 5); // max 5 to API
-  const relatedConcepts = relatedIds
-    .map(function(rid) { return CONCEPTS.find(function(c) { return c.id === rid; }); })
-    .filter(Boolean);
+  // Get concepts from the picker candidates (the 3 shown after Change Topic)
+  var pickerConcepts = _csGetPickerCandidates();
+  if (pickerConcepts.length < 2) {
+    console.warn('Story mode: not enough candidates');
+    return;
+  }
 
-  if (relatedConcepts.length < 1) return; // need at least 1 related
+  // Hide picker content, show story panel in its place
+  var pickerWrap = document.getElementById('csTopicPickerWrap');
+  var storyBtn = document.getElementById('csPickerStoryBtn');
+  if (pickerWrap) pickerWrap.style.display = 'none';
+  if (storyBtn) storyBtn.style.display = 'none';
 
-  // Hide main CS content, show story panel
-  ['csConceptPill','csPromptBlock','csCoaching','csDivider','csFeedbackRow',
-   'csActions','csRevealRow','csStoryBtn'].forEach(function(id) {
-    const el = document.getElementById(id);
-    if (el) { el.style.display = 'none'; }
-  });
-
-  const panel = document.getElementById('csStoryPanel');
+  var panel = document.getElementById('csStoryPanel');
   panel.classList.add('cs-visible');
+  // Make sure story panel is visible inside the picker area
+  // (it lives inside cs-card-inner-scroll, so it will appear)
 
-  // Show skeleton
-  const textEl = document.getElementById('csStoryText');
+  // Show skeleton + loading messages
+  var textEl = document.getElementById('csStoryText');
   textEl.innerHTML = '<div class="cs-story-skeleton">' +
-    '<div class="cs-story-skeleton-line" style="width:88%"></div>' +
-    '<div class="cs-story-skeleton-line" style="width:75%"></div>' +
-    '<div class="cs-story-skeleton-line" style="width:92%"></div>' +
-    '<div class="cs-story-skeleton-line" style="width:68%"></div>' +
-    '<div class="cs-story-skeleton-line" style="width:80%"></div>' +
+    '<div class="cs-story-skeleton-line" style="width:85%"></div>' +
+    '<div class="cs-story-skeleton-line" style="width:70%"></div>' +
+    '<div class="cs-story-skeleton-line" style="width:90%"></div>' +
+    '<div class="cs-story-skeleton-line" style="width:65%"></div>' +
+    '<div class="cs-story-skeleton-line" style="width:78%"></div>' +
     '</div>';
   document.getElementById('csStoryOpener').style.display = 'none';
-  document.getElementById('csStoryMiniCards').innerHTML = '';
+  var revealBtn = document.getElementById('csStoryRevealBtn');
+  if (revealBtn) revealBtn.classList.remove('active');
 
-  // Build concept payload — primary + related
-  const allConcepts = [_csConcept].concat(relatedConcepts);
-  const payload = allConcepts.map(function(c) {
+  // Start rotating loading messages
+  var _storyMsgEl = document.createElement('div');
+  _storyMsgEl.id = 'csStoryLoadMsg';
+  _storyMsgEl.style.cssText = "font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);text-align:center;padding:1.2rem 0 0.5rem;";
+  textEl.parentNode.insertBefore(_storyMsgEl, textEl.nextSibling);
+  var _storyMsgs = [
+    'Weaving ideas together…',
+    'Finding the thread between them…',
+    'Setting the scene…',
+    'Writing the story…',
+    'Almost there…'
+  ];
+  var _storyMsgIdx = 0;
+  _storyMsgEl.textContent = _storyMsgs[0];
+  var _storyMsgTimer = setInterval(function() {
+    _storyMsgIdx = (_storyMsgIdx + 1) % _storyMsgs.length;
+    _storyMsgEl.textContent = _storyMsgs[_storyMsgIdx];
+  }, 4000);
+
+  // Build payload
+  var payload = pickerConcepts.map(function(c) {
     return { term: c.term, plain: c.plain, analogy: c.analogy };
   });
 
-  // API call
   fetch('/api/cs-generate', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -9435,10 +9460,14 @@ function _csOpenStoryMode() {
   })
   .then(function(r) { return r.json(); })
   .then(function(data) {
+    clearInterval(_storyMsgTimer);
+    var msgEl = document.getElementById('csStoryLoadMsg');
+    if (msgEl) msgEl.remove();
+
     if (!data.story) throw new Error('no story');
 
     // Render story with inline labels
-    const parsed = _csParseStoryLabels(data.story, allConcepts);
+    var parsed = _csParseStoryLabels(data.story, pickerConcepts);
     textEl.innerHTML = parsed;
 
     // Opener
@@ -9447,46 +9476,88 @@ function _csOpenStoryMode() {
       document.getElementById('csStoryOpener').style.display = 'block';
     }
 
-    // Mini-cards (related concepts only, not primary)
-    _csRenderStoryMiniCards(relatedConcepts);
+    // Store concepts for reveal popups
+    _csRenderStoryMiniCards(pickerConcepts);
 
-    // Auto-save to localStorage
-    _csSaveStory(_csConcept, relatedConcepts, data.story, data.opener);
+    // Repopulate candidate cards with the story-concept terms
+    _csStoryRepopulateCandidates(pickerConcepts);
+
+    // Auto-save
+    _csSaveStory({ id: 0, term: pickerConcepts[0].term, category: pickerConcepts[0].category }, pickerConcepts.slice(1), data.story, data.opener);
 
     // Store for copy actions
     panel.dataset.storyText = data.story.replace(/\[\[LABEL:[^\]]+\]\]/g, '');
     panel.dataset.openerText = data.opener || '';
   })
   .catch(function(e) {
-    textEl.textContent = 'Couldn\'t generate the story right now. Try again.';
+    clearInterval(_storyMsgTimer);
+    var msgEl = document.getElementById('csStoryLoadMsg');
+    if (msgEl) msgEl.remove();
+    textEl.textContent = "Couldn't generate the story right now. Try again.";
     console.error('Story mode error:', e);
   });
 }
 
+// Get the 3 concept objects currently showing in the picker candidates
+function _csGetPickerCandidates() {
+  var list = document.getElementById('csCandidateList');
+  if (!list) return [];
+  var cards = list.querySelectorAll('.cs-candidate[data-concept-id]');
+  var concepts = [];
+  cards.forEach(function(card) {
+    var id = parseInt(card.dataset.conceptId, 10);
+    var concept = CONCEPTS.find(function(c) { return c.id === id; });
+    if (concept) concepts.push(concept);
+  });
+  return concepts;
+}
+
+// After story generates, repopulate candidate cards to match story concepts
+// Collapses all cards, updates term labels — user can expand to read more
+function _csStoryRepopulateCandidates(concepts) {
+  var list = document.getElementById('csCandidateList');
+  if (!list) return;
+  // Already showing the right cards — just collapse them all and add a note
+  list.querySelectorAll('.cs-candidate').forEach(function(card) {
+    card.classList.remove('open');
+    // Hide the generate buttons — story already created
+    var genBtn = card.querySelector('.cs-candidate-generate-btn');
+    if (genBtn) genBtn.style.display = 'none';
+    // Add a "Read more ↓" hint
+    var hint = card.querySelector('.cs-candidate-term');
+    if (hint && !hint.dataset.storyTagged) {
+      hint.dataset.storyTagged = '1';
+      var badge = document.createElement('span');
+      badge.style.cssText = "font-family:'DM Mono',monospace;font-size:0.52rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-left:8px;vertical-align:middle;";
+      badge.textContent = '↓ in the story';
+      hint.appendChild(badge);
+    }
+  });
+}
 // Close Story Mode — return to State 1 (post-generate)
 function _csCloseStoryMode() {
   _csDismissTermPopups();
-  const panel = document.getElementById('csStoryPanel');
+  var panel = document.getElementById('csStoryPanel');
   panel.classList.remove('cs-visible');
 
-  // Restore inline display overrides set by _csOpenStoryMode
-  ['csConceptPill','csPromptBlock','csGenerateRow'].forEach(function(id) {
-    const el = document.getElementById(id);
-    if (el) el.style.display = '';
-  });
-  // These are class-controlled — clear the inline override, let the class decide
-  ['csCoaching','csDivider','csFeedbackRow','csActions','csRevealRow'].forEach(function(id) {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.style.display = '';
-    // If they should be visible (cs-visible class), make sure they are
+  // Clear any stale story tag badges on candidate cards
+  document.querySelectorAll('.cs-candidate-term[data-story-tagged]').forEach(function(el) {
+    el.removeAttribute('data-story-tagged');
+    var badge = el.querySelector('span');
+    if (badge) badge.remove();
   });
 
-  // Re-show story button if concept still has enough related
-  if (_csConcept && _csConcept.related_ids && _csConcept.related_ids.length >= 2) {
-    const sb = document.getElementById('csStoryBtn');
-    if (sb) { sb.style.display = ''; sb.classList.remove('cs-hidden'); sb.classList.add('cs-visible'); }
+  // Restore picker wrap
+  var pickerWrap = document.getElementById('csTopicPickerWrap');
+  if (pickerWrap) pickerWrap.style.display = '';
+  var storyBtn = document.getElementById('csPickerStoryBtn');
+  if (storyBtn && document.querySelectorAll('#csCandidateList .cs-candidate').length >= 2) {
+    storyBtn.style.display = '';
   }
+  // Restore generate buttons in candidate cards
+  document.querySelectorAll('.cs-candidate-generate-btn').forEach(function(btn) {
+    btn.style.display = '';
+  });
 }
 
 // Story term popups — floating cards that pop out left of panel
@@ -9632,14 +9703,12 @@ function _csHidePostPrompt() {
     const el = document.getElementById(id);
     if (el) el.classList.remove('active');
   });
-  // Hide story button when loading new concept
-  const sb = document.getElementById('csStoryBtn');
-  if (sb) { sb.classList.add('cs-hidden'); sb.classList.remove('cs-visible'); }
+  // Story button lives in picker — no action needed here
 }
 
 // Full hide — used only on modal open before first concept loads
 function _csHideAll() {
-  ['csCoaching','csDivider','csFeedbackRow','csActions','csRevealRow','csStoryBtn'].forEach(function(id) {
+  ['csCoaching','csDivider','csFeedbackRow','csActions','csRevealRow'].forEach(function(id) {
     const el = document.getElementById(id);
     if (el) { el.classList.add('cs-hidden'); el.classList.remove('cs-visible'); }
   });
@@ -9650,13 +9719,7 @@ function _csShowPostPrompt() {
     const el = document.getElementById(id);
     if (el) { el.classList.remove('cs-hidden'); el.classList.add('cs-visible'); }
   });
-  // Show story button only if current concept has ≥2 related concepts
-  const sb = document.getElementById('csStoryBtn');
-  if (sb && _csConcept) {
-    const hasEnough = _csConcept.related_ids && _csConcept.related_ids.length >= 2;
-    if (hasEnough) { sb.classList.remove('cs-hidden'); sb.classList.add('cs-visible'); }
-    else { sb.classList.add('cs-hidden'); sb.classList.remove('cs-visible'); }
-  }
+  // Story button now lives in picker — nothing to do here
 }
 
 // Help ? button — mobile tap opens overlay, desktop hover shows bubble
@@ -9719,6 +9782,11 @@ function _csToggleTopicReveal() {
   if (list) list.innerHTML = '';
   const moreBtn = document.getElementById('csPickerMoreBtn');
   if (moreBtn) moreBtn.style.display = 'none';
+  // Hide story button and panel when picker resets
+  var sb2 = document.getElementById('csPickerStoryBtn');
+  if (sb2) sb2.style.display = 'none';
+  var sp2 = document.getElementById('csStoryPanel');
+  if (sp2) sp2.classList.remove('cs-visible');
 }
 
 // Toggle scenario reveal — stays open until clicked again
