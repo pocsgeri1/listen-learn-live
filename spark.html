@@ -9360,22 +9360,21 @@ function _csParseStoryLabels(storyText, conceptsUsed) {
   });
 
   // Wrap in paragraphs for readability
-  // If API returned 
-
- breaks, use those; otherwise split after 2 sentences
-  const doubleBreak = processed.split(/
-{2,}/).filter(function(p) { return p.trim(); });
-  if (doubleBreak.length > 1) {
+  // If API returned double-newline breaks, use those; otherwise split after 2 sentences
+  // Split on double newlines if present; otherwise group every 2 sentences
+  var nlBreak = processed.indexOf('\n\n');
+  if (nlBreak !== -1) {
+    var doubleBreak = processed.split('\n\n').filter(function(p) { return p.trim(); });
     return doubleBreak.map(function(p) {
       return '<p style="margin:0 0 0.85em;">' + p.trim() + '</p>';
     }).join('');
   }
   // Fallback: group every ~2 sentences into a paragraph
-  const parts = processed.split(/(?<=[.!?])\s+(?=[A-Z<])/);
+  var parts = processed.split(/(?<=[.!?]) +(?=[A-Z<])/);
   if (parts.length <= 2) return '<p>' + processed + '</p>';
-  const chunks = [];
-  for (let i = 0; i < parts.length; i += 2) {
-    const chunk = parts.slice(i, i + 2).join(' ').trim();
+  var chunks = [];
+  for (var i = 0; i < parts.length; i += 2) {
+    var chunk = parts.slice(i, i + 2).join(' ').trim();
     if (chunk) chunks.push(chunk);
   }
   return chunks.map(function(c) {
