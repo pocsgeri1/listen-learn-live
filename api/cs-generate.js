@@ -47,7 +47,7 @@ The person reading this is about to have ${scene}.
 
 Write a single short story (maximum 150 words) that weaves all ${storyConcepts.length} ideas together naturally.
 
-CRITICAL — label rule: immediately after the sentence where each concept is clearly illustrated, append the concept term as a plain inline label in this exact format: [[LABEL:${labelList.split(', ').map((l, i) => `${storyConcepts[i].term}`).join('|')}]] — use exactly [[LABEL:Term]] right after the relevant sentence ends, before the next sentence begins. One label per concept, placed after its moment in the story.
+LABEL RULE — mandatory: after each sentence that illustrates one of the ideas, immediately insert [[LABEL:ExactTermHere]] with no space before it. The labels to use are: ${storyConcepts.map(c => '[[LABEL:' + c.term + ']]').join(', ')}. Place each label exactly once, right after the sentence that shows that idea. Example: "She smiled and changed the subject.[[LABEL:Sunk Cost Fallacy]] He didn't notice."
 
 Story rules:
 - Open with one sentence that makes the reader go "huh, that's interesting"
