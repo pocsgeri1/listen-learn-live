@@ -3311,6 +3311,7 @@
   .cs-term-popup {
     position: fixed;
     width: 210px;
+    min-height: 100px;
     background: var(--surface2, #181818);
     border: 1px solid var(--border);
     border-radius: 10px;
@@ -5886,7 +5887,6 @@
       <button class="cs-picker-more-btn" id="csPickerMoreBtn" onclick="_csPickerMore()">More ideas →</button>
     </div>
     <button class="cs-story-btn" id="csPickerStoryBtn" onclick="_csOpenStoryMode()">★ See how these connect</button>
-    <button class="cs-story-btn" id="csPickerStoryBackBtn" onclick="_csReopenStory()" style="display:none;margin-left:6px;">↩ Back to short story</button>
 
     <!-- Scenario buttons — expands below the reveal row -->
     <div class="cs-reveal-section" id="csScenarioSection">
@@ -5921,7 +5921,7 @@
 
     <!-- State 5 — Story Mode panel -->
     <div class="cs-story-panel" id="csStoryPanel">
-      <div class="cs-story-eyebrow">A SHORT STORY</div>
+      <div class="cs-story-eyebrow" id="csStoryEyebrow">A SHORT STORY</div>
       <div class="cs-story-text" id="csStoryText"></div>
       <div class="cs-story-opener" id="csStoryOpener" style="display:none">
         <div class="cs-story-opener-label">Say this tonight →</div>
@@ -5951,6 +5951,7 @@
     <div class="cs-actions cs-post-prompt cs-hidden" id="csActions">
       <button class="cs-btn cs-btn--primary" id="csShareBtn">↑ Copy &amp; Share</button>
       <button class="cs-btn cs-btn--surprise" id="csSurpriseBtn">✦ Surprise me</button>
+      <button class="cs-btn" id="csBackToStoryBtn" onclick="_csReopenStory()" style="display:none;font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.08em;text-transform:uppercase;background:transparent;border:1px solid var(--border);border-radius:20px;padding:5px 14px;color:var(--muted2);cursor:pointer;">↩ Story</button>
       <div style="display:flex;gap:6px;margin-left:auto">
         <button class="cs-nav-btn" id="csPrevBtn" title="Previous concept" disabled>⤺</button>
         <button class="cs-nav-btn" id="csNextBtn" title="Next concept">⤻</button>
@@ -8291,15 +8292,18 @@ function spScenarioPill(el, scenario) {
     const rest = withRelated.concat(withoutRelated).slice(0, 2);
     const candidates = [primary].concat(rest);
 
-    // Set scenario context
+    // Set concept silently (no AI call, no panel state change — story mode handles everything)
     _csCtx = scenario;
+    _csConcept = primary;
     _csCat = primary.category;
+    _csAIData = null;
+    _renderCSShell(primary);
+    _csPushToStack(primary);
 
-    // Open panel, load concept, then inject candidates and go straight to story
+    // Open panel, then inject candidates and go straight to story
     _csOpenPanel();
-    _csLoadNewConcept(primary);
 
-    // After a brief tick (panel open + concept render), inject candidates and trigger story
+    // After a brief tick (panel open), inject candidates and trigger story
     setTimeout(function() {
       _csInjectCandidatesAndStory(candidates, scenario);
     }, 350);
@@ -8311,12 +8315,11 @@ function spScenarioPill(el, scenario) {
 
 // Inject picker candidates programmatically and trigger story mode
 function _csInjectCandidatesAndStory(concepts, scenario) {
-  // Show the picker wrap with our pre-chosen candidates
   var pickerWrap = document.getElementById('csTopicPickerWrap');
   var candidateList = document.getElementById('csCandidateList');
   if (!pickerWrap || !candidateList) return;
 
-  // Build candidate cards (same structure as _csPickerRenderCandidates)
+  // Build candidate cards
   candidateList.innerHTML = '';
   concepts.forEach(function(c) {
     var color = (typeof CAT_COLOR !== 'undefined' && CAT_COLOR[c.category]) || '#e8d5a3';
@@ -8328,18 +8331,18 @@ function _csInjectCandidatesAndStory(concepts, scenario) {
     candidateList.appendChild(card);
   });
 
-  // Show picker wrap, hide main content
+  // Activate picker wrap + hide main concept elements
   _csPickerHideMain();
   pickerWrap.classList.add('active');
-  pickerWrap.style.display = '';
 
-  // Show story button, then trigger story mode directly
+  // Show "See how these connect" button
   var storyBtn = document.getElementById('csPickerStoryBtn');
   if (storyBtn) storyBtn.classList.add('cs-visible');
 
+  // Trigger story mode immediately
   setTimeout(function() {
     _csOpenStoryMode();
-  }, 100);
+  }, 80);
 }
 
 // ============================================
@@ -8850,7 +8853,6 @@ function _csPickerHideMain() {
 }
 
 function _csPickerShowMain() {
-  _csStoryGenerated = false; // reset story state on new concept load
   // Restore main state after picker closes
   // _csPickerHideMain set inline display:none on all these — must clear ALL of them
   // before _applyAIToCtx or _csShowPostPrompt can make coaching visible
@@ -9188,6 +9190,9 @@ function _csPickForCat(cat, deterministic) {
 function _csLoadNewConcept(concept) {
   _csConcept = concept;
   _csAIData  = null; // clear ALL previous concept's aiData — prevents badge bleed
+  _csStoryGenerated = false; // new concept = new story state
+  var backBtn = document.getElementById('csBackToStoryBtn');
+  if (backBtn) backBtn.style.display = 'none';
   // Clear has-prompt badges immediately
   document.querySelectorAll('.cs-ctx-btn').forEach(function(b) { b.classList.remove('has-prompt'); });
   _renderCSShell(concept);
@@ -9482,15 +9487,26 @@ function _csParseStoryLabels(storyText, conceptsUsed) {
 let _csStoryGenerated = false; // true after a story has been generated for current candidate set
 
 function _csReopenStory() {
-  // Re-show the story panel without re-fetching — story already in DOM
+  // Re-enter story mode: re-inject the last set of candidates and re-show the story panel
+  // (story text is still in the DOM from the previous generation)
+  if (!_csStoryGenerated) return;
   var pickerWrap = document.getElementById('csTopicPickerWrap');
   var storyBtn = document.getElementById('csPickerStoryBtn');
-  var storyBackBtn = document.getElementById('csPickerStoryBackBtn');
-  if (pickerWrap) pickerWrap.style.display = 'none';
-  if (storyBtn) storyBtn.classList.remove('cs-visible');
-  if (storyBackBtn) storyBackBtn.style.display = 'none';
+  var backToStoryBtn = document.getElementById('csBackToStoryBtn');
+
+  // Hide concept main area
+  _csPickerHideMain();
+  if (pickerWrap) pickerWrap.classList.add('active');
+  if (storyBtn) storyBtn.classList.remove('cs-visible'); // hide "see how these connect" — story already done
+  if (backToStoryBtn) backToStoryBtn.style.display = 'none';
+
+  // Re-show story panel (text + opener are still in DOM)
   var panel = document.getElementById('csStoryPanel');
   if (panel) panel.classList.add('cs-visible');
+
+  // Restore headline
+  var headline = document.getElementById('csHeadline');
+  if (headline) headline.textContent = 'A Short Story';
 }
 
 function _csOpenStoryMode() {
@@ -9498,6 +9514,20 @@ function _csOpenStoryMode() {
 
   var headline = document.getElementById('csHeadline');
   if (headline) headline.textContent = 'A Short Story';
+
+  // Scenario-aware eyebrow label
+  var _spCtxLabels = {
+    friend: 'A SHORT STORY — with a friend',
+    dinner: 'A SHORT STORY — at a dinner party',
+    date: 'A SHORT STORY — on a date',
+    work: 'A SHORT STORY — at work',
+    family: 'A SHORT STORY — with family',
+    networking: 'A SHORT STORY — networking',
+    podcast: 'A SHORT STORY — podcast talk',
+    solo: 'A SHORT STORY — thinking it through'
+  };
+  var eyebrow = document.getElementById('csStoryEyebrow');
+  if (eyebrow) eyebrow.textContent = (_csCtx && _spCtxLabels[_csCtx]) ? _spCtxLabels[_csCtx] : 'A SHORT STORY';
 
   // Get concepts from the picker candidates (the 3 shown after Change Topic)
   var pickerConcepts = _csGetPickerCandidates();
@@ -9647,34 +9677,49 @@ function _csStoryRepopulateCandidates(concepts) {
 // Close Story Mode — return to State 1 (post-generate)
 function _csCloseStoryMode() {
   _csDismissTermPopups();
+
+  // Hide story panel
   var panel = document.getElementById('csStoryPanel');
-  panel.classList.remove('cs-visible');
+  if (panel) panel.classList.remove('cs-visible');
+
+  // Restore headline
   var headline = document.getElementById('csHeadline');
   if (headline) headline.textContent = "Today's Conversation Starter";
 
-  // Clear any stale story tag badges on candidate cards
+  // Clear stale story tag badges
   document.querySelectorAll('.cs-candidate-term[data-story-tagged]').forEach(function(el) {
     el.removeAttribute('data-story-tagged');
     var badge = el.querySelector('span');
     if (badge) badge.remove();
   });
 
-  // Restore picker wrap
+  // IMPORTANT: close the picker entirely and restore the concept view
+  // _csCloseStoryMode is "Back to starter" — should show concept + prompt, not picker
   var pickerWrap = document.getElementById('csTopicPickerWrap');
-  if (pickerWrap) pickerWrap.style.display = '';
+  if (pickerWrap) {
+    pickerWrap.classList.remove('active');
+    pickerWrap.style.display = '';
+  }
+
+  // Hide story button (picker is closed)
   var storyBtn = document.getElementById('csPickerStoryBtn');
-  var storyBackBtn = document.getElementById('csPickerStoryBackBtn');
-  if (storyBtn && document.querySelectorAll('#csCandidateList .cs-candidate').length >= 2) {
-    storyBtn.classList.add('cs-visible');
-  }
-  // Show "Back to short story" button if story was already generated
-  if (storyBackBtn) {
-    storyBackBtn.style.display = _csStoryGenerated ? 'inline-flex' : 'none';
-  }
+  if (storyBtn) storyBtn.classList.remove('cs-visible');
+
+  // Restore reveal topic link state
+  var topicLnk = document.getElementById('csRevealTopic');
+  if (topicLnk) topicLnk.classList.remove('active');
+
   // Restore generate buttons in candidate cards
   document.querySelectorAll('.cs-candidate-generate-btn').forEach(function(btn) {
     btn.style.display = '';
   });
+
+  // Restore main concept view (concept pill + prompt + coaching if AI ready)
+  _csPickerShowMain();
+
+  // Show "↩ Story" button in actions row if story was generated
+  var backToStoryBtn = document.getElementById('csBackToStoryBtn');
+  if (backToStoryBtn) backToStoryBtn.style.display = _csStoryGenerated ? '' : 'none';
 }
 
 // Story term popups — floating cards that pop out left of panel
@@ -9719,12 +9764,16 @@ function _csShowTermPopups() {
       '<div class="cs-term-popup-term">' + _escHtml(c.term) + '</div>' +
       '<div class="cs-term-popup-plain">' + _escHtml(c.plain || '') + '</div>';
 
-    // Stack vertically: each card 145px apart, anchored to panel top-left; clamp to viewport bottom
-    const cardHeight = 130;
-    const rawTop = panelRect.top + 120 + (i * (cardHeight + 15));
-    const topOffset = Math.min(rawTop, window.innerHeight - cardHeight - 10);
+    // Stack vertically left of panel: 150px per card, start 80px from panel top
+    // Each card gets its own independent top; no shared clamp (avoids overlap on small viewports)
+    const cardH = 140;
+    const startTop = panelRect.top + 80;
+    const rawTop = startTop + (i * (cardH + 10));
+    // Per-card: if it would overflow viewport bottom, anchor from bottom instead
+    const maxTop = window.innerHeight - cardH - 8;
+    const topOffset = Math.min(rawTop, maxTop - ((_csStoryTermConcepts.length - 1 - i) * 0));
     const leftOffset = panelRect.left - 226; // 210px card + 16px gap
-    el.style.top = topOffset + 'px';
+    el.style.top = Math.max(60, topOffset) + 'px';
     el.style.left = Math.max(8, leftOffset) + 'px';
     el.style.transitionDelay = (i * 70) + 'ms';
 
@@ -9789,45 +9838,76 @@ function _convRenderStories() {
   }
 
   container.innerHTML = '';
-  stories.forEach(function(entry, i) {
+  stories.forEach(function(entry) {
     const wrap = document.createElement('div');
-    wrap.style.cssText = 'border-bottom:1px solid var(--border);padding:16px 22px;';
+    wrap.style.cssText = 'border-bottom:1px solid var(--border);padding:18px 22px 16px;';
 
-    // Concept pills row
+    // Clickable concept pills — clicking triggers reveal popup for that concept
     const pills = document.createElement('div');
-    pills.style.cssText = 'display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px;';
+    pills.style.cssText = 'display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px;';
     (entry.conceptTerms || [entry.term]).forEach(function(term, j) {
       const cat = (entry.conceptCategories || [])[j] || '';
+      const conceptId = (entry.conceptIds || [])[j];
       const color = (typeof CAT_COLOR !== 'undefined' && CAT_COLOR[cat]) || '#e8d5a3';
-      const pill = document.createElement('span');
-      pill.style.cssText = 'font-family:\'DM Mono\',monospace;font-size:0.52rem;letter-spacing:0.09em;text-transform:uppercase;border:1px solid ' + color + ';border-radius:20px;padding:2px 8px;color:' + color + ';';
+      const pill = document.createElement('button');
+      pill.style.cssText = 'font-family:\'DM Mono\',monospace;font-size:0.52rem;letter-spacing:0.09em;text-transform:uppercase;border:1px solid ' + color + ';border-radius:20px;padding:3px 10px;color:' + color + ';background:transparent;cursor:pointer;transition:background 0.15s;';
       pill.textContent = term;
+      // Click → show term popup (same as reveal terms)
+      pill.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const concept = conceptId && typeof CONCEPTS !== 'undefined'
+          ? CONCEPTS.find(function(c) { return c.id === conceptId; })
+          : null;
+        if (concept) _csShowSingleTermPopup(concept, pill);
+      });
+      pill.addEventListener('mouseover', function() { pill.style.background = color + '22'; });
+      pill.addEventListener('mouseout', function() { pill.style.background = 'transparent'; });
       pills.appendChild(pill);
     });
     wrap.appendChild(pills);
 
-    // Story text (2-line clamp, expand on click)
+    // Story text: formatted in paragraphs (collapsed to 3 lines, expand on click)
+    const storyText = entry.story || '';
+    // Split into paragraphs on double newline; fallback: split every ~2 sentences
+    const paragraphs = storyText.indexOf('\n\n') !== -1
+      ? storyText.split('\n\n').filter(function(p) { return p.trim(); })
+      : _csChunkSentences(storyText, 2);
+
     const storyEl = document.createElement('div');
-    storyEl.style.cssText = 'font-family:\'Playfair Display\',serif;font-size:0.82rem;line-height:1.7;color:var(--text);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer;';
-    storyEl.textContent = entry.story || '';
+    storyEl.style.cssText = 'cursor:pointer;';
+
+    // Build paragraph elements
+    const parasEl = document.createElement('div');
+    parasEl.style.cssText = 'font-family:\'Playfair Display\',serif;font-size:0.84rem;line-height:1.85;color:var(--text);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;';
+    paragraphs.forEach(function(p) {
+      const pEl = document.createElement('p');
+      pEl.style.cssText = 'margin:0 0 0.7em;';
+      pEl.textContent = p.trim();
+      parasEl.appendChild(pEl);
+    });
+    storyEl.appendChild(parasEl);
+
     let expanded = false;
     storyEl.addEventListener('click', function() {
       expanded = !expanded;
       if (expanded) {
-        storyEl.style.webkitLineClamp = 'unset';
-        storyEl.style.overflow = 'visible';
+        parasEl.style.webkitLineClamp = 'unset';
+        parasEl.style.overflow = 'visible';
+        // Show opener
         if (entry.opener && !wrap.querySelector('.story-opener-row')) {
           const opRow = document.createElement('div');
           opRow.className = 'story-opener-row';
           opRow.style.cssText = 'margin-top:10px;border-left:2px solid var(--accent);padding:7px 12px;background:var(--surface2);border-radius:0 6px 6px 0;';
           opRow.innerHTML = '<div style="font-family:\'DM Mono\',monospace;font-size:0.52rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:4px;">Say this →</div><div style="font-family:\'DM Sans\',sans-serif;font-size:0.76rem;color:var(--accent);font-style:italic;line-height:1.45;">' + _escHtml(entry.opener) + '</div>';
-          wrap.appendChild(opRow);
+          storyEl.appendChild(opRow);
         }
+        ts.textContent = d ? d.toLocaleDateString('en-GB', { day:'numeric', month:'short' }) + ' · tap to collapse' : '';
       } else {
-        storyEl.style.webkitLineClamp = '2';
-        storyEl.style.overflow = 'hidden';
-        const opRow = wrap.querySelector('.story-opener-row');
+        parasEl.style.webkitLineClamp = '3';
+        parasEl.style.overflow = 'hidden';
+        const opRow = storyEl.querySelector('.story-opener-row');
         if (opRow) opRow.remove();
+        ts.textContent = d ? d.toLocaleDateString('en-GB', { day:'numeric', month:'short' }) + ' · tap to expand' : '';
       }
     });
     wrap.appendChild(storyEl);
@@ -9835,14 +9915,52 @@ function _convRenderStories() {
     // Timestamp
     const ts = document.createElement('div');
     ts.style.cssText = 'font-family:\'DM Mono\',monospace;font-size:0.52rem;letter-spacing:0.08em;color:var(--muted);margin-top:8px;';
-    if (entry.ts) {
-      const d = new Date(entry.ts);
-      ts.textContent = d.toLocaleDateString('en-GB', { day:'numeric', month:'short' }) + ' · tap to expand';
-    }
+    var d = entry.ts ? new Date(entry.ts) : null;
+    ts.textContent = d ? d.toLocaleDateString('en-GB', { day:'numeric', month:'short' }) + ' · tap to expand' : '';
     wrap.appendChild(ts);
 
     container.appendChild(wrap);
   });
+}
+
+// Helper: split story text into chunks of N sentences each
+function _csChunkSentences(text, n) {
+  var sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
+  var chunks = [];
+  for (var i = 0; i < sentences.length; i += n) {
+    chunks.push(sentences.slice(i, i + n).join(' '));
+  }
+  return chunks;
+}
+
+// Show a single term popup anchored near a given element (used from Stories tab)
+function _csShowSingleTermPopup(concept, anchorEl) {
+  // Dismiss any existing popups first
+  _csDismissTermPopups();
+  const color = (typeof CAT_COLOR !== 'undefined' && CAT_COLOR[concept.category]) || '#e8d5a3';
+  const el = document.createElement('div');
+  el.className = 'cs-term-popup';
+  el.innerHTML =
+    '<div class="cs-term-popup-cat" style="color:' + color + '">' + _escHtml(concept.category || '') + '</div>' +
+    '<div class="cs-term-popup-term">' + _escHtml(concept.term) + '</div>' +
+    '<div class="cs-term-popup-plain">' + _escHtml(concept.plain || '') + '</div>';
+
+  // Position near anchor element
+  const rect = anchorEl.getBoundingClientRect();
+  const panel = document.getElementById('convPanel');
+  const panelRect = panel ? panel.getBoundingClientRect() : { left: window.innerWidth };
+  const leftPos = Math.max(8, panelRect.left - 226);
+  const topPos = Math.min(rect.top, window.innerHeight - 150);
+  el.style.top = topPos + 'px';
+  el.style.left = leftPos + 'px';
+
+  el.addEventListener('click', function() { _csDismissTermPopups(); });
+  document.body.appendChild(el);
+  _csTermPopupEls.push(el);
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() { el.classList.add('cs-term-visible'); });
+  });
+  _csTermPopupsVisible = true;
 }
 
 // Copy full story text
@@ -9943,6 +10061,15 @@ function _csToggleTopicReveal() {
   // Open picker
   if (lnk) lnk.classList.add('active');
   playBubblePopSFX();
+
+  // If story panel is open, close it first — Change Topic exits story mode
+  var storyPanel = document.getElementById('csStoryPanel');
+  if (storyPanel && storyPanel.classList.contains('cs-visible')) {
+    storyPanel.classList.remove('cs-visible');
+    _csDismissTermPopups();
+    var hl = document.getElementById('csHeadline');
+    if (hl) hl.textContent = "Today's Conversation Starter";
+  }
 
   // Hide scenario if open
   const sc = document.getElementById('csScenarioSection');
