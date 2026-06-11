@@ -6,29 +6,38 @@
 <style>
 body{font-family:-apple-system,sans-serif;background:#0d0d0d;color:#f0ede8;padding:2rem;max-width:660px;margin:0 auto}
 h1{font-size:16px;margin-bottom:4px}
-p{color:#6b6b6b;font-size:12px;margin-bottom:1.5rem}
-.progress-wrap{background:#141414;border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:1rem;margin-bottom:1rem}
-.progress-label{font-family:monospace;font-size:10px;color:#6b6b6b;letter-spacing:.1em;margin-bottom:8px}
-.progress-bar-outer{height:6px;background:#1c1c1c;border-radius:3px;margin-bottom:8px}
-.progress-bar-inner{height:6px;width:0%;background:#e8d5a3;border-radius:3px;transition:width .3s}
-.progress-status{font-size:12px;color:#9a9a9a}
+p{color:#6b6b6b;font-size:12px;margin-bottom:1rem}
+.pw{background:#141414;border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:1rem;margin-bottom:1rem}
+.pl{font-family:monospace;font-size:10px;color:#6b6b6b;letter-spacing:.1em;margin-bottom:8px}
+.po{height:6px;background:#1c1c1c;border-radius:3px;margin-bottom:8px}
+.pi{height:6px;width:0%;background:#e8d5a3;border-radius:3px;transition:width .3s}
+.ps{font-size:12px;color:#9a9a9a}
+.row{display:flex;gap:8px;align-items:center;margin-bottom:.5rem}
+.row label{font-size:12px;color:#9a9a9a;white-space:nowrap}
+.row input{background:#1c1c1c;border:1px solid rgba(255,255,255,0.1);border-radius:5px;color:#f0ede8;font-size:12px;padding:5px 8px;width:60px;text-align:center}
 button{background:none;border:1px solid rgba(255,255,255,0.15);border-radius:6px;color:#e8d5a3;font-size:13px;padding:7px 14px;cursor:pointer;margin-right:8px;margin-bottom:1rem}
 button:hover{background:#1c1c1c}
 button:disabled{opacity:.4;cursor:not-allowed}
-#log{font-family:monospace;font-size:11px;color:#9a9a9a;background:#0a0a0a;border:1px solid rgba(255,255,255,0.07);border-radius:6px;padding:10px;height:260px;overflow-y:auto;white-space:pre-wrap;line-height:1.6}
+#log{font-family:monospace;font-size:11px;color:#9a9a9a;background:#0a0a0a;border:1px solid rgba(255,255,255,0.07);border-radius:6px;padding:10px;height:280px;overflow-y:auto;white-space:pre-wrap;line-height:1.6}
 </style>
 </head>
 <body>
 <h1>Epistemic — Collection Curation</h1>
-<p>Runs 20 batches of 30 concepts each — small enough for Vercel Hobby timeout. Click Run and wait ~5 minutes.</p>
+<p>584 concepts · 20 batches of 30 · auto-resumes if interrupted</p>
 
-<div class="progress-wrap">
-  <div class="progress-label">OVERALL PROGRESS</div>
-  <div class="progress-bar-outer"><div class="progress-bar-inner" id="mainBar"></div></div>
-  <div class="progress-status" id="mainStatus">Ready — 584 concepts across 20 batches</div>
+<div class="pw">
+  <div class="pl">OVERALL PROGRESS</div>
+  <div class="po"><div class="pi" id="mainBar"></div></div>
+  <div class="ps" id="mainStatus">Ready</div>
 </div>
 
-<button id="runBtn" onclick="run()">Run all 20 batches</button>
+<div class="row">
+  <label>Start from batch:</label>
+  <input type="number" id="startBatch" value="1" min="1" max="20" />
+  <span style="font-size:11px;color:#6b6b6b">(change this to resume after an error)</span>
+</div>
+
+<button id="runBtn" onclick="run()">Run</button>
 <button id="dlBtn" onclick="dl()" style="display:none">Download patch JSON</button>
 <div id="log">Awaiting run...</div>
 
@@ -40,6 +49,14 @@ var results = [];
 function log(m){var e=document.getElementById('log');e.textContent+=m+'\n';e.scrollTop=e.scrollHeight}
 function setMain(pct,msg){document.getElementById('mainBar').style.width=pct+'%';document.getElementById('mainStatus').textContent=msg}
 
+function cleanAndParse(text){
+  // Strip markdown fences
+  text = text.trim().replace(/^```json\n?|^```\n?|\n?```$/g,'').trim();
+  // Fix trailing commas before ] or }
+  text = text.replace(/,\s*]/g,']').replace(/,\s*}/g,'}');
+  return JSON.parse(text);
+}
+
 async function callBatch(concepts){
   var res=await fetch('/api/curate-batch',{
     method:'POST',
@@ -48,30 +65,42 @@ async function callBatch(concepts){
   });
   var data=await res.json();
   if(data.error)throw new Error(data.error);
-  return data.result;
+  // data.result is already parsed by the server, but handle raw text fallback
+  if(data.result) return data.result;
+  if(data.text) return cleanAndParse(data.text);
+  throw new Error('No result in response');
 }
 
 async function run(){
+  var startFrom = parseInt(document.getElementById('startBatch').value)||1;
+  startFrom = Math.max(1,Math.min(startFrom,BATCHES.length));
+
   document.getElementById('runBtn').disabled=true;
   document.getElementById('runBtn').textContent='Running...';
-  results=[];
 
-  for(var i=0;i<BATCHES.length;i++){
+  if(startFrom===1) results=[];
+
+  for(var i=startFrom-1;i<BATCHES.length;i++){
     var batch=BATCHES[i];
-    var pct=Math.round((i/BATCHES.length)*100);
-    setMain(pct,'Batch '+(i+1)+' of '+BATCHES.length+' — concepts '+batch[0].id+'-'+batch[batch.length-1].id);
-    log('Batch '+(i+1)+'/'+BATCHES.length+' ('+batch.length+' concepts, ids '+batch[0].id+'-'+batch[batch.length-1].id+')...');
+    var pct=Math.round(((i)/BATCHES.length)*100);
+    var firstId=batch[0].id, lastId=batch[batch.length-1].id;
+    setMain(pct,'Batch '+(i+1)+' of '+BATCHES.length+' (ids '+firstId+'-'+lastId+')');
+    log('Batch '+(i+1)+'/'+ BATCHES.length+' ('+batch.length+' concepts, ids '+firstId+'-'+lastId+')...');
     try{
       var r=await callBatch(batch);
       var n=r.filter(function(c){return c.curated_collection_ids.length>0}).length;
       results=results.concat(r);
       log('  Done. '+n+'/'+r.length+' assigned.');
+      // Save progress to localStorage so page refresh doesn't lose work
+      localStorage.setItem('curation_results', JSON.stringify(results));
+      localStorage.setItem('curation_next_batch', String(i+2));
     }catch(e){
-      log('  ERROR: '+e.message);
-      log('  Stopping. Fix the error and retry.');
-      setMain(pct,'Error on batch '+(i+1));
+      log('  ERROR on batch '+(i+1)+': '+e.message);
+      log('  Change "Start from batch" to '+(i+1)+' and click Run again to resume.');
+      document.getElementById('startBatch').value = i+1;
+      setMain(pct,'Error on batch '+(i+1)+' — change start batch and retry');
       document.getElementById('runBtn').disabled=false;
-      document.getElementById('runBtn').textContent='Retry';
+      document.getElementById('runBtn').textContent='Resume';
       return;
     }
   }
@@ -85,9 +114,23 @@ async function run(){
   COLS.forEach(function(c){tally[c.id]={title:c.title,count:0}});
   results.forEach(function(c){c.curated_collection_ids.forEach(function(id){if(tally[id])tally[id].count++})});
   COLS.forEach(function(c){log('  ['+c.id+'] '+c.title+': '+tally[c.id].count)});
+  localStorage.removeItem('curation_results');
+  localStorage.removeItem('curation_next_batch');
   document.getElementById('dlBtn').style.display='inline-block';
   document.getElementById('runBtn').textContent='Complete';
 }
+
+// Restore from localStorage on page load
+window.onload = function(){
+  var saved = localStorage.getItem('curation_results');
+  var nextBatch = localStorage.getItem('curation_next_batch');
+  if(saved && nextBatch){
+    results = JSON.parse(saved);
+    document.getElementById('startBatch').value = nextBatch;
+    document.getElementById('runBtn').textContent = 'Resume from batch '+nextBatch;
+    log('Found saved progress: '+results.length+' concepts done. Start from batch '+nextBatch+' to resume.');
+  }
+};
 
 function dl(){
   var blob=new Blob([JSON.stringify(results,null,2)],{type:'application/json'});
