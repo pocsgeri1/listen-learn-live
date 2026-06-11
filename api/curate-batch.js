@@ -1,7 +1,4 @@
 // api/curate-batch.js
-// POST { concepts: [...], collections: [...] }
-// Returns { result: [...] }
-
 export const maxDuration = 60;
 
 export default async function handler(req, res) {
@@ -40,7 +37,7 @@ No preamble. No markdown. Pure JSON only.`;
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-5',
-        max_tokens: 8000,
+        max_tokens: 4000,
         messages: [{ role: 'user', content: prompt }]
       })
     });
@@ -48,7 +45,12 @@ No preamble. No markdown. Pure JSON only.`;
     const data = await response.json();
     if (data.error) return res.status(500).json({ error: data.error.message });
 
-    const text = data.content[0].text.trim().replace(/^```json\n?|^```\n?|\n?```$/g, '').trim();
+    let text = data.content[0].text.trim();
+    // Strip markdown fences
+    text = text.replace(/^```json\n?|^```\n?|\n?```$/g, '').trim();
+    // Fix trailing commas before ] or }
+    text = text.replace(/,\s*]/g, ']').replace(/,\s*}/g, '}');
+
     const result = JSON.parse(text);
     return res.status(200).json({ result });
   } catch (e) {
