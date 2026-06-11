@@ -3319,7 +3319,7 @@
     opacity: 0;
     pointer-events: none;
     transform: translateX(12px) scale(0.94);
-    transition: opacity 0.22s ease, transform 0.26s cubic-bezier(0.34, 1.3, 0.64, 1);
+    transition: opacity 0.22s ease, transform 0.26s cubic-bezier(0.34, 1.3, 0.64, 1), box-shadow 0.2s ease, z-index 0s;
     z-index: 4000;
     box-shadow: 0 6px 24px rgba(0,0,0,0.22);
   }
@@ -3327,6 +3327,13 @@
     opacity: 1;
     pointer-events: auto;
     transform: translateX(0) scale(1);
+  }
+  .cs-term-popup.cs-term-visible:hover {
+    z-index: 4010;
+    transform: translateX(0) scale(1.02);
+    box-shadow: 0 12px 36px rgba(0,0,0,0.38);
+    border-color: var(--border-hover);
+    transition: opacity 0.22s ease, transform 0.18s cubic-bezier(0.34, 1.3, 0.64, 1), box-shadow 0.18s ease;
   }
   .cs-term-popup-cat {
     font-family: 'DM Mono', monospace;
@@ -8292,18 +8299,24 @@ function spScenarioPill(el, scenario) {
     const rest = withRelated.concat(withoutRelated).slice(0, 2);
     const candidates = [primary].concat(rest);
 
-    // Set concept silently (no AI call, no panel state change — story mode handles everything)
-    _csCtx = scenario;
+    // Map scenario pill name → valid CS context key (friend/partner/colleague/meeting)
+    const SP_CTX_MAP = {
+      friend: 'friend', dinner: 'friend', date: 'partner',
+      work: 'colleague', family: 'friend', networking: 'colleague',
+      podcast: 'friend', solo: 'friend'
+    };
+    _csCtx = SP_CTX_MAP[scenario] || 'friend';
     _csConcept = primary;
     _csCat = primary.category;
     _csAIData = null;
     _renderCSShell(primary);
     _csPushToStack(primary);
 
-    // Open panel, then inject candidates and go straight to story
-    _csOpenPanel();
+    // Open panel WITHOUT firing _loadAI — story mode handles everything
+    // Use openCS() directly (not openCSFromNav which auto-fires _loadAI)
+    openCS();
 
-    // After a brief tick (panel open), inject candidates and trigger story
+    // After panel opens, inject candidates and trigger story
     setTimeout(function() {
       _csInjectCandidatesAndStory(candidates, scenario);
     }, 350);
@@ -8331,15 +8344,22 @@ function _csInjectCandidatesAndStory(concepts, scenario) {
     candidateList.appendChild(card);
   });
 
-  // Activate picker wrap + hide main concept elements
+  // Hide main concept area + actions (picker takes over the scroll area)
   _csPickerHideMain();
+  // Also hide actions/reveal row — story mode doesn't use them
+  ['csActions','csRevealRow'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
+
+  // Activate picker wrap
   pickerWrap.classList.add('active');
 
   // Show "See how these connect" button
   var storyBtn = document.getElementById('csPickerStoryBtn');
   if (storyBtn) storyBtn.classList.add('cs-visible');
 
-  // Trigger story mode immediately
+  // Trigger story mode
   setTimeout(function() {
     _csOpenStoryMode();
   }, 80);
@@ -8853,9 +8873,10 @@ function _csPickerHideMain() {
 }
 
 function _csPickerShowMain() {
-  // Restore main state after picker closes
-  // _csPickerHideMain set inline display:none on all these — must clear ALL of them
-  // before _applyAIToCtx or _csShowPostPrompt can make coaching visible
+  // Restore main state after picker closes.
+  // _csPickerHideMain set inline display:none on several elements — clear ALL of them.
+  // csActions + csRevealRow are hidden via cs-hidden class (from _csHideAll at init),
+  // not via inline style — they are shown via _csShowPostPrompt → _applyAIToCtx.
   ['csConceptPill','csPromptBlock','csCoaching','csDivider','csFeedbackRow','csGenerateRow'].forEach(function(id) {
     const el = document.getElementById(id);
     if (el) el.style.display = '';
@@ -8865,12 +8886,19 @@ function _csPickerShowMain() {
   if (storyPanel) storyPanel.classList.remove('cs-visible');
   const src = document.getElementById('csSourceLabel');
   if (src) src.style.visibility = '';
-  // Re-render prompt + coaching — _csShowPostPrompt alone doesn't re-render text
+
+  // Always make csActions + csRevealRow visible (nav controls should always show)
+  ['csActions','csRevealRow'].forEach(function(id) {
+    const el = document.getElementById(id);
+    if (el) { el.classList.remove('cs-hidden'); el.classList.add('cs-visible'); el.style.display = ''; }
+  });
+
+  // Re-render prompt + coaching if AI data already exists
   if (_csConcept && _csAIData && _csAIData[_csCtx]) {
     _applyAIToCtx(_csCtx);
     return;
   }
-  // Fallback: check sessionStorage if _csAIData was cleared
+  // Check sessionStorage cache
   if (_csConcept) {
     var ck = (typeof CS_SESSION_KEY !== 'undefined' ? CS_SESSION_KEY : 'lll_cs_ai_') + _csConcept.id + '_' + _csCtx;
     try {
@@ -8882,7 +8910,7 @@ function _csPickerShowMain() {
         return;
       }
     } catch(e) {}
-    // Also try lll_cs_saved_v1
+    // Check Stash saved data
     try {
       var savedArr = JSON.parse(localStorage.getItem(CS_SAVED_KEY) || '[]');
       var savedEntry = savedArr.find(function(s) { return s && s.id === _csConcept.id; });
@@ -8893,6 +8921,17 @@ function _csPickerShowMain() {
         return;
       }
     } catch(e) {}
+    // Final fallback: no cached data — show generate button so user can trigger manually
+    // (Don't auto-fire _loadAI here — avoids surprise API calls and double-fires)
+    const genRow = document.getElementById('csGenerateRow');
+    const genBtn = document.getElementById('csGenerateBtn');
+    if (genRow) genRow.style.display = 'block';
+    if (genBtn) { genBtn.disabled = false; genBtn.classList.remove('loading'); genBtn.textContent = '✶ Generate conversation starter'; }
+    // Hide coaching since there's nothing to show yet
+    const coaching = document.getElementById('csCoaching');
+    if (coaching) { coaching.classList.add('cs-hidden'); coaching.classList.remove('cs-visible'); }
+    const divider = document.getElementById('csDivider');
+    if (divider) { divider.classList.add('cs-hidden'); divider.classList.remove('cs-visible'); }
   }
 }
 
@@ -9714,6 +9753,12 @@ function _csCloseStoryMode() {
     btn.style.display = '';
   });
 
+  // Clear any inline display:none set by _csInjectCandidatesAndStory on actions/reveal row
+  ['csActions','csRevealRow'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.style.display = '';
+  });
+
   // Restore main concept view (concept pill + prompt + coaching if AI ready)
   _csPickerShowMain();
 
@@ -9753,39 +9798,41 @@ function _csShowTermPopups() {
   btn.classList.add('active');
 
   const panel = document.getElementById('convPanel');
-  const panelRect = panel ? panel.getBoundingClientRect() : { left: window.innerWidth, top: 200 };
+  const panelRect = panel ? panel.getBoundingClientRect() : { left: window.innerWidth, top: 60 };
+  const leftOffset = Math.max(8, panelRect.left - 226); // 210px card + 16px gap
+  const GAP = 14; // guaranteed gap between cards
 
-  _csStoryTermConcepts.forEach(function(c, i) {
+  // Pass 1: create and insert all cards off-screen to measure real heights
+  const els = _csStoryTermConcepts.map(function(c) {
     const color = (typeof CAT_COLOR !== 'undefined' && CAT_COLOR[c.category]) || '#e8d5a3';
     const el = document.createElement('div');
     el.className = 'cs-term-popup';
+    el.style.cssText = 'visibility:hidden;top:-9999px;left:-9999px;';
     el.innerHTML =
       '<div class="cs-term-popup-cat" style="color:' + color + '">' + _escHtml(c.category || '') + '</div>' +
       '<div class="cs-term-popup-term">' + _escHtml(c.term) + '</div>' +
       '<div class="cs-term-popup-plain">' + _escHtml(c.plain || '') + '</div>';
-
-    // Stack vertically left of panel: 150px per card, start 80px from panel top
-    // Each card gets its own independent top; no shared clamp (avoids overlap on small viewports)
-    const cardH = 140;
-    const startTop = panelRect.top + 80;
-    const rawTop = startTop + (i * (cardH + 10));
-    // Per-card: if it would overflow viewport bottom, anchor from bottom instead
-    const maxTop = window.innerHeight - cardH - 8;
-    const topOffset = Math.min(rawTop, maxTop - ((_csStoryTermConcepts.length - 1 - i) * 0));
-    const leftOffset = panelRect.left - 226; // 210px card + 16px gap
-    el.style.top = Math.max(60, topOffset) + 'px';
-    el.style.left = Math.max(8, leftOffset) + 'px';
-    el.style.transitionDelay = (i * 70) + 'ms';
-
-    // Dismiss on click
     el.addEventListener('click', function() { _csDismissTermPopups(); });
-
     document.body.appendChild(el);
     _csTermPopupEls.push(el);
+    return el;
+  });
 
-    // Trigger animation on next frame
-    requestAnimationFrame(function() {
-      requestAnimationFrame(function() { el.classList.add('cs-term-visible'); });
+  // Pass 2: measure heights then position top-down with guaranteed gaps
+  requestAnimationFrame(function() {
+    var cursor = panelRect.top + 70;
+    const vpH = window.innerHeight;
+    els.forEach(function(el, i) {
+      const h = Math.max(el.offsetHeight || 0, 100);
+      const top = Math.min(cursor, vpH - h - 8);
+      el.style.top = Math.max(56, top) + 'px';
+      el.style.left = leftOffset + 'px';
+      el.style.visibility = '';
+      el.style.transitionDelay = (i * 70) + 'ms';
+      cursor = top + h + GAP;
+      requestAnimationFrame(function() {
+        requestAnimationFrame(function() { el.classList.add('cs-term-visible'); });
+      });
     });
   });
 
