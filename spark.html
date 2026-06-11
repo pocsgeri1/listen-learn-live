@@ -3276,13 +3276,13 @@
   .cs-story-btn.cs-visible { display: inline-flex !important; align-items: center; gap: 5px; }
   .cs-story-btn:hover { background: var(--accent); color: #0d0d0d; }
   /* ── Story Mode panel (State 5) ── */
-  .cs-story-panel { display: none; flex-direction: column; gap: 0; }
+  .cs-story-panel { display: none; flex-direction: column; gap: 0; align-items: stretch; }
   .cs-story-panel.cs-visible { display: flex; }
   .cs-story-back { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); background: transparent; border: none; padding: 0 0 12px 0; cursor: pointer; text-align: left; }
   .cs-story-back:hover { color: var(--text); }
-  .cs-story-eyebrow { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+  .cs-story-eyebrow { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--teal); margin-bottom: 10px; }
   .cs-story-text { font-family: 'Playfair Display', serif; font-size: 0.92rem; line-height: 1.9; color: var(--text); }
-  .cs-story-label { display: inline-block; font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.06em; text-transform: lowercase; color: var(--accent); border: 1px solid rgba(232,213,163,0.35); border-radius: 10px; padding: 1px 7px; margin-left: 4px; vertical-align: middle; position: relative; cursor: default; }
+  .cs-story-label { display: inline-block; font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.06em; text-transform: lowercase; color: var(--accent); border: 1px solid rgba(232,213,163,0.35); border-radius: 10px; padding: 1px 7px; margin-left: 4px; vertical-align: middle; position: relative; cursor: default; min-width: 110px; text-align: center; }
   .cs-story-label .cs-story-tooltip { display: none; position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); background: var(--surface2, #1e1e1e); border: 1px solid var(--accent); border-radius: 8px; padding: 9px 12px; width: 210px; font-family: 'DM Sans', sans-serif; font-size: 0.73rem; line-height: 1.55; color: var(--text); text-transform: none; letter-spacing: normal; z-index: 50; pointer-events: none; font-weight: 400; }
   [data-theme='light'] .cs-story-label .cs-story-tooltip { background: #fff; border-color: var(--accent); color: #1a1a1a; }
   .cs-story-label:hover .cs-story-tooltip { display: block; }
@@ -3301,6 +3301,9 @@
     cursor: pointer;
     transition: border-color 0.18s, color 0.18s;
     margin-bottom: 4px;
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
   }
   .cs-story-reveal-btn:hover { border-color: var(--accent); color: var(--accent); }
   .cs-story-reveal-btn.active { border-color: var(--accent); color: var(--accent); }
@@ -3346,7 +3349,7 @@
     line-height: 1.45;
   }
   [data-theme='light'] .cs-term-popup { background: #fff; box-shadow: 0 6px 24px rgba(0,0,0,0.12); }
-  .cs-story-opener { background: #0d0d0d; border-left: 2px solid var(--accent); padding: 10px 14px; border-radius: 0 6px 6px 0; margin-top: 14px; }
+  .cs-story-opener { background: var(--surface2); border: 1px solid var(--border); border-left: 2px solid var(--accent); padding: 10px 14px; border-radius: 0 6px 6px 0; margin-top: 14px; }
   .cs-story-opener-label { font-family: 'DM Mono', monospace; font-size: 0.56rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 5px; }
   .cs-story-opener-text { font-family: 'DM Sans', sans-serif; font-size: 0.8rem; color: var(--accent); font-style: italic; line-height: 1.5; }
   .cs-story-actions { display: flex; gap: 8px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); }
@@ -5883,6 +5886,7 @@
       <button class="cs-picker-more-btn" id="csPickerMoreBtn" onclick="_csPickerMore()">More ideas →</button>
     </div>
     <button class="cs-story-btn" id="csPickerStoryBtn" onclick="_csOpenStoryMode()">★ See how these connect</button>
+    <button class="cs-story-btn" id="csPickerStoryBackBtn" onclick="_csReopenStory()" style="display:none;margin-left:6px;">↩ Back to short story</button>
 
     <!-- Scenario buttons — expands below the reveal row -->
     <div class="cs-reveal-section" id="csScenarioSection">
@@ -5917,7 +5921,6 @@
 
     <!-- State 5 — Story Mode panel -->
     <div class="cs-story-panel" id="csStoryPanel">
-      <button class="cs-story-back" onclick="_csCloseStoryMode()">← Back to starter</button>
       <div class="cs-story-eyebrow">A SHORT STORY</div>
       <div class="cs-story-text" id="csStoryText"></div>
       <div class="cs-story-opener" id="csStoryOpener" style="display:none">
@@ -5927,6 +5930,7 @@
       <div class="cs-story-divider"></div>
       <button class="cs-story-reveal-btn" id="csStoryRevealBtn" onclick="_csToggleTermPopups()">◈ Reveal the terms</button>
       <div class="cs-story-actions">
+        <button class="cs-story-back cs-story-copy-btn" onclick="_csCloseStoryMode()">← Back to starter</button>
         <button class="cs-story-copy-btn" id="csStoryCopyBtn" onclick="_csStoryCopy()">↑ Copy story</button>
         <button class="cs-story-copy-btn" id="csStoryShareOpenerBtn" onclick="_csStoryShareOpener()">↑ Copy opener</button>
       </div>
@@ -8251,8 +8255,91 @@ function spToggleMorePills() {
 function spScenarioPill(el, scenario) {
   document.querySelectorAll('.sp-pill').forEach(p => p.classList.remove('active'));
   el.classList.add('active');
-  _csOpenPanel(); // Phase C1: panel entry via scenario pill
+
+  // Category map: each scenario targets specific concept categories
+  const SP_SCENARIO_CATS = {
+    friend:      ['psychology','identity','relationships'],
+    dinner:      ['psychology','thinking','philosophy','society'],
+    date:        ['relationships','language','philosophy'],
+    work:        ['business','thinking','power'],
+    family:      ['health','identity','relationships','philosophy'],
+    networking:  ['language','business','power'],
+    podcast:     ['thinking','tech-ai','science','creativity'],
+    solo:        ['thinking','philosophy','psychology','identity']
+  };
+
+  const cats = SP_SCENARIO_CATS[scenario] || ['psychology','thinking'];
+
+  // Wait for CONCEPTS to be loaded, then pick 3 concepts from target categories
+  function _spLaunchStory() {
+    if (typeof CONCEPTS === 'undefined' || !CONCEPTS.length) {
+      setTimeout(_spLaunchStory, 200);
+      return;
+    }
+    // Pick concepts with related_ids from target categories, shuffle, take 3
+    const pool = CONCEPTS.filter(function(c) {
+      return cats.includes(c.category) && !c.duplicate_of;
+    });
+    if (pool.length < 2) { _csOpenPanel(); return; }
+
+    // Shuffle pool, pick primary + up to 2 related from same scenario cats
+    const shuffled = pool.slice().sort(function() { return Math.random() - 0.5; });
+    const primary = shuffled[0];
+    // Build a candidate set: primary + 2 more from pool (preferring concepts with related_ids)
+    const withRelated = shuffled.filter(function(c) { return c.id !== primary.id && c.related_ids && c.related_ids.length > 0; });
+    const withoutRelated = shuffled.filter(function(c) { return c.id !== primary.id && (!c.related_ids || !c.related_ids.length); });
+    const rest = withRelated.concat(withoutRelated).slice(0, 2);
+    const candidates = [primary].concat(rest);
+
+    // Set scenario context
+    _csCtx = scenario;
+    _csCat = primary.category;
+
+    // Open panel, load concept, then inject candidates and go straight to story
+    _csOpenPanel();
+    _csLoadNewConcept(primary);
+
+    // After a brief tick (panel open + concept render), inject candidates and trigger story
+    setTimeout(function() {
+      _csInjectCandidatesAndStory(candidates, scenario);
+    }, 350);
+  }
+
+  _spLaunchStory();
   if (typeof track === 'function') track('sp_scenario_pill', { scenario });
+}
+
+// Inject picker candidates programmatically and trigger story mode
+function _csInjectCandidatesAndStory(concepts, scenario) {
+  // Show the picker wrap with our pre-chosen candidates
+  var pickerWrap = document.getElementById('csTopicPickerWrap');
+  var candidateList = document.getElementById('csCandidateList');
+  if (!pickerWrap || !candidateList) return;
+
+  // Build candidate cards (same structure as _csPickerRenderCandidates)
+  candidateList.innerHTML = '';
+  concepts.forEach(function(c) {
+    var color = (typeof CAT_COLOR !== 'undefined' && CAT_COLOR[c.category]) || '#e8d5a3';
+    var card = document.createElement('div');
+    card.className = 'cs-candidate';
+    card.dataset.conceptId = c.id;
+    card.innerHTML = '<div class="cs-candidate-term" style="color:' + color + '">' + _escHtml(c.term) + '</div>' +
+      '<div class="cs-candidate-hook">' + _escHtml(c.hook || '') + '</div>';
+    candidateList.appendChild(card);
+  });
+
+  // Show picker wrap, hide main content
+  _csPickerHideMain();
+  pickerWrap.classList.add('active');
+  pickerWrap.style.display = '';
+
+  // Show story button, then trigger story mode directly
+  var storyBtn = document.getElementById('csPickerStoryBtn');
+  if (storyBtn) storyBtn.classList.add('cs-visible');
+
+  setTimeout(function() {
+    _csOpenStoryMode();
+  }, 100);
 }
 
 // ============================================
@@ -8763,6 +8850,7 @@ function _csPickerHideMain() {
 }
 
 function _csPickerShowMain() {
+  _csStoryGenerated = false; // reset story state on new concept load
   // Restore main state after picker closes
   // _csPickerHideMain set inline display:none on all these — must clear ALL of them
   // before _applyAIToCtx or _csShowPostPrompt can make coaching visible
@@ -9391,8 +9479,25 @@ function _csParseStoryLabels(storyText, conceptsUsed) {
 }
 
 // Open Story Mode (State 5)
+let _csStoryGenerated = false; // true after a story has been generated for current candidate set
+
+function _csReopenStory() {
+  // Re-show the story panel without re-fetching — story already in DOM
+  var pickerWrap = document.getElementById('csTopicPickerWrap');
+  var storyBtn = document.getElementById('csPickerStoryBtn');
+  var storyBackBtn = document.getElementById('csPickerStoryBackBtn');
+  if (pickerWrap) pickerWrap.style.display = 'none';
+  if (storyBtn) storyBtn.classList.remove('cs-visible');
+  if (storyBackBtn) storyBackBtn.style.display = 'none';
+  var panel = document.getElementById('csStoryPanel');
+  if (panel) panel.classList.add('cs-visible');
+}
+
 function _csOpenStoryMode() {
   _csDismissTermPopups();
+
+  var headline = document.getElementById('csHeadline');
+  if (headline) headline.textContent = 'A Short Story';
 
   // Get concepts from the picker candidates (the 3 shown after Change Topic)
   var pickerConcepts = _csGetPickerCandidates();
@@ -9484,10 +9589,15 @@ function _csOpenStoryMode() {
 
     // Auto-save
     _csSaveStory({ id: 0, term: pickerConcepts[0].term, category: pickerConcepts[0].category }, pickerConcepts.slice(1), data.story, data.opener);
+    // Refresh Stories tab if it's currently open
+    if (_panelTab === 'stories') _convRenderStories();
 
     // Store for copy actions
     panel.dataset.storyText = data.story.replace(/\[\[LABEL:[^\]]+\]\]/g, '');
     panel.dataset.openerText = data.opener || '';
+
+    // Mark story as generated for this candidate set
+    _csStoryGenerated = true;
   })
   .catch(function(e) {
     clearInterval(_storyMsgTimer);
@@ -9539,6 +9649,8 @@ function _csCloseStoryMode() {
   _csDismissTermPopups();
   var panel = document.getElementById('csStoryPanel');
   panel.classList.remove('cs-visible');
+  var headline = document.getElementById('csHeadline');
+  if (headline) headline.textContent = "Today's Conversation Starter";
 
   // Clear any stale story tag badges on candidate cards
   document.querySelectorAll('.cs-candidate-term[data-story-tagged]').forEach(function(el) {
@@ -9551,8 +9663,13 @@ function _csCloseStoryMode() {
   var pickerWrap = document.getElementById('csTopicPickerWrap');
   if (pickerWrap) pickerWrap.style.display = '';
   var storyBtn = document.getElementById('csPickerStoryBtn');
+  var storyBackBtn = document.getElementById('csPickerStoryBackBtn');
   if (storyBtn && document.querySelectorAll('#csCandidateList .cs-candidate').length >= 2) {
     storyBtn.classList.add('cs-visible');
+  }
+  // Show "Back to short story" button if story was already generated
+  if (storyBackBtn) {
+    storyBackBtn.style.display = _csStoryGenerated ? 'inline-flex' : 'none';
   }
   // Restore generate buttons in candidate cards
   document.querySelectorAll('.cs-candidate-generate-btn').forEach(function(btn) {
@@ -9602,8 +9719,10 @@ function _csShowTermPopups() {
       '<div class="cs-term-popup-term">' + _escHtml(c.term) + '</div>' +
       '<div class="cs-term-popup-plain">' + _escHtml(c.plain || '') + '</div>';
 
-    // Stack vertically: each card 110px apart, anchored to panel top-left
-    const topOffset = panelRect.top + 120 + (i * 120);
+    // Stack vertically: each card 145px apart, anchored to panel top-left; clamp to viewport bottom
+    const cardHeight = 130;
+    const rawTop = panelRect.top + 120 + (i * (cardHeight + 15));
+    const topOffset = Math.min(rawTop, window.innerHeight - cardHeight - 10);
     const leftOffset = panelRect.left - 226; // 210px card + 16px gap
     el.style.top = topOffset + 'px';
     el.style.left = Math.max(8, leftOffset) + 'px';
@@ -9655,6 +9774,75 @@ function _csSaveStory(primaryConcept, relatedConcepts, storyText, opener) {
   stories.unshift(entry);
   if (stories.length > CS_STORIES_MAX) stories = stories.slice(0, CS_STORIES_MAX);
   try { localStorage.setItem(CS_STORIES_KEY, JSON.stringify(stories)); } catch(e) {}
+}
+
+// ── STORIES TAB RENDERER ────────────────────────────────────────────────────
+function _convRenderStories() {
+  const container = document.getElementById('panelSectionStories');
+  if (!container) return;
+  let stories = [];
+  try { stories = JSON.parse(localStorage.getItem(CS_STORIES_KEY)) || []; } catch(e) {}
+
+  if (stories.length === 0) {
+    container.innerHTML = '<div style="padding:2.5rem 22px;color:var(--muted);font-family:\'DM Mono\',monospace;font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;line-height:1.6;">No stories yet —<br>use ✦ See how these connect<br>to generate your first one.</div>';
+    return;
+  }
+
+  container.innerHTML = '';
+  stories.forEach(function(entry, i) {
+    const wrap = document.createElement('div');
+    wrap.style.cssText = 'border-bottom:1px solid var(--border);padding:16px 22px;';
+
+    // Concept pills row
+    const pills = document.createElement('div');
+    pills.style.cssText = 'display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px;';
+    (entry.conceptTerms || [entry.term]).forEach(function(term, j) {
+      const cat = (entry.conceptCategories || [])[j] || '';
+      const color = (typeof CAT_COLOR !== 'undefined' && CAT_COLOR[cat]) || '#e8d5a3';
+      const pill = document.createElement('span');
+      pill.style.cssText = 'font-family:\'DM Mono\',monospace;font-size:0.52rem;letter-spacing:0.09em;text-transform:uppercase;border:1px solid ' + color + ';border-radius:20px;padding:2px 8px;color:' + color + ';';
+      pill.textContent = term;
+      pills.appendChild(pill);
+    });
+    wrap.appendChild(pills);
+
+    // Story text (2-line clamp, expand on click)
+    const storyEl = document.createElement('div');
+    storyEl.style.cssText = 'font-family:\'Playfair Display\',serif;font-size:0.82rem;line-height:1.7;color:var(--text);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer;';
+    storyEl.textContent = entry.story || '';
+    let expanded = false;
+    storyEl.addEventListener('click', function() {
+      expanded = !expanded;
+      if (expanded) {
+        storyEl.style.webkitLineClamp = 'unset';
+        storyEl.style.overflow = 'visible';
+        if (entry.opener && !wrap.querySelector('.story-opener-row')) {
+          const opRow = document.createElement('div');
+          opRow.className = 'story-opener-row';
+          opRow.style.cssText = 'margin-top:10px;border-left:2px solid var(--accent);padding:7px 12px;background:var(--surface2);border-radius:0 6px 6px 0;';
+          opRow.innerHTML = '<div style="font-family:\'DM Mono\',monospace;font-size:0.52rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:4px;">Say this →</div><div style="font-family:\'DM Sans\',sans-serif;font-size:0.76rem;color:var(--accent);font-style:italic;line-height:1.45;">' + _escHtml(entry.opener) + '</div>';
+          wrap.appendChild(opRow);
+        }
+      } else {
+        storyEl.style.webkitLineClamp = '2';
+        storyEl.style.overflow = 'hidden';
+        const opRow = wrap.querySelector('.story-opener-row');
+        if (opRow) opRow.remove();
+      }
+    });
+    wrap.appendChild(storyEl);
+
+    // Timestamp
+    const ts = document.createElement('div');
+    ts.style.cssText = 'font-family:\'DM Mono\',monospace;font-size:0.52rem;letter-spacing:0.08em;color:var(--muted);margin-top:8px;';
+    if (entry.ts) {
+      const d = new Date(entry.ts);
+      ts.textContent = d.toLocaleDateString('en-GB', { day:'numeric', month:'short' }) + ' · tap to expand';
+    }
+    wrap.appendChild(ts);
+
+    container.appendChild(wrap);
+  });
 }
 
 // Copy full story text
@@ -12796,7 +12984,7 @@ function playStreakMilestoneSFX() {
   border-radius: 10px;
   overflow: hidden;
   overflow-y: auto;
-  max-height: 360px;
+  max-height: 320px;
   z-index: 500;
   box-shadow: 0 8px 32px rgba(0,0,0,0.35);
   opacity: 0;
@@ -13197,6 +13385,7 @@ body.cs-panel-open .sp-trigger-hint { display: none; }
         <button class="conv-panel-tab active" id="panelTabSpark" onclick="panelSwitchTab('spark')"><span class="conv-panel-tab-emoji">💬</span>Spark</button>
         <button class="conv-panel-tab" id="panelTabStash" onclick="panelSwitchTab('stash')"><span class="conv-panel-tab-emoji">🔖</span>Stash</button>
         <button class="conv-panel-tab" id="panelTabHistory" onclick="panelSwitchTab('history')"><span class="conv-panel-tab-emoji">📖</span>History</button>
+        <button class="conv-panel-tab" id="panelTabStories" onclick="panelSwitchTab('stories')"><span class="conv-panel-tab-emoji">✦</span>Stories</button>
       </div>
       <button class="conv-close" id="convClose" aria-label="Close">✕</button>
     </div>
@@ -13247,6 +13436,11 @@ body.cs-panel-open .sp-trigger-hint { display: none; }
       <!-- rendered by _convRenderHistory() into convList when active -->
     </div>
 
+    <!-- STORIES TAB -->
+    <div class="conv-tab-section" id="panelSectionStories" style="display:none;flex:1;overflow-y:auto;">
+      <!-- rendered by _convRenderStories() when active -->
+    </div>
+
   </div>
 </div>
 <!-- /CONVERSATIONS OVERLAY -->
@@ -13278,12 +13472,12 @@ function _mountCSInPanel() {
 function panelSwitchTab(tab, skipRender) {
   _panelTab = tab;
   // Update tab buttons
-  ['spark','stash','history'].forEach(t => {
+  ['spark','stash','history','stories'].forEach(t => {
     const btn = document.getElementById('panelTab' + t.charAt(0).toUpperCase() + t.slice(1));
     if (btn) btn.classList.toggle('active', t === tab);
   });
   // Show/hide sections — use opacity + pointer-events for smooth crossfade
-  const sections = { spark: 'panelSectionSpark', stash: 'panelSectionStash', history: 'panelSectionHistory' };
+  const sections = { spark: 'panelSectionSpark', stash: 'panelSectionStash', history: 'panelSectionHistory', stories: 'panelSectionStories' };
   Object.keys(sections).forEach(t => {
     const el = document.getElementById(sections[t]);
     if (!el) return;
@@ -13312,6 +13506,8 @@ function panelSwitchTab(tab, skipRender) {
     if (histSection) {
       _convRenderHistoryInto(histSection);
     }
+  } else if (tab === 'stories' && !skipRender) {
+    _convRenderStories();
   }
 }
 let _convTab = 'saved'; // kept for legacy convSwitchTab compat
