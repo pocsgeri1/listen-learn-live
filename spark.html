@@ -356,7 +356,7 @@
      EPISODES SECTION
      ============================================ */
   .episodes-section {
-    padding: 5rem 0 5rem;
+    padding: 2.5rem 0 5rem;
   }
   .episodes-podcast-group {
     margin-bottom: 3rem;
@@ -1027,7 +1027,7 @@
      ============================================ */
   #themesSection {
     padding: 0 2rem;
-    margin: 0.5rem 0 1.25rem;
+    margin: 0 0 0.75rem;
     text-align: center;
   }
   .themes-label {
@@ -1108,6 +1108,7 @@
   }
   #themePreviewZone.open {
     max-height: 620px;
+    overflow: visible;
   }
   @media (max-width: 700px) {
     #themePreviewZone.open { max-height: 760px; }
@@ -1137,16 +1138,17 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 12px;
-    padding: 0 2rem 12px;
+    padding: 12px 2rem 12px;
     max-width: 1080px;
     margin: 0 auto;
     perspective: 1400px;
-    contain: layout paint;
   }
   /* Reuse .ep-cat-column card flip styling for preview cards —
      each card gets its own single-column "column" wrapper */
   .theme-preview-col {
     display: block !important;
+    contain: none !important;
+    overflow: visible !important;
   }
   @media (max-width: 700px) {
     .theme-preview-grid {
@@ -1200,6 +1202,12 @@
   }
   [data-theme="light"] #themePreviewGrid.has-open .concept-card:not(.open) {
     opacity: 0.45;
+  }
+  /* Center term+hook block — same as Library (.nf-row) cards */
+  .theme-preview-col .card-term,
+  #themeDrawerGrid .card-term {
+    margin-top: auto;
+    padding-top: 0.5rem;
   }
 
   /* ============================================
@@ -7717,7 +7725,7 @@ function renderThemesRow() {
 
   let html = first.map(tileHtml).join('');
   if (rest.length) {
-    html += `<button class="theme-more-link" id="themeMoreBtn" onclick="themeShowMore()">More ↓</button>`;
+    html += `<button class="theme-more-link" id="themeMoreBtn" onclick="themeToggleMore()">More ↓</button>`;
     html += rest.map(tileHtml).join('');
   }
   row.innerHTML = html;
@@ -7729,16 +7737,18 @@ function renderThemesRow() {
   });
 }
 
-function themeShowMore() {
+function themeToggleMore() {
   const btn = document.getElementById('themeMoreBtn');
   if (!btn) return;
   const thematic = Object.values(COLLECTIONS_BY_ID).filter(c => c && c.type === 'thematic').sort((a,b)=>a.id-b.id);
   const rest = thematic.slice(5);
+  const expanded = btn.dataset.expanded === '1';
   rest.forEach(col => {
     const el = document.getElementById('themeTile' + col.id);
-    if (el) el.style.display = '';
+    if (el) el.style.display = expanded ? 'none' : '';
   });
-  btn.remove();
+  btn.dataset.expanded = expanded ? '0' : '1';
+  btn.textContent = expanded ? 'More ↓' : 'Less ↑';
 }
 
 function themeClick(id) {
@@ -7814,6 +7824,7 @@ function _renderThemeCard(c, prefix, col) {
       <div class="card-front">
         <div class="card-meta">
           <span class="card-num">#${String(c.id).padStart(3,'0')}</span>
+          <span class="card-cat" onclick="event.stopPropagation();setCat('${c.category}');closeThemeDrawer();closeEpisodeDrawer()">${(CATEGORIES.find(x => x.id === c.category)||{}).name||c.category}</span>
           ${c.editors_pick===true ? '<span class="pick-badge"><span class="pick-star">★</span>PICK</span>' : ''}
           <span class="mastered-badge">✓ mastered</span>
         </div>
@@ -13555,11 +13566,11 @@ function playStreakMilestoneSFX() {
 /* --- Hero wrapper — centered --- */
 .sp-hero {
   position: relative;
-  min-height: 70vh;
+  min-height: 56vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 100px 2rem 4rem;
+  padding: 72px 2rem 2rem;
   overflow: hidden; /* restored — dropdown is absolute inside col */
 }
 
@@ -13833,6 +13844,12 @@ function playStreakMilestoneSFX() {
   opacity: 0;
   overflow: hidden;
   padding-top: 0;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 5;
+  background: var(--bg);
 }
 .sp-pills-row2.open {
   max-height: 200px !important;
