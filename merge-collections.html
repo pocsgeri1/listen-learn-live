@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Epistemic — Merge Collection IDs</title>
+<style>
+:root {
+  --bg:#0d0d0d; --panel:#141414; --border:rgba(255,255,255,0.08);
+  --text:#f0ede8; --muted:#8a8a8a; --gold:#e8d5a3; --green:#7fbf7f; --red:#e07a7a;
+}
+*{box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);padding:2rem;max-width:720px;margin:0 auto;line-height:1.5}
+h1{font-size:18px;margin:0 0 4px}
+h2{font-size:13px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin:1.5rem 0 .5rem}
+p.sub{color:var(--muted);font-size:13px;margin:0 0 1.5rem}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:1rem 1.25rem;margin-bottom:1rem}
+label{display:block;font-size:12px;color:var(--muted);margin-bottom:4px}
+input[type=text],input[type=password]{width:100%;background:#1c1c1c;border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:13px;padding:8px 10px;margin-bottom:10px;font-family:ui-monospace,monospace}
+input[type=file]{display:block;margin:8px 0}
+button{background:#1c1c1c;border:1px solid var(--border);border-radius:8px;color:var(--gold);font-size:13px;padding:9px 16px;cursor:pointer;font-weight:500;margin-right:8px}
+button:hover:not(:disabled){background:#262626;border-color:rgba(232,213,163,0.3)}
+button:disabled{opacity:.35;cursor:not-allowed}
+button.danger{color:var(--red)}
+button.go{color:var(--green);font-weight:700}
+#log{font-family:ui-monospace,monospace;font-size:11.5px;color:#aaa;background:#0a0a0a;border:1px solid var(--border);border-radius:8px;padding:12px;min-height:160px;max-height:340px;overflow-y:auto;white-space:pre-wrap;line-height:1.7;margin-top:1rem}
+.warn{color:var(--red);font-size:12px;margin-top:6px}
+.ok{color:var(--green)}
+.hint{font-size:11px;color:var(--muted);margin-top:-6px;margin-bottom:10px}
+.toggle{font-size:11px;color:var(--muted);cursor:pointer;text-decoration:underline;background:none;border:none;padding:0}
+.stat{display:inline-block;background:#1c1c1c;border:1px solid var(--border);border-radius:6px;padding:6px 12px;font-size:12px;margin:2px;font-family:ui-monospace,monospace}
+.stat b{color:var(--gold)}
+</style>
+</head>
+<body>
+<h1>Epistemic — Merge Collection IDs into concepts.json</h1>
+<p class="sub">
+Takes the <code>curated_collection_ids_patch.json</code> file produced by the curation tool,
+merges it into the live <code>concepts.json</code> on GitHub (matching by <code>id</code>),
+and commits the result. Runs entirely in your browser — nothing is sent anywhere except GitHub's API.
+</p>
+
+<div class="panel">
+  <h2>1. GitHub access</h2>
+  <label>GitHub Personal Access Token (repo scope)</label>
+  <input type="password" id="ghToken" placeholder="ghp_..." />
+  <div class="hint">
+    <button class="toggle" onclick="toggleToken()">show/hide</button> —
+    needs read+write on <code>pocsgeri1/listen-learn-live</code>. Not stored anywhere; cleared on page reload.
+  </div>
+
+  <label>Repo</label>
+  <input type="text" id="ghRepo" value="pocsgeri1/listen-learn-live" />
+
+  <label>Branch</label>
+  <input type="text" id="ghBranch" value="main" />
+
+  <label>File path</label>
+  <input type="text" id="ghPath" value="concepts.json" />
+</div>
+
+<div class="panel">
+  <h2>2. Patch file</h2>
+  <label>Upload curated_collection_ids_patch.json</label>
+  <input type="file" id="patchFile" accept=".json" />
+  <div id="patchInfo" class="hint">No file loaded yet.</div>
+</div>
+
+<div class="controls">
+  <button id="previewBtn" onclick="previewMerge()" disabled>1. Preview merge (dry run)</button>
+  <button id="commitBtn" class="go" onclick="commitMerge()" disabled>2. Commit to GitHub</button>
+</div>
+
+<div id="stats" style="margin-top:10px"></div>
+
+<div id="log">Ready. Enter your GitHub token, upload the patch file, then click "Preview merge".</div>
+
+<script>
+var patchData = null;       // array from uploaded file
+var liveConcepts = null;    // array fetched from GitHub
+var liveSha = null;         // sha of concepts.json for commit
+var mergedConcepts = null;  // result of merge, ready to commit
+
+function log(msg, cls) {
+  var e = document.getElementById('log');
+  var time = new Date().toLocaleTimeString();
+  var line = '[' + time + '] ' + msg;
+  if (cls) {
+    var span = document.createElement('div');
+    span.className = cls;
+    span.textContent = line;
+    e.appendChild(span);
+  } else {
+    e.appendChild(document.createTextNode('\\n' + line));
+  }
+  e.scrollTop = e.scrollHeight;
+}
+
+function toggleToken() {
+  var el = document.getElementById('ghToken');
+  el.type = el.type === 'password' ? 'text' : 'password';
+}
+
+function cfg() {
+  return {
+    token: document.getElementById('ghToken').value.trim(),
+    repo: document.getElementById('ghRepo').value.trim(),
+    branch: document.getElementById('ghBranch').value.trim() || 'main',
+    path: document.getElementById('ghPath').value.trim() || 'concepts.json'
+  };
+}
+
+// ---------- Patch file upload ----------
+document.getElementById('patchFile').addEventListener('change', function(e) {
+  var file = e.target.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(evt) {
+    try {
+      var parsed = JSON.parse(evt.target.result);
+      if (!Array.isArray(parsed)) throw new Error('Patch file is not a JSON array');
+
+      // Validate shape: each item needs numeric id and curated_collection_ids array
+      var bad = parsed.filter(function(p) {
+        return typeof p.id !== 'number' || !Array.isArray(p.curated_collection_ids);
+      });
+      if (bad.length > 0) {
+        throw new Error(bad.length + ' entries are missing "id" or "curated_collection_ids" array');
+      }
+
+      patchData = parsed;
+      var withAssignments = parsed.filter(function(p){ return p.curated_collection_ids.length > 0; }).length;
+      document.getElementById('patchInfo').innerHTML =
+        '<span class="ok">Loaded ' + parsed.length + ' entries — ' + withAssignments + ' have at least one collection assigned (' +
+        Math.round(withAssignments/parsed.length*100) + '%).</span>';
+      log('Patch file loaded: ' + parsed.length + ' entries, ' + withAssignments + ' with assignments.');
+      updateButtons();
+    } catch (err) {
+      patchData = null;
+      document.getElementById('patchInfo').innerHTML = '<span class="warn">Error: ' + err.message + '</span>';
+      log('Patch file error: ' + err.message);
+      updateButtons();
+    }
+  };
+  reader.onerror = function() {
+    log('Failed to read file.');
+  };
+  reader.readAsText(file);
+});
+
+function updateButtons() {
+  var c = cfg();
+  document.getElementById('previewBtn').disabled = !(patchData && c.token && c.repo);
+  document.getElementById('commitBtn').disabled = !(mergedConcepts);
+}
+
+['ghToken','ghRepo','ghBranch','ghPath'].forEach(function(id) {
+  document.getElementById(id).addEventListener('input', updateButtons);
+});
+
+// ---------- GitHub fetch ----------
+async function fetchConceptsFile() {
+  var c = cfg();
+  var url = 'https://api.github.com/repos/' + c.repo + '/contents/' + c.path + '?ref=' + c.branch;
+  var res = await fetch(url, {
+    headers: {
+      'Authorization': 'token ' + c.token,
+      'Accept': 'application/vnd.github+json',
+      'User-Agent': 'Epistemic-Merge-Tool'
+    }
+  });
+  if (!res.ok) {
+    var text = await res.text();
+    throw new Error('GitHub fetch failed (HTTP ' + res.status + '): ' + text.slice(0,300));
+  }
+  var data = await res.json();
+  liveSha = data.sha;
+
+  // Decode base64 content (handle unicode properly)
+  var decoded = decodeURIComponent(escape(atob(data.content.replace(/\\n/g,''))));
+  var parsed = JSON.parse(decoded);
+  if (!Array.isArray(parsed)) throw new Error('concepts.json on GitHub is not a JSON array');
+  return parsed;
+}
+
+// ---------- Preview / dry run ----------
+async function previewMerge() {
+  document.getElementById('previewBtn').disabled = true;
+  document.getElementById('commitBtn').disabled = true;
+  mergedConcepts = null;
+  log('--- PREVIEW (dry run) ---');
+
+  try {
+    log('Fetching concepts.json from GitHub...');
+    liveConcepts = await fetchConceptsFile();
+    log('Loaded ' + liveConcepts.length + ' concepts from GitHub (sha ' + liveSha.slice(0,8) + '...).');
+
+    var patchMap = new Map(patchData.map(function(p) { return [p.id, p]; }));
+    var liveIds = new Set(liveConcepts.map(function(c) { return c.id; }));
+
+    var matched = 0, unchanged = 0, changed = 0, notInPatch = 0, inPatchNotLive = 0;
+    var sampleChanges = [];
+
+    var merged = liveConcepts.map(function(c) {
+      var copy = Object.assign({}, c);
+      if (patchMap.has(c.id)) {
+        matched++;
+        var newIds = patchMap.get(c.id).curated_collection_ids;
+        var oldIds = Array.isArray(c.curated_collection_ids) ? c.curated_collection_ids : [];
+        var same = oldIds.length === newIds.length && oldIds.every(function(v,i){return v===newIds[i];});
+        if (same) {
+          unchanged++;
+        } else {
+          changed++;
+          if (sampleChanges.length < 8) {
+            sampleChanges.push('  id ' + c.id + ' (' + c.term + '): [' + oldIds.join(',') + '] -> [' + newIds.join(',') + ']');
+          }
+        }
+        copy.curated_collection_ids = newIds;
+      } else {
+        notInPatch++;
+        // leave existing field untouched if present, otherwise don't add one
+      }
+      return copy;
+    });
+
+    patchMap.forEach(function(p, id) {
+      if (!liveIds.has(id)) inPatchNotLive++;
+    });
+
+    log('');
+    log('Matched by id: ' + matched + ' / ' + liveConcepts.length + ' live concepts');
+    log('  -> unchanged: ' + unchanged);
+    log('  -> will change: ' + changed);
+    if (notInPatch > 0) log('Concepts in GitHub but NOT in patch (left untouched): ' + notInPatch);
+    if (inPatchNotLive > 0) log('WARNING: ' + inPatchNotLive + ' patch entries have ids not found in concepts.json (ignored).');
+
+    if (sampleChanges.length > 0) {
+      log('');
+      log('Sample changes:');
+      sampleChanges.forEach(function(l){ log(l); });
+      if (changed > sampleChanges.length) log('  ... and ' + (changed - sampleChanges.length) + ' more');
+    }
+
+    var totalAssigned = merged.filter(function(c){
+      return Array.isArray(c.curated_collection_ids) && c.curated_collection_ids.length > 0;
+    }).length;
+
+    document.getElementById('stats').innerHTML =
+      '<span class="stat">Total concepts: <b>' + merged.length + '</b></span>' +
+      '<span class="stat">Will change: <b>' + changed + '</b></span>' +
+      '<span class="stat">With collection(s) after merge: <b>' + totalAssigned + '</b> (' + Math.round(totalAssigned/merged.length*100) + '%)</span>';
+
+    if (changed === 0) {
+      log('');
+      log('Nothing to change — concepts.json already matches the patch.', 'ok');
+    } else {
+      mergedConcepts = merged;
+      log('');
+      log('Preview complete. Review the changes above, then click "Commit to GitHub" to apply.', 'ok');
+    }
+
+  } catch (err) {
+    log('ERROR: ' + err.message, 'warn');
+  } finally {
+    document.getElementById('previewBtn').disabled = false;
+    updateButtons();
+  }
+}
+
+// ---------- Commit ----------
+async function commitMerge() {
+  if (!mergedConcepts) return;
+  if (!confirm('This will commit the updated concepts.json (' + mergedConcepts.length + ' concepts) to ' + cfg().repo + '. Continue?')) return;
+
+  document.getElementById('commitBtn').disabled = true;
+  document.getElementById('previewBtn').disabled = true;
+  log('--- COMMITTING ---');
+
+  try {
+    var c = cfg();
+
+    // Re-fetch sha right before commit in case it changed
+    log('Re-fetching current sha to avoid conflicts...');
+    var url = 'https://api.github.com/repos/' + c.repo + '/contents/' + c.path + '?ref=' + c.branch;
+    var shaRes = await fetch(url, {
+      headers: {
+        'Authorization': 'token ' + c.token,
+        'Accept': 'application/vnd.github+json',
+        'User-Agent': 'Epistemic-Merge-Tool'
+      }
+    });
+    if (!shaRes.ok) throw new Error('Failed to re-fetch sha (HTTP ' + shaRes.status + ')');
+    var shaData = await shaRes.json();
+    var currentSha = shaData.sha;
+
+    if (currentSha !== liveSha) {
+      log('WARNING: concepts.json changed on GitHub since preview (different sha). Proceeding with the new sha — your merge is still based on the data fetched during preview. If this worries you, click Preview again first.', 'warn');
+    }
+
+    var content = JSON.stringify(mergedConcepts, null, 2);
+    // Encode as base64 (handle unicode)
+    var b64 = btoa(unescape(encodeURIComponent(content)));
+
+    var assignedCount = mergedConcepts.filter(function(c){
+      return Array.isArray(c.curated_collection_ids) && c.curated_collection_ids.length > 0;
+    }).length;
+
+    var commitMsg = 'chore: merge curated_collection_ids (' + assignedCount + '/' + mergedConcepts.length + ' assigned)';
+
+    log('Pushing commit...');
+    var putRes = await fetch(url.split('?')[0], {
+      method: 'PUT',
+      headers: {
+        'Authorization': 'token ' + c.token,
+        'Accept': 'application/vnd.github+json',
+        'Content-Type': 'application/json',
+        'User-Agent': 'Epistemic-Merge-Tool'
+      },
+      body: JSON.stringify({
+        message: commitMsg,
+        content: b64,
+        sha: currentSha,
+        branch: c.branch
+      })
+    });
+
+    if (!putRes.ok) {
+      var errText = await putRes.text();
+      throw new Error('Commit failed (HTTP ' + putRes.status + '): ' + errText.slice(0,300));
+    }
+
+    var putData = await putRes.json();
+    log('');
+    log('SUCCESS — committed to ' + c.branch + '.', 'ok');
+    log('Commit: ' + (putData.commit && putData.commit.sha ? putData.commit.sha.slice(0,8) : '?'));
+    log('Vercel will redeploy automatically (usually 1-2 minutes).');
+    log('');
+    log('Reminder: this was a one-time merge. To re-run later with a fresh patch, just reload this page and repeat steps 1-2.');
+
+    mergedConcepts = null;
+    document.getElementById('stats').innerHTML += '<br><span class="stat ok">✓ Committed</span>';
+
+  } catch (err) {
+    log('ERROR: ' + err.message, 'warn');
+    document.getElementById('previewBtn').disabled = false;
+  } finally {
+    updateButtons();
+  }
+}
+</script>
+</body>
+</html>
