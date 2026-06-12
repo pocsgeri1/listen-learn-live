@@ -1021,6 +1021,161 @@
     text-align: center;
     padding: 3rem 0;
   }
+
+  /* ============================================
+     THEMES ROW — v1.77
+     ============================================ */
+  #themesSection {
+    padding: 0 2rem;
+    margin: 0.5rem 0 1.25rem;
+  }
+  .themes-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+  .themes-scroll-wrap {
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .themes-scroll-wrap::-webkit-scrollbar { display: none; }
+  .themes-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  @media (max-width: 700px) {
+    .themes-row { flex-wrap: nowrap; width: max-content; }
+  }
+  .theme-tile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    min-width: 76px;
+    max-width: 96px;
+    flex-shrink: 0;
+  }
+  .theme-tile:hover,
+  .theme-tile--active {
+    border-color: var(--accent2);
+    background: var(--surface2);
+  }
+  .theme-symbol {
+    font-size: 26px;
+    line-height: 1;
+    color: var(--accent);
+    font-family: 'DM Mono', monospace;
+  }
+  .theme-title {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--muted2);
+    text-align: center;
+    line-height: 1.3;
+  }
+  .theme-tile--active .theme-title { color: var(--text); }
+  .theme-tile-more {
+    color: var(--muted2);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    justify-content: center;
+  }
+  .theme-tile-more:hover { color: var(--text); }
+
+  /* Preview expand zone */
+  #themePreviewZone {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1);
+  }
+  #themePreviewZone.open {
+    max-height: 620px;
+  }
+  @media (max-width: 700px) {
+    #themePreviewZone.open { max-height: 760px; }
+  }
+  .theme-preview-header {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding: 16px 2rem 8px;
+    flex-wrap: wrap;
+  }
+  .theme-preview-symbol {
+    font-family: 'DM Mono', monospace;
+    font-size: 18px;
+    color: var(--accent);
+  }
+  .theme-preview-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    color: var(--text);
+  }
+  .theme-preview-tagline {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    color: var(--muted2);
+  }
+  .theme-preview-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    padding: 0 2rem 12px;
+  }
+  @media (max-width: 700px) {
+    .theme-preview-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 6px;
+    }
+    .theme-preview-grid .concept-card { font-size: 0.85em; }
+  }
+  .theme-preview-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem 16px;
+  }
+  .theme-explore-btn {
+    background: none;
+    border: 1px solid var(--border-hover);
+    border-radius: 6px;
+    color: var(--accent);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    padding: 7px 14px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .theme-explore-btn:hover {
+    background: var(--surface2);
+    border-color: var(--accent2);
+  }
+  .theme-count-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .theme-coming-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    border: 1px dashed var(--border);
+    border-radius: 4px;
+    padding: 2px 6px;
+    margin-left: 8px;
+  }
+
   /* ============================================
      CATEGORY ROWS — full bleed, static (no auto-scroll)
      ============================================ */
@@ -6014,6 +6169,28 @@
 </section>
 <!-- /ZONE 1 -->
 
+<!-- THEMES ROW — v1.77 -->
+<section id="themesSection">
+  <div class="themes-label">THEMES</div>
+  <div class="themes-scroll-wrap">
+    <div class="themes-row" id="themesRow"></div>
+  </div>
+</section>
+
+<!-- THEME PREVIEW EXPAND ZONE -->
+<div id="themePreviewZone">
+  <div class="theme-preview-header">
+    <span id="themePreviewSymbol" class="theme-preview-symbol"></span>
+    <span id="themePreviewTitle" class="theme-preview-title"></span>
+    <span id="themePreviewTagline" class="theme-preview-tagline"></span>
+  </div>
+  <div class="theme-preview-grid" id="themePreviewGrid"></div>
+  <div class="theme-preview-footer">
+    <button class="theme-explore-btn" id="themeExploreBtn">Explore this theme →</button>
+    <span class="theme-count-label" id="themeCountLabel"></span>
+  </div>
+</div>
+
 <!-- EPISODES SECTION -->
 <div id="episodesSection" class="episodes-section">
   <div class="episodes-controls">
@@ -6096,6 +6273,24 @@
   <div class="ep-drawer-cat-filter" id="epDrawerCatFilter"></div>
   <div class="ep-drawer-body">
     <div class="ep-drawer-grid" id="epDrawerGrid"></div>
+  </div>
+</div>
+
+<!-- THEME DRAWER — v1.77, reuses ep-drawer CSS classes -->
+<div class="ep-drawer-backdrop" id="themeBackdrop" onclick="closeThemeDrawer()"></div>
+<div class="ep-drawer" id="themeDrawer">
+  <div class="ep-drawer-handle"></div>
+  <div class="ep-drawer-header">
+    <div class="ep-drawer-meta">
+      <div class="ep-drawer-title" id="themeDrawerTitle"></div>
+      <div class="ep-drawer-pills" id="themeDrawerPills"></div>
+    </div>
+    <button class="ep-drawer-close" onclick="closeThemeDrawer()">✕</button>
+  </div>
+  <div class="ep-drawer-mix" id="themeDrawerMix"></div>
+  <div class="ep-drawer-cat-filter" id="themeDrawerCatFilter"></div>
+  <div class="ep-drawer-body">
+    <div class="ep-drawer-grid" id="themeDrawerGrid"></div>
   </div>
 </div>
 
@@ -6475,6 +6670,7 @@ async function loadConcepts() {
     window.CONCEPTS = CONCEPTS;
     await loadCollections();
     buildFuseIndex();
+    renderThemesRow();
     render();
     updateProgress();
     updateHeaderCounts();
@@ -7470,6 +7666,317 @@ function closeEpisodeDrawer() {
 }
 
 let _currentOpenEpCardId = null;
+
+/* ============================================
+   THEMES ROW — v1.77
+   ============================================ */
+let _themeOpenId = null;
+let _currentOpenThemePreviewCardId = null;
+let _currentOpenThemeDrawerCardId = null;
+
+function renderThemesRow() {
+  const row = document.getElementById('themesRow');
+  if (!row) return;
+  const thematic = Object.values(COLLECTIONS_BY_ID).filter(c => c && c.type === 'thematic');
+  if (!thematic.length) { row.innerHTML = ''; return; }
+
+  thematic.sort((a, b) => a.id - b.id);
+  const first = thematic.slice(0, 5);
+  const rest = thematic.slice(5);
+
+  const tileHtml = (col) => `<button class="theme-tile" id="themeTile${col.id}" data-id="${col.id}" onclick="themeClick(${col.id})">
+      <span class="theme-symbol">${col.symbol}</span>
+      <span class="theme-title">${col.title}</span>
+    </button>`;
+
+  let html = first.map(tileHtml).join('');
+  if (rest.length) {
+    html += `<button class="theme-tile theme-tile-more" id="themeMoreBtn" onclick="themeToggleMore()">More ↓</button>`;
+    html += rest.map(tileHtml).join('');
+  }
+  row.innerHTML = html;
+
+  // Hide "rest" tiles until More is clicked
+  rest.forEach(col => {
+    const el = document.getElementById('themeTile' + col.id);
+    if (el) el.style.display = 'none';
+  });
+}
+
+function themeToggleMore() {
+  const btn = document.getElementById('themeMoreBtn');
+  if (!btn) return;
+  const thematic = Object.values(COLLECTIONS_BY_ID).filter(c => c && c.type === 'thematic').sort((a,b)=>a.id-b.id);
+  const rest = thematic.slice(5);
+  const expanded = btn.classList.toggle('expanded');
+  rest.forEach(col => {
+    const el = document.getElementById('themeTile' + col.id);
+    if (el) el.style.display = expanded ? '' : 'none';
+  });
+  btn.textContent = expanded ? 'Less ↑' : 'More ↓';
+}
+
+function themeClick(id) {
+  playPillSFX();
+  const zone = document.getElementById('themePreviewZone');
+  if (!zone) return;
+
+  // Toggle off if clicking the already-open tile
+  if (_themeOpenId === id) {
+    zone.classList.remove('open');
+    document.querySelectorAll('.theme-tile--active').forEach(t => t.classList.remove('theme-tile--active'));
+    _themeOpenId = null;
+    return;
+  }
+
+  const col = COLLECTIONS_BY_ID[id];
+  if (!col) return;
+
+  const matches = CONCEPTS.filter(c => Array.isArray(c.curated_collection_ids) && c.curated_collection_ids.includes(id));
+
+  // Active tile state
+  document.querySelectorAll('.theme-tile--active').forEach(t => t.classList.remove('theme-tile--active'));
+  const tile = document.getElementById('themeTile' + id);
+  if (tile) tile.classList.add('theme-tile--active');
+
+  // Header
+  document.getElementById('themePreviewSymbol').textContent = col.symbol || '';
+  document.getElementById('themePreviewTitle').textContent = col.title || '';
+  document.getElementById('themePreviewTagline').textContent = col.tagline || '';
+
+  // Pick 3: editors_pick first, then fill randomly
+  const picks = matches.filter(c => c.editors_pick === true);
+  const others = matches.filter(c => c.editors_pick !== true);
+  // shuffle others for variety
+  for (let i = others.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [others[i], others[j]] = [others[j], others[i]];
+  }
+  const preview = picks.concat(others).slice(0, 3);
+
+  _currentOpenThemePreviewCardId = null;
+  const grid = document.getElementById('themePreviewGrid');
+  grid.innerHTML = preview.map(c => _renderThemeCard(c, 'tpc', col)).join('');
+
+  // Footer
+  const countLabel = document.getElementById('themeCountLabel');
+  const exploreBtn = document.getElementById('themeExploreBtn');
+  if (matches.length < 5) {
+    countLabel.innerHTML = `${matches.length} idea${matches.length !== 1 ? 's' : ''} <span class="theme-coming-badge">more coming soon</span>`;
+  } else if (matches.length < 10) {
+    countLabel.innerHTML = `${matches.length} ideas <span class="theme-coming-badge">more coming weekly</span>`;
+  } else {
+    countLabel.textContent = `${matches.length} ideas in this theme`;
+  }
+  exploreBtn.onclick = () => openThemeDrawer(id);
+
+  zone.classList.add('open');
+  _themeOpenId = id;
+
+  // Scroll the preview into view gently
+  requestAnimationFrame(() => {
+    zone.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  });
+}
+
+// Shared card renderer for theme preview + drawer (mirrors episode drawer card markup)
+function _renderThemeCard(c, prefix, col) {
+  const isMastered = mastered.has(c.id);
+  const catColor = CAT_COLOR[c.category] || '#e8d5a3';
+  return `
+  <div class="concept-card${isMastered?' mastered':''}${c.editors_pick===true?' editors-pick':''}" id="${prefix}${c.id}" style="--cat-color:${catColor}" onclick="toggleThemeCard('${prefix}', ${c.id})">
+    <div class="card-inner">
+      <div class="card-front">
+        <div class="card-meta">
+          <span class="card-num">#${String(c.id).padStart(3,'0')}</span>
+          ${c.editors_pick===true ? '<span class="pick-badge"><span class="pick-star">★</span>PICK</span>' : ''}
+          <span class="mastered-badge">✓ mastered</span>
+        </div>
+        <div class="card-term">${c.term}</div>
+        <div class="card-hook">${c.hook}</div>
+        <div class="card-flip-hint"><div class="card-flip-hint-dot"></div>tap to explore</div>
+      </div>
+      <div class="card-back">
+        <div class="card-actions card-actions-top">
+          <button class="btn-share" onclick="event.stopPropagation();shareCard(event,${c.id})">↑ Share</button>
+          <button class="btn-chat${_csIsSaved(c.id)?' saved':''}" onclick="event.stopPropagation();toggleChatSave(${c.id})" id="btnChat${prefix}${c.id}" title="Save to Conversations">💬 CHAT</button>
+        </div>
+        <div class="card-actions-divider"></div>
+        <div class="back-section-label">What it means</div>
+        <div class="back-text">${c.plain}</div>
+        <div class="back-section-label">Analogy</div>
+        <div class="back-analogy">${c.analogy}</div>
+        <div class="back-section-label">Reflect &amp; use it</div>
+        <div class="back-prompt">
+          <div class="prompt-icon">💬</div>
+          <p>${c.prompt}</p>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function toggleThemeCard(prefix, id) {
+  const el = document.getElementById(prefix + id);
+  if (!el) return;
+  const wasOpen = el.classList.contains('open');
+
+  const current = prefix === 'tpc' ? _currentOpenThemePreviewCardId : _currentOpenThemeDrawerCardId;
+
+  if (current !== null && current !== id) {
+    const prev = document.getElementById(prefix + current);
+    if (prev) prev.classList.remove('open');
+  }
+
+  el.classList.toggle('open');
+  const isNowOpen = el.classList.contains('open');
+  if (prefix === 'tpc') _currentOpenThemePreviewCardId = isNowOpen ? id : null;
+  else _currentOpenThemeDrawerCardId = isNowOpen ? id : null;
+  playCardFlipSFX(isNowOpen);
+
+  const gridId = prefix === 'tpc' ? 'themePreviewGrid' : 'themeDrawerGrid';
+  const grid = document.getElementById(gridId);
+  if (grid) {
+    const anyOpen = grid.querySelector('.concept-card.open') !== null;
+    grid.classList.toggle('has-open', anyOpen);
+  }
+  if (!wasOpen && !openedToday.has(id)) {
+    openedToday.add(id);
+    saveDailyGoal();
+    updateDailyGoal();
+  }
+}
+
+function openThemeDrawer(id) {
+  const col = COLLECTIONS_BY_ID[id];
+  if (!col) return;
+
+  window._themeScrollY = window.scrollY;
+  document.getElementById('themeDrawerTitle').textContent = col.title;
+  document.getElementById('themeDrawerPills').innerHTML = `<span class="ep-drawer-person">${col.tagline || ''}</span>`;
+  document.getElementById('themeDrawerCatFilter').innerHTML = '';
+  document.getElementById('themeDrawerGrid').innerHTML = '<div class="ep-empty">Loading…</div>';
+  document.getElementById('themeBackdrop').classList.add('open');
+  document.getElementById('themeDrawer').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  document.body.classList.add('drawer-open');
+
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    _renderThemeDrawerContent(col, id);
+  }));
+}
+
+function _renderThemeDrawerContent(col, id) {
+  const matches = CONCEPTS.filter(c => Array.isArray(c.curated_collection_ids) && c.curated_collection_ids.includes(id));
+
+  const pills = document.getElementById('themeDrawerPills');
+  const countPill = `<span class="ep-drawer-count">${matches.length} concept${matches.length !== 1 ? 's' : ''}</span>`;
+  pills.innerHTML = `<span class="ep-drawer-person">${col.tagline || ''}</span>` + countPill;
+
+  const catCounts = {};
+  matches.forEach(c => { catCounts[c.category] = (catCounts[c.category] || 0) + 1; });
+  const sortedCats = Object.entries(catCounts).sort((a,b) => b[1]-a[1]);
+  const mixBar = document.getElementById('themeDrawerMix');
+  mixBar.innerHTML = matches.length > 0
+    ? sortedCats.map(([cat, n]) => {
+        const pct = (n / matches.length * 100).toFixed(1);
+        return `<div class="episode-mix-segment" style="width:${pct}%;background:${CAT_COLOR[cat]||'#e8d5a3'}"></div>`;
+      }).join('')
+    : '';
+
+  const grid = document.getElementById('themeDrawerGrid');
+  if (!matches.length) {
+    grid.innerHTML = '<div class="ep-empty">No concepts yet in this theme</div>';
+    document.getElementById('themeDrawerCatFilter').style.display = 'none';
+    return;
+  }
+
+  const catGroups = {};
+  matches.forEach(c => {
+    if (!catGroups[c.category]) catGroups[c.category] = [];
+    catGroups[c.category].push(c);
+  });
+  const sortedCatKeys = Object.keys(catGroups).sort((a, b) => catGroups[b].length - catGroups[a].length);
+
+  grid.innerHTML = sortedCatKeys.map(catKey => {
+    const catInfo = CATEGORIES.find(x => x.id === catKey) || { name: catKey, color: '#e8d5a3' };
+    const catColor = CAT_COLOR[catKey] || '#e8d5a3';
+    const cards = catGroups[catKey].map(c => _renderThemeCard(c, 'tdc', col)).join('');
+    return `<div class="ep-cat-column" data-cat="${catKey}">
+      <div class="ep-cat-column-header" style="--col-color:${catColor}">
+        <span class="ep-cat-column-label">${catInfo.name}</span>
+        <span class="ep-cat-column-count">${catGroups[catKey].length}</span>
+      </div>
+      ${cards}
+    </div>`;
+  }).join('');
+
+  const filterRow = document.getElementById('themeDrawerCatFilter');
+  if (sortedCatKeys.length > 1) {
+    filterRow.style.display = '';
+    filterRow.innerHTML = sortedCatKeys.map((catKey, i) => {
+      const catInfo = CATEGORIES.find(x => x.id === catKey) || { name: catKey };
+      const color = CAT_COLOR[catKey] || '#e8d5a3';
+      return `<button class="ep-drawer-cat-pill${i === 0 ? ' active' : ''}" data-cat="${catKey}" style="--col-color:${color}" onclick="filterThemeDrawerCat('${catKey}')">${catInfo.name} <span style="opacity:0.5;font-size:0.55rem">${catGroups[catKey].length}</span></button>`;
+    }).join('');
+    filterThemeDrawerCat(sortedCatKeys[0]);
+  } else {
+    filterRow.style.display = 'none';
+    document.querySelectorAll('#themeDrawerGrid .ep-cat-column').forEach(c => c.classList.add('visible'));
+  }
+}
+
+function filterThemeDrawerCat(catKey) {
+  playPillSFX();
+  document.querySelectorAll('#themeDrawerCatFilter .ep-drawer-cat-pill').forEach(p => {
+    p.classList.toggle('active', p.dataset.cat === catKey);
+  });
+  document.querySelectorAll('#themeDrawerGrid .ep-cat-column').forEach(col => {
+    const match = col.dataset.cat === catKey;
+    col.classList.toggle('visible', match);
+    col.classList.remove('faded');
+    if (match) {
+      col.style.animation = 'none';
+      requestAnimationFrame(() => { col.style.animation = ''; });
+    }
+  });
+  const body = document.getElementById('themeDrawer').querySelector('.ep-drawer-body');
+  if (body) body.scrollTop = 0;
+}
+
+function closeThemeDrawer() {
+  document.getElementById('themeBackdrop').classList.remove('open');
+  document.getElementById('themeDrawer').classList.remove('open');
+
+  const grid = document.getElementById('themeDrawerGrid');
+  if (grid) {
+    grid.classList.remove('has-open');
+    grid.querySelectorAll('.concept-card.open').forEach(c => c.classList.remove('open'));
+  }
+  _currentOpenThemeDrawerCardId = null;
+
+  setTimeout(() => {
+    const sy = window._themeScrollY;
+    window._themeScrollY = null;
+    document.body.classList.remove('drawer-open');
+    document.body.style.overflow = '';
+    if (typeof sy === 'number') {
+      document.documentElement.style.scrollBehavior = 'auto';
+      document.documentElement.scrollTop = sy;
+      document.body.scrollTop = sy;
+      requestAnimationFrame(() => { document.documentElement.style.scrollBehavior = ''; });
+    }
+    const g = document.getElementById('themeDrawerGrid');
+    if (g) g.innerHTML = '';
+  }, 400);
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape' && document.getElementById('themeDrawer').classList.contains('open')) {
+    closeThemeDrawer();
+  }
+});
+
 
 function toggleEpCard(id) {
   const el = document.getElementById('epcc'+id);
