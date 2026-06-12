@@ -360,5 +360,193 @@
     "episode_url": "https://www.youtube.com/watch?v=4DBvAms7gHA",
     "aired_date": "2026-05-27",
     "created_date": "2026-06-04"
+  },
+  {
+    "id": 101,
+    "type": "thematic",
+    "title": "Self & Signal",
+    "symbol": "◎",
+    "tagline": "how you come across vs. who you are",
+    "categories": [
+      "identity",
+      "psychology",
+      "language"
+    ]
+  },
+  {
+    "id": 102,
+    "type": "thematic",
+    "title": "Risk & Ruin",
+    "symbol": "⚖",
+    "tagline": "decision-making under uncertainty",
+    "categories": [
+      "finance",
+      "thinking"
+    ]
+  },
+  {
+    "id": 103,
+    "type": "thematic",
+    "title": "Crowds & Contrarians",
+    "symbol": "⊕",
+    "tagline": "why groups get things wrong",
+    "categories": [
+      "society",
+      "thinking",
+      "psychology"
+    ]
+  },
+  {
+    "id": 104,
+    "type": "thematic",
+    "title": "Body of Evidence",
+    "symbol": "◈",
+    "tagline": "what the research actually says about how you live",
+    "categories": [
+      "health",
+      "science"
+    ]
+  },
+  {
+    "id": 105,
+    "type": "thematic",
+    "title": "Persuasion Lab",
+    "symbol": "◆",
+    "tagline": "the mechanics of changing minds",
+    "categories": [
+      "language",
+      "psychology",
+      "power"
+    ]
+  },
+  {
+    "id": 106,
+    "type": "thematic",
+    "title": "The Long Game",
+    "symbol": "∞",
+    "tagline": "patience, compounding, delayed payoff",
+    "categories": [
+      "finance",
+      "business",
+      "thinking"
+    ]
+  },
+  {
+    "id": 107,
+    "type": "thematic",
+    "title": "Attention Economics",
+    "symbol": "◉",
+    "tagline": "what your focus is actually worth",
+    "categories": [
+      "tech-ai",
+      "psychology",
+      "thinking"
+    ]
+  },
+  {
+    "id": 108,
+    "type": "thematic",
+    "title": "Status Games",
+    "symbol": "▲",
+    "tagline": "the unwritten rules everyone plays by",
+    "categories": [
+      "power",
+      "society",
+      "relationships"
+    ]
+  },
+  {
+    "id": 109,
+    "type": "thematic",
+    "title": "Making Things",
+    "symbol": "✦",
+    "tagline": "what it actually takes to build something",
+    "categories": [
+      "creativity",
+      "business"
+    ]
+  },
+  {
+    "id": 110,
+    "type": "thematic",
+    "title": "The Relationship Stack",
+    "symbol": "⬡",
+    "tagline": "how connection actually works",
+    "categories": [
+      "relationships",
+      "psychology"
+    ]
+  },
+  {
+    "id": 111,
+    "type": "thematic",
+    "title": "Hard Conversations",
+    "symbol": "—",
+    "tagline": "saying the thing no one wants to say",
+    "categories": [
+      "relationships",
+      "language",
+      "psychology"
+    ]
+  },
+  {
+    "id": 112,
+    "type": "thematic",
+    "title": "Unknown Unknowns",
+    "symbol": "○",
+    "tagline": "what you don't know you don't know",
+    "categories": [
+      "thinking",
+      "philosophy",
+      "science"
+    ]
+  },
+  {
+    "id": 113,
+    "type": "thematic",
+    "title": "Money as a Mirror",
+    "symbol": "⬜",
+    "tagline": "what spending reveals about values",
+    "categories": [
+      "finance",
+      "identity",
+      "psychology"
+    ]
+  },
+  {
+    "id": 114,
+    "type": "thematic",
+    "title": "The Credibility Gap",
+    "symbol": "∆",
+    "tagline": "why smart people aren't believed",
+    "categories": [
+      "language",
+      "power",
+      "society"
+    ]
+  },
+  {
+    "id": 115,
+    "type": "thematic",
+    "title": "Systems & Chaos",
+    "symbol": "≋",
+    "tagline": "why things break the way they do",
+    "categories": [
+      "thinking",
+      "science",
+      "society"
+    ]
+  },
+  {
+    "id": 116,
+    "type": "thematic",
+    "title": "Sovereign Mind",
+    "symbol": "✕",
+    "tagline": "thinking for yourself when everyone's being told what to think",
+    "categories": [
+      "philosophy",
+      "identity",
+      "thinking"
+    ]
   }
 ]
