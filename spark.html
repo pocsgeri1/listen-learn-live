@@ -1023,81 +1023,158 @@
   }
 
   /* ============================================
-     THEMES ROW — v1.79
+     BROWSE TOGGLE + THEMES GRID — v1.80
      ============================================ */
+  .browse-toggle-wrap {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 2rem;
+    margin: 0 0 1.25rem;
+  }
+  .browse-toggle {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted2);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 8px 18px;
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s, background 0.18s;
+  }
+  .browse-toggle:hover {
+    color: var(--text);
+    border-color: var(--accent);
+  }
+  .browse-toggle.active {
+    color: var(--accent);
+    border-color: var(--accent);
+    background: rgba(232,213,163,0.10);
+  }
+
   #themesSection {
     padding: 0 2rem;
-    margin: 0 0 0.75rem;
-    text-align: center;
+    margin: 0 0 1.5rem;
   }
-  .themes-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 14px;
-  }
-  .themes-scroll-wrap {
-    overflow-x: visible;
-  }
-  .themes-row {
+
+  /* Category filter pills above the grid */
+  .themes-filter-row {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 10px;
+    gap: 8px;
+    max-width: 980px;
+    margin: 0 auto 1.25rem;
+  }
+  .theme-filter-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted2);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 6px 13px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color 0.15s, border-color 0.15s, background 0.18s;
+  }
+  .theme-filter-pill:hover {
+    color: var(--text);
+    border-color: var(--accent);
+  }
+  .theme-filter-pill.active {
+    color: var(--accent);
+    border-color: var(--accent);
+    background: rgba(232,213,163,0.10);
+  }
+
+  /* 3x3 image-tile grid */
+  .themes-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
     max-width: 980px;
     margin: 0 auto;
   }
-  .theme-tile {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    padding: 12px 16px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
+  @media (max-width: 900px) {
+    .themes-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 540px) {
+    .themes-grid { grid-template-columns: 1fr; }
+  }
+  .theme-card {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    border-radius: 14px;
+    overflow: hidden;
     cursor: pointer;
-    transition: border-color 0.2s, background 0.2s;
-    min-width: 90px;
-    max-width: 110px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    transition: border-color 0.2s, transform 0.2s;
   }
-  .theme-tile:hover,
-  .theme-tile--active {
+  .theme-card:hover {
     border-color: var(--accent2);
-    background: var(--surface2);
+    transform: translateY(-3px);
   }
-  .theme-symbol {
-    font-size: 22px;
-    line-height: 1;
+  .theme-card--active {
+    border-color: var(--accent);
   }
-  .theme-title {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 11px;
-    font-weight: 500;
-    color: var(--muted2);
-    text-align: center;
-    line-height: 1.3;
+  .theme-card-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
-  .theme-tile--active .theme-title { color: var(--text); }
-
-  /* "More" — plain text link, not a tile */
-  .theme-more-link {
-    display: inline-flex;
+  /* Fallback gradient + emoji when no image is available */
+  .theme-card-fallback {
+    position: absolute;
+    inset: 0;
+    display: flex;
     align-items: center;
-    align-self: center;
+    justify-content: center;
+    font-size: 2.6rem;
+    background: radial-gradient(circle at 30% 30%, var(--surface2), var(--bg));
+  }
+  .theme-card-overlay {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    padding: 14px 14px 12px;
+    background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0) 100%);
+  }
+  [data-theme="light"] .theme-card-overlay {
+    background: linear-gradient(to top, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0) 100%);
+  }
+  .theme-card-emoji {
+    font-size: 1rem;
+    margin-right: 6px;
+  }
+  .theme-card-title {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #fff;
+  }
+
+  .themes-show-all {
+    display: block;
+    margin: 1.25rem auto 0;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
     background: none;
     border: none;
-    color: var(--muted);
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.08em;
     cursor: pointer;
-    padding: 0 6px;
     transition: color 0.2s;
   }
-  .theme-more-link:hover { color: var(--text); }
+  .themes-show-all:hover { color: var(--text); }
 
 
   /* Preview expand zone */
@@ -1202,12 +1279,6 @@
   }
   [data-theme="light"] #themePreviewGrid.has-open .concept-card:not(.open) {
     opacity: 0.45;
-  }
-  /* Center term+hook block — same as Library (.nf-row) cards */
-  .theme-preview-col .card-term,
-  #themeDrawerGrid .card-term {
-    margin-top: auto;
-    padding-top: 0.5rem;
   }
 
   /* ============================================
@@ -4342,12 +4413,13 @@
   .nf-row .card-hook {
     font-size: 0.82rem;
     line-height: 1.55;
+    margin-bottom: auto;
   }
   .nf-row .card-flip-hint {
     display: flex;
     align-items: center;
     gap: 5px;
-    margin-top: auto;
+    margin-top: 0;
     padding-top: 1rem;
     font-family: 'DM Mono', monospace;
     font-size: 0.52rem;
@@ -4534,13 +4606,14 @@
   }
   .ep-cat-column .card-term {
     font-size: 1.12rem;
-    margin-top: 0;
+    margin-top: auto;
     padding-top: 0.25rem;
     margin-bottom: 0.3rem;
   }
   .ep-cat-column .card-hook {
     font-size: 0.82rem;
     line-height: 1.55;
+    margin-bottom: auto;
   }
   .ep-cat-column .card-flip-hint {
     display: none;
@@ -6203,13 +6276,29 @@
 </section>
 <!-- /ZONE 1 -->
 
-<!-- THEMES ROW — v1.77 -->
-<section id="themesSection">
-  <div class="themes-label">THEMES</div>
-  <div class="themes-scroll-wrap">
-    <div class="themes-row" id="themesRow"></div>
+<!-- BROWSE TOGGLE — v1.80 -->
+<div class="browse-toggle-wrap">
+  <button class="browse-toggle active" id="browseToggleEpisodes" onclick="browseSwitch('episodes')">By Episode</button>
+  <button class="browse-toggle" id="browseToggleThemes" onclick="browseSwitch('themes')">By Theme</button>
+</div>
+
+<!-- EPISODES SECTION -->
+<div id="episodesSection" class="episodes-section">
+  <div class="episodes-controls">
+    <div class="episodes-app-header">
+      <div class="app-title" style="display:none">Browse <em>episodes</em></div>
+    </div>
   </div>
-</section>
+  <div id="episodesRow"></div>
+</div>
+<!-- /EPISODES SECTION -->
+
+<!-- THEMES SECTION — v1.80, 3x3 grid -->
+<div id="themesSection" style="display:none">
+  <div class="themes-filter-row" id="themesFilterRow"></div>
+  <div class="themes-grid" id="themesGrid"></div>
+  <button class="themes-show-all" id="themesShowAllBtn" onclick="themesShowAll()" style="display:none">Show all themes ↓</button>
+</div>
 
 <!-- THEME PREVIEW EXPAND ZONE -->
 <div id="themePreviewZone">
@@ -6224,17 +6313,6 @@
     <span class="theme-count-label" id="themeCountLabel"></span>
   </div>
 </div>
-
-<!-- EPISODES SECTION -->
-<div id="episodesSection" class="episodes-section">
-  <div class="episodes-controls">
-    <div class="episodes-app-header">
-      <div class="app-title" style="display:none">Browse <em>episodes</em></div>
-    </div>
-  </div>
-  <div id="episodesRow"></div>
-</div>
-<!-- /EPISODES SECTION -->
 
 <!-- SHORTS SECTION -->
 <div id="shortsSection" class="episodes-section" style="display:none!important;visibility:hidden;height:0;overflow:hidden;padding:0;margin:0;">
@@ -6704,7 +6782,7 @@ async function loadConcepts() {
     window.CONCEPTS = CONCEPTS;
     await loadCollections();
     buildFuseIndex();
-    renderThemesRow();
+    // v1.80: themes grid renders lazily on first browseSwitch('themes')
     render();
     updateProgress();
     updateHeaderCounts();
@@ -7702,53 +7780,109 @@ function closeEpisodeDrawer() {
 let _currentOpenEpCardId = null;
 
 /* ============================================
-   THEMES ROW — v1.77
+   BROWSE TOGGLE + THEMES GRID — v1.80
    ============================================ */
 let _themeOpenId = null;
 let _currentOpenThemePreviewCardId = null;
 let _currentOpenThemeDrawerCardId = null;
+let _themeActiveFilterCat = null; // null = no filter
+let _themesShowAll = false;
 
-function renderThemesRow() {
-  const row = document.getElementById('themesRow');
-  if (!row) return;
-  const thematic = Object.values(COLLECTIONS_BY_ID).filter(c => c && c.type === 'thematic');
-  if (!thematic.length) { row.innerHTML = ''; return; }
+function browseSwitch(mode) {
+  playPillSFX();
+  const epBtn = document.getElementById('browseToggleEpisodes');
+  const themeBtn = document.getElementById('browseToggleThemes');
+  const epSection = document.getElementById('episodesSection');
+  const themeSection = document.getElementById('themesSection');
 
-  thematic.sort((a, b) => a.id - b.id);
-  const first = thematic.slice(0, 5);
-  const rest = thematic.slice(5);
-
-  const tileHtml = (col) => `<button class="theme-tile" id="themeTile${col.id}" data-id="${col.id}" onclick="themeClick(${col.id})">
-      <span class="theme-symbol">${col.symbol}</span>
-      <span class="theme-title">${col.title}</span>
-    </button>`;
-
-  let html = first.map(tileHtml).join('');
-  if (rest.length) {
-    html += `<button class="theme-more-link" id="themeMoreBtn" onclick="themeToggleMore()">More ↓</button>`;
-    html += rest.map(tileHtml).join('');
+  if (mode === 'themes') {
+    epBtn.classList.remove('active');
+    themeBtn.classList.add('active');
+    epSection.style.display = 'none';
+    themeSection.style.display = '';
+    if (!themeSection.dataset.rendered) {
+      renderThemesFilterRow();
+      renderThemesGrid();
+      themeSection.dataset.rendered = '1';
+    }
+  } else {
+    themeBtn.classList.remove('active');
+    epBtn.classList.add('active');
+    themeSection.style.display = 'none';
+    epSection.style.display = '';
+    // Close any open theme preview when leaving the Themes view
+    const zone = document.getElementById('themePreviewZone');
+    if (zone && zone.classList.contains('open')) {
+      zone.classList.remove('open');
+      _themeOpenId = null;
+    }
   }
-  row.innerHTML = html;
-
-  // Hide "rest" tiles until More is clicked
-  rest.forEach(col => {
-    const el = document.getElementById('themeTile' + col.id);
-    if (el) el.style.display = 'none';
-  });
 }
 
-function themeToggleMore() {
-  const btn = document.getElementById('themeMoreBtn');
-  if (!btn) return;
-  const thematic = Object.values(COLLECTIONS_BY_ID).filter(c => c && c.type === 'thematic').sort((a,b)=>a.id-b.id);
-  const rest = thematic.slice(5);
-  const expanded = btn.dataset.expanded === '1';
-  rest.forEach(col => {
-    const el = document.getElementById('themeTile' + col.id);
-    if (el) el.style.display = expanded ? 'none' : '';
+function renderThemesFilterRow() {
+  const row = document.getElementById('themesFilterRow');
+  if (!row) return;
+  const cats = CATEGORIES.filter(c => c.id !== 'all');
+  let html = `<button class="theme-filter-pill active" data-cat="all" onclick="themeFilterClick('all')">All</button>`;
+  html += cats.map(c => `<button class="theme-filter-pill" data-cat="${c.id}" onclick="themeFilterClick('${c.id}')">${c.name}</button>`).join('');
+  row.innerHTML = html;
+}
+
+function themeFilterClick(catId) {
+  playPillSFX();
+  _themeActiveFilterCat = (catId === 'all') ? null : catId;
+  document.querySelectorAll('.theme-filter-pill').forEach(p => {
+    p.classList.toggle('active', p.dataset.cat === catId);
   });
-  btn.dataset.expanded = expanded ? '0' : '1';
-  btn.textContent = expanded ? 'More ↓' : 'Less ↑';
+  _themesShowAll = false; // reset to 3x3 when filter changes
+  renderThemesGrid();
+}
+
+function themesShowAll() {
+  _themesShowAll = true;
+  renderThemesGrid();
+}
+
+function renderThemesGrid() {
+  const grid = document.getElementById('themesGrid');
+  const showAllBtn = document.getElementById('themesShowAllBtn');
+  if (!grid) return;
+
+  let thematic = Object.values(COLLECTIONS_BY_ID).filter(c => c && c.type === 'thematic');
+  thematic.sort((a, b) => a.id - b.id);
+
+  if (_themeActiveFilterCat) {
+    thematic = thematic.filter(col => Array.isArray(col.categories) && col.categories.includes(_themeActiveFilterCat));
+  }
+
+  if (!thematic.length) {
+    grid.innerHTML = '<div class="ep-empty">No themes match this category yet</div>';
+    showAllBtn.style.display = 'none';
+    return;
+  }
+
+  const visible = _themesShowAll ? thematic : thematic.slice(0, 9);
+  grid.innerHTML = visible.map(themeCardHtml).join('');
+
+  showAllBtn.style.display = (!_themesShowAll && thematic.length > 9) ? '' : 'none';
+
+  // Re-apply active state if a theme preview is currently open
+  if (_themeOpenId !== null) {
+    const activeCard = document.getElementById('themeCard' + _themeOpenId);
+    if (activeCard) activeCard.classList.add('theme-card--active');
+  }
+}
+
+function themeCardHtml(col) {
+  const imgPath = `/images/themes/theme-${col.id}.jpg`;
+  return `<div class="theme-card" id="themeCard${col.id}" data-id="${col.id}" onclick="themeClick(${col.id})">
+    <img class="theme-card-img" src="${imgPath}" alt="${_escHtml(col.title)}"
+         onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+    <div class="theme-card-fallback" style="display:none">${col.symbol}</div>
+    <div class="theme-card-overlay">
+      <span class="theme-card-emoji">${col.symbol}</span><span class="theme-card-title">${col.title}</span>
+    </div>
+  </div>`;
 }
 
 function themeClick(id) {
@@ -7759,7 +7893,7 @@ function themeClick(id) {
   // Toggle off if clicking the already-open tile
   if (_themeOpenId === id) {
     zone.classList.remove('open');
-    document.querySelectorAll('.theme-tile--active').forEach(t => t.classList.remove('theme-tile--active'));
+    document.querySelectorAll('.theme-card--active').forEach(t => t.classList.remove('theme-card--active'));
     _themeOpenId = null;
     return;
   }
@@ -7770,9 +7904,9 @@ function themeClick(id) {
   const matches = CONCEPTS.filter(c => Array.isArray(c.curated_collection_ids) && c.curated_collection_ids.includes(id));
 
   // Active tile state
-  document.querySelectorAll('.theme-tile--active').forEach(t => t.classList.remove('theme-tile--active'));
-  const tile = document.getElementById('themeTile' + id);
-  if (tile) tile.classList.add('theme-tile--active');
+  document.querySelectorAll('.theme-card--active').forEach(t => t.classList.remove('theme-card--active'));
+  const tile = document.getElementById('themeCard' + id);
+  if (tile) tile.classList.add('theme-card--active');
 
   // Header
   document.getElementById('themePreviewSymbol').textContent = col.symbol || '';
@@ -10535,7 +10669,7 @@ function _csShowSingleTermPopup(concept, anchorEl) {
   const panel = document.getElementById('convPanel');
   const panelRect = panel ? panel.getBoundingClientRect() : { left: window.innerWidth };
   const leftPos = Math.max(8, panelRect.left - 226);
-  const topPos = Math.min(rect.top, window.innerHeight - 150);
+  const topPos = Math.min(Math.max(rect.top, 8), window.innerHeight - 150);
   el.style.top = topPos + 'px';
   el.style.left = leftPos + 'px';
 
@@ -11533,6 +11667,7 @@ function closeCS(persist) {
   document.body.classList.remove('cotd-open');
   document.removeEventListener('keydown', _convEscHandler);
   document.removeEventListener('click', _convOutsideClickHandler, { capture: true });
+  _csDismissTermPopups(); // v1.79c: close any floating Stories-tab term previews too
   if (persist) markDismissedTodayCS();
 }
 
