@@ -837,7 +837,7 @@
   .ep-drawer-hero {
     position: relative;
     flex-shrink: 0;
-    min-height: 140px;
+    min-height: 155px;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
@@ -871,13 +871,17 @@
     text-shadow: 0 1px 8px rgba(0,0,0,0.55), 0 1px 2px rgba(0,0,0,0.6);
   }
   .ep-drawer-handle {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
     width: 36px; height: 4px;
-    background: var(--border-hover);
+    background: rgba(255,255,255,0.5);
     border-radius: 2px;
-    margin: 14px auto 0;
-    flex-shrink: 0;
-    position: relative;
     z-index: 2;
+  }
+  [data-theme="light"] .ep-drawer-handle {
+    background: rgba(255,255,255,0.65);
   }
   .ep-drawer-title {
     font-family: 'Playfair Display', serif;
@@ -6552,9 +6556,9 @@
 <!-- EPISODE DRAWER (top-level so display:none on page sections doesn't hide it) -->
 <div class="ep-drawer-backdrop" id="epBackdrop" onclick="closeEpisodeDrawer()"></div>
 <div class="ep-drawer" id="epDrawer">
-  <div class="ep-drawer-handle"></div>
   <div class="ep-drawer-hero" id="epDrawerHero">
     <div class="ep-drawer-hero-bg" id="epDrawerHeroBg" style="display:none"></div>
+    <div class="ep-drawer-handle"></div>
     <span class="ep-drawer-count-badge" id="epDrawerCountBadge"></span>
     <button class="ep-drawer-back-cs" id="epDrawerBackCS" style="display:none" onclick="closeEpisodeDrawer();openCSFromNav()">← Prompts</button>
     <button class="ep-drawer-close" onclick="closeEpisodeDrawer()">✕</button>
@@ -6574,9 +6578,9 @@
 <!-- THEME DRAWER — v1.77, reuses ep-drawer CSS classes -->
 <div class="ep-drawer-backdrop" id="themeBackdrop" onclick="closeThemeDrawer()"></div>
 <div class="ep-drawer" id="themeDrawer">
-  <div class="ep-drawer-handle"></div>
   <div class="ep-drawer-hero" id="themeDrawerHero">
     <div class="ep-drawer-hero-bg" id="themeDrawerHeroBg" style="display:none"></div>
+    <div class="ep-drawer-handle"></div>
     <span class="ep-drawer-count-badge" id="themeDrawerCountBadge"></span>
     <button class="ep-drawer-close" onclick="closeThemeDrawer()">✕</button>
     <div class="ep-drawer-hero-content">
