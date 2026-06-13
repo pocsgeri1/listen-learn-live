@@ -832,15 +832,22 @@
     border-radius: 2px;
     margin: 14px auto 0;
     flex-shrink: 0;
+    position: relative;
+    z-index: 2;
   }
   .ep-drawer-header {
-    padding: 1.2rem 2rem 1rem;
-    border-bottom: 0.5px solid var(--border);
+    padding: 1.2rem 2rem 1.1rem;
     flex-shrink: 0;
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
     gap: 1rem;
+    position: relative;
+    z-index: 2;
+    background: linear-gradient(to bottom, rgba(13,13,13,0.0) 0%, var(--surface) 85%);
+  }
+  [data-theme="light"] .ep-drawer-header {
+    background: linear-gradient(to bottom, rgba(245,242,237,0.0) 0%, var(--surface) 85%);
   }
   .ep-drawer-meta { flex: 1; min-width: 0; }
   .ep-drawer-title {
@@ -864,17 +871,19 @@
     text-transform: uppercase;
     color: var(--muted2);
     background: var(--surface2);
-    border-radius: 3px;
-    padding: 3px 8px;
+    border: 0.5px solid var(--border);
+    border-radius: 20px;
+    padding: 4px 11px;
   }
   .ep-drawer-count {
     font-family: 'DM Mono', monospace;
     font-size: 0.62rem;
     color: var(--accent);
     letter-spacing: 0.08em;
-    padding: 3px 8px;
-    border: 0.5px solid rgba(232,213,163,0.3);
-    border-radius: 3px;
+    padding: 4px 11px;
+    border: 0.5px solid rgba(232,213,163,0.35);
+    background: rgba(232,213,163,0.07);
+    border-radius: 20px;
   }
   .ep-drawer-listen {
     font-family: 'DM Mono', monospace;
@@ -968,10 +977,14 @@
     display: flex !important;
     flex-wrap: nowrap;
     gap: 6px;
-    padding: 1rem 2rem 1.2rem;
+    padding: 0.9rem 2rem 1.1rem;
     overflow-x: auto;
     scrollbar-width: none;
     flex-shrink: 0;
+    position: relative;
+    z-index: 2;
+    background: var(--surface);
+    box-shadow: 0 1px 0 var(--border);
   }
   @media (max-width: 700px) {
     .ep-drawer-cat-filter { padding: 0 1.25rem 1rem; }
@@ -6446,17 +6459,20 @@
 // MAGNETIC PILL EFFECT
 const RADIUS = 80;
 const STRENGTH = 0.18;
-function initMagneticPills() {
+function initMagneticPillsFor(gridSelector, pillSelector) {
   if ('ontouchstart' in window || navigator.maxTouchPoints > 0) return; // no cursor on mobile
 
   let _pillRaf = false;
-  const pillGrid = document.getElementById('catGrid');
-  if (!pillGrid) return;
-  pillGrid.addEventListener('mousemove', function(e) {
+  const grid = document.querySelector(gridSelector);
+  if (!grid) return;
+  if (grid._magneticBound) return;
+  grid._magneticBound = true;
+
+  grid.addEventListener('mousemove', function(e) {
     if (_pillRaf) return;
     _pillRaf = true;
     requestAnimationFrame(() => { _pillRaf = false;
-      const pill = e.target.closest('.cat-card');
+      const pill = e.target.closest(pillSelector);
       if (!pill) return;
       const rect = pill.getBoundingClientRect();
       const cx = rect.left + rect.width / 2;
@@ -6469,10 +6485,12 @@ function initMagneticPills() {
         const ty = dy * STRENGTH;
         pill.style.transform = `translate(${tx}px, ${ty}px)`;
       }
-    });  // closes rAF
-  });    // closes pillGrid mousemove
+    });
+  });
 
-    document.querySelectorAll('.cat-card').forEach(pill => {
+  grid.querySelectorAll(pillSelector).forEach(pill => {
+    if (pill._magneticBound) return;
+    pill._magneticBound = true;
     pill.addEventListener('mouseleave', function() {
       pill.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), border-color 0.2s, background 0.2s';
       pill.style.transform = 'translate(0px, 0px)';
@@ -6484,6 +6502,10 @@ function initMagneticPills() {
       pill.style.transition = 'transform 0.1s ease, border-color 0.2s, background 0.2s';
     });
   });
+}
+
+function initMagneticPills() {
+  initMagneticPillsFor('#catGrid', '.cat-card');
 }
 // NAV BEHAVIOUR
 function scrollToSection(id) {
@@ -7712,11 +7734,8 @@ function browseSwitch(mode) {
     themeSection.style.display = '';
     _positionBrowseUnderline(themeBtn);
     if (!themeSection.dataset.rendered) {
-      renderThemesFilterRow();
-      renderThemesGrid();
-      themeSection.dataset.rendered = '1';
-    } else {
       _animateThemesEntrance();
+      themeSection.dataset.rendered = '1';
     }
   } else {
     themeBtn.classList.remove('active');
@@ -7746,15 +7765,23 @@ function renderThemesFilterRow(animate) {
       }, i * 55);
     });
   }
+  // Magnetic hover effect on theme filter pills — same as Library category pills
+  initMagneticPillsFor('#themesFilterRow', '.theme-filter-pill');
 }
 
-// Animate entrance when switching back to Themes view (pills then grid)
+// First-time entrance: pills stamp in, grid stays hidden until pills finish,
+// then grid stamps in synced with 8-pop SFX. Fires once on first "By Theme" click.
 function _animateThemesEntrance() {
   renderThemesFilterRow(true);
   const pillCount = document.querySelectorAll('#themesFilterRow .theme-filter-pill').length;
+  const grid = document.getElementById('themesGrid');
+  if (grid) grid.style.visibility = 'hidden';
+  renderThemesGrid(false); // build grid markup now, but keep it hidden
   setTimeout(function() {
-    renderThemesGrid(true);
-  }, pillCount * 55 + 80);
+    if (grid) grid.style.visibility = '';
+    _stampInThemeCards();
+    _playThemeEntranceSFX(8, 55);
+  }, pillCount * 55 + 120);
 }
 
 function themeFilterClick(catId) {
@@ -7764,12 +7791,36 @@ function themeFilterClick(catId) {
     p.classList.toggle('active', p.dataset.cat === catId);
   });
   _themesShowAll = false; // reset to 3x3 when filter changes
-  renderThemesGrid(true);
+  const grid = document.getElementById('themesGrid');
+  if (grid) grid.style.visibility = 'hidden';
+  renderThemesGrid(false);
+  requestAnimationFrame(function() {
+    if (grid) grid.style.visibility = '';
+    _stampInThemeCards();
+    _playThemeEntranceSFX(8, 55);
+  });
 }
 
 function themesShowAll() {
   _themesShowAll = true;
   renderThemesGrid(false);
+}
+
+// Stamp-in animation for currently-rendered theme cards (80ms stagger)
+function _stampInThemeCards() {
+  const grid = document.getElementById('themesGrid');
+  if (!grid) return;
+  const cards = grid.querySelectorAll('.theme-card');
+  cards.forEach(function(card, i) {
+    card.style.opacity = '0';
+    card.style.transform = 'scale(0.6)';
+    setTimeout(function() {
+      card.style.transition = 'transform 0.14s cubic-bezier(0.34,1.56,0.64,1), opacity 0.12s ease';
+      card.style.opacity = '1';
+      card.style.transform = 'scale(1.03)';
+      setTimeout(function() { card.style.transform = 'scale(1)'; }, 110);
+    }, i * 80);
+  });
 }
 
 function renderThemesGrid(animate) {
@@ -7791,22 +7842,11 @@ function renderThemesGrid(animate) {
   }
 
   const visible = _themesShowAll ? thematic : thematic.slice(0, 9);
-  grid.innerHTML = visible.map(col => themeCardHtml(col, animate)).join('');
+  grid.innerHTML = visible.map(col => themeCardHtml(col, false)).join('');
 
   showAllBtn.style.display = (!_themesShowAll && thematic.length > 9) ? '' : 'none';
 
-  if (animate) {
-    const cards = grid.querySelectorAll('.theme-card');
-    cards.forEach(function(card, i) {
-      setTimeout(function() {
-        card.style.transition = 'transform 0.14s cubic-bezier(0.34,1.56,0.64,1), opacity 0.12s ease';
-        card.style.opacity = '1';
-        card.style.transform = 'scale(1.03)';
-        setTimeout(function() { card.style.transform = 'scale(1)'; }, 110);
-      }, i * 80);
-    });
-    if (typeof _playCandidateSFX === 'function') _playCandidateSFX();
-  }
+  if (animate) _stampInThemeCards();
 }
 
 function themeCardHtml(col, animate) {
@@ -10474,9 +10514,13 @@ function _convRenderStories() {
       // Click → show term popup (same as reveal terms)
       pill.addEventListener('click', function(e) {
         e.stopPropagation();
-        const concept = conceptId && typeof CONCEPTS !== 'undefined'
+        let concept = conceptId && typeof CONCEPTS !== 'undefined'
           ? CONCEPTS.find(function(c) { return c.id === conceptId; })
           : null;
+        // Fallback for legacy saved stories where conceptIds[0] was 0 — match by term
+        if (!concept && typeof CONCEPTS !== 'undefined') {
+          concept = CONCEPTS.find(function(c) { return c.term === term; });
+        }
         if (concept) _csShowSingleTermPopup(concept, pill);
       });
       pill.addEventListener('mouseover', function() { pill.style.background = color + '22'; });
@@ -11286,6 +11330,28 @@ function _playCandidateSFX() {
       gain.gain.exponentialRampToValueAtTime(0.001, t + 0.07);
       osc.connect(gain); gain.connect(actx.destination);
       osc.start(t); osc.stop(t + 0.08);
+    }
+  } catch(e) {}
+}
+
+function _playThemeEntranceSFX(count, intervalMs) {
+  // N soft pops, faster — for theme pill/card stagger entrances
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  try {
+    const actx = _getSfxCtx();
+    const step = (intervalMs || 55) / 1000;
+    for (let i = 0; i < count; i++) {
+      const t = actx.currentTime + i * step;
+      const osc = actx.createOscillator();
+      const gain = actx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(380 + i * 25, t);
+      osc.frequency.exponentialRampToValueAtTime(140, t + 0.06);
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(0.035, t + 0.006);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.06);
+      osc.connect(gain); gain.connect(actx.destination);
+      osc.start(t); osc.stop(t + 0.07);
     }
   } catch(e) {}
 }
@@ -14320,6 +14386,9 @@ function _convOutsideClickHandler(e) {
   if (!panel) return;
   // Click inside panel — always keep open
   if (panel.contains(e.target)) return;
+  // Click on a floating term-popup (Stories tab / Reveal terms) — keep panel open;
+  // the popup's own click handler dismisses just itself
+  if (e.target.closest('.cs-term-popup')) return;
   // Click on an interactive element outside panel — keep open
   const interactive = e.target.closest('button, a, input, select, textarea, label, [onclick], [role="button"], [tabindex]');
   if (interactive) return;
