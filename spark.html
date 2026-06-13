@@ -7678,7 +7678,6 @@ function _renderDrawerContent(col, collectionId) {
   }
 
 function filterDrawerCat(catKey) {
-  playPillSFX();
   document.querySelectorAll('.ep-drawer-cat-pill').forEach(p => {
     p.classList.toggle('active', p.dataset.cat === catKey);
   });
@@ -8106,7 +8105,6 @@ function _renderThemeDrawerContent(col, id) {
 }
 
 function filterThemeDrawerCat(catKey) {
-  playPillSFX();
   document.querySelectorAll('#themeDrawerCatFilter .ep-drawer-cat-pill').forEach(p => {
     p.classList.toggle('active', p.dataset.cat === catKey);
   });
@@ -9755,6 +9753,7 @@ function _csPickerSetCtx(conceptId, ctx) {
     b.classList.toggle('active', b.dataset.ctx === ctx);
   });
   card.dataset.ctx = ctx;
+  _playSwapSFX();
 }
 
 function _csPickerToggle(conceptId) {
@@ -10247,6 +10246,7 @@ function _csReopenStory() {
 
 function _csOpenStoryMode() {
   _csDismissTermPopups();
+  _playSwapSFX();
 
   var headline = document.getElementById('csHeadline');
   if (headline) headline.textContent = 'A Short Story';
@@ -10413,6 +10413,7 @@ function _csStoryRepopulateCandidates(concepts) {
 // Close Story Mode — return to State 1 (post-generate)
 function _csCloseStoryMode() {
   _csDismissTermPopups();
+  _playSwapSFX();
 
   // Hide story panel
   var panel = document.getElementById('csStoryPanel');
@@ -11167,6 +11168,7 @@ function _csSurprise() {
 function _csSwapConcept(id) {
   const concept = CONCEPTS.find(c => c.id === id);
   if (!concept) return;
+  _playSwapSFX();
   // Close picker if open — ensures prompt block is visible before loading
   const pickerWrap = document.getElementById('csTopicPickerWrap');
   if (pickerWrap && pickerWrap.classList.contains('active')) _csClosePicker();
@@ -11378,25 +11380,10 @@ function playExpandSFX(opening) {
 
 // Bubble-pop SFX — rapid micro-pops matching stamp animation (~300ms)
 // Independent of SFX_ENABLED — this is UI feedback, not ambient sound
+// Consolidated — same shape as _playThemeEntranceSFX(8, 55), kept as a named
+// alias so existing call sites (CS "Change topic" picker open) read clearly.
 function playBubblePopSFX() {
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  try {
-    const actx = _getSfxCtx();
-    const pops = 8;
-    for (let i = 0; i < pops; i++) {
-      const t = actx.currentTime + i * 0.055; // 55ms apart
-      const osc = actx.createOscillator();
-      const gain = actx.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(480 + i * 45, t);
-      osc.frequency.exponentialRampToValueAtTime(160, t + 0.06); // 60ms tail
-      gain.gain.setValueAtTime(0, t);
-      gain.gain.linearRampToValueAtTime(0.06, t + 0.008);
-      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.06);
-      osc.connect(gain); gain.connect(actx.destination);
-      osc.start(t); osc.stop(t + 0.07);
-    }
-  } catch(e) {}
+  _playThemeEntranceSFX(8, 55);
 }
 
 function _playCandidateSFX() {
@@ -11576,6 +11563,7 @@ function _wireCSEvents() {
       document.querySelectorAll('.cs-ctx-btn').forEach(b => b.classList.remove('active'));
       this.classList.add('active');
       _csCtx = this.dataset.ctx;
+      _playSwapSFX();
 
       if (_csAIData && _csAIData[_csCtx]) {
         // Cached — instant swap
