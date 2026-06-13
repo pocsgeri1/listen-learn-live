@@ -1261,6 +1261,74 @@
   }
   .themes-show-all:hover { color: var(--text); }
 
+  /* Theme preview-expand zone — v1.83 */
+  .theme-card--active {
+    border-color: var(--accent);
+  }
+  .themes-grid.has-preview .theme-card:not(.theme-card--active) {
+    opacity: 0.35;
+    transition: opacity 0.25s ease;
+  }
+  .theme-preview-zone {
+    grid-column: 1 / -1;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s cubic-bezier(0.22,0.61,0.36,1);
+    position: relative;
+  }
+  .theme-preview-zone.open {
+    max-height: 460px;
+  }
+  @media (max-width: 600px) {
+    .theme-preview-zone.open { max-height: 1180px; }
+  }
+  /* Connector tail — small triangle pointing up to the active theme card */
+  .theme-preview-tail {
+    position: absolute;
+    top: 0;
+    width: 22px;
+    height: 11px;
+    background: var(--accent);
+    opacity: 0.5;
+    clip-path: polygon(50% 0, 0 100%, 100% 100%);
+    transform: translateX(-50%);
+    transition: left 0.3s ease;
+  }
+  .theme-preview-inner {
+    padding: 26px 0 6px !important;
+    justify-content: center;
+    flex-wrap: wrap;
+    overflow: visible !important;
+  }
+  @media (max-width: 600px) {
+    .theme-preview-inner { flex-direction: column; align-items: center; }
+  }
+  .theme-preview-inner.nf-row .concept-card {
+    width: 280px;
+    flex: 0 0 280px;
+  }
+  .theme-preview-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 0 18px;
+  }
+  .theme-explore-btn {
+    background: none;
+    border: 1px solid var(--border-hover);
+    border-radius: 6px;
+    color: var(--accent);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    padding: 7px 14px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .theme-explore-btn:hover {
+    background: var(--surface2);
+    border-color: var(--accent2);
+  }
+
   /* ============================================
      CATEGORY ROWS — full bleed, static (no auto-scroll)
      ============================================ */
@@ -7867,8 +7935,9 @@ function themeFilterClick(catId) {
     p.classList.toggle('active', p.dataset.cat === catId);
   });
   _themesShowAll = false; // reset to 3x3 when filter changes
+  _themeOpenId = null; // grid rebuilds — close any open preview
   const grid = document.getElementById('themesGrid');
-  if (grid) grid.style.visibility = 'hidden';
+  if (grid) { grid.style.visibility = 'hidden'; grid.classList.remove('has-preview'); }
   renderThemesGrid(false);
   requestAnimationFrame(function() {
     if (grid) grid.style.visibility = '';
@@ -7879,6 +7948,9 @@ function themeFilterClick(catId) {
 
 function themesShowAll() {
   _themesShowAll = true;
+  _themeOpenId = null;
+  const grid = document.getElementById('themesGrid');
+  if (grid) grid.classList.remove('has-preview');
   renderThemesGrid(false);
 }
 
@@ -7941,7 +8013,81 @@ function themeClick(id) {
   playPillSFX();
   const col = COLLECTIONS_BY_ID[id];
   if (!col) return;
-  openThemeDrawer(id);
+
+  const grid = document.getElementById('themesGrid');
+  let zone = document.getElementById('themePreviewZone');
+
+  // Toggle off if clicking the already-open card
+  if (_themeOpenId === id && zone) {
+    zone.classList.remove('open');
+    grid.classList.remove('has-preview');
+    const prevActive = document.getElementById('themeCard' + _themeOpenId);
+    if (prevActive) prevActive.classList.remove('theme-card--active');
+    _themeOpenId = null;
+    setTimeout(() => { if (zone && zone.parentNode) zone.remove(); }, 500);
+    return;
+  }
+
+  // Clear previous active state
+  if (_themeOpenId !== null) {
+    const prevActive = document.getElementById('themeCard' + _themeOpenId);
+    if (prevActive) prevActive.classList.remove('theme-card--active');
+  }
+
+  const card = document.getElementById('themeCard' + id);
+  if (card) card.classList.add('theme-card--active');
+
+  const matches = CONCEPTS.filter(c => Array.isArray(c.curated_collection_ids) && c.curated_collection_ids.includes(id));
+  const picks = matches.filter(c => c.editors_pick === true);
+  const others = matches.filter(c => c.editors_pick !== true);
+  for (let i = others.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [others[i], others[j]] = [others[j], others[i]];
+  }
+  const preview = picks.concat(others).slice(0, 3);
+
+  if (!zone) {
+    zone = document.createElement('div');
+    zone.id = 'themePreviewZone';
+    zone.className = 'theme-preview-zone';
+  }
+  zone.innerHTML = `
+    <div class="theme-preview-tail" id="themePreviewTail"></div>
+    <div class="theme-preview-inner nf-row">${preview.map(c => _renderThemeCard(c, 'tpc', col)).join('')}</div>
+    <div class="theme-preview-footer">
+      <button class="theme-explore-btn" onclick="openThemeDrawer(${id})">Explore this theme →</button>
+    </div>`;
+
+  // Insert right after the clicked card (so grid-column:1/-1 places it below that row)
+  if (card && card.nextSibling) card.parentNode.insertBefore(zone, card.nextSibling);
+  else if (card) card.parentNode.appendChild(zone);
+
+  grid.classList.add('has-preview');
+  _currentOpenThemePreviewCardId = null;
+  _themeOpenId = id;
+
+  // Position connector tail under the clicked card
+  requestAnimationFrame(() => {
+    const tail = document.getElementById('themePreviewTail');
+    if (tail && card) {
+      const cardCenter = card.offsetLeft + card.offsetWidth / 2;
+      tail.style.left = cardCenter + 'px';
+    }
+    zone.classList.add('open');
+    // Stamp in the 3 preview cards
+    const cards = zone.querySelectorAll('.theme-preview-inner .concept-card');
+    cards.forEach(function(c, i) {
+      c.style.opacity = '0';
+      c.style.transform = 'scale(0.85) translateY(10px)';
+      setTimeout(function() {
+        c.style.transition = 'transform 0.3s cubic-bezier(0.22,0.61,0.36,1), opacity 0.25s ease';
+        c.style.opacity = '1';
+        c.style.transform = 'scale(1) translateY(0)';
+      }, i * 80);
+    });
+    _playCandidateSFX();
+    zone.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  });
 }
 
 // Shared card renderer for theme preview + drawer (mirrors episode drawer card markup)
