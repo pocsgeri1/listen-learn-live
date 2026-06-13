@@ -511,6 +511,7 @@
     "analogy": "A handsome politician gets assumed to be honest and capable — voters subconsciously transfer the physical impression to his entire character.",
     "prompt": "Who are you currently trusting or admiring in one area, while assuming without evidence that they're equally reliable in others?",
     "collection_id": 1,
+    "editors_pick": true,
     "related_ids": [
       30,
       40,
@@ -1245,6 +1246,7 @@
     "analogy": "'I'm someone who always quits when things get hard' vs 'I'm someone who takes on hard things and figures it out.' Same history — completely different story.",
     "prompt": "What is the core story you tell about yourself — and is that story serving you, or keeping you smaller than you actually are?",
     "collection_id": 5,
+    "editors_pick": true,
     "related_ids": [
       105,
       237,
@@ -2608,6 +2610,7 @@
     "analogy": "A man with fragile ego feels genuinely threatened when a younger colleague succeeds. A man with real self-esteem feels proud of them — because his worth isn't diminished by theirs.",
     "prompt": "When someone around you succeeds in an area you care about — do you feel proud, inspired, or quietly threatened? That reaction tells you something important.",
     "collection_id": 5,
+    "editors_pick": true,
     "related_ids": [
       61,
       231,
@@ -2887,6 +2890,7 @@
     "analogy": "You see Elon Musk's rockets and wealth but have no clue what it's like to live with a mind that's a constant storm, thinking five times faster than normal with no off switch.",
     "prompt": "Pick someone you envy — what's one specific problem you'd have to take on if you actually traded lives with them?",
     "collection_id": 1,
+    "editors_pick": true,
     "related_ids": [
       143,
       332,
@@ -4384,6 +4388,7 @@
     "analogy": "It's like standing in a town square reading your diary aloud because people clap. You mistake the applause for intimacy, but when you go home, you're still alone — and now everyone knows your weak points.",
     "prompt": "What's one thing you've shared online that you wouldn't say to your best friend's face? Why the gap?",
     "collection_id": 14,
+    "editors_pick": true,
     "related_ids": [
       87,
       239,
@@ -5566,7 +5571,7 @@
   },
   {
     "id": 308,
-    "term": "Looks-maxing",
+    "term": "Looks-Maxing",
     "category": "identity",
     "source": "cw",
     "hook": "Men optimize appearance for dating apps — but overshoot what women want.",
@@ -5574,6 +5579,7 @@
     "analogy": "It's like studying for a test by memorizing the wrong textbook. You're working hard, but you're solving for the wrong variable. You wanted to impress the teacher, but you studied what impresses your classmates instead.",
     "prompt": "Name one way you've tried to improve your appeal that was more about impressing your own gender than the one you're attracted to.",
     "collection_id": 501,
+    "editors_pick": true,
     "timestamp": 1089,
     "related_ids": [
       292,
@@ -5594,6 +5600,7 @@
     "analogy": "It's like choosing a restaurant. You could read reviews and inspect the menu, or you could just go where there's a line out the door. The crowd has already done the vetting for you.",
     "prompt": "Think of the last person you found attractive. Did your opinion of them change after seeing how others reacted to them?",
     "collection_id": 501,
+    "editors_pick": true,
     "timestamp": 1830,
     "related_ids": [
       6,
