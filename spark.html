@@ -812,20 +812,50 @@
   .ep-drawer.open {
     transform: translateY(0);
   }
-  /* Theme drawer background image — v1.81, 30% opacity behind content */
-  .theme-drawer-bg {
+  /* Theme drawer background image — v1.82, lives only in hero zone */
+  .ep-drawer-hero {
+    position: relative;
+    flex-shrink: 0;
+    min-height: 140px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 1.4rem 2rem 1.1rem;
+    overflow: hidden;
+    background: var(--surface2);
+  }
+  .ep-drawer-hero-bg {
     position: absolute;
     inset: 0;
     background-size: cover;
     background-position: center;
-    opacity: 0.3;
-    pointer-events: none;
     z-index: 0;
   }
-  #themeDrawer > *:not(.theme-drawer-bg) {
+  .ep-drawer-hero-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.15) 60%, rgba(0,0,0,0.05) 100%);
+  }
+  [data-theme="light"] .ep-drawer-hero-bg::after {
+    background: linear-gradient(to top, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.08) 60%, rgba(0,0,0,0) 100%);
+  }
+  .ep-drawer-hero-content {
     position: relative;
     z-index: 1;
   }
+  .ep-drawer-hero .ep-drawer-title,
+  .ep-drawer-hero .ep-drawer-subtitle {
+    color: #fff;
+    text-shadow: 0 1px 8px rgba(0,0,0,0.55), 0 1px 2px rgba(0,0,0,0.6);
+  }
+  /* Episode drawer has no hero image — keep title in normal text color */
+  #epDrawer .ep-drawer-hero .ep-drawer-title,
+  #epDrawer .ep-drawer-hero .ep-drawer-subtitle {
+    color: var(--text);
+    text-shadow: none;
+  }
+  #epDrawer .ep-drawer-hero .ep-drawer-subtitle { color: var(--muted2); }
   .ep-drawer-handle {
     width: 36px; height: 4px;
     background: var(--border-hover);
@@ -835,35 +865,53 @@
     position: relative;
     z-index: 2;
   }
-  .ep-drawer-header {
-    padding: 1.2rem 2rem 1.1rem;
-    flex-shrink: 0;
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 1rem;
-    position: relative;
-    z-index: 2;
-    background: linear-gradient(to bottom, rgba(13,13,13,0.0) 0%, var(--surface) 85%);
-  }
-  [data-theme="light"] .ep-drawer-header {
-    background: linear-gradient(to bottom, rgba(245,242,237,0.0) 0%, var(--surface) 85%);
-  }
-  .ep-drawer-meta { flex: 1; min-width: 0; }
   .ep-drawer-title {
     font-family: 'Playfair Display', serif;
-    font-size: 1.2rem;
+    font-size: 1.7rem;
     font-weight: 700;
-    line-height: 1.3;
+    line-height: 1.25;
     color: var(--text);
-    margin-bottom: 0.55rem;
+    margin-bottom: 0.25rem;
+  }
+  .ep-drawer-subtitle {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 0.92rem;
+    color: var(--muted2);
+    line-height: 1.4;
+  }
+  .ep-drawer-count-badge {
+    position: absolute;
+    top: 14px;
+    right: 60px;
+    z-index: 2;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    background: rgba(13,13,13,0.55);
+    border: 0.5px solid rgba(232,213,163,0.35);
+    border-radius: 20px;
+    padding: 4px 11px;
+    backdrop-filter: none;
+  }
+  #epDrawer .ep-drawer-count-badge {
+    color: var(--accent);
+    background: rgba(232,213,163,0.07);
+    border-color: rgba(232,213,163,0.35);
+  }
+  .ep-drawer-count-badge:has(~ .ep-drawer-back-cs:not([style*="none"])) {
+    right: 150px;
   }
   .ep-drawer-pills {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: 6px;
+    padding: 0.7rem 2rem 0;
+    flex-shrink: 0;
   }
+  .ep-drawer-pills:empty { display: none; }
   .ep-drawer-person {
     font-family: 'DM Mono', monospace;
     font-size: 0.62rem;
@@ -874,16 +922,6 @@
     border: 0.5px solid var(--border);
     border-radius: 20px;
     padding: 4px 11px;
-  }
-  .ep-drawer-count {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.62rem;
-    color: var(--accent);
-    letter-spacing: 0.08em;
-    padding: 4px 11px;
-    border: 0.5px solid rgba(232,213,163,0.35);
-    background: rgba(232,213,163,0.07);
-    border-radius: 20px;
   }
   .ep-drawer-listen {
     font-family: 'DM Mono', monospace;
@@ -900,28 +938,39 @@
   }
   .ep-drawer-listen:hover { color: var(--accent); border-color: var(--accent); }
   .ep-drawer-back-cs {
+    position: absolute;
+    top: 14px; right: 60px;
+    z-index: 3;
     font-family: 'DM Mono', monospace; font-size: 0.62rem;
     letter-spacing: 0.1em; text-transform: uppercase;
-    background: none; border: 1px solid rgba(196,122,122,0.4);
+    background: rgba(13,13,13,0.45); border: 1px solid rgba(196,122,122,0.4);
     border-radius: 6px; padding: 5px 12px;
     color: #c47a7a; cursor: pointer;
     transition: border-color 0.2s, background 0.2s;
-    align-self: center;
   }
   .ep-drawer-back-cs:hover { border-color: #c47a7a; background: rgba(196,122,122,0.08); }
   .ep-drawer-close {
-    background: none;
-    border: 0.5px solid var(--border-hover);
+    position: absolute;
+    top: 14px; right: 18px;
+    z-index: 3;
+    background: rgba(13,13,13,0.45);
+    border: 0.5px solid rgba(255,255,255,0.18);
     border-radius: 6px;
-    color: var(--muted2);
+    color: #fff;
     cursor: pointer;
     font-size: 1rem;
     width: 32px; height: 32px;
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
-    transition: color 0.2s, border-color 0.2s;
+    transition: color 0.2s, border-color 0.2s, background 0.2s;
   }
-  .ep-drawer-close:hover { color: var(--text); border-color: var(--border-hover); }
+  .ep-drawer-close:hover { color: var(--accent); border-color: rgba(255,255,255,0.35); }
+  #epDrawer .ep-drawer-close {
+    background: var(--surface2);
+    border-color: var(--border-hover);
+    color: var(--muted2);
+  }
+  #epDrawer .ep-drawer-close:hover { color: var(--text); }
   .ep-drawer-mix {
     display: none;
   }
@@ -976,39 +1025,44 @@
   .ep-drawer-cat-filter {
     display: flex !important;
     flex-wrap: nowrap;
-    gap: 6px;
-    padding: 0.9rem 2rem 1.1rem;
+    gap: 1.6rem;
+    padding: 1rem 2rem 0;
     overflow-x: auto;
     scrollbar-width: none;
     flex-shrink: 0;
     position: relative;
     z-index: 2;
     background: var(--surface);
-    box-shadow: 0 1px 0 var(--border);
+    border-bottom: 1px solid var(--border);
   }
   @media (max-width: 700px) {
-    .ep-drawer-cat-filter { padding: 0 1.25rem 1rem; }
+    .ep-drawer-cat-filter { padding: 0 1.25rem; gap: 1.1rem; }
   }
   .ep-drawer-cat-filter::-webkit-scrollbar { display: none; }
   .ep-drawer-cat-pill {
     flex-shrink: 0;
     font-family: 'DM Mono', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.12em;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    padding: 5px 13px;
-    border-radius: 999px;
-    border: 0.5px solid currentColor;
+    padding: 0 0 10px;
+    border: none;
+    border-bottom: 2px solid transparent;
     background: transparent;
     cursor: pointer;
-    transition: transform 0.1s ease, background 0.2s, opacity 0.2s;
-    opacity: 0.5;
-    color: var(--col-color, var(--accent));
+    transition: color 0.2s, border-color 0.2s;
+    color: var(--muted2);
+    white-space: nowrap;
   }
-  .ep-drawer-cat-pill:hover { opacity: 0.8; }
+  .ep-drawer-cat-pill:hover { color: var(--text); }
   .ep-drawer-cat-pill.active {
-    opacity: 1;
-    background: color-mix(in srgb, var(--col-color, var(--accent)) 12%, transparent);
+    color: var(--col-color, var(--accent));
+    border-bottom-color: var(--col-color, var(--accent));
+  }
+  .ep-drawer-cat-pill .ep-drawer-cat-pill-count {
+    opacity: 0.5;
+    font-size: 0.55rem;
+    margin-left: 2px;
   }
   
   /* Only the active category renders. Desktop = 3-col grid (≤9 cards,
@@ -6286,14 +6340,17 @@
 <div class="ep-drawer-backdrop" id="epBackdrop" onclick="closeEpisodeDrawer()"></div>
 <div class="ep-drawer" id="epDrawer">
   <div class="ep-drawer-handle"></div>
-  <div class="ep-drawer-header">
-    <div class="ep-drawer-meta">
-      <div class="ep-drawer-title" id="epDrawerTitle"></div>
-      <div class="ep-drawer-pills" id="epDrawerPills"></div>
-    </div>
+  <div class="ep-drawer-hero" id="epDrawerHero">
+    <div class="ep-drawer-hero-bg" id="epDrawerHeroBg" style="display:none"></div>
+    <span class="ep-drawer-count-badge" id="epDrawerCountBadge"></span>
     <button class="ep-drawer-back-cs" id="epDrawerBackCS" style="display:none" onclick="closeEpisodeDrawer();openCSFromNav()">← Prompts</button>
-  <button class="ep-drawer-close" onclick="closeEpisodeDrawer()">✕</button>
+    <button class="ep-drawer-close" onclick="closeEpisodeDrawer()">✕</button>
+    <div class="ep-drawer-hero-content">
+      <div class="ep-drawer-title" id="epDrawerTitle"></div>
+      <div class="ep-drawer-subtitle" id="epDrawerSubtitle"></div>
+    </div>
   </div>
+  <div class="ep-drawer-pills" id="epDrawerPills"></div>
   <div class="ep-drawer-mix" id="epDrawerMix"></div>
   <div class="ep-drawer-cat-filter" id="epDrawerCatFilter"></div>
   <div class="ep-drawer-body">
@@ -6305,13 +6362,16 @@
 <div class="ep-drawer-backdrop" id="themeBackdrop" onclick="closeThemeDrawer()"></div>
 <div class="ep-drawer" id="themeDrawer">
   <div class="ep-drawer-handle"></div>
-  <div class="ep-drawer-header">
-    <div class="ep-drawer-meta">
-      <div class="ep-drawer-title" id="themeDrawerTitle"></div>
-      <div class="ep-drawer-pills" id="themeDrawerPills"></div>
-    </div>
+  <div class="ep-drawer-hero" id="themeDrawerHero">
+    <div class="ep-drawer-hero-bg" id="themeDrawerHeroBg" style="display:none"></div>
+    <span class="ep-drawer-count-badge" id="themeDrawerCountBadge"></span>
     <button class="ep-drawer-close" onclick="closeThemeDrawer()">✕</button>
+    <div class="ep-drawer-hero-content">
+      <div class="ep-drawer-title" id="themeDrawerTitle"></div>
+      <div class="ep-drawer-subtitle" id="themeDrawerSubtitle"></div>
+    </div>
   </div>
+  <div class="ep-drawer-pills" id="themeDrawerPills"></div>
   <div class="ep-drawer-mix" id="themeDrawerMix"></div>
   <div class="ep-drawer-cat-filter" id="themeDrawerCatFilter"></div>
   <div class="ep-drawer-body">
@@ -7471,7 +7531,11 @@ function updateDailyGoal() {
   }
 }
 
-function setCat(cat) { playPillSFX(); activeCat = cat; render(); }
+function setCat(cat) {
+  playPillSFX();
+  activeCat = cat;
+  _swapContent(document.getElementById('netflixRows'), render, '.nf-section', 6);
+}
 function openEpisodeDrawer(collectionId) {
   const col = COLLECTIONS_BY_ID[collectionId];
   if (!col) return;
@@ -7480,6 +7544,8 @@ function openEpisodeDrawer(collectionId) {
   // Then fill it on the next frame so the heavy DOM work doesn't block the animation.
   window._epScrollY = window.scrollY;
   document.getElementById('epDrawerTitle').textContent = col.title.trim();
+  document.getElementById('epDrawerSubtitle').textContent = '';
+  document.getElementById('epDrawerCountBadge').textContent = '';
   document.getElementById('epDrawerPills').innerHTML = '';
   document.getElementById('epDrawerCatFilter').innerHTML = '';
   document.getElementById('epDrawerGrid').innerHTML = '<div class="ep-empty">Loading…</div>';
@@ -7498,19 +7564,21 @@ function openEpisodeDrawer(collectionId) {
 function _renderDrawerContent(col, collectionId) {
   const epConcepts = CONCEPTS.filter(c => c.collection_id === collectionId).reverse();
 
-  // Header
+  // Subtitle: guest/person names as italic subtitle
+  document.getElementById('epDrawerSubtitle').textContent = (col.people || []).join(' · ');
 
-  // Pills: people + concept count + listen link
+  // Corner badge: concept count
+  document.getElementById('epDrawerCountBadge').textContent =
+    `${epConcepts.length} concept${epConcepts.length !== 1 ? 's' : ''}`;
+
+  // Pills row: date + listen link only
   const pills = document.getElementById('epDrawerPills');
-  const peoplePills = (col.people || []).map(p =>
-    `<span class="ep-drawer-person">${p}</span>`).join('');
-  const countPill = `<span class="ep-drawer-count">${epConcepts.length} concept${epConcepts.length !== 1 ? 's' : ''}</span>`;
   const listenLink = col.episode_url
     ? `<a class="ep-drawer-listen" href="${col.episode_url}" target="_blank" rel="noopener">↗ Listen</a>`
     : '';
   const drawerDateStr = (col.aired_date || col.date || col.created_date) ? new Date(col.aired_date || col.date || col.created_date).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' }).toUpperCase() : '';
   const drawerDateHtml = drawerDateStr ? `<span class="episode-datestamp">${drawerDateStr}</span>` : '';
-  pills.innerHTML = peoplePills + countPill + drawerDateHtml + listenLink;
+  pills.innerHTML = drawerDateHtml + listenLink;
 
   // Category mix bar
   const catCounts = {};
@@ -7601,7 +7669,6 @@ function _renderDrawerContent(col, collectionId) {
         return `<button class="ep-drawer-cat-pill${i === 0 ? ' active' : ''}" data-cat="${catKey}" style="--col-color:${color}" onclick="filterDrawerCat('${catKey}')">${catInfo.name} <span style="opacity:0.5;font-size:0.55rem">${catGroups[catKey].length}</span></button>`;
       }).join('');
       filterDrawerCat(sortedCatKeys[0]);
-      initMagneticDrawerPills();
     } else {
       filterRow.style.display = 'none';
       document.querySelectorAll('.ep-cat-column').forEach(c => c.classList.add('visible'));
@@ -7615,20 +7682,29 @@ function filterDrawerCat(catKey) {
   document.querySelectorAll('.ep-drawer-cat-pill').forEach(p => {
     p.classList.toggle('active', p.dataset.cat === catKey);
   });
-  document.querySelectorAll('.ep-cat-column').forEach(col => {
-    const match = col.dataset.cat === catKey;
-    col.classList.toggle('visible', match);
-    col.classList.remove('faded');
-    // Re-trigger the swoosh animation each time this column is shown
-    if (match) {
-      col.style.animation = 'none';
-      // Let the next frame restart the animation — avoids a forced synchronous layout
-      requestAnimationFrame(() => { col.style.animation = ''; });
+  const body = document.querySelector('#epDrawer .ep-drawer-body');
+  if (body) {
+    body.style.transition = 'opacity 0.1s ease';
+    body.style.opacity = '0.4';
+  }
+  setTimeout(function() {
+    document.querySelectorAll('.ep-cat-column').forEach(col => {
+      const match = col.dataset.cat === catKey;
+      col.classList.toggle('visible', match);
+      col.classList.remove('faded');
+      // Re-trigger the swoosh animation each time this column is shown
+      if (match) {
+        col.style.animation = 'none';
+        // Let the next frame restart the animation — avoids a forced synchronous layout
+        requestAnimationFrame(() => { col.style.animation = ''; });
+      }
+    });
+    if (body) {
+      body.style.opacity = '1';
+      body.scrollTop = 0;
     }
-  });
-  // Reset scroll to top of the drawer body when switching category
-  const body = document.querySelector('.ep-drawer-body');
-  if (body) body.scrollTop = 0;
+    _playSwapSFX();
+  }, 90);
 }
 
 function initMagneticDrawerPills() {
@@ -7769,10 +7845,11 @@ function renderThemesFilterRow(animate) {
   initMagneticPillsFor('#themesFilterRow', '.theme-filter-pill');
 }
 
-// First-time entrance: pills stamp in, grid stays hidden until pills finish,
-// then grid stamps in synced with 8-pop SFX. Fires once on first "By Theme" click.
+// First-time entrance: pills stamp in WITH 8-pop SFX (once ever),
+// grid stays hidden until pills finish, then grid stamps in with 3-pop SFX.
 function _animateThemesEntrance() {
   renderThemesFilterRow(true);
+  _playThemeEntranceSFX(8, 55);
   const pillCount = document.querySelectorAll('#themesFilterRow .theme-filter-pill').length;
   const grid = document.getElementById('themesGrid');
   if (grid) grid.style.visibility = 'hidden';
@@ -7780,7 +7857,7 @@ function _animateThemesEntrance() {
   setTimeout(function() {
     if (grid) grid.style.visibility = '';
     _stampInThemeCards();
-    _playThemeEntranceSFX(8, 55);
+    _playCandidateSFX();
   }, pillCount * 55 + 120);
 }
 
@@ -7797,7 +7874,7 @@ function themeFilterClick(catId) {
   requestAnimationFrame(function() {
     if (grid) grid.style.visibility = '';
     _stampInThemeCards();
-    _playThemeEntranceSFX(8, 55);
+    _playCandidateSFX();
   });
 }
 
@@ -7943,21 +8020,21 @@ function openThemeDrawer(id) {
 
   window._themeScrollY = window.scrollY;
   document.getElementById('themeDrawerTitle').textContent = col.title;
-  document.getElementById('themeDrawerPills').innerHTML = `<span class="ep-drawer-person">${col.tagline || ''}</span>`;
+  document.getElementById('themeDrawerSubtitle').textContent = col.tagline || '';
+  document.getElementById('themeDrawerPills').innerHTML = '';
+  document.getElementById('themeDrawerCountBadge').textContent = '';
   document.getElementById('themeDrawerCatFilter').innerHTML = '';
   document.getElementById('themeDrawerGrid').innerHTML = '<div class="ep-empty">Loading…</div>';
-  // v1.81: set per-theme background image (30% opacity, falls back to none if missing)
-  const drawer = document.getElementById('themeDrawer');
-  let bg = drawer.querySelector('.theme-drawer-bg');
-  if (!bg) {
-    bg = document.createElement('div');
-    bg.className = 'theme-drawer-bg';
-    drawer.insertBefore(bg, drawer.firstChild);
-  }
-  bg.style.backgroundImage = '';
+  // v1.82: hero background image (full opacity + gradient scrim, hero zone only)
+  const heroBg = document.getElementById('themeDrawerHeroBg');
+  heroBg.style.display = 'none';
+  heroBg.style.backgroundImage = '';
   const testImg = new Image();
-  testImg.onload = () => { bg.style.backgroundImage = `url(/images/themes/theme-${id}.jpg)`; };
-  testImg.onerror = () => { bg.style.backgroundImage = ''; };
+  testImg.onload = () => {
+    heroBg.style.backgroundImage = `url(/images/themes/theme-${id}.jpg)`;
+    heroBg.style.display = '';
+  };
+  testImg.onerror = () => { heroBg.style.display = 'none'; };
   testImg.src = `/images/themes/theme-${id}.jpg`;
   document.getElementById('themeBackdrop').classList.add('open');
   document.getElementById('themeDrawer').classList.add('open');
@@ -7972,9 +8049,8 @@ function openThemeDrawer(id) {
 function _renderThemeDrawerContent(col, id) {
   const matches = CONCEPTS.filter(c => Array.isArray(c.curated_collection_ids) && c.curated_collection_ids.includes(id));
 
-  const pills = document.getElementById('themeDrawerPills');
-  const countPill = `<span class="ep-drawer-count">${matches.length} concept${matches.length !== 1 ? 's' : ''}</span>`;
-  pills.innerHTML = `<span class="ep-drawer-person">${col.tagline || ''}</span>` + countPill;
+  const countBadge = document.getElementById('themeDrawerCountBadge');
+  countBadge.textContent = `${matches.length} concept${matches.length !== 1 ? 's' : ''}`;
 
   const catCounts = {};
   matches.forEach(c => { catCounts[c.category] = (catCounts[c.category] || 0) + 1; });
@@ -8034,17 +8110,27 @@ function filterThemeDrawerCat(catKey) {
   document.querySelectorAll('#themeDrawerCatFilter .ep-drawer-cat-pill').forEach(p => {
     p.classList.toggle('active', p.dataset.cat === catKey);
   });
-  document.querySelectorAll('#themeDrawerGrid .ep-cat-column').forEach(col => {
-    const match = col.dataset.cat === catKey;
-    col.classList.toggle('visible', match);
-    col.classList.remove('faded');
-    if (match) {
-      col.style.animation = 'none';
-      requestAnimationFrame(() => { col.style.animation = ''; });
+  const body = document.querySelector('#themeDrawer .ep-drawer-body');
+  if (body) {
+    body.style.transition = 'opacity 0.1s ease';
+    body.style.opacity = '0.4';
+  }
+  setTimeout(function() {
+    document.querySelectorAll('#themeDrawerGrid .ep-cat-column').forEach(col => {
+      const match = col.dataset.cat === catKey;
+      col.classList.toggle('visible', match);
+      col.classList.remove('faded');
+      if (match) {
+        col.style.animation = 'none';
+        requestAnimationFrame(() => { col.style.animation = ''; });
+      }
+    });
+    if (body) {
+      body.style.opacity = '1';
+      body.scrollTop = 0;
     }
-  });
-  const body = document.getElementById('themeDrawer').querySelector('.ep-drawer-body');
-  if (body) body.scrollTop = 0;
+    _playSwapSFX();
+  }, 90);
 }
 
 function closeThemeDrawer() {
@@ -12841,6 +12927,60 @@ function playPillSFX() {
     g.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
     osc.start(now); osc.stop(now + 0.07);
   } catch(e) {}
+}
+
+// Soft single "content has landed" tick — pairs with _swapContent below.
+// Distinct timbre from playPillSFX (which fires on the click itself).
+function _playSwapSFX() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  try {
+    const ctx = _getSfxCtx();
+    const now = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const g = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(320, now);
+    osc.frequency.exponentialRampToValueAtTime(180, now + 0.09);
+    osc.connect(g); g.connect(ctx.destination);
+    g.gain.setValueAtTime(0.05, now);
+    g.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
+    osc.start(now); osc.stop(now + 0.1);
+  } catch(e) {}
+}
+
+// Generic smooth content-swap: fades out current content, runs swapFn to
+// update the DOM, then fades+stamps in the new content with a quick stagger
+// across up to maxItems direct children. Pairs with a single soft SFX.
+// Used for category/podcast pill switches across Library, drawers, and themes.
+function _swapContent(containerEl, swapFn, itemSelector, maxItems) {
+  if (!containerEl) { swapFn(); return; }
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    swapFn();
+    return;
+  }
+  containerEl.style.transition = 'opacity 0.1s ease, transform 0.1s ease';
+  containerEl.style.opacity = '0.3';
+  containerEl.style.transform = 'translateY(4px)';
+  setTimeout(function() {
+    swapFn();
+    containerEl.style.opacity = '1';
+    containerEl.style.transform = 'translateY(0)';
+    const items = itemSelector ? containerEl.querySelectorAll(itemSelector) : [];
+    const cap = Math.min(items.length, maxItems || 6);
+    for (let i = 0; i < cap; i++) {
+      const el = items[i];
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(6px)';
+      (function(el, i) {
+        setTimeout(function() {
+          el.style.transition = 'opacity 0.18s ease, transform 0.18s cubic-bezier(0.22,0.61,0.36,1)';
+          el.style.opacity = '1';
+          el.style.transform = 'translateY(0)';
+        }, i * 30);
+      })(el, i);
+    }
+    _playSwapSFX();
+  }, 100);
 }
 
 // Nav SFX — double tick (2). Plays on Map / Quiz / Signup / Today nav clicks.
