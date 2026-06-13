@@ -812,6 +812,20 @@
   .ep-drawer.open {
     transform: translateY(0);
   }
+  /* Theme drawer background image — v1.81, 30% opacity behind content */
+  .theme-drawer-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0.3;
+    pointer-events: none;
+    z-index: 0;
+  }
+  #themeDrawer > *:not(.theme-drawer-bg) {
+    position: relative;
+    z-index: 1;
+  }
   .ep-drawer-handle {
     width: 36px; height: 4px;
     background: var(--border-hover);
@@ -1023,36 +1037,43 @@
   }
 
   /* ============================================
-     BROWSE TOGGLE + THEMES GRID — v1.80
+     BROWSE TOGGLE + THEMES GRID — v1.81
      ============================================ */
   .browse-toggle-wrap {
     display: flex;
     justify-content: center;
-    gap: 8px;
+    gap: 2.2rem;
     padding: 0 2rem;
-    margin: 0 0 1.25rem;
+    margin: 0 0 1.5rem;
+    position: relative;
   }
   .browse-toggle {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
     color: var(--muted2);
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    padding: 8px 18px;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    padding: 4px 2px 10px;
     cursor: pointer;
-    transition: color 0.15s, border-color 0.15s, background 0.18s;
+    transition: color 0.25s ease;
+    position: relative;
   }
   .browse-toggle:hover {
     color: var(--text);
-    border-color: var(--accent);
   }
   .browse-toggle.active {
     color: var(--accent);
-    border-color: var(--accent);
-    background: rgba(232,213,163,0.10);
+  }
+  .browse-toggle-underline {
+    position: absolute;
+    bottom: 0;
+    height: 2px;
+    background: var(--accent);
+    border-radius: 2px;
+    transition: left 0.32s cubic-bezier(0.65,0,0.35,1), width 0.32s cubic-bezier(0.65,0,0.35,1);
   }
 
   #themesSection {
@@ -1121,9 +1142,6 @@
     border-color: var(--accent2);
     transform: translateY(-3px);
   }
-  .theme-card--active {
-    border-color: var(--accent);
-  }
   .theme-card-img {
     position: absolute;
     inset: 0;
@@ -1175,111 +1193,6 @@
     transition: color 0.2s;
   }
   .themes-show-all:hover { color: var(--text); }
-
-
-  /* Preview expand zone */
-  #themePreviewZone {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1);
-  }
-  #themePreviewZone.open {
-    max-height: 620px;
-    overflow: visible;
-  }
-  @media (max-width: 700px) {
-    #themePreviewZone.open { max-height: 760px; }
-  }
-  .theme-preview-header {
-    display: flex;
-    align-items: baseline;
-    justify-content: center;
-    gap: 10px;
-    padding: 16px 2rem 12px;
-    flex-wrap: wrap;
-  }
-  .theme-preview-symbol {
-    font-size: 18px;
-  }
-  .theme-preview-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.05rem;
-    color: var(--text);
-  }
-  .theme-preview-tagline {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.8rem;
-    color: var(--muted2);
-  }
-  .theme-preview-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    padding: 12px 2rem 12px;
-    max-width: 1080px;
-    margin: 0 auto;
-    perspective: 1400px;
-  }
-  /* Reuse .ep-cat-column card flip styling for preview cards —
-     each card gets its own single-column "column" wrapper */
-  .theme-preview-col {
-    display: block !important;
-    contain: none !important;
-    overflow: visible !important;
-  }
-  @media (max-width: 700px) {
-    .theme-preview-grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 6px;
-    }
-    .ep-cat-column.theme-preview-col .concept-card {
-      height: 280px;
-    }
-  }
-  .theme-preview-footer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-    padding: 0 2rem 16px;
-  }
-
-  .theme-explore-btn {
-    background: none;
-    border: 1px solid var(--border-hover);
-    border-radius: 6px;
-    color: var(--accent);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    padding: 7px 14px;
-    cursor: pointer;
-    transition: background 0.2s, border-color 0.2s;
-  }
-  .theme-explore-btn:hover {
-    background: var(--surface2);
-    border-color: var(--accent2);
-  }
-  .theme-count-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    color: var(--muted);
-  }
-  .theme-coming-badge {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    color: var(--muted);
-    border: 1px dashed var(--border);
-    border-radius: 4px;
-    padding: 2px 6px;
-    margin-left: 8px;
-  }
-  #themePreviewGrid.has-open .concept-card:not(.open) {
-    opacity: 0.35;
-    pointer-events: none;
-  }
-  [data-theme="light"] #themePreviewGrid.has-open .concept-card:not(.open) {
-    opacity: 0.45;
-  }
 
   /* ============================================
      CATEGORY ROWS — full bleed, static (no auto-scroll)
@@ -6276,10 +6189,11 @@
 </section>
 <!-- /ZONE 1 -->
 
-<!-- BROWSE TOGGLE — v1.80 -->
-<div class="browse-toggle-wrap">
+<!-- BROWSE TOGGLE — v1.81 -->
+<div class="browse-toggle-wrap" id="browseToggleWrap">
   <button class="browse-toggle active" id="browseToggleEpisodes" onclick="browseSwitch('episodes')">By Episode</button>
   <button class="browse-toggle" id="browseToggleThemes" onclick="browseSwitch('themes')">By Theme</button>
+  <div class="browse-toggle-underline" id="browseToggleUnderline"></div>
 </div>
 
 <!-- EPISODES SECTION -->
@@ -6298,20 +6212,6 @@
   <div class="themes-filter-row" id="themesFilterRow"></div>
   <div class="themes-grid" id="themesGrid"></div>
   <button class="themes-show-all" id="themesShowAllBtn" onclick="themesShowAll()" style="display:none">Show all themes ↓</button>
-</div>
-
-<!-- THEME PREVIEW EXPAND ZONE -->
-<div id="themePreviewZone">
-  <div class="theme-preview-header">
-    <span id="themePreviewSymbol" class="theme-preview-symbol"></span>
-    <span id="themePreviewTitle" class="theme-preview-title"></span>
-    <span id="themePreviewTagline" class="theme-preview-tagline"></span>
-  </div>
-  <div class="theme-preview-grid" id="themePreviewGrid"></div>
-  <div class="theme-preview-footer">
-    <button class="theme-explore-btn" id="themeExploreBtn">Explore this theme →</button>
-    <span class="theme-count-label" id="themeCountLabel"></span>
-  </div>
 </div>
 
 <!-- SHORTS SECTION -->
@@ -7788,6 +7688,16 @@ let _currentOpenThemeDrawerCardId = null;
 let _themeActiveFilterCat = null; // null = no filter
 let _themesShowAll = false;
 
+function _positionBrowseUnderline(activeBtn) {
+  const underline = document.getElementById('browseToggleUnderline');
+  const wrap = document.getElementById('browseToggleWrap');
+  if (!underline || !wrap || !activeBtn) return;
+  const wrapRect = wrap.getBoundingClientRect();
+  const btnRect = activeBtn.getBoundingClientRect();
+  underline.style.left = (btnRect.left - wrapRect.left) + 'px';
+  underline.style.width = btnRect.width + 'px';
+}
+
 function browseSwitch(mode) {
   playPillSFX();
   const epBtn = document.getElementById('browseToggleEpisodes');
@@ -7800,32 +7710,51 @@ function browseSwitch(mode) {
     themeBtn.classList.add('active');
     epSection.style.display = 'none';
     themeSection.style.display = '';
+    _positionBrowseUnderline(themeBtn);
     if (!themeSection.dataset.rendered) {
       renderThemesFilterRow();
       renderThemesGrid();
       themeSection.dataset.rendered = '1';
+    } else {
+      _animateThemesEntrance();
     }
   } else {
     themeBtn.classList.remove('active');
     epBtn.classList.add('active');
     themeSection.style.display = 'none';
     epSection.style.display = '';
-    // Close any open theme preview when leaving the Themes view
-    const zone = document.getElementById('themePreviewZone');
-    if (zone && zone.classList.contains('open')) {
-      zone.classList.remove('open');
-      _themeOpenId = null;
-    }
+    _positionBrowseUnderline(epBtn);
   }
 }
 
-function renderThemesFilterRow() {
+function renderThemesFilterRow(animate) {
   const row = document.getElementById('themesFilterRow');
   if (!row) return;
   const cats = CATEGORIES.filter(c => c.id !== 'all');
-  let html = `<button class="theme-filter-pill active" data-cat="all" onclick="themeFilterClick('all')">All</button>`;
-  html += cats.map(c => `<button class="theme-filter-pill" data-cat="${c.id}" onclick="themeFilterClick('${c.id}')">${c.name}</button>`).join('');
+  let html = `<button class="theme-filter-pill active" data-cat="all" style="${animate ? 'opacity:0;transform:scale(0.6);' : ''}" onclick="themeFilterClick('all')">All</button>`;
+  html += cats.map(c => `<button class="theme-filter-pill" data-cat="${c.id}" style="${animate ? 'opacity:0;transform:scale(0.6);' : ''}" onclick="themeFilterClick('${c.id}')">${c.name}</button>`).join('');
   row.innerHTML = html;
+
+  if (animate) {
+    const btns = row.querySelectorAll('.theme-filter-pill');
+    btns.forEach(function(btn, i) {
+      setTimeout(function() {
+        btn.style.transition = 'transform 0.12s cubic-bezier(0.34,1.56,0.64,1), opacity 0.1s ease';
+        btn.style.opacity = '1';
+        btn.style.transform = 'scale(1.08)';
+        setTimeout(function() { btn.style.transform = 'scale(1)'; }, 100);
+      }, i * 55);
+    });
+  }
+}
+
+// Animate entrance when switching back to Themes view (pills then grid)
+function _animateThemesEntrance() {
+  renderThemesFilterRow(true);
+  const pillCount = document.querySelectorAll('#themesFilterRow .theme-filter-pill').length;
+  setTimeout(function() {
+    renderThemesGrid(true);
+  }, pillCount * 55 + 80);
 }
 
 function themeFilterClick(catId) {
@@ -7835,15 +7764,15 @@ function themeFilterClick(catId) {
     p.classList.toggle('active', p.dataset.cat === catId);
   });
   _themesShowAll = false; // reset to 3x3 when filter changes
-  renderThemesGrid();
+  renderThemesGrid(true);
 }
 
 function themesShowAll() {
   _themesShowAll = true;
-  renderThemesGrid();
+  renderThemesGrid(false);
 }
 
-function renderThemesGrid() {
+function renderThemesGrid(animate) {
   const grid = document.getElementById('themesGrid');
   const showAllBtn = document.getElementById('themesShowAllBtn');
   if (!grid) return;
@@ -7862,20 +7791,27 @@ function renderThemesGrid() {
   }
 
   const visible = _themesShowAll ? thematic : thematic.slice(0, 9);
-  grid.innerHTML = visible.map(themeCardHtml).join('');
+  grid.innerHTML = visible.map(col => themeCardHtml(col, animate)).join('');
 
   showAllBtn.style.display = (!_themesShowAll && thematic.length > 9) ? '' : 'none';
 
-  // Re-apply active state if a theme preview is currently open
-  if (_themeOpenId !== null) {
-    const activeCard = document.getElementById('themeCard' + _themeOpenId);
-    if (activeCard) activeCard.classList.add('theme-card--active');
+  if (animate) {
+    const cards = grid.querySelectorAll('.theme-card');
+    cards.forEach(function(card, i) {
+      setTimeout(function() {
+        card.style.transition = 'transform 0.14s cubic-bezier(0.34,1.56,0.64,1), opacity 0.12s ease';
+        card.style.opacity = '1';
+        card.style.transform = 'scale(1.03)';
+        setTimeout(function() { card.style.transform = 'scale(1)'; }, 110);
+      }, i * 80);
+    });
+    if (typeof _playCandidateSFX === 'function') _playCandidateSFX();
   }
 }
 
-function themeCardHtml(col) {
+function themeCardHtml(col, animate) {
   const imgPath = `/images/themes/theme-${col.id}.jpg`;
-  return `<div class="theme-card" id="themeCard${col.id}" data-id="${col.id}" onclick="themeClick(${col.id})">
+  return `<div class="theme-card" id="themeCard${col.id}" data-id="${col.id}" style="${animate ? 'opacity:0;transform:scale(0.6);' : ''}" onclick="themeClick(${col.id})">
     <img class="theme-card-img" src="${imgPath}" alt="${_escHtml(col.title)}"
          onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
     <div class="theme-card-fallback" style="display:none">${col.symbol}</div>
@@ -7887,65 +7823,9 @@ function themeCardHtml(col) {
 
 function themeClick(id) {
   playPillSFX();
-  const zone = document.getElementById('themePreviewZone');
-  if (!zone) return;
-
-  // Toggle off if clicking the already-open tile
-  if (_themeOpenId === id) {
-    zone.classList.remove('open');
-    document.querySelectorAll('.theme-card--active').forEach(t => t.classList.remove('theme-card--active'));
-    _themeOpenId = null;
-    return;
-  }
-
   const col = COLLECTIONS_BY_ID[id];
   if (!col) return;
-
-  const matches = CONCEPTS.filter(c => Array.isArray(c.curated_collection_ids) && c.curated_collection_ids.includes(id));
-
-  // Active tile state
-  document.querySelectorAll('.theme-card--active').forEach(t => t.classList.remove('theme-card--active'));
-  const tile = document.getElementById('themeCard' + id);
-  if (tile) tile.classList.add('theme-card--active');
-
-  // Header
-  document.getElementById('themePreviewSymbol').textContent = col.symbol || '';
-  document.getElementById('themePreviewTitle').textContent = col.title || '';
-  document.getElementById('themePreviewTagline').textContent = col.tagline || '';
-
-  // Pick 3: editors_pick first, then fill randomly
-  const picks = matches.filter(c => c.editors_pick === true);
-  const others = matches.filter(c => c.editors_pick !== true);
-  // shuffle others for variety
-  for (let i = others.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [others[i], others[j]] = [others[j], others[i]];
-  }
-  const preview = picks.concat(others).slice(0, 3);
-
-  _currentOpenThemePreviewCardId = null;
-  const grid = document.getElementById('themePreviewGrid');
-  grid.innerHTML = preview.map(c => `<div class="ep-cat-column theme-preview-col" data-cat="${c.category}">${_renderThemeCard(c, 'tpc', col)}</div>`).join('');
-
-  // Footer
-  const countLabel = document.getElementById('themeCountLabel');
-  const exploreBtn = document.getElementById('themeExploreBtn');
-  if (matches.length < 5) {
-    countLabel.innerHTML = `${matches.length} idea${matches.length !== 1 ? 's' : ''} <span class="theme-coming-badge">more coming soon</span>`;
-  } else if (matches.length < 10) {
-    countLabel.innerHTML = `${matches.length} ideas <span class="theme-coming-badge">more coming weekly</span>`;
-  } else {
-    countLabel.textContent = `${matches.length} ideas in this theme`;
-  }
-  exploreBtn.onclick = () => openThemeDrawer(id);
-
-  zone.classList.add('open');
-  _themeOpenId = id;
-
-  // Scroll the preview into view gently
-  requestAnimationFrame(() => {
-    zone.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  });
+  openThemeDrawer(id);
 }
 
 // Shared card renderer for theme preview + drawer (mirrors episode drawer card markup)
@@ -8026,6 +7906,19 @@ function openThemeDrawer(id) {
   document.getElementById('themeDrawerPills').innerHTML = `<span class="ep-drawer-person">${col.tagline || ''}</span>`;
   document.getElementById('themeDrawerCatFilter').innerHTML = '';
   document.getElementById('themeDrawerGrid').innerHTML = '<div class="ep-empty">Loading…</div>';
+  // v1.81: set per-theme background image (30% opacity, falls back to none if missing)
+  const drawer = document.getElementById('themeDrawer');
+  let bg = drawer.querySelector('.theme-drawer-bg');
+  if (!bg) {
+    bg = document.createElement('div');
+    bg.className = 'theme-drawer-bg';
+    drawer.insertBefore(bg, drawer.firstChild);
+  }
+  bg.style.backgroundImage = '';
+  const testImg = new Image();
+  testImg.onload = () => { bg.style.backgroundImage = `url(/images/themes/theme-${id}.jpg)`; };
+  testImg.onerror = () => { bg.style.backgroundImage = ''; };
+  testImg.src = `/images/themes/theme-${id}.jpg`;
   document.getElementById('themeBackdrop').classList.add('open');
   document.getElementById('themeDrawer').classList.add('open');
   document.body.style.overflow = 'hidden';
@@ -8579,6 +8472,12 @@ loadConcepts().then(() => {
   // initConceptOfTheDay();
   initConversationStarter();
   initSparkHero(); // spark.html v1.76 — hero search
+  // Position browse toggle underline under "By Episode" on load — v1.81
+  requestAnimationFrame(() => _positionBrowseUnderline(document.getElementById('browseToggleEpisodes')));
+  window.addEventListener('resize', () => {
+    const active = document.querySelector('.browse-toggle.active');
+    if (active) _positionBrowseUnderline(active);
+  });
   // Mount CS content into unified panel Spark tab
   setTimeout(_mountCSInPanel, 100);
 });
@@ -10329,7 +10228,7 @@ function _csOpenStoryMode() {
     _csStoryRepopulateCandidates(pickerConcepts);
 
     // Auto-save
-    _csSaveStory({ id: 0, term: pickerConcepts[0].term, category: pickerConcepts[0].category }, pickerConcepts.slice(1), data.story, data.opener);
+    _csSaveStory(pickerConcepts[0], pickerConcepts.slice(1), data.story, data.opener);
     // Refresh Stories tab if it's currently open
     if (_panelTab === 'stories') _convRenderStories();
 
@@ -10513,6 +10412,7 @@ function _csShowTermPopups() {
 
 function _csDismissTermPopups(silent) {
   _csTermPopupsVisible = false;
+  _csSingleTermPopupConceptId = null;
   _csTermPopupEls.forEach(function(el) {
     el.classList.remove('cs-term-visible');
     // Remove from DOM after transition
@@ -10653,9 +10553,17 @@ function _csChunkSentences(text, n) {
 }
 
 // Show a single term popup anchored near a given element (used from Stories tab)
+let _csSingleTermPopupConceptId = null;
 function _csShowSingleTermPopup(concept, anchorEl) {
+  // If the same pill's popup is already open, close it instead of reopening
+  if (_csTermPopupsVisible && _csSingleTermPopupConceptId === concept.id) {
+    _csDismissTermPopups();
+    _csSingleTermPopupConceptId = null;
+    return;
+  }
   // Dismiss any existing popups first
   _csDismissTermPopups();
+  _csSingleTermPopupConceptId = concept.id;
   const color = (typeof CAT_COLOR !== 'undefined' && CAT_COLOR[concept.category]) || '#e8d5a3';
   const el = document.createElement('div');
   el.className = 'cs-term-popup';
