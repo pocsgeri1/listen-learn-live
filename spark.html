@@ -1261,38 +1261,60 @@
   }
   .themes-show-all:hover { color: var(--text); }
 
-  /* Theme preview-expand zone — v1.83 */
+  /* Theme preview-expand zone — v1.84 */
   .theme-card--active {
     border-color: var(--accent);
+    position: relative;
+    z-index: 2;
   }
   .themes-grid.has-preview .theme-card:not(.theme-card--active) {
     opacity: 0.35;
     transition: opacity 0.25s ease;
   }
   .theme-preview-zone {
-    grid-column: 1 / -1;
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.5s cubic-bezier(0.22,0.61,0.36,1);
     position: relative;
+    margin-top: 0;
   }
   .theme-preview-zone.open {
-    max-height: 460px;
+    max-height: 520px;
+    margin-top: 28px; /* room for the connector line + node */
   }
   @media (max-width: 600px) {
-    .theme-preview-zone.open { max-height: 1180px; }
+    .theme-preview-zone.open { max-height: 1240px; }
   }
-  /* Connector tail — small triangle pointing up to the active theme card */
-  .theme-preview-tail {
+  /* Connector — vertical gold line dropping from the active card, ending in a node */
+  .theme-preview-connector {
     position: absolute;
-    top: 0;
-    width: 22px;
-    height: 11px;
+    top: -28px;
+    height: 28px;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--accent), color-mix(in srgb, var(--accent) 40%, transparent));
+    opacity: 0;
+    transform: translateX(-50%) scaleY(0);
+    transform-origin: top;
+    transition: opacity 0.25s ease, transform 0.35s cubic-bezier(0.22,0.61,0.36,1);
+  }
+  .theme-preview-zone.open .theme-preview-connector {
+    opacity: 0.7;
+    transform: translateX(-50%) scaleY(1);
+  }
+  .theme-preview-connector-node {
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    width: 9px; height: 9px;
     background: var(--accent);
-    opacity: 0.5;
-    clip-path: polygon(50% 0, 0 100%, 100% 100%);
-    transform: translateX(-50%);
-    transition: left 0.3s ease;
+    border-radius: 50%;
+    transform: translateX(-50%) scale(0);
+    box-shadow: 0 0 8px rgba(232,213,163,0.6);
+    transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+    transition-delay: 0.25s;
+  }
+  .theme-preview-zone.open .theme-preview-connector-node {
+    transform: translateX(-50%) scale(1);
   }
   .theme-preview-inner {
     padding: 26px 0 6px !important;
@@ -6346,6 +6368,7 @@
 <div id="themesSection" style="display:none">
   <div class="themes-filter-row" id="themesFilterRow"></div>
   <div class="themes-grid" id="themesGrid"></div>
+  <div class="theme-preview-zone" id="themePreviewZone"></div>
   <button class="themes-show-all" id="themesShowAllBtn" onclick="themesShowAll()" style="display:none">Show all themes ↓</button>
 </div>
 
@@ -7937,6 +7960,8 @@ function themeFilterClick(catId) {
   _themesShowAll = false; // reset to 3x3 when filter changes
   _themeOpenId = null; // grid rebuilds — close any open preview
   const grid = document.getElementById('themesGrid');
+  const zone = document.getElementById('themePreviewZone');
+  if (zone) { zone.classList.remove('open'); zone.innerHTML = ''; }
   if (grid) { grid.style.visibility = 'hidden'; grid.classList.remove('has-preview'); }
   renderThemesGrid(false);
   requestAnimationFrame(function() {
@@ -7950,6 +7975,8 @@ function themesShowAll() {
   _themesShowAll = true;
   _themeOpenId = null;
   const grid = document.getElementById('themesGrid');
+  const zone = document.getElementById('themePreviewZone');
+  if (zone) { zone.classList.remove('open'); zone.innerHTML = ''; }
   if (grid) grid.classList.remove('has-preview');
   renderThemesGrid(false);
 }
@@ -8015,16 +8042,16 @@ function themeClick(id) {
   if (!col) return;
 
   const grid = document.getElementById('themesGrid');
-  let zone = document.getElementById('themePreviewZone');
+  const zone = document.getElementById('themePreviewZone');
 
   // Toggle off if clicking the already-open card
-  if (_themeOpenId === id && zone) {
+  if (_themeOpenId === id) {
     zone.classList.remove('open');
     grid.classList.remove('has-preview');
     const prevActive = document.getElementById('themeCard' + _themeOpenId);
     if (prevActive) prevActive.classList.remove('theme-card--active');
     _themeOpenId = null;
-    setTimeout(() => { if (zone && zone.parentNode) zone.remove(); }, 500);
+    setTimeout(() => { zone.innerHTML = ''; }, 500);
     return;
   }
 
@@ -8046,32 +8073,28 @@ function themeClick(id) {
   }
   const preview = picks.concat(others).slice(0, 3);
 
-  if (!zone) {
-    zone = document.createElement('div');
-    zone.id = 'themePreviewZone';
-    zone.className = 'theme-preview-zone';
-  }
   zone.innerHTML = `
-    <div class="theme-preview-tail" id="themePreviewTail"></div>
+    <div class="theme-preview-connector" id="themePreviewConnector"></div>
+    <div class="theme-preview-connector-node" id="themePreviewConnectorNode"></div>
     <div class="theme-preview-inner nf-row">${preview.map(c => _renderThemeCard(c, 'tpc', col)).join('')}</div>
     <div class="theme-preview-footer">
       <button class="theme-explore-btn" onclick="openThemeDrawer(${id})">Explore this theme →</button>
     </div>`;
 
-  // Insert right after the clicked card (so grid-column:1/-1 places it below that row)
-  if (card && card.nextSibling) card.parentNode.insertBefore(zone, card.nextSibling);
-  else if (card) card.parentNode.appendChild(zone);
-
   grid.classList.add('has-preview');
   _currentOpenThemePreviewCardId = null;
   _themeOpenId = id;
 
-  // Position connector tail under the clicked card
+  // Position the connector under the clicked card — zone sits directly below
+  // the grid (outside it), so card.offsetLeft is relative to the same
+  // horizontal origin as the zone.
   requestAnimationFrame(() => {
-    const tail = document.getElementById('themePreviewTail');
-    if (tail && card) {
+    const connector = document.getElementById('themePreviewConnector');
+    const node = document.getElementById('themePreviewConnectorNode');
+    if (card) {
       const cardCenter = card.offsetLeft + card.offsetWidth / 2;
-      tail.style.left = cardCenter + 'px';
+      if (connector) connector.style.left = cardCenter + 'px';
+      if (node) node.style.left = cardCenter + 'px';
     }
     zone.classList.add('open');
     // Stamp in the 3 preview cards
@@ -8085,7 +8108,7 @@ function themeClick(id) {
         c.style.transform = 'scale(1) translateY(0)';
       }, i * 80);
     });
-    _playCandidateSFX();
+    _playThemePreviewSFX();
     zone.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   });
 }
@@ -8747,6 +8770,17 @@ loadConcepts().then(() => {
   window.addEventListener('resize', () => {
     const active = document.querySelector('.browse-toggle.active');
     if (active) _positionBrowseUnderline(active);
+    // Reposition theme preview connector if open
+    if (_themeOpenId !== null) {
+      const card = document.getElementById('themeCard' + _themeOpenId);
+      const connector = document.getElementById('themePreviewConnector');
+      const node = document.getElementById('themePreviewConnectorNode');
+      if (card && connector && node) {
+        const cardCenter = card.offsetLeft + card.offsetWidth / 2;
+        connector.style.left = cardCenter + 'px';
+        node.style.left = cardCenter + 'px';
+      }
+    }
   });
   // Mount CS content into unified panel Spark tab
   setTimeout(_mountCSInPanel, 100);
@@ -11549,6 +11583,29 @@ function _playCandidateSFX() {
       gain.gain.exponentialRampToValueAtTime(0.001, t + 0.07);
       osc.connect(gain); gain.connect(actx.destination);
       osc.start(t); osc.stop(t + 0.08);
+    }
+  } catch(e) {}
+}
+
+// Deeper, warmer 3-pop — same cadence as _playCandidateSFX but pitched down
+// an octave with a triangle wave + longer tail, so theme card preview-expand
+// doesn't sound identical to category/topic pops elsewhere.
+function _playThemePreviewSFX() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  try {
+    const actx = _getSfxCtx();
+    for (let i = 0; i < 3; i++) {
+      const t = actx.currentTime + i * 0.09; // slightly slower, 90ms apart
+      const osc = actx.createOscillator();
+      const gain = actx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(190 + i * 20, t);
+      osc.frequency.exponentialRampToValueAtTime(75, t + 0.11);
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(0.05, t + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.11);
+      osc.connect(gain); gain.connect(actx.destination);
+      osc.start(t); osc.stop(t + 0.12);
     }
   } catch(e) {}
 }
