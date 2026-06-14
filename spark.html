@@ -49,14 +49,14 @@
      LIGHT MODE TOKENS
      ============================================ */
   [data-theme="light"] {
-    --bg: #f5f2ed;
-    --surface: #ede9e2;
-    --surface2: #e3ddd4;
-    --border: rgba(0,0,0,0.09);
-    --border-hover: rgba(0,0,0,0.2);
-    --text: #1a1814;
-    --muted: #7a7570;
-    --muted2: #5a5550;
+    --bg: #f5f0e8;
+    --surface: #eee8db;
+    --surface2: #e4dccf;
+    --border: rgba(0,0,0,0.08);
+    --border-hover: rgba(0,0,0,0.18);
+    --text: #1a1714;
+    --muted: #7a7060;
+    --muted2: #5a5040;
     --accent: #b8860b;
     --accent2: #9a700a;
     --red: #c0442a;
@@ -67,8 +67,97 @@
     --teal: #1a9080;
   }
 
-  /* Noise is heavy on warm parchment — reduce */
-  [data-theme="light"] body::before { opacity: 0.07; }
+  /* #10 Magazine feel — paper grain texture via SVG filter + warm ink accents */
+  [data-theme="light"] body {
+    /* SVG-inline noise filter — no external file, no HTTP request */
+    background-color: var(--bg);
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 300px 300px;
+  }
+
+  /* Ink-ruled separator lines on headings */
+  [data-theme="light"] .app-title,
+  [data-theme="light"] .sp-tagline {
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Cards feel like cut paper — slightly warmer shadow, crisp border */
+  [data-theme="light"] .concept-card {
+    background: #f0e9da;
+    border-color: rgba(0,0,0,0.1);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.07), 0 0 0 0.5px rgba(0,0,0,0.05);
+  }
+  [data-theme="light"] .concept-card:hover {
+    box-shadow: 0 6px 16px rgba(0,0,0,0.1), 0 0 0 0.5px rgba(180,134,11,0.25);
+    border-color: rgba(180,134,11,0.3);
+  }
+  [data-theme="light"] .concept-card::before {
+    background: var(--accent);
+    opacity: 0.55;
+  }
+
+  /* Nav — cream paper with ink rule */
+  [data-theme="light"] nav {
+    background: rgba(245,240,232,0.97);
+    border-bottom: 1.5px solid rgba(0,0,0,0.1);
+    backdrop-filter: blur(8px);
+  }
+  [data-theme="light"] nav.scrolled {
+    background: rgba(245,240,232,0.99);
+    border-bottom-color: rgba(0,0,0,0.12);
+  }
+
+  /* Episode cards — yellowed-paper feel */
+  [data-theme="light"] .episode-card {
+    background: #ede6d8;
+    border-color: rgba(0,0,0,0.09);
+  }
+
+  /* Surface elements — layered paper */
+  [data-theme="light"] .cat-grid {
+    background: var(--bg);
+  }
+
+  /* Section headings — editorial weight */
+  [data-theme="light"] .nf-section-title {
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  /* Hero search on light — cream card */
+  [data-theme="light"] .sp-search-wrap {
+    background: #f0e9da;
+    border-color: rgba(0,0,0,0.12);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.6);
+  }
+  [data-theme="light"] .sp-search-wrap:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06), 0 0 0 2px rgba(184,134,11,0.12), inset 0 1px 0 rgba(255,255,255,0.6);
+  }
+
+  /* Tagline on light — deep ink */
+  [data-theme="light"] .sp-tagline { color: #0f0e0c; }
+  [data-theme="light"] .sp-tagline em { color: var(--accent); }
+
+  /* Progress bar — linen-paper */
+  [data-theme="light"] .progress-bar {
+    background: #ede6d8;
+    border-color: rgba(0,0,0,0.08);
+  }
+
+  /* Drawers — heavier paper feel */
+  [data-theme="light"] .ep-drawer {
+    background: #f0e9da;
+    border-top-color: rgba(0,0,0,0.14);
+  }
+  [data-theme="light"] .ep-drawer-body {
+    background: var(--bg);
+  }
+
+  /* Reduce noise filter — already handled but reinforce */
+  [data-theme="light"] body::before { opacity: 0; } /* replaced by bg-image above */
 
   /* ============================================
      GLOBAL FOCUS-VISIBLE — gold outline for keyboard nav,
@@ -4449,6 +4538,13 @@
       scrollbar-width: none;
       -webkit-overflow-scrolling: touch;
       scroll-snap-type: x proximity;
+      /* #2 sticky cat bar — sticks below nav (76px) */
+      position: sticky;
+      top: 62px;
+      z-index: 50;
+      background: var(--bg);
+      margin-bottom: 0;
+      border-bottom: 1px solid var(--border);
     }
     .cat-grid::-webkit-scrollbar { display: none; }
     .cat-card { scroll-snap-align: start; flex-shrink: 0; }
@@ -4461,10 +4557,11 @@
     border-radius: 999px;
     padding: 6px 16px;
     cursor: pointer;
-    transition: border-color 0.2s, background 0.2s;
+    transition: border-color 0.2s, background 0.2s, transform 0.18s cubic-bezier(0.34,1.56,0.64,1);
     white-space: nowrap;
     will-change: transform;
   }
+  /* #4 Card hover lift — lightweight translateY only, GPU-composited */
   .cat-card:hover { border-color: currentColor; }
   .cat-card.active {
     background: rgba(255,255,255,0.06);
@@ -4539,12 +4636,26 @@
     border-radius: 12px;
     cursor: pointer;
     position: relative;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    touch-action: pan-y; /* mobile: vertical scroll takes priority over tap-hold */
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.18s cubic-bezier(0.34,1.56,0.64,1);
+    touch-action: pan-y;
   }
+  /* #4 Card hover lift — transform only, no layout reflow, no will-change (avoid memory) */
+  .concept-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.18);
+  }
+  [data-theme="light"] .concept-card:hover {
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  }
+  @media (hover: none) {
+    /* No hover state on touch — avoid stuck state */
+    .concept-card:hover { transform: none; box-shadow: none; }
+  }
+
   .concept-card.editors-pick { border-color: rgba(232,213,163,0.45); }
   .concept-card.editors-pick:hover { border-color: rgba(232,213,163,0.7); }
 
+  /* #5 PICK badge — 3-cycle breathe on load, then stops (matches unflipped dot feel) */
   .pick-badge {
     font-family: 'DM Mono', monospace;
     font-size: 0.58rem;
@@ -4558,8 +4669,51 @@
     display: inline-flex;
     align-items: center;
     gap: 4px;
+    animation: pickBadgeBreathe 2s ease-in-out 3;
+    animation-fill-mode: both;
   }
-  .pick-badge .pick-star { font-size: 0.65rem; line-height: 1; }
+  @keyframes pickBadgeBreathe {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(232,213,163,0); border-color: rgba(232,213,163,0.3); }
+    50% { box-shadow: 0 0 8px 2px rgba(232,213,163,0.25); border-color: rgba(232,213,163,0.7); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pick-badge { animation: none; }
+  }
+
+  /* #7 Streak glow — faint gold aura from 3rd consecutive card read */
+  .concept-card.card-streak {
+    box-shadow: 0 0 0 1px rgba(232,213,163,0.18), 0 0 18px rgba(232,213,163,0.09);
+    border-color: rgba(232,213,163,0.35);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .concept-card.card-streak {
+      animation: streakPulseOnce 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+    }
+  }
+  @keyframes streakPulseOnce {
+    0% { box-shadow: 0 0 0 0 rgba(232,213,163,0.45); }
+    100% { box-shadow: 0 0 0 1px rgba(232,213,163,0.18), 0 0 18px rgba(232,213,163,0.09); }
+  }
+
+  /* #1 Reading progress — gold left border grows as card enters viewport */
+  .concept-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    border-radius: 12px 0 0 12px;
+    background: var(--accent);
+    transform: scaleY(var(--read-progress, 0));
+    transform-origin: top;
+    transition: transform 0.4s cubic-bezier(0.22,0.61,0.36,1);
+    z-index: 1;
+    opacity: 0.7;
+  }
+  .concept-card.card-read::before {
+    transform: scaleY(1);
+    opacity: 0.9;
+    transition: transform 0.6s cubic-bezier(0.22,0.61,0.36,1);
+  }
 
   .mastered-badge {
     font-size: 0.58rem;
@@ -6562,7 +6716,7 @@
   <!-- Center column: tagline + search + scenario pills -->
   <div class="sp-hero-col">
 
-    <h1 class="sp-tagline">Ideas die in<br><em>your earbuds.</em></h1>
+    <h1 class="sp-tagline">Ideas die in<br><em id="spTaglineTyped" aria-label="your earbuds."></em></h1>
     <p class="sp-sub">Turn 3 hours of podcast into 3 ideas you'll actually say out loud.</p>
 
     <!-- Hero search bar -->
@@ -7197,6 +7351,8 @@ async function loadConcepts() {
     updateProgress();
     updateHeaderCounts();
     initMagneticCards();
+    // #1 Init reading progress observer after first grid render — v1.92
+    setTimeout(_initReadingProgress, 400);
 
   } catch (error) {
     console.error('Failed to load concepts:', error);
@@ -7496,6 +7652,8 @@ function buildGrid() {
   if (mc) mc._magneticBound = false;
   initMagneticCards();
   document.querySelectorAll('.nf-row').forEach(updateArrowVisibility);
+  // Signal reading-progress observer to re-attach — v1.92
+  document.dispatchEvent(new Event('_gridBuilt'));
 }
 
 function initDragScroll() {
@@ -7966,6 +8124,74 @@ function setCat(cat) {
   activeCat = cat;
   _swapContent(document.getElementById('netflixRows'), render, '.nf-section', 6);
 }
+// ── READING PROGRESS + SESSION TOAST — v1.92 ────────────────────────────────
+// #1: IntersectionObserver marks cards as read as they enter viewport.
+//     Adds .card-read class (triggers full left-border via CSS).
+// #9: Counts distinct concepts seen this session; at 5 shows a toast.
+
+let _readCount = 0;
+let _toastShown = false;
+let _readObserver = null;
+
+function _initReadingProgress() {
+  if (_readObserver) { _readObserver.disconnect(); }
+  if (!window.IntersectionObserver) return;
+
+  _readObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (!entry.isIntersecting) return;
+      const card = entry.target;
+      if (card.classList.contains('card-read')) return;
+      card.classList.add('card-read');
+      _readCount++;
+      _readObserver.unobserve(card); // one-shot per card
+      // #9 toast at 5 concepts
+      if (_readCount === 5 && !_toastShown) {
+        _toastShown = true;
+        _showSessionToast('5 ideas today ✦');
+      }
+    });
+  }, { threshold: 0.55 }); // card is >55% in view = "read"
+
+  // Attach to all current concept cards
+  document.querySelectorAll('.concept-card').forEach(function(c) {
+    if (!c.classList.contains('card-read')) _readObserver.observe(c);
+  });
+}
+
+// Re-init whenever buildGrid runs (cards are replaced in DOM)
+const _origBuildGrid = typeof buildGrid === 'function' ? buildGrid : null;
+
+function _showSessionToast(msg) {
+  let t = document.getElementById('_sessionToast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = '_sessionToast';
+    t.style.cssText = [
+      'position:fixed','bottom:24px','left:50%','transform:translateX(-50%) translateY(12px)',
+      'background:var(--surface2)','border:1px solid rgba(232,213,163,0.4)',
+      'color:var(--accent)','font-family:\'DM Mono\',monospace','font-size:0.68rem',
+      'letter-spacing:0.12em','text-transform:uppercase','padding:9px 20px',
+      'border-radius:999px','z-index:9999','opacity:0',
+      'transition:opacity 0.3s ease,transform 0.3s cubic-bezier(0.34,1.56,0.64,1)',
+      'pointer-events:none','white-space:nowrap','box-shadow:0 4px 20px rgba(0,0,0,0.3)'
+    ].join(';');
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  requestAnimationFrame(() => {
+    t.style.opacity = '1';
+    t.style.transform = 'translateX(-50%) translateY(0)';
+  });
+  setTimeout(() => {
+    t.style.opacity = '0';
+    t.style.transform = 'translateX(-50%) translateY(8px)';
+  }, 3200);
+}
+
+// Hook into buildGrid completion to re-attach observer after DOM rebuild
+document.addEventListener('_gridBuilt', _initReadingProgress);
+
 // ── DRAWER SWIPE-DOWN TO CLOSE — v1.90 ──────────────────────────────────────
 // Touch the hero image area and swipe down ≥60px → closes whichever drawer is open.
 // passive:true on touchstart/touchmove = no scroll jank.
@@ -9433,6 +9659,77 @@ function initSparkHero() {
   setTimeout(() => {
     document.querySelectorAll('.sp-pill').forEach(p => p.classList.add('btns-settled'));
   }, 1100);
+
+  // #6 Typewriter on "your earbuds." — one-shot per session
+  const _typeEl = document.getElementById('spTaglineTyped');
+  const _typeText = 'your earbuds.';
+  if (_typeEl) {
+    const _typeKey = 'ep_typed_v1';
+    const _hasSeen = sessionStorage.getItem(_typeKey);
+    if (!_hasSeen) {
+      sessionStorage.setItem(_typeKey, '1');
+      let _ti = 0;
+      _typeEl.textContent = '';
+      const _typeNext = () => {
+        if (_ti <= _typeText.length) {
+          _typeEl.textContent = _typeText.slice(0, _ti);
+          _ti++;
+          setTimeout(_typeNext, _ti === 1 ? 300 : 55 + Math.random() * 25);
+        }
+      };
+      setTimeout(_typeNext, 680); // delay after page paint
+    } else {
+      _typeEl.textContent = _typeText;
+    }
+  }
+
+  // #8 Placeholder cycling — fires only when input is empty and unfocused
+  const _phInput = document.getElementById('spSearchInput');
+  const _placeholders = [
+    'loss aversion…',
+    'narrative identity…',
+    'skin in the game…',
+    'epistemic humility…',
+    'status signalling…',
+  ];
+  if (_phInput) {
+    let _phi = 0;
+    let _phTimer = null;
+    const _cyclePh = () => {
+      if (document.activeElement !== _phInput && !_phInput.value) {
+        _phi = (_phi + 1) % _placeholders.length;
+        _phInput.placeholder = _placeholders[_phi];
+      }
+    };
+    _phTimer = setInterval(_cyclePh, 3000);
+    _phInput.addEventListener('focus', () => {
+      _phInput.placeholder = 'Search an idea, topic, or concept…';
+    });
+    _phInput.addEventListener('blur', () => {
+      if (!_phInput.value) setTimeout(() => { _phInput.placeholder = _placeholders[_phi]; }, 600);
+    });
+  }
+
+  // #7 Streak watcher — starts after first grid build (reading progress inited separately)
+  document.addEventListener('_gridBuilt', _watchStreak, { once: true });
+}
+
+// #7 Streak glow — MutationObserver watches card-read additions, glow from 3rd onward
+let _streakObserver = null;
+function _watchStreak() {
+  if (_streakObserver) { _streakObserver.disconnect(); }
+  let _streakCount = 0;
+  const container = document.getElementById('netflixRows');
+  if (!container) return;
+  _streakObserver = new MutationObserver(function(mutations) {
+    mutations.forEach(function(m) {
+      m.target.classList && m.target.classList.contains('card-read') && _streakCount++;
+      if (_streakCount >= 3) {
+        m.target.classList.add('card-streak');
+      }
+    });
+  });
+  _streakObserver.observe(container, { subtree: true, attributes: true, attributeFilter: ['class'] });
 }
 
 // --- Hero search ---
