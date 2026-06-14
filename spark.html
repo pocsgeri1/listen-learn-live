@@ -845,6 +845,10 @@
     overflow: hidden;
     background: var(--surface2);
   }
+  /* Desktop: 10% extra headroom at top so hero image gets more breathing room */
+  @media (min-width: 769px) {
+    .ep-drawer-hero { padding-top: calc(1.4rem + 10%); }
+  }
   .ep-drawer-hero-bg {
     position: absolute;
     inset: 0;
@@ -3158,6 +3162,44 @@
     opacity: 0.85;
   }
 
+  /* Connects-to chip — Phase 2 v1.89 */
+  .cs-connects-chip {
+    display: none;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.72rem;
+    color: var(--muted2);
+  }
+  .cs-connects-chip.visible { display: flex; }
+  .cs-connects-chip-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .cs-connects-chip-btn {
+    background: none;
+    border: 0.5px solid rgba(232,213,163,0.3);
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.7rem;
+    color: var(--accent);
+    cursor: pointer;
+    transition: border-color 0.18s, background 0.18s;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 180px;
+  }
+  .cs-connects-chip-btn:hover {
+    border-color: var(--accent);
+    background: rgba(232,213,163,0.07);
+  }
   /* Related label */
   .cs-related-label {
     font-family: 'DM Mono', monospace; font-size: 0.6rem;
@@ -3786,6 +3828,91 @@
   .cs-story-opener { background: var(--surface2); border: 1px solid var(--border); border-left: 2px solid var(--accent); padding: 10px 14px; border-radius: 0 6px 6px 0; margin-top: 14px; }
   .cs-story-opener-label { font-family: 'DM Mono', monospace; font-size: 0.56rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 5px; }
   .cs-story-opener-text { font-family: 'DM Sans', sans-serif; font-size: 0.8rem; color: var(--accent); font-style: italic; line-height: 1.5; }
+
+  /* Voice playback button — v1.89 Phase 1 */
+  .cs-voice-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 7px;
+    background: none;
+    border: 0.5px solid rgba(232,213,163,0.25);
+    border-radius: 20px;
+    padding: 3px 9px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.56rem;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--muted2);
+    cursor: pointer;
+    transition: border-color 0.18s, color 0.18s;
+    position: relative;
+  }
+  .cs-voice-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .cs-voice-btn.speaking {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+  .cs-voice-btn.speaking::before {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 24px;
+    border: 1px solid rgba(232,213,163,0.35);
+    animation: voicePulse 1.2s ease-in-out infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cs-voice-btn.speaking::before { animation: none; }
+  }
+  @keyframes voicePulse {
+    0%, 100% { opacity: 0.5; transform: scale(1); }
+    50% { opacity: 0; transform: scale(1.12); }
+  }
+  /* Voice picker popover */
+  .cs-voice-picker {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 0;
+    background: var(--surface2);
+    border: 1px solid var(--border-hover);
+    border-radius: 8px;
+    padding: 10px 12px;
+    min-width: 200px;
+    z-index: 200;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  .cs-voice-picker-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.54rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .cs-voice-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 0;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.72rem;
+    color: var(--muted2);
+    transition: color 0.15s;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+  }
+  .cs-voice-option:hover { color: var(--text); }
+  .cs-voice-option.selected { color: var(--accent); }
+  .cs-voice-option-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--border-hover);
+    flex-shrink: 0;
+  }
+  .cs-voice-option.selected .cs-voice-option-dot { background: var(--accent); }
   .cs-story-actions { display: flex; gap: 8px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); }
   .cs-story-copy-btn { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; background: transparent; border: 1px solid var(--border); border-radius: 20px; padding: 5px 14px; color: var(--muted2); cursor: pointer; transition: border-color 0.18s, color 0.18s; }
   .cs-story-copy-btn:hover { border-color: var(--text); color: var(--text); }
@@ -6321,6 +6448,13 @@
       <div class="cs-coaching-section">
         <div class="cs-coaching-label">You could say:</div>
         <div class="cs-openers-list" id="csOpenersList"></div>
+        <!-- Voice playback — v1.89 Phase 1 -->
+        <div style="position:relative">
+          <button class="cs-voice-btn" id="csVoiceBtn" onclick="_csVoiceToggle()" title="Hear it spoken aloud" style="display:none">
+            🔊 <span id="csVoiceBtnLabel">hear it</span>
+          </button>
+          <div class="cs-voice-picker" id="csVoicePicker" style="display:none"></div>
+        </div>
       </div>
       <div class="cs-coaching-section cs-pitfall-wrap">
         <div class="cs-coaching-label cs-coaching-label--warn">Watch out for:</div>
@@ -6328,13 +6462,22 @@
       </div>
     </div>
 
+    <!-- Connects-to chip — v1.89 Phase 2 -->
+    <div class="cs-connects-chip cs-post-prompt cs-hidden" id="csConnectsChip">
+      <span class="cs-connects-chip-label">connects to →</span>
+      <button class="cs-connects-chip-btn" id="csConnectsChipBtn" onclick="_csConnectsChipClick()">—</button>
+    </div>
+
     <!-- Bottom controls: Change topic · Change scenario · Related — v1.72c -->
+    <!-- Related button disabled v1.89 (chip replaces it); separator hidden too -->
     <div class="cs-reveal-row cs-post-prompt cs-hidden" id="csRevealRow">
       <button class="cs-reveal-link" id="csRevealTopic" onclick="_csToggleTopicReveal()">Change topic</button>
       <span class="cs-reveal-sep">·</span>
       <button class="cs-reveal-link" id="csRevealScenario" onclick="_csToggleScenarioReveal()">Change scenario</button>
-      <span class="cs-reveal-sep">·</span>
+      <!-- DISABLED v1.89: replaced by connects-to chip above
+      <span class="cs-reveal-sep" id="csRevealRelatedSep">·</span>
       <button class="cs-reveal-link" id="csRevealRelated" onclick="_csToggleRelatedReveal()">Related concepts</button>
+      -->
     </div>
 
     <!-- Category pills — expands below the reveal row -->
@@ -7755,6 +7898,44 @@ function setCat(cat) {
   activeCat = cat;
   _swapContent(document.getElementById('netflixRows'), render, '.nf-section', 6);
 }
+// ── DRAWER HERO PARALLAX — v1.89 Phase 3 ─────────────────────────────────────
+// Desktop-only, respects prefers-reduced-motion. Shifts background-position-y
+// on the hero-bg element as the drawer body scrolls — no transforms, no will-change.
+// background-position updates are compositor-friendly and won't cause layout.
+
+let _drawerParallaxRAF = null;
+let _drawerParallaxCleanup = null;
+
+function _initDrawerParallax(bodyEl, heroBgEl) {
+  // Guard: mobile or reduced-motion → skip
+  if (!bodyEl || !heroBgEl) return;
+  if (window.matchMedia('(max-width: 768px)').matches) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  // Tear down any existing listener first
+  if (_drawerParallaxCleanup) { _drawerParallaxCleanup(); _drawerParallaxCleanup = null; }
+
+  let _ticking = false;
+  function onScroll() {
+    if (_ticking) return;
+    _ticking = true;
+    _drawerParallaxRAF = requestAnimationFrame(function() {
+      _ticking = false;
+      const scrollY = bodyEl.scrollTop;
+      // Shift bg upward by 35% of scroll distance — subtle depth effect
+      const offset = 50 - (scrollY * 0.35 / heroBgEl.offsetHeight * 100);
+      heroBgEl.style.backgroundPosition = `center ${Math.max(20, Math.min(80, offset))}%`;
+    });
+  }
+
+  bodyEl.addEventListener('scroll', onScroll, { passive: true });
+  _drawerParallaxCleanup = function() {
+    bodyEl.removeEventListener('scroll', onScroll);
+    if (_drawerParallaxRAF) { cancelAnimationFrame(_drawerParallaxRAF); _drawerParallaxRAF = null; }
+    heroBgEl.style.backgroundPosition = 'center';
+  };
+}
+
 function openEpisodeDrawer(collectionId) {
   const col = COLLECTIONS_BY_ID[collectionId];
   if (!col) return;
@@ -7898,8 +8079,12 @@ function _renderDrawerContent(col, collectionId) {
       document.querySelectorAll('.ep-cat-column').forEach(c => c.classList.add('visible'));
     }
   }
-
-  }
+  // Init parallax after content rendered — v1.89
+  _initDrawerParallax(
+    document.querySelector('#epDrawer .ep-drawer-body'),
+    document.getElementById('epDrawerHeroBg')
+  );
+}
 
 function filterDrawerCat(catKey) {
   document.querySelectorAll('.ep-drawer-cat-pill').forEach(p => {
@@ -7964,6 +8149,8 @@ function closeEpisodeDrawer() {
   const backBtn = document.getElementById('epDrawerBackCS');
   if (backBtn) backBtn.style.display = 'none';
   _csFromDrawer = false;
+  // Tear down parallax listener — v1.89
+  if (_drawerParallaxCleanup) { _drawerParallaxCleanup(); _drawerParallaxCleanup = null; }
   // Phase 1 (instant): start the slide-down animation. Drawer is still position:fixed,
   // body sections still display:none — so nothing heavy happens this frame.
   document.getElementById('epBackdrop').classList.remove('open');
@@ -8422,6 +8609,11 @@ function _renderThemeDrawerContent(col, id) {
     filterRow.style.display = 'none';
     document.querySelectorAll('#themeDrawerGrid .ep-cat-column').forEach(c => c.classList.add('visible'));
   }
+  // Init parallax after content rendered — v1.89
+  _initDrawerParallax(
+    document.querySelector('#themeDrawer .ep-drawer-body'),
+    document.getElementById('themeDrawerHeroBg')
+  );
 }
 
 function filterThemeDrawerCat(catKey) {
@@ -8452,6 +8644,8 @@ function filterThemeDrawerCat(catKey) {
 }
 
 function closeThemeDrawer() {
+  // Tear down parallax listener — v1.89
+  if (_drawerParallaxCleanup) { _drawerParallaxCleanup(); _drawerParallaxCleanup = null; }
   document.getElementById('themeBackdrop').classList.remove('open');
   document.getElementById('themeDrawer').classList.remove('open');
 
@@ -9969,11 +10163,9 @@ function _csClosePicker() {
   _csPickerShowMain();
   const lnk = document.getElementById('csRevealTopic');
   if (lnk) lnk.classList.remove('active');
-  // Restore scenario + related pills
+  // Restore scenario pill (related pill disabled v1.89 — chip replaces it)
   const sl = document.getElementById('csRevealScenario');
-  const rl = document.getElementById('csRevealRelated');
   if (sl) sl.style.display = '';
-  if (rl) rl.style.display = '';
 }
 
 function _csPickerBuildCatRow(activeCatId) {
@@ -10399,6 +10591,8 @@ function _applyAIToCtx(ctx) {
     `<div class="cs-opener-line"><span class="cs-opener-idx">${i === 0 ? 'Try saying' : 'Or try'}</span>${_escHtml(o)}</div>`
   ).join('');
   document.getElementById('csPitfall').textContent = d.pitfall || '';
+  // Show voice button when openers are populated — v1.89
+  if (typeof _voiceUpdateBtn === 'function') _voiceUpdateBtn();
 
   // Auto-save generated prompt to history (with prompt text) — v1.72
   _csLogHistoryWithPrompt(_csConcept, ctx, d.prompt);
@@ -10501,13 +10695,28 @@ function _renderRelated(concept) {
     wrap.appendChild(expand);
     row.appendChild(wrap);
   });
-  // Show/hide Related reveal pill based on pool size
+  // DISABLED v1.89 — csRevealRelated replaced by connects-to chip; refs kept for safety
   const relatedLnk = document.getElementById('csRevealRelated');
-  if (relatedLnk) relatedLnk.style.display = pool.length > 0 ? '' : 'none';
+  if (relatedLnk) relatedLnk.style.display = 'none';
   // Reset related section state on new concept
   const relSec = document.getElementById('csRelatedSection');
   if (relSec) relSec.classList.remove('open');
   if (relatedLnk) relatedLnk.classList.remove('active');
+
+  // ── Connects-to chip — v1.89 ──────────────────────────────────────────────
+  // Pick best connect: first in related_ids that resolves, else first same-cat
+  const chip = document.getElementById('csConnectsChip');
+  const chipBtn = document.getElementById('csConnectsChipBtn');
+  if (chip && chipBtn) {
+    const connectTarget = pool[0] || null;
+    if (connectTarget) {
+      chipBtn.textContent = connectTarget.term;
+      chipBtn.dataset.connectId = connectTarget.id;
+      chip.classList.add('visible');
+    } else {
+      chip.classList.remove('visible');
+    }
+  }
 }
 
 // ── STORY MODE — Phase D ──────────────────────────────────────────────────
@@ -11445,6 +11654,169 @@ function _csToggleRelatedReveal() {
   }
 }
 
+// ── VOICE PLAYBACK — v1.89 Phase 1 ──────────────────────────────────────────
+// Uses browser SpeechSynthesis (free, no API cost)
+// Voice preference stored in localStorage under lll_voice_pref_v1
+// Reads first opener from csOpenersList (the "You could say:" list)
+
+const VOICE_PREF_KEY = 'lll_voice_pref_v1';
+let _voiceSpeaking = false;
+
+// Return curated list of quality voices — prefer named OS voices, skip generic synth
+function _voiceGetCandidates() {
+  if (!window.speechSynthesis) return [];
+  const all = window.speechSynthesis.getVoices();
+  // Preferred: non-Google, non-"Android", English
+  const preferred = all.filter(v =>
+    v.lang && v.lang.startsWith('en') &&
+    !v.name.toLowerCase().includes('google') &&
+    !v.name.toLowerCase().includes('android') &&
+    !v.name.toLowerCase().includes('compact')
+  );
+  // Fallback: any English voice
+  const fallback = all.filter(v => v.lang && v.lang.startsWith('en') && !preferred.includes(v));
+  return preferred.concat(fallback).slice(0, 5);
+}
+
+function _voiceGetSaved() {
+  return localStorage.getItem(VOICE_PREF_KEY) || null;
+}
+
+function _voiceSetSaved(name) {
+  localStorage.setItem(VOICE_PREF_KEY, name);
+}
+
+function _voiceGetCurrent() {
+  const all = window.speechSynthesis ? window.speechSynthesis.getVoices() : [];
+  const saved = _voiceGetSaved();
+  if (saved) {
+    const found = all.find(v => v.name === saved);
+    if (found) return found;
+  }
+  const cands = _voiceGetCandidates();
+  return cands[0] || (all[0] || null);
+}
+
+// Get the first opener text to read
+function _voiceGetText() {
+  const list = document.getElementById('csOpenersList');
+  if (!list) return '';
+  const first = list.querySelector('.cs-opener-line');
+  if (!first) return '';
+  // Strip the "Try saying" / "Or try" label
+  const clone = first.cloneNode(true);
+  const lbl = clone.querySelector('.cs-opener-idx');
+  if (lbl) lbl.remove();
+  return clone.textContent.trim();
+}
+
+function _voiceSpeak(text, voice) {
+  if (!window.speechSynthesis || !text) return;
+  window.speechSynthesis.cancel();
+  const utt = new SpeechSynthesisUtterance(text);
+  if (voice) utt.voice = voice;
+  utt.rate = 0.88;
+  utt.pitch = 0.95;
+  utt.volume = 1;
+  _voiceSpeaking = true;
+  const btn = document.getElementById('csVoiceBtn');
+  const lbl = document.getElementById('csVoiceBtnLabel');
+  if (btn) btn.classList.add('speaking');
+  if (lbl) lbl.textContent = 'speaking…';
+  utt.onend = utt.onerror = function() {
+    _voiceSpeaking = false;
+    if (btn) btn.classList.remove('speaking');
+    if (lbl) lbl.textContent = 'hear it';
+  };
+  window.speechSynthesis.speak(utt);
+}
+
+function _voiceStop() {
+  if (window.speechSynthesis) window.speechSynthesis.cancel();
+  _voiceSpeaking = false;
+  const btn = document.getElementById('csVoiceBtn');
+  const lbl = document.getElementById('csVoiceBtnLabel');
+  if (btn) btn.classList.remove('speaking');
+  if (lbl) lbl.textContent = 'hear it';
+}
+
+function _voiceShowPicker(candidates, onPick) {
+  const picker = document.getElementById('csVoicePicker');
+  if (!picker) return;
+  picker.innerHTML = '<div class="cs-voice-picker-label">Choose a voice</div>' +
+    candidates.map((v, i) => {
+      const saved = _voiceGetSaved();
+      const isSel = saved ? v.name === saved : i === 0;
+      return `<button class="cs-voice-option${isSel ? ' selected' : ''}" onclick="_voicePickOption('${v.name.replace(/'/g,"\\'")}')">
+        <span class="cs-voice-option-dot"></span>${v.name}
+      </button>`;
+    }).join('');
+  picker.style.display = '';
+  // Close on outside click
+  setTimeout(() => {
+    document.addEventListener('click', _voiceClosePicker, { once: true, capture: true });
+  }, 0);
+}
+
+function _voicePickOption(name) {
+  _voiceSetSaved(name);
+  _voiceClosePicker();
+  const text = _voiceGetText();
+  const voice = (window.speechSynthesis.getVoices() || []).find(v => v.name === name) || _voiceGetCurrent();
+  _voiceSpeak(text, voice);
+}
+
+function _voiceClosePicker() {
+  const picker = document.getElementById('csVoicePicker');
+  if (picker) picker.style.display = 'none';
+}
+
+function _csVoiceToggle() {
+  if (_voiceSpeaking) { _voiceStop(); return; }
+  const text = _voiceGetText();
+  if (!text) return;
+  // If no voice saved yet, show picker first
+  if (!_voiceGetSaved()) {
+    // voices may load async — wait if empty
+    const tryShow = () => {
+      const cands = _voiceGetCandidates();
+      if (cands.length > 1) {
+        _voiceShowPicker(cands);
+      } else {
+        // Single voice or none — just speak
+        _voiceSpeak(text, _voiceGetCurrent());
+      }
+    };
+    if (window.speechSynthesis && window.speechSynthesis.getVoices().length === 0) {
+      window.speechSynthesis.addEventListener('voiceschanged', tryShow, { once: true });
+    } else {
+      tryShow();
+    }
+    return;
+  }
+  _voiceSpeak(text, _voiceGetCurrent());
+}
+
+// Show/hide the voice button when openers are rendered
+function _voiceUpdateBtn() {
+  const btn = document.getElementById('csVoiceBtn');
+  if (!btn || !window.speechSynthesis) return;
+  const text = _voiceGetText();
+  btn.style.display = text ? '' : 'none';
+  // Always stop any in-flight speech when concept changes
+  if (_voiceSpeaking) _voiceStop();
+}
+
+// Connects-to chip click — v1.89
+// Swaps the CS panel to the target concept (same flow as _csSwapConcept)
+function _csConnectsChipClick() {
+  const btn = document.getElementById('csConnectsChipBtn');
+  if (!btn) return;
+  const targetId = parseInt(btn.dataset.connectId, 10);
+  if (!targetId) return;
+  _csSwapConcept(targetId);
+}
+
 // Surprise me — random concept from any category
 function _csSurprise() {
   const pool = CONCEPTS.filter(c => !c.duplicate_of && (!_csConcept || c.id !== _csConcept.id));
@@ -11805,6 +12177,8 @@ function _showCSLoading(on) {
         const pitfall = document.getElementById('csPitfall');
         if (openersList) openersList.innerHTML = '';
         if (pitfall) pitfall.textContent = '';
+        // Hide voice button when openers cleared — v1.89
+        if (typeof _voiceUpdateBtn === 'function') _voiceUpdateBtn();
       }, 200);
     }
   }
