@@ -84,8 +84,7 @@
     inset: 0;
     pointer-events: none;
     z-index: 0;
-    /* SVG: vertical column rules + horizontal baseline + corner crop marks */
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1440' height='900' preserveAspectRatio='none'%3E%3Cdefs%3E%3Cstyle%3E.r%7Bstroke:%23b8860b;stroke-opacity:0.07;fill:none;stroke-width:0.5%7D.c%7Bstroke:%23b8860b;stroke-opacity:0.12;fill:none;stroke-width:0.5%7D%3C/style%3E%3C/defs%3E%3C!-- vertical column rules --%3E%3Cline class='r' x1='360' y1='0' x2='360' y2='900'/%3E%3Cline class='r' x1='720' y1='0' x2='720' y2='900'/%3E%3Cline class='r' x1='1080' y1='0' x2='1080' y2='900'/%3E%3C!-- horizontal baseline grid (every 180px) --%3E%3Cline class='r' x1='0' y1='180' x2='1440' y2='180'/%3E%3Cline class='r' x1='0' y1='360' x2='1440' y2='360'/%3E%3Cline class='r' x1='0' y1='540' x2='1440' y2='540'/%3E%3Cline class='r' x1='0' y1='720' x2='1440' y2='720'/%3E%3C!-- corner crop marks — top left --%3E%3Cline class='c' x1='0' y1='32' x2='24' y2='32'/%3E%3Cline class='c' x1='32' y1='0' x2='32' y2='24'/%3E%3C!-- top right --%3E%3Cline class='c' x1='1416' y1='32' x2='1440' y2='32'/%3E%3Cline class='c' x1='1408' y1='0' x2='1408' y2='24'/%3E%3C!-- bottom left --%3E%3Cline class='c' x1='0' y1='868' x2='24' y2='868'/%3E%3Cline class='c' x1='32' y1='876' x2='32' y2='900'/%3E%3C!-- bottom right --%3E%3Cline class='c' x1='1416' y1='868' x2='1440' y2='868'/%3E%3Cline class='c' x1='1408' y1='876' x2='1408' y2='900'/%3E%3C!-- golden accent bar — left margin --%3E%3Crect x='0' y='0' width='3' height='900' fill='%23b8860b' opacity='0.12'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 900'%3E%3Cdefs%3E%3Cstyle%3E.wm%7Bfont-family:serif;font-weight:700;font-style:italic;fill:%23b8860b;fill-opacity:0.045;letter-spacing:0.18em%7D.rule%7Bstroke:%23b8860b;stroke-opacity:0.18;fill:none;stroke-width:1%7D.thin%7Bstroke:%23b8860b;stroke-opacity:0.07;fill:none;stroke-width:0.5%7D.orn%7Bfill:%23b8860b;fill-opacity:0.13%7D%3C/style%3E%3C/defs%3E%3C!-- DIAGONAL WATERMARK — large italic serif --%3E%3Ctext class='wm' x='50%25' y='50%25' font-size='148' text-anchor='middle' dominant-baseline='middle' transform='rotate(-28 720 450)'%3EEPISTEMIC%3C/text%3E%3C!-- strong left margin rule --%3E%3Cline class='rule' x1='52' y1='0' x2='52' y2='900'/%3E%3C!-- hairline right rule --%3E%3Cline class='thin' x1='1388' y1='0' x2='1388' y2='900'/%3E%3C!-- top rule --%3E%3Cline class='rule' x1='0' y1='52' x2='1440' y2='52'/%3E%3C!-- bottom rule --%3E%3Cline class='thin' x1='0' y1='848' x2='1440' y2='848'/%3E%3C!-- top-left corner ornament: crosshair --%3E%3Cline class='rule' x1='0' y1='52' x2='52' y2='52'/%3E%3Cline class='rule' x1='52' y1='0' x2='52' y2='52'/%3E%3Ccircle class='orn' cx='52' cy='52' r='3.5'/%3E%3C!-- top-right --%3E%3Ccircle class='orn' cx='1388' cy='52' r='3.5'/%3E%3C!-- bottom-left --%3E%3Ccircle class='orn' cx='52' cy='848' r='3.5'/%3E%3C!-- bottom-right --%3E%3Ccircle class='orn' cx='1388' cy='848' r='3.5'/%3E%3C!-- top label — magazine masthead style --%3E%3Ctext x='72' y='38' font-family='monospace' font-size='9' letter-spacing='0.22em' fill='%23b8860b' fill-opacity='0.35' text-transform='uppercase'%3EIDEAS WORTH SAYING OUT LOUD%3C/text%3E%3C!-- issue number bottom right --%3E%3Ctext x='1368' y='866' font-family='monospace' font-size='9' letter-spacing='0.15em' fill='%23b8860b' fill-opacity='0.28' text-anchor='end'%3EEPISTEMIC%3C/text%3E%3C/svg%3E");
     background-size: 100% 100%;
     background-repeat: no-repeat;
     background-attachment: fixed;
@@ -102,10 +101,6 @@
     background: #f0e9da;
     border-color: rgba(0,0,0,0.1);
     box-shadow: 0 1px 3px rgba(0,0,0,0.07), 0 0 0 0.5px rgba(0,0,0,0.05);
-  }
-  [data-theme="light"] .concept-card:hover {
-    box-shadow: 0 6px 16px rgba(0,0,0,0.1), 0 0 0 0.5px rgba(180,134,11,0.25);
-    border-color: rgba(180,134,11,0.3);
   }
 
   /* Nav — cream paper with ink rule */
@@ -4646,20 +4641,8 @@
     border-radius: 12px;
     cursor: pointer;
     position: relative;
-    transition: border-color 0.2s, box-shadow 0.2s, transform 0.18s cubic-bezier(0.34,1.56,0.64,1);
+    transition: border-color 0.2s, box-shadow 0.2s;
     touch-action: pan-y;
-  }
-  /* #4 Card hover lift — transform only, no layout reflow, no will-change (avoid memory) */
-  .concept-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.18);
-  }
-  [data-theme="light"] .concept-card:hover {
-    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-  }
-  @media (hover: none) {
-    /* No hover state on touch — avoid stuck state */
-    .concept-card:hover { transform: none; box-shadow: none; }
   }
 
   .concept-card.editors-pick { border-color: rgba(232,213,163,0.45); }
@@ -7785,6 +7768,11 @@ function toggleCard(id) {
     if (_hintDot) _hintDot.classList.remove('pulse');
     updateDailyGoal();
     track('concept_opened', { id: id });
+    // #9 Session toast — fires after 5th unique flip this session
+    if (openedToday.size === 5 && !_toastShown) {
+      _toastShown = true;
+      _showSessionToast('5 ideas today ✦');
+    }
   }
 }
 
@@ -8140,14 +8128,10 @@ function _initReadingProgress() {
       const card = entry.target;
       if (card.classList.contains('card-read')) return;
       card.classList.add('card-read');
-      _readCount++;
       _readObserver.unobserve(card); // one-shot per card
-      // #7 streak glow from 3rd card onward
-      if (_readCount >= 3) card.classList.add('card-streak');
-      // #9 toast at 5 concepts
-      if (_readCount === 5 && !_toastShown) {
-        _toastShown = true;
-        _showSessionToast('5 ideas today ✦');
+      // #7 streak glow from 3rd card seen in viewport
+      if (document.querySelectorAll('.concept-card.card-read').length >= 3) {
+        card.classList.add('card-streak');
       }
     });
   }, { threshold: 0.55 });
@@ -9664,9 +9648,11 @@ function initSparkHero() {
   const _typeText = 'your earbuds.';
   if (_typeEl) {
     const _typeKey = 'ep_typed_v1';
-    const _hasSeen = sessionStorage.getItem(_typeKey);
+    const _lastSeen = parseInt(localStorage.getItem(_typeKey) || '0', 10);
+    const _cooldownMs = 2 * 60 * 60 * 1000; // 2 hours — plays fresh on every new session
+    const _hasSeen = (Date.now() - _lastSeen) < _cooldownMs;
     if (!_hasSeen) {
-      sessionStorage.setItem(_typeKey, '1');
+      localStorage.setItem(_typeKey, String(Date.now()));
       let _ti = 0;
       _typeEl.textContent = '';
       const _subEl = document.getElementById('spSub');
@@ -9676,7 +9662,6 @@ function initSparkHero() {
           _ti++;
           setTimeout(_typeNext, _ti === 1 ? 300 : 55 + Math.random() * 25);
         } else {
-          // Typewriter done — fade+zoom in the sub-tagline
           if (_subEl) {
             setTimeout(() => {
               _subEl.style.opacity = '1';
@@ -9688,7 +9673,6 @@ function initSparkHero() {
       setTimeout(_typeNext, 680);
     } else {
       _typeEl.textContent = _typeText;
-      // Returning visitor — show sub instantly
       const _subEl = document.getElementById('spSub');
       if (_subEl) { _subEl.style.opacity = '1'; _subEl.style.transform = 'scale(1)'; }
     }
