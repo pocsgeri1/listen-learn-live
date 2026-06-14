@@ -924,8 +924,8 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 6px;
-    padding: 0.7rem 2rem 0;
+    gap: 10px;
+    padding: 0.85rem 2rem 0.1rem;
     flex-shrink: 0;
   }
   .ep-drawer-pills:empty { display: none; }
@@ -1057,7 +1057,7 @@
     border-bottom: 1px solid var(--border);
   }
   @media (max-width: 700px) {
-    .ep-drawer-cat-filter { padding: 0 1.25rem; gap: 1.1rem; }
+    .ep-drawer-cat-filter { padding: 0.75rem 1.25rem 0; gap: 1.1rem; }
   }
   .ep-drawer-cat-filter::-webkit-scrollbar { display: none; }
   .ep-drawer-cat-pill {
@@ -6143,8 +6143,8 @@
   <div class="nav-mobile-divider"></div>
   <!-- v1.71: mobile nav — Spark | Browse | Stash | Sign Up -->
   <button class="nav-mobile-link nav-mobile-cs" onclick="playNavSFX();_csOpenPanel();closeMobileNav()">💬 Spark</button>
-  <button class="nav-mobile-link" onclick="playNavSFX();document.getElementById('app').scrollIntoView({behavior:'smooth'});closeMobileNav()">◈ Library</button>
-  <button class="nav-mobile-link nav-mobile-conv" onclick="playNavSFX();openConversations();closeMobileNav()">◆ Collection</button>
+  <button class="nav-mobile-link" onclick="playNavSFX();document.getElementById('app').scrollIntoView({behavior:'smooth'});closeMobileNav()">📚 Library</button>
+  <button class="nav-mobile-link nav-mobile-conv" onclick="playNavSFX();openConversations();closeMobileNav()">📌 Collection</button>
   <div class="nav-mobile-divider"></div>
   <button class="nav-mobile-link nav-mobile-signup" onclick="playNavSFX();scrollToSection('signup');closeMobileNav()">◉ Sign Up 🎁 — Free Founding Access</button>
   <!-- hidden v1.70 — preserved:
@@ -6540,19 +6540,19 @@
     <!-- Dropdown results -->
     <div class="sp-dropdown" id="spDropdown" style="display:none" role="listbox"></div>
 
-    <!-- Scenario pills — 2 visible on mobile, 4 on desktop + More -->
+    <!-- Scenario pills — 2 visible on mobile via CSS, all 5 on desktop -->
     <div class="sp-pills-wrap">
       <div class="sp-pills-row" id="spPillsRow1">
         <button class="sp-pill" onclick="spScenarioPill(this,'friend')">💬 With a friend</button>
-        <button class="sp-pill sp-pill-desktop-show" onclick="spScenarioPill(this,'dinner')">🍷 Dinner party</button>
-        <button class="sp-pill sp-pill-desktop-show" onclick="spScenarioPill(this,'date')">✨ On a date</button>
-        <button class="sp-pill sp-pill-desktop-show" onclick="spScenarioPill(this,'work')">💼 At work</button>
-        <button class="sp-pill sp-pill-more" id="spMoreBtn" onclick="spToggleMorePills()">⤵ more</button>
+        <button class="sp-pill sp-pill-hide-mobile" onclick="spScenarioPill(this,'dinner')">🍷 Dinner party</button>
+        <button class="sp-pill sp-pill-hide-mobile" onclick="spScenarioPill(this,'date')">✨ On a date</button>
+        <button class="sp-pill sp-pill-hide-mobile" onclick="spScenarioPill(this,'work')">💼 At work</button>
+        <button class="sp-pill sp-pill-more" id="spMoreBtn" onclick="spToggleMorePills()">⤵</button>
       </div>
       <div class="sp-pills-row sp-pills-row2" id="spPillsRow2" style="max-height:0;overflow:hidden;">
-        <button class="sp-pill sp-pill-mobile-expand" onclick="spScenarioPill(this,'dinner')">🍷 Dinner party</button>
-        <button class="sp-pill sp-pill-mobile-expand" onclick="spScenarioPill(this,'date')">✨ On a date</button>
-        <button class="sp-pill sp-pill-mobile-expand" onclick="spScenarioPill(this,'work')">💼 At work</button>
+        <button class="sp-pill sp-pill-show-mobile" onclick="spScenarioPill(this,'dinner')">🍷 Dinner party</button>
+        <button class="sp-pill sp-pill-show-mobile" onclick="spScenarioPill(this,'date')">✨ On a date</button>
+        <button class="sp-pill sp-pill-show-mobile" onclick="spScenarioPill(this,'work')">💼 At work</button>
         <button class="sp-pill" onclick="spScenarioPill(this,'family')">🏡 With family</button>
         <button class="sp-pill" onclick="spScenarioPill(this,'networking')">🤝 Networking</button>
         <button class="sp-pill" onclick="spScenarioPill(this,'podcast')">🎙️ Podcast talk</button>
@@ -9476,9 +9476,12 @@ function _spShowResults(q) {
       const color = CAT_COLOR[c.category] || '#e8d5a3';
       const catName = (CATEGORIES.find(x => x.id === c.category) || {}).name || c.category;
       const srcLabel = SOURCE_LABEL[c.source] || c.source || '';
+      // On mobile: clicking body loads concept into CS without auto-fire
+      // On desktop: shows floating preview card
+      const bodyClick = `window.innerWidth <= 700 ? _spLoadConceptNoFire(${c.id}) : _spPreviewCard(${c.id})`;
       return `<div class="sp-drop-item" role="option" data-id="${c.id}">
         <div class="sp-drop-stripe" style="background:${color}"></div>
-        <div class="sp-drop-body" onclick="_spPreviewCard(${c.id})">
+        <div class="sp-drop-body" onclick="${bodyClick}">
           <div class="sp-drop-meta-row">
             <span class="sp-drop-term">${_spEsc(c.term)}</span>
             <span class="sp-drop-pills">
@@ -9526,6 +9529,21 @@ function _spSelectConcept(id) {
   _csLoadNewConcept(concept);
   _csOpenPanel();
   _loadAI(concept, _csCtx, true);
+}
+
+// Mobile: load concept into CS panel without auto-firing AI generation — v1.90
+// User can then pick context and hit Generate manually
+function _spLoadConceptNoFire(id) {
+  const concept = CONCEPTS.find(x => x.id === id);
+  if (!concept) return;
+  _spHideDropdown();
+  _csCat = concept.category;
+  _csCtx = 'friend';
+  _renderCSShell(concept);
+  _wireCSEvents();
+  _csLoadNewConcept(concept);
+  _csOpenPanel();
+  // Do NOT call _loadAI — user taps Generate when ready
 }
 
 // Show floating concept preview card (back-face style: plain + analogy)
@@ -9595,16 +9613,18 @@ function spToggleMorePills() {
   if (!row2) return;
   if (_spPillsExpanded) {
     row2.classList.add('open');
-    if (btn) btn.textContent = '⤴ less';
+    if (btn) btn.textContent = '⤴';
   } else {
     row2.classList.remove('open');
-    if (btn) btn.textContent = '⤵ more';
+    if (btn) btn.textContent = '⤵';
   }
 }
 
 function spScenarioPill(el, scenario) {
+  // Mark active on all pills matching this scenario (handles duplicates across rows)
   document.querySelectorAll('.sp-pill').forEach(p => p.classList.remove('active'));
-  el.classList.add('active');
+  // Find all pills that trigger this scenario and mark them active
+  document.querySelectorAll('.sp-pill[onclick*="\''+scenario+'\'"]').forEach(p => p.classList.add('active'));
 
   // Category map: each scenario targets specific concept categories
   const SP_SCENARIO_CATS = {
@@ -14894,13 +14914,13 @@ function playStreakMilestoneSFX() {
   .sp-pills-row2.open {
     padding-top: 8px;
   }
-  /* On desktop, hide the mobile-only duplicate pills */
-  .sp-pill-mobile-expand { display: none; }
+  /* On desktop, mobile-only pills in row2 are hidden */
+  .sp-pill-show-mobile { display: none; }
 }
 
-/* On mobile, hide the desktop pills that show in row1 */
+/* On mobile, hide the desktop-only pills in row1 */
 @media (max-width: 600px) {
-  .sp-pill-desktop-show { display: none; }
+  .sp-pill-hide-mobile { display: none; }
 }
 
 .sp-pill {
@@ -14927,14 +14947,15 @@ function playStreakMilestoneSFX() {
   border-color: var(--accent);
   background: rgba(232,213,163,0.10);
 }
-/* More button — visually secondary: dashed, smaller */
+/* More button — symbol only, visually minimal */
 .sp-pill-more {
   color: var(--muted);
   border-style: dashed;
   border-color: var(--border);
-  font-size: 0.6rem;
-  padding: 6px 11px;
-  letter-spacing: 0.1em;
+  font-size: 0.75rem;
+  padding: 4px 9px;
+  letter-spacing: 0;
+  line-height: 1;
 }
 .sp-pill-more:hover {
   color: var(--accent);
