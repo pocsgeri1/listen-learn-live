@@ -67,14 +67,28 @@
     --teal: #1a9080;
   }
 
-  /* #10 Magazine feel — paper grain texture via SVG filter + warm ink accents */
+  /* #10 Magazine feel — editorial SVG hairlines + paper grain */
   [data-theme="light"] body {
-    /* SVG-inline noise filter — no external file, no HTTP request */
     background-color: var(--bg);
+    /* Layer 1: very fine paper grain */
     background-image:
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
     background-repeat: repeat;
     background-size: 300px 300px;
+  }
+
+  /* Editorial hairlines — fixed, full-page, pointer-events none, only light mode */
+  [data-theme="light"] body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    /* SVG: vertical column rules + horizontal baseline + corner crop marks */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1440' height='900' preserveAspectRatio='none'%3E%3Cdefs%3E%3Cstyle%3E.r%7Bstroke:%23b8860b;stroke-opacity:0.07;fill:none;stroke-width:0.5%7D.c%7Bstroke:%23b8860b;stroke-opacity:0.12;fill:none;stroke-width:0.5%7D%3C/style%3E%3C/defs%3E%3C!-- vertical column rules --%3E%3Cline class='r' x1='360' y1='0' x2='360' y2='900'/%3E%3Cline class='r' x1='720' y1='0' x2='720' y2='900'/%3E%3Cline class='r' x1='1080' y1='0' x2='1080' y2='900'/%3E%3C!-- horizontal baseline grid (every 180px) --%3E%3Cline class='r' x1='0' y1='180' x2='1440' y2='180'/%3E%3Cline class='r' x1='0' y1='360' x2='1440' y2='360'/%3E%3Cline class='r' x1='0' y1='540' x2='1440' y2='540'/%3E%3Cline class='r' x1='0' y1='720' x2='1440' y2='720'/%3E%3C!-- corner crop marks — top left --%3E%3Cline class='c' x1='0' y1='32' x2='24' y2='32'/%3E%3Cline class='c' x1='32' y1='0' x2='32' y2='24'/%3E%3C!-- top right --%3E%3Cline class='c' x1='1416' y1='32' x2='1440' y2='32'/%3E%3Cline class='c' x1='1408' y1='0' x2='1408' y2='24'/%3E%3C!-- bottom left --%3E%3Cline class='c' x1='0' y1='868' x2='24' y2='868'/%3E%3Cline class='c' x1='32' y1='876' x2='32' y2='900'/%3E%3C!-- bottom right --%3E%3Cline class='c' x1='1416' y1='868' x2='1440' y2='868'/%3E%3Cline class='c' x1='1408' y1='876' x2='1408' y2='900'/%3E%3C!-- golden accent bar — left margin --%3E%3Crect x='0' y='0' width='3' height='900' fill='%23b8860b' opacity='0.12'/%3E%3C/svg%3E");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
   }
 
   /* Ink-ruled separator lines on headings */
@@ -92,10 +106,6 @@
   [data-theme="light"] .concept-card:hover {
     box-shadow: 0 6px 16px rgba(0,0,0,0.1), 0 0 0 0.5px rgba(180,134,11,0.25);
     border-color: rgba(180,134,11,0.3);
-  }
-  [data-theme="light"] .concept-card::before {
-    background: var(--accent);
-    opacity: 0.55;
   }
 
   /* Nav — cream paper with ink rule */
@@ -4696,25 +4706,6 @@
   }
 
   /* #1 Reading progress — gold left border grows as card enters viewport */
-  .concept-card::before {
-    content: '';
-    position: absolute;
-    left: 0; top: 0; bottom: 0;
-    width: 3px;
-    border-radius: 12px 0 0 12px;
-    background: var(--accent);
-    transform: scaleY(var(--read-progress, 0));
-    transform-origin: top;
-    transition: transform 0.4s cubic-bezier(0.22,0.61,0.36,1);
-    z-index: 1;
-    opacity: 0.7;
-  }
-  .concept-card.card-read::before {
-    transform: scaleY(1);
-    opacity: 0.9;
-    transition: transform 0.6s cubic-bezier(0.22,0.61,0.36,1);
-  }
-
   .mastered-badge {
     font-size: 0.58rem;
     letter-spacing: 0.1em;
@@ -4831,6 +4822,10 @@
     box-shadow: 0 4px 12px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.04);
     transition: border-color 0.2s, box-shadow 0.2s, transform 0.25s ease;
     transform: rotate(-0.8deg);
+  }
+  /* Mobile: no tilt — prevents touch from misreading scroll as card-tap */
+  @media (hover: none) {
+    .nf-row .concept-card .card-front { transform: none !important; }
   }
   .nf-row .concept-card:hover .card-front {
     border-color: rgba(255,255,255,0.13);
@@ -6717,7 +6712,7 @@
   <div class="sp-hero-col">
 
     <h1 class="sp-tagline">Ideas die in<br><em id="spTaglineTyped" aria-label="your earbuds."></em></h1>
-    <p class="sp-sub">Turn 3 hours of podcast into 3 ideas you'll actually say out loud.</p>
+    <p class="sp-sub" id="spSub" style="opacity:0;transform:scale(0.96)">Turn 3 hours of podcast into 3 ideas you'll actually say out loud.</p>
 
     <!-- Hero search bar -->
     <div class="sp-search-wrap" id="spSearchWrap">
@@ -7657,6 +7652,8 @@ function buildGrid() {
 }
 
 function initDragScroll() {
+  // Touch devices use native scroll — no drag handler needed (was causing mobile freeze/scroll intercept)
+  if ('ontouchstart' in window || navigator.maxTouchPoints > 0) return;
   document.querySelectorAll('.nf-row, .episodes-row').forEach(row => {
     if (row._dragBound) return;
     row._dragBound = true;
@@ -8145,13 +8142,15 @@ function _initReadingProgress() {
       card.classList.add('card-read');
       _readCount++;
       _readObserver.unobserve(card); // one-shot per card
+      // #7 streak glow from 3rd card onward
+      if (_readCount >= 3) card.classList.add('card-streak');
       // #9 toast at 5 concepts
       if (_readCount === 5 && !_toastShown) {
         _toastShown = true;
         _showSessionToast('5 ideas today ✦');
       }
     });
-  }, { threshold: 0.55 }); // card is >55% in view = "read"
+  }, { threshold: 0.55 });
 
   // Attach to all current concept cards
   document.querySelectorAll('.concept-card').forEach(function(c) {
@@ -9670,16 +9669,28 @@ function initSparkHero() {
       sessionStorage.setItem(_typeKey, '1');
       let _ti = 0;
       _typeEl.textContent = '';
+      const _subEl = document.getElementById('spSub');
       const _typeNext = () => {
         if (_ti <= _typeText.length) {
           _typeEl.textContent = _typeText.slice(0, _ti);
           _ti++;
           setTimeout(_typeNext, _ti === 1 ? 300 : 55 + Math.random() * 25);
+        } else {
+          // Typewriter done — fade+zoom in the sub-tagline
+          if (_subEl) {
+            setTimeout(() => {
+              _subEl.style.opacity = '1';
+              _subEl.style.transform = 'scale(1)';
+            }, 120);
+          }
         }
       };
-      setTimeout(_typeNext, 680); // delay after page paint
+      setTimeout(_typeNext, 680);
     } else {
       _typeEl.textContent = _typeText;
+      // Returning visitor — show sub instantly
+      const _subEl = document.getElementById('spSub');
+      if (_subEl) { _subEl.style.opacity = '1'; _subEl.style.transform = 'scale(1)'; }
     }
   }
 
@@ -9714,22 +9725,11 @@ function initSparkHero() {
   document.addEventListener('_gridBuilt', _watchStreak, { once: true });
 }
 
-// #7 Streak glow — MutationObserver watches card-read additions, glow from 3rd onward
-let _streakObserver = null;
+// #7 Streak glow — tracks via _readCount (set in _initReadingProgress), no MutationObserver
+// Applied when _readCount hits 3+; check happens inside _initReadingProgress callback
+let _streakObserver = null; // kept as null — MutationObserver approach removed (mobile freeze)
 function _watchStreak() {
-  if (_streakObserver) { _streakObserver.disconnect(); }
-  let _streakCount = 0;
-  const container = document.getElementById('netflixRows');
-  if (!container) return;
-  _streakObserver = new MutationObserver(function(mutations) {
-    mutations.forEach(function(m) {
-      m.target.classList && m.target.classList.contains('card-read') && _streakCount++;
-      if (_streakCount >= 3) {
-        m.target.classList.add('card-streak');
-      }
-    });
-  });
-  _streakObserver.observe(container, { subtree: true, attributes: true, attributeFilter: ['class'] });
+  // No-op: streak now applied directly in _initReadingProgress via _readCount check
 }
 
 // --- Hero search ---
@@ -14970,6 +14970,7 @@ function playStreakMilestoneSFX() {
   margin: 0 0 2rem;
   max-width: 100%;
   white-space: nowrap;
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22,0.61,0.36,1);
 }
 @media (max-width: 600px) {
   .sp-sub { white-space: normal; }
