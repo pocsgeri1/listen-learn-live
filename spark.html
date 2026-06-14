@@ -590,30 +590,6 @@
       height: 100px;
     }
   }
-  /* Mobile: single-column with left thumbnail for episode scroll rows — v1.91 */
-  @media (max-width: 600px) {
-    .episodes-row .episode-card {
-      flex: 0 0 calc(100vw - 2rem);
-      flex-direction: row;
-      height: 88px;
-    }
-    .episodes-row .episode-thumb {
-      width: 100px;
-      height: 88px;
-      flex-shrink: 0;
-      border-radius: 0;
-    }
-    .episodes-row .episode-body {
-      padding: 0.65rem 0.85rem;
-      gap: 0.3rem;
-    }
-    .episodes-row .episode-title {
-      font-size: 0.78rem;
-      -webkit-line-clamp: 2;
-    }
-    .episodes-row .episode-people-row { display: none; }
-    .episodes-row .episode-count { font-size: 0.58rem; margin-top: auto; }
-  }
   @media (max-width: 420px) {
     .episodes-gallery {
       grid-template-columns: 1fr 1fr;
@@ -1272,6 +1248,19 @@
     gap: 8px;
     max-width: 980px;
     margin: 0 auto 1.25rem;
+  }
+  @media (max-width: 600px) {
+    .themes-filter-row {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      justify-content: flex-start;
+      padding: 0 1rem 0.25rem;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      scroll-snap-type: x proximity;
+    }
+    .themes-filter-row::-webkit-scrollbar { display: none; }
+    .theme-filter-pill { scroll-snap-align: start; flex-shrink: 0; }
   }
   .theme-filter-pill {
     font-family: 'DM Mono', monospace;
@@ -4534,6 +4523,13 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 10px;
+    touch-action: pan-y; /* let vertical swipe scroll pass through on mobile */
+  }
+  @media (max-width: 600px) {
+    .concepts-grid {
+      grid-template-columns: 1fr; /* single column on mobile — no accidental horizontal intercept */
+      gap: 8px;
+    }
   }
 
   /* ── CONCEPT CARD — shared base ── */
@@ -4544,6 +4540,7 @@
     cursor: pointer;
     position: relative;
     transition: border-color 0.2s, box-shadow 0.2s;
+    touch-action: pan-y; /* mobile: vertical scroll takes priority over tap-hold */
   }
   .concept-card.editors-pick { border-color: rgba(232,213,163,0.45); }
   .concept-card.editors-pick:hover { border-color: rgba(232,213,163,0.7); }
@@ -14639,7 +14636,7 @@ function playStreakMilestoneSFX() {
   align-items: center;
   justify-content: center;
   padding: 72px 2rem 2rem;
-  overflow: hidden; /* restored — dropdown is absolute inside col */
+  overflow: visible; /* row2 absolute pills and dropdown need to escape */
 }
 
 /* --- Center copy column — overflow visible so preview card escapes --- */
