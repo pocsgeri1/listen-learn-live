@@ -969,9 +969,9 @@
   .ep-drawer-close {
     position: absolute;
     top: 14px; right: 18px;
-    z-index: 3;
-    background: rgba(13,13,13,0.45);
-    border: 0.5px solid rgba(255,255,255,0.18);
+    z-index: 10;
+    background: rgba(13,13,13,0.55);
+    border: 0.5px solid rgba(255,255,255,0.22);
     border-radius: 6px;
     color: #fff;
     cursor: pointer;
@@ -982,6 +982,16 @@
     transition: color 0.2s, border-color 0.2s, background 0.2s;
   }
   .ep-drawer-close:hover { color: var(--accent); border-color: rgba(255,255,255,0.35); }
+  /* On mobile: stick close button to top-right of the drawer even when hero is short */
+  @media (max-width: 700px) {
+    .ep-drawer-close {
+      position: sticky;
+      top: 14px;
+      align-self: flex-end;
+      margin: 14px 18px -46px auto; /* negative bottom margin so it overlaps hero content */
+      z-index: 15;
+    }
+  }
   .ep-drawer-mix {
     display: none;
   }
@@ -1192,6 +1202,9 @@
     padding: 0 2rem;
     margin: 0 0 1.5rem;
     position: relative;
+  }
+  @media (max-width: 600px) {
+    .browse-toggle-wrap { margin-top: 1.5rem; }
   }
   .browse-toggle {
     font-family: 'Playfair Display', serif;
@@ -6129,6 +6142,7 @@
   <button class="nav-mobile-link nav-mobile-epic" onclick="openEgg();playNavSFX();closeMobileNav()">😎 I feel epic!</button>
   <div class="nav-mobile-divider"></div>
   <!-- v1.71: mobile nav — Spark | Browse | Stash | Sign Up -->
+  <button class="nav-mobile-link nav-mobile-cs" onclick="playNavSFX();_csOpenPanel();closeMobileNav()">💬 Spark</button>
   <button class="nav-mobile-link" onclick="playNavSFX();document.getElementById('app').scrollIntoView({behavior:'smooth'});closeMobileNav()">◈ Library</button>
   <button class="nav-mobile-link nav-mobile-conv" onclick="playNavSFX();openConversations();closeMobileNav()">◆ Collection</button>
   <div class="nav-mobile-divider"></div>
@@ -6526,16 +6540,19 @@
     <!-- Dropdown results -->
     <div class="sp-dropdown" id="spDropdown" style="display:none" role="listbox"></div>
 
-    <!-- Scenario pills — 4 visible + More -->
+    <!-- Scenario pills — 2 visible on mobile, 4 on desktop + More -->
     <div class="sp-pills-wrap">
       <div class="sp-pills-row" id="spPillsRow1">
         <button class="sp-pill" onclick="spScenarioPill(this,'friend')">💬 With a friend</button>
-        <button class="sp-pill" onclick="spScenarioPill(this,'dinner')">🍷 Dinner party</button>
-        <button class="sp-pill" onclick="spScenarioPill(this,'date')">✨ On a date</button>
-        <button class="sp-pill" onclick="spScenarioPill(this,'work')">💼 At work</button>
-        <button class="sp-pill sp-pill-more" id="spMoreBtn" onclick="spToggleMorePills()">More ↓</button>
+        <button class="sp-pill sp-pill-desktop-show" onclick="spScenarioPill(this,'dinner')">🍷 Dinner party</button>
+        <button class="sp-pill sp-pill-desktop-show" onclick="spScenarioPill(this,'date')">✨ On a date</button>
+        <button class="sp-pill sp-pill-desktop-show" onclick="spScenarioPill(this,'work')">💼 At work</button>
+        <button class="sp-pill sp-pill-more" id="spMoreBtn" onclick="spToggleMorePills()">⤵ more</button>
       </div>
       <div class="sp-pills-row sp-pills-row2" id="spPillsRow2" style="max-height:0;overflow:hidden;">
+        <button class="sp-pill sp-pill-mobile-expand" onclick="spScenarioPill(this,'dinner')">🍷 Dinner party</button>
+        <button class="sp-pill sp-pill-mobile-expand" onclick="spScenarioPill(this,'date')">✨ On a date</button>
+        <button class="sp-pill sp-pill-mobile-expand" onclick="spScenarioPill(this,'work')">💼 At work</button>
         <button class="sp-pill" onclick="spScenarioPill(this,'family')">🏡 With family</button>
         <button class="sp-pill" onclick="spScenarioPill(this,'networking')">🤝 Networking</button>
         <button class="sp-pill" onclick="spScenarioPill(this,'podcast')">🎙️ Podcast talk</button>
@@ -7894,7 +7911,51 @@ function setCat(cat) {
   activeCat = cat;
   _swapContent(document.getElementById('netflixRows'), render, '.nf-section', 6);
 }
-// ── DRAWER HERO PARALLAX — v1.89 Phase 3 ─────────────────────────────────────
+// ── DRAWER SWIPE-DOWN TO CLOSE — v1.90 ──────────────────────────────────────
+// Touch the hero image area and swipe down ≥60px → closes whichever drawer is open.
+// passive:true on touchstart/touchmove = no scroll jank.
+
+function _initDrawerSwipeClose(drawerEl, closeFn) {
+  const hero = drawerEl.querySelector('.ep-drawer-hero');
+  if (!hero) return;
+  let _startY = null;
+  hero.addEventListener('touchstart', function(e) {
+    _startY = e.touches[0].clientY;
+  }, { passive: true });
+  hero.addEventListener('touchend', function(e) {
+    if (_startY === null) return;
+    const dy = e.changedTouches[0].clientY - _startY;
+    _startY = null;
+    if (dy > 60) closeFn();
+  }, { passive: true });
+}
+
+// Hook into both drawers after they open
+const _origOpenEpisodeDrawer = openEpisodeDrawer;
+// Patch applied at call sites via init — drawers already exist in DOM, so attach once on load
+document.addEventListener('DOMContentLoaded', function() {}, { once: true });
+// Attach swipe listeners once after first open — use a flag
+let _epDrawerSwipeInited = false, _themeDrawerSwipeInited = false;
+const _epDrawerEl = document.getElementById('epDrawer');
+const _themeDrawerEl = document.getElementById('themeDrawer');
+if (_epDrawerEl) {
+  new MutationObserver(function(mutations) {
+    if (_epDrawerSwipeInited) return;
+    if (_epDrawerEl.classList.contains('open')) {
+      _initDrawerSwipeClose(_epDrawerEl, closeEpisodeDrawer);
+      _epDrawerSwipeInited = true;
+    }
+  }).observe(_epDrawerEl, { attributes: true, attributeFilter: ['class'] });
+}
+if (_themeDrawerEl) {
+  new MutationObserver(function(mutations) {
+    if (_themeDrawerSwipeInited) return;
+    if (_themeDrawerEl.classList.contains('open')) {
+      _initDrawerSwipeClose(_themeDrawerEl, closeThemeDrawer);
+      _themeDrawerSwipeInited = true;
+    }
+  }).observe(_themeDrawerEl, { attributes: true, attributeFilter: ['class'] });
+}
 // Desktop-only, respects prefers-reduced-motion. Shifts background-position-y
 // on the hero-bg element as the drawer body scrolls — no transforms, no will-change.
 // background-position updates are compositor-friendly and won't cause layout.
@@ -8370,6 +8431,12 @@ function themeClick(id) {
   playPillSFX();
   const col = COLLECTIONS_BY_ID[id];
   if (!col) return;
+
+  // Mobile: skip inline preview, open drawer directly — v1.90
+  if (window.matchMedia('(max-width: 700px)').matches) {
+    openThemeDrawer(id);
+    return;
+  }
 
   const grid = document.getElementById('themesGrid');
   const card = document.getElementById('themeCard' + id);
@@ -9528,10 +9595,10 @@ function spToggleMorePills() {
   if (!row2) return;
   if (_spPillsExpanded) {
     row2.classList.add('open');
-    if (btn) btn.textContent = 'Less ↑';
+    if (btn) btn.textContent = '⤴ less';
   } else {
     row2.classList.remove('open');
-    if (btn) btn.textContent = 'More ↓';
+    if (btn) btn.textContent = '⤵ more';
   }
 }
 
@@ -14740,6 +14807,50 @@ function playStreakMilestoneSFX() {
   color: var(--muted);
 }
 
+/* Mobile: compact single-line search results — v1.90 */
+@media (max-width: 600px) {
+  .sp-dropdown {
+    max-width: calc(100vw - 2rem);
+    max-height: 260px;
+    border-radius: 8px;
+  }
+  .sp-drop-item {
+    min-height: 0;
+  }
+  .sp-drop-body {
+    padding: 9px 8px;
+    gap: 2px;
+  }
+  /* Single-line: term + cat pill side by side, hook hidden */
+  .sp-drop-meta-row {
+    flex-wrap: nowrap;
+    gap: 6px;
+  }
+  .sp-drop-term {
+    font-size: 0.78rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .sp-drop-pills {
+    gap: 3px;
+  }
+  .sp-drop-cat-pill {
+    font-size: 0.52rem;
+    padding: 1px 5px;
+  }
+  /* Hide source pill and hook on mobile — keeps it one clean line */
+  .sp-drop-src-pill { display: none; }
+  .sp-drop-hook { display: none; }
+  /* Compact CTA */
+  .sp-drop-cta-btn {
+    font-size: 0.55rem;
+    padding: 0 10px;
+    letter-spacing: 0.06em;
+  }
+  .sp-drop-divider { margin: 5px 0; }
+}
+
 /* --- Scenario pills --- */
 .sp-pills-wrap {
   margin-top: 1.25rem;
@@ -14751,34 +14862,57 @@ function playStreakMilestoneSFX() {
   gap: 8px;
   justify-content: center;
 }
+/* Row2: static on mobile (no absolute — prevents overlap with browse toggle) */
 .sp-pills-row2 {
-  transition: max-height 0.28s ease, opacity 0.22s ease;
+  transition: max-height 0.3s cubic-bezier(0.22,0.61,0.36,1), opacity 0.25s ease;
   opacity: 0;
   overflow: hidden;
+  max-height: 0;
   padding-top: 0;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  z-index: 5;
-  background: var(--bg);
+  /* Static by default — avoids overlap issue */
+  position: static;
+  margin-top: 0;
 }
 .sp-pills-row2.open {
-  max-height: 200px !important;
+  max-height: 300px;
   opacity: 1;
   padding-top: 8px;
+  margin-top: 0;
+}
+
+/* Desktop: row2 can float absolute (wider viewport, no collision) */
+@media (min-width: 601px) {
+  .sp-pills-row2 {
+    position: absolute;
+    top: 100%;
+    left: 0; right: 0;
+    z-index: 5;
+    background: var(--bg);
+    padding-top: 0;
+    margin-top: 0;
+  }
+  .sp-pills-row2.open {
+    padding-top: 8px;
+  }
+  /* On desktop, hide the mobile-only duplicate pills */
+  .sp-pill-mobile-expand { display: none; }
+}
+
+/* On mobile, hide the desktop pills that show in row1 */
+@media (max-width: 600px) {
+  .sp-pill-desktop-show { display: none; }
 }
 
 .sp-pill {
   font-family: 'DM Mono', monospace;
-  font-size: 0.7rem;
+  font-size: 0.66rem;
   letter-spacing: 0.07em;
   text-transform: uppercase;
   color: var(--muted2);
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 999px;
-  padding: 8px 16px;
+  padding: 7px 13px;
   cursor: pointer;
   white-space: nowrap;
   transition: color 0.15s, border-color 0.15s, background 0.18s;
@@ -14798,8 +14932,8 @@ function playStreakMilestoneSFX() {
   color: var(--muted);
   border-style: dashed;
   border-color: var(--border);
-  font-size: 0.62rem;
-  padding: 7px 13px;
+  font-size: 0.6rem;
+  padding: 6px 11px;
   letter-spacing: 0.1em;
 }
 .sp-pill-more:hover {
