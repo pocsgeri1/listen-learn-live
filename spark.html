@@ -1081,6 +1081,31 @@
      vertical column of the same card size. */
   .ep-cat-column { display: none; }
   .ep-cat-column.visible {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    animation: drawerCatSlideIn 0.32s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  }
+  @keyframes drawerCatSlideIn {
+    from { opacity: 0; transform: translateX(-38px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes drawerCatSlideOut {
+    from { opacity: 1; transform: translateX(0); }
+    to   { opacity: 0; transform: translateX(38px); }
+  }
+  .ep-cat-column.sliding-out {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    animation: drawerCatSlideOut 0.18s cubic-bezier(0.55, 0, 1, 0.45) both;
+    pointer-events: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ep-cat-column.visible { animation: none; }
+    .ep-cat-column.sliding-out { animation: none; }
+  }
+  .ep-cat-column.visible {
     display: grid;
     grid-template-columns: repeat(4, 280px);
     gap: 18px;
@@ -1088,7 +1113,7 @@
     max-width: 1240px;
     justify-content: center;
     margin: 0 auto;
-    animation: epColSwoosh 0.4s cubic-bezier(0.22,0.61,0.36,1) both;
+    animation: drawerCatSlideIn 0.32s cubic-bezier(0.22, 0.61, 0.36, 1) both;
   }
   .ep-cat-column.visible .ep-cat-column-header {
     grid-column: 1 / -1;
@@ -3826,90 +3851,7 @@
   .cs-story-opener-label { font-family: 'DM Mono', monospace; font-size: 0.56rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 5px; }
   .cs-story-opener-text { font-family: 'DM Sans', sans-serif; font-size: 0.8rem; color: var(--accent); font-style: italic; line-height: 1.5; }
 
-  /* Voice playback button — v1.89 Phase 1 */
-  .cs-voice-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    margin-top: 7px;
-    background: none;
-    border: 0.5px solid rgba(232,213,163,0.25);
-    border-radius: 20px;
-    padding: 3px 9px;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.56rem;
-    letter-spacing: 0.07em;
-    text-transform: uppercase;
-    color: var(--muted2);
-    cursor: pointer;
-    transition: border-color 0.18s, color 0.18s;
-    position: relative;
-  }
-  .cs-voice-btn:hover { border-color: var(--accent); color: var(--accent); }
-  .cs-voice-btn.speaking {
-    color: var(--accent);
-    border-color: var(--accent);
-  }
-  .cs-voice-btn.speaking::before {
-    content: '';
-    position: absolute;
-    inset: -3px;
-    border-radius: 24px;
-    border: 1px solid rgba(232,213,163,0.35);
-    animation: voicePulse 1.2s ease-in-out infinite;
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .cs-voice-btn.speaking::before { animation: none; }
-  }
-  @keyframes voicePulse {
-    0%, 100% { opacity: 0.5; transform: scale(1); }
-    50% { opacity: 0; transform: scale(1.12); }
-  }
-  /* Voice picker popover */
-  .cs-voice-picker {
-    position: absolute;
-    bottom: calc(100% + 8px);
-    left: 0;
-    background: var(--surface2);
-    border: 1px solid var(--border-hover);
-    border-radius: 8px;
-    padding: 10px 12px;
-    min-width: 200px;
-    z-index: 200;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-  }
-  .cs-voice-picker-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.54rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 8px;
-  }
-  .cs-voice-option {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 5px 0;
-    cursor: pointer;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.72rem;
-    color: var(--muted2);
-    transition: color 0.15s;
-    border: none;
-    background: none;
-    width: 100%;
-    text-align: left;
-  }
-  .cs-voice-option:hover { color: var(--text); }
-  .cs-voice-option.selected { color: var(--accent); }
-  .cs-voice-option-dot {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--border-hover);
-    flex-shrink: 0;
-  }
-  .cs-voice-option.selected .cs-voice-option-dot { background: var(--accent); }
+  /* Story actions */
   .cs-story-actions { display: flex; gap: 8px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); }
   .cs-story-copy-btn { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; background: transparent; border: 1px solid var(--border); border-radius: 20px; padding: 5px 14px; color: var(--muted2); cursor: pointer; transition: border-color 0.18s, color 0.18s; }
   .cs-story-copy-btn:hover { border-color: var(--text); color: var(--text); }
@@ -6445,13 +6387,6 @@
       <div class="cs-coaching-section">
         <div class="cs-coaching-label">You could say:</div>
         <div class="cs-openers-list" id="csOpenersList"></div>
-        <!-- Voice playback — v1.89 Phase 1 -->
-        <div style="position:relative">
-          <button class="cs-voice-btn" id="csVoiceBtn" onclick="_csVoiceToggle()" title="Hear it spoken aloud" style="display:none">
-            🔊 <span id="csVoiceBtnLabel">hear it</span>
-          </button>
-          <div class="cs-voice-picker" id="csVoicePicker" style="display:none"></div>
-        </div>
       </div>
       <div class="cs-coaching-section cs-pitfall-wrap">
         <div class="cs-coaching-label cs-coaching-label--warn">Watch out for:</div>
@@ -6665,8 +6600,9 @@
     </div>
     <div class="search-wrap">
       <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M10 10l3.5 3.5"/></svg>
-      <input type="text" id="search" placeholder="Search concepts..." />
+      <input type="text" id="search" placeholder="Search concepts..." autocomplete="off" />
     </div>
+    <div id="searchPrefixHint" style="display:none;font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.07em;text-transform:uppercase;color:var(--accent);padding:4px 0 2px 2px;"></div>
   </div>
 
   <!-- PROGRESS -->
@@ -7077,11 +7013,74 @@ function buildFuseIndex() {
   });
 }
 
+// ── SEARCH PREFIX PARSER — v1.90 ─────────────────────────────────────────────
+// Handles special prefixes before falling through to Fuse fuzzy search.
+// Returns: { type: 'normal'|'source'|'saved'|'story', query: string, sourceKey: string|null }
+const SOURCE_ALIASES = {
+  'modern wisdom': 'cw', 'modern-wisdom': 'cw', 'cw': 'cw', 'chris williamson': 'cw',
+  'hormozi': 'ah', 'alex hormozi': 'ah', 'ah': 'ah',
+  'dan koe': 'dk', 'koe': 'dk', 'dk': 'dk',
+  'core': 'core', 'foundational': 'core',
+};
+
+function _parseSearchPrefix(raw) {
+  const q = raw.trim();
+  const lower = q.toLowerCase();
+
+  // source: or from: prefix
+  const sourceMatch = lower.match(/^(?:source:|from:)\s*(.+)/);
+  if (sourceMatch) {
+    const alias = sourceMatch[1].trim();
+    const key = SOURCE_ALIASES[alias] || null;
+    return { type: 'source', query: alias, sourceKey: key };
+  }
+
+  // saved: or stash: prefix
+  if (/^(?:saved:|stash:)/.test(lower)) {
+    return { type: 'saved', query: '', sourceKey: null };
+  }
+
+  // story: prefix
+  const storyMatch = lower.match(/^story:\s*(.*)/);
+  if (storyMatch) {
+    return { type: 'story', query: storyMatch[1].trim(), sourceKey: null };
+  }
+
+  return { type: 'normal', query: q, sourceKey: null };
+}
+
 // Returns a Set of concept IDs that match the query, or null if no query.
 function fuzzyMatchIds(q) {
   if (!q) return null;
+  const parsed = _parseSearchPrefix(q);
+
+  // source: filter
+  if (parsed.type === 'source') {
+    if (!parsed.sourceKey) return new Set(); // unrecognised alias → show nothing
+    return new Set(CONCEPTS.filter(c => c.source === parsed.sourceKey && !c.duplicate_of).map(c => c.id));
+  }
+
+  // saved:/stash: filter — return IDs saved in lll_cs_saved_v1
+  if (parsed.type === 'saved') {
+    try {
+      const raw = localStorage.getItem('lll_cs_saved_v1');
+      const saved = raw ? JSON.parse(raw) : [];
+      return new Set(saved.map(s => typeof s === 'object' ? s.id : s).filter(Boolean));
+    } catch(e) { return new Set(); }
+  }
+
+  // story: prefix — fuzzy search among concepts only, returns ids; UI handles story mode launch separately
+  if (parsed.type === 'story') {
+    if (!parsed.query) return null; // show all if no sub-query
+    // fall through to normal fuzzy with sub-query
+    return _fuzzySearch(parsed.query);
+  }
+
+  return _fuzzySearch(q);
+}
+
+function _fuzzySearch(q) {
   if (!FUSE) {
-    // Fallback: substring match on the original 4 fields + people
     const ql = q.toLowerCase();
     return new Set(CONCEPTS.filter(c => {
       const col = (c.collection_id != null) ? COLLECTIONS_BY_ID[c.collection_id] : null;
@@ -7373,7 +7372,7 @@ function buildGrid() {
                       <span class="card-num">#${String(c.id).padStart(3,'0')}</span>
                       <span class="card-cat" onclick="event.stopPropagation();setCat('${c.category}');closeEpisodeDrawer()">${(CATEGORIES.find(x => x.id === c.category)||{}).name||c.category}</span>
                       ${c.editors_pick===true ? '<span class="pick-badge"><span class="pick-star">★</span>PICK</span>' : ''}
-                      <span class="mastered-badge">✓ mastered</span>
+                      
                     </div>
                     <div class="card-term">${c.term}</div>
                     <div class="card-hook">${c.hook}</div>
@@ -8020,7 +8019,7 @@ function _renderDrawerContent(col, collectionId) {
               <div class="card-meta">
                 <span class="card-num">#${String(c.id).padStart(3,'0')}</span>
                 ${c.editors_pick===true ? '<span class="pick-badge"><span class="pick-star">★</span>PICK</span>' : ''}
-                <span class="mastered-badge">✓ mastered</span>
+                
               </div>
               <div class="card-term">${c.term}</div>
               <div class="card-hook">${c.hook}</div>
@@ -8088,28 +8087,34 @@ function filterDrawerCat(catKey) {
     p.classList.toggle('active', p.dataset.cat === catKey);
   });
   const body = document.querySelector('#epDrawer .ep-drawer-body');
-  if (body) {
-    body.style.transition = 'opacity 0.1s ease';
-    body.style.opacity = '0.4';
+  const currentVisible = document.querySelector('#epDrawer .ep-cat-column.visible');
+
+  // Slide current column out to the right
+  if (currentVisible && currentVisible.dataset.cat !== catKey) {
+    currentVisible.classList.remove('visible');
+    currentVisible.classList.add('sliding-out');
+    setTimeout(() => { currentVisible.classList.remove('sliding-out'); }, 200);
   }
+
+  // Play deep woosh SFX
+  _playSwapSFX();
+
+  // After slide-out, bring new column in from left
   setTimeout(function() {
-    document.querySelectorAll('.ep-cat-column').forEach(col => {
+    document.querySelectorAll('#epDrawer .ep-cat-column').forEach(col => {
       const match = col.dataset.cat === catKey;
-      col.classList.toggle('visible', match);
-      col.classList.remove('faded');
-      // Re-trigger the swoosh animation each time this column is shown
-      if (match) {
+      if (match && !col.classList.contains('visible')) {
+        col.classList.remove('sliding-out');
+        col.classList.add('visible');
+        // Re-trigger slide-in animation
         col.style.animation = 'none';
-        // Let the next frame restart the animation — avoids a forced synchronous layout
         requestAnimationFrame(() => { col.style.animation = ''; });
+      } else if (!match) {
+        col.classList.remove('visible', 'sliding-out');
       }
     });
-    if (body) {
-      body.style.opacity = '1';
-      body.scrollTop = 0;
-    }
-    _playSwapSFX();
-  }, 90);
+    if (body) body.scrollTop = 0;
+  }, 160);
 }
 
 function initMagneticDrawerPills() {
@@ -8458,7 +8463,7 @@ function _renderThemeCard(c, prefix, col) {
           <span class="card-num">#${String(c.id).padStart(3,'0')}</span>
           <span class="card-cat" onclick="event.stopPropagation();setCat('${c.category}');closeThemeDrawer();closeEpisodeDrawer()">${(CATEGORIES.find(x => x.id === c.category)||{}).name||c.category}</span>
           ${c.editors_pick===true ? '<span class="pick-badge"><span class="pick-star">★</span>PICK</span>' : ''}
-          <span class="mastered-badge">✓ mastered</span>
+          
         </div>
         <div class="card-term">${c.term}</div>
         <div class="card-hook">${c.hook}</div>
@@ -8618,26 +8623,30 @@ function filterThemeDrawerCat(catKey) {
     p.classList.toggle('active', p.dataset.cat === catKey);
   });
   const body = document.querySelector('#themeDrawer .ep-drawer-body');
-  if (body) {
-    body.style.transition = 'opacity 0.1s ease';
-    body.style.opacity = '0.4';
+  const currentVisible = document.querySelector('#themeDrawerGrid .ep-cat-column.visible');
+
+  if (currentVisible && currentVisible.dataset.cat !== catKey) {
+    currentVisible.classList.remove('visible');
+    currentVisible.classList.add('sliding-out');
+    setTimeout(() => { currentVisible.classList.remove('sliding-out'); }, 200);
   }
+
+  _playSwapSFX();
+
   setTimeout(function() {
     document.querySelectorAll('#themeDrawerGrid .ep-cat-column').forEach(col => {
       const match = col.dataset.cat === catKey;
-      col.classList.toggle('visible', match);
-      col.classList.remove('faded');
-      if (match) {
+      if (match && !col.classList.contains('visible')) {
+        col.classList.remove('sliding-out');
+        col.classList.add('visible');
         col.style.animation = 'none';
         requestAnimationFrame(() => { col.style.animation = ''; });
+      } else if (!match) {
+        col.classList.remove('visible', 'sliding-out');
       }
     });
-    if (body) {
-      body.style.opacity = '1';
-      body.scrollTop = 0;
-    }
-    _playSwapSFX();
-  }, 90);
+    if (body) body.scrollTop = 0;
+  }, 160);
 }
 
 function closeThemeDrawer() {
@@ -9089,8 +9098,50 @@ function toggleVault() {
 let _searchDebounce = null;
 document.getElementById('search').addEventListener('input', e => {
   searchQ = e.target.value;
+  // Show prefix hint label — v1.90
+  const hint = document.getElementById('searchPrefixHint');
+  if (hint && searchQ) {
+    const parsed = _parseSearchPrefix(searchQ);
+    if (parsed.type === 'source') {
+      const label = parsed.sourceKey
+        ? ({ cw:'Modern Wisdom', ah:'Alex Hormozi', dk:'Dan Koe', core:'Core / Foundational' })[parsed.sourceKey]
+        : '⚠ unknown source';
+      hint.textContent = '⤷ filtering by source: ' + label;
+      hint.style.display = '';
+    } else if (parsed.type === 'saved') {
+      hint.textContent = '⤷ showing saved concepts';
+      hint.style.display = '';
+    } else if (parsed.type === 'story') {
+      hint.textContent = parsed.query ? '⤷ story seed: ' + parsed.query : '⤷ story mode — type a topic';
+      hint.style.display = '';
+    } else {
+      hint.style.display = 'none';
+    }
+  } else if (hint) {
+    hint.style.display = 'none';
+  }
   clearTimeout(_searchDebounce);
   _searchDebounce = setTimeout(() => buildGrid(), 180);
+});
+
+// Enter key on search — story: prefix opens CS Story Mode picker
+document.getElementById('search').addEventListener('keydown', e => {
+  if (e.key !== 'Enter') return;
+  const parsed = _parseSearchPrefix(searchQ);
+  if (parsed.type === 'story') {
+    e.preventDefault();
+    // Open CS panel in Story Mode without auto-firing generation
+    // Clear search so grid restores; pass story sub-query as seed
+    const seed = parsed.query;
+    document.getElementById('search').value = '';
+    searchQ = '';
+    const hint = document.getElementById('searchPrefixHint');
+    if (hint) hint.style.display = 'none';
+    buildGrid();
+    // Trigger story mode picker with seed pre-filled
+    if (typeof _csOpenStoryPicker === 'function') _csOpenStoryPicker(seed);
+    else if (typeof openConversationStarter === 'function') openConversationStarter();
+  }
 });
 
 // spark.html v1.76: episodeSearch is now rendered dynamically inside buildEpisodes()
@@ -9202,7 +9253,7 @@ function _spRenderFilteredGrid(pool) {
                       <span class="card-num">#${String(c.id).padStart(3,'0')}</span>
                       <span class="card-cat" onclick="event.stopPropagation();setCat('${c.category}');closeEpisodeDrawer()">${(CATEGORIES.find(x => x.id === c.category)||{}).name||c.category}</span>
                       ${c.editors_pick===true ? '<span class="pick-badge"><span class="pick-star">★</span>PICK</span>' : ''}
-                      <span class="mastered-badge">✓ mastered</span>
+                      
                     </div>
                     <div class="card-term">${c.term}</div>
                     <div class="card-hook">${c.hook}</div>
@@ -10588,8 +10639,6 @@ function _applyAIToCtx(ctx) {
     `<div class="cs-opener-line"><span class="cs-opener-idx">${i === 0 ? 'Try saying' : 'Or try'}</span>${_escHtml(o)}</div>`
   ).join('');
   document.getElementById('csPitfall').textContent = d.pitfall || '';
-  // Show voice button when openers are populated — v1.89
-  if (typeof _voiceUpdateBtn === 'function') _voiceUpdateBtn();
 
   // Auto-save generated prompt to history (with prompt text) — v1.72
   _csLogHistoryWithPrompt(_csConcept, ctx, d.prompt);
@@ -11651,172 +11700,6 @@ function _csToggleRelatedReveal() {
   }
 }
 
-// ── VOICE PLAYBACK — v1.89 Phase 1 ──────────────────────────────────────────
-// Uses browser SpeechSynthesis (free, no API cost)
-// Voice preference stored in localStorage under lll_voice_pref_v1
-// Reads first opener from csOpenersList (the "You could say:" list)
-
-const VOICE_PREF_KEY = 'lll_voice_pref_v1';
-let _voiceSpeaking = false;
-
-// Return curated list of quality voices — prefer named OS voices, skip generic synth
-function _voiceGetCandidates() {
-  if (!window.speechSynthesis) return [];
-  const all = window.speechSynthesis.getVoices();
-  // Preferred: non-Google, non-"Android", English
-  const preferred = all.filter(v =>
-    v.lang && v.lang.startsWith('en') &&
-    !v.name.toLowerCase().includes('google') &&
-    !v.name.toLowerCase().includes('android') &&
-    !v.name.toLowerCase().includes('compact')
-  );
-  // Fallback: any English voice
-  const fallback = all.filter(v => v.lang && v.lang.startsWith('en') && !preferred.includes(v));
-  return preferred.concat(fallback).slice(0, 5);
-}
-
-function _voiceGetSaved() {
-  return localStorage.getItem(VOICE_PREF_KEY) || null;
-}
-
-function _voiceSetSaved(name) {
-  localStorage.setItem(VOICE_PREF_KEY, name);
-}
-
-function _voiceGetCurrent() {
-  const all = window.speechSynthesis ? window.speechSynthesis.getVoices() : [];
-  const saved = _voiceGetSaved();
-  if (saved) {
-    const found = all.find(v => v.name === saved);
-    if (found) return found;
-  }
-  const cands = _voiceGetCandidates();
-  return cands[0] || (all[0] || null);
-}
-
-// Get the first opener text to read
-function _voiceGetText() {
-  const list = document.getElementById('csOpenersList');
-  if (!list) return '';
-  const first = list.querySelector('.cs-opener-line');
-  if (!first) return '';
-  // Strip the "Try saying" / "Or try" label
-  const clone = first.cloneNode(true);
-  const lbl = clone.querySelector('.cs-opener-idx');
-  if (lbl) lbl.remove();
-  return clone.textContent.trim();
-}
-
-function _voiceSpeak(text, voice) {
-  if (!window.speechSynthesis || !text) return;
-  window.speechSynthesis.cancel();
-  const utt = new SpeechSynthesisUtterance(text);
-  if (voice) utt.voice = voice;
-  utt.rate = 0.88;
-  utt.pitch = 0.95;
-  utt.volume = 1;
-  _voiceSpeaking = true;
-  const btn = document.getElementById('csVoiceBtn');
-  const lbl = document.getElementById('csVoiceBtnLabel');
-  if (btn) btn.classList.add('speaking');
-  if (lbl) lbl.textContent = 'speaking…';
-  utt.onend = utt.onerror = function() {
-    _voiceSpeaking = false;
-    if (btn) btn.classList.remove('speaking');
-    if (lbl) lbl.textContent = 'hear it';
-  };
-  window.speechSynthesis.speak(utt);
-}
-
-function _voiceStop() {
-  if (window.speechSynthesis) window.speechSynthesis.cancel();
-  _voiceSpeaking = false;
-  const btn = document.getElementById('csVoiceBtn');
-  const lbl = document.getElementById('csVoiceBtnLabel');
-  if (btn) btn.classList.remove('speaking');
-  if (lbl) lbl.textContent = 'hear it';
-}
-
-function _voiceShowPicker(candidates, onPick) {
-  const picker = document.getElementById('csVoicePicker');
-  if (!picker) return;
-  function _renderPicker() {
-    const saved = _voiceGetSaved();
-    picker.innerHTML = '<div class="cs-voice-picker-label">Choose a voice — tap to preview</div>' +
-      candidates.map((v) => {
-        const isSel = v.name === saved;
-        return `<button class="cs-voice-option${isSel ? ' selected' : ''}" data-voicename="${_escHtml(v.name)}" onclick="_voicePickOption('${v.name.replace(/'/g,"\\'")}',${'true'})">
-          <span class="cs-voice-option-dot"></span>${_escHtml(v.name)}
-        </button>`;
-      }).join('') +
-      '<div style="margin-top:8px;padding-top:6px;border-top:0.5px solid var(--border)">' +
-      '<button class="cs-voice-option" style="color:var(--muted);font-size:0.65rem" onclick="_voiceClosePicker()">✕ close</button>' +
-      '</div>';
-  }
-  _renderPicker();
-  picker._renderPicker = _renderPicker; // expose for re-render after pick
-  picker.style.display = '';
-  // Close on outside click — but only if click is outside the picker itself
-  setTimeout(() => {
-    document.addEventListener('click', function _outsideClose(e) {
-      const p = document.getElementById('csVoicePicker');
-      const btn = document.getElementById('csVoiceBtn');
-      if (p && !p.contains(e.target) && btn && !btn.contains(e.target)) {
-        _voiceClosePicker();
-        document.removeEventListener('click', _outsideClose, true);
-      }
-    }, { capture: true });
-  }, 0);
-}
-
-function _voicePickOption(name, keepOpen) {
-  _voiceSetSaved(name);
-  // Re-render picker to show new selection — keep it open so user can try others
-  const picker = document.getElementById('csVoicePicker');
-  if (picker && picker._renderPicker) picker._renderPicker();
-  const text = _voiceGetText();
-  const voice = (window.speechSynthesis.getVoices() || []).find(v => v.name === name) || _voiceGetCurrent();
-  _voiceSpeak(text, voice);
-}
-
-function _voiceClosePicker() {
-  const picker = document.getElementById('csVoicePicker');
-  if (picker) picker.style.display = 'none';
-}
-
-function _csVoiceToggle() {
-  if (_voiceSpeaking) { _voiceStop(); return; }
-  const text = _voiceGetText();
-  if (!text) return;
-  const picker = document.getElementById('csVoicePicker');
-  // If picker is already open, close it
-  if (picker && picker.style.display !== 'none') { _voiceClosePicker(); return; }
-  // Always show picker — lets user try different voices freely
-  const tryShow = () => {
-    const cands = _voiceGetCandidates();
-    if (cands.length > 1) {
-      _voiceShowPicker(cands);
-    } else {
-      // Only one voice available — just speak
-      _voiceSpeak(text, _voiceGetCurrent());
-    }
-  };
-  if (window.speechSynthesis && window.speechSynthesis.getVoices().length === 0) {
-    window.speechSynthesis.addEventListener('voiceschanged', tryShow, { once: true });
-  } else {
-    tryShow();
-  }
-}
-
-// Show/hide the voice button when openers are rendered
-function _voiceUpdateBtn() {
-  const btn = document.getElementById('csVoiceBtn');
-  if (!btn || !window.speechSynthesis) return;
-  const text = _voiceGetText();
-  btn.style.display = text ? '' : 'none';
-  // Always stop any in-flight speech when concept changes
-  if (_voiceSpeaking) _voiceStop();
-}
 
 // Connects-to chip click — v1.89
 // Swaps the CS panel to the target concept (same flow as _csSwapConcept)
@@ -12188,8 +12071,6 @@ function _showCSLoading(on) {
         const pitfall = document.getElementById('csPitfall');
         if (openersList) openersList.innerHTML = '';
         if (pitfall) pitfall.textContent = '';
-        // Hide voice button when openers cleared — v1.89
-        if (typeof _voiceUpdateBtn === 'function') _voiceUpdateBtn();
       }, 200);
     }
   }
