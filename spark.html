@@ -4774,12 +4774,12 @@
 
   /* ── SCAN MODE — 2-col fixed tile grid ── */
   #netflixRows.scan-mode .nf-section { margin-bottom: 0; }
-  #netflixRows.scan-mode .nf-section-header { padding: 1.4rem 2rem 0.6rem; }
+  #netflixRows.scan-mode .nf-section-header { padding: 1.4rem 2rem 0.6rem; max-width: 1100px; margin-left: auto; margin-right: auto; }
   #netflixRows.scan-mode .nf-scroll-wrap { overflow: visible; padding: 0; }
   #netflixRows.scan-mode .scroll-arrow,
   #netflixRows.scan-mode .nf-fade-left,
   #netflixRows.scan-mode .nf-fade-right { display: none !important; }
-  /* Replace horizontal scroll row with 2-col grid */
+  /* Replace horizontal scroll row with 2-col grid, same max-width as .app-controls */
   #netflixRows.scan-mode .nf-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -4788,6 +4788,10 @@
     padding: 0 2rem 1.2rem;
     scroll-snap-type: none;
     user-select: none;
+    max-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
   }
   @media (max-width: 600px) {
     #netflixRows.scan-mode .nf-row {
@@ -9656,13 +9660,64 @@ function spToggleScan(btn) {
 }
 
 function _spScanTileClick(id, anchorEl) {
-  // Show same preview card as search results; on small screens open CS directly
-  if (window.innerWidth <= 1024) {
+  // If preview already showing for this id — second click opens CS
+  const card = document.getElementById('spPreviewCard');
+  if (card && card.dataset.previewId === String(id) && card.classList.contains('sp-preview-visible')) {
+    spDismissPreview();
     const c = CONCEPTS.find(x => x.id === id);
     if (c) openCS(c);
-  } else {
-    _spPreviewCard(id, anchorEl);
+    return;
   }
+  // Mobile: skip preview, open CS directly
+  if (window.innerWidth <= 700) {
+    const c = CONCEPTS.find(x => x.id === id);
+    if (c) openCS(c);
+    return;
+  }
+  _spScanPreview(id, anchorEl);
+}
+
+function _spScanPreview(id, anchorEl) {
+  const concept = CONCEPTS.find(x => x.id === id);
+  if (!concept) return;
+  const card = document.getElementById('spPreviewCard');
+  if (!card) return;
+
+  const color = CAT_COLOR[concept.category] || '#e8d5a3';
+  const catName = (CATEGORIES.find(x => x.id === concept.category) || {}).name || concept.category;
+
+  card.dataset.previewId = id;
+  card.style.setProperty('--preview-color', color);
+  card.innerHTML = `
+    <div class="sp-preview-cat" style="color:${color}">${_spEsc(catName)}</div>
+    <div class="sp-preview-term">${_spEsc(concept.term)}</div>
+    <div class="sp-preview-section-label">What it means</div>
+    <div class="sp-preview-plain">${_spEsc(concept.plain || '')}</div>
+    <div class="sp-preview-section-label">Analogy</div>
+    <div class="sp-preview-analogy" style="border-left-color:${color}">${_spEsc(concept.analogy || '')}</div>
+    <div class="sp-preview-footer">
+      <button class="sp-preview-talk-btn" onclick="event.stopPropagation();spDismissPreview();_spSelectConcept(${id})">💬 Talk about this →</button>
+    </div>`;
+
+  // Position: fixed, to the right of the tile (or left if near right edge)
+  const rect = anchorEl ? anchorEl.getBoundingClientRect() : null;
+  const cardW = 260;
+  let top = rect ? Math.max(80, rect.top + rect.height / 2 - 120) : 200;
+  let left;
+  if (rect) {
+    const rightPos = rect.right + 14;
+    left = (rightPos + cardW > window.innerWidth - 12) ? Math.max(12, rect.left - cardW - 14) : rightPos;
+  } else {
+    left = window.innerWidth / 2 - cardW / 2;
+  }
+
+  card.style.width = cardW + 'px';
+  card.style.top = top + 'px';
+  card.style.left = left + 'px';
+  card.style.right = 'auto';
+  card.style.display = 'flex';
+  card.classList.remove('sp-preview-visible');
+  requestAnimationFrame(() => requestAnimationFrame(() => card.classList.add('sp-preview-visible')));
 }
 
 function _spRenderFilteredGrid(pool) {
@@ -9813,22 +9868,49 @@ function initSparkHero() {
   ];
   if (_phInput && _phOverlay) {
     let _phi = 0;
-    _phOverlay.textContent = _placeholders[0];
-    // Hide native placeholder while overlay is active
-    _phInput.placeholder = '';
+    let _phTyping = false;
+    let _phTimer = null;
 
-    const _cyclePh = () => {
+    function _phType(text, done) {
+      _phTyping = true;
+      _phOverlay.textContent = '';
+      let i = 0;
+      function next() {
+        if (document.activeElement === _phInput || _phInput.value) { _phTyping = false; return; }
+        if (i < text.length) {
+          _phOverlay.textContent += text[i++];
+          // Jitter: 40–110ms per character, slightly faster on spaces
+          const delay = text[i - 1] === ' ' ? 30 : 40 + Math.random() * 70;
+          _phTimer = setTimeout(next, delay);
+        } else {
+          _phTyping = false;
+          if (done) done();
+        }
+      }
+      next();
+    }
+
+    function _phCycle() {
       if (document.activeElement === _phInput || _phInput.value) return;
+      _phi = (_phi + 1) % _placeholders.length;
+      // Fade out, then type next
       _phOverlay.classList.add('fading');
       setTimeout(() => {
-        _phi = (_phi + 1) % _placeholders.length;
-        _phOverlay.textContent = _placeholders[_phi];
+        _phOverlay.textContent = '';
         _phOverlay.classList.remove('fading');
+        _phType(_placeholders[_phi]);
       }, 350);
-    };
-    setInterval(_cyclePh, 3000);
+    }
+
+    // Type first phrase immediately, then cycle
+    _phType(_placeholders[0], () => {
+      setInterval(_phCycle, 3200);
+    });
+    _phInput.placeholder = '';
 
     _phInput.addEventListener('focus', () => {
+      clearTimeout(_phTimer);
+      _phTyping = false;
       _phOverlay.classList.add('hidden');
       _phInput.placeholder = 'Search an idea, topic, or concept…';
     });
