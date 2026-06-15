@@ -6786,7 +6786,7 @@
 <section class="sp-hero" id="spHero">
 
   <!-- Floating concept preview card — shown when user clicks a term in search dropdown -->
-  <div class="sp-preview-card" id="spPreviewCard" style="display:none" onclick="spDismissPreview()"></div>
+  <div class="sp-preview-card" id="spPreviewCard" style="display:none"></div>
 
   <!-- Center column: tagline + search + scenario pills -->
   <div class="sp-hero-col">
@@ -7735,6 +7735,8 @@ function buildGrid() {
   if (mc) mc._magneticBound = false;
   initMagneticCards();
   document.querySelectorAll('.nf-row').forEach(updateArrowVisibility);
+  // Re-inject scan tiles if scan mode is still active after DOM rebuild
+  if (mc && mc.classList.contains('scan-mode')) _spReinjectScanTiles(mc);
   // Signal reading-progress observer to re-attach — v1.92
   document.dispatchEvent(new Event('_gridBuilt'));
 }
@@ -9627,6 +9629,27 @@ function spSetSort(sort, btn) {
   }
 }
 
+function _spReinjectScanTiles(grid) {
+  // Remove any stale tiles first
+  grid.querySelectorAll('.sc-tile').forEach(t => t.remove());
+  grid.querySelectorAll('.nf-row').forEach(row => {
+    const rowId = row.id.replace('nf-drag-', '');
+    const catConcepts = CONCEPTS.filter(c => c.category === rowId && !c.duplicate_of);
+    const color = CAT_COLOR[rowId] || '#e8d5a3';
+    const frag = document.createDocumentFragment();
+    catConcepts.forEach(c => {
+      const tile = document.createElement('div');
+      tile.className = 'sc-tile';
+      tile.dataset.id = c.id;
+      tile.style.setProperty('--cat-color', color);
+      tile.innerHTML = `<div class="sc-tile-term">${_spEsc(c.term)}</div><div class="sc-tile-hook">${_spEsc(c.hook)}</div>`;
+      tile.addEventListener('click', (e) => { e.stopPropagation(); _spScanTileClick(c.id, e.currentTarget); });
+      frag.appendChild(tile);
+    });
+    row.appendChild(frag);
+  });
+}
+
 function spToggleScan(btn) {
   const grid = document.getElementById('netflixRows');
   if (!grid) return;
@@ -9635,43 +9658,24 @@ function spToggleScan(btn) {
   btn.classList.toggle('active', isOn);
 
   if (isOn) {
-    // Inject lightweight tiles into each nf-row
-    grid.querySelectorAll('.nf-row').forEach(row => {
-      const rowId = row.id.replace('nf-drag-', '');
-      const catConcepts = CONCEPTS.filter(c => c.category === rowId && !c.duplicate_of);
-      const color = CAT_COLOR[rowId] || '#e8d5a3';
-      const frag = document.createDocumentFragment();
-      catConcepts.forEach(c => {
-        const tile = document.createElement('div');
-        tile.className = 'sc-tile';
-        tile.dataset.id = c.id;
-        tile.style.setProperty('--cat-color', color);
-        tile.innerHTML = `<div class="sc-tile-term">${_spEsc(c.term)}</div><div class="sc-tile-hook">${_spEsc(c.hook)}</div>`;
-        tile.addEventListener('click', (e) => _spScanTileClick(c.id, e.currentTarget));
-        frag.appendChild(tile);
-      });
-      row.appendChild(frag);
-    });
+    _spReinjectScanTiles(grid);
   } else {
-    // Remove tiles, restore arrow visibility
     grid.querySelectorAll('.sc-tile').forEach(t => t.remove());
     grid.querySelectorAll('.nf-row').forEach(updateArrowVisibility);
   }
 }
 
 function _spScanTileClick(id, anchorEl) {
-  // If preview already showing for this id — second click opens CS
+  // If preview already showing for this id — second click loads into CS
   const card = document.getElementById('spPreviewCard');
   if (card && card.dataset.previewId === String(id) && card.classList.contains('sp-preview-visible')) {
     spDismissPreview();
-    const c = CONCEPTS.find(x => x.id === id);
-    if (c) openCS(c);
+    _spSelectConcept(id);
     return;
   }
   // Mobile: skip preview, open CS directly
   if (window.innerWidth <= 700) {
-    const c = CONCEPTS.find(x => x.id === id);
-    if (c) openCS(c);
+    _spSelectConcept(id);
     return;
   }
   _spScanPreview(id, anchorEl);
@@ -9717,7 +9721,17 @@ function _spScanPreview(id, anchorEl) {
   card.style.right = 'auto';
   card.style.display = 'flex';
   card.classList.remove('sp-preview-visible');
-  requestAnimationFrame(() => requestAnimationFrame(() => card.classList.add('sp-preview-visible')));
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    card.classList.add('sp-preview-visible');
+    // Dismiss on next outside click (not on the card itself)
+    const _dismissOutside = (e) => {
+      if (!card.contains(e.target)) {
+        spDismissPreview();
+        document.removeEventListener('click', _dismissOutside, true);
+      }
+    };
+    setTimeout(() => document.addEventListener('click', _dismissOutside, true), 80);
+  }));
 }
 
 function _spRenderFilteredGrid(pool) {
