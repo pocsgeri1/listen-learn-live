@@ -18,6 +18,9 @@
       document.documentElement.setAttribute('data-theme','light');
       document.getElementById('themeColorMeta').content = '#f5f2ed';
     }
+    // Preload guard: hide below-nav content until first rAF to prevent
+    // episodes flashing before hero paint completes on hard refresh
+    document.documentElement.classList.add('ep-preload');
   })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -26,6 +29,23 @@
 <script defer src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js"></script>
 <script defer src="https://cloud.umami.is/script.js" data-website-id="0bb07ad6-a205-4d9d-ae92-b7e184e7fa4f"></script>
 <style>
+  /* Preload guard: prevents episodes/grid flashing before hero on hard refresh */
+  html.ep-preload .sp-hero,
+  html.ep-preload .browse-toggle-wrap,
+  html.ep-preload #episodesSection,
+  html.ep-preload #themesSection,
+  html.ep-preload #netflixRows {
+    opacity: 0;
+  }
+  /* Smooth fade-in when preload class is removed */
+  .sp-hero,
+  .browse-toggle-wrap,
+  #episodesSection,
+  #themesSection,
+  #netflixRows {
+    transition: opacity 0.22s ease;
+  }
+
   :root {
     --bg: #0d0d0d;
     --surface: #141414;
@@ -67,14 +87,9 @@
     --teal: #1a9080;
   }
 
-  /* #10 Magazine feel — editorial SVG hairlines + paper grain */
+  /* #10 Magazine feel — editorial SVG hairlines */
   [data-theme="light"] body {
     background-color: var(--bg);
-    /* Layer 1: very fine paper grain */
-    background-image:
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
-    background-repeat: repeat;
-    background-size: 300px 300px;
   }
 
   /* Editorial hairlines — fixed, full-page, pointer-events none, only light mode */
@@ -87,7 +102,6 @@
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 900'%3E%3Cdefs%3E%3Cstyle%3E.wm%7Bfont-family:serif;font-weight:700;font-style:italic;fill:%23b8860b;fill-opacity:0.045;letter-spacing:0.18em%7D.rule%7Bstroke:%23b8860b;stroke-opacity:0.18;fill:none;stroke-width:1%7D.thin%7Bstroke:%23b8860b;stroke-opacity:0.07;fill:none;stroke-width:0.5%7D.orn%7Bfill:%23b8860b;fill-opacity:0.13%7D%3C/style%3E%3C/defs%3E%3C!-- DIAGONAL WATERMARK — large italic serif --%3E%3Ctext class='wm' x='50%25' y='50%25' font-size='148' text-anchor='middle' dominant-baseline='middle' transform='rotate(-28 720 450)'%3EEPISTEMIC%3C/text%3E%3C!-- strong left margin rule --%3E%3Cline class='rule' x1='52' y1='0' x2='52' y2='900'/%3E%3C!-- hairline right rule --%3E%3Cline class='thin' x1='1388' y1='0' x2='1388' y2='900'/%3E%3C!-- top rule --%3E%3Cline class='rule' x1='0' y1='52' x2='1440' y2='52'/%3E%3C!-- bottom rule --%3E%3Cline class='thin' x1='0' y1='848' x2='1440' y2='848'/%3E%3C!-- top-left corner ornament: crosshair --%3E%3Cline class='rule' x1='0' y1='52' x2='52' y2='52'/%3E%3Cline class='rule' x1='52' y1='0' x2='52' y2='52'/%3E%3Ccircle class='orn' cx='52' cy='52' r='3.5'/%3E%3C!-- top-right --%3E%3Ccircle class='orn' cx='1388' cy='52' r='3.5'/%3E%3C!-- bottom-left --%3E%3Ccircle class='orn' cx='52' cy='848' r='3.5'/%3E%3C!-- bottom-right --%3E%3Ccircle class='orn' cx='1388' cy='848' r='3.5'/%3E%3C!-- top label — magazine masthead style --%3E%3Ctext x='72' y='38' font-family='monospace' font-size='9' letter-spacing='0.22em' fill='%23b8860b' fill-opacity='0.35' text-transform='uppercase'%3EIDEAS WORTH SAYING OUT LOUD%3C/text%3E%3C!-- issue number bottom right --%3E%3Ctext x='1368' y='866' font-family='monospace' font-size='9' letter-spacing='0.15em' fill='%23b8860b' fill-opacity='0.28' text-anchor='end'%3EEPISTEMIC%3C/text%3E%3C/svg%3E");
     background-size: 100% 100%;
     background-repeat: no-repeat;
-    background-attachment: fixed;
   }
 
   /* Ink-ruled separator lines on headings */
@@ -332,23 +346,26 @@
     border-color: rgba(184,134,11,0.15);
   }
 
-  /* Darken category pills + card accent borders in light mode.
-     The inline hex colors are designed for dark-bg; on parchment they're too pale.
-     A combined brightness+saturation filter fixes this without touching each hex. */
+  /* Category pill colors in light — hardcoded instead of filter: brightness/saturate
+     to avoid per-element compositor layers on every card and pill in the grid. */
   [data-theme="light"] .cat-card:not(.vault-pill) {
-    filter: brightness(0.72) saturate(1.4);
+    color: color-mix(in srgb, var(--cat-color, var(--accent)) 60%, #1a1814);
+    border-color: color-mix(in srgb, var(--cat-color, var(--accent)) 55%, transparent);
+    background: color-mix(in srgb, var(--cat-color, var(--accent)) 12%, transparent);
   }
   [data-theme="light"] .cat-card.active:not(.vault-pill) {
-    filter: brightness(0.65) saturate(1.5);
+    color: color-mix(in srgb, var(--cat-color, var(--accent)) 50%, #1a1814);
+    border-color: color-mix(in srgb, var(--cat-color, var(--accent)) 70%, transparent);
+    background: color-mix(in srgb, var(--cat-color, var(--accent)) 20%, transparent);
+  }
+  [data-theme="light"] .card-cat {
+    color: color-mix(in srgb, var(--cat-color, var(--accent)) 55%, #1a1814);
   }
   [data-theme="light"] .nf-row .concept-card .card-back {
     border-color: color-mix(in srgb, var(--cat-color, var(--accent)) 55%, transparent);
   }
   [data-theme="light"] .nf-row .back-analogy {
     border-left-color: color-mix(in srgb, var(--cat-color, var(--accent)) 70%, transparent);
-  }
-  [data-theme="light"] .card-cat {
-    filter: brightness(0.68) saturate(1.4);
   }
 
   /* Tally iframe background fix — neutral warm-dark surface that reads
@@ -365,11 +382,11 @@
   }
 
   /* Quiz category pills — inline colour override, CSS filter can't reach them.
-     Darken in light mode so they're legible on parchment. */
+     Use opacity reduction instead of filter to avoid per-element compositor layers. */
   [data-theme="light"] .quiz-cat-pill,
   [data-theme="light"] .quiz-review-cat,
   [data-theme="light"] .quiz-cat-chip {
-    filter: brightness(0.6) saturate(1.5);
+    opacity: 0.75;
   }
 
   /* Back prompt block in light */
@@ -1183,33 +1200,9 @@
   /* Only the active category renders. Desktop = 4-up grid of fixed-size
      280x370 cards (matches Library / preview-zone sizing). Mobile = single
      vertical column of the same card size. */
-  .ep-cat-column { display: none; }
-  .ep-cat-column.visible {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    animation: drawerCatSlideIn 0.32s cubic-bezier(0.22, 0.61, 0.36, 1) both;
-  }
-  @keyframes drawerCatSlideIn {
-    from { opacity: 0; transform: translateX(-38px); }
-    to   { opacity: 1; transform: translateX(0); }
-  }
-  @keyframes drawerCatSlideOut {
-    from { opacity: 1; transform: translateX(0); }
-    to   { opacity: 0; transform: translateX(38px); }
-  }
-  .ep-cat-column.sliding-out {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    animation: drawerCatSlideOut 0.18s cubic-bezier(0.55, 0, 1, 0.45) both;
-    pointer-events: none;
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .ep-cat-column.visible { animation: none; }
-    .ep-cat-column.sliding-out { animation: none; }
-  }
-  .ep-cat-column.visible {
+  /* Drawer category columns — always in flow, hidden via opacity/visibility.
+     display:none prevents CSS keyframe animations from running at all. */
+  .ep-cat-column {
     display: grid;
     grid-template-columns: repeat(4, 280px);
     gap: 18px;
@@ -1217,7 +1210,52 @@
     max-width: 1240px;
     justify-content: center;
     margin: 0 auto;
-    animation: drawerCatSlideIn 0.32s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    /* Collapsed state: take no vertical space */
+    max-height: 0;
+    overflow: hidden;
+  }
+  .ep-cat-column.visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    position: relative;
+    top: auto; left: auto; right: auto;
+    max-height: none;
+    overflow: visible;
+    animation: drawerCatSlideIn 0.28s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  }
+  @keyframes drawerCatSlideIn {
+    from { opacity: 0; transform: translateX(-28px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes drawerCatSlideOut {
+    from { opacity: 1; transform: translateX(0); }
+    to   { opacity: 0; transform: translateX(28px); }
+  }
+  .ep-cat-column.sliding-out {
+    display: grid;
+    grid-template-columns: repeat(4, 280px);
+    gap: 18px;
+    width: 100%;
+    max-width: 1240px;
+    justify-content: center;
+    margin: 0 auto;
+    animation: drawerCatSlideOut 0.16s cubic-bezier(0.55, 0, 1, 0.45) both;
+    pointer-events: none;
+    position: relative;
+    opacity: 0;
+    visibility: hidden;
+    max-height: 0;
+    overflow: hidden;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ep-cat-column.visible { animation: none; }
+    .ep-cat-column.sliding-out { animation: none; }
   }
   .ep-cat-column.visible .ep-cat-column-header {
     grid-column: 1 / -1;
@@ -1231,10 +1269,20 @@
     .ep-cat-column.visible {
       grid-template-columns: repeat(2, 280px);
     }
+    .ep-cat-column.sliding-out {
+      grid-template-columns: repeat(2, 280px);
+    }
   }
   /* Mobile: single vertical column, same card size */
   @media (max-width: 700px) {
     .ep-cat-column.visible {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      max-width: 520px;
+    }
+    .ep-cat-column.sliding-out {
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -6701,6 +6749,8 @@
     <div class="sp-search-wrap" id="spSearchWrap">
       <svg class="sp-search-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M10 10l3.5 3.5"/></svg>
       <input class="sp-search-input" id="spSearchInput" type="text" placeholder="Search an idea, topic, or concept…" autocomplete="off" />
+      <!-- Placeholder overlay for crossfade cycling — hidden when input has focus or value -->
+      <span class="sp-ph-overlay" id="spPhOverlay" aria-hidden="true"></span>
       <button class="sp-search-clear" id="spSearchClear" style="display:none" onclick="spClearSearch()" aria-label="Clear search">✕</button>
     </div>
     <!-- Dropdown results -->
@@ -7329,6 +7379,12 @@ async function loadConcepts() {
     updateProgress();
     updateHeaderCounts();
     initMagneticCards();
+    // Remove preload guard after first paint — prevents flashing on hard refresh
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        document.documentElement.classList.remove('ep-preload');
+      });
+    });
     // #1 Init reading progress observer after first grid render — v1.92
     setTimeout(_initReadingProgress, 400);
 
@@ -8431,9 +8487,6 @@ function filterDrawerCat(catKey) {
       if (match && !col.classList.contains('visible')) {
         col.classList.remove('sliding-out');
         col.classList.add('visible');
-        // Re-trigger slide-in animation
-        col.style.animation = 'none';
-        requestAnimationFrame(() => { col.style.animation = ''; });
       } else if (!match) {
         col.classList.remove('visible', 'sliding-out');
       }
@@ -8974,8 +9027,6 @@ function filterThemeDrawerCat(catKey) {
       if (match && !col.classList.contains('visible')) {
         col.classList.remove('sliding-out');
         col.classList.add('visible');
-        col.style.animation = 'none';
-        requestAnimationFrame(() => { col.style.animation = ''; });
       } else if (!match) {
         col.classList.remove('visible', 'sliding-out');
       }
@@ -9670,7 +9721,7 @@ function initSparkHero() {
           }
         }
       };
-      setTimeout(_typeNext, 680);
+      setTimeout(_typeNext, 200);
     } else {
       _typeEl.textContent = _typeText;
       const _subEl = document.getElementById('spSub');
@@ -9678,30 +9729,52 @@ function initSparkHero() {
     }
   }
 
-  // #8 Placeholder cycling — fires only when input is empty and unfocused
+  // #8 Placeholder cycling — crossfade overlay instead of native placeholder swap
   const _phInput = document.getElementById('spSearchInput');
+  const _phOverlay = document.getElementById('spPhOverlay');
   const _placeholders = [
+    'Search an idea, topic, or concept…',
     'loss aversion…',
     'narrative identity…',
     'skin in the game…',
     'epistemic humility…',
     'status signalling…',
   ];
-  if (_phInput) {
+  if (_phInput && _phOverlay) {
     let _phi = 0;
-    let _phTimer = null;
+    _phOverlay.textContent = _placeholders[0];
+    // Hide native placeholder while overlay is active
+    _phInput.placeholder = '';
+
     const _cyclePh = () => {
-      if (document.activeElement !== _phInput && !_phInput.value) {
+      if (document.activeElement === _phInput || _phInput.value) return;
+      _phOverlay.classList.add('fading');
+      setTimeout(() => {
         _phi = (_phi + 1) % _placeholders.length;
-        _phInput.placeholder = _placeholders[_phi];
-      }
+        _phOverlay.textContent = _placeholders[_phi];
+        _phOverlay.classList.remove('fading');
+      }, 350);
     };
-    _phTimer = setInterval(_cyclePh, 3000);
+    setInterval(_cyclePh, 3000);
+
     _phInput.addEventListener('focus', () => {
+      _phOverlay.classList.add('hidden');
       _phInput.placeholder = 'Search an idea, topic, or concept…';
     });
     _phInput.addEventListener('blur', () => {
-      if (!_phInput.value) setTimeout(() => { _phInput.placeholder = _placeholders[_phi]; }, 600);
+      if (!_phInput.value) {
+        setTimeout(() => {
+          _phInput.placeholder = '';
+          _phOverlay.classList.remove('hidden');
+        }, 200);
+      }
+    });
+    _phInput.addEventListener('input', () => {
+      if (_phInput.value) {
+        _phOverlay.classList.add('hidden');
+      } else if (document.activeElement !== _phInput) {
+        _phOverlay.classList.remove('hidden');
+      }
     });
   }
 
@@ -15032,6 +15105,25 @@ function playStreakMilestoneSFX() {
 
 [data-theme="light"] .sp-search-input { color: var(--text); }
 [data-theme="light"] .sp-search-input::placeholder { color: var(--muted); }
+
+/* Placeholder cycling overlay — crossfades instead of hard-cutting */
+.sp-ph-overlay {
+  position: absolute;
+  left: 39px; /* icon (15px) + gap (10px) + padding (14px) */
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem;
+  color: var(--muted);
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+  overflow: hidden;
+  opacity: 1;
+  transition: opacity 0.35s ease;
+}
+.sp-ph-overlay.fading { opacity: 0; }
+.sp-ph-overlay.hidden { display: none; }
 
 /* --- Search dropdown --- */
 .sp-dropdown {
