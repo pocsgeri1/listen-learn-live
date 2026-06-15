@@ -1,9 +1,8 @@
-// /api/cs-generate.js — v1.71
-// Generates context-aware conversation starter via Claude API.
+// /api/cs-generate.js — v1.97
+// Generates context-aware conversation starters + stories via Claude API.
 // Env var required: ANTHROPIC_API_KEY
-// POST body: { concept: { term, hook, plain, analogy, prompt, category }, ctx?: string }
-// If ctx is provided: returns { ctx: { prompt, openers, pitfall } } (single scenario)
-// If ctx is omitted: returns { contexts: { partner, friend, colleague, meeting } } (legacy all-4)
+// POST body (conversation starter): { concept: { term, hook, plain, analogy, prompt, category }, ctx?: string }
+// POST body (story): { mode: 'story', concepts: [{term, plain, analogy}], storyCtx: string }
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -15,52 +14,67 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'Server misconfigured: ANTHROPIC_API_KEY missing.' });
   }
 
-  const { concept, ctx, mode, concepts: storyConcepts, storyCtx } = req.body || {};
+  const body = req.body || {};
 
-  // ── Story Mode ────────────────────────────────────────────────────────────
-  if (mode === 'story') {
-    if (!storyConcepts || storyConcepts.length < 2) {
-      return res.status(400).json({ error: 'story mode requires at least 2 concepts.' });
+  // ─── STORY MODE ────────────────────────────────────────────────────────────
+  if (body.mode === 'story') {
+    const { concepts, storyCtx } = body;
+    if (!concepts || concepts.length < 2) {
+      return res.status(400).json({ error: 'At least 2 concepts required for story mode.' });
     }
 
-    const CTX_SCENES = {
-      partner:   'a quiet evening at home together',
-      friend:    'dinner with a close friend',
-      colleague: 'a coffee catch-up with a colleague',
-      meeting:   'a work meeting or team lunch',
+    const SCENE_HINTS = {
+      friend:     'city walk, pub, someone\'s flat — two people who actually know each other',
+      partner:    'home, morning, quiet evening — an honest conversation between two people in a relationship',
+      colleague:  'work context — office, Slack, a meeting that could\'ve been an email',
+      meeting:    'group setting — presentation, team discussion, something slightly high-stakes',
+      dinner:     'dinner party, kitchen table, third bottle of wine — group of friends, slightly loose',
+      date:       'first or second date — a bar, somewhere with good lighting, both people performing slightly',
+      work:       'Wednesday afternoon, someone\'s commute home, a desk at 6pm',
+      family:     'family gathering — the kind where you revert to being 16 within ten minutes',
+      networking: 'conference drinks, a co-working space, someone handing out a business card',
+      podcast:    'two people debriefing a podcast episode they both heard differently',
+      solo:       'someone alone — commute, walk, late night — a thought that won\'t leave them alone',
     };
-    const scene = CTX_SCENES[storyCtx] || 'a dinner with a friend';
 
-    const conceptList = storyConcepts.map((c, i) =>
+    const conceptList = concepts.map((c, i) =>
       `${i + 1}. ${c.term}: ${c.plain}`
     ).join('\n');
 
-    const labelList = storyConcepts.map(c => `"${c.term}"`).join(', ');
+    const sceneHint = SCENE_HINTS[storyCtx] || SCENE_HINTS.friend;
 
-    const storySystemPrompt = `You are a master storyteller who explains complex ideas in the simplest possible way — like Richard Feynman talking to a curious friend over dinner. You write short, vivid stories that make people say "huh, I'd never thought of it that way." Output only valid JSON — no markdown, no preamble.`;
+    const systemPrompt = `You write short, human scenes for people who think too much about conversations they've already had. Your style sits between Esther Perel and Dan Koe: you name what's unspoken without explaining it, and you end before the moral arrives. You are never academic. You are never preachy. You never explain what a concept means — you show it through what a character does, says, or notices.`;
 
-    const storyUserPrompt = `Here are ${storyConcepts.length} ideas from the world of podcasts and thinking:
+    const userPrompt = `Write ONE scene (180-210 words, hard ceiling) that weaves these ${concepts.length} ideas together as lived experience.
 
+CONCEPTS (show each through action or dialogue — never name or define them):
 ${conceptList}
 
-The person reading this is about to have ${scene}.
+SCENE CONTEXT: ${sceneHint}
 
-Write a single short story (maximum 150 words) that weaves all ${storyConcepts.length} ideas together naturally.
+VOICE & STYLE RULES — ALL NON-NEGOTIABLE:
+- "You" voice throughout. The reader is inside the story, not watching it.
+- Casual and conversational. Write the way you'd tell this to a friend over a drink, not in a newsletter.
+- Profanity is allowed where it feels natural. Don't force it, don't sanitise it.
+- Use slang where it fits: "mate", "buddy", "Jheeze", "clocked it", "yeah-good-yeah" — make it feel lived-in.
+- Use names (Sofia, Giovanni, Nadia) when they're a named character. Use "mate" or "buddy" for unnamed friends.
+- No em-dashes anywhere. Use comma, colon, or full stop.
+- No triads of exactly three. Vary counts or restructure as a sentence.
+- No "Here's the thing:". No "Most people don't realise". No "It's not X, it's Y".
+- No awakening moments: never write "she realised", "it hit him", "suddenly he understood". Show the shift, don't name it.
+- No moral in the final sentence. End on something small and real — a laugh, a silence, a quiet action.
+- Open mid-scene. The reader should feel like they walked into something already happening.
+- Be specific. Name the actual thing: "Porsche 911, white, red leather" not "expensive car". "To wake up on a Tuesday excited" not "something simpler".
+- Bold the hardest-hitting line or key question using **text** markdown. Only one bold moment per paragraph max.
+- One concept per paragraph arc. Don't crowd them.
 
-LABEL RULE — mandatory: after each sentence that illustrates one of the ideas, immediately insert [[LABEL:ExactTermHere]] with no space before it. The labels to use are: ${storyConcepts.map(c => '[[LABEL:' + c.term + ']]').join(', ')}. Place each label exactly once, right after the sentence that shows that idea. Example: "She smiled and changed the subject.[[LABEL:Sunk Cost Fallacy]] He didn't notice."
+LABEL MARKERS:
+After the paragraph where each concept peaks, insert [[LABEL:Term]] on its own line — using the exact term from the list above.
 
-Story rules:
-- Open with one sentence that makes the reader go "huh, that's interesting"
-- Set the scene in one real moment matching: ${scene}
-- Each idea appears once, shown through what happens, never defined directly
-- Close with one sentence the reader could actually say out loud
-- No jargon. No lists. No headers. Pure story.
-- Sound like a smart friend, not a teacher.
+ALSO RETURN a single "opener" sentence (plain text, max 20 words) the reader could actually say out loud to start this conversation tonight.
 
-Also write one short "opener" — a single sentence the reader could say out loud tonight to start a conversation about one of these ideas.
-
-Respond ONLY with valid JSON:
-{"story": "...story text with [[LABEL:Term]] markers...", "opener": "..."}`;
+FORMAT — return ONLY valid JSON, no markdown fences:
+{"story": "paragraph one text\n\n[[LABEL:Term One]]\n\nparagraph two text\n\n[[LABEL:Term Two]]\n\nparagraph three text\n\n[[LABEL:Term Three]]", "opener": "..."}`;
 
     try {
       const response = await fetch('https://api.anthropic.com/v1/messages', {
@@ -71,10 +85,10 @@ Respond ONLY with valid JSON:
           'anthropic-version': '2023-06-01',
         },
         body: JSON.stringify({
-          model: 'claude-sonnet-4-5',
-          max_tokens: 600,
-          system: storySystemPrompt,
-          messages: [{ role: 'user', content: storyUserPrompt }],
+          model: 'claude-sonnet-4-6',
+          max_tokens: 800,
+          system: systemPrompt,
+          messages: [{ role: 'user', content: userPrompt }],
         }),
       });
 
@@ -89,19 +103,20 @@ Respond ONLY with valid JSON:
       const clean = raw.replace(/```json|```/g, '').trim();
       const parsed = JSON.parse(clean);
 
-      if (!parsed.story || !parsed.opener) {
+      if (!parsed.story) {
         return res.status(502).json({ error: 'Malformed story response.' });
       }
 
-      return res.status(200).json({ story: parsed.story, opener: parsed.opener });
+      return res.status(200).json({ story: parsed.story, opener: parsed.opener || '' });
 
     } catch (e) {
       console.error('cs-generate story error:', e);
       return res.status(500).json({ error: 'Internal server error.' });
     }
   }
-  // ── End Story Mode ────────────────────────────────────────────────────────
 
+  // ─── CONVERSATION STARTER MODE ─────────────────────────────────────────────
+  const { concept, ctx } = body;
   if (!concept || !concept.term) {
     return res.status(400).json({ error: 'concept object with term is required.' });
   }
@@ -110,10 +125,10 @@ Respond ONLY with valid JSON:
     partner:   'intimate/romantic partner, relaxed home setting, emotional honesty OK',
     friend:    'close friend, casual, humour allowed, no hierarchy',
     colleague: 'peer at work, professional but warm, aware of office dynamics',
-    meeting:   'group setting, you want to surface an insight without lecturing'
+    meeting:   'group setting, you want to surface an insight without lecturing',
   };
 
-  const systemPrompt = `You are a conversation coach helping people use intellectual ideas in real-life interactions. You write in a warm, direct, non-preachy voice. Output only valid JSON — no markdown, no preamble.`;
+  const systemPrompt = `You are a conversation coach helping ambitious people use ideas in real conversations. You write in a warm, direct, non-preachy voice — the tone of a smart friend, not a consultant. Output only valid JSON, no markdown, no preamble.`;
 
   // Single-ctx mode
   if (ctx && CTX_DESCRIPTIONS[ctx]) {
@@ -129,10 +144,10 @@ Category: ${concept.category}
 
 CONTEXT: ${ctx} — ${CTX_DESCRIPTIONS[ctx]}
 
-Provide:
-- prompt: a genuine, natural question adapted for that specific relationship dynamic. Max 2 sentences.
-- openers: exactly 2 verbatim sentences someone could say out loud to introduce this topic. Natural, not textbook. They should lead INTO the prompt.
-- pitfall: one short warning about what could go wrong in this specific context. Max 15 words.
+RULES:
+- prompt: a genuine, natural question adapted for that specific relationship dynamic. Max 2 sentences. No em-dashes. Not textbook. Not therapy-speak.
+- openers: exactly 2 verbatim sentences someone could say out loud to introduce this topic. Casual and natural — the way you'd actually bring it up. They should lead INTO the prompt.
+- pitfall: one short, specific warning about what could go wrong in this context. Max 15 words. Be direct.
 
 Respond ONLY with this JSON (no extra fields):
 { "prompt": "...", "openers": ["...", "..."], "pitfall": "..." }`;
@@ -146,7 +161,7 @@ Respond ONLY with this JSON (no extra fields):
           'anthropic-version': '2023-06-01',
         },
         body: JSON.stringify({
-          model: 'claude-sonnet-4-5',
+          model: 'claude-sonnet-4-6',
           max_tokens: 700,
           system: systemPrompt,
           messages: [{ role: 'user', content: userPrompt }],
@@ -188,9 +203,9 @@ Original prompt: ${concept.prompt}
 Category: ${concept.category}
 
 For each of 4 contexts, provide:
-- prompt: a genuine, natural question adapted for that specific relationship dynamic. Max 2 sentences.
-- openers: exactly 2 verbatim sentences someone could say out loud to introduce this topic. Natural, not textbook.
-- pitfall: one short warning about what could go wrong in that specific context. Max 15 words.
+- prompt: a genuine, natural question adapted for that specific relationship dynamic. Max 2 sentences. No em-dashes.
+- openers: exactly 2 verbatim sentences someone could say out loud to introduce this topic. Casual, natural, not textbook.
+- pitfall: one short, specific warning about what could go wrong in that specific context. Max 15 words.
 
 Contexts:
 - partner: ${CTX_DESCRIPTIONS.partner}
@@ -215,7 +230,7 @@ Respond ONLY with this JSON structure:
         'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-5',
+        model: 'claude-sonnet-4-6',
         max_tokens: 1200,
         system: systemPrompt,
         messages: [{ role: 'user', content: userPrompt }],
