@@ -3996,6 +3996,25 @@
   .cs-story-skeleton { display: flex; flex-direction: column; gap: 8px; padding: 4px 0; }
   .cs-story-skeleton-line { height: 0.9em; border-radius: 4px; background: linear-gradient(90deg, var(--surface) 25%, var(--border) 50%, var(--surface) 75%); background-size: 200% 100%; animation: csStoryShimmer 1.4s infinite; }
   @keyframes csStoryShimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+  /* Typewriter cursor */
+  .tw-cursor {
+    display: inline-block;
+    width: 2px;
+    height: 1em;
+    background: var(--accent);
+    margin-left: 2px;
+    vertical-align: text-bottom;
+    border-radius: 1px;
+    animation: twBlink 0.8s ease-in-out infinite;
+    opacity: 1;
+  }
+  .tw-cursor.tw-done { animation: none; opacity: 0; }
+  @keyframes twBlink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+  /* CS prompt typewriter — same Playfair style, streams in */
+  #csPromptText.tw-active { opacity: 1; }
+  .cs-story-text .tw-bold { font-weight: 700; color: var(--text); }
   .cs-btn {
     font-family: 'DM Mono', monospace; font-size: 0.7rem;
     letter-spacing: 0.1em; text-transform: uppercase;
@@ -6748,9 +6767,9 @@
       <div class="cs-story-divider"></div>
       <button class="cs-story-reveal-btn" id="csStoryRevealBtn" onclick="_csToggleTermPopups()">◈ Reveal the terms</button>
       <div class="cs-story-actions">
-        <button class="cs-story-back cs-story-copy-btn" onclick="_csCloseStoryMode()">← Back to starter</button>
         <button class="cs-story-copy-btn" id="csStoryCopyBtn" onclick="_csStoryCopy()">↑ Copy story</button>
-        <button class="cs-story-copy-btn" id="csStoryShareOpenerBtn" onclick="_csStoryShareOpener()">↑ Copy opener</button>
+        <button class="cs-story-copy-btn" id="csStoryShareOpenerBtn" onclick="_csStoryShareOpener()" style="display:none">↑ Copy opener</button>
+        <button class="cs-story-back cs-story-copy-btn" onclick="_csCloseStoryMode()" style="margin-left:auto">← Back</button>
       </div>
     </div>
 
@@ -10215,45 +10234,65 @@ function spToggleMorePills() {
 function spScenarioPill(el, scenario) {
   // Mark active on all pills matching this scenario (handles duplicates across rows)
   document.querySelectorAll('.sp-pill').forEach(p => p.classList.remove('active'));
-  // Find all pills that trigger this scenario and mark them active
-  document.querySelectorAll('.sp-pill[onclick*="\''+scenario+'\'"]').forEach(p => p.classList.add('active'));
+  document.querySelectorAll('.sp-pill[onclick*="\'"+scenario+"\'"]').forEach(p => p.classList.add('active'));
 
-  // Category map: each scenario targets specific concept categories
-  const SP_SCENARIO_CATS = {
-    friend:      ['psychology','identity','relationships'],
-    dinner:      ['psychology','thinking','philosophy','society'],
-    date:        ['relationships','language','philosophy'],
-    work:        ['business','thinking','power'],
-    family:      ['health','identity','relationships','philosophy'],
-    networking:  ['language','business','power'],
-    podcast:     ['thinking','tech-ai','science','creativity'],
-    solo:        ['thinking','philosophy','psychology','identity']
-  };
-
-  const cats = SP_SCENARIO_CATS[scenario] || ['psychology','thinking'];
-
-  // Wait for CONCEPTS to be loaded, then pick 3 concepts from target categories
-  function _spLaunchStory() {
+  function _spLaunchScenario() {
     if (typeof CONCEPTS === 'undefined' || !CONCEPTS.length) {
-      setTimeout(_spLaunchStory, 200);
+      setTimeout(_spLaunchScenario, 200);
       return;
     }
-    // Pick concepts with related_ids from target categories, shuffle, take 3
+
+    // ── LOCKED SEED PATH ────────────────────────────────────────────────────
+    const seed = SP_STORY_SEEDS[scenario];
+    if (seed) {
+      const seedConcepts = seed.concept_ids.map(function(id) {
+        return CONCEPTS.find(function(c) { return c.id === id; });
+      }).filter(Boolean);
+
+      const SP_CTX_MAP = {
+        friend: 'friend', dinner: 'friend', date: 'partner',
+        work: 'colleague', family: 'friend', networking: 'colleague',
+        podcast: 'friend', solo: 'friend'
+      };
+      _csCtx = SP_CTX_MAP[scenario] || 'friend';
+
+      const primary = seedConcepts[0] || CONCEPTS[0];
+      _csConcept = primary;
+      _csCat = primary.category;
+      _csAIData = null;
+      _renderCSShell(primary);
+      _csPushToStack(primary);
+
+      openCS();
+
+      setTimeout(function() {
+        _csPlayLockedSeed(seed, seedConcepts);
+      }, 320);
+
+      if (typeof track === 'function') track('sp_scenario_pill', { scenario, seed: true });
+      return;
+    }
+
+    // ── AI-GENERATED PATH (unlocked scenarios) ──────────────────────────────
+    const SP_SCENARIO_CATS = {
+      family:      ['health','identity','relationships','philosophy'],
+      networking:  ['language','business','power'],
+      podcast:     ['thinking','tech-ai','science','creativity'],
+      solo:        ['thinking','philosophy','psychology','identity']
+    };
+    const cats = SP_SCENARIO_CATS[scenario] || ['psychology','thinking'];
     const pool = CONCEPTS.filter(function(c) {
       return cats.includes(c.category) && !c.duplicate_of;
     });
     if (pool.length < 2) { _csOpenPanel(); return; }
 
-    // Shuffle pool, pick primary + up to 2 related from same scenario cats
     const shuffled = pool.slice().sort(function() { return Math.random() - 0.5; });
     const primary = shuffled[0];
-    // Build a candidate set: primary + 2 more from pool (preferring concepts with related_ids)
     const withRelated = shuffled.filter(function(c) { return c.id !== primary.id && c.related_ids && c.related_ids.length > 0; });
     const withoutRelated = shuffled.filter(function(c) { return c.id !== primary.id && (!c.related_ids || !c.related_ids.length); });
     const rest = withRelated.concat(withoutRelated).slice(0, 2);
     const candidates = [primary].concat(rest);
 
-    // Map scenario pill name → valid CS context key (friend/partner/colleague/meeting)
     const SP_CTX_MAP = {
       friend: 'friend', dinner: 'friend', date: 'partner',
       work: 'colleague', family: 'friend', networking: 'colleague',
@@ -10266,18 +10305,93 @@ function spScenarioPill(el, scenario) {
     _renderCSShell(primary);
     _csPushToStack(primary);
 
-    // Open panel WITHOUT firing _loadAI — story mode handles everything
-    // Use openCS() directly (not openCSFromNav which auto-fires _loadAI)
     openCS();
 
-    // After panel opens, inject candidates and trigger story
     setTimeout(function() {
       _csInjectCandidatesAndStory(candidates, scenario);
     }, 350);
+
+    if (typeof track === 'function') track('sp_scenario_pill', { scenario });
   }
 
-  _spLaunchStory();
-  if (typeof track === 'function') track('sp_scenario_pill', { scenario });
+  _spLaunchScenario();
+}
+
+// Play a locked pre-written seed story via typewriter — no API call
+function _csPlayLockedSeed(seed, seedConcepts) {
+  _csDismissTermPopups();
+  _playSwapSFX();
+
+  // Set headline + eyebrow
+  var headline = document.getElementById('csHeadline');
+  if (headline) headline.textContent = 'A Short Story';
+  var eyebrow = document.getElementById('csStoryEyebrow');
+  if (eyebrow) eyebrow.textContent = seed.eyebrow || 'A SHORT STORY';
+
+  // Hide concept main area + actions — story takes over
+  _csPickerHideMain();
+  ['csActions','csRevealRow'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
+
+  // Show story panel
+  var panel = document.getElementById('csStoryPanel');
+  if (panel) panel.classList.add('cs-visible');
+
+  // Hide opener block + reveal btn until typewriter done
+  var openerBlock = document.getElementById('csStoryOpener');
+  var revealBtn = document.getElementById('csStoryRevealBtn');
+  var actionsRow = panel ? panel.querySelector('.cs-story-actions') : null;
+  if (openerBlock) openerBlock.style.display = 'none';
+  if (revealBtn) { revealBtn.style.opacity = '0'; revealBtn.style.pointerEvents = 'none'; }
+  if (actionsRow) { actionsRow.style.opacity = '0'; actionsRow.style.pointerEvents = 'none'; }
+
+  // Hide picker wrap — seeds don't use candidates
+  var pickerWrap = document.getElementById('csTopicPickerWrap');
+  if (pickerWrap) { pickerWrap.classList.remove('active'); pickerWrap.style.display = 'none'; }
+  var storyBtn = document.getElementById('csPickerStoryBtn');
+  if (storyBtn) storyBtn.classList.remove('cs-visible');
+
+  // Clear story text and start typewriter
+  var textEl = document.getElementById('csStoryText');
+  if (!textEl) return;
+  textEl.innerHTML = '';
+  if (textEl._twCancel) textEl._twCancel();
+
+  _csTypewriter(textEl, seed.story, {
+    speed: 14,
+    jitter: 20,
+    concepts: seedConcepts,
+    onDone: function() {
+      // Fade in reveal btn + actions row
+      if (revealBtn) {
+        revealBtn.style.transition = 'opacity 0.5s ease';
+        revealBtn.style.opacity = '1';
+        revealBtn.style.pointerEvents = '';
+      }
+      if (actionsRow) {
+        actionsRow.style.transition = 'opacity 0.5s ease 0.2s';
+        actionsRow.style.opacity = '1';
+        actionsRow.style.pointerEvents = '';
+      }
+      // Seeds have no opener — keep opener btn hidden
+      var openerCopyBtn = document.getElementById('csStoryShareOpenerBtn');
+      if (openerCopyBtn) openerCopyBtn.style.display = 'none';
+      // Store for copy
+      if (panel) {
+        panel.dataset.storyText = seed.story.replace(/\[\[LABEL:[^\]]+\]\]/g, '').replace(/\*\*/g, '');
+        panel.dataset.openerText = '';
+      }
+      // Store concepts for reveal popups
+      _csRenderStoryMiniCards(seedConcepts);
+      _csStoryGenerated = true;
+
+      // Auto-save
+      _csSaveStory(seedConcepts[0], seedConcepts.slice(1), seed.story, '');
+      if (typeof _panelTab !== 'undefined' && _panelTab === 'stories') _convRenderStories();
+    }
+  });
 }
 
 // Inject picker candidates programmatically and trigger story mode
@@ -11294,21 +11408,31 @@ function _applyAIToCtx(ctx) {
 
   document.getElementById('csOpener').textContent = CS_OPENERS[ctx] || '';
 
-  // Fade in prompt text
+  // Typewriter prompt text
   const inner = document.getElementById('csPromptInner');
-  if (inner) {
-    inner.classList.remove('cs-prompt-visible');
-    inner.classList.add('cs-prompt-hidden');
-    inner.style.display = 'block'; // ensure visible
-    requestAnimationFrame(function() {
-      document.getElementById('csPromptText').textContent = d.prompt;
-      requestAnimationFrame(function() {
-        inner.classList.remove('cs-prompt-hidden');
-        inner.classList.add('cs-prompt-visible');
-      });
-    });
-  } else {
-    document.getElementById('csPromptText').textContent = d.prompt;
+  const promptEl = document.getElementById('csPromptText');
+  if (inner && promptEl) {
+    inner.style.display = 'block';
+    inner.classList.remove('cs-prompt-hidden','cs-prompt-visible');
+    promptEl.textContent = '';
+    promptEl.classList.add('tw-active');
+    // Inline typewriter for the short prompt text (no labels/bold)
+    let pi = 0;
+    const ptext = d.prompt || '';
+    const cursor = document.createElement('span');
+    cursor.className = 'tw-cursor';
+    promptEl.appendChild(cursor);
+    const ptimer = setInterval(function() {
+      if (pi < ptext.length) {
+        promptEl.insertBefore(document.createTextNode(ptext[pi++]), cursor);
+      } else {
+        clearInterval(ptimer);
+        cursor.className = 'tw-cursor tw-done';
+        promptEl.classList.remove('tw-active');
+      }
+    }, 16 + Math.random() * 18);
+  } else if (promptEl) {
+    promptEl.textContent = d.prompt || '';
   }
 
   // Coaching layer
@@ -11449,6 +11573,258 @@ function _renderRelated(concept) {
 const CS_STORIES_KEY = 'lll_cs_stories_v1';
 const CS_STORIES_MAX = 20;
 
+// ─── TYPEWRITER UTILITY ──────────────────────────────────────────────────────
+// _csTypewriter(el, html, opts) — types HTML content into el character by character.
+// Supports **bold** markdown, paragraph breaks (\n\n), and [[LABEL:Term]] markers.
+// opts: { speed: ms base per char, jitter: ms random extra, onDone: fn, concepts: [] }
+function _csTypewriter(el, rawText, opts) {
+  opts = opts || {};
+  const speed    = opts.speed  !== undefined ? opts.speed  : 18;
+  const jitter   = opts.jitter !== undefined ? opts.jitter : 22;
+  const onDone   = opts.onDone || null;
+  const concepts = opts.concepts || [];
+
+  // Pre-process: build a sequence of { type: 'char'|'label'|'break', value } tokens
+  // so we can type chars but inject labels instantly when we hit [[LABEL:...]]
+  const plainMap = {};
+  concepts.forEach(function(c) { if (c) plainMap[(c.term||'').toLowerCase()] = c.plain || ''; });
+
+  // Parse **bold** → wrap tokens, [[LABEL:X]] → label token, \n\n → break token
+  const tokens = [];
+  let remaining = rawText;
+  const LABEL_RE = /\[\[LABEL:([^\]]+)\]\]/;
+  const BOLD_RE  = /\*\*([^*]+)\*\*/;
+
+  while (remaining.length) {
+    const labelM = LABEL_RE.exec(remaining);
+    const boldM  = BOLD_RE.exec(remaining);
+    const breakIdx = remaining.indexOf('\n\n');
+
+    // Find which comes first
+    const candidates = [
+      labelM ? { idx: labelM.index, type: 'label', match: labelM } : null,
+      boldM  ? { idx: boldM.index,  type: 'bold',  match: boldM  } : null,
+      breakIdx >= 0 ? { idx: breakIdx, type: 'break', match: null } : null,
+    ].filter(Boolean);
+
+    if (!candidates.length) {
+      // Rest is plain text
+      for (let i = 0; i < remaining.length; i++) tokens.push({ type: 'char', value: remaining[i] });
+      remaining = '';
+      break;
+    }
+
+    candidates.sort((a, b) => a.idx - b.idx);
+    const first = candidates[0];
+
+    // Type plain text before this token
+    for (let i = 0; i < first.idx; i++) tokens.push({ type: 'char', value: remaining[i] });
+
+    if (first.type === 'label') {
+      tokens.push({ type: 'label', value: first.match[1] });
+      remaining = remaining.slice(first.idx + first.match[0].length);
+    } else if (first.type === 'bold') {
+      // type the bold chars with a bold wrapper
+      const btext = first.match[1];
+      tokens.push({ type: 'bold_start' });
+      for (let i = 0; i < btext.length; i++) tokens.push({ type: 'char', value: btext[i] });
+      tokens.push({ type: 'bold_end' });
+      remaining = remaining.slice(first.idx + first.match[0].length);
+    } else {
+      tokens.push({ type: 'break' });
+      remaining = remaining.slice(first.idx + 2);
+    }
+  }
+
+  // Build DOM progressively
+  el.innerHTML = '';
+  let currentP  = document.createElement('p');
+  currentP.style.margin = '0 0 0.85em';
+  el.appendChild(currentP);
+
+  let currentSpan = null; // for bold wrapping
+  let boldOpen    = false;
+
+  // Cursor el
+  const cursor = document.createElement('span');
+  cursor.className = 'tw-cursor';
+  currentP.appendChild(cursor);
+
+  let i = 0;
+  let cancelled = false;
+  el._twCancel = function() { cancelled = true; };
+
+  function appendChar(ch) {
+    const target = currentSpan || currentP;
+    // Insert before cursor
+    const textNode = document.createTextNode(ch);
+    target.insertBefore(textNode, target === currentP ? cursor : null);
+    if (target !== currentP) target.appendChild(textNode);
+  }
+
+  function step() {
+    if (cancelled || i >= tokens.length) {
+      cursor.className = 'tw-cursor tw-done';
+      if (onDone) onDone();
+      return;
+    }
+    const tok = tokens[i++];
+
+    if (tok.type === 'char') {
+      // Insert text node before cursor in currentP (or currentSpan)
+      if (boldOpen && currentSpan) {
+        currentSpan.insertBefore(document.createTextNode(tok.value), null);
+      } else {
+        currentP.insertBefore(document.createTextNode(tok.value), cursor);
+      }
+    } else if (tok.type === 'break') {
+      // Move cursor to new paragraph
+      currentP = document.createElement('p');
+      currentP.style.margin = '0 0 0.85em';
+      el.appendChild(currentP);
+      currentP.appendChild(cursor);
+      boldOpen    = false;
+      currentSpan = null;
+    } else if (tok.type === 'label') {
+      const term  = tok.value;
+      const plain = plainMap[term.toLowerCase()] || '';
+      const safe  = term.replace(/"/g,'&quot;').replace(/</g,'&lt;');
+      const safep = plain.replace(/"/g,'&quot;').replace(/</g,'&lt;');
+      const span  = document.createElement('span');
+      span.className = 'cs-story-label';
+      span.innerHTML = safe + '<span class="cs-story-tooltip">' + safep + '</span>';
+      // Fade in label
+      span.style.opacity = '0';
+      span.style.transition = 'opacity 0.4s ease';
+      currentP.insertBefore(span, cursor);
+      requestAnimationFrame(function() { span.style.opacity = '1'; });
+    } else if (tok.type === 'bold_start') {
+      currentSpan = document.createElement('strong');
+      currentSpan.className = 'tw-bold';
+      currentP.insertBefore(currentSpan, cursor);
+      boldOpen = true;
+      step(); return;
+    } else if (tok.type === 'bold_end') {
+      boldOpen    = false;
+      currentSpan = null;
+      step(); return;
+    }
+
+    // Scroll el into view smoothly
+    el.parentElement && (el.parentElement.scrollTop = el.parentElement.scrollHeight);
+
+    const delay = (tok.type === 'char')
+      ? speed + Math.random() * jitter
+      : 0;
+    setTimeout(step, delay);
+  }
+
+  step();
+}
+
+// ─── LOCKED STORY SEEDS ──────────────────────────────────────────────────────
+// Pre-written stories for the 4 locked scenarios.
+// concept_ids: array of [id, id, id] matching pill drop order.
+// story: raw text with **bold** and [[LABEL:Term]] markers.
+const SP_STORY_SEEDS = {
+  friend: {
+    concept_ids: [332, 402, 394],
+    eyebrow: 'A SHORT STORY — with a friend',
+    story: `You're walking through the city with your mate, been "catching up" for twenty minutes but mostly just doing the "how-are-you" — "yeah-good-yeah" loop and vague updates that don't mean anything.
+
+Then a Porsche 911 pulls up next to you. White, red leather interior. Your friend stops mid-sentence: "Jheeze. That guy's living the life. One day man, one day that's me."
+
+"Do you actually want that car," you ask, "or do you just want people to see you in it?"
+
+Hm... he says. And the silence after is kinda the answer.
+
+[[LABEL:Man in the Car Paradox]]
+
+Because that guy in the Porsche isn't thinking about either of you — he's worried about someone keying his doors. And somewhere across the city, someone's scrolling your mate's Instagram right now thinking the exact same thing about his life. But you've both been doing this for months, absorbing everyone's best-case version of themselves and subconsciously building a wishlist of things you never actually asked for. Half the stuff you're chasing, you don't even want. You want the version of yourself that wanted it.
+
+[[LABEL:Releasing the Desire]]
+
+**"What would you actually want if no one could see it?"** you ask.
+
+He goes quiet. Then: "Honestly? To wake up on a Tuesday excited. Maybe a dog. Good sex and not feeling like shit by Sunday."
+
+"So go build that then," you say.
+
+He laughs. But you both know that was the only permission he needed.
+
+[[LABEL:Permission You Give Yourself]]`,
+  },
+
+  dinner: {
+    concept_ids: [547, 419, 480],
+    eyebrow: 'A SHORT STORY — at a dinner party',
+    story: `You're at a dinner party at Giovanni's place, third bottle open, and Sofia casually mentions she's been thinking about quitting her corporate job to go do something creative. Normal enough thing to say.
+
+But your mate across the table jumps on it like she said she's joining a cult. "So you just think money doesn't matter? People have bills, responsibilities, you can't just decide to be an artist—" and suddenly he's five sentences deep into an argument against a position nobody actually took.
+
+"I didn't say money doesn't matter," Sofia says, quietly.
+
+He doesn't really hear it. He's too busy winning.
+
+[[LABEL:Strawmanning]]
+
+Nobody at that table was actually under threat. The wine was good, the evening was fine. But a brain that's used to real problems doesn't clock off when things get comfortable — it finds new ones. Sofia's offhand comment about her own life became the problem. A harmless Tuesday evening became a debate he needed to win.
+
+[[LABEL:Blue Dot Effect]]
+
+Because he made the same choice five years ago. Stayed in the safe job, told himself it was the grown-up thing to do. And somewhere along the way it stopped being a decision and became **who he is** — so Sofia's comment didn't feel like dinner conversation. It felt like an attack on his whole identity. And the real question — **"did I actually make the right call?"** — is one he's been avoiding for years.
+
+The table moves on. Giovanni tops up the wine. But you and Sofia both clocked it.
+
+[[LABEL:Anatomy of Identity]]`,
+  },
+
+  date: {
+    concept_ids: [388, 351, 409],
+    eyebrow: 'A SHORT STORY — on a date',
+    story: `You're about forty minutes into a first date and it's going fine. Like, *technically* fine. You've done the what-do-you-do, the where-are-you-from, the oh-that's-so-interesting face. The conversation has the shape of a conversation without really being one.
+
+Then she asks what you actually wanted to be as a kid, back before the world told you what was realistic.
+
+Without thinking twice you say: "A zookeeper. I was genuinely obsessed with penguins. Still am, a bit."
+
+She laughs. Not politely — *actually* laughs. Then admits she wanted to be a weather presenter because she liked the pointer stick. And just like that the whole evening shifts gear, because you both just said something real instead of something impressive. You didn't edit yourself, didn't scan her face before answering, just said the thing. And that — more than anything else you could have said — is what made her lean in.
+
+[[LABEL:Theory of Attractiveness]]
+
+Turns out nobody's won over by the highlight reels anymore. The person trying hardest to seem sorted is usually the least sorted, and everyone in their thirties knows it by now.
+
+[[LABEL:Relatable Beats Impressive]]
+
+Later she mentions she'd love to move somewhere slower, maybe Lisbon, maybe somewhere with actual summers. You ask what her average Tuesday looks like right now. She pauses — **"nobody's ever asked me that on a date."**
+
+But that's the whole thing, isn't it. You're not just looking for someone attractive and funny and kind. You're looking for someone whose ordinary life you could actually stand to be inside. And that starts with a Tuesday.
+
+[[LABEL:Choosing a Lifestyle, Not Just a Partner]]`,
+  },
+
+  work: {
+    concept_ids: [484, 373, 378],
+    eyebrow: 'A SHORT STORY — at work',
+    story: `It's a Wednesday and you've been "busy" since 8am. Three standups, a planning session that could've been a doc, and forty-seven Slack messages that all needed your input urgently. It's 6pm. You close the laptop and try to remember what you actually moved forward today. **Nothing comes to mind.**
+
+[[LABEL:Daily Needle-moving Levers]]
+
+You grab your bag and hop on the metro, earphones in, half-scrolling, half-zoned out. And somewhere between stops it just hits you — this job hasn't surprised you in eight months. You know which meetings are theatre, which deadlines are fake, which feedback loops go nowhere. You stopped growing somewhere around last spring and just kept showing up anyway, getting slightly better at a game *you're not sure you want to win.*
+
+**The busier you are, the easier it is not to notice.**
+
+[[LABEL:Challenge Plateau]]
+
+Because here's what nobody tells you about a comfortable job: it doesn't just take the eight hours. It takes the hour before, when you're already mentally in your inbox before you've had coffee. And it takes the two hours after, when you're too drained to do anything that actually matters to you but not tired enough to just sleep.
+
+You get home. Make something easy. Watch something you won't remember tomorrow. And the quiet thing running in the back of your head doesn't switch off with the TV — **"is this actually the trade I agreed to, or did it just happen to me while I wasn't paying attention?"**
+
+[[LABEL:Third-of-Life Tax]]`,
+  },
+};
+
+// ─── PARSE STORY LABELS ──────────────────────────────────────────────────────
 // Parse story text: replace [[LABEL:Term]] markers with gold inline label HTML
 function _csParseStoryLabels(storyText, conceptsUsed) {
   const plainMap = {};
@@ -11550,24 +11926,20 @@ function _csOpenStoryMode() {
   // Make sure story panel is visible inside the picker area
   // (it lives inside cs-card-inner-scroll, so it will appear)
 
-  // Show skeleton + loading messages
+  // Show minimal loading state — just eyebrow + blinking cursor line
   var textEl = document.getElementById('csStoryText');
-  textEl.innerHTML = '<div class="cs-story-skeleton">' +
-    '<div class="cs-story-skeleton-line" style="width:85%"></div>' +
-    '<div class="cs-story-skeleton-line" style="width:70%"></div>' +
-    '<div class="cs-story-skeleton-line" style="width:90%"></div>' +
-    '<div class="cs-story-skeleton-line" style="width:65%"></div>' +
-    '<div class="cs-story-skeleton-line" style="width:78%"></div>' +
-    '</div>';
+  textEl.innerHTML = '<span class="tw-cursor"></span>';
   document.getElementById('csStoryOpener').style.display = 'none';
   var revealBtn = document.getElementById('csStoryRevealBtn');
-  if (revealBtn) revealBtn.classList.remove('active');
+  if (revealBtn) { revealBtn.style.opacity = '0'; revealBtn.style.pointerEvents = 'none'; }
+  var storyActionsRow = document.getElementById('csStoryPanel') ? document.getElementById('csStoryPanel').querySelector('.cs-story-actions') : null;
+  if (storyActionsRow) { storyActionsRow.style.opacity = '0'; storyActionsRow.style.pointerEvents = 'none'; }
 
-  // Start rotating loading messages
+  // Start rotating loading messages above text
   var _storyMsgEl = document.createElement('div');
   _storyMsgEl.id = 'csStoryLoadMsg';
-  _storyMsgEl.style.cssText = "font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);text-align:center;padding:1.2rem 0 0.5rem;";
-  textEl.parentNode.insertBefore(_storyMsgEl, textEl.nextSibling);
+  _storyMsgEl.style.cssText = "font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);padding:0 0 1rem;";
+  textEl.parentNode.insertBefore(_storyMsgEl, textEl);
   var _storyMsgs = [
     'Weaving ideas together…',
     'Finding the thread between them…',
@@ -11604,33 +11976,43 @@ function _csOpenStoryMode() {
 
     if (!data.story) throw new Error('no story');
 
-    // Render story with inline labels
-    var parsed = _csParseStoryLabels(data.story, pickerConcepts);
-    textEl.innerHTML = parsed;
-
-    // Opener
-    if (data.opener) {
-      document.getElementById('csStoryOpenerText').textContent = data.opener;
-      document.getElementById('csStoryOpener').style.display = 'block';
-    }
-
-    // Store concepts for reveal popups
-    _csRenderStoryMiniCards(pickerConcepts);
-
-    // Repopulate candidate cards with the story-concept terms
-    _csStoryRepopulateCandidates(pickerConcepts);
-
-    // Auto-save
-    _csSaveStory(pickerConcepts[0], pickerConcepts.slice(1), data.story, data.opener);
-    // Refresh Stories tab if it's currently open
-    if (_panelTab === 'stories') _convRenderStories();
-
-    // Store for copy actions
-    panel.dataset.storyText = data.story.replace(/\[\[LABEL:[^\]]+\]\]/g, '');
-    panel.dataset.openerText = data.opener || '';
-
-    // Mark story as generated for this candidate set
-    _csStoryGenerated = true;
+    // Clear loading cursor, typewrite the story
+    textEl.innerHTML = '';
+    _csTypewriter(textEl, data.story, {
+      speed: 14,
+      jitter: 20,
+      concepts: pickerConcepts,
+      onDone: function() {
+        // Opener
+        if (data.opener) {
+          document.getElementById('csStoryOpenerText').textContent = data.opener;
+          document.getElementById('csStoryOpener').style.display = 'block';
+        }
+        // Fade in reveal btn + actions
+        if (revealBtn) {
+          revealBtn.style.transition = 'opacity 0.5s ease';
+          revealBtn.style.opacity = '1';
+          revealBtn.style.pointerEvents = '';
+        }
+        if (storyActionsRow) {
+          storyActionsRow.style.transition = 'opacity 0.5s ease 0.2s';
+          storyActionsRow.style.opacity = '1';
+          storyActionsRow.style.pointerEvents = '';
+        }
+        // Show opener copy btn only if opener exists
+        var openerCopyBtn = document.getElementById('csStoryShareOpenerBtn');
+        if (openerCopyBtn) openerCopyBtn.style.display = data.opener ? '' : 'none';
+        _csRenderStoryMiniCards(pickerConcepts);
+        _csStoryRepopulateCandidates(pickerConcepts);
+        // Auto-save
+        _csSaveStory(pickerConcepts[0], pickerConcepts.slice(1), data.story, data.opener);
+        if (_panelTab === 'stories') _convRenderStories();
+        // Store for copy actions
+        panel.dataset.storyText = data.story.replace(/\[\[LABEL:[^\]]+\]\]/g, '').replace(/\*\*/g,'');
+        panel.dataset.openerText = data.opener || '';
+        _csStoryGenerated = true;
+      }
+    });
   })
   .catch(function(e) {
     clearInterval(_storyMsgTimer);
@@ -11682,6 +12064,10 @@ function _csCloseStoryMode() {
   _csDismissTermPopups();
   _playSwapSFX();
 
+  // Cancel any running typewriter
+  var textEl = document.getElementById('csStoryText');
+  if (textEl && textEl._twCancel) textEl._twCancel();
+
   // Hide story panel
   var panel = document.getElementById('csStoryPanel');
   if (panel) panel.classList.remove('cs-visible');
@@ -11697,37 +12083,69 @@ function _csCloseStoryMode() {
     if (badge) badge.remove();
   });
 
-  // IMPORTANT: close the picker entirely and restore the concept view
-  // _csCloseStoryMode is "Back to starter" — should show concept + prompt, not picker
+  // Close picker entirely
   var pickerWrap = document.getElementById('csTopicPickerWrap');
-  if (pickerWrap) {
-    pickerWrap.classList.remove('active');
-    pickerWrap.style.display = '';
-  }
+  if (pickerWrap) { pickerWrap.classList.remove('active'); pickerWrap.style.display = ''; }
 
-  // Hide story button (picker is closed)
   var storyBtn = document.getElementById('csPickerStoryBtn');
   if (storyBtn) storyBtn.classList.remove('cs-visible');
 
-  // Restore reveal topic link state
   var topicLnk = document.getElementById('csRevealTopic');
   if (topicLnk) topicLnk.classList.remove('active');
 
-  // Restore generate buttons in candidate cards
   document.querySelectorAll('.cs-candidate-generate-btn').forEach(function(btn) {
     btn.style.display = '';
   });
 
-  // Clear any inline display:none set by _csInjectCandidatesAndStory on actions/reveal row
+  // Restore actions/reveal row display
   ['csActions','csRevealRow'].forEach(function(id) {
     var el = document.getElementById(id);
     if (el) el.style.display = '';
   });
 
-  // Restore main concept view (concept pill + prompt + coaching if AI ready)
-  _csPickerShowMain();
+  // Show concept pill + prompt. If AI data exists use it; otherwise show Generate btn.
+  // NEVER auto-fire _loadAI from here — avoids surprise API call on Back press.
+  ['csConceptPill','csPromptBlock','csCoaching','csDivider','csFeedbackRow','csGenerateRow'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.style.display = '';
+  });
+  var storyPanel = document.getElementById('csStoryPanel');
+  if (storyPanel) storyPanel.classList.remove('cs-visible');
+  var src = document.getElementById('csSourceLabel');
+  if (src) src.style.visibility = '';
 
-  // Show "↩ Story" button in actions row if story was generated
+  ['csActions','csRevealRow'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) { el.classList.remove('cs-hidden'); el.classList.add('cs-visible'); el.style.display = ''; }
+  });
+
+  // Re-apply AI data if it exists — no new API call
+  if (_csConcept && _csAIData && _csAIData[_csCtx]) {
+    _applyAIToCtx(_csCtx);
+  } else if (_csConcept) {
+    // Try session cache
+    var ck = (typeof CS_SESSION_KEY !== 'undefined' ? CS_SESSION_KEY : 'lll_cs_ai_') + _csConcept.id + '_' + _csCtx;
+    try {
+      var cached = sessionStorage.getItem(ck);
+      if (cached) {
+        if (!_csAIData) _csAIData = {};
+        _csAIData[_csCtx] = JSON.parse(cached);
+        _applyAIToCtx(_csCtx);
+      } else {
+        // No data — show Generate button, hide coaching
+        var genRow = document.getElementById('csGenerateRow');
+        var genBtn = document.getElementById('csGenerateBtn');
+        if (genRow) genRow.style.display = 'block';
+        if (genBtn) { genBtn.disabled = false; genBtn.classList.remove('loading'); genBtn.textContent = '✶ Generate conversation starter'; }
+        var coaching = document.getElementById('csCoaching');
+        if (coaching) { coaching.classList.add('cs-hidden'); coaching.classList.remove('cs-visible'); }
+        var divider = document.getElementById('csDivider');
+        if (divider) { divider.classList.add('cs-hidden'); divider.classList.remove('cs-visible'); }
+      }
+    } catch(e) {}
+  }
+
+  // Show ↩ Story button in actions row if story was already generated
   var backToStoryBtn = document.getElementById('csBackToStoryBtn');
   if (backToStoryBtn) backToStoryBtn.style.display = _csStoryGenerated ? '' : 'none';
 }
