@@ -4014,7 +4014,7 @@
 
   /* CS prompt typewriter — same Playfair style, streams in */
   #csPromptText.tw-active { opacity: 1; }
-  .cs-story-text .tw-bold { font-weight: 700; color: var(--text); }
+  .cs-story-text .tw-bold { font-weight: 700; color: var(--accent); }
   .cs-btn {
     font-family: 'DM Mono', monospace; font-size: 0.7rem;
     letter-spacing: 0.1em; text-transform: uppercase;
@@ -4998,9 +4998,11 @@
     touch-action: pan-y;
     scrollbar-width: thin;
     scrollbar-color: var(--border-hover) transparent;
+    visibility: hidden;
   }
   .nf-row .concept-card.open .card-back {
     box-shadow: 0 4px 12px rgba(0,0,0,0.45);
+    visibility: visible;
   }
   .nf-row .concept-card .card-back::-webkit-scrollbar { width: 3px; }
   .nf-row .concept-card .card-back::-webkit-scrollbar-thumb { background: var(--border-hover); border-radius: 2px; }
@@ -10391,8 +10393,8 @@ function _csPlayLockedSeed(seed, seedConcepts) {
   if (textEl._twCancel) textEl._twCancel();
 
   _csTypewriter(textEl, seed.story, {
-    speed: 14,
-    jitter: 20,
+    speed: 4,
+    jitter: 6,
     concepts: seedConcepts,
     onDone: function() {
       // Fade in reveal btn + actions row
@@ -11709,13 +11711,19 @@ function _csTypewriter(el, rawText, opts) {
         currentP.insertBefore(document.createTextNode(tok.value), cursor);
       }
     } else if (tok.type === 'break') {
-      // Move cursor to new paragraph
-      currentP = document.createElement('p');
-      currentP.style.margin = '0 0 0.85em';
-      el.appendChild(currentP);
-      currentP.appendChild(cursor);
-      boldOpen    = false;
-      currentSpan = null;
+      // Peek: if next token is a label, don't create a new paragraph —
+      // attach the label inline to the current paragraph instead
+      const nextTok = tokens[i];
+      if (nextTok && nextTok.type === 'label') {
+        // skip new paragraph — label stays inline at end of current para
+      } else {
+        currentP = document.createElement('p');
+        currentP.style.margin = '0 0 0.85em';
+        el.appendChild(currentP);
+        currentP.appendChild(cursor);
+        boldOpen    = false;
+        currentSpan = null;
+      }
     } else if (tok.type === 'label') {
       const term  = tok.value;
       const plain = plainMap[term.toLowerCase()] || '';
@@ -11729,6 +11737,17 @@ function _csTypewriter(el, rawText, opts) {
       span.style.transition = 'opacity 0.4s ease';
       currentP.insertBefore(span, cursor);
       requestAnimationFrame(function() { span.style.opacity = '1'; });
+      // Skip the next break token (label is inline, next para starts fresh after)
+      if (tokens[i] && tokens[i].type === 'break') {
+        i++; // consume the break after label
+        // Now start a new paragraph for the content that follows
+        currentP = document.createElement('p');
+        currentP.style.margin = '0 0 0.85em';
+        el.appendChild(currentP);
+        currentP.appendChild(cursor);
+        boldOpen    = false;
+        currentSpan = null;
+      }
     } else if (tok.type === 'bold_start') {
       currentSpan = document.createElement('strong');
       currentSpan.className = 'tw-bold';
@@ -12010,8 +12029,8 @@ function _csOpenStoryMode() {
     // Clear loading cursor, typewrite the story
     textEl.innerHTML = '';
     _csTypewriter(textEl, data.story, {
-      speed: 14,
-      jitter: 20,
+      speed: 4,
+      jitter: 6,
       concepts: pickerConcepts,
       onDone: function() {
         // Opener
@@ -16295,12 +16314,12 @@ body.cs-panel-open .sp-trigger-hint { display: none; }
     </div><!-- /panelSectionStash -->
 
     <!-- HISTORY TAB -->
-    <div class="conv-tab-section" id="panelSectionHistory" style="display:none;flex:1;overflow-y:auto;">
+    <div class="conv-tab-section" id="panelSectionHistory" style="display:none;flex:1;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;">
       <!-- rendered by _convRenderHistory() into convList when active -->
     </div>
 
     <!-- STORIES TAB -->
-    <div class="conv-tab-section" id="panelSectionStories" style="display:none;flex:1;overflow-y:auto;">
+    <div class="conv-tab-section" id="panelSectionStories" style="display:none;flex:1;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;">
       <!-- rendered by _convRenderStories() when active -->
     </div>
 
