@@ -4894,6 +4894,14 @@
     height: 100%;
     transform-style: preserve-3d;
     transition: transform 0.62s cubic-bezier(0.4, 0.2, 0.2, 1);
+    transform: rotate(-0.8deg);
+  }
+  /* Mobile: no tilt */
+  @media (hover: none) {
+    .nf-row .concept-card .card-inner { transform: none !important; }
+  }
+  .nf-row .concept-card:hover .card-inner {
+    transform: rotate(0deg) translateY(-6px);
   }
   .nf-row .concept-card.open .card-inner {
     transform: rotateY(180deg);
@@ -4916,20 +4924,11 @@
     display: flex;
     flex-direction: column;
     box-shadow: 0 4px 12px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.04);
-    transition: border-color 0.2s, box-shadow 0.2s, transform 0.25s ease;
-    transform: rotate(-0.8deg);
-  }
-  /* Mobile: no tilt — prevents touch from misreading scroll as card-tap */
-  @media (hover: none) {
-    .nf-row .concept-card .card-front { transform: none !important; }
+    transition: border-color 0.2s, box-shadow 0.2s;
   }
   .nf-row .concept-card:hover .card-front {
     border-color: rgba(255,255,255,0.13);
     box-shadow: 0 6px 16px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.06);
-    transform: rotate(0deg) translateY(-6px);
-  }
-  .nf-row .concept-card.open .card-front {
-    transform: rotate(0deg);
   }
   .nf-row .concept-card.editors-pick .card-front {
     border-color: rgba(232,213,163,0.4);
@@ -4974,7 +4973,9 @@
     flex-shrink: 0;
   }
   .nf-row .card-flip-hint-dot.pulse {
-    animation: hintDotBreathe 2s ease-in-out infinite;
+    /* pulse removed — was running simultaneously on every unvisited card, causing scroll lag */
+    background: var(--accent);
+    opacity: 0.7;
   }
   @keyframes hintDotBreathe {
     0%, 100% { opacity: 0.35; transform: scale(1); box-shadow: 0 0 0 0 rgba(232,213,163,0); }
@@ -5184,7 +5185,8 @@
     flex-shrink: 0;
   }
   .ep-cat-column .card-flip-hint-dot.pulse {
-    animation: hintDotBreathe 2s ease-in-out infinite;
+    background: var(--accent);
+    opacity: 0.7;
   }
 
   /* BACK FACE */
@@ -9651,6 +9653,11 @@ function spSetSort(sort, btn) {
 function _spReinjectScanTiles(grid) {
   // Remove any stale tiles first
   grid.querySelectorAll('.sc-tile').forEach(t => t.remove());
+  // Remove any previous delegation listener
+  if (grid._scanDelegate) {
+    grid.removeEventListener('click', grid._scanDelegate, true);
+    grid._scanDelegate = null;
+  }
   grid.querySelectorAll('.nf-row').forEach(row => {
     const rowId = row.id.replace('nf-drag-', '');
     const catConcepts = CONCEPTS.filter(c => c.category === rowId && !c.duplicate_of);
@@ -9662,11 +9669,19 @@ function _spReinjectScanTiles(grid) {
       tile.dataset.id = c.id;
       tile.style.setProperty('--cat-color', color);
       tile.innerHTML = `<div class="sc-tile-term">${_spEsc(c.term)}</div><div class="sc-tile-hook">${_spEsc(c.hook)}</div>`;
-      tile.addEventListener('click', (e) => { e.stopPropagation(); _spScanTileClick(c.id, e.currentTarget); });
       frag.appendChild(tile);
     });
     row.appendChild(frag);
   });
+  // Single delegated click listener on the grid
+  grid._scanDelegate = function(e) {
+    const tile = e.target.closest('.sc-tile');
+    if (!tile) return;
+    e.stopPropagation();
+    const id = parseInt(tile.dataset.id, 10);
+    if (id) _spScanTileClick(id, tile);
+  };
+  grid.addEventListener('click', grid._scanDelegate, true);
 }
 
 function spToggleScan(btn) {
@@ -9680,6 +9695,10 @@ function spToggleScan(btn) {
     _spReinjectScanTiles(grid);
   } else {
     grid.querySelectorAll('.sc-tile').forEach(t => t.remove());
+    if (grid._scanDelegate) {
+      grid.removeEventListener('click', grid._scanDelegate, true);
+      grid._scanDelegate = null;
+    }
     grid.querySelectorAll('.nf-row').forEach(updateArrowVisibility);
   }
 }
@@ -9742,14 +9761,18 @@ function _spScanPreview(id, anchorEl) {
   card.classList.remove('sp-preview-visible');
   requestAnimationFrame(() => requestAnimationFrame(() => {
     card.classList.add('sp-preview-visible');
+    // Remove any previous outside-click listener
+    if (card._dismissFn) {
+      document.removeEventListener('click', card._dismissFn, true);
+      card._dismissFn = null;
+    }
     // Dismiss on next outside click (not on the card itself)
-    const _dismissOutside = (e) => {
+    card._dismissFn = (e) => {
       if (!card.contains(e.target)) {
         spDismissPreview();
-        document.removeEventListener('click', _dismissOutside, true);
       }
     };
-    setTimeout(() => document.addEventListener('click', _dismissOutside, true), 80);
+    setTimeout(() => document.addEventListener('click', card._dismissFn, true), 80);
   }));
 }
 
@@ -10125,13 +10148,10 @@ function _spSelectConcept(id) {
   if (!concept) return;
   _spHideDropdown();
   spDismissPreview();
-
-  if (!_csConcept) {
-    _csCat = concept.category;
-    _csCtx = 'friend';
-    _renderCSShell(concept);
-    _wireCSEvents();
-  }
+  _csCat = concept.category;
+  _csCtx = _csCtx || 'friend';
+  _renderCSShell(concept);
+  _wireCSEvents();
   _csLoadNewConcept(concept);
   _csOpenPanel();
   _loadAI(concept, _csCtx, true);
@@ -10205,6 +10225,10 @@ function _spPreviewCard(id, anchorEl) {
 function spDismissPreview() {
   const card = document.getElementById('spPreviewCard');
   if (!card) return;
+  if (card._dismissFn) {
+    document.removeEventListener('click', card._dismissFn, true);
+    card._dismissFn = null;
+  }
   card.classList.remove('sp-preview-visible');
   setTimeout(() => { card.style.display = 'none'; }, 260);
 }
@@ -11726,7 +11750,7 @@ function _csTypewriter(el, rawText, opts) {
 // Pre-written stories for the 4 locked scenarios.
 // concept_ids: array of [id, id, id] matching pill drop order.
 // story: raw text with **bold** and [[LABEL:Term]] markers.
-const SP_STORY_SEEDS = {
+var SP_STORY_SEEDS = {
   friend: {
     concept_ids: [332, 402, 394],
     eyebrow: 'A SHORT STORY — with a friend',
