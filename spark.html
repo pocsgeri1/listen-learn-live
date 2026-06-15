@@ -921,10 +921,10 @@
     background: rgba(0,0,0,0);
     z-index: 200;
     pointer-events: none;
-    transition: background 0.25s ease;
+    transition: background 0.2s ease;
   }
   .ep-drawer-backdrop.open {
-    background: rgba(0,0,0,0.92);
+    background: rgba(0,0,0,0.82);
     pointer-events: all;
   }
   .ep-drawer {
@@ -938,8 +938,8 @@
     display: flex;
     flex-direction: column;
     transform: translateY(100%);
-    transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1);
-    overflow: hidden;
+    transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+    will-change: transform;
   }
   .ep-drawer.open {
     transform: translateY(0);
@@ -954,6 +954,7 @@
     justify-content: flex-end;
     padding: 1.4rem 2rem 1.1rem;
     overflow: hidden;
+    border-radius: 16px 16px 0 0;
     background: var(--surface2);
   }
 
@@ -1200,89 +1201,50 @@
   /* Only the active category renders. Desktop = 4-up grid of fixed-size
      280x370 cards (matches Library / preview-zone sizing). Mobile = single
      vertical column of the same card size. */
-  /* Drawer category columns — always in flow, hidden via opacity/visibility.
-     display:none prevents CSS keyframe animations from running at all. */
+  /* Drawer category columns — display:none default, JS sets display then triggers animation via rAF */
   .ep-cat-column {
-    display: grid;
+    display: none;
     grid-template-columns: repeat(4, 280px);
     gap: 18px;
     width: 100%;
     max-width: 1240px;
     justify-content: center;
     margin: 0 auto;
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    /* Collapsed state: take no vertical space */
-    max-height: 0;
-    overflow: hidden;
   }
   .ep-cat-column.visible {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-    position: relative;
-    top: auto; left: auto; right: auto;
-    max-height: none;
-    overflow: visible;
-    animation: drawerCatSlideIn 0.28s cubic-bezier(0.22, 0.61, 0.36, 1) both;
-  }
-  @keyframes drawerCatSlideIn {
-    from { opacity: 0; transform: translateX(-28px); }
-    to   { opacity: 1; transform: translateX(0); }
-  }
-  @keyframes drawerCatSlideOut {
-    from { opacity: 1; transform: translateX(0); }
-    to   { opacity: 0; transform: translateX(28px); }
-  }
-  .ep-cat-column.sliding-out {
     display: grid;
-    grid-template-columns: repeat(4, 280px);
-    gap: 18px;
-    width: 100%;
-    max-width: 1240px;
-    justify-content: center;
-    margin: 0 auto;
-    animation: drawerCatSlideOut 0.16s cubic-bezier(0.55, 0, 1, 0.45) both;
-    pointer-events: none;
-    position: relative;
-    opacity: 0;
-    visibility: hidden;
-    max-height: 0;
-    overflow: hidden;
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .ep-cat-column.visible { animation: none; }
-    .ep-cat-column.sliding-out { animation: none; }
   }
   .ep-cat-column.visible .ep-cat-column-header {
     grid-column: 1 / -1;
   }
-  @keyframes epColSwoosh {
-    from { opacity: 0; transform: translateY(18px); }
+  /* Animation fires only when .animating is added (one rAF after display:grid) */
+  .ep-cat-column.animating {
+    animation: drawerCatFadeIn 0.18s ease both;
+  }
+  .ep-cat-column.out-anim {
+    animation: drawerCatFadeOut 0.12s ease both;
+  }
+  @keyframes drawerCatFadeIn {
+    from { opacity: 0; transform: translateY(8px); }
     to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes drawerCatFadeOut {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ep-cat-column.animating { animation: none; }
+    .ep-cat-column.out-anim { animation: none; }
   }
   /* Tablet: 2-up */
   @media (max-width: 1240px) {
     .ep-cat-column.visible {
       grid-template-columns: repeat(2, 280px);
     }
-    .ep-cat-column.sliding-out {
-      grid-template-columns: repeat(2, 280px);
-    }
   }
-  /* Mobile: single vertical column, same card size */
+  /* Mobile: single vertical column */
   @media (max-width: 700px) {
     .ep-cat-column.visible {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 16px;
-      max-width: 520px;
-    }
-    .ep-cat-column.sliding-out {
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -6870,7 +6832,7 @@
     <div class="ep-drawer-handle"></div>
     <span class="ep-drawer-count-badge" id="epDrawerCountBadge"></span>
     <button class="ep-drawer-back-cs" id="epDrawerBackCS" style="display:none" onclick="closeEpisodeDrawer();openCSFromNav()">← Prompts</button>
-    <button class="ep-drawer-close" onclick="closeEpisodeDrawer()">✕</button>
+    <button class="ep-drawer-close" onclick="_playCloseSFX();closeEpisodeDrawer()">✕</button>
     <div class="ep-drawer-hero-content">
       <div class="ep-drawer-title" id="epDrawerTitle"></div>
       <div class="ep-drawer-subtitle" id="epDrawerSubtitle"></div>
@@ -6891,7 +6853,7 @@
     <div class="ep-drawer-hero-bg" id="themeDrawerHeroBg" style="display:none"></div>
     <div class="ep-drawer-handle"></div>
     <span class="ep-drawer-count-badge" id="themeDrawerCountBadge"></span>
-    <button class="ep-drawer-close" onclick="closeThemeDrawer()">✕</button>
+    <button class="ep-drawer-close" onclick="_playCloseSFX();closeThemeDrawer()">✕</button>
     <div class="ep-drawer-hero-content">
       <div class="ep-drawer-title" id="themeDrawerTitle"></div>
       <div class="ep-drawer-subtitle" id="themeDrawerSubtitle"></div>
@@ -8450,7 +8412,7 @@ function _renderDrawerContent(col, collectionId) {
         const color = CAT_COLOR[catKey] || '#e8d5a3';
         return `<button class="ep-drawer-cat-pill${i === 0 ? ' active' : ''}" data-cat="${catKey}" style="--col-color:${color}" onclick="filterDrawerCat('${catKey}')">${catInfo.name} <span style="opacity:0.5;font-size:0.55rem">${catGroups[catKey].length}</span></button>`;
       }).join('');
-      filterDrawerCat(sortedCatKeys[0]);
+      filterDrawerCat(sortedCatKeys[0], true);
     } else {
       filterRow.style.display = 'none';
       document.querySelectorAll('.ep-cat-column').forEach(c => c.classList.add('visible'));
@@ -8463,36 +8425,23 @@ function _renderDrawerContent(col, collectionId) {
   );
 }
 
-function filterDrawerCat(catKey) {
+function filterDrawerCat(catKey, silent) {
   document.querySelectorAll('.ep-drawer-cat-pill').forEach(p => {
     p.classList.toggle('active', p.dataset.cat === catKey);
   });
   const body = document.querySelector('#epDrawer .ep-drawer-body');
-  const currentVisible = document.querySelector('#epDrawer .ep-cat-column.visible');
 
-  // Slide current column out to the right
-  if (currentVisible && currentVisible.dataset.cat !== catKey) {
-    currentVisible.classList.remove('visible');
-    currentVisible.classList.add('sliding-out');
-    setTimeout(() => { currentVisible.classList.remove('sliding-out'); }, 200);
-  }
+  document.querySelectorAll('#epDrawer .ep-cat-column').forEach(col => {
+    const match = col.dataset.cat === catKey;
+    col.classList.remove('visible', 'animating', 'out-anim');
+    if (match) {
+      col.classList.add('visible');
+      if (!silent) requestAnimationFrame(() => { col.classList.add('animating'); });
+    }
+  });
 
-  // Play deep woosh SFX
-  _playSwapSFX();
-
-  // After slide-out, bring new column in from left
-  setTimeout(function() {
-    document.querySelectorAll('#epDrawer .ep-cat-column').forEach(col => {
-      const match = col.dataset.cat === catKey;
-      if (match && !col.classList.contains('visible')) {
-        col.classList.remove('sliding-out');
-        col.classList.add('visible');
-      } else if (!match) {
-        col.classList.remove('visible', 'sliding-out');
-      }
-    });
-    if (body) body.scrollTop = 0;
-  }, 160);
+  if (body) body.scrollTop = 0;
+  if (!silent) _playSwapSFX();
 }
 
 function initMagneticDrawerPills() {
@@ -8994,7 +8943,7 @@ function _renderThemeDrawerContent(col, id) {
       const color = CAT_COLOR[catKey] || '#e8d5a3';
       return `<button class="ep-drawer-cat-pill${i === 0 ? ' active' : ''}" data-cat="${catKey}" style="--col-color:${color}" onclick="filterThemeDrawerCat('${catKey}')">${catInfo.name} <span style="opacity:0.5;font-size:0.55rem">${catGroups[catKey].length}</span></button>`;
     }).join('');
-    filterThemeDrawerCat(sortedCatKeys[0]);
+    filterThemeDrawerCat(sortedCatKeys[0], true);
   } else {
     filterRow.style.display = 'none';
     document.querySelectorAll('#themeDrawerGrid .ep-cat-column').forEach(c => c.classList.add('visible'));
@@ -9006,33 +8955,23 @@ function _renderThemeDrawerContent(col, id) {
   );
 }
 
-function filterThemeDrawerCat(catKey) {
+function filterThemeDrawerCat(catKey, silent) {
   document.querySelectorAll('#themeDrawerCatFilter .ep-drawer-cat-pill').forEach(p => {
     p.classList.toggle('active', p.dataset.cat === catKey);
   });
   const body = document.querySelector('#themeDrawer .ep-drawer-body');
-  const currentVisible = document.querySelector('#themeDrawerGrid .ep-cat-column.visible');
 
-  if (currentVisible && currentVisible.dataset.cat !== catKey) {
-    currentVisible.classList.remove('visible');
-    currentVisible.classList.add('sliding-out');
-    setTimeout(() => { currentVisible.classList.remove('sliding-out'); }, 200);
-  }
+  document.querySelectorAll('#themeDrawerGrid .ep-cat-column').forEach(col => {
+    const match = col.dataset.cat === catKey;
+    col.classList.remove('visible', 'animating', 'out-anim');
+    if (match) {
+      col.classList.add('visible');
+      if (!silent) requestAnimationFrame(() => { col.classList.add('animating'); });
+    }
+  });
 
-  _playSwapSFX();
-
-  setTimeout(function() {
-    document.querySelectorAll('#themeDrawerGrid .ep-cat-column').forEach(col => {
-      const match = col.dataset.cat === catKey;
-      if (match && !col.classList.contains('visible')) {
-        col.classList.remove('sliding-out');
-        col.classList.add('visible');
-      } else if (!match) {
-        col.classList.remove('visible', 'sliding-out');
-      }
-    });
-    if (body) body.scrollTop = 0;
-  }, 160);
+  if (body) body.scrollTop = 0;
+  if (!silent) _playSwapSFX();
 }
 
 function closeThemeDrawer() {
@@ -12906,22 +12845,16 @@ function _setEpisodeHeroBg(col, sortedCats) {
   const seed = _seedHash(String(col.id || col.title || ''));
   const rnd = (n, salt) => ((seed * (salt + 1) * 9301 + 49297) % 233280) / 233280 * n;
 
-  // 3 soft blobs, each tinted with one of the top category colors
-  const blobs = colors.map((color, i) => {
-    const cx = 15 + rnd(70, i * 3 + 1);
-    const cy = 15 + rnd(70, i * 3 + 2);
-    const r  = 35 + rnd(35, i * 3 + 3);
-    return `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${color}" opacity="0.5"/>`;
-  }).join('');
+  // Pure CSS radial gradients — same feel as blobs but zero SVG filter cost
+  const pct = (i) => Math.round(20 + rnd(60, i));
+  const bg = [
+    `radial-gradient(ellipse at ${pct(1)}% ${pct(2)}%, ${colors[0]}55 0%, transparent 65%)`,
+    `radial-gradient(ellipse at ${pct(3)}% ${pct(4)}%, ${colors[1]}44 0%, transparent 60%)`,
+    `radial-gradient(ellipse at ${pct(5)}% ${pct(6)}%, ${colors[2]}33 0%, transparent 55%)`,
+    `linear-gradient(135deg, #0d0d0d 0%, #141414 100%)`
+  ].join(', ');
 
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 60" preserveAspectRatio="xMidYMid slice">
-    <defs><filter id="b"><feGaussianBlur stdDeviation="14"/></filter></defs>
-    <rect width="100" height="60" fill="#0d0d0d"/>
-    <g filter="url(#b)">${blobs}</g>
-  </svg>`;
-
-  const encoded = 'data:image/svg+xml,' + encodeURIComponent(svg);
-  heroBg.style.backgroundImage = `url("${encoded}")`;
+  heroBg.style.backgroundImage = bg;
   heroBg.style.display = '';
 }
 
@@ -14115,6 +14048,24 @@ function _playSwapSFX() {
     g.gain.setValueAtTime(0.05, now);
     g.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
     osc.start(now); osc.stop(now + 0.1);
+  } catch(e) {}
+}
+
+// Drawer close SFX — soft descending tap, lighter than the swap whoosh
+function _playCloseSFX() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  try {
+    const ctx = _getSfxCtx();
+    const now = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const g = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(260, now);
+    osc.frequency.exponentialRampToValueAtTime(130, now + 0.12);
+    osc.connect(g); g.connect(ctx.destination);
+    g.gain.setValueAtTime(0.045, now);
+    g.gain.exponentialRampToValueAtTime(0.001, now + 0.13);
+    osc.start(now); osc.stop(now + 0.14);
   } catch(e) {}
 }
 
