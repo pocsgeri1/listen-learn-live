@@ -4763,6 +4763,66 @@
   .card-front .people-pills { display: none; }
   .card-back .people-pills { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 0.75rem; }
 
+  /* ── SCAN MODE — collapsed term+hook only ── */
+  #netflixRows.scan-mode .nf-row {
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 0.5rem 2rem 1rem;
+  }
+  #netflixRows.scan-mode .nf-row .concept-card {
+    flex: 0 0 100%;
+    min-width: 0;
+    height: 64px !important;
+    overflow: hidden;
+    border-radius: 8px;
+    pointer-events: auto;
+  }
+  #netflixRows.scan-mode .nf-row .concept-card .card-inner {
+    transform: none !important;
+    transition: none !important;
+  }
+  #netflixRows.scan-mode .nf-row .concept-card .card-back { display: none !important; }
+  #netflixRows.scan-mode .nf-row .concept-card .card-front {
+    position: relative !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 12px !important;
+    padding: 0 16px 0 20px !important;
+    height: 64px !important;
+    transform: none !important;
+    box-shadow: none !important;
+    border-left: 3px solid var(--cat-color, var(--accent)) !important;
+    border-radius: 8px !important;
+  }
+  #netflixRows.scan-mode .nf-row .concept-card:hover .card-front {
+    transform: none !important;
+    border-color: var(--cat-color, var(--accent)) !important;
+  }
+  #netflixRows.scan-mode .nf-row .card-meta { display: none !important; }
+  #netflixRows.scan-mode .nf-row .card-term {
+    font-size: 0.88rem !important;
+    margin-bottom: 0 !important;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  #netflixRows.scan-mode .nf-row .card-hook {
+    font-size: 0.72rem !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+    min-width: 0;
+  }
+  #netflixRows.scan-mode .nf-row .card-flip-hint { display: none !important; }
+  /* Scan mode: suppress scroll arrows and fades — full row wraps */
+  #netflixRows.scan-mode .scroll-arrow,
+  #netflixRows.scan-mode .nf-fade-left,
+  #netflixRows.scan-mode .nf-fade-right { display: none !important; }
+  #netflixRows.scan-mode .nf-scroll-wrap { overflow: visible !important; }
+  /* Open CS on click in scan mode — keep pointer cursor */
+  #netflixRows.scan-mode .nf-row .concept-card { cursor: pointer; }
+
   /* ── FLIP CARDS — nf-row only ── */
   .nf-row { perspective: 1400px; }
 
@@ -6791,6 +6851,7 @@
       <button class="sp-sort-pill active" data-sort="latest" onclick="spSetSort('latest',this)">Latest</button>
       <button class="sp-sort-pill" data-sort="trending" onclick="spSetSort('trending',this)">Trending</button>
       <button class="sp-sort-pill" data-sort="picks" onclick="spSetSort('picks',this)">Editor's Picks</button>
+      <button class="sp-sort-pill sp-scan-pill" id="spScanToggle" onclick="spToggleScan(this)" title="Collapse cards to term + hook only">◫ Scan</button>
     </div>
     <div class="search-wrap">
       <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M10 10l3.5 3.5"/></svg>
@@ -7765,6 +7826,13 @@ let _currentOpenCardId = null;
 function toggleCard(id) {
   const el = document.getElementById('cc'+id);
   if (!el) return;
+  // In scan mode: open CS panel instead of flipping
+  const grid = document.getElementById('netflixRows');
+  if (grid && grid.classList.contains('scan-mode')) {
+    const c = CONCEPTS.find(x => x.id === id);
+    if (c) { openCS(c); }
+    return;
+  }
   const wasOpen = el.classList.contains('open');
 
   // Close previously open card (if different)
@@ -9536,7 +9604,16 @@ function spSetSort(sort, btn) {
   }
 }
 
-// Render a flat filtered list (not grouped by category) for trending/picks
+function spToggleScan(btn) {
+  const grid = document.getElementById('netflixRows');
+  if (!grid) return;
+  const isOn = grid.classList.toggle('scan-mode');
+  btn.textContent = isOn ? '⊞ Full' : '◫ Scan';
+  btn.classList.toggle('active', isOn);
+  // Arrows become irrelevant in scan mode — re-evaluate on exit
+  if (!isOn) document.querySelectorAll('.nf-row').forEach(updateArrowVisibility);
+}
+
 function _spRenderFilteredGrid(pool) {
   const container = document.getElementById('netflixRows');
   if (!container) return;
