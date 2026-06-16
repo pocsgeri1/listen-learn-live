@@ -1250,13 +1250,17 @@
     background: rgba(184,134,11,0.08);
   }
 
-  /* ── DRAWER SCAN TILES (2-col with category dividers) ─── */
+  /* ── DRAWER SCAN TILES (2-col centered) ─── */
   .ep-drawer-body.drawer-scan-mode .ep-drawer-grid { display: none; }
   .ep-drawer-scan-grid {
     display: none;
     flex-direction: column;
     gap: 0;
-    padding: 0 0 2rem;
+    padding: 1rem 0 2rem;
+    max-width: 760px;
+    margin: 0 auto;
+    width: 100%;
+    align-self: center;
   }
   .ep-drawer-body.drawer-scan-mode .ep-drawer-scan-grid { display: flex; }
   .ep-drawer-scan-cat-divider {
@@ -1265,13 +1269,15 @@
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--cat-color, var(--accent));
-    padding: 14px 22px 6px;
+    padding: 16px 12px 8px;
     border-bottom: 1px solid var(--border);
+    margin-bottom: 2px;
   }
   .ep-drawer-scan-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
   }
+  @media (max-width: 600px) { .ep-drawer-scan-row { grid-template-columns: 1fr; } }
   .ep-drawer-scan-tile {
     display: flex;
     flex-direction: column;
@@ -1283,7 +1289,6 @@
     transition: background 0.14s;
     min-height: 62px;
   }
-  .ep-drawer-scan-tile:nth-child(even) { border-left: 2px solid var(--cat-color, var(--accent)); }
   .ep-drawer-scan-tile:hover { background: var(--surface2); }
   .ep-drawer-scan-tile-term {
     font-family: 'DM Sans', sans-serif;
@@ -1303,6 +1308,7 @@
 
   /* ── DRAWER ALL-CARDS VIEW ───────────────────────────────── */
   .ep-drawer-body.drawer-all-mode .ep-cat-column { display: none !important; }
+  .ep-drawer-body.drawer-all-mode .ep-drawer-cat-filter { pointer-events: none; opacity: 0.4; }
   .ep-drawer-all-grid {
     display: none;
     flex-direction: column;
@@ -1318,23 +1324,55 @@
     color: var(--cat-color, var(--accent));
     padding: 20px 0 10px;
     border-bottom: 1px solid var(--border);
-    margin-bottom: 12px;
+    margin-bottom: 14px;
     display: flex;
     align-items: baseline;
     gap: 8px;
+    scroll-margin-top: 12px;
   }
   .ep-drawer-all-cat-header span { color: var(--muted); font-size: 0.52rem; }
   .ep-drawer-all-cards-wrap {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 14px;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
     margin-bottom: 8px;
+    align-items: start;
   }
   .ep-drawer-all-cards-wrap .concept-card {
-    height: 300px;
     width: 100%;
+    height: 300px;
     min-width: 0;
+    perspective: 1400px;
   }
+  .ep-drawer-all-cards-wrap .concept-card .card-inner {
+    position: relative; width: 100%; height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.55s cubic-bezier(0.4,0.2,0.2,1);
+  }
+  .ep-drawer-all-cards-wrap .concept-card.open .card-inner { transform: rotateY(180deg); }
+  .ep-drawer-all-cards-wrap .concept-card .card-front,
+  .ep-drawer-all-cards-wrap .concept-card .card-back {
+    position: absolute; inset: 0;
+    backface-visibility: hidden; -webkit-backface-visibility: hidden;
+    border-radius: 14px; overflow: hidden;
+  }
+  .ep-drawer-all-cards-wrap .concept-card .card-front {
+    background: color-mix(in srgb, var(--cat-color, var(--surface)) 11%, var(--surface));
+    border: 1px solid var(--border);
+    padding: 18px 18px 14px;
+    display: flex; flex-direction: column;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.35);
+  }
+  .ep-drawer-all-cards-wrap .concept-card .card-back {
+    transform: rotateY(180deg);
+    background: var(--surface2);
+    border: 1px solid color-mix(in srgb, var(--cat-color, var(--border)) 40%, var(--border));
+    padding: 14px 16px; overflow-y: auto;
+    display: flex; flex-direction: column; gap: 6px; font-size: 0.78rem;
+  }
+  @media (max-width: 700px) { .ep-drawer-all-cards-wrap { grid-template-columns: 1fr; } }
+
+  /* Only the active category renders. Desktop = 4-up grid of fixed-size
      280x370 cards (matches Library / preview-zone sizing). Mobile = single
      vertical column of the same card size. */
   /* Drawer category columns — display:none default, JS sets display then triggers animation via rAF */
@@ -4667,6 +4705,27 @@
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 8px;
+    /* Smooth expand/collapse when Mastered filter activates */
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-width: 0;
+    transition: max-height 0.28s cubic-bezier(0.4,0,0.2,1),
+                opacity 0.22s ease,
+                margin-bottom 0.28s ease,
+                padding 0.22s ease,
+                border-width 0.22s ease;
+  }
+  .progress-bar.pb-visible {
+    max-height: 80px;
+    opacity: 1;
+    margin-bottom: 1.5rem;
+    padding-top: 14px;
+    padding-bottom: 14px;
+    border-width: 1px;
   }
 
   .progress-label {
@@ -5428,7 +5487,8 @@
     color: var(--muted2);
   }
   .btn-master:hover { border-color: var(--green); color: var(--green); }
-  .concept-card.mastered .btn-master { border-color: var(--green); color: var(--green); background: rgba(122,175,138,0.1); }
+  .concept-card.mastered .btn-master,
+  .btn-master.mastered-active { border-color: var(--green); color: var(--green); background: rgba(122,175,138,0.1); }
 
   .btn-share {
     padding: 7px 12px;
@@ -7055,7 +7115,7 @@
   </div>
 
   <!-- PROGRESS -->
-  <div class="progress-bar" style="display:none">
+  <div class="progress-bar" id="progressBar">
   <div class="progress-label">Progress</div>
   <div class="progress-track">
     <div class="progress-fill" id="progressFill" style="width:0%"></div>
@@ -7880,8 +7940,8 @@ function buildGrid() {
                   </div>
                   <div class="card-back">
                     <div class="card-actions card-actions-top">
-                      <!-- v1.71: vault/master hidden — <button class="btn-master" ...> preserved below -->
                       <button class="btn-share" onclick="event.stopPropagation();shareCard(event,${c.id})">↑ Share</button>
+                      <button class="btn-master${mastered.has(c.id)?' mastered-active':''}" onclick="event.stopPropagation();toggleMaster(event,${c.id})" id="btnMaster${c.id}">${mastered.has(c.id)?'✓ Saved':'⊕ Save'}</button>
                       <button class="btn-chat${_csIsSaved(c.id)?' saved':''}" onclick="event.stopPropagation();toggleChatSave(${c.id})" id="btnChat${c.id}" title="Save to Conversations">💬 CHAT</button>
                       ${(() => {
                         if (c.collection_id == null || typeof c.timestamp !== 'number') return '';
@@ -8092,10 +8152,18 @@ function toggleMaster(e, id) {
   const el = document.getElementById('cc' + id);
   if (el) {
     el.classList.toggle('mastered', mastered.has(id));
+    // Update the inline Save button (new label + active class)
     const btn = el.querySelector('.btn-master');
-    if (btn) btn.textContent = mastered.has(id) ? '✓ VAULT' : '⊕ VAULT';
+    if (btn) {
+      btn.textContent = mastered.has(id) ? '✓ Saved' : '⊕ Save';
+      btn.classList.toggle('mastered-active', mastered.has(id));
+    }
     const badge = el.querySelector('.mastered-badge');
     if (badge) badge.style.display = mastered.has(id) ? 'block' : 'none';
+  }
+  // If Mastered filter is active, refresh the grid after a short delay
+  if (typeof spActiveSort !== 'undefined' && spActiveSort === 'mastered') {
+    setTimeout(() => spSetSort('mastered', document.querySelector('.sp-sort-pill[data-sort="mastered"]')), 120);
   }
 }
 
@@ -8656,8 +8724,8 @@ function _renderDrawerContent(col, collectionId) {
             </div>
             <div class="card-back">
               <div class="card-actions card-actions-top">
-                <!-- v1.71: vault/master hidden -->
                 <button class="btn-share" onclick="event.stopPropagation();shareCard(event,${c.id})">↑ Share</button>
+                <button class="btn-master${mastered.has(c.id)?' mastered-active':''}" onclick="event.stopPropagation();toggleMaster(event,${c.id})" id="btnMasterEp${c.id}">${mastered.has(c.id)?'✓ Saved':'⊕ Save'}</button>
                 <button class="btn-chat${_csIsSaved(c.id)?' saved':''}" onclick="event.stopPropagation();toggleChatSave(${c.id})" id="btnChatEp${c.id}" title="Save to Conversations">💬 CHAT</button>
                 ${(() => {
                   if (typeof c.timestamp !== 'number' || !col || !col.episode_url) return '';
@@ -9823,9 +9891,12 @@ function spSetSort(sort, btn) {
   document.querySelectorAll('.sp-sort-pill').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
 
-  // Show/hide mastered progress bar
+  // Show/hide mastered progress bar — animated via .pb-visible class
   const pb = document.querySelector('.progress-bar');
-  if (pb) pb.style.display = sort === 'mastered' ? '' : 'none';
+  if (pb) {
+    pb.style.display = 'flex'; // always rendered, CSS handles visibility
+    pb.classList.toggle('pb-visible', sort === 'mastered');
+  }
 
   // Apply sort/filter to grid
   const container = document.getElementById('netflixRows');
@@ -10100,6 +10171,13 @@ function _spScanPreview(id, anchorEl) {
   const card = document.getElementById('spPreviewCard');
   if (!card) return;
 
+  // Synchronously remove any existing dismiss listener BEFORE async work —
+  // prevents the triggering click propagating to a stale listener
+  if (card._dismissFn) {
+    document.removeEventListener('click', card._dismissFn, true);
+    card._dismissFn = null;
+  }
+
   const color = CAT_COLOR[concept.category] || '#e8d5a3';
   const catName = (CATEGORIES.find(x => x.id === concept.category) || {}).name || concept.category;
 
@@ -10143,20 +10221,11 @@ function _spScanPreview(id, anchorEl) {
   card.classList.remove('sp-preview-visible');
   requestAnimationFrame(() => requestAnimationFrame(() => {
     card.classList.add('sp-preview-visible');
-    // Remove any previous outside-click listener
-    if (card._dismissFn) {
-      document.removeEventListener('click', card._dismissFn, true);
-      card._dismissFn = null;
-    }
-    // Stamp the open time so we can ignore the triggering click
+    // Attach dismiss listener — 150ms guard prevents same-click dismissal
     card._openedAt = Date.now();
-    // Dismiss on next outside click (not on the card itself)
     card._dismissFn = (e) => {
-      // Ignore clicks that happened within 200ms of opening (same event still propagating)
-      if (Date.now() - (card._openedAt || 0) < 200) return;
-      if (!card.contains(e.target)) {
-        spDismissPreview();
-      }
+      if (Date.now() - (card._openedAt || 0) < 150) return;
+      if (!card.contains(e.target)) spDismissPreview();
     };
     document.addEventListener('click', card._dismissFn, true);
   }));
