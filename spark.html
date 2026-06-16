@@ -289,14 +289,16 @@
   [data-theme="light"] .cat-card.active {
     background: rgba(0,0,0,0.06);
   }
-  /* "All" pill text in light mode — accent color has enough contrast */
+  /* "All" pill text in light mode — explicit dark-gold to beat color-mix rule */
   [data-theme="light"] .cat-card[data-cat="all"] {
-    color: var(--accent2);
+    color: #7a5c00 !important;
+    border-color: rgba(122,92,0,0.4) !important;
+    background: rgba(184,134,11,0.1) !important;
   }
   [data-theme="light"] .cat-card[data-cat="all"].active {
-    color: var(--accent2);
-    background: rgba(184,134,11,0.12);
-    border-color: var(--accent2);
+    color: #5a4200 !important;
+    border-color: #7a5c00 !important;
+    background: rgba(184,134,11,0.18) !important;
   }
 
   /* NF flip card front shadow in light */
@@ -1206,69 +1208,86 @@
     margin-left: 2px;
   }
 
-  /* ── DRAWER SCAN MODE ────────────────────────────────────── */
+  /* ── DRAWER VIEW TOGGLE (3 icon buttons) ───────────────── */
   .ep-drawer-sort-row {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
-    padding: 0.65rem 2rem 0.55rem;
+    gap: 4px;
+    padding: 0.55rem 2rem 0.5rem;
     background: var(--surface);
     border-bottom: 1px solid var(--border);
     flex-shrink: 0;
   }
   @media (max-width: 700px) {
-    .ep-drawer-sort-row { padding: 0.55rem 1.25rem 0.45rem; }
+    .ep-drawer-sort-row { padding: 0.5rem 1.25rem 0.45rem; }
   }
-  .ep-drawer-scan-pill {
+  .ep-drawer-view-btn {
     font-family: 'DM Mono', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
+    font-size: 1rem;
+    line-height: 1;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background: transparent;
-    border: 0.5px solid var(--border);
-    border-radius: 999px;
-    padding: 4px 12px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
     color: var(--muted2);
     cursor: pointer;
-    transition: border-color 0.18s, color 0.18s, background 0.18s;
-    white-space: nowrap;
+    transition: color 0.15s, border-color 0.15s, background 0.15s;
   }
-  .ep-drawer-scan-pill:hover { border-color: var(--text); color: var(--text); }
-  .ep-drawer-scan-pill.active {
-    border-color: var(--accent);
+  .ep-drawer-view-btn:hover { color: var(--text); border-color: var(--border-hover); }
+  .ep-drawer-view-btn.active {
     color: var(--accent);
-    background: rgba(232,213,163,0.07);
+    border-color: var(--accent);
+    background: rgba(232,213,163,0.08);
   }
   [data-theme="light"] .ep-drawer-sort-row { background: var(--surface); }
-  [data-theme="light"] .ep-drawer-scan-pill.active {
-    border-color: var(--accent2);
+  [data-theme="light"] .ep-drawer-view-btn.active {
     color: var(--accent2);
-    background: rgba(184,134,11,0.07);
+    border-color: var(--accent2);
+    background: rgba(184,134,11,0.08);
   }
-  /* Drawer scan tiles — same design as library .sc-tile */
+
+  /* ── DRAWER SCAN TILES (2-col with category dividers) ─── */
   .ep-drawer-body.drawer-scan-mode .ep-drawer-grid { display: none; }
   .ep-drawer-scan-grid {
     display: none;
     flex-direction: column;
     gap: 0;
-    padding: 0;
+    padding: 0 0 2rem;
   }
   .ep-drawer-body.drawer-scan-mode .ep-drawer-scan-grid { display: flex; }
+  .ep-drawer-scan-cat-divider {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--cat-color, var(--accent));
+    padding: 14px 22px 6px;
+    border-bottom: 1px solid var(--border);
+  }
+  .ep-drawer-scan-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
   .ep-drawer-scan-tile {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 12px 22px 11px 20px;
+    padding: 11px 16px 10px 14px;
     border-bottom: 1px solid var(--border);
-    border-left: 2.5px solid var(--cat-color, var(--accent));
+    border-left: 2px solid var(--cat-color, var(--accent));
     cursor: pointer;
     transition: background 0.14s;
-    min-height: 66px;
+    min-height: 62px;
   }
+  .ep-drawer-scan-tile:nth-child(even) { border-left: 2px solid var(--cat-color, var(--accent)); }
   .ep-drawer-scan-tile:hover { background: var(--surface2); }
   .ep-drawer-scan-tile-term {
     font-family: 'DM Sans', sans-serif;
-    font-size: 0.84rem;
+    font-size: 0.8rem;
     font-weight: 500;
     color: var(--text);
     margin-bottom: 3px;
@@ -1276,12 +1295,46 @@
   }
   .ep-drawer-scan-tile-hook {
     font-family: 'DM Sans', sans-serif;
-    font-size: 0.72rem;
+    font-size: 0.68rem;
     color: var(--muted2);
     line-height: 1.4;
   }
-  [data-theme="light"] .ep-drawer-scan-tile { border-left-color: var(--cat-color, var(--accent)); }
   [data-theme="light"] .ep-drawer-scan-tile:hover { background: var(--surface2); }
+
+  /* ── DRAWER ALL-CARDS VIEW ───────────────────────────────── */
+  .ep-drawer-body.drawer-all-mode .ep-cat-column { display: none !important; }
+  .ep-drawer-all-grid {
+    display: none;
+    flex-direction: column;
+    gap: 0;
+    padding: 0 1.5rem 2rem;
+  }
+  .ep-drawer-body.drawer-all-mode .ep-drawer-all-grid { display: flex; }
+  .ep-drawer-all-cat-header {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--cat-color, var(--accent));
+    padding: 20px 0 10px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .ep-drawer-all-cat-header span { color: var(--muted); font-size: 0.52rem; }
+  .ep-drawer-all-cards-wrap {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 14px;
+    margin-bottom: 8px;
+  }
+  .ep-drawer-all-cards-wrap .concept-card {
+    height: 300px;
+    width: 100%;
+    min-width: 0;
+  }
      280x370 cards (matches Library / preview-zone sizing). Mobile = single
      vertical column of the same card size. */
   /* Drawer category columns — display:none default, JS sets display then triggers animation via rAF */
@@ -4758,8 +4811,8 @@
 
   /* ── CONCEPT CARD — shared base ── */
   .concept-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
+    background: transparent; /* never paint behind 3D flip faces — each face has its own bg */
+    border: none; /* faces carry their own borders */
     border-radius: 12px;
     cursor: pointer;
     position: relative;
@@ -6987,9 +7040,12 @@
     <div class="app-title">The <em>Library</em></div>
     <!-- Sort pills — spark.html v1.76 -->
     <div class="sp-sort-pills" id="spSortPills">
-      <button class="sp-sort-pill active" data-sort="latest" onclick="spSetSort('latest',this)">↻ Latest</button>
-      <button class="sp-sort-pill" data-sort="picks" onclick="spSetSort('picks',this)">★ Editor's Picks</button>
-      <button class="sp-sort-pill sp-scan-pill" id="spScanToggle" onclick="spToggleScan(this)" title="Collapse cards to term + hook only">◫ Scan</button>
+      <div class="sp-sort-group">
+        <button class="sp-sort-pill active" data-sort="latest" onclick="spSetSort('latest',this)">↻ Latest</button>
+        <button class="sp-sort-pill" data-sort="picks" onclick="spSetSort('picks',this)">★ Picks</button>
+        <button class="sp-sort-pill" data-sort="mastered" onclick="spSetSort('mastered',this)">◈ Mastered</button>
+      </div>
+      <button class="sp-scan-toggle" id="spScanToggle" onclick="spToggleScan(this)" title="Toggle scan / full view">◫</button>
     </div>
     <div class="search-wrap">
       <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M10 10l3.5 3.5"/></svg>
@@ -7040,10 +7096,13 @@
   <div class="ep-drawer-mix" id="epDrawerMix"></div>
   <div class="ep-drawer-cat-filter" id="epDrawerCatFilter"></div>
   <div class="ep-drawer-sort-row" id="epDrawerSortRow" style="display:none">
-    <button class="ep-drawer-scan-pill" id="epDrawerScanPill" onclick="toggleDrawerScan('ep')">◫ Scan</button>
+    <button class="ep-drawer-view-btn active" id="epViewBtnFlip" data-view="flip" onclick="setDrawerView('ep','flip',this)" title="Card view">⊟</button>
+    <button class="ep-drawer-view-btn" id="epViewBtnScan" data-view="scan" onclick="setDrawerView('ep','scan',this)" title="Scan view">◫</button>
+    <button class="ep-drawer-view-btn" id="epViewBtnAll" data-view="all" onclick="setDrawerView('ep','all',this)" title="All cards">⊞</button>
   </div>
   <div class="ep-drawer-body">
     <div class="ep-drawer-scan-grid" id="epDrawerScanGrid"></div>
+    <div class="ep-drawer-all-grid" id="epDrawerAllGrid"></div>
     <div class="ep-drawer-grid" id="epDrawerGrid"></div>
   </div>
 </div>
@@ -7065,10 +7124,13 @@
   <div class="ep-drawer-mix" id="themeDrawerMix"></div>
   <div class="ep-drawer-cat-filter" id="themeDrawerCatFilter"></div>
   <div class="ep-drawer-sort-row" id="themeDrawerSortRow" style="display:none">
-    <button class="ep-drawer-scan-pill" id="themeDrawerScanPill" onclick="toggleDrawerScan('theme')">◫ Scan</button>
+    <button class="ep-drawer-view-btn active" id="themeViewBtnFlip" data-view="flip" onclick="setDrawerView('theme','flip',this)" title="Card view">⊟</button>
+    <button class="ep-drawer-view-btn" id="themeViewBtnScan" data-view="scan" onclick="setDrawerView('theme','scan',this)" title="Scan view">◫</button>
+    <button class="ep-drawer-view-btn" id="themeViewBtnAll" data-view="all" onclick="setDrawerView('theme','all',this)" title="All cards">⊞</button>
   </div>
   <div class="ep-drawer-body">
     <div class="ep-drawer-scan-grid" id="themeDrawerScanGrid"></div>
+    <div class="ep-drawer-all-grid" id="themeDrawerAllGrid"></div>
     <div class="ep-drawer-grid" id="themeDrawerGrid"></div>
   </div>
 </div>
@@ -7219,7 +7281,15 @@ function initMagneticPillsFor(gridSelector, pillSelector) {
   let _pillRaf = false;
   const grid = document.querySelector(gridSelector);
   if (!grid) return;
-  if (grid._magneticBound) return;
+  // Always re-bind: reset bound flag so re-rendered pills get listeners
+  if (grid._magneticBound) {
+    // Reset any stuck transforms on existing pills before re-binding
+    grid.querySelectorAll(pillSelector).forEach(function(p) {
+      p.style.transform = 'translate(0px,0px)';
+      p._magneticBound = false;
+    });
+    grid._magneticBound = false;
+  }
   grid._magneticBound = true;
 
   grid.addEventListener('mousemove', function(e) {
@@ -9749,21 +9819,26 @@ let spActiveSort = 'latest';
 
 function spSetSort(sort, btn) {
   spActiveSort = sort;
-  // Update active pill UI
+  // Update active pill UI — only within .sp-sort-group
   document.querySelectorAll('.sp-sort-pill').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
+
+  // Show/hide mastered progress bar
+  const pb = document.querySelector('.progress-bar');
+  if (pb) pb.style.display = sort === 'mastered' ? '' : 'none';
 
   // Apply sort/filter to grid
   const container = document.getElementById('netflixRows');
   if (!container) return;
 
   if (sort === 'latest') {
-    // Restore default: clear any overrides, re-render normally
     buildGrid();
   } else if (sort === 'trending') {
     _spRenderFilteredGrid(CONCEPTS.filter(c => TRENDING_IDS.includes(c.id) && !c.duplicate_of));
   } else if (sort === 'picks') {
     _spRenderFilteredGrid(CONCEPTS.filter(c => c.editors_pick === true && !c.duplicate_of));
+  } else if (sort === 'mastered') {
+    _spRenderFilteredGrid(CONCEPTS.filter(c => mastered.has(c.id) && !c.duplicate_of));
   }
 }
 
@@ -9805,7 +9880,7 @@ function spToggleScan(btn) {
   const grid = document.getElementById('netflixRows');
   if (!grid) return;
   const isOn = grid.classList.toggle('scan-mode');
-  btn.textContent = isOn ? '⊞ Full' : '◫ Scan';
+  btn.textContent = isOn ? '⊞' : '◫';
   btn.classList.toggle('active', isOn);
 
   if (isOn) {
@@ -9820,75 +9895,191 @@ function spToggleScan(btn) {
   }
 }
 
-// ── DRAWER SCAN MODE (episode + theme drawers) ─────────────────────────
+// ── DRAWER VIEW MODES (flip | scan | all) ─────────────────────────
 function _resetDrawerScan(prefix) {
-  const pillId = prefix === 'ep' ? 'epDrawerScanPill' : 'themeDrawerScanPill';
-  const scanGridId = prefix === 'ep' ? 'epDrawerScanGrid' : 'themeDrawerScanGrid';
+  // Reset to flip view without animating
   const bodyEl = document.querySelector('#' + (prefix === 'ep' ? 'epDrawer' : 'themeDrawer') + ' .ep-drawer-body');
-  const pill = document.getElementById(pillId);
-  const scanGrid = document.getElementById(scanGridId);
-  if (pill) { pill.textContent = '◫ Scan'; pill.classList.remove('active'); }
+  const scanGrid = document.getElementById(prefix === 'ep' ? 'epDrawerScanGrid' : 'themeDrawerScanGrid');
+  const allGrid = document.getElementById(prefix === 'ep' ? 'epDrawerAllGrid' : 'themeDrawerAllGrid');
+  if (bodyEl) { bodyEl.classList.remove('drawer-scan-mode', 'drawer-all-mode'); }
   if (scanGrid) scanGrid.innerHTML = '';
-  if (bodyEl) bodyEl.classList.remove('drawer-scan-mode');
+  if (allGrid) allGrid.innerHTML = '';
+  // Reset active button
+  const flipBtn = document.getElementById(prefix === 'ep' ? 'epViewBtnFlip' : 'themeViewBtnFlip');
+  const scanBtn = document.getElementById(prefix === 'ep' ? 'epViewBtnScan' : 'themeViewBtnScan');
+  const allBtn  = document.getElementById(prefix === 'ep' ? 'epViewBtnAll'  : 'themeViewBtnAll');
+  [flipBtn, scanBtn, allBtn].forEach(function(b) { if (b) b.classList.remove('active'); });
+  if (flipBtn) flipBtn.classList.add('active');
 }
 
-function toggleDrawerScan(prefix) {
-  const pillId = prefix === 'ep' ? 'epDrawerScanPill' : 'themeDrawerScanPill';
-  const gridId = prefix === 'ep' ? 'epDrawerGrid' : 'themeDrawerGrid';
-  const scanGridId = prefix === 'ep' ? 'epDrawerScanGrid' : 'themeDrawerScanGrid';
+function setDrawerView(prefix, view, btn) {
   const drawerId = prefix === 'ep' ? 'epDrawer' : 'themeDrawer';
+  const gridId   = prefix === 'ep' ? 'epDrawerGrid' : 'themeDrawerGrid';
+  const scanGridId = prefix === 'ep' ? 'epDrawerScanGrid' : 'themeDrawerScanGrid';
+  const allGridId  = prefix === 'ep' ? 'epDrawerAllGrid'  : 'themeDrawerAllGrid';
   const bodyEl = document.querySelector('#' + drawerId + ' .ep-drawer-body');
-  const pill = document.getElementById(pillId);
-  if (!bodyEl || !pill) return;
+  if (!bodyEl) return;
 
-  const isOn = bodyEl.classList.toggle('drawer-scan-mode');
-  pill.textContent = isOn ? '⊞ Full' : '◫ Scan';
-  pill.classList.toggle('active', isOn);
+  // Update icon buttons
+  var flipBtn = document.getElementById(prefix === 'ep' ? 'epViewBtnFlip' : 'themeViewBtnFlip');
+  var scanBtn = document.getElementById(prefix === 'ep' ? 'epViewBtnScan' : 'themeViewBtnScan');
+  var allBtn  = document.getElementById(prefix === 'ep' ? 'epViewBtnAll'  : 'themeViewBtnAll');
+  [flipBtn, scanBtn, allBtn].forEach(function(b) { if (b) b.classList.remove('active'); });
+  if (btn) btn.classList.add('active');
 
-  const scanGrid = document.getElementById(scanGridId);
-  if (!scanGrid) return;
+  // Clear modes
+  bodyEl.classList.remove('drawer-scan-mode', 'drawer-all-mode');
+  spDismissPreview();
 
-  if (isOn) {
-    // Build scan tiles from the drawer's concept cards
-    const grid = document.getElementById(gridId);
-    const cards = grid ? grid.querySelectorAll('.concept-card') : [];
-    const frag = document.createDocumentFragment();
-    cards.forEach(function(card) {
-      const id = parseInt((card.id || '').replace(/^(epcc|tdc|cc)/, ''), 10);
-      const concept = id ? CONCEPTS.find(function(c) { return c.id === id; }) : null;
-      if (!concept) return;
-      const color = CAT_COLOR[concept.category] || '#e8d5a3';
-      const tile = document.createElement('div');
-      tile.className = 'ep-drawer-scan-tile';
-      tile.dataset.id = concept.id;
-      tile.style.setProperty('--cat-color', color);
-      tile.innerHTML =
-        '<div class="ep-drawer-scan-tile-term">' + _spEsc(concept.term) + '</div>' +
-        '<div class="ep-drawer-scan-tile-hook">' + _spEsc(concept.hook) + '</div>';
-      tile.addEventListener('click', function(e) {
-        e.stopPropagation();
-        _drawerScanTileClick(concept.id, tile, prefix);
-      });
-      frag.appendChild(tile);
-    });
-    scanGrid.innerHTML = '';
-    scanGrid.appendChild(frag);
-  } else {
-    scanGrid.innerHTML = '';
-    spDismissPreview();
-  }
-}
+  var scanGrid = document.getElementById(scanGridId);
+  var allGrid  = document.getElementById(allGridId);
+  if (scanGrid) scanGrid.innerHTML = '';
+  if (allGrid)  allGrid.innerHTML = '';
 
-function _drawerScanTileClick(id, anchorEl, prefix) {
-  // If preview for this id already open — second click opens CS
-  const card = document.getElementById('spPreviewCard');
-  if (card && card.dataset.previewId === String(id) && card.classList.contains('sp-preview-visible')) {
-    spDismissPreview();
-    _spSelectConcept(id);
+  if (view === 'flip') {
+    // Default: category filter is already working
     return;
   }
-  // Show preview; "Talk about this" fires CS
-  _spScanPreview(id, anchorEl);
+
+  if (view === 'scan') {
+    bodyEl.classList.add('drawer-scan-mode');
+    // Build 2-col scan tiles grouped by category
+    var grid = document.getElementById(gridId);
+    if (!grid || !scanGrid) return;
+    // Collect all concepts from the drawer's concept cards
+    var catMap = {}; // catKey → [{id,term,hook,color}]
+    grid.querySelectorAll('.ep-cat-column').forEach(function(col) {
+      var catKey = col.dataset.cat;
+      var color = CAT_COLOR[catKey] || '#e8d5a3';
+      col.querySelectorAll('.concept-card').forEach(function(card) {
+        var id = parseInt((card.id || '').replace(/^(epcc|tdc|cc)/, ''), 10);
+        var concept = id ? CONCEPTS.find(function(c) { return c.id === id; }) : null;
+        if (!concept) return;
+        if (!catMap[catKey]) catMap[catKey] = { color: color, items: [] };
+        catMap[catKey].items.push(concept);
+      });
+    });
+    var frag = document.createDocumentFragment();
+    Object.keys(catMap).forEach(function(catKey) {
+      var group = catMap[catKey];
+      var catInfo = CATEGORIES.find(function(x) { return x.id === catKey; }) || { name: catKey };
+      // Category divider
+      var divider = document.createElement('div');
+      divider.className = 'ep-drawer-scan-cat-divider';
+      divider.style.setProperty('--cat-color', group.color);
+      divider.textContent = catInfo.name;
+      frag.appendChild(divider);
+      // 2-col row
+      var row = document.createElement('div');
+      row.className = 'ep-drawer-scan-row';
+      group.items.forEach(function(concept) {
+        var tile = document.createElement('div');
+        tile.className = 'ep-drawer-scan-tile';
+        tile.style.setProperty('--cat-color', group.color);
+        tile.innerHTML =
+          '<div class="ep-drawer-scan-tile-term">' + _spEsc(concept.term) + '</div>' +
+          '<div class="ep-drawer-scan-tile-hook">' + _spEsc(concept.hook) + '</div>';
+        tile.addEventListener('click', function(e) {
+          e.stopPropagation();
+          var card = document.getElementById('spPreviewCard');
+          if (card && card.dataset.previewId === String(concept.id) && card.classList.contains('sp-preview-visible')) {
+            spDismissPreview();
+            _spSelectConcept(concept.id);
+            return;
+          }
+          _spScanPreview(concept.id, tile);
+        });
+        row.appendChild(tile);
+      });
+      frag.appendChild(row);
+    });
+    scanGrid.appendChild(frag);
+    return;
+  }
+
+  if (view === 'all') {
+    bodyEl.classList.add('drawer-all-mode');
+    // Build all-cards grid grouped by category
+    var grid2 = document.getElementById(gridId);
+    if (!grid2 || !allGrid) return;
+    var frag2 = document.createDocumentFragment();
+    grid2.querySelectorAll('.ep-cat-column').forEach(function(col) {
+      var catKey = col.dataset.cat;
+      var color = CAT_COLOR[catKey] || '#e8d5a3';
+      var catInfo = CATEGORIES.find(function(x) { return x.id === catKey; }) || { name: catKey };
+      var cards = col.querySelectorAll('.concept-card');
+      if (!cards.length) return;
+      // Category header
+      var header = document.createElement('div');
+      header.className = 'ep-drawer-all-cat-header';
+      header.style.setProperty('--cat-color', color);
+      header.innerHTML = catInfo.name + ' <span>' + cards.length + '</span>';
+      // Make header clickable to scroll category into view
+      header.style.cursor = 'pointer';
+      header.addEventListener('click', function() {
+        header.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+      frag2.appendChild(header);
+      // Cards wrap
+      var wrap = document.createElement('div');
+      wrap.className = 'ep-drawer-all-cards-wrap';
+      cards.forEach(function(origCard) {
+        // Clone card so original DOM for flip view is preserved
+        var clone = origCard.cloneNode(true);
+        // Remap id + onclick to avoid conflicts
+        var origId = parseInt((origCard.id || '').replace(/^(epcc|tdc|cc)/, ''), 10);
+        clone.id = 'allcc' + origId;
+        clone.setAttribute('onclick', 'toggleAllCard(' + origId + ',\'' + prefix + '\')');
+        wrap.appendChild(clone);
+      });
+      frag2.appendChild(wrap);
+    });
+    allGrid.appendChild(frag2);
+
+    // Smooth scroll category into view when cat filter pill is clicked
+    // Wire cat filter pills to also scroll in all-cards mode
+    document.querySelectorAll('#' + prefix + 'DrawerCatFilter .ep-drawer-cat-pill').forEach(function(pill) {
+      pill._allModeHandler = function() {
+        if (!bodyEl.classList.contains('drawer-all-mode')) return;
+        var catKey = pill.dataset.cat;
+        var header = allGrid.querySelector('.ep-drawer-all-cat-header[data-cat="' + catKey + '"]');
+        if (!header) {
+          // Find by color match — set data-cat on headers
+          var headers = allGrid.querySelectorAll('.ep-drawer-all-cat-header');
+          headers.forEach(function(h) { if (h.dataset.cat === catKey) header = h; });
+        }
+        if (header) header.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      };
+      pill.addEventListener('click', pill._allModeHandler);
+    });
+    // Set data-cat on all-grid headers for cat scroll targeting
+    allGrid.querySelectorAll('.ep-drawer-all-cat-header').forEach(function(h, i) {
+      var allCatKeys = Array.from(grid2.querySelectorAll('.ep-cat-column')).map(function(c) { return c.dataset.cat; });
+      if (allCatKeys[i]) h.dataset.cat = allCatKeys[i];
+    });
+  }
+}
+
+// Toggle cloned card in all-cards view
+let _currentAllCardId = null;
+function toggleAllCard(id, prefix) {
+  var el = document.getElementById('allcc' + id);
+  if (!el) return;
+  var wasOpen = el.classList.contains('open');
+  // Close previous
+  if (_currentAllCardId !== null && _currentAllCardId !== id) {
+    var prev = document.getElementById('allcc' + _currentAllCardId);
+    if (prev) prev.classList.remove('open');
+  }
+  el.classList.toggle('open');
+  _currentAllCardId = el.classList.contains('open') ? id : null;
+  playCardFlipSFX(!wasOpen);
+}
+
+// Legacy shim — toggleDrawerScan now routes through setDrawerView
+function toggleDrawerScan(prefix) {
+  var scanBtn = document.getElementById(prefix === 'ep' ? 'epViewBtnScan' : 'themeViewBtnScan');
+  setDrawerView(prefix, 'scan', scanBtn);
 }
 
 function _spScanTileClick(id, anchorEl) {
@@ -9957,13 +10148,17 @@ function _spScanPreview(id, anchorEl) {
       document.removeEventListener('click', card._dismissFn, true);
       card._dismissFn = null;
     }
+    // Stamp the open time so we can ignore the triggering click
+    card._openedAt = Date.now();
     // Dismiss on next outside click (not on the card itself)
     card._dismissFn = (e) => {
+      // Ignore clicks that happened within 200ms of opening (same event still propagating)
+      if (Date.now() - (card._openedAt || 0) < 200) return;
       if (!card.contains(e.target)) {
         spDismissPreview();
       }
     };
-    setTimeout(() => document.addEventListener('click', card._dismissFn, true), 80);
+    document.addEventListener('click', card._dismissFn, true);
   }));
 }
 
@@ -16330,45 +16525,84 @@ function playStreakMilestoneSFX() {
 /* --- Sort pills (Zone 7 Library header) --- */
 .sp-sort-pills {
   display: flex;
-  gap: 6px;
+  align-items: center;
+  gap: 10px;
   margin-top: 10px;
   flex-wrap: wrap;
 }
+/* Segmented filter group — connected pill buttons */
+.sp-sort-group {
+  display: flex;
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 3px;
+  gap: 2px;
+}
 .sp-sort-pill {
   font-family: 'DM Mono', monospace;
-  font-size: 0.65rem;
-  letter-spacing: 0.1em;
+  font-size: 0.62rem;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
   color: var(--muted2);
   background: transparent;
-  border: 1px solid var(--border);
+  border: none;
   border-radius: 999px;
-  padding: 6px 14px;
+  padding: 5px 13px;
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s;
+  white-space: nowrap;
+}
+.sp-sort-pill:hover { color: var(--text); }
+.sp-sort-pill.active {
+  color: #0d0d0d;
+  background: var(--accent);
+}
+/* Scan toggle — icon-only pill, visually distinct from the filter group */
+.sp-scan-toggle {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.95rem;
+  line-height: 1;
+  color: var(--muted2);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   transition: color 0.15s, border-color 0.15s, background 0.15s;
+  flex-shrink: 0;
 }
-.sp-sort-pill:hover {
-  color: var(--text);
-  border-color: var(--border-hover);
-}
-.sp-sort-pill.active {
+.sp-scan-toggle:hover { color: var(--text); border-color: var(--border-hover); }
+.sp-scan-toggle.active {
   color: var(--accent);
   border-color: var(--accent);
-  background: rgba(232,213,163,0.06);
+  background: rgba(232,213,163,0.08);
 }
 
-[data-theme="light"] .sp-sort-pill {
-  color: var(--muted2);
+[data-theme="light"] .sp-sort-group {
+  background: var(--surface2);
   border-color: var(--border);
 }
-[data-theme="light"] .sp-sort-pill:hover {
-  color: var(--text);
-  border-color: var(--border-hover);
-}
+[data-theme="light"] .sp-sort-pill { color: var(--muted2); }
+[data-theme="light"] .sp-sort-pill:hover { color: var(--text); }
 [data-theme="light"] .sp-sort-pill.active {
-  color: var(--accent);
-  border-color: var(--accent);
-  background: rgba(184,134,11,0.06);
+  color: #fff;
+  background: var(--accent2);
+}
+[data-theme="light"] .sp-scan-toggle {
+  background: var(--surface2);
+  border-color: var(--border);
+  color: var(--muted2);
+}
+[data-theme="light"] .sp-scan-toggle.active {
+  color: var(--accent2);
+  border-color: var(--accent2);
+  background: rgba(184,134,11,0.08);
 }
 
 /* --- Concept preview card (fixed position, shown when user clicks a term) --- */
