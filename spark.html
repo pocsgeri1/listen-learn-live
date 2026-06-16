@@ -289,6 +289,15 @@
   [data-theme="light"] .cat-card.active {
     background: rgba(0,0,0,0.06);
   }
+  /* "All" pill text in light mode — accent color has enough contrast */
+  [data-theme="light"] .cat-card[data-cat="all"] {
+    color: var(--accent2);
+  }
+  [data-theme="light"] .cat-card[data-cat="all"].active {
+    color: var(--accent2);
+    background: rgba(184,134,11,0.12);
+    border-color: var(--accent2);
+  }
 
   /* NF flip card front shadow in light */
   [data-theme="light"] .nf-row .concept-card .card-front {
@@ -1196,8 +1205,83 @@
     font-size: 0.55rem;
     margin-left: 2px;
   }
-  
-  /* Only the active category renders. Desktop = 4-up grid of fixed-size
+
+  /* ── DRAWER SCAN MODE ────────────────────────────────────── */
+  .ep-drawer-sort-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.65rem 2rem 0.55rem;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  @media (max-width: 700px) {
+    .ep-drawer-sort-row { padding: 0.55rem 1.25rem 0.45rem; }
+  }
+  .ep-drawer-scan-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: transparent;
+    border: 0.5px solid var(--border);
+    border-radius: 999px;
+    padding: 4px 12px;
+    color: var(--muted2);
+    cursor: pointer;
+    transition: border-color 0.18s, color 0.18s, background 0.18s;
+    white-space: nowrap;
+  }
+  .ep-drawer-scan-pill:hover { border-color: var(--text); color: var(--text); }
+  .ep-drawer-scan-pill.active {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(232,213,163,0.07);
+  }
+  [data-theme="light"] .ep-drawer-sort-row { background: var(--surface); }
+  [data-theme="light"] .ep-drawer-scan-pill.active {
+    border-color: var(--accent2);
+    color: var(--accent2);
+    background: rgba(184,134,11,0.07);
+  }
+  /* Drawer scan tiles — same design as library .sc-tile */
+  .ep-drawer-body.drawer-scan-mode .ep-drawer-grid { display: none; }
+  .ep-drawer-scan-grid {
+    display: none;
+    flex-direction: column;
+    gap: 0;
+    padding: 0;
+  }
+  .ep-drawer-body.drawer-scan-mode .ep-drawer-scan-grid { display: flex; }
+  .ep-drawer-scan-tile {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 12px 22px 11px 20px;
+    border-bottom: 1px solid var(--border);
+    border-left: 2.5px solid var(--cat-color, var(--accent));
+    cursor: pointer;
+    transition: background 0.14s;
+    min-height: 66px;
+  }
+  .ep-drawer-scan-tile:hover { background: var(--surface2); }
+  .ep-drawer-scan-tile-term {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.84rem;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 3px;
+    line-height: 1.3;
+  }
+  .ep-drawer-scan-tile-hook {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.72rem;
+    color: var(--muted2);
+    line-height: 1.4;
+  }
+  [data-theme="light"] .ep-drawer-scan-tile { border-left-color: var(--cat-color, var(--accent)); }
+  [data-theme="light"] .ep-drawer-scan-tile:hover { background: var(--surface2); }
      280x370 cards (matches Library / preview-zone sizing). Mobile = single
      vertical column of the same card size. */
   /* Drawer category columns — display:none default, JS sets display then triggers animation via rAF */
@@ -1656,6 +1740,7 @@
     padding: 1rem 2rem 1.5rem;
     user-select: none;
     -webkit-user-select: none;
+    touch-action: pan-x; /* mobile: allow horizontal row scroll */
   }
   .nf-row::-webkit-scrollbar { display: none; }
   /* Guarantee card pointer cursor — row must not override */
@@ -6954,7 +7039,11 @@
   <div class="ep-drawer-pills" id="epDrawerPills"></div>
   <div class="ep-drawer-mix" id="epDrawerMix"></div>
   <div class="ep-drawer-cat-filter" id="epDrawerCatFilter"></div>
+  <div class="ep-drawer-sort-row" id="epDrawerSortRow" style="display:none">
+    <button class="ep-drawer-scan-pill" id="epDrawerScanPill" onclick="toggleDrawerScan('ep')">◫ Scan</button>
+  </div>
   <div class="ep-drawer-body">
+    <div class="ep-drawer-scan-grid" id="epDrawerScanGrid"></div>
     <div class="ep-drawer-grid" id="epDrawerGrid"></div>
   </div>
 </div>
@@ -6975,7 +7064,11 @@
   <div class="ep-drawer-pills" id="themeDrawerPills"></div>
   <div class="ep-drawer-mix" id="themeDrawerMix"></div>
   <div class="ep-drawer-cat-filter" id="themeDrawerCatFilter"></div>
+  <div class="ep-drawer-sort-row" id="themeDrawerSortRow" style="display:none">
+    <button class="ep-drawer-scan-pill" id="themeDrawerScanPill" onclick="toggleDrawerScan('theme')">◫ Scan</button>
+  </div>
   <div class="ep-drawer-body">
+    <div class="ep-drawer-scan-grid" id="themeDrawerScanGrid"></div>
     <div class="ep-drawer-grid" id="themeDrawerGrid"></div>
   </div>
 </div>
@@ -7878,7 +7971,12 @@ function render() { buildCats(); initMagneticPills(); buildGrid(); updateProgres
 
 let _currentOpenCardId = null;
 
+let _toggleCardLast = 0;
 function toggleCard(id) {
+  // Debounce: ignore rapid double-taps within 300ms (prevents crash on mobile multi-tap)
+  const now = Date.now();
+  if (now - _toggleCardLast < 300) return;
+  _toggleCardLast = now;
   const el = document.getElementById('cc'+id);
   if (!el) return;
   // In scan mode: cards are hidden behind tiles; tiles have their own click handler
@@ -8541,6 +8639,10 @@ function _renderDrawerContent(col, collectionId) {
     document.querySelector('#epDrawer .ep-drawer-body'),
     document.getElementById('epDrawerHeroBg')
   );
+  // Show scan sort row; reset any prior scan state
+  const _epSortRow = document.getElementById('epDrawerSortRow');
+  if (_epSortRow) _epSortRow.style.display = '';
+  _resetDrawerScan('ep');
 }
 
 function filterDrawerCat(catKey, silent) {
@@ -8598,6 +8700,9 @@ function closeEpisodeDrawer() {
   _csFromDrawer = false;
   // Tear down parallax listener — v1.89
   if (_drawerParallaxCleanup) { _drawerParallaxCleanup(); _drawerParallaxCleanup = null; }
+  // Reset scan mode
+  _resetDrawerScan('ep');
+  spDismissPreview();
   // Phase 1 (instant): start the slide-down animation. Drawer is still position:fixed,
   // body sections still display:none — so nothing heavy happens this frame.
   document.getElementById('epBackdrop').classList.remove('open');
@@ -9071,6 +9176,10 @@ function _renderThemeDrawerContent(col, id) {
     document.querySelector('#themeDrawer .ep-drawer-body'),
     document.getElementById('themeDrawerHeroBg')
   );
+  // Show scan sort row; reset any prior scan state
+  const _themeSortRow = document.getElementById('themeDrawerSortRow');
+  if (_themeSortRow) _themeSortRow.style.display = '';
+  _resetDrawerScan('theme');
 }
 
 function filterThemeDrawerCat(catKey, silent) {
@@ -9095,6 +9204,9 @@ function filterThemeDrawerCat(catKey, silent) {
 function closeThemeDrawer() {
   // Tear down parallax listener — v1.89
   if (_drawerParallaxCleanup) { _drawerParallaxCleanup(); _drawerParallaxCleanup = null; }
+  // Reset scan mode
+  _resetDrawerScan('theme');
+  spDismissPreview();
   document.getElementById('themeBackdrop').classList.remove('open');
   document.getElementById('themeDrawer').classList.remove('open');
 
@@ -9708,6 +9820,77 @@ function spToggleScan(btn) {
   }
 }
 
+// ── DRAWER SCAN MODE (episode + theme drawers) ─────────────────────────
+function _resetDrawerScan(prefix) {
+  const pillId = prefix === 'ep' ? 'epDrawerScanPill' : 'themeDrawerScanPill';
+  const scanGridId = prefix === 'ep' ? 'epDrawerScanGrid' : 'themeDrawerScanGrid';
+  const bodyEl = document.querySelector('#' + (prefix === 'ep' ? 'epDrawer' : 'themeDrawer') + ' .ep-drawer-body');
+  const pill = document.getElementById(pillId);
+  const scanGrid = document.getElementById(scanGridId);
+  if (pill) { pill.textContent = '◫ Scan'; pill.classList.remove('active'); }
+  if (scanGrid) scanGrid.innerHTML = '';
+  if (bodyEl) bodyEl.classList.remove('drawer-scan-mode');
+}
+
+function toggleDrawerScan(prefix) {
+  const pillId = prefix === 'ep' ? 'epDrawerScanPill' : 'themeDrawerScanPill';
+  const gridId = prefix === 'ep' ? 'epDrawerGrid' : 'themeDrawerGrid';
+  const scanGridId = prefix === 'ep' ? 'epDrawerScanGrid' : 'themeDrawerScanGrid';
+  const drawerId = prefix === 'ep' ? 'epDrawer' : 'themeDrawer';
+  const bodyEl = document.querySelector('#' + drawerId + ' .ep-drawer-body');
+  const pill = document.getElementById(pillId);
+  if (!bodyEl || !pill) return;
+
+  const isOn = bodyEl.classList.toggle('drawer-scan-mode');
+  pill.textContent = isOn ? '⊞ Full' : '◫ Scan';
+  pill.classList.toggle('active', isOn);
+
+  const scanGrid = document.getElementById(scanGridId);
+  if (!scanGrid) return;
+
+  if (isOn) {
+    // Build scan tiles from the drawer's concept cards
+    const grid = document.getElementById(gridId);
+    const cards = grid ? grid.querySelectorAll('.concept-card') : [];
+    const frag = document.createDocumentFragment();
+    cards.forEach(function(card) {
+      const id = parseInt((card.id || '').replace(/^(epcc|tdc|cc)/, ''), 10);
+      const concept = id ? CONCEPTS.find(function(c) { return c.id === id; }) : null;
+      if (!concept) return;
+      const color = CAT_COLOR[concept.category] || '#e8d5a3';
+      const tile = document.createElement('div');
+      tile.className = 'ep-drawer-scan-tile';
+      tile.dataset.id = concept.id;
+      tile.style.setProperty('--cat-color', color);
+      tile.innerHTML =
+        '<div class="ep-drawer-scan-tile-term">' + _spEsc(concept.term) + '</div>' +
+        '<div class="ep-drawer-scan-tile-hook">' + _spEsc(concept.hook) + '</div>';
+      tile.addEventListener('click', function(e) {
+        e.stopPropagation();
+        _drawerScanTileClick(concept.id, tile, prefix);
+      });
+      frag.appendChild(tile);
+    });
+    scanGrid.innerHTML = '';
+    scanGrid.appendChild(frag);
+  } else {
+    scanGrid.innerHTML = '';
+    spDismissPreview();
+  }
+}
+
+function _drawerScanTileClick(id, anchorEl, prefix) {
+  // If preview for this id already open — second click opens CS
+  const card = document.getElementById('spPreviewCard');
+  if (card && card.dataset.previewId === String(id) && card.classList.contains('sp-preview-visible')) {
+    spDismissPreview();
+    _spSelectConcept(id);
+    return;
+  }
+  // Show preview; "Talk about this" fires CS
+  _spScanPreview(id, anchorEl);
+}
+
 function _spScanTileClick(id, anchorEl) {
   // If preview already showing for this id — second click loads into CS
   const card = document.getElementById('spPreviewCard');
@@ -9716,11 +9899,7 @@ function _spScanTileClick(id, anchorEl) {
     _spSelectConcept(id);
     return;
   }
-  // Mobile: skip preview, open CS directly
-  if (window.innerWidth <= 700) {
-    _spSelectConcept(id);
-    return;
-  }
+  // Both mobile and desktop: show preview first; "Talk about this" opens CS
   _spScanPreview(id, anchorEl);
 }
 
@@ -9763,6 +9942,13 @@ function _spScanPreview(id, anchorEl) {
   card.style.left = left + 'px';
   card.style.right = 'auto';
   card.style.display = 'flex';
+  // Mobile: centre horizontally, anchor below tile
+  if (window.innerWidth <= 700) {
+    const mW = Math.min(300, window.innerWidth - 24);
+    card.style.width = mW + 'px';
+    card.style.left = Math.max(12, (window.innerWidth - mW) / 2) + 'px';
+    card.style.top = rect ? Math.min(rect.bottom + 8, window.innerHeight - 320) + 'px' : '120px';
+  }
   card.classList.remove('sp-preview-visible');
   requestAnimationFrame(() => requestAnimationFrame(() => {
     card.classList.add('sp-preview-visible');
@@ -9866,6 +10052,8 @@ function _spRenderFilteredGrid(pool) {
   });
 
   container.innerHTML = html || `<div style="padding:3rem 2rem;color:var(--muted);font-family:'DM Mono',monospace;font-size:0.75rem;letter-spacing:0.12em;text-transform:uppercase;text-align:center;">No concepts found</div>`;
+  // Re-inject scan tiles if scan mode is active (e.g. Editor's Picks + Scan)
+  if (container.classList.contains('scan-mode')) _spReinjectScanTiles(container);
 }
 
 // --- Hero card stack ---
@@ -12319,13 +12507,30 @@ function _convRenderStories() {
   }
 
   container.innerHTML = '';
-  stories.forEach(function(entry) {
+  stories.forEach(function(entry, entryIdx) {
     const wrap = document.createElement('div');
-    wrap.style.cssText = 'border-bottom:1px solid var(--border);padding:18px 22px 16px;';
+    wrap.style.cssText = 'border-bottom:1px solid var(--border);padding:18px 22px 16px;position:relative;';
 
-    // Clickable concept pills — clicking triggers reveal popup for that concept
+    // Delete button (×) — top right of card
+    const delBtn = document.createElement('button');
+    delBtn.textContent = '×';
+    delBtn.title = 'Remove this story';
+    delBtn.style.cssText = 'position:absolute;top:14px;right:16px;background:transparent;border:none;color:var(--muted);font-size:1rem;line-height:1;cursor:pointer;padding:2px 5px;border-radius:4px;transition:color 0.15s;z-index:2;';
+    delBtn.addEventListener('mouseover', function() { delBtn.style.color = 'var(--red)'; });
+    delBtn.addEventListener('mouseout', function() { delBtn.style.color = 'var(--muted)'; });
+    delBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var stored = [];
+      try { stored = JSON.parse(localStorage.getItem(CS_STORIES_KEY)) || []; } catch(ex) {}
+      stored.splice(entryIdx, 1);
+      localStorage.setItem(CS_STORIES_KEY, JSON.stringify(stored));
+      _convRenderStories(); // re-render
+    });
+    wrap.appendChild(delBtn);
+
+    // Clickable concept pills
     const pills = document.createElement('div');
-    pills.style.cssText = 'display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px;';
+    pills.style.cssText = 'display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px;padding-right:24px;';
     (entry.conceptTerms || [entry.term]).forEach(function(term, j) {
       const cat = (entry.conceptCategories || [])[j] || '';
       const conceptId = (entry.conceptIds || [])[j];
@@ -12333,13 +12538,11 @@ function _convRenderStories() {
       const pill = document.createElement('button');
       pill.style.cssText = 'font-family:\'DM Mono\',monospace;font-size:0.52rem;letter-spacing:0.09em;text-transform:uppercase;border:1px solid ' + color + ';border-radius:20px;padding:3px 10px;color:' + color + ';background:transparent;cursor:pointer;transition:background 0.15s;';
       pill.textContent = term;
-      // Click → show term popup (same as reveal terms)
       pill.addEventListener('click', function(e) {
         e.stopPropagation();
         let concept = conceptId && typeof CONCEPTS !== 'undefined'
           ? CONCEPTS.find(function(c) { return c.id === conceptId; })
           : null;
-        // Fallback for legacy saved stories where conceptIds[0] was 0 — match by term
         if (!concept && typeof CONCEPTS !== 'undefined') {
           concept = CONCEPTS.find(function(c) { return c.term === term; });
         }
@@ -12351,9 +12554,8 @@ function _convRenderStories() {
     });
     wrap.appendChild(pills);
 
-    // Story text: formatted in paragraphs (collapsed to 3 lines, expand on click)
+    // Story text (collapsed / expanded)
     const storyText = entry.story || '';
-    // Split into paragraphs on double newline; fallback: split every ~2 sentences
     const paragraphs = storyText.indexOf('\n\n') !== -1
       ? storyText.split('\n\n').filter(function(p) { return p.trim(); })
       : _csChunkSentences(storyText, 2);
@@ -12361,7 +12563,6 @@ function _convRenderStories() {
     const storyEl = document.createElement('div');
     storyEl.style.cssText = 'cursor:pointer;';
 
-    // Build paragraph elements
     const parasEl = document.createElement('div');
     parasEl.style.cssText = 'font-family:\'Playfair Display\',serif;font-size:0.84rem;line-height:1.85;color:var(--text);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;';
     paragraphs.forEach(function(p) {
@@ -12372,25 +12573,65 @@ function _convRenderStories() {
     });
     storyEl.appendChild(parasEl);
 
+    // Actions row (copy + share) — hidden until expanded
+    const actionsRow = document.createElement('div');
+    actionsRow.style.cssText = 'display:none;flex-direction:row;gap:8px;margin-top:14px;padding-top:10px;border-top:1px solid var(--border);';
+
+    const copyBtn = document.createElement('button');
+    copyBtn.textContent = '↑ Copy story';
+    copyBtn.style.cssText = 'font-family:\'DM Mono\',monospace;font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;background:transparent;border:1px solid var(--border);border-radius:20px;padding:5px 14px;color:var(--muted2);cursor:pointer;transition:border-color 0.18s,color 0.18s;';
+    copyBtn.addEventListener('mouseover', function() { copyBtn.style.borderColor='var(--text)';copyBtn.style.color='var(--text)'; });
+    copyBtn.addEventListener('mouseout', function() { copyBtn.style.borderColor='var(--border)';copyBtn.style.color='var(--muted2)'; });
+    copyBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var fullText = (entry.conceptTerms || []).join(' · ') + '\n\n' + storyText + (entry.opener ? '\n\n— ' + entry.opener : '');
+      navigator.clipboard.writeText(fullText).then(function() {
+        copyBtn.textContent = '✓ Copied!';
+        setTimeout(function() { copyBtn.textContent = '↑ Copy story'; }, 1800);
+      }).catch(function() { copyBtn.textContent = '↑ Copy story'; });
+    });
+    actionsRow.appendChild(copyBtn);
+
+    const shareBtn = document.createElement('button');
+    shareBtn.textContent = '↑ Share';
+    shareBtn.style.cssText = 'font-family:\'DM Mono\',monospace;font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;background:transparent;border:1px solid var(--border);border-radius:20px;padding:5px 14px;color:var(--muted2);cursor:pointer;transition:border-color 0.18s,color 0.18s;';
+    shareBtn.addEventListener('mouseover', function() { shareBtn.style.borderColor='var(--text)';shareBtn.style.color='var(--text)'; });
+    shareBtn.addEventListener('mouseout', function() { shareBtn.style.borderColor='var(--border)';shareBtn.style.color='var(--muted2)'; });
+    shareBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var shareText = storyText + (entry.opener ? '\n\n"' + entry.opener + '"' : '');
+      if (navigator.share) {
+        navigator.share({ title: 'Epistemic story', text: shareText }).catch(function() {});
+      } else {
+        navigator.clipboard.writeText(shareText).then(function() {
+          shareBtn.textContent = '✓ Copied!';
+          setTimeout(function() { shareBtn.textContent = '↑ Share'; }, 1800);
+        }).catch(function() {});
+      }
+    });
+    actionsRow.appendChild(shareBtn);
+    storyEl.appendChild(actionsRow);
+
     let expanded = false;
     storyEl.addEventListener('click', function() {
       expanded = !expanded;
       if (expanded) {
         parasEl.style.webkitLineClamp = 'unset';
         parasEl.style.overflow = 'visible';
-        // Show opener
+        actionsRow.style.display = 'flex';
         if (entry.opener && !wrap.querySelector('.story-opener-row')) {
           const opRow = document.createElement('div');
           opRow.className = 'story-opener-row';
           opRow.style.cssText = 'margin-top:10px;border-left:2px solid var(--accent);padding:7px 12px;background:var(--surface2);border-radius:0 6px 6px 0;';
           opRow.innerHTML = '<div style="font-family:\'DM Mono\',monospace;font-size:0.52rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:4px;">Say this →</div><div style="font-family:\'DM Sans\',sans-serif;font-size:0.76rem;color:var(--accent);font-style:italic;line-height:1.45;">' + _escHtml(entry.opener) + '</div>';
-          storyEl.appendChild(opRow);
+          parasEl.after(opRow);
         }
         ts.textContent = d ? d.toLocaleDateString('en-GB', { day:'numeric', month:'short' }) + ' · tap to collapse' : '';
       } else {
         parasEl.style.webkitLineClamp = '3';
         parasEl.style.overflow = 'hidden';
-        const opRow = storyEl.querySelector('.story-opener-row');
+        actionsRow.style.display = 'none';
+        const opRow = wrap.querySelector('.story-opener-row');
         if (opRow) opRow.remove();
         ts.textContent = d ? d.toLocaleDateString('en-GB', { day:'numeric', month:'short' }) + ' · tap to expand' : '';
       }
@@ -16367,7 +16608,7 @@ function panelSwitchTab(tab, skipRender) {
       el.style.display = t === 'stash' ? 'flex' : 'flex';
       el.style.flexDirection = 'column';
       el.style.flex = '1';
-      el.style.overflow = t === 'spark' ? 'hidden' : 'hidden';
+      el.style.overflow = (t === 'spark') ? 'hidden' : 'auto';
       requestAnimationFrame(() => { el.style.opacity = '1'; el.style.pointerEvents = ''; });
     } else {
       el.style.opacity = '0';
