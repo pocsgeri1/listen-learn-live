@@ -1107,11 +1107,17 @@
   /* On mobile: stick close button to top-right of the drawer even when hero is short */
   @media (max-width: 700px) {
     .ep-drawer-close {
-      position: sticky;
+      position: absolute;
       top: 14px;
-      align-self: flex-end;
-      margin: 14px 18px -46px auto; /* negative bottom margin so it overlaps hero content */
+      right: 14px;
+      margin: 0;
       z-index: 15;
+    }
+    .ep-drawer-count-badge {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      right: auto;
     }
   }
   .ep-drawer-mix {
@@ -1210,16 +1216,28 @@
 
   /* ── DRAWER VIEW TOGGLE (3 icon buttons) ───────────────── */
   .ep-drawer-sort-row {
+    position: absolute;
+    right: 1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
     display: flex;
     align-items: center;
     gap: 4px;
-    padding: 0.55rem 2rem 0.5rem;
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
+    padding: 0;
+    background: none;
+    border: none;
     flex-shrink: 0;
+    z-index: 5;
   }
+  .ep-drawer-cat-filter { position: relative; }
   @media (max-width: 700px) {
-    .ep-drawer-sort-row { padding: 0.5rem 1.25rem 0.45rem; }
+    .ep-drawer-sort-row {
+      position: static;
+      transform: none;
+      padding: 0.5rem 1.25rem 0.45rem;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
   }
   .ep-drawer-view-btn {
     font-family: 'DM Mono', monospace;
@@ -2324,6 +2342,8 @@
     .nav-mobile-toggle { display: block; }
     .nav-right { gap: 0.5rem; }
     .hiw-trigger { display: none; }
+    .nav-logo { max-width: calc(100vw - 160px); overflow: hidden; }
+    .nav-eyebrow { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: calc(100vw - 160px); }
   }
 
   /* HERO */
@@ -5101,14 +5121,15 @@
     height: 100%;
     transform-style: preserve-3d;
     transition: transform 0.62s cubic-bezier(0.4, 0.2, 0.2, 1);
-    transform: none; /* no idle tilt — causes close-flip glitch on transition back */
+    transform: rotate(-0.8deg);
+    background: transparent;
   }
   /* Mobile: no tilt */
   @media (hover: none) {
     .nf-row .concept-card .card-inner { transform: none !important; }
   }
   .nf-row .concept-card:not(.open):hover .card-inner {
-    transform: translateY(-5px);
+    transform: rotate(0deg) translateY(-5px);
   }
   .nf-row .concept-card.open .card-inner {
     transform: rotateY(180deg);
@@ -8175,7 +8196,7 @@ function toggleMaster(e, id) {
   updateProgress();
 
   // Update all ★ master buttons for this concept across all card instances
-  ['', 'Ep', 'Th', 'Fl'].forEach(suffix => {
+  ['', 'Ep', 'Th', 'Fl', 'All'].forEach(suffix => {
     const btn = document.getElementById('btnMaster' + suffix + id);
     if (btn) {
       btn.classList.toggle('mastered-active', mastered.has(id));
@@ -10099,38 +10120,78 @@ function setDrawerView(prefix, view, btn) {
 
   if (view === 'all') {
     bodyEl.classList.add('drawer-all-mode');
-    // Build all-cards grid grouped by category
     var grid2 = document.getElementById(gridId);
     if (!grid2 || !allGrid) return;
-    var frag2 = document.createDocumentFragment();
+    var catConceptMap = {}, catOrder = [];
     grid2.querySelectorAll('.ep-cat-column').forEach(function(col) {
-      var catKey = col.dataset.cat;
+      var ck = col.dataset.cat;
+      if (!catConceptMap[ck]) { catConceptMap[ck] = []; catOrder.push(ck); }
+      col.querySelectorAll('.concept-card').forEach(function(card) {
+        var cid = parseInt((card.id || '').replace(/^(epcc|tdc|cc)/, ''), 10);
+        if (cid) catConceptMap[ck].push(cid);
+      });
+    });
+    var frag2 = document.createDocumentFragment();
+    catOrder.forEach(function(catKey) {
+      var ids = catConceptMap[catKey] || [];
+      if (!ids.length) return;
       var color = CAT_COLOR[catKey] || '#e8d5a3';
       var catInfo = CATEGORIES.find(function(x) { return x.id === catKey; }) || { name: catKey };
-      var cards = col.querySelectorAll('.concept-card');
-      if (!cards.length) return;
-      // Category header
       var header = document.createElement('div');
       header.className = 'ep-drawer-all-cat-header';
+      header.dataset.cat = catKey;
       header.style.setProperty('--cat-color', color);
-      header.innerHTML = catInfo.name + ' <span>' + cards.length + '</span>';
-      // Make header clickable to scroll category into view
+      header.innerHTML = catInfo.name + ' <span>' + ids.length + '</span>';
       header.style.cursor = 'pointer';
-      header.addEventListener('click', function() {
-        header.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      });
+      header.addEventListener('click', function() { header.scrollIntoView({ behavior:'smooth', block:'start' }); });
       frag2.appendChild(header);
-      // Cards wrap
       var wrap = document.createElement('div');
       wrap.className = 'ep-drawer-all-cards-wrap';
-      cards.forEach(function(origCard) {
-        // Clone card so original DOM for flip view is preserved
-        var clone = origCard.cloneNode(true);
-        // Remap id + onclick to avoid conflicts
-        var origId = parseInt((origCard.id || '').replace(/^(epcc|tdc|cc)/, ''), 10);
-        clone.id = 'allcc' + origId;
-        clone.setAttribute('onclick', 'toggleAllCard(' + origId + ',\'' + prefix + '\')');
-        wrap.appendChild(clone);
+      ids.forEach(function(cid) {
+        var c = CONCEPTS.find(function(x) { return x.id === cid; });
+        if (!c) return;
+        var col2 = COLLECTIONS_BY_ID && c.collection_id != null ? COLLECTIONS_BY_ID[c.collection_id] : null;
+        var listenBtn = '';
+        if (col2 && col2.episode_url && typeof c.timestamp === 'number') {
+          var epUrl = typeof buildTimestampedUrl === 'function' ? buildTimestampedUrl(col2.episode_url, c.timestamp) : '';
+          if (epUrl) listenBtn = '<a class="btn-icon btn-listen" href="' + epUrl + '" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="Listen">🎧</a>';
+        }
+        var isMC = typeof mastered !== 'undefined' && mastered.has(c.id);
+        var isSv = typeof _csIsSaved === 'function' && _csIsSaved(c.id);
+        var cardEl = document.createElement('div');
+        cardEl.className = 'concept-card' + (isMC ? ' mastered' : '') + (c.editors_pick === true ? ' editors-pick' : '');
+        cardEl.id = 'allcc' + c.id;
+        cardEl.style.setProperty('--cat-color', color);
+        cardEl.setAttribute('onclick', "toggleAllCard(" + c.id + ",'" + prefix + "')");
+        cardEl.innerHTML = [
+          '<div class="card-inner">',
+          '<div class="card-front">',
+          '<div class="card-meta">',
+          '<span class="card-num">#' + String(c.id).padStart(3,'0') + '</span>',
+          '<span class="card-cat">' + (catInfo.name||catKey) + '</span>',
+          (c.editors_pick===true ? '<span class="pick-badge"><span class="pick-star">★</span>PICK</span>' : ''),
+          '</div>',
+          '<div class="card-term">' + (c.term||'') + '</div>',
+          '<div class="card-hook">' + (c.hook||'') + '</div>',
+          '<div class="card-flip-hint"><div class="card-flip-hint-dot"></div>tap to explore</div>',
+          '</div>',
+          '<div class="card-back">',
+          '<div class="card-actions card-actions-top">',
+          '<button class="btn-icon btn-share" onclick="event.stopPropagation();shareCard(event,' + c.id + ')" title="Share">🔗</button>',
+          '<button class="btn-icon btn-master' + (isMC?' mastered-active':'') + '" onclick="event.stopPropagation();toggleMaster(event,' + c.id + ')" id="btnMasterAll' + c.id + '" title="Save">★</button>',
+          '<button class="btn-icon btn-chat' + (isSv?' saved':'') + '" onclick="event.stopPropagation();toggleChatSave(' + c.id + ')" id="btnChatAll' + c.id + '" title="Chat">💬</button>',
+          listenBtn,
+          '</div>',
+          '<div class="card-actions-divider"></div>',
+          '<div class="back-section-label">What it means</div>',
+          '<div class="back-text">' + (c.plain||'') + '</div>',
+          '<div class="back-section-label">Analogy</div>',
+          '<div class="back-analogy">' + (c.analogy||'') + '</div>',
+          '<div class="back-section-label">Reflect &amp; use it</div>',
+          '<div class="back-prompt"><div class="prompt-icon">💬</div><p>' + (c.prompt||'') + '</p></div>',
+          '</div></div>'
+        ].join('');
+        wrap.appendChild(cardEl);
       });
       frag2.appendChild(wrap);
     });
@@ -10568,15 +10629,22 @@ function _spShowResults(q) {
 
   // Two-pass ranking: term matches first, then content matches
   const ql = q.toLowerCase();
+  const _activePool = (typeof spActiveSort !== 'undefined' && spActiveSort === 'picks')
+    ? new Set(CONCEPTS.filter(c => c.editors_pick === true && !c.duplicate_of).map(c => c.id))
+    : (typeof spActiveSort !== 'undefined' && spActiveSort === 'mastered')
+    ? new Set([...(typeof mastered !== 'undefined' ? mastered : new Set())])
+    : null;
   const termMatches = CONCEPTS.filter(c =>
-    !c.duplicate_of && c.term.toLowerCase().includes(ql)
+    !c.duplicate_of && c.term.toLowerCase().includes(ql) &&
+    (!_activePool || _activePool.has(c.id))
   );
   const termMatchIds = new Set(termMatches.map(c => c.id));
 
   // Fuse pass for content matches — exclude term matches to avoid doubles
   const fuseIds = fuzzyMatchIds(q);
   const contentMatches = fuseIds
-    ? CONCEPTS.filter(c => fuseIds.has(c.id) && !c.duplicate_of && !termMatchIds.has(c.id))
+    ? CONCEPTS.filter(c => fuseIds.has(c.id) && !c.duplicate_of && !termMatchIds.has(c.id) &&
+        (!_activePool || _activePool.has(c.id)))
     : [];
 
   // Merge: term matches first, then content, cap at 12 total
