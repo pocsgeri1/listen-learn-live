@@ -1215,29 +1215,33 @@
   }
 
   /* ── DRAWER VIEW TOGGLE (3 icon buttons) ───────────────── */
+  /* View toggle row is appended into the cat-filter row by JS on desktop.
+     On mobile it stays as its own row below. */
   .ep-drawer-sort-row {
-    position: absolute;
-    right: 1.5rem;
-    top: 50%;
-    transform: translateY(-50%);
     display: flex;
     align-items: center;
     gap: 4px;
+    margin-left: auto;
     padding: 0;
     background: none;
     border: none;
     flex-shrink: 0;
-    z-index: 5;
   }
-  .ep-drawer-cat-filter { position: relative; }
+  /* When injected inside cat-filter: cat-filter becomes flex */
+  .ep-drawer-cat-filter.has-view-toggle {
+    display: flex;
+    align-items: center;
+    padding-right: 0.75rem;
+  }
   @media (max-width: 700px) {
     .ep-drawer-sort-row {
-      position: static;
-      transform: none;
-      padding: 0.5rem 1.25rem 0.45rem;
+      display: flex;
+      padding: 0.45rem 1.25rem;
       background: var(--surface);
       border-bottom: 1px solid var(--border);
+      margin-left: 0;
     }
+    .ep-drawer-cat-filter.has-view-toggle { flex-wrap: nowrap; }
   }
   .ep-drawer-view-btn {
     font-family: 'DM Mono', monospace;
@@ -1400,6 +1404,22 @@
   }
   @media (max-width: 700px) { .ep-drawer-all-cards-wrap { grid-template-columns: 1fr; } }
 
+
+  /* ── ALL-CARDS VIEW: back-face styles match ep-cat-column ── */
+  .ep-drawer-all-cards-wrap .card-flip-hint { display: none; }
+  .ep-drawer-all-cards-wrap .card-meta { display: flex; align-items: center; gap: 7px; margin-bottom: 12px; flex-wrap: wrap; }
+  .ep-drawer-all-cards-wrap .card-term { font-size: 1.05rem; margin-top: auto; padding-top: 0.25rem; margin-bottom: 0.3rem; font-family: 'Playfair Display', serif; font-weight: 700; color: var(--text); line-height: 1.25; }
+  .ep-drawer-all-cards-wrap .card-hook { font-size: 0.8rem; line-height: 1.55; margin-bottom: auto; font-family: 'DM Sans', sans-serif; color: var(--text); font-style: italic; }
+  .ep-drawer-all-cards-wrap .back-section-label { font-family: 'DM Mono', monospace; font-size: 0.54rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-top: 12px; margin-bottom: 5px; }
+  .ep-drawer-all-cards-wrap .back-section-label:first-of-type { margin-top: 0; }
+  .ep-drawer-all-cards-wrap .back-text { font-size: 0.8rem; color: var(--text); line-height: 1.7; font-weight: 300; }
+  .ep-drawer-all-cards-wrap .back-analogy { font-size: 0.76rem; color: var(--muted2); line-height: 1.65; font-style: italic; border-left: 2px solid color-mix(in srgb, var(--cat-color, var(--accent)) 50%, transparent); padding-left: 10px; }
+  .ep-drawer-all-cards-wrap .back-prompt { background: rgba(232,213,163,0.06); border: 1px solid rgba(232,213,163,0.15); border-radius: 8px; padding: 10px 12px; margin-top: 10px; }
+  .ep-drawer-all-cards-wrap .back-prompt p { font-size: 0.76rem; color: var(--accent); line-height: 1.6; margin: 0; }
+  .ep-drawer-all-cards-wrap .prompt-icon { font-size: 0.8rem; margin-bottom: 3px; }
+  .ep-drawer-all-cards-wrap .card-actions-top { display: flex; gap: 6px; align-items: center; margin-bottom: 8px; }
+  .ep-drawer-all-cards-wrap .card-actions-divider { height: 1px; background: var(--border); margin: 8px 0 12px; flex-shrink: 0; }
+  .ep-drawer-all-cards-wrap .concept-card .card-back { gap: 0; }
   /* Only the active category renders. Desktop = 4-up grid of fixed-size
      280x370 cards (matches Library / preview-zone sizing). Mobile = single
      vertical column of the same card size. */
@@ -2342,8 +2362,8 @@
     .nav-mobile-toggle { display: block; }
     .nav-right { gap: 0.5rem; }
     .hiw-trigger { display: none; }
-    .nav-logo { max-width: calc(100vw - 160px); overflow: hidden; }
-    .nav-eyebrow { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: calc(100vw - 160px); }
+    .nav-logo { max-width: none; overflow: visible; }
+    .nav-eyebrow { white-space: nowrap; overflow: visible; }
   }
 
   /* HERO */
@@ -4906,7 +4926,7 @@
     cursor: pointer;
     position: relative;
     transition: border-color 0.2s, box-shadow 0.2s;
-    touch-action: pan-y;
+    touch-action: auto; /* pan-x handled by parent .nf-row */
   }
 
   .concept-card.editors-pick { border-color: rgba(232,213,163,0.45); }
@@ -5105,7 +5125,7 @@
     flex: 0 0 280px;
     min-width: 280px;
     height: 370px;
-    overflow: visible;
+    overflow: hidden; /* clip card-inner so rotated edges don't bleed */
     border: none;
     background: transparent;
     border-radius: 14px;
@@ -5121,7 +5141,7 @@
     height: 100%;
     transform-style: preserve-3d;
     transition: transform 0.62s cubic-bezier(0.4, 0.2, 0.2, 1);
-    transform: rotate(-0.8deg);
+    transform: none;
     background: transparent;
   }
   /* Mobile: no tilt */
@@ -5129,7 +5149,7 @@
     .nf-row .concept-card .card-inner { transform: none !important; }
   }
   .nf-row .concept-card:not(.open):hover .card-inner {
-    transform: rotate(0deg) translateY(-5px);
+    transform: translateY(-6px);
   }
   .nf-row .concept-card.open .card-inner {
     transform: rotateY(180deg);
@@ -6661,7 +6681,7 @@
     <!-- v1.71: epic button lives in nav-right, hidden until nav hover -->
     <a class="nav-epic-standalone" id="navEpicBtn" onclick="openEgg();playNavSFX()" title="I feel epic!">😎 I feel epic!</a>
     <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode" onclick="toggleTheme()">☽</button>
-    <button class="nav-signup-btn" id="navSignupBtn" onclick="playNavSFX();scrollToSection('signup')">Sign Up 🎁</button>
+    <!-- Sign Up removed from default nav — accessible via hamburger menu -->
     <div class="nav-pill">
       <div class="nav-dot"></div>
       <span id="navConceptCount">—</span> ideas
@@ -8826,9 +8846,14 @@ function _renderDrawerContent(col, collectionId) {
     document.querySelector('#epDrawer .ep-drawer-body'),
     document.getElementById('epDrawerHeroBg')
   );
-  // Show scan sort row; reset any prior scan state
+  // Move sort-row inside cat-filter for same-row layout on desktop
   const _epSortRow = document.getElementById('epDrawerSortRow');
-  if (_epSortRow) _epSortRow.style.display = '';
+  const _epCatFilter = document.getElementById('epDrawerCatFilter');
+  if (_epSortRow && _epCatFilter) {
+    _epCatFilter.appendChild(_epSortRow);
+    _epSortRow.style.display = '';
+    _epCatFilter.classList.add('has-view-toggle');
+  }
   _resetDrawerScan('ep');
 }
 
@@ -9364,9 +9389,14 @@ function _renderThemeDrawerContent(col, id) {
     document.querySelector('#themeDrawer .ep-drawer-body'),
     document.getElementById('themeDrawerHeroBg')
   );
-  // Show scan sort row; reset any prior scan state
+  // Move sort-row inside cat-filter for same-row layout on desktop
   const _themeSortRow = document.getElementById('themeDrawerSortRow');
-  if (_themeSortRow) _themeSortRow.style.display = '';
+  const _themeCatFilter = document.getElementById('themeDrawerCatFilter');
+  if (_themeSortRow && _themeCatFilter) {
+    _themeCatFilter.appendChild(_themeSortRow);
+    _themeSortRow.style.display = '';
+    _themeCatFilter.classList.add('has-view-toggle');
+  }
   _resetDrawerScan('theme');
 }
 
@@ -9948,9 +9978,15 @@ function spSetSort(sort, btn) {
     pb.classList.toggle('pb-visible', sort === 'mastered');
   }
 
-  // Apply sort/filter to grid
+  // If scan mode is on, turn it off so full-card filtered view renders correctly
   const container = document.getElementById('netflixRows');
   if (!container) return;
+  if (container.classList.contains('scan-mode')) {
+    container.classList.remove('scan-mode');
+    container.querySelectorAll('.sc-tile').forEach(t => t.remove());
+    const scanBtn = document.getElementById('spScanToggle');
+    if (scanBtn) { scanBtn.textContent = '◫'; scanBtn.classList.remove('active'); }
+  }
 
   if (sort === 'latest') {
     buildGrid();
