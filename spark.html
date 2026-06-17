@@ -5156,15 +5156,16 @@
     height: 100%;
     transform-style: preserve-3d;
     transition: transform 0.62s cubic-bezier(0.4, 0.2, 0.2, 1);
-    transform: none;
+    transform: rotate(-0.8deg); /* subtle idle tilt */
     background: transparent;
   }
   /* Mobile: no tilt */
   @media (hover: none) {
     .nf-row .concept-card .card-inner { transform: none !important; }
   }
+  /* Hover: straighten up and lift */
   .nf-row .concept-card:not(.open):hover .card-inner {
-    transform: translateY(-6px);
+    transform: rotate(0deg) translateY(-6px);
   }
   .nf-row .concept-card.open .card-inner {
     transform: rotateY(180deg);
@@ -5186,16 +5187,22 @@
     padding: 22px 22px 18px;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.04);
+    /* No box-shadow here — shadow during 3D flip paints as black rectangle behind card */
     transition: border-color 0.2s, box-shadow 0.2s;
+    visibility: visible;
   }
-  .nf-row .concept-card:hover .card-front {
+  /* Hide front face once flipped so its GPU layer stops painting */
+  .nf-row .concept-card.open .card-front {
+    visibility: hidden;
+  }
+  /* Shadow only on hover — GPU compositing doesn't cause frame when not rotating */
+  .nf-row .concept-card:not(.open):hover .card-front {
     border-color: rgba(255,255,255,0.13);
-    box-shadow: 0 6px 16px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.06);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.5);
   }
+  /* Editor's pick: golden border only — no shadow ring */
   .nf-row .concept-card.editors-pick .card-front {
     border-color: rgba(232,213,163,0.55);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.45), 0 0 0 1px rgba(232,213,163,0.2), inset 0 1px 0 rgba(255,255,255,0.04);
   }
 
   .nf-row .card-meta {
