@@ -1179,10 +1179,9 @@
     overflow-x: auto;
     scrollbar-width: none;
     flex-shrink: 0;
-    position: relative;
     z-index: 2;
     background: var(--surface);
-    border-bottom: 1px solid var(--border);
+    /* border-bottom now on .ep-drawer-filter-row wrapper */
   }
   @media (max-width: 700px) {
     .ep-drawer-cat-filter { padding: 0.75rem 1.25rem 0; gap: 1.1rem; }
@@ -1215,33 +1214,46 @@
   }
 
   /* ── DRAWER VIEW TOGGLE (3 icon buttons) ───────────────── */
-  /* View toggle row is appended into the cat-filter row by JS on desktop.
-     On mobile it stays as its own row below. */
+  /* Filter row wrapper: cat-filter pills + view-toggle icons on same line */
+  .ep-drawer-filter-row {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+    min-height: 44px;
+  }
+  .ep-drawer-filter-row .ep-drawer-cat-filter {
+    flex: 1;
+    border-bottom: none; /* border is on the wrapper */
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    min-width: 0;
+  }
+  .ep-drawer-filter-row .ep-drawer-cat-filter::-webkit-scrollbar { display: none; }
   .ep-drawer-sort-row {
     display: flex;
     align-items: center;
     gap: 4px;
-    margin-left: auto;
-    padding: 0;
-    background: none;
-    border: none;
+    padding: 0 1rem 0 0.5rem;
     flex-shrink: 0;
-  }
-  /* When injected inside cat-filter: cat-filter becomes flex */
-  .ep-drawer-cat-filter.has-view-toggle {
-    display: flex;
-    align-items: center;
-    padding-right: 0.75rem;
+    border-left: 1px solid var(--border);
   }
   @media (max-width: 700px) {
-    .ep-drawer-sort-row {
-      display: flex;
-      padding: 0.45rem 1.25rem;
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      margin-left: 0;
+    .ep-drawer-filter-row {
+      flex-wrap: wrap;
     }
-    .ep-drawer-cat-filter.has-view-toggle { flex-wrap: nowrap; }
+    .ep-drawer-filter-row .ep-drawer-cat-filter {
+      width: 100%;
+      flex: 0 0 100%;
+      border-bottom: 1px solid var(--border);
+    }
+    .ep-drawer-sort-row {
+      border-left: none;
+      padding: 0.4rem 1rem;
+      width: 100%;
+      border-top: none;
+    }
   }
   .ep-drawer-view-btn {
     font-family: 'DM Mono', monospace;
@@ -1360,11 +1372,14 @@
     margin-bottom: 8px;
     align-items: start;
   }
-  /* All-cards view: cards identical to library .nf-row .concept-card */
+  /* All-cards view: cards match ep-cat-column size (280×370) */
   .ep-drawer-all-cards-wrap .concept-card {
-    width: 100%; height: 300px; min-width: 0;
+    width: 280px; height: 370px; min-width: 280px;
     perspective: 1400px; flex: none;
     border: none; background: transparent;
+  }
+  @media (max-width: 700px) {
+    .ep-drawer-all-cards-wrap .concept-card { width: 100%; min-width: 0; height: 340px; }
   }
   .ep-drawer-all-cards-wrap .concept-card .card-inner {
     position: relative; width: 100%; height: 100%;
@@ -4929,8 +4944,8 @@
     touch-action: auto; /* pan-x handled by parent .nf-row */
   }
 
-  .concept-card.editors-pick { border-color: rgba(232,213,163,0.45); }
-  .concept-card.editors-pick:hover { border-color: rgba(232,213,163,0.7); }
+  /* editors-pick glow lives on card-front face, not the wrapper */
+  .concept-card.editors-pick { border: none; }
 
   /* #5 PICK badge — 3-cycle breathe on load, then stops (matches unflipped dot feel) */
   .pick-badge {
@@ -5125,7 +5140,7 @@
     flex: 0 0 280px;
     min-width: 280px;
     height: 370px;
-    overflow: hidden; /* clip card-inner so rotated edges don't bleed */
+    overflow: visible;
     border: none;
     background: transparent;
     border-radius: 14px;
@@ -5179,7 +5194,8 @@
     box-shadow: 0 6px 16px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.06);
   }
   .nf-row .concept-card.editors-pick .card-front {
-    border-color: rgba(232,213,163,0.4);
+    border-color: rgba(232,213,163,0.55);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.45), 0 0 0 1px rgba(232,213,163,0.2), inset 0 1px 0 rgba(255,255,255,0.04);
   }
 
   .nf-row .card-meta {
@@ -7221,11 +7237,13 @@
   </div>
   <div class="ep-drawer-pills" id="epDrawerPills"></div>
   <div class="ep-drawer-mix" id="epDrawerMix"></div>
-  <div class="ep-drawer-cat-filter" id="epDrawerCatFilter"></div>
-  <div class="ep-drawer-sort-row" id="epDrawerSortRow" style="display:none">
-    <button class="ep-drawer-view-btn active" id="epViewBtnFlip" data-view="flip" onclick="setDrawerView('ep','flip',this)" title="Card view">⊟</button>
-    <button class="ep-drawer-view-btn" id="epViewBtnScan" data-view="scan" onclick="setDrawerView('ep','scan',this)" title="Scan view">◫</button>
-    <button class="ep-drawer-view-btn" id="epViewBtnAll" data-view="all" onclick="setDrawerView('ep','all',this)" title="All cards">⊞</button>
+  <div class="ep-drawer-filter-row">
+    <div class="ep-drawer-cat-filter" id="epDrawerCatFilter"></div>
+    <div class="ep-drawer-sort-row" id="epDrawerSortRow" style="display:none">
+      <button class="ep-drawer-view-btn active" id="epViewBtnFlip" data-view="flip" onclick="setDrawerView('ep','flip',this)" title="Card view">⊟</button>
+      <button class="ep-drawer-view-btn" id="epViewBtnScan" data-view="scan" onclick="setDrawerView('ep','scan',this)" title="Scan view">◫</button>
+      <button class="ep-drawer-view-btn" id="epViewBtnAll" data-view="all" onclick="setDrawerView('ep','all',this)" title="All cards">⊞</button>
+    </div>
   </div>
   <div class="ep-drawer-body">
     <div class="ep-drawer-scan-grid" id="epDrawerScanGrid"></div>
@@ -7249,11 +7267,13 @@
   </div>
   <div class="ep-drawer-pills" id="themeDrawerPills"></div>
   <div class="ep-drawer-mix" id="themeDrawerMix"></div>
-  <div class="ep-drawer-cat-filter" id="themeDrawerCatFilter"></div>
-  <div class="ep-drawer-sort-row" id="themeDrawerSortRow" style="display:none">
-    <button class="ep-drawer-view-btn active" id="themeViewBtnFlip" data-view="flip" onclick="setDrawerView('theme','flip',this)" title="Card view">⊟</button>
-    <button class="ep-drawer-view-btn" id="themeViewBtnScan" data-view="scan" onclick="setDrawerView('theme','scan',this)" title="Scan view">◫</button>
-    <button class="ep-drawer-view-btn" id="themeViewBtnAll" data-view="all" onclick="setDrawerView('theme','all',this)" title="All cards">⊞</button>
+  <div class="ep-drawer-filter-row">
+    <div class="ep-drawer-cat-filter" id="themeDrawerCatFilter"></div>
+    <div class="ep-drawer-sort-row" id="themeDrawerSortRow" style="display:none">
+      <button class="ep-drawer-view-btn active" id="themeViewBtnFlip" data-view="flip" onclick="setDrawerView('theme','flip',this)" title="Card view">⊟</button>
+      <button class="ep-drawer-view-btn" id="themeViewBtnScan" data-view="scan" onclick="setDrawerView('theme','scan',this)" title="Scan view">◫</button>
+      <button class="ep-drawer-view-btn" id="themeViewBtnAll" data-view="all" onclick="setDrawerView('theme','all',this)" title="All cards">⊞</button>
+    </div>
   </div>
   <div class="ep-drawer-body">
     <div class="ep-drawer-scan-grid" id="themeDrawerScanGrid"></div>
@@ -8209,18 +8229,26 @@ function toggleCard(id) {
 
 function toggleMaster(e, id) {
   e.stopPropagation();
+  e.preventDefault();
   const isMastering = !mastered.has(id);
   if (isMastering) { mastered.add(id); playVaultSFX(); track('concept_mastered', { id: id }); }
   else { mastered.delete(id); playVaultRemoveSFX(); }
   saveMastered();
   updateProgress();
 
-  // Update all ★ master buttons for this concept across all card instances
+  const isSaved = mastered.has(id);
+  // Always update the clicked button directly (in case id lookup misses)
+  const clickedBtn = e.currentTarget || e.target;
+  if (clickedBtn && clickedBtn.classList.contains('btn-master')) {
+    clickedBtn.classList.toggle('mastered-active', isSaved);
+    clickedBtn.title = isSaved ? 'Saved ✓' : 'Save to Mastered';
+  }
+  // Update all other ★ master buttons for this concept
   ['', 'Ep', 'Th', 'Fl', 'All'].forEach(suffix => {
     const btn = document.getElementById('btnMaster' + suffix + id);
-    if (btn) {
-      btn.classList.toggle('mastered-active', mastered.has(id));
-      btn.title = mastered.has(id) ? 'Saved ✓' : 'Save to Mastered';
+    if (btn && btn !== clickedBtn) {
+      btn.classList.toggle('mastered-active', isSaved);
+      btn.title = isSaved ? 'Saved ✓' : 'Save to Mastered';
     }
   });
   // Update card element mastered class
@@ -8846,14 +8874,9 @@ function _renderDrawerContent(col, collectionId) {
     document.querySelector('#epDrawer .ep-drawer-body'),
     document.getElementById('epDrawerHeroBg')
   );
-  // Move sort-row inside cat-filter for same-row layout on desktop
+  // Show sort-row (sibling of cat-filter; CSS makes them share one row)
   const _epSortRow = document.getElementById('epDrawerSortRow');
-  const _epCatFilter = document.getElementById('epDrawerCatFilter');
-  if (_epSortRow && _epCatFilter) {
-    _epCatFilter.appendChild(_epSortRow);
-    _epSortRow.style.display = '';
-    _epCatFilter.classList.add('has-view-toggle');
-  }
+  if (_epSortRow) _epSortRow.style.display = '';
   _resetDrawerScan('ep');
 }
 
@@ -9389,14 +9412,9 @@ function _renderThemeDrawerContent(col, id) {
     document.querySelector('#themeDrawer .ep-drawer-body'),
     document.getElementById('themeDrawerHeroBg')
   );
-  // Move sort-row inside cat-filter for same-row layout on desktop
+  // Show sort-row (sibling of cat-filter; CSS makes them share one row)
   const _themeSortRow = document.getElementById('themeDrawerSortRow');
-  const _themeCatFilter = document.getElementById('themeDrawerCatFilter');
-  if (_themeSortRow && _themeCatFilter) {
-    _themeCatFilter.appendChild(_themeSortRow);
-    _themeSortRow.style.display = '';
-    _themeCatFilter.classList.add('has-view-toggle');
-  }
+  if (_themeSortRow) _themeSortRow.style.display = '';
   _resetDrawerScan('theme');
 }
 
@@ -15318,17 +15336,19 @@ function playCardFlipSFX(isOpening) {
 function playVaultSFX() {
   if (!SFX_ENABLED) return;
   try {
-    notes.forEach((freq, i) => {
+    const ctx = _getSfxCtx();
+    const vaultNotes = [523, 659, 784]; // C5 E5 G5 — rising triad
+    vaultNotes.forEach((freq, i) => {
       const o = ctx.createOscillator();
       const g = ctx.createGain();
       o.type = 'sine';
       o.connect(g); g.connect(ctx.destination);
       o.frequency.value = freq;
-      const t = ctx.currentTime + i * 0.12;
+      const t = ctx.currentTime + i * 0.10;
       g.gain.setValueAtTime(0, t);
-      g.gain.linearRampToValueAtTime(0.1, t + 0.04);
-      g.gain.exponentialRampToValueAtTime(0.001, t + 0.38);
-      o.start(t); o.stop(t + 0.4);
+      g.gain.linearRampToValueAtTime(0.09, t + 0.03);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 0.32);
+      o.start(t); o.stop(t + 0.35);
     });
   } catch(e) {}
 }
