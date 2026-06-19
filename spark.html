@@ -5159,9 +5159,9 @@
     transform: rotate(-0.8deg); /* subtle idle tilt */
     background: transparent;
   }
-  /* Mobile: no tilt */
+  /* Mobile: no idle tilt (but flip must still work) */
   @media (hover: none) {
-    .nf-row .concept-card .card-inner { transform: none !important; }
+    .nf-row .concept-card:not(.open) .card-inner { transform: none; }
   }
   /* Hover: straighten up and lift */
   .nf-row .concept-card:not(.open):hover .card-inner {
@@ -5188,12 +5188,13 @@
     display: flex;
     flex-direction: column;
     /* No box-shadow here — shadow during 3D flip paints as black rectangle behind card */
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition: border-color 0.2s, box-shadow 0.2s, visibility 0s linear 0.62s;
     visibility: visible;
   }
-  /* Hide front face once flipped so its GPU layer stops painting */
+  /* Hide front face once flipped so its GPU layer stops painting — delayed until rotation finishes */
   .nf-row .concept-card.open .card-front {
     visibility: hidden;
+    transition: border-color 0.2s, box-shadow 0.2s, visibility 0s linear 0.31s;
   }
   /* Shadow only on hover — GPU compositing doesn't cause frame when not rotating */
   .nf-row .concept-card:not(.open):hover .card-front {
@@ -8079,7 +8080,8 @@ function buildGrid() {
   initMagneticCards();
   document.querySelectorAll('.nf-row').forEach(updateArrowVisibility);
   // Re-inject scan tiles if scan mode is still active after DOM rebuild
-  if (mc && mc.classList.contains('scan-mode')) _spReinjectScanTiles(mc);
+  // Pass the same matchIds/vault filter buildGrid just applied, so scan tiles match search results
+  if (mc && mc.classList.contains('scan-mode')) _spReinjectScanTiles(mc, matchIds, isVault);
   // Signal reading-progress observer to re-attach — v1.92
   document.dispatchEvent(new Event('_gridBuilt'));
 }
@@ -10024,7 +10026,7 @@ function spSetSort(sort, btn) {
   }
 }
 
-function _spReinjectScanTiles(grid) {
+function _spReinjectScanTiles(grid, matchIds, isVault) {
   // Remove any stale tiles first
   grid.querySelectorAll('.sc-tile').forEach(t => t.remove());
   // Remove any previous delegation listener
@@ -10034,7 +10036,9 @@ function _spReinjectScanTiles(grid) {
   }
   grid.querySelectorAll('.nf-row').forEach(row => {
     const rowId = row.id.replace('nf-drag-', '');
-    const catConcepts = CONCEPTS.filter(c => c.category === rowId && !c.duplicate_of);
+    let catConcepts = CONCEPTS.filter(c => c.category === rowId && !c.duplicate_of);
+    if (isVault) catConcepts = catConcepts.filter(c => mastered.has(c.id));
+    if (matchIds) catConcepts = catConcepts.filter(c => matchIds.has(c.id));
     const color = CAT_COLOR[rowId] || '#e8d5a3';
     const frag = document.createDocumentFragment();
     catConcepts.forEach(c => {
