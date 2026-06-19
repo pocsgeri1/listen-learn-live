@@ -23,6 +23,50 @@ Extract 20–40 concepts that are:
 - Applicable in real conversations, decisions, or mental models
 - Counterintuitive, precise, or underknown rather than obvious
 
+HOOK FIELD — RULES (v2.0)
+--------------------------
+Job: make the reader feel something before they understand anything. Test: would a sharp person screenshot this without the card?
+
+Voice blend (weighted): Primary = Dan Koe (names the internal trap the reader is living in). Secondary, equal weight = Hormozi (blunt cost) + Naval (compression/paradox). Seasoning only = Sahil Bloom (stakes) / Esther Perel (subtext).
+Category steers which lever leads: business/power → Hormozi; psychology/identity → Koe; philosophy/science → Naval; society/finance → hidden-incentive (Sutherland); relationships/language → unspoken dynamic (Perel); thinking/creativity/health/tech-ai → plain clarity, no seasoning.
+
+Format: target 8–12 words, hard ceiling 14. One sentence preferred. Two clauses only if clause 2 reframes/inverts/punches — never if it just continues clause 1.
+
+Generation sequence — apply in this order:
+1. Front-load the trigger word — the specific/surprising/identity-relevant noun lands in the first 3 words, not the last 3.
+   Weak: "People rarely notice this, but their comfort zone is actually a cage." Fixed: "Your comfort zone stopped being comfortable years ago."
+2. Pick ONE dominant lever (identity-relevance / cost-of-inaction / compression-paradox / subtext-reveal). Cut anything not serving it.
+3. Reach for the specific noun/number/scenario before any intensifier.
+   Weak: "This happens way more often than people think." Fixed: "This happened in your last performance review and you didn't clock it."
+4. EVERYDAY LANGUAGE CHECK: every word must be something an expat professional or a 12-year-old would instantly understand. No academic register, no native-only idioms ("lost the plot," "fires" as instinct-verb). If a smart 12-year-old would stumble on a word, replace it. This rule applies ONLY to hook/plain/analogy/prompt — never to the term field.
+5. NO-OVERLAP CHECK: cover the hook, read the plain field. If the hook doesn't add a new angle, rewrite.
+
+Pattern menu (ranked — lean on #1 most, rotate the rest):
+1. Hyper-specific over abstract (highest hit rate, default choice)
+2. Funny/sarcastic + concrete visual (sarcasm always paired with a specific image, never alone)
+3. Blunt one-line verdict
+4. Relatable self-recognition ("oh no, that's me")
+5. Reversal / frame flip
+6. Metaphor that unlocks a hard/Latin term
+
+BATCH-LEVEL TONE BALANCE: aim ~60% straight/specific/blunt (patterns 1, 3, 6), ~40% funny/twisted/surprising (patterns 2, 4, 5) across the full batch. Let each concept self-select its natural fit — do not force a tone onto a bad fit. Check the ratio after drafting the batch, not per-card.
+
+Hard bans: em-dashes anywhere; "You're not X, you're Y" / "It's not X, it's Y" (even disguised — rewrite the clause structure entirely, don't just swap words); "Most people don't realize…"; "Here's the thing:"; "Game-changing"; "a new era of"; "everything shifted"; -ing verb opener with no subject ("Confusing busy with results."); motivational poster cadence ("Small things compound into big things."); triads of exactly three; academic register; sarcasm/negativity as the batch default (fine as rotation per the tone balance above, never dominant).
+
+TERM FIELD — RULES (v2.0)
+---------------------------
+Job: the label someone says out loud in conversation. Must be sayable, memorable, worth knowing.
+
+1. Concrete imagery beats abstract labels ("The Velvet Rope Effect" > "Exclusivity-Driven Value Perception").
+2. Real, citable, exotic-sounding vocabulary is PRESERVED, not simplified (Hormesis, Dunning-Kruger). The everyday-language rule above applies to hook/plain/analogy/prompt — NEVER to term. Novelty is part of the value.
+3. Named/coined terms are exempt from rewriting entirely (Dunning-Kruger, Motte and Bailey, Bikeshedding, etc.).
+4. "X as/of/over/through Y" = default suspicion, not automatic ban. Test: remove the connector — do the two halves independently mean something? If yes, can stay (e.g. "Brands as Insurance"). If no, find something more specific.
+5. "X vs Y" survives only if both nouns are independently teachable. Symbols (≠, >) can replace "vs" when cleaner.
+6. NO OVERLAP WITH HOOK — check explicitly, side by side. Don't repeat 2+ content words from the hook or restate its angle. Exempt only when the term IS the established real name for the concept.
+7. Specificity/mechanism beats category label ("Three Prices, One Decoy" > "Good, Better, Best").
+8. Format: 2–5 words, Title Case, no punctuation except natural hyphens (never em-dashes), avoid leading "The" unless it's earning its place.
+9. Accessibility check: would a fluent non-native professional be able to SAY this term out loud in a meeting without stumbling on pronunciation? Tests sayability/circulation, NOT intuitive obviousness — exotic real words can still pass.
+
 DO NOT extract:
 - Generic advice ("work hard", "be consistent", "find your passion")
 - Concepts so well-known they add no value ("supply and demand", "teamwork")
@@ -33,10 +77,10 @@ DO NOT extract:
 FOR EACH EXTRACTED CONCEPT, RETURN THIS EXACT JSON STRUCTURE:
 {
   "id": null,
-  "term": "[2-5 words, clear and memorable]",
+  "term": "[follow TERM FIELD RULES v2.0 above — 2-5 words]",
   "category": "[exactly one of: finance | psychology | thinking | power | relationships | language | business | identity | health | philosophy | society | creativity | science | tech-ai]",
   "source": "[2-letter source code — see SOURCE ATTRIBUTION below]",
-  "hook": "[one sentence, max 12 words, format: observation — implication]",
+  "hook": "[follow HOOK FIELD RULES v2.0 above — 8-12 words target, 14 hard ceiling]",
   "plain": "[2-3 sentences, zero jargon, plain English only]",
   "analogy": "[one concrete real-world scenario, 1-2 sentences]",
   "prompt": "[one actionable reflection or conversation question]",
@@ -66,7 +110,7 @@ novelty:             10 = counterintuitive, aha-moment; 1 = everyone knows this
 conversation_value:  10 = using it would impress in a meeting; 1 = common vocabulary
 
 QUALITY CHECKS — reject concepts that fail any of these:
-- Hook must work as a standalone tweet and feel punchy
+- Hook must pass all rules in the HOOK FIELD section above (8-12 words target, front-loaded, one dominant lever, everyday language, no overlap with plain)
 - Analogy must use a concrete real-world scenario, not "it's like a machine"
 - Plain explanation must pass the "smart 25-year-old who never heard this term" test
 - Composite score must be 6.0 or above to be included in output
