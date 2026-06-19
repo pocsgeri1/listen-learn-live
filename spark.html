@@ -10695,21 +10695,18 @@ function _spShowResults(q) {
   if (!dropdown) return;
   _spFocusedIdx = -1;
 
-  // Position dropdown below search bar using fixed coordinates
-  const wrap = document.getElementById('spSearchWrap');
-  if (wrap) {
+  // Position dropdown exactly against the search bar's own edges (not viewport-centered)
+  // so it visually pours down from the bar rather than floating independently below it.
+  const _spPositionDropdown = () => {
+    const wrap = document.getElementById('spSearchWrap');
+    if (!wrap) return;
     const r = wrap.getBoundingClientRect();
     dropdown.style.top = (r.bottom + 6) + 'px';
-    if (window.innerWidth <= 600) {
-      // Center the dropdown on mobile
-      const dw = Math.min(window.innerWidth - 32, r.width);
-      dropdown.style.width = dw + 'px';
-      dropdown.style.left = Math.max(16, (window.innerWidth - dw) / 2) + 'px';
-    } else {
-      dropdown.style.left = r.left + 'px';
-      dropdown.style.width = r.width + 'px';
-    }
-  }
+    dropdown.style.left = r.left + 'px';
+    dropdown.style.width = r.width + 'px';
+    dropdown.style.maxWidth = (window.innerWidth - 32) + 'px';
+  };
+  _spPositionDropdown();
 
   // Two-pass ranking: term matches first, then content matches
   const ql = q.toLowerCase();
@@ -10766,7 +10763,10 @@ function _spShowResults(q) {
   }
 
   dropdown.style.display = '';
-  requestAnimationFrame(() => dropdown.classList.add('visible'));
+  requestAnimationFrame(() => {
+    _spPositionDropdown(); // re-check in case the on-screen keyboard shifted layout
+    dropdown.classList.add('visible');
+  });
 }
 
 function _spHideDropdown() {
@@ -10918,16 +10918,39 @@ function _spOpenMobilePreview(id, opts) {
   _spMobilePreviewSource = opts.fromSearch ? 'search' : 'scan';
 
   // Don't hide the search dropdown — modal sits on top; closing reveals it again unchanged
-  document.body.style.overflow = 'hidden';
+  _spLockBodyScroll();
   backdrop.style.display = 'flex';
   requestAnimationFrame(() => requestAnimationFrame(() => backdrop.classList.add('visible')));
+}
+
+// Robust scroll-lock pattern (position:fixed + saved scrollY) instead of plain
+// overflow:hidden toggling — iOS Safari can leave the page un-scrollable after
+// an overflow:hidden body is paired with an inner overflow-y:auto element that
+// was itself scrolled. Pinning the body's actual position and restoring the
+// exact scrollY on unlock avoids that class of stuck-scroll bug entirely.
+let _spScrollLockY = 0;
+function _spLockBodyScroll() {
+  _spScrollLockY = window.scrollY || window.pageYOffset || 0;
+  document.body.style.position = 'fixed';
+  document.body.style.top = (-_spScrollLockY) + 'px';
+  document.body.style.left = '0';
+  document.body.style.right = '0';
+  document.body.style.width = '100%';
+}
+function _spUnlockBodyScroll() {
+  document.body.style.position = '';
+  document.body.style.top = '';
+  document.body.style.left = '';
+  document.body.style.right = '';
+  document.body.style.width = '';
+  window.scrollTo(0, _spScrollLockY);
 }
 
 function spDismissMobilePreview(goingToCS) {
   const backdrop = document.getElementById('spMobilePreviewBackdrop');
   if (!backdrop) return;
   backdrop.classList.remove('visible');
-  document.body.style.overflow = '';
+  _spUnlockBodyScroll();
   setTimeout(() => { backdrop.style.display = 'none'; }, 220);
   // If the user tapped "Talk about this", _spSelectConcept already hides the dropdown itself —
   // otherwise (plain X close) leave the search dropdown exactly as it was underneath.
@@ -16559,6 +16582,21 @@ function playStreakMilestoneSFX() {
   transform: translateY(0);
 }
 
+/* Mobile: "waterfall" reveal — pours down from the search bar's own width
+   instead of a flat fade, so it reads as extending from the bar, not
+   overlapping it. */
+@media (max-width: 600px) {
+  .sp-dropdown {
+    transform: none;
+    clip-path: inset(0 0 100% 0 round 8px);
+    transition: opacity 0.16s ease, clip-path 0.32s cubic-bezier(0.22,0.61,0.36,1);
+  }
+  .sp-dropdown.visible {
+    transform: none;
+    clip-path: inset(0 0 0% 0 round 8px);
+  }
+}
+
 [data-theme="light"] .sp-dropdown {
   background: var(--surface);
   border-color: var(--border-hover);
@@ -16773,8 +16811,10 @@ function playStreakMilestoneSFX() {
 /* On mobile, hide the desktop-only pills in row1 */
 @media (max-width: 600px) {
   .sp-pill-hide-mobile { display: none; }
-  /* Row1 now carries 3 pills + the "+" toggle — tighten so they fit one line */
-  .sp-pills-row#spPillsRow1 { flex-wrap: nowrap; gap: 6px; }
+  /* Row1 carries 3 pills + the "+" toggle. wrap (never nowrap) so the row can
+     never force the page wider than the viewport — nowrap here was the root
+     cause of mobile auto-zoom/horizontal scroll on landing (v1.99j regression). */
+  .sp-pills-row#spPillsRow1 { flex-wrap: wrap; gap: 6px; }
   .sp-pills-row#spPillsRow1 .sp-pill:not(.sp-pill-more) {
     font-size: 0.6rem;
     padding: 7px 10px;
@@ -17047,12 +17087,13 @@ function playStreakMilestoneSFX() {
   display: none;
   align-items: center;
   justify-content: center;
-  padding: 24px 16px;
+  padding: 20px 16px;
   background: rgba(13,13,13,0.55);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   opacity: 0;
   transition: opacity 0.22s ease;
+  perspective: 1000px; /* for the card's flip-reveal entrance */
 }
 .sp-mobile-preview-backdrop.visible {
   display: flex;
@@ -17061,13 +17102,13 @@ function playStreakMilestoneSFX() {
 .sp-mobile-preview-card {
   position: relative;
   width: 100%;
-  max-width: 360px;
-  max-height: calc(100vh - 48px);
+  max-width: 290px;
+  max-height: calc(100vh - 96px);
   background: var(--surface2);
   border: 1px solid var(--cat-color, var(--border));
   border-color: color-mix(in srgb, var(--cat-color, var(--accent)) 35%, transparent);
-  border-radius: 16px;
-  padding: 24px 20px 20px;
+  border-radius: 14px;
+  padding: 19px 16px 16px;
   display: flex;
   flex-direction: column;
   gap: 0;
@@ -17075,23 +17116,27 @@ function playStreakMilestoneSFX() {
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
   box-shadow: 0 12px 40px rgba(0,0,0,0.5);
-  transform: scale(0.9) translateY(16px);
-  transition: transform 0.3s cubic-bezier(0.22,0.61,0.36,1);
+  /* On-brand entrance: starts as if mid-flip (like the library cards), settles flat + fades in */
+  transform: scale(0.88) rotateX(-8deg) translateY(14px);
+  transform-origin: center 30%;
+  opacity: 0;
+  transition: transform 0.3s cubic-bezier(0.22,0.61,0.36,1), opacity 0.26s ease;
 }
 .sp-mobile-preview-backdrop.visible .sp-mobile-preview-card {
-  transform: scale(1) translateY(0);
+  transform: scale(1) rotateX(0deg) translateY(0);
+  opacity: 1;
 }
 .sp-mobile-preview-close {
   position: absolute;
-  top: 14px;
-  right: 14px;
-  width: 30px;
-  height: 30px;
+  top: 12px;
+  right: 12px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
   border: 1px solid var(--border);
   background: var(--surface);
   color: var(--muted2);
-  font-size: 0.85rem;
+  font-size: 0.76rem;
   line-height: 1;
   cursor: pointer;
   display: flex;
@@ -17104,21 +17149,21 @@ function playStreakMilestoneSFX() {
   color: var(--accent);
   border-color: var(--accent);
 }
-.sp-mobile-preview-content { padding-right: 24px; }
+.sp-mobile-preview-content { padding-right: 20px; }
 .sp-mp-cat {
   font-family: 'DM Mono', monospace;
-  font-size: 0.56rem;
+  font-size: 0.52rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  margin-bottom: 8px;
+  margin-bottom: 7px;
 }
 .sp-mp-term {
   font-family: 'Playfair Display', serif;
-  font-size: 1.3rem;
+  font-size: 1.12rem;
   font-weight: 700;
   color: var(--text);
   line-height: 1.25;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 .sp-mp-hook {
   font-size: 0.86rem;
@@ -17130,59 +17175,59 @@ function playStreakMilestoneSFX() {
 /* Reuse the same field styling as the card-back so content always matches */
 .sp-mobile-preview-content .back-section-label {
   font-family: 'DM Mono', monospace;
-  font-size: 0.54rem;
+  font-size: 0.5rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--muted);
-  margin-top: 16px;
-  margin-bottom: 5px;
+  margin-top: 13px;
+  margin-bottom: 4px;
 }
 .sp-mobile-preview-content .back-section-label:first-of-type { margin-top: 0; }
 .sp-mobile-preview-content .back-text {
-  font-size: 0.86rem;
+  font-size: 0.79rem;
   color: var(--text);
-  line-height: 1.7;
+  line-height: 1.6;
   font-weight: 300;
 }
 .sp-mobile-preview-content .back-analogy {
-  font-size: 0.82rem;
+  font-size: 0.75rem;
   color: var(--muted2);
-  line-height: 1.65;
+  line-height: 1.55;
   font-style: italic;
   border-left: 2px solid color-mix(in srgb, var(--cat-color, var(--accent)) 50%, transparent);
-  padding-left: 10px;
+  padding-left: 9px;
 }
 .sp-mobile-preview-content .back-prompt {
   background: rgba(232,213,163,0.06);
   border: 1px solid rgba(232,213,163,0.15);
   border-radius: 8px;
-  padding: 12px 14px;
-  margin-top: 14px;
+  padding: 10px 12px;
+  margin-top: 12px;
 }
 .sp-mobile-preview-content .back-prompt p {
-  font-size: 0.82rem;
+  font-size: 0.75rem;
   color: var(--accent);
-  line-height: 1.6;
+  line-height: 1.55;
   margin: 0;
 }
-.sp-mobile-preview-content .prompt-icon { font-size: 0.86rem; margin-bottom: 3px; }
+.sp-mobile-preview-content .prompt-icon { font-size: 0.8rem; margin-bottom: 3px; }
 .sp-mp-footer {
-  margin-top: 18px;
-  padding-top: 14px;
+  margin-top: 15px;
+  padding-top: 12px;
   border-top: 1px solid var(--border);
   display: flex;
   justify-content: center;
 }
 .sp-mp-talk-btn {
   font-family: 'DM Mono', monospace;
-  font-size: 0.68rem;
+  font-size: 0.64rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--accent);
   background: rgba(232,213,163,0.10);
   border: 1px solid rgba(232,213,163,0.3);
   border-radius: 999px;
-  padding: 10px 20px;
+  padding: 9px 18px;
   cursor: pointer;
   width: 100%;
 }
