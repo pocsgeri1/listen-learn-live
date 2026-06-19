@@ -5188,7 +5188,8 @@
     display: flex;
     flex-direction: column;
     /* No box-shadow here — shadow during 3D flip paints as black rectangle behind card */
-    transition: border-color 0.2s, box-shadow 0.2s, visibility 0s linear 0.62s;
+    /* visibility flips back to visible at the 0.31s edge-on point (halfway through the 0.62s rotation), same as opening */
+    transition: border-color 0.2s, box-shadow 0.2s, visibility 0s linear 0.31s;
     visibility: visible;
   }
   /* Hide front face once flipped so its GPU layer stops painting — delayed until rotation finishes */
@@ -7103,6 +7104,14 @@
   <!-- Floating concept preview card — shown when user clicks a term in search dropdown -->
   <div class="sp-preview-card" id="spPreviewCard" style="display:none"></div>
 
+  <!-- Mobile full-screen concept preview modal — card-flip style, blurred backdrop -->
+  <div class="sp-mobile-preview-backdrop" id="spMobilePreviewBackdrop" onclick="if(event.target===this) spDismissMobilePreview()">
+    <div class="sp-mobile-preview-card" id="spMobilePreviewCard">
+      <button class="sp-mobile-preview-close" id="spMobilePreviewClose" onclick="spDismissMobilePreview()" aria-label="Close">✕</button>
+      <div class="sp-mobile-preview-content" id="spMobilePreviewContent"></div>
+    </div>
+  </div>
+
   <!-- Center column: tagline + search + scenario pills -->
   <div class="sp-hero-col">
 
@@ -7125,13 +7134,12 @@
       <div class="sp-pills-row" id="spPillsRow1">
         <button class="sp-pill" onclick="spScenarioPill(this,'friend')">💬 With a friend</button>
         <button class="sp-pill sp-pill-hide-mobile" onclick="spScenarioPill(this,'dinner')">🍷 Dinner party</button>
-        <button class="sp-pill sp-pill-hide-mobile" onclick="spScenarioPill(this,'date')">✨ On a date</button>
+        <button class="sp-pill" onclick="spScenarioPill(this,'date')">✨ On a date</button>
         <button class="sp-pill sp-pill-hide-mobile" onclick="spScenarioPill(this,'work')">💼 At work</button>
         <button class="sp-pill sp-pill-more" id="spMoreBtn" onclick="spToggleMorePills()"><span class="sp-more-sym">+</span></button>
       </div>
       <div class="sp-pills-row sp-pills-row2" id="spPillsRow2">
         <button class="sp-pill sp-pill-show-mobile" onclick="spScenarioPill(this,'dinner')">🍷 Dinner party</button>
-        <button class="sp-pill sp-pill-show-mobile" onclick="spScenarioPill(this,'date')">✨ On a date</button>
         <button class="sp-pill sp-pill-show-mobile" onclick="spScenarioPill(this,'work')">💼 At work</button>
         <button class="sp-pill" onclick="spScenarioPill(this,'family')">🏡 With family</button>
         <button class="sp-pill" onclick="spScenarioPill(this,'networking')">🤝 Networking</button>
@@ -10309,6 +10317,11 @@ function toggleDrawerScan(prefix) {
 }
 
 function _spScanTileClick(id, anchorEl) {
+  // Mobile/tablet: the floating .sp-preview-card has no room — use the full-screen modal instead
+  if (window.innerWidth <= 1024) {
+    _spOpenMobilePreview(id);
+    return;
+  }
   // If preview already showing for this id — second click loads into CS
   const card = document.getElementById('spPreviewCard');
   if (card && card.dataset.previewId === String(id) && card.classList.contains('sp-preview-visible')) {
@@ -10316,7 +10329,7 @@ function _spScanTileClick(id, anchorEl) {
     _spSelectConcept(id);
     return;
   }
-  // Both mobile and desktop: show preview first; "Talk about this" opens CS
+  // Desktop: show floating preview first; "Talk about this" opens CS
   _spScanPreview(id, anchorEl);
 }
 
@@ -10331,6 +10344,12 @@ function _spScanPreview(id, anchorEl) {
   if (card._dismissFn) {
     document.removeEventListener('click', card._dismissFn, true);
     card._dismissFn = null;
+  }
+  // Cancel any pending hide-timeout from a previous dismiss — otherwise it
+  // fires ~260ms later and force-hides this freshly-reopened preview
+  if (card._hideTimeout) {
+    clearTimeout(card._hideTimeout);
+    card._hideTimeout = null;
   }
 
   const color = CAT_COLOR[concept.category] || '#e8d5a3';
@@ -10725,9 +10744,9 @@ function _spShowResults(q) {
       const color = CAT_COLOR[c.category] || '#e8d5a3';
       const catName = (CATEGORIES.find(x => x.id === c.category) || {}).name || c.category;
       const srcLabel = SOURCE_LABEL[c.source] || c.source || '';
-      // On mobile: clicking body loads concept into CS without auto-fire
+      // On mobile: clicking body opens the full-screen preview modal (dropdown stays open underneath)
       // On desktop: shows floating preview card
-      const bodyClick = `window.innerWidth <= 700 ? _spLoadConceptNoFire(${c.id}) : _spPreviewCard(${c.id})`;
+      const bodyClick = `window.innerWidth <= 1024 ? _spOpenMobilePreview(${c.id}, {fromSearch:true}) : _spPreviewCard(${c.id})`;
       return `<div class="sp-drop-item" role="option" data-id="${c.id}">
         <div class="sp-drop-stripe" style="background:${color}"></div>
         <div class="sp-drop-body" onclick="${bodyClick}">
@@ -10802,6 +10821,12 @@ function _spPreviewCard(id, anchorEl) {
   // On small screens the card is hidden via CSS — skip JS work
   if (window.innerWidth <= 1024) return;
 
+  // Cancel any pending hide-timeout from a previous dismiss
+  if (card._hideTimeout) {
+    clearTimeout(card._hideTimeout);
+    card._hideTimeout = null;
+  }
+
   const color = CAT_COLOR[concept.category] || '#e8d5a3';
   const catName = (CATEGORIES.find(x => x.id === concept.category) || {}).name || concept.category;
 
@@ -10850,8 +10875,73 @@ function spDismissPreview() {
     card._dismissFn = null;
   }
   card.classList.remove('sp-preview-visible');
-  setTimeout(() => { card.style.display = 'none'; }, 260);
+  if (card._hideTimeout) clearTimeout(card._hideTimeout);
+  card._hideTimeout = setTimeout(() => { card.style.display = 'none'; card._hideTimeout = null; }, 260);
 }
+
+// --- Mobile full-screen concept preview modal ---
+// Used in place of the floating .sp-preview-card on small screens (no room there),
+// and in place of opening the full CS panel when tapping a search result on mobile.
+// Shows term/hook/plain/analogy/prompt — same fields + styling as the library card-back.
+let _spMobilePreviewSource = null; // 'search' | 'scan' | null — what to restore on close
+
+function _spOpenMobilePreview(id, opts) {
+  opts = opts || {};
+  const concept = CONCEPTS.find(x => x.id === id);
+  if (!concept) return;
+  const backdrop = document.getElementById('spMobilePreviewBackdrop');
+  const content = document.getElementById('spMobilePreviewContent');
+  if (!backdrop || !content) return;
+
+  const color = CAT_COLOR[concept.category] || '#e8d5a3';
+  const catName = (CATEGORIES.find(x => x.id === concept.category) || {}).name || concept.category;
+
+  backdrop.querySelector('.sp-mobile-preview-card').style.setProperty('--cat-color', color);
+  content.innerHTML = `
+    <div class="sp-mp-cat" style="color:${color}">${_spEsc(catName)}</div>
+    <div class="sp-mp-term">${_spEsc(concept.term)}</div>
+    <div class="sp-mp-hook">${_spEsc(concept.hook || '')}</div>
+    <div class="back-section-label">What it means</div>
+    <div class="back-text">${_spEsc(concept.plain || '')}</div>
+    <div class="back-section-label">Analogy</div>
+    <div class="back-analogy">${_spEsc(concept.analogy || '')}</div>
+    <div class="back-section-label">Reflect &amp; use it</div>
+    <div class="back-prompt">
+      <div class="prompt-icon">💬</div>
+      <p>${_spEsc(concept.prompt || '')}</p>
+    </div>
+    <div class="sp-mp-footer">
+      <button class="sp-mp-talk-btn" onclick="spDismissMobilePreview(true);_spSelectConcept(${id})">💬 Talk about this →</button>
+    </div>`;
+
+  // Remember where this was opened from so closing restores the right state
+  _spMobilePreviewSource = opts.fromSearch ? 'search' : 'scan';
+
+  // Don't hide the search dropdown — modal sits on top; closing reveals it again unchanged
+  document.body.style.overflow = 'hidden';
+  backdrop.style.display = 'flex';
+  requestAnimationFrame(() => requestAnimationFrame(() => backdrop.classList.add('visible')));
+}
+
+function spDismissMobilePreview(goingToCS) {
+  const backdrop = document.getElementById('spMobilePreviewBackdrop');
+  if (!backdrop) return;
+  backdrop.classList.remove('visible');
+  document.body.style.overflow = '';
+  setTimeout(() => { backdrop.style.display = 'none'; }, 220);
+  // If the user tapped "Talk about this", _spSelectConcept already hides the dropdown itself —
+  // otherwise (plain X close) leave the search dropdown exactly as it was underneath.
+  if (!goingToCS) _spMobilePreviewSource = null;
+}
+
+// Esc key to close mobile preview modal
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    const backdrop = document.getElementById('spMobilePreviewBackdrop');
+    if (backdrop && backdrop.classList.contains('visible')) spDismissMobilePreview();
+  }
+});
+
 
 
 function _spEsc(str) {
@@ -16683,6 +16773,18 @@ function playStreakMilestoneSFX() {
 /* On mobile, hide the desktop-only pills in row1 */
 @media (max-width: 600px) {
   .sp-pill-hide-mobile { display: none; }
+  /* Row1 now carries 3 pills + the "+" toggle — tighten so they fit one line */
+  .sp-pills-row#spPillsRow1 { flex-wrap: nowrap; gap: 6px; }
+  .sp-pills-row#spPillsRow1 .sp-pill:not(.sp-pill-more) {
+    font-size: 0.6rem;
+    padding: 7px 10px;
+  }
+}
+@media (max-width: 360px) {
+  .sp-pills-row#spPillsRow1 .sp-pill:not(.sp-pill-more) {
+    font-size: 0.56rem;
+    padding: 6px 8px;
+  }
 }
 
 .sp-pill {
@@ -16932,6 +17034,171 @@ function playStreakMilestoneSFX() {
 [data-theme="light"] .sp-preview-card {
   background: var(--surface);
   box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+}
+
+/* --- Mobile full-screen concept preview modal --- */
+/* Card-flip style preview used on mobile in place of the floating .sp-preview-card
+   (which has no room on small screens) and in place of opening the full CS panel.
+   Shows the same fields as the library card-back, plus the hook. */
+.sp-mobile-preview-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 6000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  background: rgba(13,13,13,0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  opacity: 0;
+  transition: opacity 0.22s ease;
+}
+.sp-mobile-preview-backdrop.visible {
+  display: flex;
+  opacity: 1;
+}
+.sp-mobile-preview-card {
+  position: relative;
+  width: 100%;
+  max-width: 360px;
+  max-height: calc(100vh - 48px);
+  background: var(--surface2);
+  border: 1px solid var(--cat-color, var(--border));
+  border-color: color-mix(in srgb, var(--cat-color, var(--accent)) 35%, transparent);
+  border-radius: 16px;
+  padding: 24px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+  transform: scale(0.9) translateY(16px);
+  transition: transform 0.3s cubic-bezier(0.22,0.61,0.36,1);
+}
+.sp-mobile-preview-backdrop.visible .sp-mobile-preview-card {
+  transform: scale(1) translateY(0);
+}
+.sp-mobile-preview-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--muted2);
+  font-size: 0.85rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s, border-color 0.15s;
+  z-index: 1;
+}
+.sp-mobile-preview-close:active {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.sp-mobile-preview-content { padding-right: 24px; }
+.sp-mp-cat {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.56rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.sp-mp-term {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.25;
+  margin-bottom: 10px;
+}
+.sp-mp-hook {
+  font-size: 0.86rem;
+  color: var(--muted2);
+  font-style: italic;
+  line-height: 1.5;
+  margin-bottom: 4px;
+}
+/* Reuse the same field styling as the card-back so content always matches */
+.sp-mobile-preview-content .back-section-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.54rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 16px;
+  margin-bottom: 5px;
+}
+.sp-mobile-preview-content .back-section-label:first-of-type { margin-top: 0; }
+.sp-mobile-preview-content .back-text {
+  font-size: 0.86rem;
+  color: var(--text);
+  line-height: 1.7;
+  font-weight: 300;
+}
+.sp-mobile-preview-content .back-analogy {
+  font-size: 0.82rem;
+  color: var(--muted2);
+  line-height: 1.65;
+  font-style: italic;
+  border-left: 2px solid color-mix(in srgb, var(--cat-color, var(--accent)) 50%, transparent);
+  padding-left: 10px;
+}
+.sp-mobile-preview-content .back-prompt {
+  background: rgba(232,213,163,0.06);
+  border: 1px solid rgba(232,213,163,0.15);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-top: 14px;
+}
+.sp-mobile-preview-content .back-prompt p {
+  font-size: 0.82rem;
+  color: var(--accent);
+  line-height: 1.6;
+  margin: 0;
+}
+.sp-mobile-preview-content .prompt-icon { font-size: 0.86rem; margin-bottom: 3px; }
+.sp-mp-footer {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: center;
+}
+.sp-mp-talk-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(232,213,163,0.10);
+  border: 1px solid rgba(232,213,163,0.3);
+  border-radius: 999px;
+  padding: 10px 20px;
+  cursor: pointer;
+  width: 100%;
+}
+.sp-mp-talk-btn:active { opacity: 0.7; }
+
+/* Only render this modal on mobile/tablet — desktop keeps the floating .sp-preview-card */
+@media (min-width: 1025px) {
+  .sp-mobile-preview-backdrop { display: none !important; }
+}
+
+[data-theme="light"] .sp-mobile-preview-card {
+  background: var(--surface);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+}
+[data-theme="light"] .sp-mobile-preview-close {
+  background: var(--surface2);
 }
 
 
