@@ -39,18 +39,24 @@ rewritten. Concepts written before v1.4 (roughly ids 1-200 across core/cw/
 ah/dk batches) are the most likely to need full rewrites across all fields.
 
 ═══════════════════════════════════════════
-TERM RULES (max 4 words, with exceptions)
+TERM RULES (v2.0 — 2-5 words, with exceptions)
 ═══════════════════════════════════════════
+Job: the term is the label someone says out loud in conversation. Must be
+sayable, memorable, worth knowing.
 
 EXEMPT FROM REWRITE (always PASS for term, regardless of length/pattern):
 - Named/coined terms using a person's name: "Hume's Guillotine",
   "Dunning-Kruger Effect", "Maslow's Hierarchy"
 - Universal/evergreen coined terms that keep their original name regardless
   of word count
+- Real, citable, exotic-sounding vocabulary (Hormesis, Motte and Bailey,
+  Bikeshedding) — these are PRESERVED, not simplified. Novelty is part of
+  the value; don't flag an exotic-but-real word just for being unfamiliar.
 
 ALLOWED PATTERNS (do not flag these as needing rewrite):
-- "X vs Y" / "x > y" / "x → y" symbol constructions: "Signal vs Noise",
-  "x > y Thinking"
+- "X vs Y" / "x > y" / "x → y" symbol constructions, but ONLY if both
+  nouns are independently teachable: "Signal vs Noise" (yes), "Good vs Bad
+  Advice" (no — not specific enough as a pair)
 - Hyphenated compound nouns: "Trade-Off", "Fat-Tailed Marketing",
   "Third-of-Life Tax"
 - Step sequences using ➜ where it TRULY clarifies a process or transition
@@ -65,11 +71,17 @@ ALLOWED PATTERNS (do not flag these as needing rewrite):
   automatically correct.
 - DUPLICATE TERMS ACROSS THE LIBRARY ARE ALLOWED — do not avoid a strong
   term because it might resemble another concept's term
+- "X as/of/over/through Y" is DEFAULT SUSPICION, not automatic rewrite.
+  Test: remove the connector — do the two halves independently mean
+  something? If yes, it can PASS (e.g. "Brands as Insurance", "Hardware
+  as a Service" — real industry term). If no, it's a REWRITE TRIGGER
+  (e.g. "Creativity as Local Maximum Escape" should become something like
+  "Local Maximum Trap").
 
 REWRITE TRIGGERS for term:
-- "X of Y" pattern (e.g. "Soft Bigotry of Male Expectations")
-- "X as Y" pattern (e.g. "Catastrophe as Certainty Drug",
-  "Declassification as Rolling Process")
+- "X of Y" / "X as Y" pattern that FAILS the independent-meaning test
+  above (e.g. "Soft Bigotry of Male Expectations", "Catastrophe as
+  Certainty Drug", "Declassification as Rolling Process")
 - "X (qualifier)" parenthetical that is NOT a natural part of the term
   itself, e.g. "Meritocracy (myth of)" — REWRITE.
   Note: parentheticals/hyphens that ARE the term's natural written form are
@@ -77,20 +89,44 @@ REWRITE TRIGGERS for term:
   parentheticals in the problematic sense and are always fine; this rule is
   about explanatory asides bolted onto an otherwise normal term, like
   "(myth of)" or "(stop scrolling!)")
-- Academic/paper-title phrasing — 4+ words that read like a paper section
-  header, nobody would say it at dinner
-- Over 4 words, unless covered by an exception above
+- Academic/paper-title phrasing — reads like a paper section header,
+  nobody would say it at dinner
+- Over 5 words, unless covered by an exception above
+
+NO OVERLAP WITH HOOK — check explicitly, side by side, every time:
+- The term must not repeat 2+ content words from the hook, or restate the
+  hook's own angle/structure in different words
+- This is the single most common mistake in past rewrite passes — a term
+  can "sound different" while still just paraphrasing the hook's exact
+  framing
+- Process: read the hook and the term side by side. If they're answering
+  the same question from the same angle, pull the term from a different
+  part of the concept (mechanism, consequence, contrast, example)
+- Real, established vocabulary is exempt from this check IF the
+  established term is simply how the concept is known — preserving real
+  vocabulary takes priority over avoiding overlap in that specific case
 
 NEW TERM REQUIREMENTS:
-- 1-4 words (try to land on 2-3 where possible)
+- 2-5 words (try to land on 2-3 where possible)
 - "Say it at dinner" test: a real phrase someone would use in conversation
 - Reverse-test: could someone guess the rough domain/topic from the term
   alone?
-- Concrete words over abstract Latinate ones
-- GLOBAL ACCESSIBILITY CHECK: must also pass for a fluent non-native
-  English speaker (expat professional). Avoid regionally-specific idioms
-  (e.g. UK-only medical/cultural imagery). Prefer phrases taught in
-  standard ESL curricula and recognized globally.
+- Concrete words over abstract Latinate ones — UNLESS the Latinate word is
+  itself real, citable, and "impressive to know" (see exempt list above)
+- Specificity/mechanism beats category label: "Three Prices, One Decoy"
+  over "Good, Better, Best"
+- GLOBAL ACCESSIBILITY CHECK: would a fluent non-native English speaker
+  (expat professional) be able to SAY this term out loud in a meeting
+  without stumbling on pronunciation? This tests sayability/circulation,
+  NOT intuitive obviousness — a real, exotic-sounding word can still pass.
+  Avoid regionally-specific idioms (e.g. UK-only medical/cultural
+  imagery). Prefer phrases recognized globally.
+
+IF IT ISN'T BROKEN, DON'T FIX IT:
+- Don't rewrite a term just because a rule technically allows a rewrite.
+  Only rewrite genuine blandness — if the term already reads as specific,
+  concrete, and sticky, leave it alone even if some rule above could
+  technically apply.
 
 PRESERVING REAL VOCABULARY (when the original term is a widely-known real
 word the reader benefits from learning, e.g. "Meritocracy", "Virtue
@@ -119,30 +155,84 @@ Rules:
   bracket is a bonus, never load-bearing
 
 ═══════════════════════════════════════════
-HOOK RULES (8-12 words)
+HOOK RULES (v2.0 — 8-12 words target, 14 hard ceiling)
 ═══════════════════════════════════════════
-Voice: hard-hitting, contrarian, controversial, food-for-thought,
-reality-check, polarizing. Dan Koe Twitter style.
+Job: make the reader feel something before they understand anything. Test:
+would a sharp person screenshot this without the card?
+
+VOICE BLEND (weighted):
+- Primary: Dan Koe — names the internal trap the reader is living in
+- Secondary, equal weight: Hormozi (blunt cost) + Naval (compression/paradox)
+- Seasoning only: Sahil Bloom (stakes) / Esther Perel (subtext)
+- Category steers which lever leads: business/power → Hormozi; psychology/
+  identity → Koe; philosophy/science → Naval; society/finance → hidden-
+  incentive (Sutherland); relationships/language → unspoken dynamic
+  (Perel); thinking/creativity/health/tech-ai → plain clarity, no seasoning.
+- This is a ROTATION, not a single register. Do not default every hook to
+  the same lever — that collapses the whole point of the voice blend.
+
+FORMAT: target 8-12 words, hard ceiling 14 (do not lean on old 15-16 word
+exceptions). One sentence preferred. Two clauses only if clause 2
+reframes, inverts, or punches — never if it just continues clause 1.
+
+GENERATION/REVIEW SEQUENCE — apply in this order:
+1. Front-load the trigger word — the specific/surprising/identity-relevant
+   noun lands in the first 3 words, not the last 3.
+   Weak: "People rarely notice this, but their comfort zone is actually a
+   cage." Fixed: "Your comfort zone stopped being comfortable years ago."
+2. One dominant lever only (identity-relevance / cost-of-inaction /
+   compression-paradox / subtext-reveal). Cut anything not serving it.
+3. Specific noun/number/scenario before any intensifier.
+   Weak: "This happens way more often than people think." Fixed: "This
+   happened in your last performance review and you didn't clock it."
+4. EVERYDAY LANGUAGE CHECK: every word must be something an expat
+   professional or a 12-year-old would instantly understand. No academic
+   register, no native-only idioms ("lost the plot," "fires" as
+   instinct-verb). This applies ONLY to hook/plain/analogy/prompt — never
+   to term.
+5. NO-OVERLAP CHECK: cover the hook, read plain's first sentence. If the
+   hook doesn't add a new angle, rewrite.
+
+PATTERN MENU (ranked — pattern 1 should be the most common choice,
+rotate the rest):
+1. Hyper-specific over abstract (highest hit rate, default choice)
+2. Funny/sarcastic + concrete visual (sarcasm always paired with a
+   specific image, never alone)
+3. Blunt one-line verdict
+4. Relatable self-recognition ("oh no, that's me")
+5. Reversal / frame flip
+6. Metaphor that unlocks a hard/Latin term
+
+BATCH-LEVEL TONE BALANCE: aim ~60% straight/specific/blunt (patterns 1,
+3, 6), ~40% funny/twisted/surprising (patterns 2, 4, 5) across a batch.
+Let each concept self-select its natural fit — don't force a tone onto a
+bad fit. Check the ratio after drafting, not per-card.
 
 Questions allowed: "What if your confidence is just ignorance?"
 "You" allowed sparingly, only when it adds punch.
 NO fancy vocabulary — clean, punchy, direct.
 NO em-dashes anywhere — use period, comma, or colon.
 
-STANDALONE-TWEET TEST: would this work as a tweet someone wants to retweet?
-
 NO GENERIC OPENERS:
 "This concept is about...", "It's important to...", "Many people...",
 "It's common to...", "We often...", "Studies show..."
 
-BANNED PATTERNS (AI-slop tells):
-- "You're not X, you're Y" (e.g. "You're not tired. You're uninspired.")
-- "It's not X, it's Y"
+HARD BANS (AI-slop tells):
+- "You're not X, you're Y" / "It's not X, it's Y" — banned even when it
+  sounds good; if a draft naturally falls into this shape, rewrite the
+  clause structure entirely, don't just swap words
 - "While X might seem right, Y is actually..."
 - "Sure, X works. But Y is where the real..."
 - Mid-sentence question trick: "The answer? Simpler than you think."
 - "Most people don't realize..."
 - "Here's the thing:"
+- "Game-changing", "a new era of", "everything shifted"
+- -ing verb opener with no subject: "Confusing busy with results."
+- Motivational poster cadence: "Small things compound into big things."
+- Triads of exactly three
+- Academic register — if it sounds like a textbook, it failed
+- Sarcasm/negativity as the BATCH DEFAULT — fine as rotation per the tone
+  balance above, never the dominant register across a batch
 
 CRITICAL — HOOK vs PLAIN OVERLAP:
 Hook must NOT say nearly the same thing as plain's first sentence. If they
@@ -150,8 +240,8 @@ would overlap, plain's first sentence must open from a different angle
 (mechanism, consequence, specific example, "here's why").
 
 GLOBAL ACCESSIBILITY CHECK applies here too (see Term Rules above) — the
-hook must land for a fluent non-native English speaker, not just a native
-12-year-old.
+hook must land for a fluent non-native English speaker AND a 12-year-old,
+not just a native adult reader.
 
 ═══════════════════════════════════════════
 PLAIN RULES
