@@ -399,11 +399,17 @@
     opacity: 0.75;
   }
 
-  /* Back prompt block in light */
+  /* Back prompt block in light — confident gold treatment so it doesn't blend
+     into the light card background (low-alpha tint was nearly invisible) */
   [data-theme="light"] .ep-cat-column .back-prompt,
   [data-theme="light"] .nf-row .concept-card .back-prompt {
-    background: rgba(184,134,11,0.06);
-    border-color: rgba(184,134,11,0.16);
+    background: linear-gradient(135deg, rgba(184,134,11,0.13), rgba(184,134,11,0.05));
+    border: 1px solid rgba(184,134,11,0.3);
+    border-left: 3px solid var(--accent);
+  }
+  [data-theme="light"] .ep-cat-column .back-prompt p,
+  [data-theme="light"] .nf-row .concept-card .back-prompt p {
+    color: #8a6207;
   }
 
   /* hc-back-prompt in light */
@@ -9066,18 +9072,31 @@ function renderThemesFilterRow(animate) {
 
 // First-time entrance: pills stamp in WITH 8-pop SFX (once ever),
 // grid stays hidden until pills finish, then grid stamps in with 3-pop SFX.
+// Mobile: tiles fire after just the first 4 pills (not all 15) so there's no
+// dead-feeling wait while pills the user can't even fully see yet keep animating.
 function _animateThemesEntrance() {
   renderThemesFilterRow(true);
-  _playThemeEntranceSFX(8, 55);
+  const isMobile = window.innerWidth <= 700;
   const pillCount = document.querySelectorAll('#themesFilterRow .theme-filter-pill').length;
   const grid = document.getElementById('themesGrid');
   if (grid) grid.style.visibility = 'hidden';
   renderThemesGrid(false); // build grid markup now, but keep it hidden
-  setTimeout(function() {
-    if (grid) grid.style.visibility = '';
-    _stampInThemeCards();
-    _playCandidateSFX();
-  }, pillCount * 55 + 120);
+
+  if (isMobile) {
+    _playThemeEntranceSFX(4, 55); // only the first 4 pills get a pop
+    setTimeout(function() {
+      if (grid) grid.style.visibility = '';
+      _stampInThemeCards();
+      _playCandidateSFX();
+    }, 4 * 55 + 120);
+  } else {
+    _playThemeEntranceSFX(8, 55);
+    setTimeout(function() {
+      if (grid) grid.style.visibility = '';
+      _stampInThemeCards();
+      _playCandidateSFX();
+    }, pillCount * 55 + 120);
+  }
 }
 
 function themeFilterClick(catId) {
@@ -9145,7 +9164,9 @@ function renderThemesGrid(animate) {
     return;
   }
 
-  const visible = _themesShowAll ? thematic : thematic.slice(0, 9);
+  // Mobile shows just the first row (3) by default — desktop keeps 3 rows (9)
+  const defaultCount = (window.innerWidth <= 700) ? 3 : 9;
+  const visible = _themesShowAll ? thematic : thematic.slice(0, defaultCount);
 
   // Render in rows of 3 — each row is its own grid, with a preview-zone slot
   // directly after it. This lets a preview expand below a specific row
@@ -9159,7 +9180,7 @@ function renderThemesGrid(animate) {
   }
   grid.innerHTML = html;
 
-  showAllBtn.style.display = (!_themesShowAll && thematic.length > 9) ? '' : 'none';
+  showAllBtn.style.display = (!_themesShowAll && thematic.length > defaultCount) ? '' : 'none';
 
   if (animate) _stampInThemeCards();
 }
@@ -9646,7 +9667,11 @@ function buildEpisodes() {
   });
 
   // Active podcast filter (persisted across re-renders)
-  if (typeof window._activePodcast === 'undefined') window._activePodcast = 'all';
+  // Mobile defaults to "Modern Wisdom" instead of "All" — falls back to "all"
+  // if that podcast isn't present in the current data (e.g. local/staging).
+  if (typeof window._activePodcast === 'undefined') {
+    window._activePodcast = (window.innerWidth <= 700 && grouped['Modern Wisdom']) ? 'Modern Wisdom' : 'all';
+  }
   // If the active podcast no longer exists in current filtered set, reset
   if (window._activePodcast !== 'all' && !grouped[window._activePodcast]) window._activePodcast = 'all';
 
@@ -10180,13 +10205,9 @@ function setDrawerView(prefix, view, btn) {
           '<div class="ep-drawer-scan-tile-hook">' + _spEsc(concept.hook) + '</div>';
         tile.addEventListener('click', function(e) {
           e.stopPropagation();
-          var card = document.getElementById('spPreviewCard');
-          if (card && card.dataset.previewId === String(concept.id) && card.classList.contains('sp-preview-visible')) {
-            spDismissPreview();
-            _spSelectConcept(concept.id);
-            return;
-          }
-          _spScanPreview(concept.id, tile);
+          // Reuse the same mobile/desktop-aware handler as Library scan tiles —
+          // routes to the full-screen modal on mobile, floating preview on desktop.
+          _spScanTileClick(concept.id, tile);
         });
         row.appendChild(tile);
       });
@@ -10373,14 +10394,34 @@ function _spScanPreview(id, anchorEl) {
       <button class="sp-preview-talk-btn" onclick="event.stopPropagation();spDismissPreview();_spSelectConcept(${id})">💬 Talk about this →</button>
     </div>`;
 
-  // Position: fixed, to the right of the tile (or left if near right edge)
+  // Position: fixed, anchored to the side of the tile that matches its column —
+  // left-column tiles preview to the left, right-column tiles preview to the
+  // right. Previously this always tried opening to the right first, so a
+  // left-column tile's preview would land on top of the right column's text
+  // (there was always room to its right since that's where the 2nd column is).
   const rect = anchorEl ? anchorEl.getBoundingClientRect() : null;
   const cardW = 260;
   let top = rect ? Math.max(80, rect.top + rect.height / 2 - 120) : 200;
   let left;
   if (rect) {
+    // Determine which column this tile is in by comparing its midpoint to its
+    // parent grid row's midpoint — works for both the 2-col Library scan grid
+    // and the 2-col drawer scan grid without needing to know which one it is.
+    const gridEl = anchorEl.closest('.nf-row, .ep-drawer-scan-row') || anchorEl.parentElement;
+    const gridRect = gridEl ? gridEl.getBoundingClientRect() : null;
+    const tileMid = rect.left + rect.width / 2;
+    const gridMid = gridRect ? gridRect.left + gridRect.width / 2 : tileMid;
+    const isLeftColumn = tileMid < gridMid;
+
     const rightPos = rect.right + 14;
-    left = (rightPos + cardW > window.innerWidth - 12) ? Math.max(12, rect.left - cardW - 14) : rightPos;
+    const leftPos = Math.max(12, rect.left - cardW - 14);
+    if (isLeftColumn) {
+      // Prefer opening left; only fall back to the right if there's truly no room on the left
+      left = (leftPos >= 12 && rect.left - 14 - cardW >= 12) ? leftPos : rightPos;
+    } else {
+      // Prefer opening right; only fall back to the left if it would overflow off-screen
+      left = (rightPos + cardW <= window.innerWidth - 12) ? rightPos : leftPos;
+    }
   } else {
     left = window.innerWidth / 2 - cardW / 2;
   }
@@ -17242,6 +17283,28 @@ function playStreakMilestoneSFX() {
   width: 100%;
 }
 .sp-mp-talk-btn:active { opacity: 0.7; }
+
+/* Light mode: the low-alpha gold tint that works on dark backgrounds nearly
+   disappears against the light card — give the prompt + CTA a distinct,
+   confident treatment instead of just a fainter version of the dark style. */
+[data-theme="light"] .sp-mobile-preview-content .back-prompt {
+  background: linear-gradient(135deg, rgba(184,134,11,0.13), rgba(184,134,11,0.05));
+  border: 1px solid rgba(184,134,11,0.3);
+  border-left: 3px solid var(--accent);
+}
+[data-theme="light"] .sp-mobile-preview-content .back-prompt p {
+  color: #8a6207;
+}
+[data-theme="light"] .sp-mp-talk-btn {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff8ec;
+  box-shadow: 0 4px 14px rgba(184,134,11,0.35);
+}
+[data-theme="light"] .sp-mp-talk-btn:active {
+  opacity: 0.85;
+  box-shadow: 0 2px 8px rgba(184,134,11,0.3);
+}
 
 /* Only render this modal on mobile/tablet — desktop keeps the floating .sp-preview-card */
 @media (min-width: 1025px) {
