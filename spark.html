@@ -1905,7 +1905,7 @@
     align-self: flex-start;
   }
   @media (max-width: 600px) {
-    .nf-row .concept-card { flex: 0 0 85vw; min-width: 85vw; }
+    .nf-row .concept-card { flex: 0 0 68vw; min-width: 68vw; }
   }
   /* ============================================
      HOW IT WORKS MODAL
@@ -5147,7 +5147,7 @@
     align-self: flex-start;
   }
   @media (max-width: 600px) {
-    .nf-row .concept-card { flex: 0 0 80vw; min-width: 80vw; height: 360px; }
+    .nf-row .concept-card { flex: 0 0 68vw; min-width: 68vw; height: 410px; }
   }
 
   .nf-row .concept-card .card-inner {
@@ -5155,7 +5155,7 @@
     width: 100%;
     height: 100%;
     transform-style: preserve-3d;
-    transition: transform 0.62s cubic-bezier(0.4, 0.2, 0.2, 1);
+    transition: transform 0.5s cubic-bezier(0.4, 0.2, 0.2, 1);
     transform: rotate(-0.8deg); /* subtle idle tilt */
     background: transparent;
   }
@@ -5188,14 +5188,14 @@
     display: flex;
     flex-direction: column;
     /* No box-shadow here — shadow during 3D flip paints as black rectangle behind card */
-    /* visibility flips back to visible at the 0.31s edge-on point (halfway through the 0.62s rotation), same as opening */
-    transition: border-color 0.2s, box-shadow 0.2s, visibility 0s linear 0.31s;
+    /* visibility flips at the 0.25s edge-on point (halfway through the 0.5s rotation), same both directions */
+    transition: border-color 0.2s, box-shadow 0.2s, visibility 0s linear 0.25s;
     visibility: visible;
   }
   /* Hide front face once flipped so its GPU layer stops painting — delayed until rotation finishes */
   .nf-row .concept-card.open .card-front {
     visibility: hidden;
-    transition: border-color 0.2s, box-shadow 0.2s, visibility 0s linear 0.31s;
+    transition: border-color 0.2s, box-shadow 0.2s, visibility 0s linear 0.25s;
   }
   /* Shadow only on hover — GPU compositing doesn't cause frame when not rotating */
   .nf-row .concept-card:not(.open):hover .card-front {
@@ -5272,10 +5272,15 @@
     scrollbar-width: thin;
     scrollbar-color: var(--border-hover) transparent;
     visibility: hidden;
+    /* Stay visible until the 0.25s edge-on point when closing — without this delay
+       the back face vanished at frame zero of the close rotation, leaving a window
+       where neither face was visible ("ghost close" bug). Symmetric with card-front. */
+    transition: box-shadow 0.2s, visibility 0s linear 0.25s;
   }
   .nf-row .concept-card.open .card-back {
     box-shadow: 0 4px 12px rgba(0,0,0,0.45);
     visibility: visible;
+    transition: box-shadow 0.2s, visibility 0s linear 0.25s;
   }
   .nf-row .concept-card .card-back::-webkit-scrollbar { width: 3px; }
   .nf-row .concept-card .card-back::-webkit-scrollbar-thumb { background: var(--border-hover); border-radius: 2px; }
@@ -10702,9 +10707,14 @@ function _spShowResults(q) {
     if (!wrap) return;
     const r = wrap.getBoundingClientRect();
     dropdown.style.top = (r.bottom + 6) + 'px';
-    dropdown.style.left = r.left + 'px';
-    dropdown.style.width = r.width + 'px';
-    dropdown.style.maxWidth = (window.innerWidth - 32) + 'px';
+    // Clamp width directly (not via CSS max-width, which left-anchors and clips
+    // rather than recentering) — if the search bar is wider than the safe viewport
+    // area, shrink the dropdown and recenter it under the bar's own midpoint.
+    const safeWidth = window.innerWidth - 32;
+    const w = Math.min(r.width, safeWidth);
+    const barCenter = r.left + r.width / 2;
+    dropdown.style.width = w + 'px';
+    dropdown.style.left = Math.max(16, barCenter - w / 2) + 'px';
   };
   _spPositionDropdown();
 
@@ -17240,7 +17250,9 @@ function playStreakMilestoneSFX() {
 
 [data-theme="light"] .sp-mobile-preview-card {
   background: var(--surface);
-  box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+  border-width: 2px;
+  border-color: color-mix(in srgb, var(--cat-color, var(--accent)) 65%, transparent);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.18);
 }
 [data-theme="light"] .sp-mobile-preview-close {
   background: var(--surface2);
