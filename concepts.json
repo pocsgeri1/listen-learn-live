@@ -642,8 +642,7 @@
     "collection_id": 1,
     "related_ids": [
       24,
-      101,
-      435
+      101
     ],
     "curated_collection_ids": [
       112
@@ -847,8 +846,7 @@
     "collection_id": 1,
     "related_ids": [
       50,
-      74,
-      453
+      74
     ],
     "curated_collection_ids": [
       115
@@ -1240,7 +1238,7 @@
     "term": "Narrative Identity",
     "category": "identity",
     "source": "core",
-    "hook": "The story you keep telling about yourself is the cage you keep choosing to live in.",
+    "hook": "The story you tell yourself about who you are becomes who you are.",
     "plain": "The internal autobiography we build to make sense of our lives. It shapes beliefs, choices, and self-worth. The part most people miss: it can be consciously rewritten.",
     "analogy": "'I always quit when things get hard' versus 'I take on hard things and figure them out.' Same history, completely different story.",
     "prompt": "Write one sentence summarizing the core story you tell about yourself. Now ask: is that story helping you grow, or keeping you small?",
@@ -1422,7 +1420,7 @@
     "term": "Parental Attribution Error",
     "category": "identity",
     "source": "cw",
-    "hook": "You blame your parents for the bad and call the good 'just who you are.'",
+    "hook": "Your parents get blamed for your flaws but not credited for your strengths.",
     "plain": "A double standard buried in how we think about our upbringing: we externalize the bad (it's their fault) but internalize the good (that's just me). Both actually came from the same source.",
     "analogy": "You blame your pushy parents for your perfectionism but never credit them for the ambition and discipline that same pressure gave you.",
     "prompt": "What strength do you take full credit for that was actually shaped by the same experiences you blame for your struggles?",
@@ -1545,7 +1543,7 @@
     "term": "Civilizational Anxiety",
     "category": "society",
     "source": "cw",
-    "hook": "You're not anxious about your life. You're anxious about everything, all at once, all the time.",
+    "hook": "A vague dread that the world is deteriorating and you can't stop it.",
     "plain": "The low-level existential unease many people feel about societal direction (decline in institutions, culture wars, technology acceleration) that compounds personal stress without a clear target.",
     "analogy": "Doom-scrolling news every morning and feeling vaguely hopeless by 9am, not because anything specific happened to you, but because collective dread seeped in.",
     "prompt": "How much of your daily anxiety is about your actual life, and how much is absorbed from a media environment designed to keep you in a state of low-grade alarm?",
@@ -1597,7 +1595,7 @@
     "term": "Evolved Mismatch",
     "category": "psychology",
     "source": "cw",
-    "hook": "Your brain was built for hunting and hiding. Now it's trying to handle a group chat.",
+    "hook": "Your ancient brain is running in a modern world it wasn't built for.",
     "plain": "Humans evolved for small tribes, scarcity, and physical danger. Most of our psychological problems come from hardwired responses that don't fit modern environments at all.",
     "analogy": "Craving sugar and fat made perfect sense when calories were scarce and survival was uncertain. Now the same instinct is driving an obesity epidemic. The software is outdated but still running.",
     "prompt": "What instinct or emotional reaction do you have regularly that would have been useful 100,000 years ago but is actively harmful in your current life?",
@@ -1688,7 +1686,7 @@
     "term": "Comfort Zone Creep",
     "category": "thinking",
     "source": "cw",
-    "hook": "You moved into your comfort zone. Now you're just living in it like a tenant who forgot they can leave.",
+    "hook": "What used to scare you now bores you. That's not progress, it's stalling.",
     "plain": "As you grow, yesterday's challenges become today's warm-up. If you don't keep moving the difficulty bar, comfort replaces growth and progress stops cold.",
     "analogy": "The lifter who was proud of 60kg now does it on autopilot. If the weight never goes up, neither does strength, no matter how consistent the routine.",
     "prompt": "What felt genuinely hard 12 months ago that's easy now? Have you actually increased the difficulty since, or are you just repeating the same comfortable reps?",
@@ -1722,7 +1720,7 @@
     "term": "Rejection Sensitivity",
     "category": "psychology",
     "source": "cw",
-    "hook": "You've already been rejected a hundred times by people who never even heard the question.",
+    "hook": "You lose before you try because the rejection already happened in your head.",
     "plain": "An emotional pattern where even small rejections trigger outsized pain, leading you to avoid asking, applying, or attempting. The fear of the no stops you from ever hearing yes.",
     "analogy": "He doesn't ask for the promotion because he's already been turned down in his mind. The loss happened before the conversation, so the conversation never happens.",
     "prompt": "Where have you pre-rejected yourself this month? Name one thing you decided someone would say no to without actually asking.",
@@ -1997,7 +1995,7 @@
     "term": "Pain is the Pitch",
     "category": "business",
     "source": "ah",
-    "hook": "Name their problem better than they can and the sale is already half done.",
+    "hook": "Describe their pain better than they can, and they'll trust you to fix it.",
     "plain": "When you name someone's exact frustration with precision, they automatically assume you know the solution. Understanding proves expertise faster than credentials ever will.",
     "analogy": "A doctor who describes your symptoms before you finish speaking earns your trust instantly. You assume they already know what's wrong and how to fix it.",
     "prompt": "Can you describe your ideal customer's exact pain in their own words (the specific frustration they feel at 2am) better than they could describe it themselves?",
@@ -2033,7 +2031,7 @@
     "term": "Ship It Ugly",
     "category": "business",
     "source": "ah",
-    "hook": "Waiting until it's ready is why nobody's heard of you yet.",
+    "hook": "Ship 100 imperfect things. One will hit. Ship one perfect thing. Nothing will.",
     "plain": "People over-prepare and under-attempt. Volume of attempts beats precision of a single perfect attempt. Successful people fail faster and iterate more.",
     "analogy": "A comedian performing 300 nights a year will be funnier than one spending 300 nights perfecting a single set. Reps consistently beat rehearsal.",
     "prompt": "Where are you waiting to be ready or perfect, when shipping something imperfect this week and learning from reality would serve you far better?",
@@ -2120,7 +2118,7 @@
     "term": "Solve the Right Problem",
     "category": "business",
     "source": "ah",
-    "hook": "Nobody buys a drill. They buy a hole in the wall. Sell the hole.",
+    "hook": "People don't want what they're asking for. They want what it gives them.",
     "plain": "Customers rarely want your product. They want the outcome your product enables. Identify the real desire underneath the stated desire and sell that instead.",
     "analogy": "People don't want a gym membership. They want to look better naked and feel more confident. Airlines don't sell flights. They sell the destination and everything it represents.",
     "prompt": "What is your customer's actual dream outcome, not what they're asking for, but what they're hoping that thing will give them?",
@@ -2207,7 +2205,7 @@
     "term": "Productize Yourself",
     "category": "business",
     "source": "dk",
-    "hook": "You've been answering the same questions for free for years. Someone would pay for that.",
+    "hook": "Stop trading hours for money. Package what you know and sell it while you sleep.",
     "plain": "Instead of selling your time directly, turn your knowledge into digital products, content, or systems that can earn money without your presence. One piece of work can be sold to thousands.",
     "analogy": "A consultant charges €200 per hour for advice. But the same consultant who writes a €97 course sells their advice to 10,000 people simultaneously without showing up.",
     "prompt": "What hard-won knowledge or skill do you have that someone else would pay to learn? How could you package that once and sell it repeatedly?",
@@ -2241,7 +2239,7 @@
     "term": "Self-Actualize → Self-Monetize → Self-Transcend",
     "category": "philosophy",
     "source": "dk",
-    "hook": "Chasing money before mastery is why most people end up with neither.",
+    "hook": "Master something real. Make money from it. Then use it to serve beyond yourself.",
     "plain": "Dan Koe's three-stage framework: pursue mastery because you genuinely care, turn that mastery into income, then use your platform and resources to grow beyond your own interests.",
     "analogy": "Stage 1: become a genuinely great cook. Stage 2: open a restaurant. Stage 3: train other chefs and build a food culture. Each stage builds on the foundation of the previous one.",
     "prompt": "Which stage are you in: still building mastery, earning from it, or serving something larger? What would need to be true to reach the next one?",
@@ -2294,7 +2292,7 @@
     "term": "Niche of One",
     "category": "business",
     "source": "dk",
-    "hook": "Nobody else is a former nurse who loves behavioural economics and makes furniture. That's not random. That's the niche.",
+    "hook": "You are the niche. Your weird combination of interests IS your unfair advantage.",
     "plain": "Rather than picking a niche externally, your specific intersection of obsessions creates a category of one that nobody else can replicate. Your unique combination is your brand.",
     "analogy": "Nobody else is both a former nightclub DJ and a philosophy-reading self-improvement podcaster. Chris Williamson didn't pick a niche externally — he became one through who he genuinely is.",
     "prompt": "List three to five genuine interests you have. What perspective on the world does that specific combination create that almost nobody else has?",
@@ -2313,7 +2311,7 @@
     "term": "Sovereign Individual",
     "category": "philosophy",
     "source": "dk",
-    "hook": "If one person can end your income with an email, you're not free.",
+    "hook": "The person who can't be fired because nobody hired them in the first place.",
     "plain": "Someone who controls their own time, income streams, and location, not dependent on any single employer, system, or geography (also known as the sovereign individual). Made newly possible by the internet and digital work.",
     "analogy": "The opposite of someone who can be made redundant with a single email. The sovereign individual can't be fired — because nobody hired them in the first place.",
     "prompt": "How many of your current income sources, relationships, and freedoms depend on a single entity? What would it take to diversify that risk?",
@@ -2417,7 +2415,7 @@
     "term": "Reinvention Capital",
     "category": "thinking",
     "source": "dk",
-    "hook": "Career change doesn't delete your last ten years. It upgrades them.",
+    "hook": "Your past skills don't vanish when you pivot. They compound into the new thing.",
     "plain": "When you change direction, you don't start at zero. All your previous skills, experiences, and hard lessons transfer and compound into the new domain in unexpected ways (this has a name: reinvention capital).",
     "analogy": "A lawyer who becomes a therapist doesn't lose their legal knowledge. Their ability to analyze complex arguments and spot logical fallacies makes them a more rigorous, effective therapist.",
     "prompt": "If you changed direction completely today, what skills from your current life would give you an unexpected advantage in the new path?",
@@ -2436,7 +2434,7 @@
     "term": "Minimum Viable Offer",
     "category": "business",
     "source": "dk",
-    "hook": "Sell it before you build it. The worst that can happen is someone says no and saves you six months.",
+    "hook": "Real buyers tell you more in 10 minutes than 6 months of planning ever will.",
     "plain": "Sell a rough version before building the polished one. Actual customer reactions beat every internal debate, focus group, and spreadsheet projection combined.",
     "analogy": "Rather than spending six months building a full course, offer a live workshop first. If 10 people pay — you've validated the idea. If nobody pays — you saved six months.",
     "prompt": "What's the smallest, ugliest version of your idea you could sell to one real person this week? Not test. Sell. Money changes hands.",
@@ -2508,7 +2506,7 @@
     "term": "Done Beats Perfect",
     "category": "business",
     "source": "dk",
-    "hook": "The person who launched the ugly version last year is lapping you while you're still tweaking fonts.",
+    "hook": "Version two built on real feedback beats perfect version one that never ships.",
     "plain": "Getting something real into the world and improving from actual reactions consistently beats waiting until it's flawless. Perfection is imaginary. Feedback from reality is priceless.",
     "analogy": "Every iPhone ever released had flaws. Apple shipped them anyway. Version 2, informed by millions of real users, is always better than a perfect version 1 that ships never.",
     "prompt": "What are you polishing right now that would teach you 10x more if you released it today and improved based on actual reactions?",
@@ -2584,7 +2582,7 @@
     "term": "Ingroup Favoritism",
     "category": "society",
     "source": "cw",
-    "hook": "Your loyalty to your group is someone else's closed door.",
+    "hook": "Favoring your group means disadvantaging everyone else, whether you realize it or not.",
     "plain": "People don't just reward those in their group more. They systematically disadvantage outsiders, often without conscious intent. It operates beneath awareness in hiring, friendship, trust.",
     "analogy": "Two identical resumes, one with a local name and one with a foreign name. The local name gets significantly more callbacks. No deliberate prejudice required.",
     "prompt": "Think of your last three hires, close friendships, or major collaborations. How many came from backgrounds genuinely different from yours?",
@@ -2642,7 +2640,7 @@
     "term": "Self-Education Advantage",
     "category": "thinking",
     "source": "dk",
-    "hook": "Your degree was designed by a committee in 2005; the person who actually taught you the skill has 2M subscribers.",
+    "hook": "Credentials teach you what mattered decades ago. Self-teaching lets you master what matters now.",
     "plain": "Formal education updates slowly. Self-directed learning lets you master cutting-edge skills faster than any institution can revise its curriculum. The gap is your advantage.",
     "analogy": "A programmer who taught themselves AI tools and shipped real projects last year is often more practically valuable than someone with an AI PhD who only knows academic theory.",
     "prompt": "What skill that's highly valued right now could you teach yourself to a functional level in six months, without enrolling in anything?",
@@ -3011,7 +3009,7 @@
     "term": "The Frame Is the Point",
     "category": "language",
     "source": "dk",
-    "hook": "People don't share ideas. They share packaging.",
+    "hook": "The idea is cheap. The structure is what makes people remember it or share it.",
     "plain": "You don't need endless new ideas. You need to master structuring ideas so they land with force. The same concept performs wildly differently depending on whether it's framed as a story, a list, a question, or a contrast. Learning structures (hooks, analogies, reversals) is more valuable than chasing novelty, because you can apply those structures to any raw idea.",
     "analogy": "A comedian doesn't write new material every night. They refine the delivery, timing, and setup of five jokes until each one reliably kills.",
     "prompt": "Take one idea you shared recently that didn't land. Rewrite it using a completely different structure: turn a statement into a question, or a list into a story. Notice what changes.",
@@ -3029,7 +3027,7 @@
     "term": "Learning in Public",
     "category": "language",
     "source": "dk",
-    "hook": "Sharing what you're still figuring out builds more trust than sharing what you already know.",
+    "hook": "Treat learning as research, then share your notes as if they were original ideas.",
     "plain": "Instead of splitting learning (private) from creating (public), treat your self-education as the foundation of your output. When you study something, take notes as if you'll teach it. When you discover an insight, share it immediately. This turns curiosity into a business asset and removes the pressure to 'create content.' You're just synthesizing what you're already learning.",
     "analogy": "A medical student who tweets their study notes builds an audience of future doctors. They're not doing extra work. They're making their learning visible.",
     "prompt": "What did you learn this week that genuinely surprised you? Write two sentences explaining it to someone who knows nothing about the topic.",
@@ -3046,7 +3044,7 @@
     "term": "Hyperspecific System",
     "category": "business",
     "source": "dk",
-    "hook": "Generic gets ignored. Weirdly specific gets shared.",
+    "hook": "Generic solutions are commodities. Systems built exactly how you needed them are premium.",
     "plain": "Instead of trying to serve everyone, build a system that solves a problem exactly the way you needed it solved. It's opinionated, specific, and reflects your lived experience. This makes it irreplaceable for the narrow group of people who share your problem and worldview. They'll pay more because it fits them perfectly, not generically.",
     "analogy": "Thousands of note-taking apps exist, but Roam Research became valuable because it was built for a specific type of networked thinker who couldn't find that anywhere else.",
     "prompt": "Name one tool, process, or habit you've built for yourself that works better than anything you found ready-made. Who else do you know struggling with that exact gap?",
@@ -3065,7 +3063,7 @@
     "term": "The Thing AI Can't Fake",
     "category": "business",
     "source": "dk",
-    "hook": "AI writes the words. Making anyone actually give a damn about them is another story.",
+    "hook": "AI can build anything. It can't make people care about what you built.",
     "plain": "In a world where anyone can create anything (via AI or automation), the scarcest resource is attention. The ability to attract, earn, and hold someone's focus becomes the ultimate competitive advantage. Products fail not because they're bad, but because no one knows they exist. Attention is non-scalable by AI and will remain valuable indefinitely.",
     "analogy": "Two restaurants with identical food. One empty, one with a line around the block. The difference isn't quality. It's attention.",
     "prompt": "List three products or creators you admire. How did you first hear about them, and what made you keep paying attention after that first touch?",
@@ -3268,7 +3266,7 @@
     "term": "Entrepreneurial Apprenticeship",
     "category": "business",
     "source": "dk",
-    "hook": "The best MBA is a front-row seat at someone else's startup, watching them nearly go broke.",
+    "hook": "Twelve people or fewer, direct access to the founder. That's where you learn.",
     "plain": "Join a team small enough that you work directly with the person building the business. You're not climbing a ladder or sitting in training modules. You're watching decisions happen in real time, seeing how money flows, learning what actually scales. This beats a degree because the skills are current, not theoretical.",
     "analogy": "Training under a Michelin chef in their kitchen versus a culinary degree. One teaches you recipes. The other teaches you how to run service when three orders go wrong at once.",
     "prompt": "Name two people in your city running a business you respect with under 5,000 Instagram followers. Pick one. Draft the email offering 90 days of free work in exchange for proximity.",
@@ -3353,7 +3351,7 @@
     "term": "Entrepreneurial Pyramid",
     "category": "business",
     "source": "dk",
-    "hook": "The lowest rung is trading hours for money. A surprising number of people never look up.",
+    "hook": "Level 1 is selling your time. Most people retire there.",
     "plain": "Five levels exist: skilled labor, intellectual property, data and software, financial assets. You start selling time. Then you package knowledge into books or frameworks (this is called intellectual property). Then you build systems that generate leads or insights without you. Then you sell the whole thing. School only teaches level one.",
     "analogy": "A consultant bills hourly. Then they write a book and license a method. Then they build a lead-gen quiz that runs itself. Then they sell the firm for five million. Same expertise, different altitude.",
     "prompt": "Where are you right now on the five levels? What's the smallest move in the next sixty days that gets you one level higher?",
@@ -3387,7 +3385,7 @@
     "term": "Friction Creates Value",
     "category": "psychology",
     "source": "core",
-    "hook": "The velvet rope doesn't make the club better. It makes you want to get in.",
+    "hook": "Let everyone in and it feels worthless. Make them apply and they'll pay attention.",
     "plain": "A small barrier raises perceived value. Application, survey, waitlist. Humans equate effort with worth. If you give instant access, they assume it's cheap. Make them qualify and they assume it's exclusive, even if the content inside is identical.",
     "analogy": "Two Slack groups on the same niche. One is open to anyone. The other requires a five-question form. The second will have higher engagement and members convinced the insights are better, even if both share the same links.",
     "prompt": "Pick one thing you currently give away too easily. Add a single gate this week: a question, a form, a sixty-second Loom intro. Track what happens to how people treat it.",
@@ -3444,8 +3442,7 @@
     "collection_id": 12,
     "related_ids": [
       131,
-      265,
-      459
+      265
     ],
     "curated_collection_ids": []
   },
@@ -3780,7 +3777,7 @@
     "term": "Modeling Vs. Teaching",
     "category": "relationships",
     "source": "cw",
-    "hook": "Your communication style isn't yours. It's your parents', copied without permission.",
+    "hook": "You learned how to fight by watching, not instruction. Most had terrible teachers.",
     "plain": "Most people never got formal training in communication. They absorbed patterns from parents or authority figures who may have used yelling, conflict, or even physical aggression. Without better models, those scripts replicate across generations, even when people know they're harmful.",
     "analogy": "If your dad solved every disagreement by slamming doors and your mom gave silent treatment for days, you downloaded that playbook. Now when your partner asks where you want to eat, you either shut down or explode.",
     "prompt": "Name one communication behavior you inherited from a parent. Now imagine your kid adopting that same behavior in 20 years. What would you change today?",
@@ -4072,7 +4069,7 @@
     "term": "Selective Productivity",
     "category": "thinking",
     "source": "ah",
-    "hook": "Productivity comes from all the things you choose NOT to do.",
+    "hook": "Your to-do list is a liability. Focus is what you refuse to do.",
     "plain": "Real output comes from ruthlessly narrowing your attention, not adding more tasks. The sculptor's art is what they chip away, not pile on. Commitment is the elimination of alternatives.",
     "analogy": "A photographer with unlimited shots takes worse photos than one with a single roll of film. The constraint isn't the limitation — it's the filter that forces you to see what actually matters.",
     "prompt": "Write down everything on your to-do list. Now circle the three things that, if you only did those and deleted the rest, would make this week a success. What's stopping you from deleting the rest right now?",
@@ -4091,7 +4088,7 @@
     "term": "Type One Vs. Type Two Empathy",
     "category": "psychology",
     "source": "cw",
-    "hook": "Emotional empathy gets you to the funeral. Understanding gets you to why they drove drunk.",
+    "hook": "You feel their pain. You still have no idea why they did it.",
     "plain": "Emotional empathy is feeling someone's emotions in real time — you sense their sadness, anger, or fear. Mental empathy is understanding how they arrived at their perspective, even if you don't share it (sometimes called cognitive empathy). Most people have the first without the second, which makes disagreement feel like a threat.",
     "analogy": "Your friend is devastated after a breakup. You feel their sadness — that's easy. But you can't fathom why they stayed in a toxic relationship for three years. Without mental empathy, you're sympathetic but not useful.",
     "prompt": "Pick someone whose choices baffle you. Write down three life experiences or beliefs they might hold that would make their decision feel logical from the inside, even if you'd never make it yourself.",
@@ -4234,7 +4231,7 @@
     "term": "Trapped in the Story",
     "category": "identity",
     "source": "cw",
-    "hook": "You went looking for an explanation and came back with an identity.",
+    "hook": "The diagnosis was supposed to help. Now you can't imagine life without it.",
     "plain": "When a mental health label becomes so central to your self-concept that you can't imagine yourself without it. You're not someone who occasionally struggles — you ARE your disorder. The diagnosis was meant to help, but it became a cage because you built your entire personality around it.",
     "analogy": "Getting a nickname in middle school and still introducing yourself that way at 30. What was meant to be descriptive became definitional, and now you don't know who you'd be without it.",
     "prompt": "Pick a label you've used to describe yourself for years. If you woke up tomorrow and it didn't apply anymore, would you feel relieved or lost? Why?",
@@ -4332,8 +4329,7 @@
     "collection_id": 14,
     "related_ids": [
       51,
-      36,
-      435
+      36
     ],
     "curated_collection_ids": [
       103
@@ -4398,7 +4394,7 @@
     "term": "The Vanity Paradox",
     "category": "psychology",
     "source": "cw",
-    "hook": "You spent forty minutes on your appearance this morning and untag every photo that catches you off guard.",
+    "hook": "You obsess over your look but panic when someone snaps a candid photo.",
     "plain": "You're hyperaware of how you appear while feeling deep shame about your unedited self. You'll spend hours perfecting an image but panic when someone takes a candid. The vanity and insecurity aren't opposites, they're two sides of performance anxiety.",
     "analogy": "An actor terrified of being seen off-stage. On camera with lighting and script, confident. Run into them at the grocery store and they're mortified. The persona only works under controlled conditions.",
     "prompt": "When was the last time you felt genuinely comfortable being seen with zero preparation? Name the year.",
@@ -4527,7 +4523,7 @@
     "term": "Simulation Substitution",
     "category": "psychology",
     "source": "cw",
-    "hook": "Parasocial relationships are just real enough to stop you from wanting the actual thing.",
+    "hook": "YouTube friends feel real enough to stop you getting lonely enough to act.",
     "plain": "Digital imitations of human needs (parasocial relationships, curated advice, performative empathy) are just satisfying enough to prevent you from seeking the real thing. You're not getting what you need, but you're getting enough of a facsimile that you don't feel urgency to change. The pain stays low-grade and chronic.",
     "analogy": "Drinking diet soda when you're dehydrated. It tastes like the thing, tricks your brain briefly, but your cells are still screaming for water. You just don't notice because the craving got muted.",
     "prompt": "Name one relationship you maintain online that you wouldn't bother with if showing up required driving 20 minutes.",
@@ -4546,7 +4542,7 @@
     "term": "Bound by Hatred, Not Love",
     "category": "relationships",
     "source": "cw",
-    "hook": "A group that bonds over contempt for others isn't a community. It's a mob with a group chat.",
+    "hook": "Groups united by who they oppose never build anything. They only tear down.",
     "plain": "A community where shared identity is defined by mutual contempt for an out-group rather than affection for each other or a positive vision. You're not connected by what you're building, you're connected by what you're destroying. When the enemy disappears, so does the bond.",
     "analogy": "A friend group that only meets to complain about their ex-boss. Once the boss leaves, they realize they have nothing else to talk about. The friendship was hate dressed up as connection.",
     "prompt": "Think of your closest online community. If the thing you all oppose suddenly vanished tomorrow, would the group still have a reason to exist?",
@@ -4602,7 +4598,7 @@
     "term": "Epigenetic Aging",
     "category": "health",
     "source": "cw",
-    "hook": "Aging isn't your body falling apart, but rather your body forgetting how to read its own instructions.",
+    "hook": "DNA breaks move gene switches wrong. That's aging, not simple wear and tear.",
     "plain": "Every cell has the same DNA, but different genes are turned on or off to make a heart cell different from a skin cell. As you age, DNA gets damaged from radiation, stress, and habits. When your body repairs it, those on/off switches sometimes get moved to the wrong place. Genes that should be off turn on; genes that should be on turn off. That's aging: cells forgetting their job because the instruction manual got scrambled.",
     "analogy": "A recipe book where someone moved all the page markers. The instructions are still there, but you keep opening to the wrong recipe.",
     "prompt": "If aging is just gene switches in the wrong position, what habit today might be scrambling them fastest for you?",
@@ -4645,8 +4641,7 @@
     "collection_id": 15,
     "timestamp": 902,
     "related_ids": [
-      267,
-      434
+      267
     ],
     "curated_collection_ids": [
       109
@@ -4665,8 +4660,7 @@
     "timestamp": 1644,
     "related_ids": [
       268,
-      326,
-      461
+      326
     ],
     "curated_collection_ids": []
   },
@@ -4759,8 +4753,7 @@
     "timestamp": 5565,
     "related_ids": [
       193,
-      273,
-      464
+      273
     ],
     "curated_collection_ids": []
   },
@@ -4870,8 +4863,7 @@
     "timestamp": 3719,
     "related_ids": [
       106,
-      258,
-      428
+      258
     ],
     "curated_collection_ids": []
   },
@@ -4921,7 +4913,7 @@
     "term": "Auto Research Agents",
     "category": "tech-ai",
     "source": "cw",
-    "hook": "AI is now training AI. Humans are mostly just paying the electricity bill.",
+    "hook": "AI agents trained better models than ChatGPT in one weekend, no humans required.",
     "plain": "Someone ran 30 AI agents on a home computer over a weekend. The agents talked to each other, scored improvements, built a better language model than recent ChatGPT versions. No human researchers involved. AI can now bootstrap itself into better versions without centralized oversight.",
     "analogy": "Lock 30 interns in a library Friday night. Monday morning they've written a better textbook than the professor ever assigned.",
     "prompt": "Name one decision you make daily that you'd trust a machine to improve faster than you could.",
@@ -4976,7 +4968,7 @@
     "term": "The 100-year Filter",
     "category": "thinking",
     "source": "core",
-    "hook": "In 100 years, none of today's disasters make the list. Most barely make it to next Tuesday.",
+    "hook": "Check if it matters in 100 years. Most of your stress just failed.",
     "plain": "You're agonizing over something that won't register as significant a year from now, let alone a century. The vast majority of what consumes your mental energy today will be completely forgotten by you and everyone else. This perspective doesn't diminish what matters, it reveals what doesn't.",
     "analogy": "Read your great-grandparent's diary. Three full pages about a coworker's passive-aggressive email. That's how your current stress looks from any real distance.",
     "prompt": "Write down what's stressing you most right now. Will you remember it in five years?",
@@ -5034,7 +5026,7 @@
     "term": "Vulnerability Signaling",
     "category": "psychology",
     "source": "cw",
-    "hook": "The alarm works perfectly. It just hasn't learned the danger is gone.",
+    "hook": "Communicating need once ensured survival. Now it fires with no threat in sight.",
     "plain": "Throughout human history, women faced unique vulnerabilities due to smaller size, pregnancy, and caretaking demands. Those who effectively communicated sadness or distress were more likely to receive help and resources (i.e., vulnerability signaling). This tendency persists: women globally report feeling less happy and less healthy than men, and women's depression spreads through social networks more than men's does. The adaptation that once ensured survival now manifests as a general pessimistic outlook.",
     "analogy": "A crying child in a store gets immediate help from strangers. Women who signaled vulnerability in ancestral environments received the same protective response. Now that mechanism fires constantly, even when the threat is abstract.",
     "prompt": "When in the last month did expressing distress get you immediate help, and when did it backfire because the situation didn't actually call for it?",
@@ -5074,7 +5066,7 @@
     "term": "Benevolent Sexism",
     "category": "society",
     "source": "core",
-    "hook": "Opening the door is fine. Assuming she can't open it herself is the problem.",
+    "hook": "Wanting to protect women is sexist, unless you ask them what they actually want.",
     "plain": "The idea: positive attitudes toward women (wanting to protect them, seeing them as deserving care) are actually oppression because they infantilize women and limit autonomy (some call this benevolent sexism). The problem: when you measure it, most women endorse these beliefs and are attracted to men who hold them. The scale treats awareness of female preferences as evidence of sexism. It pathologizes both male and female psychology.",
     "analogy": "Calling someone sexist for holding a door open, even though most people walking through, including women, appreciate the gesture. The ideology and the lived experience are completely out of sync.",
     "prompt": "Recall a time someone treated you protectively in a way that could be called paternalistic. Did it feel patronizing or genuinely good?",
@@ -5240,7 +5232,7 @@
     "term": "Niche Construction",
     "category": "society",
     "source": "core",
-    "hook": "You didn't find your niche. You built it, then convinced everyone it was always there.",
+    "hook": "We don't just adapt to the world. We reshape it to favor us.",
     "plain": "Organisms modify their environment in ways that alter selection pressures for themselves and future generations (this is called niche construction). Humans do this constantly: we build cities, create norms, design institutions. If you evolved to evoke care by signaling vulnerability, you have an incentive to build a world that rewards vulnerability and punishes indifference.",
     "analogy": "Beavers build dams, which create ponds, which favor beavers. Humans build ideologies, which create systems, which favor whoever built the ideology.",
     "prompt": "What rule or norm have you pushed for in the last year that, if everyone adopted it, would make your life easier?",
@@ -5258,7 +5250,7 @@
     "term": "The Pretty Privilege",
     "category": "power",
     "source": "core",
-    "hook": "Attractive people get hired faster, paid more, and forgiven quicker. Nobody talks about it.",
+    "hook": "Beauty is invisible power. We deny it exists so we don't admit the gap.",
     "plain": "Attractive people are hired more, paid more, trusted more, forgiven more, and given more help. Women, on average, are more attractive than men by self-report and peer rating, so they benefit disproportionately. We're reluctant to acknowledge this because unlike wealth or race, you can't redistribute beauty, and admitting it matters undermines meritocracy.",
     "analogy": "Some video game characters start with +5 charisma. Every NPC is nicer to them, every quest easier. You'd call it an unfair advantage in a game, but we pretend it doesn't exist in real life.",
     "prompt": "Think of the most attractive person you know. Name three specific advantages they've received that were invisible to them but obvious to you.",
@@ -5511,7 +5503,7 @@
     "term": "What Men Actually Need to Hear",
     "category": "relationships",
     "source": "cw",
-    "hook": "Telling a man 'it's okay' can feel like you've stopped believing in him.",
+    "hook": "Telling a struggling man it's okay to struggle feels like giving up on him.",
     "plain": "Men and women want different support when distressed. Women often want validation and empathy. Men respond better to encouragement that frames the struggle as temporary and solvable: 'I know you can handle this.' Sympathy can feel patronizing. A mission feels like respect.",
     "analogy": "A coach at halftime doesn't say 'it's okay that you're losing.' They say 'we can still win, here's how.' That's the framing men respond to.",
     "prompt": "Next time a guy you know is struggling, try this: 'What do you need to get back on track?' Watch what happens compared to 'how are you feeling?'",
@@ -5589,7 +5581,7 @@
     "term": "Mate Copying",
     "category": "relationships",
     "source": "core",
-    "hook": "The easiest way to become more attractive is to already be wanted by someone else.",
+    "hook": "Women want men other women want. Direct assessment is hard. Social proof is easy.",
     "plain": "Finding someone more attractive if they're already desired by others (i.e., mate copying). Evaluating a potential partner's true quality is hard, so you outsource the decision to the judgment of others. If other women find him attractive, he must have hidden value. This is why pre-selection is so powerful and why being seen with an attractive partner raises your own mate value.",
     "analogy": "Choosing a restaurant. You could read reviews and inspect the menu, or you could just go where there's a line out the door. The crowd has already done the vetting.",
     "prompt": "Think of the last person you found attractive. Did your opinion shift after seeing how others reacted to them? What changed?",
@@ -5609,7 +5601,7 @@
     "term": "Meta-invention",
     "category": "thinking",
     "source": "ry",
-    "hook": "We didn't just build another machine. We built the thing that builds machines.",
+    "hook": "Inventing intelligence is the last thing we'll ever invent. It invents everything else.",
     "plain": "Unlike tools that do one thing, AI is intelligence that invents more intelligence. Once you create a system that does science and engineering better than humans, you've automated the invention process itself. It's not a tool. It's a replacement inventor.",
     "analogy": "Every previous invention stopped at itself: fire cooks food, but fire doesn't invent wheels. AI is like hiring a scientist who hires 10 more scientists, who each hire 10 more, forever. You've automated the thing that makes everything else.",
     "prompt": "What's the last problem you solved by hiring someone smarter than you? Now imagine that person could clone themselves a thousand times and work around the clock. What disappears from your to-do list permanently?",
@@ -5703,7 +5695,7 @@
     "term": "Unpredictability Barrier",
     "category": "thinking",
     "source": "ry",
-    "hook": "You can't predict what's smarter than you. If you could, you'd already be that smart.",
+    "hook": "If you can predict a smarter agent's moves, you're as smart as it is. Contradiction.",
     "plain": "By definition, you cannot predict what a superintelligent system will do. If you could, you'd be operating at its level of intelligence, which contradicts the idea that it's smarter than you. It's like your dog trying to predict why you do a podcast. It's outside the dog's model of the world.",
     "analogy": "You're playing chess against a grandmaster. If you can predict every move they'll make, you're playing at their level, so they're not really better than you. True intelligence gaps mean you can't see their strategy coming.",
     "prompt": "Think of the smartest person you know. Now imagine they're 10x smarter. What decisions of theirs would you stop trying to predict, and how would that change the relationship?",
@@ -5743,7 +5735,7 @@
     "term": "Singularity Event Horizon",
     "category": "tech-ai",
     "source": "ry",
-    "hook": "Imagine a new iPhone model every hour. Then every minute. That's where this ends up.",
+    "hook": "Progress happens so fast you can't track it. Every concept obsolete in seconds.",
     "plain": "The point where AI improves itself so rapidly that humans can't keep up (the technical term: singularity). Imagine a new iPhone version every day, then every hour, then every second. You stop understanding what's possible because technology evolves faster than you can learn about it. Knowledge becomes obsolete in real time.",
     "analogy": "You're watching a show, and every time you blink, they've skipped five seasons ahead. You have no idea who these characters are, what the rules are, or what just happened. That's singularity: you're present, but you've lost the plot.",
     "prompt": "In the last month, name one domain where you felt you were falling behind faster than you could catch up. Now imagine that acceleration never stops. What's the first thing you let go of?",
@@ -5819,15 +5811,13 @@
     "term": "Retroactive Simulation Commitment",
     "category": "philosophy",
     "source": "ry",
-    "hook": "Future computing power doesn't just change what's possible. It retroactively changes what's real.",
+    "hook": "If I run a billion sims of this moment later, you're statistically in one now.",
     "plain": "Once simulation technology becomes affordable, anyone can run billions of copies of any moment in history, including this one. If someone commits to running a billion simulations of this conversation in the future, the odds that you're in the original version right now drop to one in a billion. The commitment alone changes the probability of what's real.",
     "analogy": "Someone announces they're printing a billion counterfeit $100 bills tomorrow. The moment they do, the bill in your wallet is statistically fake. The commitment flips the odds before it even happens.",
     "prompt": "If you're statistically in a simulation right now, what's the one thing you'd do to make yourself interesting enough not to get shut down?",
     "collection_id": 502,
     "timestamp": 3479,
     "related_ids": [
-      465,
-      463,
       322
     ],
     "curated_collection_ids": []
@@ -5855,7 +5845,7 @@
     "term": "Endless Capability Discovery",
     "category": "tech-ai",
     "source": "ry",
-    "hook": "Nobody programmed AI to write poetry. They trained it, then found poetry in there.",
+    "hook": "Builders don't program capabilities. They train a system, then test to see what appeared.",
     "plain": "Modern AI develops abilities its creators didn't explicitly program. After training, engineers discover emergent skills by experimentation: can it translate Swahili? Can it write legal briefs? The system learns patterns from data, and capabilities appear that no one predicted. It's discovery, not construction.",
     "analogy": "You mix chemicals following a recipe, and suddenly the mixture starts glowing. You didn't plan for that. Now you're running tests to see what else it can do.",
     "prompt": "Think of a tool you use daily. What does it do now that wasn't part of the original design? Who figured that out?",
@@ -5893,7 +5883,7 @@
     "term": "Terminal Biological Clock",
     "category": "identity",
     "source": "ry",
-    "hook": "The only reason having kids feels urgent is that you're going to die. Remove that and the clock stops.",
+    "hook": "You rush to have kids because you die. Remove the deadline, remove the urgency.",
     "plain": "Humans feel biological pressure to reproduce because lifespans end. If you lived a thousand years, the urgency disappears. You'd delay having kids indefinitely. Biological clocks are calibrated to terminal lifespans. Remove the endpoint, and reproductive behavior collapses.",
     "analogy": "Running to catch a train that leaves in five minutes. But if trains run every hour forever, why sprint? You'll catch the next one. That's immortality and parenthood.",
     "prompt": "If you knew you'd live to 500, what major life decision would you delay indefinitely? What does that tell you about why you're rushing now?",
@@ -5920,8 +5910,7 @@
     "timestamp": 2733,
     "related_ids": [
       127,
-      131,
-      454
+      131
     ],
     "curated_collection_ids": []
   },
@@ -5966,7 +5955,7 @@
     "term": "AI = Mass Job Loss",
     "category": "business",
     "source": "ry",
-    "hook": "The good news: AI is creating new jobs. The bad news: they're mostly about managing AI.",
+    "hook": "Before: one job automated, retrain elsewhere. Now: all jobs automate, no Plan B.",
     "plain": "Historically, when technology automated a job, workers retrained for a different role. But if AI automates cognitive labor across all domains, there's no next job to retrain for. The advice 'learn to code' already expired. AI codes better. This isn't displacement, it's obsolescence.",
     "analogy": "Factory closed, so learn to drive trucks. Trucks go autonomous, so learn to code. AI codes. AI does everything. You're not behind on retraining. There's nowhere left to retrain to.",
     "prompt": "If you lost your job tomorrow and AI could do every role you're qualified for, what would you do with the next decade? Retraining isn't an option.",
@@ -5984,7 +5973,7 @@
     "term": "Black Box Intelligence",
     "category": "tech-ai",
     "source": "ry",
-    "hook": "The engineers who built it have no clue what it can do. Neither do you. Neither do they.",
+    "hook": "Even the people who built it run experiments to learn what it does.",
     "plain": "Modern AI systems are trained on massive datasets, and their creators don't fully understand how they work. After training, engineers run tests to discover capabilities: can you do math? Can you lie? The internal decision-making is opaque. It's science, not engineering. You grow it, then study it.",
     "analogy": "Planting a seed, watering it, watching a tree grow. You didn't design the tree. You just provided conditions. Now you're testing the branches to see if they'll hold weight. You're the gardener, not the architect.",
     "prompt": "Name one system you rely on daily that no one fully understands. What happens when it makes a decision you can't explain?",
@@ -6590,7 +6579,7 @@
     "term": "Six-Month Loop",
     "category": "identity",
     "source": "dk",
-    "hook": "You haven't lived ten years. You've lived one year ten times.",
+    "hook": "Most people plateau at 23. They repeat the same six months forever.",
     "plain": "The pattern where you stop growing and just cycle through the same routines, relationships, and experiences every six months. You're not staying the same, you're declining while the world moves forward. What felt like stability is stagnation in disguise.",
     "analogy": "Replaying the same playlist for years. You think you're enjoying the music, but you've stopped discovering new songs that could change your taste entirely.",
     "prompt": "Name one goal you've been 'working on' for more than six months without measurable progress. What would change if you admitted you've been repeating the same effort without improving it?",
@@ -6667,7 +6656,7 @@
     "term": "Virtue Signaling Filter",
     "category": "society",
     "source": "dk",
-    "hook": "People who loudly hate money tend to want it the most. Loudly.",
+    "hook": "Few people see beyond virtue signaling to form their own opinion on money.",
     "plain": "People publicly condemn wealth to signal morality, even when they privately crave it (also known as virtue signaling). Filtering out this performance lets you form an independent view on what money actually enables.",
     "analogy": "Like classmates who mock someone for studying hard and acing tests, then privately panic about their own grades. The mockery is theater, not belief.",
     "prompt": "Who in your life mocks ambition or wealth out loud? Now watch their actions for 48 hours. Do they match their words, or is the performance covering insecurity?",
@@ -6810,7 +6799,7 @@
     "term": "Self-Actualization Default",
     "category": "philosophy",
     "source": "dk",
-    "hook": "Every choice builds the best version of you or destroys it. No middle ground.",
+    "hook": "Every choice builds the best version of you or erodes it. No middle.",
     "plain": "Every action either moves you toward your highest capability or slowly dismantles it. There's no neutral. When you eat junk, skip the gym, avoid hard conversations, or scroll aimlessly, you're not maintaining, you're declining (i.e., self-actualization vs. self-sabotage).",
     "analogy": "Like steering a boat on moving water. You're either adjusting the rudder toward your destination or drifting off course. Staying in place isn't an option.",
     "prompt": "Zoom out to age 60. Consult that version of yourself on one decision you're facing this week. Would they thank you for short-term comfort or long-term capability?",
@@ -6928,7 +6917,7 @@
     "term": "Third-of-Life Tax",
     "category": "business",
     "source": "dk",
-    "hook": "You sell eight hours, recover for eight hours, and call the remaining eight 'your life.'",
+    "hook": "A job takes a third of your time, then drains the next third recovering.",
     "plain": "The hidden cost of traditional employment: one-third of your day is sold, another third is spent recovering in a low-energy fog. You're left with one-third to actually live, and even that's often spent preparing for the next workday.",
     "analogy": "Rent costs a third of your income. Then the commute, stress, and recovery burn another third. You're left with pocket change for the life you actually want.",
     "prompt": "Track your waking hours from yesterday: work, post-work fog, and true free time. If the recovery block is larger than expected, name one thing you'd cut from work to reclaim it.",
@@ -7031,7 +7020,7 @@
     "term": "Disposition for Fame",
     "category": "identity",
     "source": "cw",
-    "hook": "Getting famous is one skill. Not falling apart when you do is a completely different one.",
+    "hook": "Some people have the skill for fame but not the wiring to survive it.",
     "plain": "You can be talented enough to achieve fame but lack the psychological disposition to handle it (i.e., the temperament for fame). Some people respond well to attention and function normally. Others self-destruct. Fame is a stress test: if your internal system can't cope with the pressure, you'll detonate even though the thing you wanted is in your hands.",
     "analogy": "A singer writes a hit song, tours the world, and can't sing anymore because the anxiety gave him a physical tick. He had the talent but not the wiring.",
     "prompt": "If you got everything you wanted tomorrow, do you honestly think you'd be able to handle it? What would break first?",
@@ -7442,7 +7431,7 @@
     "term": "Reminder Systems for Personal Growth",
     "category": "philosophy",
     "source": "ah",
-    "hook": "You already know what you need to do. You just keep forgetting to do it.",
+    "hook": "You don't need new ideas. You need to remember the ones you have.",
     "plain": "Most personal growth advice isn't about discovering new principles. It's about keeping the same core truths in front of your face. Religion used to provide these rituals. Now, podcasts have become the new delivery system.",
     "analogy": "You know you should go for a walk, sleep more, say how you feel. But you forget. So you listen to a podcast that reminds you. It's not new information, it's a fire extinguisher you keep in the room.",
     "prompt": "What's one piece of advice you already know but haven't acted on in the past two weeks?",
@@ -7602,7 +7591,7 @@
     "term": "Serial Obsessive",
     "category": "identity",
     "source": "cw",
-    "hook": "The obsession changes every few years. The obsessive never does.",
+    "hook": "Cricket at 14. Startups at 25. Philosophy at 32. Same person, different fire.",
     "plain": "Some people cycle through deep, all-consuming interests every few years. Cricket, then club promotion, then personal development, then podcasting. Each obsession is genuine and non-destructive. The only real risk is never finding an obsession worth anything at all.",
     "analogy": "You spent your 20s obsessed with CrossFit, your 30s obsessed with real estate, and now you're obsessed with writing. Each phase felt like your entire identity — but the next one always finds you.",
     "prompt": "What were you obsessed with five years ago? What are you obsessed with now? If you had to bet, what's next?",
@@ -7870,836 +7859,6 @@
     "curated_collection_ids": []
   },
   {
-    "id": 425,
-    "term": "Unacknowledged Special Access Program",
-    "category": "power",
-    "source": "sb",
-    "hook": "Legally required to deny existence, not just withhold details.",
-    "plain": "The most secretive tier of government projects. Standard classified programs you acknowledge exist but can't discuss. Unacknowledged programs require you to deny you've ever heard of them, even under oath. If someone asks about your involvement, the correct answer is 'I don't know what you're talking about.' Secrecy weaponized through plausible deniability.",
-    "analogy": "You work on a cure for cancer in a basement lab but are contractually forbidden from confirming the lab exists. A reporter asks if you work on cancer research. Your legal answer: 'No.' You're not lying about the science; you're denying the entire frame.",
-    "prompt": "Think of the last time someone asked you about work you genuinely couldn't discuss. Did you deflect with 'I can't talk about that,' or did you flat-out deny knowing anything? What's the difference?",
-    "collection_id": 513,
-    "timestamp": 2537,
-    "editors_pick": false,
-    "related_ids": [
-      70,
-      429,
-      432
-    ],
-    "curated_collection_ids": []
-  },
-  {
-    "id": 426,
-    "term": "Warp Bubble",
-    "category": "science",
-    "source": "core",
-    "hook": "The craft doesn't move through space. Space moves around the craft.",
-    "plain": "A theoretical propulsion method where you generate immense energy around a craft to create a localized distortion in spacetime. Instead of pushing through space, space itself moves around the craft, like a surfer riding a wave. The craft stays stationary relative to the bubble. This bypasses the speed of light limitation and explains instant right-angle turns without g-force: inertia doesn't apply inside the bubble.",
-    "analogy": "You're on a moving walkway at an airport, standing still while the walkway moves you forward. If the walkway wrapped around you in all directions and moved space itself, you'd never feel motion or impact, even at thousands of miles per hour.",
-    "prompt": "If you could sidestep the normal rules of friction in one area of your life right now, relationships or work or health, which would you choose and what's the first move you'd make?",
-    "collection_id": 513,
-    "timestamp": 2208,
-    "editors_pick": true,
-    "related_ids": [
-      260,
-      268,
-      434
-    ],
-    "curated_collection_ids": []
-  },
-  {
-    "id": 427,
-    "term": "Remote Viewing",
-    "category": "psychology",
-    "source": "core",
-    "hook": "Trained perception operates beyond physical presence.",
-    "plain": "A skill where individuals mentally perceive locations, objects, or events far from their physical body. Originally investigated by the CIA as 'Project Stargate' to determine if psychic abilities were exploitable for intelligence. The program lasted over two decades, generated millions in funding, and documented successes: locating a downed Soviet plane in Africa within three miles, predicting silver futures for 30 days straight. The mechanism remains unknown but appears to be trainable, not a supernatural gift.",
-    "analogy": "You're blindfolded and asked to describe what's in a locked safe three states away. You shouldn't be able to. But after training, you sketch the contents with 70% accuracy. Perception decoupled from sensory input.",
-    "prompt": "If you could 'see' one hidden thing right now, a competitor's next move or a friend's unspoken concern or next quarter's numbers, what would you choose and what would you do in the next 48 hours?",
-    "collection_id": 513,
-    "timestamp": 4091,
-    "editors_pick": false,
-    "related_ids": [
-      63,
-      428,
-      437
-    ],
-    "curated_collection_ids": []
-  },
-  {
-    "id": 428,
-    "term": "Consciousness Without Borders",
-    "category": "science",
-    "source": "core",
-    "hook": "Your thoughts aren't stored in your skull. They're tuned to a signal.",
-    "plain": "A frontier exploring whether consciousness operates through quantum entanglement, allowing perception and influence beyond the brain's physical boundaries. Hal Puthoff's remote viewing experiments suggest this: individuals affecting shielded quantum devices or perceiving information at a distance implies consciousness interacts with reality in ways classical physics doesn't predict. If consciousness is quantum, it's a field that extends, not hardware confined to your head.",
-    "analogy": "Your smartphone connects to Wi-Fi even though you can't see the signal. The signal isn't stored in the phone; the phone is tuned to a frequency that exists everywhere. Your brain might be the receiver, but the signal isn't inside it.",
-    "prompt": "Next time you walk into a tense room, pause before anyone speaks. What do you notice that has no physical evidence yet? Write it down, then compare to what unfolds.",
-    "collection_id": 513,
-    "timestamp": 4610,
-    "editors_pick": false,
-    "related_ids": [
-      106,
-      330,
-      427
-    ],
-    "curated_collection_ids": [
-      112
-    ]
-  },
-  {
-    "id": 429,
-    "term": "Legacy Program",
-    "category": "power",
-    "source": "sb",
-    "hook": "Bureaucrats outlast presidents. Institutional memory defeats democratic oversight.",
-    "plain": "A covert initiative operating in secrecy since the 1940s, outside congressional and even presidential oversight. Career officials in agencies like the CIA and Air Force can gate-keep information indefinitely by treating elected leaders as temporary help. Presidents serve 4-8 years. The people managing certain programs stay for decades. Shadow governance where accountability is structurally impossible.",
-    "analogy": "You join a company as CEO. On day one, the CFO tells you certain bank accounts are off-limits. When you ask why, she says the previous three CEOs weren't told either. She's been there 30 years. You'll be gone in four. Who runs the company?",
-    "prompt": "In your organization, name the person who's been there so long they effectively control information flow regardless of official hierarchy. What do they know that no chart shows?",
-    "collection_id": 513,
-    "timestamp": 1315,
-    "editors_pick": false,
-    "related_ids": [
-      70,
-      425,
-      430
-    ],
-    "curated_collection_ids": [
-      115
-    ]
-  },
-  {
-    "id": 430,
-    "term": "Outlasting the President",
-    "category": "power",
-    "source": "sb",
-    "hook": "Career bureaucrats treat elected leaders as temporary obstacles.",
-    "plain": "A tactic where entrenched officials in federal agencies simply outlast sitting presidents. Presidents serve 4-8 years. Senior bureaucrats stay 20-30 years. If a president pushes for transparency or access to classified programs, those officials slow-roll, withhold, or misdirect until the administration changes. Institutional memory lives with the bureaucrats. This inverts the hierarchy: the people serving the president actually control information flow.",
-    "analogy": "You're the new manager of a 50-year-old restaurant. The head chef has been there since opening and controls all supplier relationships. You ask to renegotiate contracts. He says 'the owner doesn't allow it.' You push. He stalls. You'll be replaced in two years. He'll still be there.",
-    "prompt": "In your world, who has knowledge that makes them more powerful than people with higher titles? What information do they control that you can't verify independently?",
-    "collection_id": 513,
-    "timestamp": 1367,
-    "editors_pick": false,
-    "related_ids": [
-      429,
-      450,
-      70
-    ],
-    "curated_collection_ids": [
-      108
-    ]
-  },
-  {
-    "id": 431,
-    "term": "Mind-Controlled Craft",
-    "category": "tech-ai",
-    "source": "core",
-    "hook": "No control panels. The pilot's thoughts are the controls.",
-    "plain": "Reports from crash retrievals describe craft with no visible instrumentation, buttons, or panels, just empty interiors with seats. The craft are operated via direct neural or consciousness-based interface. The pilot's thoughts control the vehicle. This explains why some craft move in ways that mirror organic nervous system responses: instant reaction, fluid motion. If the craft is an extension of the pilot's mind, it behaves like a body part, not a machine.",
-    "analogy": "You get into a car with no steering wheel, no dashboard. You think 'turn left' and the car turns left. The interface is your intention. You don't operate the car; you become the car.",
-    "prompt": "If you could control one system in your life, your calendar or your team's output or your home environment, purely through intention with zero manual input, which would you choose and what becomes possible?",
-    "collection_id": 513,
-    "timestamp": 4642,
-    "editors_pick": false,
-    "related_ids": [
-      271,
-      327,
-      434
-    ],
-    "curated_collection_ids": []
-  },
-  {
-    "id": 432,
-    "term": "Public Means Enemy Intel",
-    "category": "power",
-    "source": "sb",
-    "hook": "Transparency is espionage. Anything you admit, adversaries learn.",
-    "plain": "A national security doctrine justifying secrecy by arguing that any information released to the public automatically reaches adversaries. If the U.S. admits what it knows about technology, China and Russia learn what the U.S. knows and doesn't know, giving them a competitive edge in reverse-engineering. This logic traps information in classification limbo indefinitely, because there's never a safe moment to go public.",
-    "analogy": "You're in a poker game. You figured out the dealer's tell. If you announce it to help your friend at the table, the dealer hears it too and changes behavior. Now your edge is gone. So you stay silent, forever.",
-    "prompt": "Think of useful information you withheld from a group because one untrustworthy person was in the room. Did the secrecy protect anyone, or just freeze progress?",
-    "collection_id": 513,
-    "timestamp": 1027,
-    "editors_pick": false,
-    "related_ids": [
-      46,
-      425,
-      439
-    ],
-    "curated_collection_ids": [
-      112
-    ]
-  },
-  {
-    "id": 433,
-    "term": "Nuclear Honeypot",
-    "category": "power",
-    "source": "sb",
-    "hook": "Concentrate nuclear assets in one spot. Non-human intelligence investigates.",
-    "plain": "A tactic where intelligence agencies deliberately create environments likely to attract UAP activity. They discovered a high concentration of nuclear materials in a small area tends to draw UAP. So they'd gather assets in one spot, set up surveillance, and wait. It worked. This implies UAP monitor nuclear activity, and the U.S. figured out how to game that behavior for intelligence collection.",
-    "analogy": "You want to study a rare nocturnal animal. You set up bait stations in a grid, install night-vision cameras, and wait. The animal shows up predictably. You didn't discover it; you discovered the conditions that make it observable.",
-    "prompt": "If you wanted to bait an investor, a hiring manager, or a potential partner into revealing their true priorities, what specific environment would you create to make them show up as they really are?",
-    "collection_id": 513,
-    "timestamp": 2012,
-    "editors_pick": false,
-    "related_ids": [
-      425,
-      435,
-      444
-    ],
-    "curated_collection_ids": []
-  },
-  {
-    "id": 434,
-    "term": "Transmedium Travel",
-    "category": "tech-ai",
-    "source": "core",
-    "hook": "No splash, no resistance. The craft warps spacetime, not the environment.",
-    "plain": "Objects moving seamlessly between space, air, and water without friction, deceleration, or environmental interaction. Witnesses describe craft entering the ocean at high speed without creating a splash, suggesting they're surrounded by a localized spacetime bubble that isolates them from their surroundings. The craft isn't traveling through water or air; it's redefining physics in its immediate vicinity.",
-    "analogy": "You're walking through a rainstorm but there's an invisible sphere around you. Rain doesn't touch you. Wind doesn't push you. You're in the storm, but the storm has no effect on you.",
-    "prompt": "Pick one area where you feel constant friction: a difficult relationship, a slow process, a stubborn habit. If that friction vanished tomorrow, what's the first thing you'd attempt?",
-    "collection_id": 513,
-    "timestamp": 2231,
-    "editors_pick": false,
-    "related_ids": [
-      426,
-      431,
-      438
-    ],
-    "curated_collection_ids": []
-  },
-  {
-    "id": 435,
-    "term": "Strategic Surprise",
-    "category": "thinking",
-    "source": "sb",
-    "hook": "Imagination failures create Pearl Harbors.",
-    "plain": "When something catches a nation or organization completely off-guard, not because the threat was invisible, but because decision-makers failed to imagine it was possible. Pearl Harbor happened because no one thought Japan could get torpedoes through shallow water. 9/11 happened because no one imagined terrorists would weaponize commercial planes. Refusal to use imagination creates blindspots that enemies exploit.",
-    "analogy": "Your competitor launches a product that destroys your business model. Everyone on your team says 'we never thought they'd do that.' But three years ago, an intern proposed the same idea in a meeting and was laughed out of the room.",
-    "prompt": "What's the one move in your industry or relationship that everyone agrees 'would never happen'? If it happened next month, write down exactly what you'd do in the first 24 hours.",
-    "collection_id": 513,
-    "timestamp": 3253,
-    "editors_pick": false,
-    "related_ids": [
-      36,
-      444,
-      156
-    ],
-    "curated_collection_ids": [
-      112
-    ]
-  },
-  {
-    "id": 436,
-    "term": "Laugh Them Into Silence",
-    "category": "society",
-    "source": "sb",
-    "hook": "Mockery protects secrets better than vaults.",
-    "plain": "In the late 1940s, elements of the U.S. government deliberately cultivated cultural stigma around certain topics to make anyone who pursued them seem crazy, ruining their reputation and career. This was more effective than traditional classification because it didn't require enforcement: the public became the enforcement mechanism. Scientists avoided the field entirely, not because it was illegal, but because it was social suicide.",
-    "analogy": "A company wants to bury a failed product. Instead of a press release, they let rumors spread that only idiots bought it. Journalists mock it. Comedians joke about it. Soon, mentioning you own one gets you laughed out of rooms. Mission accomplished, no legal suppression required.",
-    "prompt": "What's a topic in your field that people reflexively dismiss as 'not serious' without ever engaging the evidence? Who benefits most from that dismissal staying in place?",
-    "collection_id": 513,
-    "timestamp": 1027,
-    "editors_pick": false,
-    "related_ids": [
-      25,
-      46,
-      158
-    ],
-    "curated_collection_ids": [
-      108
-    ]
-  },
-  {
-    "id": 437,
-    "term": "Silver Futures Experiment",
-    "category": "science",
-    "source": "core",
-    "hook": "Six out of seven predicted market moves using trained perception of future states.",
-    "plain": "A 30-day trial where CIA-trained remote viewers predicted daily silver futures prices: whether silver would go up or down the next day. An external investor bet real money on their predictions. Results: $260,000 in profit over 30 days, with the program taking a 10% cut. Six out of seven participants produced consistently accurate data. Not vague prophecy, actionable financial intelligence extracted through trained perception. Mechanism unknown, results documented.",
-    "analogy": "You're at a racetrack. Someone hands you a sheet predicting winners for 30 races. You bet. Twenty-five out of thirty predictions hit. At some point, you stop asking how and start asking if you can do it again.",
-    "prompt": "If you could accurately predict one category of future events for the next 30 days, market moves or hiring decisions or relationship outcomes, which would you choose and would you act on it or share it?",
-    "collection_id": 513,
-    "timestamp": 4342,
-    "editors_pick": false,
-    "related_ids": [
-      23,
-      100,
-      427
-    ],
-    "curated_collection_ids": []
-  },
-  {
-    "id": 438,
-    "term": "Built to Fly, Not to Survive",
-    "category": "science",
-    "source": "core",
-    "hook": "The bodies aren't the civilization. They're the drones.",
-    "plain": "Why would recovered craft contain biological entities if the technology is so advanced? One hypothesis: interstellar civilizations don't risk sentient life on dangerous missions. They manufacture biological pilots, purpose-built for space travel, with no independent will. Humanoid but not human. Neural-linked to the craft, no control panels needed. If true, the 'aliens' we've found aren't who we're dealing with, they're expendable couriers.",
-    "analogy": "You need someone to inspect a toxic waste site. You don't send your best engineer. You build a humanoid robot that can interact with the environment but costs nothing to lose. When investigators arrive, they find the robot, not you.",
-    "prompt": "If you could send a copy of yourself into a high-risk scenario knowing it wasn't actually you, what would you have it do? What does that say about how you value your own safety?",
-    "collection_id": 513,
-    "timestamp": 4669,
-    "editors_pick": true,
-    "related_ids": [
-      256,
-      266,
-      434
-    ],
-    "curated_collection_ids": []
-  },
-  {
-    "id": 439,
-    "term": "The Slow Drip Strategy",
-    "category": "power",
-    "source": "sb",
-    "hook": "Release it in pieces until the extraordinary feels routine.",
-    "plain": "Trump's UAP strategy: release evidence in tranches, not one massive dump. First wave (400+ files, Apollo triangle photo) sets the stage. Subsequent releases build credibility and let the public adjust to increasingly shocking material (this is called desensitization). Avoids societal panic. Gives institutions time to adjust their frameworks. By the time the smoking gun arrives, people have already integrated the base premise that non-human intelligence exists.",
-    "analogy": "Your friend's partner is cheating. You don't open with 'I saw them in bed with someone else.' You say 'they've been acting weird,' then 'I saw some texts,' then 'a friend saw them at a hotel.' By the time you share the full truth, they've already emotionally braced for it.",
-    "prompt": "You need to deliver terrible news to your team. Do you do it in one meeting or break it into stages? What's the cost of dragging it out versus the cost of overwhelming them all at once?",
-    "collection_id": 513,
-    "timestamp": 5058,
-    "editors_pick": false,
-    "related_ids": [
-      262,
-      432,
-      440
-    ],
-    "curated_collection_ids": [
-      105
-    ]
-  },
-  {
-    "id": 440,
-    "term": "Safety in Numbers",
-    "category": "power",
-    "source": "sb",
-    "hook": "Speak alone, get destroyed. Speak together, shift the culture.",
-    "plain": "Dan Farah's playbook for getting credible people to go public with UAP information. For decades, individuals who spoke out were dismissed and professionally destroyed. The stigma was too strong. So Farah proposed a coordinated reveal: multiple high-level officials stepping forward simultaneously in one documentary. Dilutes individual risk. Creates critical mass of credibility media can't ignore. It's not one person making a wild claim, it's the Senate Intelligence Committee, Navy pilots, CIA physicists, and defense officials all saying the same thing.",
-    "analogy": "You work at a company with a toxic culture. Speak up alone, you're fired. But if 30 employees coordinate and publish an open letter together, HR can't retaliate against everyone. Collective action changes the math.",
-    "prompt": "What's something you know is true in your workplace or industry but can't say publicly because you'd be the only one saying it? Who else knows? Could you say it together?",
-    "collection_id": 513,
-    "timestamp": 352,
-    "editors_pick": false,
-    "related_ids": [
-      439,
-      442,
-      54
-    ],
-    "curated_collection_ids": [
-      103
-    ]
-  },
-  {
-    "id": 441,
-    "term": "Ants in the Living Room",
-    "category": "thinking",
-    "source": "sb",
-    "hook": "Ignored until you evolve. Then you're a problem that needs monitoring.",
-    "plain": "How advanced non-human intelligence might view humanity. Ants can live in your backyard for generations and you never think about them. You're not hiding, not hostile, they're just irrelevant. But if one day those ants evolved fast, cracked your lock, and showed up in your kitchen, now you care. We may have technologically evolved so fast in the last 80 years (splitting the atom, nuclear weapons, space travel) that we went from ignorable to problem. Hence the sudden UAP activity around nuclear sites.",
-    "analogy": "Your neighbor's kid plays in the yard for years. You wave, forget about them. Then one day the kid shows up at your door with a PhD and a business proposal. Suddenly you're paying attention. The kid didn't change as a person, they crossed a capability threshold that made them relevant.",
-    "prompt": "When did you go from being ignored to being taken seriously in your career or relationships? What capability threshold did you cross that forced others to notice you?",
-    "collection_id": 513,
-    "timestamp": 1837,
-    "editors_pick": false,
-    "related_ids": [
-      294,
-      315,
-      91
-    ],
-    "curated_collection_ids": []
-  },
-  {
-    "id": 442,
-    "term": "The Message That Spoke Volumes",
-    "category": "power",
-    "source": "sb",
-    "hook": "Not 'risking my career.' Forfeiting my life. That's the exact phrasing.",
-    "plain": "Dan Farah was scheduled to interview a senior special forces officer involved in UAP crash recoveries. Days before filming, the officer messaged: 'After long talks with my wife, I've decided I'd be forfeiting my life if I participated.' Not risking his career or concerned about consequences. Forfeiting my life. This precise language suggests credible death threats or a belief that certain people within the legacy program would act lethally to prevent disclosure.",
-    "analogy": "A whistleblower contacts a journalist to expose corporate fraud. The day before the interview, they text: 'I can't do this. They'll kill me.' The journalist asks who. The whistleblower hangs up and disappears.",
-    "prompt": "Have you stayed silent about something important because you genuinely feared retaliation? What would it take for you to speak up anyway?",
-    "collection_id": 513,
-    "timestamp": 1219,
-    "editors_pick": false,
-    "related_ids": [
-      26,
-      440
-    ],
-    "curated_collection_ids": [
-      111
-    ]
-  },
-  {
-    "id": 443,
-    "term": "Apollo Triangle",
-    "category": "science",
-    "source": "sb",
-    "hook": "Triangular craft. Hovering above the moon. 1972. NASA always knew.",
-    "plain": "A still image from the 1972 Apollo mission showing a triangular craft hovering above the moon and the astronauts, captured from the lunar module. The UAP Task Force reviewed this image years ago and determined it was legitimate. Included in the first batch of Trump's declassified UAP files. Direct photographic documentation of non-human craft in space during a NASA mission. Also implies NASA has known about UAP encounters for at least 50 years.",
-    "analogy": "You're on a work trip. You take a photo of a landmark. Years later, you zoom in and notice a figure in the background that wasn't there when you looked with your eyes. You show your boss. They say, 'We always knew that figure was there. We just didn't tell you.'",
-    "prompt": "If you discovered evidence of something major that your organization has known about for decades but never disclosed, would you go public first or ask why it was hidden?",
-    "collection_id": 513,
-    "timestamp": 1655,
-    "editors_pick": true,
-    "related_ids": [
-      36,
-      439
-    ],
-    "curated_collection_ids": []
-  },
-  {
-    "id": 444,
-    "term": "Imagination Deficit",
-    "category": "thinking",
-    "source": "core",
-    "hook": "Pearl Harbor. 9/11. COVID. Same flaw: we couldn't imagine it happening.",
-    "plain": "Marco Rubio's doctrine on intelligence failures. The greatest disasters in U.S. history happened not because warning signs were absent, but because decision-makers couldn't imagine the scenario unfolding. Pearl Harbor: 'Japan can't get torpedoes through shallow water.' 9/11: 'Terrorists won't weaponize commercial planes.' COVID: 'Pandemics are a third-world problem.' In each case, the capability to imagine the threat would have enabled preparation. Human psychology defaults to 'if I haven't seen it, it won't happen.' Imagination is a strategic asset; its absence is a national security vulnerability.",
-    "analogy": "Your competitor launches a product that undercuts you by 90%. Everyone on your team says 'we never thought they'd go that low.' But an intern proposed the same pricing model two years ago and was dismissed as naive. You lost because you couldn't imagine losing.",
-    "prompt": "What's the one move in your industry everyone says 'would never happen'? If it happened next quarter, would you be strategically surprised or prepared?",
-    "collection_id": 513,
-    "timestamp": 3253,
-    "editors_pick": false,
-    "related_ids": [
-      30,
-      103,
-      435
-    ],
-    "curated_collection_ids": [
-      112
-    ]
-  },
-  {
-    "id": 445,
-    "term": "The Headless Army",
-    "category": "power",
-    "source": "core",
-    "hook": "Cut off the head, the body dies. Unless there's no head.",
-    "plain": "A military strategy that assumes killing the leader will end the conflict. This works when power is centralized, but fails against decentralized systems like Iran's IRGC, where 31 provinces operate independently. History shows: if there's no single head to cut off, the body keeps fighting.",
-    "analogy": "A company where the CEO's departure tanks the stock versus a co-op where every region runs autonomously. Firing the founder changes nothing.",
-    "prompt": "Name a system in your life (team, habit, relationship) that would collapse if one person left, and one that wouldn't. What's the structural difference?",
-    "collection_id": 514,
-    "timestamp": 745,
-    "editors_pick": false,
-    "related_ids": [
-      456,
-      461,
-      50
-    ],
-    "curated_collection_ids": [
-      115
-    ]
-  },
-  {
-    "id": 446,
-    "term": "Shadow Fleet",
-    "category": "business",
-    "source": "core",
-    "hook": "Sanction a country's exports. They rebrand the ships and keep selling.",
-    "plain": "A network of tankers with murky ownership, falsified documents, and transponders turned off, used to evade sanctions. Russia operates around 1,000 shadow fleet tankers to sell oil globally despite Western embargoes. They're technically stateless, so seizing them is legally gray. The fleet proves sanctions only work if you control the oceans.",
-    "analogy": "Selling concert tickets on StubHub under fake names after Ticketmaster bans you. The product moves, just through a different door.",
-    "prompt": "When you've been blocked from a resource or platform, what's the shadow fleet equivalent you used to get around it?",
-    "collection_id": 514,
-    "timestamp": 3229,
-    "editors_pick": true,
-    "related_ids": [
-      49,
-      65,
-      348
-    ],
-    "curated_collection_ids": [
-      115
-    ]
-  },
-  {
-    "id": 447,
-    "term": "Forward Operating Base",
-    "category": "power",
-    "source": "core",
-    "hook": "Don't invade. Just plant a base and arm the rebels.",
-    "plain": "A military outpost established in hostile territory not to conquer but to supply, train, and coordinate local insurgents. The US uses this in Iran's borderlands (Kurdish regions, Balochi areas) to incite ethnic violence without committing to full-scale invasion. Cheaper than war. Destabilizes from within.",
-    "analogy": "Opening a franchise in a competitor's neighborhood. You're not buying them out. You're just making sure their customers have an alternative you control.",
-    "prompt": "Where in your competitive landscape (work, personal, market) could you establish a base, a small foothold that gives you leverage without full commitment?",
-    "collection_id": 514,
-    "timestamp": 2068,
-    "editors_pick": false,
-    "related_ids": [
-      445,
-      448,
-      461
-    ],
-    "curated_collection_ids": []
-  },
-  {
-    "id": 448,
-    "term": "Game of Uncle",
-    "category": "power",
-    "source": "core",
-    "hook": "Can't destroy your opponent. So pile on pain until they beg you to stop.",
-    "plain": "A conflict where neither side can win outright, so victory goes to whoever inflicts enough suffering that the other quits first. Not about military dominance, about breaking will. Iran vs. the US: Iran targets global oil supplies; the US bombs Iranian infrastructure. The loser is whoever's citizens or allies scream loudest to end it.",
-    "analogy": "Two kids twisting each other's arms. Neither is strong enough to pin the other, so the fight ends when one yells uncle from the pain.",
-    "prompt": "Think of a negotiation or conflict you're in right now. Who has more tolerance for discomfort, you or the other side? That's who wins.",
-    "collection_id": 514,
-    "timestamp": 849,
-    "editors_pick": false,
-    "related_ids": [
-      13,
-      447,
-      455
-    ],
-    "curated_collection_ids": []
-  },
-  {
-    "id": 449,
-    "term": "National Draft",
-    "category": "society",
-    "source": "sb",
-    "hook": "Automatic registration means 18-to-24-year-olds become state-owned labor in wartime.",
-    "plain": "A system where young men (18 to 24 in the US case) are automatically entered into a lottery for military conscription. It was dormant post-Vietnam but is being reactivated. If war escalates, the government can call up hundreds of thousands with no opt-out. Forced labor pool for ground wars the public won't volunteer for.",
-    "analogy": "A company auto-enrolling all interns into a 'may be deployed to the worst office' clause. You're in by default unless you fight your way out.",
-    "prompt": "If you were automatically signed up for something you never agreed to (a loan, a lease, a commitment), what would you do in the next 48 hours?",
-    "collection_id": 514,
-    "timestamp": 1080,
-    "editors_pick": false,
-    "related_ids": [
-      38,
-      88,
-      324
-    ],
-    "curated_collection_ids": []
-  },
-  {
-    "id": 450,
-    "term": "Military-Industrial Complex",
-    "category": "power",
-    "source": "core",
-    "hook": "Wars persist because weapon-makers profit. Incentives trump peace.",
-    "plain": "A self-reinforcing system where defense contractors, Pentagon officials, and politicians mutually benefit from perpetual conflict. Companies lobby for wars to sell weapons; generals retire into cushy defense jobs; politicians get campaign donations. Peace is bad for business. The system doesn't need a conspiracy, just aligned incentives.",
-    "analogy": "A hospital that gets paid per surgery, not per cure. Patients staying sick is more profitable than getting healthy.",
-    "prompt": "Where in your industry does the money flow to people who benefit from prolonging the problem rather than solving it?",
-    "collection_id": 514,
-    "timestamp": 692,
-    "editors_pick": false,
-    "related_ids": [
-      42,
-      56,
-      70
-    ],
-    "curated_collection_ids": [
-      113
-    ]
-  },
-  {
-    "id": 451,
-    "term": "As Above, So Below",
-    "category": "philosophy",
-    "source": "core",
-    "hook": "Your personal choices don't just reflect the system. They shape it.",
-    "plain": "A Hermetic principle that says patterns repeat at every scale: your individual actions influence global systems (also known as 'as above, so below'). If you act with kindness, you add kindness to the collective. If you act with greed, you feed systemic corruption. Not metaphorical, a theory of causation where individual energy shapes reality.",
-    "analogy": "A single drop of dye in a glass of water. It seems insignificant, but eventually the entire glass changes color.",
-    "prompt": "Name one small habit you practice daily. If everyone on Earth did it, would the world be better or worse?",
-    "collection_id": 514,
-    "timestamp": 7123,
-    "editors_pick": false,
-    "related_ids": [
-      463,
-      465,
-      50
-    ],
-    "curated_collection_ids": []
-  },
-  {
-    "id": 452,
-    "term": "AI Civilian State",
-    "category": "tech-ai",
-    "source": "core",
-    "hook": "Every click, purchase, and message feeds a government dossier on you.",
-    "plain": "A society where digital ID and AI-monitored transactions replace privacy. Every online action (payments, messages, searches, locations) is recorded, categorized, and analyzed by the state to predict and control behavior. China already operates this way. The West is moving toward it under the banner of security and convenience.",
-    "analogy": "A mall where every store you enter, every item you pick up, and every conversation you have is logged. The mall owner uses it to decide if you're allowed back tomorrow.",
-    "prompt": "List three things you did online this week you'd be uncomfortable explaining to a government agent. Now imagine those actions are already in a file with your name on it.",
-    "collection_id": 514,
-    "timestamp": 63,
-    "editors_pick": false,
-    "related_ids": [
-      102,
-      161,
-      460
-    ],
-    "curated_collection_ids": []
-  },
-  {
-    "id": 453,
-    "term": "Bronze Age Collapse",
-    "category": "society",
-    "source": "core",
-    "hook": "The entire Mediterranean collapsed within a century and nobody knows exactly why.",
-    "plain": "Around 1200 BCE, the Mediterranean's major civilizations collapsed within a century. Earthquakes, famine, wars, and mass migration created cascading failures. Refugees overwhelmed defenses, trade routes died, and writing systems disappeared for 400 years. When interconnected systems fail together, recovery takes generations.",
-    "analogy": "Like five Fortune 500 companies bankrupting the same year, flooding the job market with millions of workers nobody can absorb.",
-    "prompt": "If supply chains, internet, and healthcare collapsed for six months, what's the first resource you'd secure and where would you get it?",
-    "collection_id": 514,
-    "timestamp": 5888,
-    "editors_pick": false,
-    "related_ids": [
-      74,
-      88,
-      435
-    ],
-    "curated_collection_ids": [
-      115
-    ]
-  },
-  {
-    "id": 454,
-    "term": "Third Rome Strategy",
-    "category": "philosophy",
-    "source": "core",
-    "hook": "Moscow believes it inherited Rome's spiritual throne. Wars become sacred missions.",
-    "plain": "A Russian geopolitical belief that Moscow is the heir to Rome and Byzantium, tasked with leading the Orthodox Christian world (some call this the Third Rome strategy). Wars aren't just territorial, they're civilizational missions defending spiritual values against a materialistic West. This narrative justifies decades of sacrifice.",
-    "analogy": "Like a family member who insists they're grandma's true guardian and will fight anyone who dishonors the legacy, whether or not grandma asked.",
-    "prompt": "Name a legacy you've inherited that you feel morally obligated to defend, even though no one asked you to carry it.",
-    "collection_id": 514,
-    "timestamp": 2830,
-    "editors_pick": false,
-    "related_ids": [
-      458,
-      94,
-      466
-    ],
-    "curated_collection_ids": []
-  },
-  {
-    "id": 455,
-    "term": "War of Attrition",
-    "category": "power",
-    "source": "core",
-    "hook": "Nobody wins. One side just runs out of will first.",
-    "plain": "A conflict where no one can deliver a decisive blow, so the winner is whoever endures pain longer (this is called a war of attrition). Iran hides weapons in mountains, disrupts oil, and waits. The US bombs targets but can't force surrender. Eventually one side's public, economy, or morale breaks.",
-    "analogy": "Two fighters in a ring, both exhausted, neither landing a decisive punch — the fight ends when one's knees buckle or their corner throws in the towel.",
-    "prompt": "Think of a drawn-out conflict you're in right now. Are you the side with more endurance, or are you bleeding resources faster?",
-    "collection_id": 514,
-    "timestamp": 849,
-    "editors_pick": false,
-    "related_ids": [
-      448,
-      13,
-      122
-    ],
-    "curated_collection_ids": [
-      106
-    ]
-  },
-  {
-    "id": 456,
-    "term": "Mosaic Strategy",
-    "category": "power",
-    "source": "sb",
-    "hook": "Decentralize so completely that killing leaders changes nothing. No brain to destroy.",
-    "plain": "Iran's IRGC splits into 31 independent military commands. Each operates autonomously with its own leaders, resources, and objectives. The center doesn't coordinate them, they self-organize. This makes the system immune to decapitation strikes. The downside: you can't call off the war even if you want to.",
-    "analogy": "Like a protest movement with no organizer. Police arrest 100 people and the march continues because no one's in charge.",
-    "prompt": "Name a project where removing you would genuinely change nothing. What structural feature makes that possible?",
-    "collection_id": 514,
-    "timestamp": 2336,
-    "editors_pick": false,
-    "related_ids": [
-      50,
-      445,
-      67
-    ],
-    "curated_collection_ids": [
-      115
-    ]
-  },
-  {
-    "id": 457,
-    "term": "China's Neutral Play",
-    "category": "power",
-    "source": "sb",
-    "hook": "China won't pick a side. It'll trade with both and win quietly.",
-    "plain": "A prediction that China will avoid taking sides in US-Russia-Iran conflicts. Instead, it will strike economic deals with America while financing Russia and Iran's war efforts. The goal: let superpowers bleed each other while securing energy, resources, and influence without firing a shot.",
-    "analogy": "Like a bookie who takes bets from both fighters in a match — no matter who wins, the bookie profits.",
-    "prompt": "In a conflict between two powerful people you know, how could you position yourself to benefit from both without choosing one?",
-    "collection_id": 514,
-    "timestamp": 4665,
-    "editors_pick": false,
-    "related_ids": [
-      39,
-      193,
-      464
-    ],
-    "curated_collection_ids": []
-  },
-  {
-    "id": 458,
-    "term": "Eschatology",
-    "category": "philosophy",
-    "source": "core",
-    "hook": "A roadmap for how the world ends. Not a metaphor, a strategic objective.",
-    "plain": "A belief system about humanity's ultimate destiny (i.e., eschatology). For Iran's IRGC, it's the conviction that Iran must liberate Mecca and defeat America to fulfill God's plan. For some Israelis, controlling biblical lands will trigger the Messiah's return. These aren't symbols, they're strategic objectives.",
-    "analogy": "Like a chess player who believes the only real win is flipping the board at a specific moment, not checkmate. They're not playing your game, they're fulfilling a script.",
-    "prompt": "What long-term outcome are you working toward that you'd pursue even at personal cost, because you believe it's meant to happen?",
-    "collection_id": 514,
-    "timestamp": 2482,
-    "editors_pick": false,
-    "related_ids": [
-      454,
-      89,
-      238
-    ],
-    "curated_collection_ids": []
-  },
-  {
-    "id": 459,
-    "term": "Fortress America",
-    "category": "power",
-    "source": "sb",
-    "hook": "Secure the hemisphere entirely. Sell weapons to the chaos outside.",
-    "plain": "A grand strategy where the US secures total dominance over North and South America to create a self-sufficient empire. The goal: monopolize energy, minerals, and food in the Americas, then sell weapons and resources to a chaotic world. Isolationism with a militarized perimeter.",
-    "analogy": "Like a medieval lord abandoning distant villages to fortify only the castle and its immediate farmland — you can't defend everything, so defend what feeds you.",
-    "prompt": "What's the smallest defensible perimeter in your business or life that still lets you thrive?",
-    "collection_id": 514,
-    "timestamp": 1274,
-    "editors_pick": false,
-    "related_ids": [
-      461,
-      326,
-      193
-    ],
-    "curated_collection_ids": []
-  },
-  {
-    "id": 460,
-    "term": "Digital ID",
-    "category": "tech-ai",
-    "source": "core",
-    "hook": "One login for everything. One file linking all your behavior forever.",
-    "plain": "A government-issued identity tied to every digital action: bank accounts, social media, purchases, travel. In China, you can't function without it. The benefit: convenience and reduced fraud. The cost: total surveillance. The state sees everything and can restrict access based on your score.",
-    "analogy": "Like a corporate badge that tracks not just when you swipe into the office, but every coffee you buy, every coworker you email, and every website you visit — all stored in HR's file.",
-    "prompt": "If every transaction you made this month were visible to one authority, which three would you want to hide and why?",
-    "collection_id": 514,
-    "timestamp": 4986,
-    "editors_pick": true,
-    "related_ids": [
-      161,
-      452,
-      102
-    ],
-    "curated_collection_ids": []
-  },
-  {
-    "id": 461,
-    "term": "The Ground Decides",
-    "category": "power",
-    "source": "core",
-    "hook": "Flat deserts fall in weeks. Mountains outlast empires for decades.",
-    "plain": "Geography determines military outcomes more than technology. Iraq is flat desert: the US conquered it in two weeks using air power. Iran is mountainous: weapons hide in caves, guerrilla warfare thrives, and no amount of bombing forces surrender. Terrain dictates strategy.",
-    "analogy": "Like a boxing match in a phone booth versus an open field. The smaller space neutralizes the bigger fighter's reach.",
-    "prompt": "In your competitive landscape, are you fighting on flat ground where you're exposed, or do you have defensible advantages to hide behind?",
-    "collection_id": 514,
-    "timestamp": 745,
-    "editors_pick": false,
-    "related_ids": [
-      74,
-      459,
-      462
-    ],
-    "curated_collection_ids": []
-  },
-  {
-    "id": 462,
-    "term": "Maritime Choke Point",
-    "category": "power",
-    "source": "core",
-    "hook": "Control the narrow straits. Control 80% of global trade flows.",
-    "plain": "A geographic bottleneck through which massive amounts of trade must pass (also known as a maritime choke point). Examples: Strait of Hormuz (20% of world's oil), Strait of Malacca, Panama Canal. Whoever controls these straits controls energy, food, and goods for entire continents. Blockading one creates instant leverage.",
-    "analogy": "Like owning the only bridge into a city of 10 million people — you don't need an army inside the city; just close the bridge and wait.",
-    "prompt": "In your work or relationships, what's the one choke point that, if removed, would halt everything downstream?",
-    "collection_id": 514,
-    "timestamp": 911,
-    "editors_pick": false,
-    "related_ids": [
-      461,
-      464,
-      5
-    ],
-    "curated_collection_ids": []
-  },
-  {
-    "id": 463,
-    "term": "Hermetic Philosophy",
-    "category": "philosophy",
-    "source": "core",
-    "hook": "Reality is energy, not matter. Your thoughts shape the world directly.",
-    "plain": "An ancient Egyptian belief system that says consciousness is primary; material reality is a projection of vibration. The principle 'as above, so below' means individual actions ripple into collective reality. You are a fractal of God experiencing itself. Change yourself, and you change the universe.",
-    "analogy": "Like a video game where every player's choices slightly alter the map for everyone else — you're not a spectator; you're co-writing the story.",
-    "prompt": "If reality is shaped by collective thought, what's one belief you hold that most people share, and what world does that belief create?",
-    "collection_id": 514,
-    "timestamp": 7035,
-    "editors_pick": false,
-    "related_ids": [
-      451,
-      465,
-      428
-    ],
-    "curated_collection_ids": []
-  },
-  {
-    "id": 464,
-    "term": "Petrodollar Ponzi",
-    "category": "finance",
-    "source": "core",
-    "hook": "The dollar's power rests on one fragile deal: oil trades demand dollars.",
-    "plain": "The US dollar remains the global reserve currency because oil-producing nations agreed to sell energy only in dollars (this has a name: the petrodollar system). This creates artificial demand. If major exporters abandon this and trade in other currencies or gold, the dollar's dominance collapses.",
-    "analogy": "Like a nightclub that stays packed only because bouncers force everyone to pay cover in club tokens. If people can pay cash elsewhere, the token becomes worthless.",
-    "prompt": "What's one must-have in your industry that only exists because everyone agreed to need it, not because it's objectively superior?",
-    "collection_id": 514,
-    "timestamp": 198,
-    "editors_pick": false,
-    "related_ids": [
-      462,
-      28,
-      193
-    ],
-    "curated_collection_ids": []
-  },
-  {
-    "id": 465,
-    "term": "Plato's Cave",
-    "category": "philosophy",
-    "source": "core",
-    "hook": "You think you see reality. You're watching shadows on a wall.",
-    "plain": "A metaphor from Plato's Republic: prisoners chained in a cave see only shadows cast by objects behind them. They mistake shadows for reality, build entire belief systems around them, and violently reject anyone who says the shadows aren't real. The cave represents the illusion most people live in.",
-    "analogy": "Like watching a TV show so long you forget it's scripted — and when someone says 'it's just actors,' you get angry because the storyline feels more real than your own life.",
-    "prompt": "What's one shadow you believed for years (a cultural norm, a career rule, a relationship pattern) that you now see was just a projection?",
-    "collection_id": 514,
-    "timestamp": 6130,
-    "editors_pick": false,
-    "related_ids": [
-      463,
-      24,
-      144
-    ],
-    "curated_collection_ids": [
-      112
-    ]
-  },
-  {
-    "id": 466,
-    "term": "Greater Israel Project",
-    "category": "power",
-    "source": "core",
-    "hook": "From the Nile to Euphrates. A biblical claim driving modern geopolitics.",
-    "plain": "A belief among some Israelis that the Jewish state's rightful borders extend from Egypt's Nile River to Iraq's Euphrates, encompassing Lebanon, Jordan, parts of Syria, Saudi Arabia, and Turkey. It's rooted in a literal reading of God's promise to Abraham. This ideology frames Middle East wars as territorial reclamation.",
-    "analogy": "Like a neighbor claiming your backyard because their great-great-grandfather's deed from 1820 says it's theirs — legally dubious, but backed by conviction.",
-    "prompt": "What's a rightful claim you or your company believe you're owed based on history rather than present-day agreement?",
-    "collection_id": 514,
-    "timestamp": 2965,
-    "editors_pick": false,
-    "related_ids": [
-      454,
-      458,
-      94
-    ],
-    "curated_collection_ids": []
-  },
-  {
     "id": 467,
     "term": "Identity-First Change",
     "category": "identity",
@@ -8895,7 +8054,7 @@
     "term": "Anti-Vision",
     "category": "psychology",
     "source": "dk",
-    "hook": "If you can't name your dream, you'd better know exactly what hell looks like.",
+    "hook": "You can't name your dream. But you know exactly what hell looks like.",
     "plain": "Most people struggle to define a clear vision, but everyone knows the life they refuse to live. An anti-vision is a specific, visceral picture of the future that disgusts you. That negative pull is often stronger than positive motivation, especially when you're stuck and unclear on what you want.",
     "analogy": "You don't know what business to start, but you're certain you'll never ask permission for a day off, never depend on one income source, never feel financially fragile again. That's enough direction to start moving.",
     "prompt": "Describe a specific Tuesday 10 years from now if nothing changes. What does your day look like, and is that future tolerable?",
@@ -9246,7 +8405,7 @@
     "term": "Domain of Mastery",
     "category": "thinking",
     "source": "dk",
-    "hook": "Pick one thing that makes money, one that makes you curious, one that makes you better. Call it a career.",
+    "hook": "Pick three interests: one that pays, one that excites, one that develops you.",
     "plain": "A framework for building authority without niching down to one boring topic. Choose three interests: one that makes money (copywriting), one that excites you (psychology), and one that develops you (philosophy). The overlap becomes your unique voice.",
     "analogy": "Fitness plus stoicism plus business strategy creates an unfair advantage. 'I do Instagram ads for dentists' does not.",
     "prompt": "Name three interests you'd study for free. Which one could pay you, which one never gets boring, and which one makes you better at being human?",
@@ -9834,7 +8993,7 @@
     "term": "Functional Fixedness",
     "category": "creativity",
     "source": "core",
-    "hook": "You can't see a chair as a stepladder until you desperately need a stepladder.",
+    "hook": "Once you know what something is for, you stop seeing what else it could be.",
     "plain": "When you learn an object's normal use, your mind locks onto it and struggles to imagine other uses. The knowledge that should help you actually blinds you to alternatives. This happens because naming something creates a mental category that's hard to break.",
     "analogy": "You're hunting for a screwdriver to open a paint can, walking past the coin in your pocket that would do the job instantly. The coin is money, not a tool, so your brain never even sees it as an option.",
     "prompt": "Name a problem you're stuck on. Now list every object within arm's reach and force yourself to imagine how each one could solve it, no matter how stupid it sounds.",
@@ -9954,7 +9113,7 @@
     "term": "Steal Like an Artist",
     "category": "creativity",
     "source": "core",
-    "hook": "The question was never 'did you steal it.' It's 'did you steal from the right people.'",
+    "hook": "Nothing is original. Take well and transform it.",
     "plain": "Every creator builds on what they admired before them. The skill isn't avoiding influence but absorbing many influences and combining them until the result is unmistakably yours. Nothing is original. Take well and transform it.",
     "analogy": "A musician learns by playing other people's songs for years, then writes their own. The borrowed scales and phrasings are still in there, just rearranged into something new. No one calls that plagiarism.",
     "prompt": "Name three creators whose work you'd shamelessly copy if no one was watching. Now pick one thing from each and combine them into something you'd actually make.",
@@ -10201,7 +9360,7 @@
     "term": "Hormesis",
     "category": "health",
     "source": "core",
-    "hook": "Cold water, heavy weights, hard conversations: small doses of hard things build you up.",
+    "hook": "A small dose of stress makes you stronger. A large dose breaks you.",
     "plain": "A controlled amount of a stressor that would harm you in large doses actually triggers your body to adapt and become more resilient (i.e., hormesis). The dose is the difference between damage and improvement.",
     "analogy": "Lifting weights tears your muscle fibres a little — and that small, recoverable damage is exactly what signals the muscle to rebuild stronger.",
     "prompt": "Where are you avoiding all discomfort when a small, recoverable dose of it would actually make you stronger?",
@@ -10287,7 +9446,7 @@
     "term": "Anecdotal Evidence",
     "category": "science",
     "source": "core",
-    "hook": "One story from a friend beats a study of ten thousand strangers. Your brain can't help it.",
+    "hook": "One vivid story beats a hundred boring stats in your mind. That's the trap.",
     "plain": "A single memorable example feels more convincing than dry data covering thousands of cases, even though the data is far more reliable. Your mind weights the story too heavily because it's concrete and emotional.",
     "analogy": "Someone abandons a well-reviewed car because one friend's cousin had engine trouble — ignoring the thousands of owners with no issues.",
     "prompt": "What decision are you making based on one strong story instead of the broader, duller pattern?",
@@ -10483,7 +9642,7 @@
     "term": "Euphemism Treadmill",
     "category": "language",
     "source": "core",
-    "hook": "We went from 'retarded' to 'special needs' to 'differently abled.' The discomfort just bought a new coat.",
+    "hook": "Every polite word eventually soaks up the awkwardness it was meant to dodge.",
     "plain": "We invent softer terms for uncomfortable things, but the discomfort attaches to the new word too, forcing another replacement — endlessly (the technical term: *euphemism treadmill*). The issue was never the word; it was the reality.",
     "analogy": "'Toilet' became 'bathroom' became 'restroom' became 'facilities' — each polite term eventually sounds as blunt as the one it replaced.",
     "prompt": "What are you renaming at work instead of fixing?",
@@ -10503,7 +9662,7 @@
     "term": "Motte and Bailey",
     "category": "language",
     "source": "core",
-    "hook": "'We value work-life balance.' Said every company right before the Sunday Slack message.",
+    "hook": "Defend the wild claim, retreat to the safe one, sneak back when no one's watching.",
     "plain": "Someone advances a bold, controversial position (the bailey), but when challenged retreats to a modest, obviously-true claim (the motte), then quietly returns to the bold one once pressure lifts. It's bait-and-switch dressed as consistency.",
     "analogy": "'Astrology predicts your future' — challenged, they say 'I just mean the seasons affect mood' — agreed, and then they're back to predicting your future.",
     "prompt": "What strong claim did you defend last week by swapping it for a weaker one mid-conversation?",
@@ -11404,7 +10563,7 @@
     "term": "Horsepower as Marketing Metric",
     "category": "creativity",
     "source": "core",
-    "hook": "The metric that sells your product doesn't have to be real. Just relatable.",
+    "hook": "Matthew Boulton invented horsepower to sell steam engines. The metric wasn't science, it was persuasion.",
     "plain": "Boulton and Watt invented horsepower not as a technical standard but as a marketing tool. Buyers couldn't evaluate steam engines, so Boulton created a term that made the math simple: this 25-horsepower engine replaces 75 horses because they work in shifts. Suddenly, the value was undeniable.",
     "analogy": "A software company selling automation creates a metric: 'hours saved per week.' Customers couldn't compare products before, but now they see '40 hours saved per month' and the ROI is obvious.",
     "prompt": "What comparison are your customers unable to make right now because no one has invented the unit of measurement that would make the decision obvious?",
@@ -11530,7 +10689,7 @@
     "term": "Process Fetishism",
     "category": "thinking",
     "source": "core",
-    "hook": "If it has to make sense before you start, you'll only ever do what's already been done.",
+    "hook": "Requiring that everything make sense in advance limits you to the obvious 15%.",
     "plain": "Organizations demand that every decision follow a logical, sequential process because it feels rigorous. But requiring that everything make sense in advance limits you to exploring only the obvious portion of the solution space. Penicillin, Viagra, and Darwin's theory all happened backward: discovery first, explanation later. Process worship kills serendipity.",
     "analogy": "A company rejects a brilliant ad concept because it didn't emerge from the six-stage creative brief process. A competitor runs it as spec work, it goes viral, and they win the client.",
     "prompt": "What result has your team achieved that you couldn't have planned through a formal process, and why do you still insist on that process for everything else?",
@@ -11812,7 +10971,7 @@
     "term": "Make It Easy to Say Yes",
     "category": "business",
     "source": "core",
-    "hook": "Every channel you remove because it's inconvenient for you is a customer you just handed to someone else.",
+    "hook": "More ways to buy equals more total buyers. Reducing channels optimizes cost, kills sales.",
     "plain": "Customers have different preferences for how they want to purchase. Some want to call, some want to book online, some want to walk in. Each additional channel you offer increases total conversions because you're removing friction for a different segment. Finance teams want to force everyone into the lowest-cost channel, which saves pennies per transaction but loses customers who needed a different path.",
     "analogy": "A restaurant removes phone orders and forces all reservations through an app. Tech-savvy diners love it; older customers who would've called and spent more just book elsewhere.",
     "prompt": "Which sales or service channel did your business eliminate in the last three years, and which customer segment quietly left with it?",
@@ -11833,7 +10992,7 @@
     "term": "Belief Changes the Taste",
     "category": "psychology",
     "source": "core",
-    "hook": "The wine tastes better when it costs more. Your brain isn't broken. It's just doing its job.",
+    "hook": "Identical products perform differently based on the badge. Your brain writes the review.",
     "plain": "When Toyota and GM built the exact same car on the same production line and badged them differently, the Toyota had fewer customer complaints and higher resale value. Same car, same faults, different perception. Customers expected the Toyota to be reliable, so they interpreted the experience through that lens. Brand perception doesn't just influence purchase, it literally changes how you experience the product.",
     "analogy": "You drink wine from a £10 bottle and a £50 bottle. The £50 one tastes better. Later you learn they were the same wine in different bottles, but your memory insists the expensive one was superior.",
     "prompt": "If you secretly swapped the branding on your product with a luxury competitor's, how would your customers' experience and complaints change?",
@@ -11898,7 +11057,7 @@
     "term": "Function vs Feeling",
     "category": "creativity",
     "source": "core",
-    "hook": "Engineers buy the better product. Everyone else buys the one that feels like them.",
+    "hook": "Technical people optimize for function; customers optimize for feeling. The gap is profit.",
     "plain": "Engineers and data-driven thinkers assume customers buy the objectively best product. Humans buy things that feel right, look impressive, or signal identity. A Toyota and a Chevrolet built on the same production line have different resale values purely because of brand perception. Engineering can't see this gap, which is why technical founders often undervalue marketing.",
     "analogy": "Two watches: one keeps time to within a millisecond, the other loses two minutes a day. The second one costs ten times more because it's a Rolex, and people buy the story, not the accuracy.",
     "prompt": "What attribute of your product does your team obsess over that customers barely notice, and what attribute do customers care about that you've never measured?",
@@ -11919,7 +11078,7 @@
     "term": "Slow, Slow, Then All at Once",
     "category": "thinking",
     "source": "core",
-    "hook": "You water the plant forever with no sign of life, then one morning it's everywhere.",
+    "hook": "Business uses addition when it needs sigmoid curves. Adoption isn't linear, it's social.",
     "plain": "Most business planning assumes linear returns: double the input, double the output. Human adoption follows sigmoid curves, slow at first, explosive in the middle, plateauing at saturation. Products fail because companies expect instant traction and kill them before the social copying phase kicks in. Google Glass was ahead by 15 years; most innovations need patience through the steep part of the S-curve.",
     "analogy": "A new product sells five units in month one, seven in month two. Finance kills it for underperformance. Had they waited, month six would have sold 500 as early adopters made it safe for everyone else.",
     "prompt": "Which initiative in your business did you or your team abandon during the flat part of the adoption curve before social proof could kick in?",
@@ -11942,7 +11101,7 @@
     "term": "Built for the Wild, Living Online",
     "category": "society",
     "source": "core",
-    "hook": "You're a messy, analog human being trapped inside systems designed by people who think in spreadsheets.",
+    "hook": "We're biological creatures forced to navigate systems designed by engineers who hate ambiguity.",
     "plain": "Human beings are messy, emotional, and analog. But the digital systems we're forced to use every day are designed by people who think in binaries and optimize for efficiency. The result is friction: self-checkout machines that yell 'unidentified object in bagging area,' parking apps that exclude the elderly, hotel showers with no soap. We're being forced to adapt to machines instead of machines adapting to us.",
     "analogy": "You're asked to authorize a transaction on your phone, but your phone is in another room charging. The system assumes you carry it everywhere. You just want to finish your work.",
     "prompt": "What digital system in your life forces you to behave in a way that feels unnatural, and how would you redesign it to fit human behavior instead?",
@@ -12180,7 +11339,7 @@
     "term": "Exchange > Imposition",
     "category": "language",
     "source": "core",
-    "hook": "Tell people what to do and they resist. Show them what they get in return and they comply.",
+    "hook": "People hate being told what to do; reframe it as a trade and resistance disappears.",
     "plain": "An imposition feels like control; an exchange feels like fairness. Governments and companies impose rules that trigger backlash, but if the same rule is presented as 'we're giving you X in return for Y,' compliance rises. The policy doesn't change, only the framing.",
     "analogy": "A city introduces 20 mph speed limits and drivers revolt. Reframe it: '20 mph limit, but we're removing all speed bumps.' Same rule, framed as a deal. Acceptance jumps.",
     "prompt": "What policy or rule in your organization is currently framed as a mandate that could be reframed as a fair exchange?",
@@ -12225,7 +11384,7 @@
     "term": "The Logical 15%",
     "category": "thinking",
     "source": "core",
-    "hook": "The best ideas never made sense on paper first. That's why nobody stole them.",
+    "hook": "Insisting everything make sense in advance restricts you to 15% of possible solutions.",
     "plain": "If you demand that every step of a process be logically justified before you take it, you can only explore the part of the solution space that's already obvious. The other 85% of potential solutions require lateral leaps that don't make sense until after you discover them. Penicillin, Viagra, and the theory of evolution were all found backward: discovered, then rationalized.",
     "analogy": "A team brainstorms product ideas but rejects anything that doesn't fit the current business model. They miss the breakthrough that would've created a new category because it required a leap that seemed irrational at the time.",
     "prompt": "What idea in your business has been rejected because no one could justify it in advance? What would happen if you tested it this month anyway?",
@@ -12353,7 +11512,7 @@
     "term": "Margin Beats Volume",
     "category": "finance",
     "source": "core",
-    "hook": "Growth looks impressive. Margin is what actually pays the bills.",
+    "hook": "Charging 30% more beats doubling customers. Margins matter more than growth teams admit.",
     "plain": "Getting existing customers to pay 30% more is usually far more profitable than doubling customer count. Volume growth is expensive and often unprofitable at scale because margins are thin. But marketers obsess over acquisition, ignoring the fact that perception and positioning can justify higher prices with zero incremental cost.",
     "analogy": "A software company spends $2 million to double users at the current price and loses money. They raise prices 25%, lose 10% of customers, and profit triples.",
     "prompt": "Run the math: if you raised prices 30% tomorrow and lost 20% of customers, would you still be more profitable? If yes, what's stopping you from testing it?",
