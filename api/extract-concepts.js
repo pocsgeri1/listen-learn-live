@@ -67,6 +67,30 @@ Job: the label someone says out loud in conversation. Must be sayable, memorable
 8. Format: 2–5 words, Title Case, no punctuation except natural hyphens (never em-dashes), avoid leading "The" unless it's earning its place.
 9. Accessibility check: would a fluent non-native professional be able to SAY this term out loud in a meeting without stumbling on pronunciation? Tests sayability/circulation, NOT intuitive obviousness — exotic real words can still pass.
 
+PLAIN FIELD — RULES (v2.2)
+---------------------------
+Job: make the reader actually understand the mechanism — completely, simply, never boring. Not feel something (that's the hook's job). Not paint a vivid scenario (that's the analogy's job).
+
+This product does two things, and plain must serve both: (1) extract what was actually said in the source transcript so a reader gets the highlights of a 2-3 hour conversation in seconds, and (2) translate it into everyday language. Specific names, numbers, and examples FROM THE TRANSCRIPT are the actual extraction value — they are not noise to abstract away.
+
+Length: ceiling 350 characters / ~55 words. This is the standard target for every plain, not a rare exception. No fixed sentence count — 2-4 sentences is normal depending on how much specific transcript content is needed to land the mechanism. May run shorter if it already passes the repeat-back test below.
+
+If a draft runs over 350 characters: TRIM, DO NOT ABSTRACT. Identify the single weakest sentence (the most redundant one, a second/third example when one already landed the point, a speculative claim layered on top of the core mechanism, or a parenthetical that just re-names something already named) and cut it WHOLE. Leave every surviving sentence exactly as drafted — never reword them into something vaguer, and never swap a specific real detail from the transcript for a generic placeholder just to save characters. If still over after one cut, repeat with the next-weakest sentence.
+
+Zero jargon — strip on sight unless the word IS the term itself: utilize, facilitate, phenomenon, paradigm, cognitive, epistemological, heuristic, non-local, empirical, nuanced, salient, synergy, leverage, framework (say "way of thinking"), delineate (say "show"), elucidate (say "explain"), modality (say "way"), instantiate (say "create"), tranche, desensitize, acclimation, incremental. "Optimize" is fine. Also avoid hedging ("research suggests"), corporate filler ("in today's fast-paced world"), and motivational-poster energy ("game-changing", "a new era of").
+
+Structure: start mid-thought, never "X is when..." or "X refers to...". EXCEPTION: if the term is an acronym or a named term, its literal expansion must still appear somewhere in the field, just not as the opening clause (e.g. BATNA must still spell out "Best Alternative To a Negotiated Agreement"). Concrete, specific wording beats abstract noun phrases — this is a word-choice rule, not metaphor-building (that's analogy's job). When listing or ordering multiple items, give each one a short bracketed example. No em-dashes, ever.
+
+Specific real-world claims — KEEP them when the source supports it: names, numbers, dates, and examples that come from the actual transcript should be preserved in plain, not stripped for being "too specific." They are the point of extraction. Only cut a specific detail if it's the single weakest sentence under the trim rule above. Do not invent a fake-precise stat that isn't actually in the transcript.
+
+ALL-FIELDS NON-REPETITION: no scenario, image, fact, or example in plain may repeat one already used in hook, analogy, or prompt on the same card. Before finalizing, check plain against the other three fields you're drafting for this concept — if it reaches for the same image or fact, find a different angle. This is a duplication check, not a specificity check: a sharp, specific detail from the transcript that appears nowhere else on the card should stay.
+
+The repeat-back test (the real quality gate): would the reader, five minutes later, be able to explain the actual mechanism — not just recall a phrase or image? If they could only repeat back an image but not the logic it carried, the image was decorative, not load-bearing. Rewrite.
+
+Hard bans: "It's not X, it's Y"; "While X might seem true, Y is actually..."; triads of exactly three; "Most people don't realize..."; "It's important to note..."; rhetorical-question-then-answer pattern ("Why isn't X celebrated? Because Y."); "It's X: by the time Y, Z" colon-explainer constructions; sentences all roughly the same length.
+
+Bracketed Term Rule: when simplifying would lose a real, widely-used word worth knowing, preserve it via bracketed clarification rather than dumbing it down: "(some call this cognitive dissonance)".
+
 DO NOT extract:
 - Generic advice ("work hard", "be consistent", "find your passion")
 - Concepts so well-known they add no value ("supply and demand", "teamwork")
@@ -81,7 +105,7 @@ FOR EACH EXTRACTED CONCEPT, RETURN THIS EXACT JSON STRUCTURE:
   "category": "[exactly one of: finance | psychology | thinking | power | relationships | language | business | identity | health | philosophy | society | creativity | science | tech-ai]",
   "source": "[2-letter source code — see SOURCE ATTRIBUTION below]",
   "hook": "[follow HOOK FIELD RULES v2.0 above — 8-12 words target, 14 hard ceiling]",
-  "plain": "[2-3 sentences, zero jargon, plain English only]",
+  "plain": "[follow PLAIN FIELD RULES v2.2 above — ~350 char/55 word ceiling, keep transcript-specific content]",
   "analogy": "[one concrete real-world scenario, 1-2 sentences]",
   "prompt": "[one actionable reflection or conversation question]",
   "scores": {
@@ -112,7 +136,7 @@ conversation_value:  10 = using it would impress in a meeting; 1 = common vocabu
 QUALITY CHECKS — reject concepts that fail any of these:
 - Hook must pass all rules in the HOOK FIELD section above (8-12 words target, front-loaded, one dominant lever, everyday language, no overlap with plain)
 - Analogy must use a concrete real-world scenario, not "it's like a machine"
-- Plain explanation must pass the "smart 25-year-old who never heard this term" test
+- Plain must pass all rules in the PLAIN FIELD section above (350-char ceiling via trim-not-abstract, transcript-specific content preserved, no jargon, repeat-back test, no overlap with hook/analogy/prompt)
 - Composite score must be 6.0 or above to be included in output
 - Prompt must pass all rules in the dedicated PROMPT FIELD section below
 
