@@ -1583,9 +1583,11 @@
     border: none;
     padding: 0;
     cursor: pointer;
-    transition: color 0.25s ease, opacity 0.25s ease;
+    transition: color 0.3s ease, opacity 0.3s ease, transform 0.3s cubic-bezier(0.34,1.4,0.64,1);
     position: relative;
     opacity: 0.6;
+    transform: scale(0.94);
+    transform-origin: left bottom;
   }
   @media (max-width: 600px) {
     .browse-toggle { font-size: 1.15rem; }
@@ -1595,31 +1597,9 @@
   .browse-toggle.active {
     color: var(--text);
     opacity: 1;
+    transform: scale(1);
   }
   .browse-toggle.active em { color: var(--accent); }
-
-  /* Circular swap flourish — v1.93. Direction encoded by --swap-dx sign,
-     set in JS from measured button positions before the class swap. */
-  @keyframes browseSwapOutDown {
-    0%   { transform: translate(0,0) rotate(0deg); }
-    30%  { transform: translate(calc(var(--swap-dx, 60px) * 0.35), 20px) rotate(4deg); }
-    55%  { transform: translate(calc(var(--swap-dx, 60px) * 0.6), 28px) rotate(6deg); }
-    80%  { transform: translate(calc(var(--swap-dx, 60px) * 0.28), 12px) rotate(2deg); }
-    100% { transform: translate(0,0) rotate(0deg); }
-  }
-  @keyframes browseSwapInUp {
-    0%   { transform: translate(0,0) rotate(0deg); }
-    30%  { transform: translate(calc(var(--swap-dx, 60px) * -0.35), -20px) rotate(-4deg); }
-    55%  { transform: translate(calc(var(--swap-dx, 60px) * -0.6), -28px) rotate(-6deg); }
-    80%  { transform: translate(calc(var(--swap-dx, 60px) * -0.28), -12px) rotate(-2deg); }
-    100% { transform: translate(0,0) rotate(0deg); }
-  }
-  .browse-toggle.swap-arc-out-down { animation: browseSwapOutDown 520ms cubic-bezier(0.45,0.05,0.18,1) both; }
-  .browse-toggle.swap-arc-in-up { animation: browseSwapInUp 520ms cubic-bezier(0.45,0.05,0.18,1) both; }
-  @media (prefers-reduced-motion: reduce) {
-    .browse-toggle.swap-arc-out-down,
-    .browse-toggle.swap-arc-in-up { animation: none; }
-  }
 
   #themesSection {
     padding: 0;
@@ -9057,34 +9037,13 @@ function browseSwitch(mode) {
   const themeBtn = document.getElementById('browseToggleThemes');
   const epSection = document.getElementById('episodesSection');
   const themeSection = document.getElementById('themesSection');
-  const wrap = document.getElementById('browseToggleWrap');
 
   const goingToThemes = mode === 'themes';
   const alreadyThere = goingToThemes ? themeBtn.classList.contains('active') : epBtn.classList.contains('active');
   if (alreadyThere) return;
 
-  // v1.93: circular swap flourish — measure live slot positions before any class changes,
-  // so the arc magnitude (--swap-dx) always matches the real on-screen gap between the labels.
-  if (wrap && !wrap.classList.contains('swap-animating')) {
-    const epRect = epBtn.getBoundingClientRect();
-    const themeRect = themeBtn.getBoundingClientRect();
-    const dx = goingToThemes ? (themeRect.left - epRect.left) : (epRect.left - themeRect.left);
-    wrap.style.setProperty('--swap-dx', dx + 'px');
-    wrap.classList.add('swap-animating');
-
-    const outBtn = goingToThemes ? epBtn : themeBtn;
-    const inBtn = goingToThemes ? themeBtn : epBtn;
-    outBtn.classList.add('swap-arc-out-down');
-    inBtn.classList.add('swap-arc-in-up');
-
-    const cleanup = () => {
-      outBtn.classList.remove('swap-arc-out-down');
-      inBtn.classList.remove('swap-arc-in-up');
-      wrap.classList.remove('swap-animating');
-    };
-    outBtn.addEventListener('animationend', cleanup, { once: true });
-    setTimeout(cleanup, 650); // safety fallback if animationend doesn't fire (e.g. reduced motion)
-  }
+  // v2.1a: swap is a plain CSS transition driven entirely by .active (see CSS) —
+  // no measurement, no keyframes, nothing that can misfire across screen sizes.
 
   if (mode === 'themes') {
     epBtn.classList.remove('active');
@@ -15508,7 +15467,7 @@ function toggleTheme() {
   const meta = document.getElementById('themeColorMeta');
   if (meta) meta.content = next === 'light' ? '#f5f2ed' : '#0d0d0d';
 
-  // v1.93: brain constellation canvas is dark-mode only
+  // v2.1a: brain constellation canvas is dark-mode only
   if (_epBrain) { next === 'light' ? _epBrain.stop() : _epBrain.start(); }
 }
 
@@ -15520,40 +15479,52 @@ function toggleTheme() {
 })();
 
 /* ============================================
-   HERO BRAIN CONSTELLATION — v1.93
+   HERO BRAIN CONSTELLATION — v2.1a
    Minimal canvas field: points laid out as a loose
    suggestion of a brain (two lobes + brainstem stub),
-   connected to their nearest neighbours, with traveling
-   light pulses that fire node-to-node — a thought
-   registering, then spreading. Galaxy/stars feel at rest.
-   Dark mode only. Plain canvas 2D, no libraries, cheap to run.
+   connected to their nearest neighbours, with occasional
+   traveling light pulses — a thought registering, then
+   spreading. Dark mode only.
+
+   v2.1a fixes (see changelog):
+   - Brain mask now scales uniformly off min(height, width)
+     instead of raw hero width — on ultrawide screens the old
+     version stretched the silhouette into a flat, dense mesh
+     (this was the bug in the bug report screenshot).
+   - Point/edge count cut hard, gradient draws removed, render
+     loop throttled to ~20fps, pulses slowed and capped at 1
+     concurrent — meaningfully lighter on the main thread.
+   - EP_BRAIN_ENABLED kill switch below: flip to false to turn
+     this off entirely with zero further code changes needed.
    ============================================ */
+const EP_BRAIN_ENABLED = true;
 let _epBrain = null;
 
-function _epBrainBuildPoints(w) {
-  // Soft brain silhouette as a blend of two hemisphere lobes + a small
-  // brainstem stub — not a literal anatomical trace, a minimal suggestion.
-  const cx = 0.5, cy = 0.46;
-  function inMask(x, y) {
-    const dx = x - cx, dy = y - cy;
-    const lobeL = Math.pow((dx + 0.135) / 0.30, 2) + Math.pow(dy / 0.225, 2);
-    const lobeR = Math.pow((dx - 0.135) / 0.30, 2) + Math.pow(dy / 0.225, 2);
-    const stem = (dx > -0.045 && dx < 0.045 && dy > 0.18 && dy < 0.30);
-    return lobeL <= 1 || lobeR <= 1 || stem;
-  }
+function _epBrainMask(lx, ly) {
+  // Local unit space, centered on (0,0). Two hemisphere lobes + brainstem stub —
+  // a minimal suggestion of a brain, not an anatomical trace.
+  const lobeL = Math.pow((lx + 0.135) / 0.30, 2) + Math.pow(ly / 0.225, 2);
+  const lobeR = Math.pow((lx - 0.135) / 0.30, 2) + Math.pow(ly / 0.225, 2);
+  const stem = (lx > -0.045 && lx < 0.045 && ly > 0.18 && ly < 0.30);
+  return lobeL <= 1 || lobeR <= 1 || stem;
+}
+
+function _epBrainBuildPoints(w, h, scale) {
+  const cx = w / 2, cy = h * 0.44;
   const pts = [];
-  const target = w < 700 ? 44 : 76;
+  const target = w < 700 ? 14 : 24; // v2.1a: cut hard from 44/76 for performance
   let attempts = 0;
-  while (pts.length < target && attempts < target * 50) {
+  while (pts.length < target && attempts < target * 60) {
     attempts++;
-    const x = Math.random();
-    const y = 0.12 + Math.random() * 0.62;
-    if (inMask(x, y) && Math.random() < 0.9) {
+    const lx = (Math.random() - 0.5) * 0.9;
+    const ly = -0.4 + Math.random() * 0.75;
+    if (_epBrainMask(lx, ly)) {
       pts.push({
-        x, y,
-        r: 1.1 + Math.random() * 1.6,
+        x: cx + lx * scale,
+        y: cy + ly * scale,
+        r: 1.1 + Math.random() * 1.3,
         phase: Math.random() * Math.PI * 2,
-        baseAlpha: 0.16 + Math.random() * 0.20,
+        baseAlpha: 0.14 + Math.random() * 0.16,
         _litUntil: 0
       });
     }
@@ -15561,9 +15532,9 @@ function _epBrainBuildPoints(w) {
   return pts;
 }
 
-function _epBrainBuildEdges(pts) {
+function _epBrainBuildEdges(pts, maxDist) {
   const edges = [];
-  const maxNeighbors = 3;
+  const maxNeighbors = 2; // v2.1a: cut from 3
   pts.forEach((p, i) => {
     pts
       .map((q, j) => (j === i ? null : { j, d: Math.hypot(p.x - q.x, p.y - q.y) }))
@@ -15571,7 +15542,7 @@ function _epBrainBuildEdges(pts) {
       .sort((a, b) => a.d - b.d)
       .slice(0, maxNeighbors)
       .forEach(({ j, d }) => {
-        if (d < 0.16 && !edges.some(e => (e.a === i && e.b === j) || (e.a === j && e.b === i))) {
+        if (d < maxDist && !edges.some(e => (e.a === i && e.b === j) || (e.a === j && e.b === i))) {
           edges.push({ a: i, b: j });
         }
       });
@@ -15580,15 +15551,17 @@ function _epBrainBuildEdges(pts) {
 }
 
 function initEpBrainCanvas() {
+  if (!EP_BRAIN_ENABLED) return;
   const canvas = document.getElementById('epBrainCanvas');
   const hero = document.getElementById('spHero');
   if (!canvas || !hero || !canvas.getContext) return;
   const ctx = canvas.getContext('2d');
   const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const dpr = Math.min(window.devicePixelRatio || 1, 1.5); // v2.1a: was capped at 2, 1.5 is plenty for this sparse a field
   let w = 0, h = 0, points = [], edges = [], pulses = [];
-  let raf = null, spawnTimer = null, running = false;
+  let raf = null, spawnTimer = null, running = false, lastDraw = 0;
+  const FRAME_INTERVAL = 1000 / 20; // v2.1a: throttle to ~20fps, ambient motion doesn't need 60
 
   function resize() {
     const rect = hero.getBoundingClientRect();
@@ -15599,33 +15572,35 @@ function initEpBrainCanvas() {
     canvas.style.width = w + 'px';
     canvas.style.height = h + 'px';
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    points = _epBrainBuildPoints(w);
-    edges = _epBrainBuildEdges(points);
+    // v2.1a fix: uniform scale from the limiting dimension, so the brain shape
+    // never stretches into a flat mesh on very wide hero sections.
+    const scale = Math.min(h * 0.78, w * 0.42);
+    points = _epBrainBuildPoints(w, h, scale);
+    edges = _epBrainBuildEdges(points, scale * 0.34);
     pulses = [];
   }
 
   function spawnPulse() {
-    if (document.hidden || !edges.length) return;
+    if (document.hidden || !edges.length || pulses.length > 0) return; // v2.1a: cap at 1 concurrent pulse
     const e = Math.floor(Math.random() * edges.length);
     pulses.push({ e, t: 0, dir: Math.random() < 0.5 ? 1 : -1 });
-    if (Math.random() < 0.35) {
-      setTimeout(() => {
-        if (running && edges.length) pulses.push({ e: Math.floor(Math.random() * edges.length), t: 0, dir: Math.random() < 0.5 ? 1 : -1 });
-      }, 160 + Math.random() * 220);
-    }
   }
 
   function draw(time) {
     if (!running) return;
+    raf = requestAnimationFrame(draw);
+    if (time - lastDraw < FRAME_INTERVAL) return; // v2.1a: throttle actual drawing work
+    lastDraw = time;
+
     ctx.clearRect(0, 0, w, h);
 
     ctx.lineWidth = 1;
+    ctx.strokeStyle = 'rgba(232,213,163,0.06)';
     edges.forEach(({ a, b }) => {
       const p = points[a], q = points[b];
-      ctx.strokeStyle = 'rgba(232,213,163,0.07)';
       ctx.beginPath();
-      ctx.moveTo(p.x * w, p.y * h);
-      ctx.lineTo(q.x * w, q.y * h);
+      ctx.moveTo(p.x, p.y);
+      ctx.lineTo(q.x, q.y);
       ctx.stroke();
     });
 
@@ -15633,13 +15608,13 @@ function initEpBrainCanvas() {
       const tw = 0.5 + 0.5 * Math.sin(time * 0.0006 + p.phase);
       ctx.fillStyle = `rgba(232,213,163,${(p.baseAlpha * (0.6 + 0.4 * tw)).toFixed(3)})`;
       ctx.beginPath();
-      ctx.arc(p.x * w, p.y * h, p.r, 0, Math.PI * 2);
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
       ctx.fill();
       if (p._litUntil && time < p._litUntil) {
         const k = (p._litUntil - time) / 500;
-        ctx.fillStyle = `rgba(232,213,163,${(0.55 * k).toFixed(3)})`;
+        ctx.fillStyle = `rgba(232,213,163,${(0.5 * k).toFixed(3)})`;
         ctx.beginPath();
-        ctx.arc(p.x * w, p.y * h, p.r + 2.2 * k, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, p.r + 2 * k, 0, Math.PI * 2);
         ctx.fill();
       }
     });
@@ -15655,24 +15630,25 @@ function initEpBrainCanvas() {
       const t = pulse.t;
       const x = from.x + (to.x - from.x) * t;
       const y = from.y + (to.y - from.y) * t;
-      const grad = ctx.createRadialGradient(x * w, y * h, 0, x * w, y * h, 7);
-      grad.addColorStop(0, 'rgba(232,213,163,0.9)');
-      grad.addColorStop(1, 'rgba(232,213,163,0)');
-      ctx.fillStyle = grad;
+      // v2.1a: plain filled circles instead of createRadialGradient (was the
+      // single most expensive call in the loop, recreated every frame)
+      ctx.fillStyle = 'rgba(232,213,163,0.18)';
       ctx.beginPath();
-      ctx.arc(x * w, y * h, 7, 0, Math.PI * 2);
+      ctx.arc(x, y, 5, 0, Math.PI * 2);
       ctx.fill();
-      ctx.strokeStyle = 'rgba(232,213,163,0.35)';
-      ctx.lineWidth = 1.4;
+      ctx.fillStyle = 'rgba(232,213,163,0.85)';
       ctx.beginPath();
-      ctx.moveTo(from.x * w, from.y * h);
-      ctx.lineTo(x * w, y * h);
+      ctx.arc(x, y, 2.2, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(232,213,163,0.3)';
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.moveTo(from.x, from.y);
+      ctx.lineTo(x, y);
       ctx.stroke();
-      pulse.t += reduceMotion ? 1 : 0.018;
+      pulse.t += reduceMotion ? 1 : 0.022;
       if (pulse.t >= 1) to._litUntil = time + 500;
     });
-
-    raf = requestAnimationFrame(draw);
   }
 
   function start() {
@@ -15681,7 +15657,8 @@ function initEpBrainCanvas() {
     canvas.style.display = '';
     if (!points.length) resize();
     raf = requestAnimationFrame(draw);
-    if (!reduceMotion) spawnTimer = setInterval(spawnPulse, 700 + Math.random() * 400);
+    // v2.1a: spawn far less often (was 700-1100ms), quieter = "occasionally fires" not "constantly"
+    if (!reduceMotion) spawnTimer = setInterval(spawnPulse, 1800 + Math.random() * 700);
   }
   function stop() {
     running = false;
