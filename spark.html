@@ -4544,7 +4544,7 @@
     color: var(--muted);
   }
   
-  /* FOUNDER / ABOUT — v2.1c */
+  /* FOUNDER / ABOUT — v2.3 */
   .founder-section {
     position: relative;
     z-index: 1;
@@ -4552,42 +4552,104 @@
     background: var(--bg);
   }
   .founder-inner {
-    max-width: 920px;
+    max-width: 960px;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: 220px 1fr;
+    grid-template-columns: 300px 1fr;
     gap: 3.5rem;
     align-items: start;
   }
-  .founder-photo-wrap {
+
+  /* Photo montage — v2.3. Three pieces of different shapes/sizes, overlapping
+     like a scrapbook: the main portrait, a gym moment, and a "proof" screenshot
+     of an old failed system, tagged like an exhibit. */
+  .founder-photo-montage {
     position: relative;
-    width: 220px;
-    height: 220px;
-    border-radius: 50%;
-    overflow: hidden;
-    border: 1px solid rgba(232,213,163,0.3);
+    width: 300px;
+    height: 360px;
     flex-shrink: 0;
   }
-  .founder-photo {
+  .fpm-piece {
+    position: absolute;
+    overflow: hidden;
+    background: var(--surface);
+  }
+  .fpm-piece img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
   }
-  .founder-photo-fallback {
-    width: 100%;
-    height: 100%;
-    display: flex;
+  .fpm-fallback {
+    position: absolute;
+    inset: 0;
+    display: none;
     align-items: center;
     justify-content: center;
     background: var(--surface);
   }
-  .founder-photo-fallback span {
+  .fpm-fallback span {
     font-family: 'Playfair Display', serif;
     font-style: italic;
-    font-size: 4rem;
     color: var(--accent);
   }
+  .fpm-main .fpm-fallback span { font-size: 3.2rem; }
+  .fpm-fallback-icon span { font-size: 1.6rem; font-style: normal; }
+
+  .fpm-main {
+    width: 210px;
+    height: 250px;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    border-radius: 14px 70px 14px 70px / 70px 14px 70px 14px;
+    border: 1px solid rgba(232,213,163,0.25);
+    box-shadow: 0 14px 30px rgba(0,0,0,0.35);
+    transform: rotate(-4deg);
+  }
+  .fpm-gym {
+    width: 148px;
+    height: 148px;
+    top: -16px;
+    right: -14px;
+    z-index: 2;
+    border-radius: 50% 18% 50% 18%;
+    border: 3px solid var(--bg);
+    box-shadow: 0 10px 22px rgba(0,0,0,0.4);
+    transform: rotate(9deg);
+  }
+  .fpm-notes {
+    width: 142px;
+    height: 124px;
+    bottom: -22px;
+    left: 4px;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    padding: 6px 6px 0;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    box-shadow: 0 12px 26px rgba(0,0,0,0.45);
+    transform: rotate(-7deg);
+  }
+  .fpm-notes img, .fpm-notes .fpm-fallback { position: relative; inset: auto; flex: 1; min-height: 0; }
+  .fpm-notes-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: center;
+    padding: 4px 0 6px;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .fpm-piece { transition: transform 0.35s cubic-bezier(0.22,1,0.36,1), box-shadow 0.35s; }
+    .founder-photo-montage:hover .fpm-main { transform: rotate(-1deg) scale(1.02); }
+    .founder-photo-montage:hover .fpm-gym { transform: rotate(3deg) scale(1.05); }
+    .founder-photo-montage:hover .fpm-notes { transform: rotate(-2deg) scale(1.05); }
+  }
+
   .founder-label {
     display: inline-block;
     font-family: 'DM Mono', monospace;
@@ -4622,6 +4684,13 @@
     margin-bottom: 1.1rem;
   }
   .founder-text p:last-child { margin-bottom: 0; }
+  .founder-text p.founder-line-emphasis {
+    color: var(--text);
+    font-size: 1.08rem;
+    font-style: italic;
+    font-weight: 400;
+    margin: 1.6rem 0;
+  }
 
   @media (max-width: 700px) {
     .founder-section { padding: 60px 1.5rem; }
@@ -4630,10 +4699,10 @@
       text-align: center;
       gap: 1.75rem;
     }
-    .founder-photo-wrap {
-      width: 140px;
-      height: 140px;
-      margin: 0 auto;
+    .founder-photo-montage {
+      transform: scale(0.74);
+      transform-origin: top center;
+      margin: 0 auto -90px;
     }
     .founder-text p { text-align: left; }
   }
@@ -7588,28 +7657,48 @@
 </section>
 <!-- /NEWSLETTER CAPTURE -->
 
-<!-- FOUNDER / ABOUT — v2.1c. Placed below the signup flow deliberately, so it
+<!-- FOUNDER / ABOUT — v2.3. Placed below the signup flow deliberately, so it
      doesn't interrupt the primary browse→join conversion path; rewards people
      who've scrolled this far with the human story behind the product. -->
 <section class="founder-section" id="founder">
   <div class="founder-inner">
-    <div class="founder-photo-wrap">
-      <img
-        class="founder-photo"
-        src="/assets/founder-photo.jpg"
-        alt="Gergely, founder of Epistemic"
-        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-      />
-      <div class="founder-photo-fallback" style="display:none">
-        <span>G</span>
+    <div class="founder-photo-montage">
+      <div class="fpm-piece fpm-main">
+        <img
+          src="/assets/founder-photo.jpg"
+          alt="Gergely, founder of Epistemic"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+        />
+        <div class="fpm-fallback"><span>G</span></div>
+      </div>
+      <div class="fpm-piece fpm-gym">
+        <img
+          src="/assets/gym-cast.jpg"
+          alt="Listening to a podcast at the gym"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+        />
+        <div class="fpm-fallback fpm-fallback-icon"><span>&#127939;</span></div>
+      </div>
+      <div class="fpm-piece fpm-notes">
+        <img
+          src="/assets/notes-system.jpg"
+          alt="A screenshot of an old, failed note-taking system"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+        />
+        <div class="fpm-fallback fpm-fallback-icon"><span>&#128221;</span></div>
+        <div class="fpm-notes-tag">exhibit A: the noise</div>
       </div>
     </div>
     <div class="founder-text">
       <div class="founder-label">Why Epistemic Exists</div>
       <h2 class="founder-heading">The <em>sentence</em> I kept losing.</h2>
-      <p>You know the feeling when someone in a meeting says the exact thing you'd been circling in your head, except sharper, except like it cost them nothing? That happened to me all the time. I'd spend my commute deep in a podcast, genuinely getting every idea, nodding along like I owned it. Then the next day, in a real conversation, in English, my second language, I'd reach for that same idea and just come up empty. So I started writing the best bits down as short, sayable concept cards, just for myself at first, so I'd stop losing the good stuff overnight.</p>
+      <p>I used to confuse listening with learning. I'd hit the gym or commute with Modern Wisdom on, catch a sharp idea, and feel smart instantly, like I owned it.</p>
+      <p class="founder-line-emphasis">By the next morning, 90% of it was gone. "Poof, see ya later..."</p>
+      <p>I tried to fix it: Readwise highlights I never reopened. A podcast summary app that gave me bullet points I'd skim once and forget. Even writing things down on my own little cheat sheet. None of it stuck. It all just turned into more noise in my head.</p>
+      <p class="founder-line-emphasis">Passive listening, especially as an expat, is just a broken way to learn...</p>
       <p>Along the way, that personal cheat sheet turned into an actual library, concept by concept, episode by episode, until it was clearly useful to people who weren't me too.</p>
-      <p>So I built the tool I wished existed. Epistemic isn't trying to make you smarter. It's trying to make sure the smart thing you already know doesn't die in your head the next time it matters. If that's a problem you know personally, I think you'll feel at home here.</p>
+      <p class="founder-line-emphasis">So I built the tool I wished existed.</p>
+      <p>Epistemic isn't trying to make you smarter. It's trying to make sure the smart thing you already know doesn't die in your head the next time it matters. If that's a problem you know personally, I think you'll feel at home here.</p>
     </div>
   </div>
 </section>
@@ -7631,7 +7720,7 @@
     <div class="footer-bottom">
       <div class="footer-links">
         <button class="footer-link-btn" onclick="document.getElementById('founder')?.scrollIntoView({behavior:'smooth',block:'start'})">About</button>
-        <a class="footer-link-btn" href="mailto:hello@epistemic.live">Contact</a>
+        <a class="footer-link-btn" href="mailto:getepistemic.app@gmail.com">Contact</a>
         <a class="footer-link-btn" href="/privacy">Privacy Policy</a>
         <a class="footer-link-btn" href="/terms">Terms of Service</a>
       </div>
