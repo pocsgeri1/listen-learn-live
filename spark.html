@@ -4555,7 +4555,7 @@
     max-width: 1300px;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: 570px 1fr;
+    grid-template-columns: 520px 1fr;
     gap: 4rem;
     align-items: start;
   }
@@ -4572,8 +4572,8 @@
      screenshot is actually readable. */
   .founder-photo-montage {
     position: relative;
-    width: 570px;
-    height: 620px;
+    width: 520px;
+    height: 570px;
     flex-shrink: 0;
   }
   .fpm-piece {
@@ -4629,7 +4629,8 @@
     .fpm-piece:hover .fpm-expand-hint { opacity: 1; }
   }
 
-  /* Main — portrait, top-left, the foundational shot */
+  /* Main — portrait, top-left. z-index 1: sits at the back, the two pieces
+     that touch its corners (notes, notes2) layer on top of it. */
   .fpm-main {
     width: 250px;
     height: 320px;
@@ -4641,35 +4642,35 @@
     transform: rotate(-4deg);
   }
 
-  /* Systems screenshot #1 — landscape, top-right, biggest piece */
+  /* Systems screenshot #1 — landscape, top-right, overlapping main's top-right corner */
   .fpm-notes {
     width: 280px;
     height: 200px;
-    top: 6px;
-    left: 280px;
+    top: -10px;
+    left: 230px;
     z-index: 2;
     border-radius: 90px 24px 90px 24px / 28px 100px 28px 100px;
     box-shadow: 0 16px 36px rgba(0,0,0,0.45);
     transform: rotate(4deg);
   }
 
-  /* Systems screenshot #2 — new, sits below the main shot, left of gym */
+  /* Systems screenshot #2 — now landscape too, overlapping main's bottom edge */
   .fpm-notes2 {
-    width: 220px;
-    height: 240px;
-    top: 350px;
-    left: 0;
+    width: 260px;
+    height: 180px;
+    top: 280px;
+    left: 40px;
     z-index: 2;
-    border-radius: 30px 110px 30px 110px / 110px 30px 110px 30px;
+    border-radius: 24px 90px 24px 90px / 100px 28px 100px 28px;
     box-shadow: 0 16px 36px rgba(0,0,0,0.45);
-    transform: rotate(5deg);
+    transform: rotate(-5deg);
   }
 
-  /* Gym — portrait, bottom-right, frontmost, never cropped */
+  /* Gym — portrait, bottom-right, frontmost, overlapping notes2's corner, never cropped */
   .fpm-gym {
     width: 250px;
     height: 320px;
-    top: 290px;
+    top: 240px;
     right: 0;
     z-index: 3;
     border-radius: 100px 24px 100px 24px / 24px 110px 24px 110px;
@@ -4679,10 +4680,9 @@
   .fpm-gym img { object-fit: contain; }
 
   /* Caption chips — separate elements, positioned to overlap each photo's
-     own bottom edge but live outside its overflow:hidden box, so text can
-     never get clipped by the border-radius curve. Generous vertical gaps
-     between pieces (see positions above) mean these no longer reach far
-     enough to spill onto the photo below them. */
+     own edge but live outside its overflow:hidden box, so text can never
+     get clipped by the border-radius curve. Each placed in a clear pocket
+     between pieces rather than on a spot another photo overlaps. */
   .fpm-tag {
     position: absolute;
     z-index: 4;
@@ -4697,14 +4697,24 @@
     box-shadow: 0 6px 14px rgba(0,0,0,0.4);
     white-space: nowrap;
   }
+  .fpm-tag-main {
+    top: 232px;
+    left: -10px;
+    transform: rotate(-4deg);
+  }
   .fpm-tag-notes {
-    top: 180px;
-    left: 296px;
+    top: 156px;
+    left: 248px;
     transform: rotate(-3deg);
   }
+  .fpm-tag-notes2 {
+    top: 432px;
+    left: 56px;
+    transform: rotate(3deg);
+  }
   .fpm-tag-gym {
-    top: 562px;
-    right: 30px;
+    top: 516px;
+    right: 26px;
     transform: rotate(3deg);
   }
 
@@ -4820,9 +4830,9 @@
       gap: 1.75rem;
     }
     .founder-photo-montage {
-      transform: scale(0.52);
+      transform: scale(0.58);
       transform-origin: top center;
-      margin: 0 auto -280px;
+      margin: 0 auto -225px;
     }
     .founder-text p { text-align: left; }
   }
@@ -7783,7 +7793,7 @@
 <section class="founder-section" id="founder">
   <div class="founder-inner">
     <div class="founder-photo-montage">
-      <div class="fpm-piece fpm-main" onclick="openFpmLightbox('/assets/founder-photo.jpg','')">
+      <div class="fpm-piece fpm-main" onclick="openFpmLightbox('/assets/founder-photo.jpg','Hi, that&#39;s me')">
         <img
           src="/assets/founder-photo.jpg"
           alt="Gergely, founder of Epistemic"
@@ -7801,7 +7811,7 @@
         <div class="fpm-fallback fpm-fallback-icon"><span>&#128221;</span></div>
         <div class="fpm-expand-hint">&#8599;</div>
       </div>
-      <div class="fpm-piece fpm-notes2" onclick="openFpmLightbox('/assets/notes-system2.jpg','')">
+      <div class="fpm-piece fpm-notes2" onclick="openFpmLightbox('/assets/notes-system2.jpg','...then I built a whole taxonomy')">
         <img
           src="/assets/notes-system2.jpg"
           alt="Another screenshot of an old note-taking system"
@@ -7819,7 +7829,9 @@
         <div class="fpm-fallback fpm-fallback-icon"><span>&#127939;</span></div>
         <div class="fpm-expand-hint">&#8599;</div>
       </div>
+      <div class="fpm-tag fpm-tag-main">hi, that's me</div>
       <div class="fpm-tag fpm-tag-notes">my "smart" Notion cheat sheet...</div>
+      <div class="fpm-tag fpm-tag-notes2">...then I built a whole taxonomy</div>
       <div class="fpm-tag fpm-tag-gym">where it all began...</div>
     </div>
     <div class="founder-text">
