@@ -4560,22 +4560,28 @@
     align-items: start;
   }
 
-  /* Photo montage — v2.4. Three pieces, sized to feel as substantial as the
-     text column. Main hero shot is a horizontal rectangle (largest, no tag,
-     pure photo). Systems screenshot is a twisted vertical rectangle. Gym
-     photo sits frontmost, never cropped (object-fit: contain), both "evidence"
-     pieces get a fixed warm-white paper backing + dark caption so the
-     polaroid look reads correctly in dark mode too (it was invisible before,
-     since it used theme-variable colors that go dark in dark mode). */
+  /* Photo montage — v2.5. Three pieces, repositioned: portrait top-left (you),
+     landscape center (the old system, biggest), portrait bottom-right (gym).
+     Borders are a thin gold hairline on the existing dark surface, not a flat
+     white "paper" card. Caption tags are now separate sticky-note-style chips
+     living OUTSIDE each photo's clipped frame, not text printed inside it —
+     the old "EXHIBIT" text was getting clipped by the border-radius curve
+     because it sat inside an overflow:hidden box; moving it outside removes
+     that failure mode entirely rather than patching around it. Each piece is
+     clickable and opens a lightbox (see fpmLightbox below) so the dense
+     screenshot is actually readable. */
   .founder-photo-montage {
     position: relative;
-    width: 420px;
-    height: 580px;
+    width: 430px;
+    height: 560px;
     flex-shrink: 0;
   }
   .fpm-piece {
     position: absolute;
     overflow: hidden;
+    background: var(--surface);
+    border: 1.5px solid rgba(232,213,163,0.4);
+    cursor: pointer;
   }
   .fpm-piece img {
     width: 100%;
@@ -4599,74 +4605,154 @@
   .fpm-main .fpm-fallback span { font-size: 4rem; }
   .fpm-fallback-icon span { font-size: 2rem; font-style: normal; }
 
-  /* Main hero shot — horizontal rectangle, largest, plain photo (no paper backing) */
+  /* Expand hint — small glyph that appears on hover, signals "click to enlarge" */
+  .fpm-expand-hint {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: rgba(13,13,13,0.55);
+    border: 1px solid rgba(232,213,163,0.5);
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    z-index: 2;
+    pointer-events: none;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .fpm-piece:hover .fpm-expand-hint { opacity: 1; }
+  }
+
+  /* Main — portrait, top-left, the foundational shot */
   .fpm-main {
-    width: 380px;
-    height: 240px;
+    width: 210px;
+    height: 300px;
     top: 0;
     left: 0;
     z-index: 1;
-    background: var(--surface);
-    border-radius: 24px 100px 24px 100px / 90px 24px 90px 24px;
-    border: 1px solid rgba(232,213,163,0.25);
+    border-radius: 20px 90px 20px 90px / 100px 20px 100px 20px;
     box-shadow: 0 16px 34px rgba(0,0,0,0.4);
-    transform: rotate(-3deg);
+    transform: rotate(-4deg);
   }
 
-  /* Systems screenshot — twisted vertical rectangle, fixed warm-white "paper" backing */
+  /* Systems screenshot — landscape, center, biggest piece */
   .fpm-notes {
-    width: 200px;
-    height: 250px;
-    top: 130px;
-    right: -20px;
+    width: 270px;
+    height: 195px;
+    top: 110px;
+    left: 150px;
     z-index: 2;
-    display: flex;
-    flex-direction: column;
-    background: #f0ece2;
-    padding: 9px 9px 0;
-    border-radius: 16px 60px 16px 60px;
-    box-shadow: 0 14px 30px rgba(0,0,0,0.45);
-    transform: rotate(10deg);
+    border-radius: 90px 24px 90px 24px / 28px 100px 28px 100px;
+    box-shadow: 0 16px 36px rgba(0,0,0,0.45);
+    transform: rotate(4deg);
   }
 
-  /* Gym photo — closer/frontmost, never cropped, same fixed paper backing */
+  /* Gym — portrait, bottom-right, frontmost, never cropped */
   .fpm-gym {
-    width: 220px;
-    height: 280px;
-    top: 300px;
-    left: 10px;
+    width: 190px;
+    height: 250px;
+    top: 270px;
+    right: 0;
     z-index: 3;
-    display: flex;
-    flex-direction: column;
-    background: #f0ece2;
-    padding: 9px 9px 0;
-    border-radius: 20px 70px 20px 70px;
-    box-shadow: 0 16px 34px rgba(0,0,0,0.5);
+    border-radius: 100px 24px 100px 24px / 24px 110px 24px 110px;
+    box-shadow: 0 16px 36px rgba(0,0,0,0.5);
     transform: rotate(-6deg);
   }
-  .fpm-gym img { object-fit: contain; background: #f0ece2; }
+  .fpm-gym img { object-fit: contain; }
 
-  .fpm-notes img, .fpm-notes .fpm-fallback,
-  .fpm-gym img, .fpm-gym .fpm-fallback {
-    position: relative; inset: auto; flex: 1; min-height: 0;
-  }
-  .fpm-notes .fpm-fallback, .fpm-gym .fpm-fallback { background: #f0ece2; }
+  /* Caption chips — separate elements, positioned to overlap each photo's
+     bottom edge but live outside its overflow:hidden box, so text can never
+     get clipped by the border-radius curve again. */
   .fpm-tag {
+    position: absolute;
+    z-index: 4;
     font-family: 'DM Mono', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: #5a5040; /* fixed dark tone — paper backing is fixed-white regardless of theme, so this can't use a theme variable or it disappears in dark mode */
-    text-align: center;
-    padding: 6px 0 8px;
+    font-size: 0.62rem;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+    background: var(--bg);
+    border: 1px solid rgba(232,213,163,0.45);
+    border-radius: 999px;
+    padding: 6px 14px;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.4);
+    white-space: nowrap;
+  }
+  .fpm-tag-notes {
+    top: 282px;
+    left: 168px;
+    transform: rotate(-3deg);
+  }
+  .fpm-tag-gym {
+    top: 496px;
+    right: 18px;
+    transform: rotate(3deg);
   }
 
-  /* Individual hover per piece — v2.4: each piece responds on its own, not as a group */
+  /* Individual hover per piece — each responds on its own, not as a group */
   @media (hover: hover) and (pointer: fine) {
     .fpm-piece { transition: transform 0.35s cubic-bezier(0.22,1,0.36,1), box-shadow 0.35s; }
-    .fpm-main:hover { transform: rotate(-1deg) scale(1.03); z-index: 4; }
-    .fpm-notes:hover { transform: rotate(6deg) scale(1.05); z-index: 4; }
-    .fpm-gym:hover { transform: rotate(-2deg) scale(1.05); z-index: 4; }
+    .fpm-main:hover { transform: rotate(-1deg) scale(1.03); z-index: 5; }
+    .fpm-notes:hover { transform: rotate(1deg) scale(1.04); z-index: 5; }
+    .fpm-gym:hover { transform: rotate(-2deg) scale(1.04); z-index: 5; }
+  }
+
+  /* Lightbox — click any piece to see it full-size */
+  .fpm-lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(8,8,8,0.92);
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    box-sizing: border-box;
+  }
+  .fpm-lightbox.active { display: flex; }
+  .fpm-lightbox-inner {
+    max-width: 90vw;
+    max-height: 86vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+  }
+  .fpm-lightbox img {
+    max-width: 90vw;
+    max-height: 76vh;
+    object-fit: contain;
+    border-radius: 10px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+    border: 1px solid rgba(232,213,163,0.3);
+  }
+  .fpm-lightbox-caption {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .fpm-lightbox-close {
+    position: fixed;
+    top: 24px;
+    right: 28px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(232,213,163,0.4);
+    color: var(--text);
+    font-size: 1.3rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .founder-label {
@@ -4721,7 +4807,7 @@
     .founder-photo-montage {
       transform: scale(0.68);
       transform-origin: top center;
-      margin: 0 auto -175px;
+      margin: 0 auto -165px;
     }
     .founder-text p { text-align: left; }
   }
@@ -7676,38 +7762,41 @@
 </section>
 <!-- /NEWSLETTER CAPTURE -->
 
-<!-- FOUNDER / ABOUT — v2.3. Placed below the signup flow deliberately, so it
+<!-- FOUNDER / ABOUT — v2.5. Placed below the signup flow deliberately, so it
      doesn't interrupt the primary browse→join conversion path; rewards people
      who've scrolled this far with the human story behind the product. -->
 <section class="founder-section" id="founder">
   <div class="founder-inner">
     <div class="founder-photo-montage">
-      <div class="fpm-piece fpm-main">
+      <div class="fpm-piece fpm-main" onclick="openFpmLightbox('/assets/founder-photo.jpg','')">
         <img
           src="/assets/founder-photo.jpg"
           alt="Gergely, founder of Epistemic"
           onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
         />
         <div class="fpm-fallback"><span>G</span></div>
+        <div class="fpm-expand-hint">&#8599;</div>
       </div>
-      <div class="fpm-piece fpm-notes">
+      <div class="fpm-piece fpm-notes" onclick="openFpmLightbox('/assets/notes-system.jpg','My &quot;smart&quot; Notion cheat sheet...')">
         <img
           src="/assets/notes-system.jpg"
           alt="A screenshot of an old, failed note-taking system"
           onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
         />
         <div class="fpm-fallback fpm-fallback-icon"><span>&#128221;</span></div>
-        <div class="fpm-tag">exhibit A: the noise</div>
+        <div class="fpm-expand-hint">&#8599;</div>
       </div>
-      <div class="fpm-piece fpm-gym">
+      <div class="fpm-piece fpm-gym" onclick="openFpmLightbox('/assets/gym-cast.jpg','Where it all began...')">
         <img
           src="/assets/gym-cast.jpg"
           alt="Listening to a podcast at the gym"
           onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
         />
         <div class="fpm-fallback fpm-fallback-icon"><span>&#127939;</span></div>
-        <div class="fpm-tag">exhibit B: where it started</div>
+        <div class="fpm-expand-hint">&#8599;</div>
       </div>
+      <div class="fpm-tag fpm-tag-notes">my "smart" Notion cheat sheet...</div>
+      <div class="fpm-tag fpm-tag-gym">where it all began...</div>
     </div>
     <div class="founder-text">
       <div class="founder-label">Why Epistemic Exists</div>
@@ -7723,6 +7812,16 @@
   </div>
 </section>
 <!-- /FOUNDER / ABOUT -->
+
+<!-- Photo lightbox — v2.5, used by the founder photo montage -->
+<div class="fpm-lightbox" id="fpmLightbox" onclick="if(event.target===this) closeFpmLightbox()">
+  <button class="fpm-lightbox-close" onclick="closeFpmLightbox()" aria-label="Close">&times;</button>
+  <div class="fpm-lightbox-inner">
+    <img id="fpmLightboxImg" src="" alt="" />
+    <div class="fpm-lightbox-caption" id="fpmLightboxCaption"></div>
+  </div>
+</div>
+<!-- /Photo lightbox -->
 
 <!-- FOOTER — v2.2 -->
 <footer class="site-footer">
@@ -8046,6 +8145,28 @@ let COLLECTIONS_BY_ID = {};
 let FUSE = null;
 
 // Footer — v2.2. CATEGORIES is static, so this can run immediately at parse time.
+// Founder photo montage lightbox — v2.5
+function openFpmLightbox(src, caption) {
+  const overlay = document.getElementById('fpmLightbox');
+  const img = document.getElementById('fpmLightboxImg');
+  const cap = document.getElementById('fpmLightboxCaption');
+  if (!overlay || !img) return;
+  img.src = src;
+  img.alt = caption || '';
+  if (cap) cap.textContent = caption || '';
+  overlay.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+function closeFpmLightbox() {
+  const overlay = document.getElementById('fpmLightbox');
+  if (!overlay) return;
+  overlay.classList.remove('active');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeFpmLightbox();
+});
+
 function _footerGoToCategory(catId) {
   setCat(catId);
   document.getElementById('app')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
