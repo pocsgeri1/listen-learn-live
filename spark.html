@@ -104,6 +104,21 @@
     background-repeat: no-repeat;
   }
 
+  /* Dark-mode editorial hairlines — v1.93. Same margin rules, corner ornaments,
+     and masthead label as light mode — deliberately WITHOUT the diagonal brand
+     watermark text. Recolored for the dark surface. Default theme = no attribute,
+     so this targets dark mode directly; zeroed out under [data-theme="light"]. */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 900'%3E%3Cdefs%3E%3Cstyle%3E.rule%7Bstroke:%23e8d5a3;stroke-opacity:0.14;fill:none;stroke-width:1%7D.thin%7Bstroke:%23e8d5a3;stroke-opacity:0.06;fill:none;stroke-width:0.5%7D.orn%7Bfill:%23e8d5a3;fill-opacity:0.10%7D%3C/style%3E%3C/defs%3E%3C!-- strong left margin rule --%3E%3Cline class='rule' x1='52' y1='0' x2='52' y2='900'/%3E%3C!-- hairline right rule --%3E%3Cline class='thin' x1='1388' y1='0' x2='1388' y2='900'/%3E%3C!-- top rule --%3E%3Cline class='rule' x1='0' y1='52' x2='1440' y2='52'/%3E%3C!-- bottom rule --%3E%3Cline class='thin' x1='0' y1='848' x2='1440' y2='848'/%3E%3C!-- top-left corner ornament: crosshair --%3E%3Cline class='rule' x1='0' y1='52' x2='52' y2='52'/%3E%3Cline class='rule' x1='52' y1='0' x2='52' y2='52'/%3E%3Ccircle class='orn' cx='52' cy='52' r='3.5'/%3E%3C!-- top-right --%3E%3Ccircle class='orn' cx='1388' cy='52' r='3.5'/%3E%3C!-- bottom-left --%3E%3Ccircle class='orn' cx='52' cy='848' r='3.5'/%3E%3C!-- bottom-right --%3E%3Ccircle class='orn' cx='1388' cy='848' r='3.5'/%3E%3C!-- top label, magazine masthead style --%3E%3Ctext x='72' y='38' font-family='monospace' font-size='9' letter-spacing='0.22em' fill='%23e8d5a3' fill-opacity='0.30' text-transform='uppercase'%3EIDEAS WORTH SAYING OUT LOUD%3C/text%3E%3C!-- issue mark, bottom right, no brand word --%3E%3Ctext x='1368' y='866' font-family='monospace' font-size='9' letter-spacing='0.15em' fill='%23e8d5a3' fill-opacity='0.22' text-anchor='end'%3EVOL. I%3C/text%3E%3C/svg%3E");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+  }
+
   /* Ink-ruled separator lines on headings */
   [data-theme="light"] .app-title,
   [data-theme="light"] .sp-tagline {
@@ -1540,61 +1555,87 @@
   }
 
   /* ============================================
-     BROWSE TOGGLE + THEMES GRID — v1.81
+     BROWSE TOGGLE + THEMES GRID — v1.93
+     Restyled to match "The Library" app-header:
+     left-aligned, Playfair italic, bottom divider.
      ============================================ */
   .browse-toggle-wrap {
     display: flex;
-    justify-content: center;
-    gap: 2.2rem;
-    padding: 0 2rem;
-    margin: 0 0 1.5rem;
+    align-items: flex-end;
+    justify-content: flex-start;
+    gap: 1.6rem;
+    max-width: 1100px;
+    margin: 0 auto 1.75rem;
+    padding: 0 2rem 1.2rem;
+    border-bottom: 1px solid var(--border);
+    box-sizing: border-box;
     position: relative;
   }
   @media (max-width: 600px) {
-    .browse-toggle-wrap { margin-top: 1.5rem; }
+    .browse-toggle-wrap { margin-top: 1.5rem; gap: 1.1rem; }
   }
   .browse-toggle {
     font-family: 'Playfair Display', serif;
-    font-style: italic;
-    font-size: 1.05rem;
-    letter-spacing: 0.01em;
+    font-size: 1.5rem;
+    font-weight: 400;
     color: var(--muted2);
     background: none;
     border: none;
-    border-bottom: 2px solid transparent;
-    padding: 4px 2px 10px;
+    padding: 0;
     cursor: pointer;
-    transition: color 0.25s ease;
+    transition: color 0.25s ease, opacity 0.25s ease;
     position: relative;
+    opacity: 0.6;
   }
-  .browse-toggle:hover {
-    color: var(--text);
+  @media (max-width: 600px) {
+    .browse-toggle { font-size: 1.15rem; }
   }
+  .browse-toggle em { font-style: italic; color: inherit; }
+  .browse-toggle:hover { opacity: 0.85; }
   .browse-toggle.active {
-    color: var(--accent);
+    color: var(--text);
+    opacity: 1;
   }
-  .browse-toggle-underline {
-    position: absolute;
-    bottom: 0;
-    height: 2px;
-    background: var(--accent);
-    border-radius: 2px;
-    transition: left 0.32s cubic-bezier(0.65,0,0.35,1), width 0.32s cubic-bezier(0.65,0,0.35,1);
+  .browse-toggle.active em { color: var(--accent); }
+
+  /* Circular swap flourish — v1.93. Direction encoded by --swap-dx sign,
+     set in JS from measured button positions before the class swap. */
+  @keyframes browseSwapOutDown {
+    0%   { transform: translate(0,0) rotate(0deg); }
+    30%  { transform: translate(calc(var(--swap-dx, 60px) * 0.35), 20px) rotate(4deg); }
+    55%  { transform: translate(calc(var(--swap-dx, 60px) * 0.6), 28px) rotate(6deg); }
+    80%  { transform: translate(calc(var(--swap-dx, 60px) * 0.28), 12px) rotate(2deg); }
+    100% { transform: translate(0,0) rotate(0deg); }
+  }
+  @keyframes browseSwapInUp {
+    0%   { transform: translate(0,0) rotate(0deg); }
+    30%  { transform: translate(calc(var(--swap-dx, 60px) * -0.35), -20px) rotate(-4deg); }
+    55%  { transform: translate(calc(var(--swap-dx, 60px) * -0.6), -28px) rotate(-6deg); }
+    80%  { transform: translate(calc(var(--swap-dx, 60px) * -0.28), -12px) rotate(-2deg); }
+    100% { transform: translate(0,0) rotate(0deg); }
+  }
+  .browse-toggle.swap-arc-out-down { animation: browseSwapOutDown 520ms cubic-bezier(0.45,0.05,0.18,1) both; }
+  .browse-toggle.swap-arc-in-up { animation: browseSwapInUp 520ms cubic-bezier(0.45,0.05,0.18,1) both; }
+  @media (prefers-reduced-motion: reduce) {
+    .browse-toggle.swap-arc-out-down,
+    .browse-toggle.swap-arc-in-up { animation: none; }
   }
 
   #themesSection {
-    padding: 0 2rem;
+    padding: 0;
     margin: 0 0 1.5rem;
   }
 
-  /* Category filter pills above the grid */
+  /* Category filter pills above the grid — v1.93: aligned to ep-podcast-pills-row (max-width/padding/margin) so By Episode/By Theme swap doesn't jump position */
   .themes-filter-row {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 8px;
-    max-width: 980px;
-    margin: 0 auto 1.25rem;
+    max-width: 1100px;
+    margin: 0 auto 1.75rem;
+    padding: 0 2rem;
+    box-sizing: border-box;
   }
   @media (max-width: 600px) {
     .themes-filter-row {
@@ -1635,8 +1676,10 @@
 
   /* 3x3 image-tile grid */
   .themes-grid {
-    max-width: 980px;
+    max-width: 1100px;
     margin: 0 auto;
+    padding: 0 2rem;
+    box-sizing: border-box;
   }
   .themes-row {
     display: grid;
@@ -7112,6 +7155,9 @@
 <!-- ZONE 1 — Hero: spark.html v1.76 -->
 <section class="sp-hero" id="spHero">
 
+  <!-- Brain constellation canvas — v1.93, dark mode only, behind hero copy -->
+  <canvas id="epBrainCanvas" class="ep-brain-canvas" aria-hidden="true"></canvas>
+
   <!-- Floating concept preview card — shown when user clicks a term in search dropdown -->
   <div class="sp-preview-card" id="spPreviewCard" style="display:none"></div>
 
@@ -7164,20 +7210,14 @@
 </section>
 <!-- /ZONE 1 -->
 
-<!-- BROWSE TOGGLE — v1.81 -->
+<!-- BROWSE TOGGLE — v1.93: left-aligned, styled like "The Library" header (Playfair italic + divider) -->
 <div class="browse-toggle-wrap" id="browseToggleWrap">
-  <button class="browse-toggle active" id="browseToggleEpisodes" onclick="browseSwitch('episodes')">By Episode</button>
-  <button class="browse-toggle" id="browseToggleThemes" onclick="browseSwitch('themes')">By Theme</button>
-  <div class="browse-toggle-underline" id="browseToggleUnderline"></div>
+  <button class="browse-toggle active" id="browseToggleEpisodes" onclick="browseSwitch('episodes')">Browse <em>Episodes</em></button>
+  <button class="browse-toggle" id="browseToggleThemes" onclick="browseSwitch('themes')">By <em>Themes</em></button>
 </div>
 
 <!-- EPISODES SECTION -->
 <div id="episodesSection" class="episodes-section">
-  <div class="episodes-controls">
-    <div class="episodes-app-header">
-      <div class="app-title" style="display:none">Browse <em>episodes</em></div>
-    </div>
-  </div>
   <div id="episodesRow"></div>
 </div>
 <!-- /EPISODES SECTION -->
@@ -9011,29 +9051,46 @@ let _currentOpenThemeDrawerCardId = null;
 let _themeActiveFilterCat = null; // null = no filter
 let _themesShowAll = false;
 
-function _positionBrowseUnderline(activeBtn) {
-  const underline = document.getElementById('browseToggleUnderline');
-  const wrap = document.getElementById('browseToggleWrap');
-  if (!underline || !wrap || !activeBtn) return;
-  const wrapRect = wrap.getBoundingClientRect();
-  const btnRect = activeBtn.getBoundingClientRect();
-  underline.style.left = (btnRect.left - wrapRect.left) + 'px';
-  underline.style.width = btnRect.width + 'px';
-}
-
 function browseSwitch(mode) {
   playPillSFX();
   const epBtn = document.getElementById('browseToggleEpisodes');
   const themeBtn = document.getElementById('browseToggleThemes');
   const epSection = document.getElementById('episodesSection');
   const themeSection = document.getElementById('themesSection');
+  const wrap = document.getElementById('browseToggleWrap');
+
+  const goingToThemes = mode === 'themes';
+  const alreadyThere = goingToThemes ? themeBtn.classList.contains('active') : epBtn.classList.contains('active');
+  if (alreadyThere) return;
+
+  // v1.93: circular swap flourish — measure live slot positions before any class changes,
+  // so the arc magnitude (--swap-dx) always matches the real on-screen gap between the labels.
+  if (wrap && !wrap.classList.contains('swap-animating')) {
+    const epRect = epBtn.getBoundingClientRect();
+    const themeRect = themeBtn.getBoundingClientRect();
+    const dx = goingToThemes ? (themeRect.left - epRect.left) : (epRect.left - themeRect.left);
+    wrap.style.setProperty('--swap-dx', dx + 'px');
+    wrap.classList.add('swap-animating');
+
+    const outBtn = goingToThemes ? epBtn : themeBtn;
+    const inBtn = goingToThemes ? themeBtn : epBtn;
+    outBtn.classList.add('swap-arc-out-down');
+    inBtn.classList.add('swap-arc-in-up');
+
+    const cleanup = () => {
+      outBtn.classList.remove('swap-arc-out-down');
+      inBtn.classList.remove('swap-arc-in-up');
+      wrap.classList.remove('swap-animating');
+    };
+    outBtn.addEventListener('animationend', cleanup, { once: true });
+    setTimeout(cleanup, 650); // safety fallback if animationend doesn't fire (e.g. reduced motion)
+  }
 
   if (mode === 'themes') {
     epBtn.classList.remove('active');
     themeBtn.classList.add('active');
     epSection.style.display = 'none';
     themeSection.style.display = '';
-    _positionBrowseUnderline(themeBtn);
     if (!themeSection.dataset.rendered) {
       _animateThemesEntrance();
       themeSection.dataset.rendered = '1';
@@ -9043,7 +9100,6 @@ function browseSwitch(mode) {
     epBtn.classList.add('active');
     themeSection.style.display = 'none';
     epSection.style.display = '';
-    _positionBrowseUnderline(epBtn);
   }
 }
 
@@ -9998,12 +10054,7 @@ loadConcepts().then(() => {
   // initConceptOfTheDay();
   initConversationStarter();
   initSparkHero(); // spark.html v1.76 — hero search
-  // Position browse toggle underline under "By Episode" on load — v1.81
-  requestAnimationFrame(() => _positionBrowseUnderline(document.getElementById('browseToggleEpisodes')));
   window.addEventListener('resize', () => {
-    const active = document.querySelector('.browse-toggle.active');
-    if (active) _positionBrowseUnderline(active);
-    // Reposition theme preview connector if open
     if (_themeOpenId !== null) {
       const card = document.getElementById('themeCard' + _themeOpenId);
       const connector = document.getElementById('themePreviewConnector');
@@ -14317,6 +14368,7 @@ function closeCS(persist) {
   document.removeEventListener('keydown', _convEscHandler);
   document.removeEventListener('click', _convOutsideClickHandler, { capture: true });
   _csDismissTermPopups(); // v1.79c: close any floating Stories-tab term previews too
+  document.querySelectorAll('.sp-pill.active').forEach(p => p.classList.remove('active')); // v1.93: clear stuck scenario pill state on close
   if (persist) markDismissedTodayCS();
 }
 
@@ -15455,6 +15507,9 @@ function toggleTheme() {
   // Update meta theme-color for mobile browser chrome
   const meta = document.getElementById('themeColorMeta');
   if (meta) meta.content = next === 'light' ? '#f5f2ed' : '#0d0d0d';
+
+  // v1.93: brain constellation canvas is dark-mode only
+  if (_epBrain) { next === 'light' ? _epBrain.stop() : _epBrain.start(); }
 }
 
 // Apply correct icon on load (theme already set by inline head script)
@@ -15463,6 +15518,186 @@ function toggleTheme() {
   const btn = document.getElementById('themeToggle');
   if (btn) btn.textContent = isLight ? '☀' : '☽';
 })();
+
+/* ============================================
+   HERO BRAIN CONSTELLATION — v1.93
+   Minimal canvas field: points laid out as a loose
+   suggestion of a brain (two lobes + brainstem stub),
+   connected to their nearest neighbours, with traveling
+   light pulses that fire node-to-node — a thought
+   registering, then spreading. Galaxy/stars feel at rest.
+   Dark mode only. Plain canvas 2D, no libraries, cheap to run.
+   ============================================ */
+let _epBrain = null;
+
+function _epBrainBuildPoints(w) {
+  // Soft brain silhouette as a blend of two hemisphere lobes + a small
+  // brainstem stub — not a literal anatomical trace, a minimal suggestion.
+  const cx = 0.5, cy = 0.46;
+  function inMask(x, y) {
+    const dx = x - cx, dy = y - cy;
+    const lobeL = Math.pow((dx + 0.135) / 0.30, 2) + Math.pow(dy / 0.225, 2);
+    const lobeR = Math.pow((dx - 0.135) / 0.30, 2) + Math.pow(dy / 0.225, 2);
+    const stem = (dx > -0.045 && dx < 0.045 && dy > 0.18 && dy < 0.30);
+    return lobeL <= 1 || lobeR <= 1 || stem;
+  }
+  const pts = [];
+  const target = w < 700 ? 44 : 76;
+  let attempts = 0;
+  while (pts.length < target && attempts < target * 50) {
+    attempts++;
+    const x = Math.random();
+    const y = 0.12 + Math.random() * 0.62;
+    if (inMask(x, y) && Math.random() < 0.9) {
+      pts.push({
+        x, y,
+        r: 1.1 + Math.random() * 1.6,
+        phase: Math.random() * Math.PI * 2,
+        baseAlpha: 0.16 + Math.random() * 0.20,
+        _litUntil: 0
+      });
+    }
+  }
+  return pts;
+}
+
+function _epBrainBuildEdges(pts) {
+  const edges = [];
+  const maxNeighbors = 3;
+  pts.forEach((p, i) => {
+    pts
+      .map((q, j) => (j === i ? null : { j, d: Math.hypot(p.x - q.x, p.y - q.y) }))
+      .filter(Boolean)
+      .sort((a, b) => a.d - b.d)
+      .slice(0, maxNeighbors)
+      .forEach(({ j, d }) => {
+        if (d < 0.16 && !edges.some(e => (e.a === i && e.b === j) || (e.a === j && e.b === i))) {
+          edges.push({ a: i, b: j });
+        }
+      });
+  });
+  return edges;
+}
+
+function initEpBrainCanvas() {
+  const canvas = document.getElementById('epBrainCanvas');
+  const hero = document.getElementById('spHero');
+  if (!canvas || !hero || !canvas.getContext) return;
+  const ctx = canvas.getContext('2d');
+  const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  let w = 0, h = 0, points = [], edges = [], pulses = [];
+  let raf = null, spawnTimer = null, running = false;
+
+  function resize() {
+    const rect = hero.getBoundingClientRect();
+    w = rect.width; h = rect.height;
+    if (!w || !h) return;
+    canvas.width = Math.round(w * dpr);
+    canvas.height = Math.round(h * dpr);
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    points = _epBrainBuildPoints(w);
+    edges = _epBrainBuildEdges(points);
+    pulses = [];
+  }
+
+  function spawnPulse() {
+    if (document.hidden || !edges.length) return;
+    const e = Math.floor(Math.random() * edges.length);
+    pulses.push({ e, t: 0, dir: Math.random() < 0.5 ? 1 : -1 });
+    if (Math.random() < 0.35) {
+      setTimeout(() => {
+        if (running && edges.length) pulses.push({ e: Math.floor(Math.random() * edges.length), t: 0, dir: Math.random() < 0.5 ? 1 : -1 });
+      }, 160 + Math.random() * 220);
+    }
+  }
+
+  function draw(time) {
+    if (!running) return;
+    ctx.clearRect(0, 0, w, h);
+
+    ctx.lineWidth = 1;
+    edges.forEach(({ a, b }) => {
+      const p = points[a], q = points[b];
+      ctx.strokeStyle = 'rgba(232,213,163,0.07)';
+      ctx.beginPath();
+      ctx.moveTo(p.x * w, p.y * h);
+      ctx.lineTo(q.x * w, q.y * h);
+      ctx.stroke();
+    });
+
+    points.forEach(p => {
+      const tw = 0.5 + 0.5 * Math.sin(time * 0.0006 + p.phase);
+      ctx.fillStyle = `rgba(232,213,163,${(p.baseAlpha * (0.6 + 0.4 * tw)).toFixed(3)})`;
+      ctx.beginPath();
+      ctx.arc(p.x * w, p.y * h, p.r, 0, Math.PI * 2);
+      ctx.fill();
+      if (p._litUntil && time < p._litUntil) {
+        const k = (p._litUntil - time) / 500;
+        ctx.fillStyle = `rgba(232,213,163,${(0.55 * k).toFixed(3)})`;
+        ctx.beginPath();
+        ctx.arc(p.x * w, p.y * h, p.r + 2.2 * k, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    });
+
+    pulses = pulses.filter(pulse => pulse.t <= 1);
+    pulses.forEach(pulse => {
+      const edge = edges[pulse.e];
+      if (!edge) { pulse.t = 2; return; }
+      const a = points[edge.a], b = points[edge.b];
+      if (!a || !b) { pulse.t = 2; return; }
+      const from = pulse.dir === 1 ? a : b;
+      const to = pulse.dir === 1 ? b : a;
+      const t = pulse.t;
+      const x = from.x + (to.x - from.x) * t;
+      const y = from.y + (to.y - from.y) * t;
+      const grad = ctx.createRadialGradient(x * w, y * h, 0, x * w, y * h, 7);
+      grad.addColorStop(0, 'rgba(232,213,163,0.9)');
+      grad.addColorStop(1, 'rgba(232,213,163,0)');
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(x * w, y * h, 7, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(232,213,163,0.35)';
+      ctx.lineWidth = 1.4;
+      ctx.beginPath();
+      ctx.moveTo(from.x * w, from.y * h);
+      ctx.lineTo(x * w, y * h);
+      ctx.stroke();
+      pulse.t += reduceMotion ? 1 : 0.018;
+      if (pulse.t >= 1) to._litUntil = time + 500;
+    });
+
+    raf = requestAnimationFrame(draw);
+  }
+
+  function start() {
+    if (running) return;
+    running = true;
+    canvas.style.display = '';
+    if (!points.length) resize();
+    raf = requestAnimationFrame(draw);
+    if (!reduceMotion) spawnTimer = setInterval(spawnPulse, 700 + Math.random() * 400);
+  }
+  function stop() {
+    running = false;
+    canvas.style.display = 'none';
+    if (raf) cancelAnimationFrame(raf);
+    if (spawnTimer) clearInterval(spawnTimer);
+  }
+
+  window.addEventListener('resize', () => { if (running) resize(); });
+
+  _epBrain = { start, stop, resize };
+
+  resize();
+  if (document.documentElement.getAttribute('data-theme') !== 'light') start();
+}
+initEpBrainCanvas();
 
 // Card flip SFX — soft whoosh, like a page turning through air.
 // Skipped if user prefers reduced motion (accessibility).
@@ -16477,6 +16712,22 @@ function playStreakMilestoneSFX() {
   justify-content: center;
   padding: 72px 2rem 2rem;
   overflow: visible; /* row2 absolute pills and dropdown need to escape */
+}
+
+/* Brain constellation canvas — v1.93. Sits behind hero copy (z-index 0 vs
+   .sp-hero-col's z-index 1), dark mode only. Pure decoration, no pointer events. */
+.ep-brain-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.65;
+}
+[data-theme="light"] .ep-brain-canvas { display: none; }
+@media (max-width: 600px) {
+  .ep-brain-canvas { opacity: 0.45; } /* quieter on small screens, copy needs the contrast */
 }
 
 /* --- Center copy column — overflow visible so preview card escapes --- */
