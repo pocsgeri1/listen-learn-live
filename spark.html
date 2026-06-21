@@ -200,6 +200,37 @@
   }
 
   /* ============================================
+     CUSTOM CURSOR — v2.3f. A small gold ring that trails the real cursor
+     with a soft lag. Decorative only — the native cursor stays visible and
+     fully functional, this just adds a touch of life on top of it. Desktop
+     only (hover:hover + pointer:fine), one RAF loop, one DOM element.
+     ============================================ */
+  #epCursor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 22px;
+    height: 22px;
+    border: 1.5px solid var(--accent);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99999;
+    opacity: 0;
+    transition: width 0.25s cubic-bezier(0.22,1,0.36,1), height 0.25s cubic-bezier(0.22,1,0.36,1), background 0.25s ease, opacity 0.2s ease;
+    will-change: transform;
+  }
+  #epCursor.ep-cursor-active { opacity: 0.85; }
+  #epCursor.ep-cursor-hover {
+    width: 38px;
+    height: 38px;
+    background: rgba(232,213,163,0.12);
+  }
+  #epCursor.ep-cursor-down { width: 16px; height: 16px; }
+  @media (hover: none), (pointer: coarse) {
+    #epCursor { display: none; }
+  }
+
+  /* ============================================
      GLOBAL FOCUS-VISIBLE — gold outline for keyboard nav,
      replaces default browser blue ring (off-brand on dark theme)
      ============================================ */
@@ -1599,9 +1630,9 @@
      ============================================ */
   .browse-toggle-wrap {
     display: flex;
-    align-items: center;
+    align-items: baseline;
     justify-content: flex-start;
-    gap: 0.7rem;
+    gap: 1.8rem;
     max-width: 1100px;
     margin: 0 auto 1.75rem;
     padding: 0 2rem 1.2rem;
@@ -1610,32 +1641,44 @@
     position: relative;
   }
   @media (max-width: 600px) {
-    .browse-toggle-wrap { margin-top: 1.5rem; gap: 0.5rem; }
+    .browse-toggle-wrap { margin-top: 1.5rem; gap: 1.1rem; }
   }
+  /* v2.3f: reverted to Playfair italic, matching "The Library" app-title
+     typography — gold animated underline on the active label is the
+     lightweight "surprise" in place of the old pill borders. */
   .browse-toggle {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.78rem;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
     font-weight: 400;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
     color: var(--muted2);
     background: transparent;
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    padding: 9px 22px;
+    border: none;
+    padding: 0 0 6px;
     cursor: pointer;
-    transition: color 0.15s, border-color 0.15s, background 0.15s;
+    position: relative;
+    transition: color 0.25s ease;
     white-space: nowrap;
   }
-  @media (max-width: 600px) {
-    .browse-toggle { font-size: 0.68rem; padding: 7px 16px; }
+  .browse-toggle::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 2px;
+    width: 0;
+    background: var(--accent);
+    border-radius: 2px;
+    transition: width 0.4s cubic-bezier(0.22,1,0.36,1);
   }
-  .browse-toggle:hover { color: var(--text); border-color: var(--border-hover); }
+  @media (max-width: 600px) {
+    .browse-toggle { font-size: 1.3rem; }
+  }
+  .browse-toggle:hover { color: var(--text); }
   .browse-toggle.active {
     color: var(--accent);
-    border-color: var(--accent);
-    background: rgba(232,213,163,0.06);
+    font-style: italic;
   }
+  .browse-toggle.active::after { width: 100%; }
 
   #themesSection {
     padding: 0;
@@ -4550,6 +4593,7 @@
     z-index: 1;
     padding: 90px 2rem;
     background: var(--bg);
+    overflow-x: hidden; /* v2.3f: montage uses fixed px widths for absolute-positioned pieces — without this, it was forcing real horizontal overflow on mobile, not just visual overflow that transform:scale alone doesn't fully contain */
   }
   .founder-inner {
     max-width: 1300px;
@@ -4574,6 +4618,7 @@
     position: relative;
     width: 520px;
     height: 570px;
+    margin-top: 44px; /* v2.3f: aligns the top of the first photo with the heading text, not the label pill above it */
     flex-shrink: 0;
   }
   .fpm-piece {
@@ -4814,6 +4859,7 @@
     margin-bottom: 1.1rem;
   }
   .founder-text p:last-child { margin-bottom: 0; }
+  .founder-text p em { font-style: italic; color: var(--accent); }
   .founder-text p.founder-line-emphasis {
     color: var(--text);
     font-size: 1.08rem;
@@ -4828,13 +4874,18 @@
       grid-template-columns: 1fr;
       text-align: center;
       gap: 1.75rem;
+      max-width: 100%;
     }
     .founder-photo-montage {
       transform: scale(0.58);
       transform-origin: top center;
       margin: 0 auto -225px;
     }
-    .founder-text p { text-align: left; }
+    .founder-label { font-size: 0.62rem; padding: 5px 13px; }
+    .founder-heading { font-size: 1.4rem; }
+    .founder-text p { font-size: 0.85rem; text-align: left; }
+    .founder-text p.founder-line-emphasis { font-size: 0.95rem; }
+    .fpm-tag { font-size: 0.56rem; padding: 5px 11px; }
   }
 
   /* MOBILE */
@@ -4858,13 +4909,16 @@
     background: var(--surface);
     border-top: 1px solid var(--border);
     padding: 56px 2rem 32px;
+    overflow-x: hidden;
   }
   .footer-inner {
     max-width: 1100px;
     margin: 0 auto;
   }
   .footer-top {
+    padding-bottom: 2.5rem;
     margin-bottom: 2.5rem;
+    border-bottom: 1px solid var(--border);
   }
   .footer-brand {
     font-family: 'Playfair Display', serif;
@@ -4879,41 +4933,6 @@
     color: var(--muted2);
     max-width: 420px;
     line-height: 1.6;
-  }
-  .footer-col-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 1rem;
-  }
-  .footer-cats {
-    padding-bottom: 2.5rem;
-    margin-bottom: 2.5rem;
-    border-bottom: 1px solid var(--border);
-  }
-  .footer-cat-links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.6rem;
-  }
-  .footer-cat-link {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.68rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--muted2);
-    background: transparent;
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    padding: 6px 14px;
-    cursor: pointer;
-    transition: color 0.15s, border-color 0.15s;
-  }
-  .footer-cat-link:hover {
-    color: var(--accent);
-    border-color: var(--accent);
   }
   .footer-bottom {
     display: flex;
@@ -4948,6 +4967,11 @@
   @media (max-width: 600px) {
     .site-footer { padding: 44px 1.5rem 28px; }
     .footer-bottom { flex-direction: column; align-items: flex-start; }
+    .footer-brand { font-size: 1.2rem; }
+    .footer-tagline { font-size: 0.78rem; }
+    .footer-link-btn { font-size: 0.74rem; }
+    .footer-copyright { font-size: 0.6rem; }
+    .footer-links { gap: 1.1rem; }
   }
   /* FEEDBACK MODAL */
   .feedback-backdrop {
@@ -5585,6 +5609,21 @@
     border-color: var(--border);
   }
   [data-theme="light"] .sc-tile:hover { background: var(--surface2); }
+
+  /* Scan-tile hover lift — v2.3f. Same treatment as the drawer scan-mode
+     tiles, desktop only so it can't get stuck on a tap on touch devices. */
+  @media (hover: hover) and (pointer: fine) {
+    .sc-tile {
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.15s, background 0.15s;
+    }
+    .sc-tile:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+    }
+    [data-theme="light"] .sc-tile:hover {
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    }
+  }
 
   /* ── FLIP CARDS — nf-row only ── */
   .nf-row { perspective: 1400px; }
@@ -7837,11 +7876,11 @@
     <div class="founder-text">
       <div class="founder-label">Why Epistemic Exists</div>
       <h2 class="founder-heading">The <em>sentence</em> I kept losing.</h2>
-      <p>I used to confuse listening with learning. I'd hit the gym or commute with Modern Wisdom on, catch a sharp idea, and feel smart instantly, like I owned it.</p>
+      <p>I used to confuse listening with learning. I'd hit the gym or commute with Modern Wisdom on, catch a sharp idea, and feel <em>smart</em> and <em>productive</em> instantly, like I owned it.</p>
       <p class="founder-line-emphasis">By the next morning, 90% of it was gone. "Poof, see ya later..."</p>
-      <p>I tried to fix it: Readwise highlights I never reopened. A podcast summary app that gave me bullet points I'd skim once and forget. Even writing things down on my own little cheat sheet. None of it stuck. It all just turned into more noise in my head.</p>
-      <p class="founder-line-emphasis">Passive listening, especially as an expat, is just a broken way to learn...</p>
-      <p>Along the way, that personal cheat sheet turned into an actual library, concept by concept, episode by episode, until it was clearly useful to people who weren't me too.</p>
+      <p>I tried to fix it: Readwise highlights I never reopened. A podcast summary app that gave me bullet points I'd skim once and forget. Even writing things down in my little Notion cheat sheet. None of it stuck. It just turned into more noise in my head.</p>
+      <p class="founder-line-emphasis">Passive listening is just mental masturbation... and a broken learning format (especially as an expat).</p>
+      <p>Along the way, that personal cheat sheet turned into an actual library. Concept by concept, episode by episode, until it was clearly useful to people like me too: expats, non-native English speakers, podcast lovers.</p>
       <p class="founder-line-emphasis">So I built the tool I wished existed.</p>
       <p>Epistemic isn't trying to make you smarter. It's trying to make sure the smart thing you already know doesn't die in your head the next time it matters. If that's a problem you know personally, I think you'll feel right at home here.</p>
     </div>
@@ -7865,11 +7904,6 @@
     <div class="footer-top">
       <div class="footer-brand">Epistemic<span>.</span></div>
       <div class="footer-tagline">Turn 3 hours of podcast into 3 ideas you'll actually say out loud.</div>
-    </div>
-
-    <div class="footer-cats">
-      <div class="footer-col-label">Browse by category</div>
-      <div class="footer-cat-links" id="footerCatLinks"></div>
     </div>
 
     <div class="footer-bottom">
@@ -8182,6 +8216,40 @@ let FUSE = null;
 
 // Footer — v2.2. CATEGORIES is static, so this can run immediately at parse time.
 // Founder photo montage lightbox — v2.5
+// Custom trailing-ring cursor — v2.3f. Desktop only, one RAF loop, purely decorative.
+(function initEpCursor() {
+  if (!window.matchMedia || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+  const cursor = document.createElement('div');
+  cursor.id = 'epCursor';
+  document.body.appendChild(cursor);
+
+  let mx = 0, my = 0, cx = 0, cy = 0, started = false;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    if (!started) { cx = mx; cy = my; started = true; }
+    cursor.classList.add('ep-cursor-active');
+  }, { passive: true });
+  document.addEventListener('mousedown', () => cursor.classList.add('ep-cursor-down'));
+  document.addEventListener('mouseup', () => cursor.classList.remove('ep-cursor-down'));
+  document.addEventListener('mouseleave', () => cursor.classList.remove('ep-cursor-active'));
+
+  const HOVER_SELECTOR = 'a, button, [onclick], .concept-card, .sc-tile, .ep-drawer-scan-tile, .fpm-piece, input, textarea';
+  document.addEventListener('mouseover', e => {
+    if (e.target.closest(HOVER_SELECTOR)) cursor.classList.add('ep-cursor-hover');
+  }, true);
+  document.addEventListener('mouseout', e => {
+    if (e.target.closest(HOVER_SELECTOR)) cursor.classList.remove('ep-cursor-hover');
+  }, true);
+
+  function loop() {
+    cx += (mx - cx) * 0.18;
+    cy += (my - cy) * 0.18;
+    cursor.style.transform = `translate(${cx - 11}px, ${cy - 11}px)`;
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+})();
+
 function openFpmLightbox(src, caption) {
   const overlay = document.getElementById('fpmLightbox');
   const img = document.getElementById('fpmLightboxImg');
@@ -8203,18 +8271,7 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape') closeFpmLightbox();
 });
 
-function _footerGoToCategory(catId) {
-  setCat(catId);
-  document.getElementById('app')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
 (function _renderFooter() {
-  const wrap = document.getElementById('footerCatLinks');
-  if (wrap) {
-    wrap.innerHTML = CATEGORIES
-      .filter(c => c.id !== 'all')
-      .map(c => `<button class="footer-cat-link" onclick="_footerGoToCategory('${c.id}')">${c.name}</button>`)
-      .join('');
-  }
   const yearEl = document.getElementById('footerYear');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 })();
