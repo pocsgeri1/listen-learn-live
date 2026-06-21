@@ -1561,6 +1561,36 @@
     box-shadow: 0 6px 16px rgba(0,0,0,0.12);
   }
 
+  /* Scroll-reveal — v2.2. Cards fade + rise into place as they enter the
+     viewport. Stagger delay is set inline per-card by initScrollReveal(). */
+  .reveal-init {
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.22,1,0.36,1);
+  }
+  .reveal-init.reveal-in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal-init { opacity: 1; transform: none; transition: none; }
+  }
+
+  /* Scan-mode tile hover lift — v2.2. Desktop only (hover:hover + pointer:fine)
+     so it never gets "stuck" after a tap on touch devices. */
+  @media (hover: hover) and (pointer: fine) {
+    .ep-drawer-scan-tile {
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+    }
+    .ep-drawer-scan-tile:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+    }
+    [data-theme="light"] .ep-drawer-scan-tile:hover {
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    }
+  }
+
   /* ============================================
      BROWSE TOGGLE + THEMES GRID — v2.1c
      Pill toggle, matching the existing podcast/category
@@ -4621,6 +4651,105 @@
       justify-content: center;
     }
   }
+
+  /* FOOTER — v2.2 */
+  .site-footer {
+    position: relative;
+    z-index: 1;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 56px 2rem 32px;
+  }
+  .footer-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .footer-top {
+    margin-bottom: 2.5rem;
+  }
+  .footer-brand {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.4rem;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+  }
+  .footer-brand span { color: var(--accent); }
+  .footer-tagline {
+    font-size: 0.85rem;
+    color: var(--muted2);
+    max-width: 420px;
+    line-height: 1.6;
+  }
+  .footer-col-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+  .footer-cats {
+    padding-bottom: 2.5rem;
+    margin-bottom: 2.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .footer-cat-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+  .footer-cat-link {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted2);
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 6px 14px;
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .footer-cat-link:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+  .footer-bottom {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem;
+  }
+  .footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+  .footer-link-btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    color: var(--muted2);
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+  .footer-link-btn:hover { color: var(--accent); }
+  .footer-copyright {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+  }
+  @media (max-width: 600px) {
+    .site-footer { padding: 44px 1.5rem 28px; }
+    .footer-bottom { flex-direction: column; align-items: flex-start; }
+  }
   /* FEEDBACK MODAL */
   .feedback-backdrop {
     display: none;
@@ -7476,15 +7605,41 @@
       </div>
     </div>
     <div class="founder-text">
-      <div class="founder-label">Why I built this</div>
+      <div class="founder-label">Why Epistemic Exists</div>
       <h2 class="founder-heading">The <em>sentence</em> I kept losing.</h2>
-      <p>I used to listen to three hours of podcasts a week and remember almost none of it when it actually mattered. I'd hear a sharp idea on my commute, nod along, feel smarter for twenty minutes — and then sit in a meeting the next day, English as my working language, and watch the exact thought I needed disappear right when I needed to say it out loud.</p>
-      <p>It wasn't a vocabulary problem. I understood the concepts fine. It was the gap between knowing something and being able to say it, naturally, in the room, in a second language, without it sounding rehearsed. Nobody was building for that gap — they were building flashcards, summaries, courses. None of it was about the sentence you actually need at 10am on a Tuesday.</p>
+      <p>You know the feeling when someone in a meeting says the exact thing you'd been circling in your head, except sharper, except like it cost them nothing? That happened to me all the time. I'd spend my commute deep in a podcast, genuinely getting every idea, nodding along like I owned it. Then the next day, in a real conversation, in English, my second language, I'd reach for that same idea and just come up empty. So I started writing the best bits down as short, sayable concept cards, just for myself at first, so I'd stop losing the good stuff overnight.</p>
+      <p>Along the way, that personal cheat sheet turned into an actual library, concept by concept, episode by episode, until it was clearly useful to people who weren't me too.</p>
       <p>So I built the tool I wished existed. Epistemic isn't trying to make you smarter. It's trying to make sure the smart thing you already know doesn't die in your head the next time it matters. If that's a problem you know personally, I think you'll feel at home here.</p>
     </div>
   </div>
 </section>
 <!-- /FOUNDER / ABOUT -->
+
+<!-- FOOTER — v2.2 -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">Epistemic<span>.</span></div>
+      <div class="footer-tagline">Turn 3 hours of podcast into 3 ideas you'll actually say out loud.</div>
+    </div>
+
+    <div class="footer-cats">
+      <div class="footer-col-label">Browse by category</div>
+      <div class="footer-cat-links" id="footerCatLinks"></div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-links">
+        <button class="footer-link-btn" onclick="document.getElementById('founder')?.scrollIntoView({behavior:'smooth',block:'start'})">About</button>
+        <a class="footer-link-btn" href="mailto:hello@epistemic.live">Contact</a>
+        <a class="footer-link-btn" href="/privacy">Privacy Policy</a>
+        <a class="footer-link-btn" href="/terms">Terms of Service</a>
+      </div>
+      <div class="footer-copyright">&copy; <span id="footerYear"></span> Epistemic. All rights reserved.</div>
+    </div>
+  </div>
+</footer>
+<!-- /FOOTER -->
 
 <!-- FEEDBACK MODAL -->
 <div class="feedback-backdrop" id="feedbackBackdrop" onclick="closeFeedbackModal(event)"></div>
@@ -7780,6 +7935,23 @@ const CATEGORIES = [
 let CONCEPTS = [];
 let COLLECTIONS_BY_ID = {};
 let FUSE = null;
+
+// Footer — v2.2. CATEGORIES is static, so this can run immediately at parse time.
+function _footerGoToCategory(catId) {
+  setCat(catId);
+  document.getElementById('app')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+(function _renderFooter() {
+  const wrap = document.getElementById('footerCatLinks');
+  if (wrap) {
+    wrap.innerHTML = CATEGORIES
+      .filter(c => c.id !== 'all')
+      .map(c => `<button class="footer-cat-link" onclick="_footerGoToCategory('${c.id}')">${c.name}</button>`)
+      .join('');
+  }
+  const yearEl = document.getElementById('footerYear');
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
+})();
 
 async function loadCollections() {
   try {
@@ -8142,6 +8314,46 @@ function filtered() {
   }).reverse();
 }
 
+// Reusable empty-state illustration — v2.2. message can include simple HTML (e.g. <strong>).
+function _emptyStateHTML(message) {
+  return `<div class="ep-empty-state">
+    <svg class="ep-empty-svg" viewBox="0 0 120 60" fill="none" aria-hidden="true">
+      <circle cx="24" cy="30" r="4" fill="currentColor" opacity="0.55"/>
+      <circle cx="96" cy="30" r="4" fill="currentColor" opacity="0.55"/>
+      <line x1="31" y1="30" x2="89" y2="30" stroke="currentColor" stroke-width="1" stroke-dasharray="3 5" opacity="0.35"/>
+    </svg>
+    <div class="ep-empty-msg">${message}</div>
+  </div>`;
+}
+
+// Scroll-reveal helper — v2.2. Call after any render that adds cards matching
+// `selector` inside `container`. Skips elements already armed (re-renders safe).
+// Staggers reveal by DOM order, capped so a long list doesn't take forever to finish.
+function initScrollReveal(selector, container) {
+  const root = container || document;
+  const els = root.querySelectorAll(selector + ':not(.reveal-armed)');
+  if (!els.length) return;
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(el => el.classList.add('reveal-in'));
+    return;
+  }
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const el = entry.target;
+      const siblings = Array.prototype.slice.call(el.parentElement ? el.parentElement.children : []);
+      const idx = siblings.indexOf(el);
+      el.style.transitionDelay = (Math.min(Math.max(idx, 0), 8) * 40) + 'ms';
+      el.classList.add('reveal-in');
+      obs.unobserve(el);
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  els.forEach(el => {
+    el.classList.add('reveal-armed', 'reveal-init');
+    obs.observe(el);
+  });
+}
+
 function buildGrid() {
   const container = document.getElementById('netflixRows');
   if (!container) return;
@@ -8235,9 +8447,10 @@ function buildGrid() {
       </div>`;
   });
 
-  container.innerHTML = html || `<div style="padding:3rem 2rem;color:var(--muted);font-family:'DM Mono',monospace;font-size:0.75rem;letter-spacing:0.12em;text-transform:uppercase;text-align:center;">No concepts found</div>`;
+  container.innerHTML = html || `${_emptyStateHTML('No concepts found<br><strong>Try a different filter or search term</strong>')}`;
   document.getElementById('resultCount').textContent = totalVisible > 0 ? `${totalVisible} concept${totalVisible !== 1 ? 's' : ''} shown` : '';
   initDragScroll();
+  initScrollReveal('.concept-card', container); // v2.2
   const mc = document.getElementById('netflixRows');
   if (mc) mc._magneticBound = false;
   initMagneticCards();
@@ -9152,7 +9365,12 @@ let _currentOpenEpCardId = null;
 let _themeOpenId = null;
 let _currentOpenThemePreviewCardId = null;
 let _currentOpenThemeDrawerCardId = null;
-let _themeActiveFilterCat = null; // null = no filter
+let _themeActiveFilterCat = (function() { // v2.2: restore last theme filter
+  try {
+    const saved = localStorage.getItem('lll_theme_filter');
+    return (saved && saved !== 'all') ? saved : null;
+  } catch (e) { return null; }
+})();
 let _themesShowAll = false;
 
 function browseSwitch(mode) {
@@ -9190,8 +9408,9 @@ function renderThemesFilterRow(animate) {
   const row = document.getElementById('themesFilterRow');
   if (!row) return;
   const cats = CATEGORIES.filter(c => c.id !== 'all');
-  let html = `<button class="theme-filter-pill active" data-cat="all" style="${animate ? 'opacity:0;transform:scale(0.6);' : ''}" onclick="themeFilterClick('all')">All</button>`;
-  html += cats.map(c => `<button class="theme-filter-pill" data-cat="${c.id}" style="${animate ? 'opacity:0;transform:scale(0.6);' : ''}" onclick="themeFilterClick('${c.id}')">${c.name}</button>`).join('');
+  const activeId = _themeActiveFilterCat || 'all'; // v2.2: reflect persisted filter, not just "all"
+  let html = `<button class="theme-filter-pill${activeId === 'all' ? ' active' : ''}" data-cat="all" style="${animate ? 'opacity:0;transform:scale(0.6);' : ''}" onclick="themeFilterClick('all')">All</button>`;
+  html += cats.map(c => `<button class="theme-filter-pill${activeId === c.id ? ' active' : ''}" data-cat="${c.id}" style="${animate ? 'opacity:0;transform:scale(0.6);' : ''}" onclick="themeFilterClick('${c.id}')">${c.name}</button>`).join('');
   row.innerHTML = html;
 
   if (animate) {
@@ -9241,6 +9460,7 @@ function _animateThemesEntrance() {
 function themeFilterClick(catId) {
   playPillSFX();
   _themeActiveFilterCat = (catId === 'all') ? null : catId;
+  try { localStorage.setItem('lll_theme_filter', catId); } catch (e) {} // v2.2
   document.querySelectorAll('.theme-filter-pill').forEach(p => {
     p.classList.toggle('active', p.dataset.cat === catId);
   });
@@ -9787,7 +10007,7 @@ function buildEpisodes() {
   section.style.display = 'block';
 
   if (episodeCollections.length === 0) {
-    row.innerHTML = `<div style="padding:2rem;text-align:center;font-family:'DM Mono',monospace;font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);">No episodes match your search</div>`;
+    row.innerHTML = `${_emptyStateHTML('No episodes match your search')}`;
     return;
   }
 
@@ -9809,7 +10029,13 @@ function buildEpisodes() {
   // Mobile defaults to "Modern Wisdom" instead of "All" — falls back to "all"
   // if that podcast isn't present in the current data (e.g. local/staging).
   if (typeof window._activePodcast === 'undefined') {
-    window._activePodcast = (window.innerWidth <= 700 && grouped['Modern Wisdom']) ? 'Modern Wisdom' : 'all';
+    let savedPodcast = null;
+    try { savedPodcast = localStorage.getItem('lll_podcast_filter'); } catch (e) {} // v2.2
+    if (savedPodcast && grouped[savedPodcast]) {
+      window._activePodcast = savedPodcast;
+    } else {
+      window._activePodcast = (window.innerWidth <= 700 && grouped['Modern Wisdom']) ? 'Modern Wisdom' : 'all';
+    }
   }
   // If the active podcast no longer exists in current filtered set, reset
   if (window._activePodcast !== 'all' && !grouped[window._activePodcast]) window._activePodcast = 'all';
@@ -9919,12 +10145,14 @@ function buildEpisodes() {
 
   // Re-init drag-scroll after fresh render
   initDragScroll();
+  initScrollReveal('.episode-card', row); // v2.2
   // Update arrow visibility for each row
   document.querySelectorAll('.episodes-row').forEach(updateArrowVisibility);
 }
 function setEpisodePodcast(name) {
   playPillSFX();
   window._activePodcast = name;
+  try { localStorage.setItem('lll_podcast_filter', name); } catch (e) {} // v2.2
   buildEpisodes();
 }
 function buildShorts() {
@@ -10027,6 +10255,10 @@ function filterShorts(person, searchText) {
 
   const row = document.getElementById('shortsCardRow');
   if (!row) return;
+  if (filtered.length === 0) {
+    row.innerHTML = `${_emptyStateHTML('No shorts match your search')}`; // v2.2
+    return;
+  }
   row.innerHTML = filtered.map(col => {
     const colConcepts = CONCEPTS.filter(c => c.collection_id === col.id);
     const ytId = getYouTubeId(col.episode_url);
@@ -10591,7 +10823,7 @@ function _spRenderFilteredGrid(pool) {
   container.style.minHeight = '0';
 
   if (pool.length === 0) {
-    container.innerHTML = `<div style="padding:3rem 2rem;color:var(--muted);font-family:'DM Mono',monospace;font-size:0.75rem;letter-spacing:0.12em;text-transform:uppercase;text-align:center;">No concepts found</div>`;
+    container.innerHTML = `${_emptyStateHTML('No concepts found<br><strong>Try a different filter or search term</strong>')}`;
     return;
   }
 
@@ -10670,7 +10902,7 @@ function _spRenderFilteredGrid(pool) {
       </div>`;
   });
 
-  container.innerHTML = html || `<div style="padding:3rem 2rem;color:var(--muted);font-family:'DM Mono',monospace;font-size:0.75rem;letter-spacing:0.12em;text-transform:uppercase;text-align:center;">No concepts found</div>`;
+  container.innerHTML = html || `${_emptyStateHTML('No concepts found<br><strong>Try a different filter or search term</strong>')}`;
   // Re-inject scan tiles if scan mode is active (e.g. Editor's Picks + Scan)
   if (container.classList.contains('scan-mode')) _spReinjectScanTiles(container);
 }
@@ -10829,7 +11061,7 @@ function _spInitSearch() {
   });
 
   input.addEventListener('keydown', e => {
-    const items = dropdown.querySelectorAll('.sp-drop-item');
+    const items = dropdown.querySelectorAll('.sp-drop-item, .sp-drop-ep-item');
     if (e.key === 'ArrowDown') {
       e.preventDefault();
       _spFocusedIdx = Math.min(_spFocusedIdx + 1, items.length - 1);
@@ -10916,35 +11148,65 @@ function _spShowResults(q) {
   // Merge: term matches first, then content, cap at 12 total
   const results = [...termMatches, ...contentMatches].slice(0, 12);
 
+  // v2.2: episode + podcast host search — same query, separate pool, own section
+  const episodeResults = Object.values(COLLECTIONS_BY_ID || {})
+    .filter(col => col.type === 'episode')
+    .filter(col => {
+      const haystack = [col.title || '', col.podcast || '', ...(col.people || [])].join(' ').toLowerCase();
+      return haystack.includes(ql);
+    })
+    .slice(0, 4);
+
   // Source label map
   const SOURCE_LABEL = { cw: 'Modern Wisdom', ah: 'Alex Hormozi', dk: 'Dan Koe', core: 'Epistemic' };
 
-  if (results.length === 0) {
-    dropdown.innerHTML = `<div class="sp-drop-empty">Nothing found for "<strong>${_spEsc(q)}</strong>" — try a topic like "habits" or "decision making"</div>`;
+  if (results.length === 0 && episodeResults.length === 0) {
+    dropdown.innerHTML = `${_emptyStateHTML(`Nothing found for "<strong>${_spEsc(q)}</strong>"<br>Try a topic like "habits" or "decision making"`)}`;
   } else {
-    dropdown.innerHTML = results.map((c) => {
-      const color = CAT_COLOR[c.category] || '#e8d5a3';
-      const catName = (CATEGORIES.find(x => x.id === c.category) || {}).name || c.category;
-      const srcLabel = SOURCE_LABEL[c.source] || c.source || '';
-      // On mobile: clicking body opens the full-screen preview modal (dropdown stays open underneath)
-      // On desktop: shows floating preview card
-      const bodyClick = `window.innerWidth <= 1024 ? _spOpenMobilePreview(${c.id}, {fromSearch:true}) : _spPreviewCard(${c.id})`;
-      return `<div class="sp-drop-item" role="option" data-id="${c.id}">
-        <div class="sp-drop-stripe" style="background:${color}"></div>
-        <div class="sp-drop-body" onclick="${bodyClick}">
-          <div class="sp-drop-meta-row">
-            <span class="sp-drop-term">${_spEsc(c.term)}</span>
-            <span class="sp-drop-pills">
-              <span class="sp-drop-cat-pill" style="color:${color};border-color:${color}">${_spEsc(catName)}</span>
-              ${srcLabel ? `<span class="sp-drop-src-pill">${_spEsc(srcLabel)}</span>` : ''}
-            </span>
+    let html = '';
+    if (results.length > 0) {
+      if (episodeResults.length > 0) html += `<div class="sp-drop-section-label">Concepts</div>`;
+      html += results.map((c) => {
+        const color = CAT_COLOR[c.category] || '#e8d5a3';
+        const catName = (CATEGORIES.find(x => x.id === c.category) || {}).name || c.category;
+        const srcLabel = SOURCE_LABEL[c.source] || c.source || '';
+        // On mobile: clicking body opens the full-screen preview modal (dropdown stays open underneath)
+        // On desktop: shows floating preview card
+        const bodyClick = `window.innerWidth <= 1024 ? _spOpenMobilePreview(${c.id}, {fromSearch:true}) : _spPreviewCard(${c.id})`;
+        return `<div class="sp-drop-item" role="option" data-id="${c.id}">
+          <div class="sp-drop-stripe" style="background:${color}"></div>
+          <div class="sp-drop-body" onclick="${bodyClick}">
+            <div class="sp-drop-meta-row">
+              <span class="sp-drop-term">${_spEsc(c.term)}</span>
+              <span class="sp-drop-pills">
+                <span class="sp-drop-cat-pill" style="color:${color};border-color:${color}">${_spEsc(catName)}</span>
+                ${srcLabel ? `<span class="sp-drop-src-pill">${_spEsc(srcLabel)}</span>` : ''}
+              </span>
+            </div>
+            <div class="sp-drop-hook">${_spEsc(c.hook)}</div>
           </div>
-          <div class="sp-drop-hook">${_spEsc(c.hook)}</div>
-        </div>
-        <div class="sp-drop-divider"></div>
-        <button class="sp-drop-cta-btn" onclick="event.stopPropagation();_spSelectConcept(${c.id})">Talk about this →</button>
-      </div>`;
-    }).join('');
+          <div class="sp-drop-divider"></div>
+          <button class="sp-drop-cta-btn" onclick="event.stopPropagation();_spSelectConcept(${c.id})">Talk about this →</button>
+        </div>`;
+      }).join('');
+    }
+    if (episodeResults.length > 0) {
+      html += `<div class="sp-drop-section-label">Episodes</div>`;
+      html += episodeResults.map((col) => {
+        const conceptCount = CONCEPTS.filter(c => c.collection_id === col.id).length;
+        const ytId = getYouTubeId(col.episode_url);
+        const thumb = ytId
+          ? `<img class="sp-drop-ep-thumb" src="https://img.youtube.com/vi/${ytId}/default.jpg" alt="" loading="lazy" />`
+          : `<div class="sp-drop-ep-thumb"></div>`;
+        return `<div class="sp-drop-ep-item" role="option" onclick="_spHideDropdown();openEpisodeDrawer(${col.id})">          ${thumb}
+          <div class="sp-drop-ep-body">
+            <div class="sp-drop-ep-title">${_spEsc(col.title || '')}</div>
+            <div class="sp-drop-ep-meta">${_spEsc(col.podcast || '')} &middot; ${conceptCount} concept${conceptCount !== 1 ? 's' : ''}</div>
+          </div>
+        </div>`;
+      }).join('');
+    }
+    dropdown.innerHTML = html;
   }
 
   dropdown.style.display = '';
@@ -16867,6 +17129,57 @@ function playStreakMilestoneSFX() {
   line-height: 1.4;
   text-align: left;
 }
+
+/* Grouped section labels + episode results — v2.2 global search */
+.sp-drop-section-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+  padding: 10px 12px 6px;
+  background: var(--surface);
+}
+.sp-drop-ep-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.12s;
+  text-align: left;
+}
+.sp-drop-ep-item:last-child { border-bottom: none; }
+.sp-drop-ep-item:hover,
+.sp-drop-ep-item.focused { background: var(--surface2); }
+.sp-drop-ep-thumb {
+  width: 36px;
+  height: 36px;
+  border-radius: 5px;
+  flex-shrink: 0;
+  object-fit: cover;
+  background: var(--surface2);
+}
+.sp-drop-ep-body { min-width: 0; flex: 1; }
+.sp-drop-ep-title {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sp-drop-ep-meta {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
 /* Divider between body and CTA */
 .sp-drop-divider {
   width: 1px;
@@ -16902,6 +17215,36 @@ function playStreakMilestoneSFX() {
   font-size: 0.82rem;
   color: var(--muted);
 }
+
+/* Empty-state illustration — v2.2. Shared across every search/filter context
+   on the site (hero search, library, episodes, shorts, stash). Two unconnected
+   points with a faint dotted line between them — an idea that hasn't connected
+   yet, same metaphor the whole product runs on. */
+.ep-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 3rem 2rem;
+  text-align: center;
+}
+.ep-empty-svg {
+  width: 96px;
+  height: 48px;
+  color: var(--accent);
+  opacity: 0.85;
+}
+.ep-empty-msg {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  max-width: 280px;
+  line-height: 1.7;
+}
+.ep-empty-msg strong { color: var(--text); text-transform: none; letter-spacing: 0; font-family: 'DM Sans', sans-serif; }
 
 /* Mobile: compact single-line search results — v1.90 */
 @media (max-width: 600px) {
@@ -17775,6 +18118,13 @@ function _convRenderSaved() {
   saved.sort((a, b) => (b.savedAt || '') > (a.savedAt || '') ? 1 : -1);
 
   if (!saved.length) {
+    if (q) {
+      // v2.2: search-specific empty state — was incorrectly showing the
+      // "nothing saved at all" message even when the user just had a search
+      // term that matched nothing among their actual saved items.
+      list.innerHTML = _emptyStateHTML(`No saved concepts match "<strong>${_spEsc(q)}</strong>"`);
+      return;
+    }
     list.innerHTML = `<div class="conv-empty">
       <div class="conv-empty-icon">💬</div>
       <div class="conv-empty-title">Nothing saved yet</div>
