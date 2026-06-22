@@ -4621,6 +4621,15 @@
      that failure mode entirely rather than patching around it. Each piece is
      clickable and opens a lightbox (see fpmLightbox below) so the dense
      screenshot is actually readable. */
+
+  /* Desktop: hide mobile-only inline image blocks */
+  .founder-mobile-notes,
+  .founder-mobile-gym { display: none; }
+
+  /* Fix gym photo — object-fit:contain was leaving blank bars on the sides.
+     Switched to cover so the photo fills its frame on both desktop + mobile. */
+  .fpm-gym img { object-fit: cover; }
+
   .founder-photo-montage {
     position: relative;
     width: 520px;
@@ -4887,54 +4896,78 @@
       max-width: 100%;
     }
 
-    /* On mobile we completely override the absolute-positioned montage
-       with a simple centered stack — no scale() transforms, no overflow,
-       no invisible overflow causing horizontal scroll. Three photos in a
-       natural flow: main portrait centered up top, two system screenshots
-       side by side below it. The absolute-positioned tags are hidden (too
-       small to read at this size) and replaced by the lightbox captions. */
-    .founder-photo-montage {
-      position: relative;
-      width: 100%;
-      height: auto;
-      margin-top: 0;
+    /* On mobile the desktop montage is hidden entirely. Photos are instead
+       shown inline within the text flow via .founder-mobile-notes (injected
+       between the "noise" paragraph and the "mental masturbation" emphasis)
+       and .founder-mobile-gym (gym photo at the very bottom of the text).
+       Only 3 images shown: 2 system screenshots mid-text, gym at end. */
+    .founder-photo-montage { display: none; }
+
+    /* Inline notes block — two screenshots side by side, with caption tags */
+    .founder-mobile-notes {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 12px;
+      gap: 8px;
+      margin: 1rem 0;
+      width: 100%;
     }
-    .fpm-piece {
+    .founder-mobile-notes .fpm-piece {
       position: relative;
       top: auto; left: auto; right: auto; bottom: auto;
-      transform: none !important;
+      transform: none;
+    }
+    .founder-mobile-notes .fpm-notes,
+    .founder-mobile-notes .fpm-notes2 {
+      width: 100%;
+      max-width: 320px;
+      height: 160px;
+      border-radius: 16px 48px 16px 48px / 48px 16px 48px 16px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+    }
+    .founder-mobile-notes .fpm-notes2 {
+      border-radius: 48px 16px 48px 16px / 16px 48px 16px 48px;
+    }
+    .founder-mobile-tags {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      margin-top: 4px;
+    }
+    .founder-mobile-tags .fpm-tag {
+      position: relative;
+      font-size: 0.6rem;
+      padding: 5px 13px;
+    }
+
+    /* Gym image at end of text */
+    .founder-mobile-gym {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      margin-top: 1.5rem;
+    }
+    .founder-mobile-gym .fpm-piece {
+      position: relative;
+      top: auto; left: auto; right: auto; bottom: auto;
+      transform: none;
       width: 100%;
       max-width: 280px;
-      height: 220px;
+      height: 320px;
+      border-radius: 60px 16px 60px 16px / 16px 60px 16px 60px;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.45);
     }
-    .fpm-main { max-width: 300px; height: 340px; border-radius: 16px 60px 16px 60px / 60px 16px 60px 16px; }
-    .fpm-notes { max-width: 240px; height: 160px; border-radius: 60px 16px 60px 16px / 16px 60px 16px 60px; }
-    .fpm-notes2 { max-width: 240px; height: 160px; border-radius: 16px 60px 16px 60px / 60px 16px 60px 16px; }
-    .fpm-gym { max-width: 220px; height: 260px; border-radius: 60px 16px 60px 16px; }
-
-    /* Put notes + notes2 side by side on mobile */
-    .founder-photo-montage::before {
-      content: '';
-      display: none;
-    }
-    .fpm-notes, .fpm-notes2 {
+    .founder-mobile-gym .fpm-gym img { object-fit: cover; } /* fill frame, not contain */
+    .founder-mobile-gym .fpm-tag {
       position: relative;
+      font-size: 0.6rem;
+      padding: 5px 13px;
     }
 
-    /* Simple two-up row for system screenshots */
-    .fpm-notes-row {
-      display: flex;
-      gap: 10px;
-      width: 100%;
-      justify-content: center;
-    }
-    .fpm-notes-row .fpm-piece { max-width: calc(50% - 5px); width: auto; height: 140px; }
-
-    .fpm-tag { display: none; } /* captions shown in lightbox on mobile */
+    /* Tags in desktop montage stay hidden on mobile (replaced by inline ones above) */
+    .fpm-tag { display: none; }
 
     .founder-label { font-size: 0.62rem; padding: 5px 13px; }
     .founder-heading { font-size: 1.4rem; }
@@ -4985,7 +5018,7 @@
   .footer-tagline {
     font-size: 0.85rem;
     color: var(--muted2);
-    max-width: 420px;
+    white-space: nowrap; /* one line on desktop; overridden to wrap on mobile */
     line-height: 1.6;
   }
   .footer-bottom {
@@ -5022,7 +5055,7 @@
     .site-footer { padding: 44px 1.5rem 28px; }
     .footer-bottom { flex-direction: column; align-items: flex-start; }
     .footer-brand { font-size: 1.2rem; }
-    .footer-tagline { font-size: 0.78rem; }
+    .footer-tagline { font-size: 0.78rem; white-space: normal; max-width: 280px; }
     .footer-link-btn { font-size: 0.74rem; }
     .footer-copyright { font-size: 0.6rem; }
     .footer-links { gap: 1.1rem; }
@@ -5254,7 +5287,7 @@
 
   .app-title {
     font-family: 'Playfair Display', serif;
-    font-size: 1.8rem;
+    font-size: 2rem;
     font-weight: 400;
   }
 
@@ -7932,13 +7965,37 @@
     <div class="founder-text">
       <div class="founder-label">Why Epistemic Exists</div>
       <h2 class="founder-heading">The <em>sentence</em> I kept losing.</h2>
-      <p>I used to confuse listening with learning. I'd hit the gym or commute with Modern Wisdom on, catch a sharp idea, and feel <em>smart</em> and <em>productive</em> instantly, like I owned it. Like at a dinner party, when you want to explain something you heard and just... can't find the words.</p>
+      <p>I used to confuse listening with learning. I'd hit the gym or commute with Modern Wisdom on, catch a sharp idea, and feel <em>smart</em> and <em>productive</em> instantly, like I owned it.</p>
       <p class="founder-line-emphasis">By the next morning, 90% of it was gone. "Poof, see ya later..."</p>
-      <p>I tried to fix it: Readwise highlights I never reopened. A podcast summary app that gave me bullet points I'd skim once and forget. Even writing things down in my little Notion cheat sheet. None of it stuck. It just turned into more noise in my head.</p>
+      <p>I hated losing my words when I wanted to explain what I just heard, so I tried to fix it: Readwise highlights I never reopened. A podcast summary app that gave me bullet points I'd skim once and forget. Even writing things down in my little Notion cheat sheet. None of it stuck. It just turned into more noise in my head.</p>
+      <div class="founder-mobile-notes">
+        <div class="fpm-piece fpm-notes" onclick="openFpmLightbox('/assets/notes-system.jpg','My &quot;smart&quot; Notion cheat sheet...')">
+          <img src="/assets/notes-system.jpg" alt="Notion cheat sheet" onerror="this.style.display='none';" />
+          <div class="fpm-fallback fpm-fallback-icon"><span>&#128221;</span></div>
+          <div class="fpm-expand-hint">&#8599;</div>
+        </div>
+        <div class="fpm-piece fpm-notes2" onclick="openFpmLightbox('/assets/notes-system2.jpg','...then I built a whole taxonomy')">
+          <img src="/assets/notes-system2.jpg" alt="Taxonomy system" onerror="this.style.display='none';" />
+          <div class="fpm-fallback fpm-fallback-icon"><span>&#128203;</span></div>
+          <div class="fpm-expand-hint">&#8599;</div>
+        </div>
+        <div class="founder-mobile-tags">
+          <div class="fpm-tag">my "smart" Notion cheat sheet...</div>
+          <div class="fpm-tag">...then I built a whole taxonomy</div>
+        </div>
+      </div>
       <p class="founder-line-emphasis">Passive listening is just mental masturbation... and a broken learning format.</p>
       <p>Along the way, that personal cheat sheet turned into an actual library. Concept by concept, episode by episode, until it was clearly useful to people like me too: expats, non-native English speakers, podcast lovers.</p>
       <p class="founder-line-emphasis">So I built the tool I wished existed.</p>
       <p>Epistemic isn't trying to make you smarter. It's trying to make sure the smart thing you already know doesn't die in your head the next time it matters. If that's a problem you know personally, I think you'll feel right at home here.</p>
+      <div class="founder-mobile-gym">
+        <div class="fpm-piece fpm-gym" onclick="openFpmLightbox('/assets/gym-cast.jpg','Where it all began...')">
+          <img src="/assets/gym-cast.jpg" alt="Listening to a podcast at the gym" onerror="this.style.display='none';" />
+          <div class="fpm-fallback fpm-fallback-icon"><span>&#127939;</span></div>
+          <div class="fpm-expand-hint">&#8599;</div>
+        </div>
+        <div class="fpm-tag">where it all began...</div>
+      </div>
     </div>
   </div>
 </section>
@@ -10462,13 +10519,16 @@ function buildEpisodes() {
     `;
   }
 
-  // Build podcast pills HTML — v2.3f: show first 3 by default, rest behind "Show all" button.
-  // "All" + up to 3 named podcasts visible initially; the rest are hidden until expanded.
-  const DEFAULT_PODCAST_PILL_LIMIT = 3;
+  // Build podcast pills HTML — v2.3g: pin the first 3 to a fixed priority list
+  // (MW, DOAC, Dan Koe) regardless of episode count so the "Show all" button
+  // is reliably about the same 3 every time. Remaining podcasts go behind it.
+  const PINNED_PODCASTS = ['Modern Wisdom', 'Diary of a CEO', 'Dan Koe'];
+  const pinnedVisible = PINNED_PODCASTS.filter(n => grouped[n]);
+  const rest = podcastNames.filter(n => !PINNED_PODCASTS.includes(n));
+  const allOrderedNames = [...pinnedVisible, ...rest];
   let _podcastPillsExpanded = window._podcastPillsExpanded || false;
-  const podcastPillsToShow = _podcastPillsExpanded ? podcastNames : podcastNames.slice(0, DEFAULT_PODCAST_PILL_LIMIT);
-  const hiddenPodcasts = podcastNames.slice(DEFAULT_PODCAST_PILL_LIMIT);
-  const hasHidden = hiddenPodcasts.length > 0 && !_podcastPillsExpanded;
+  const podcastPillsToShow = _podcastPillsExpanded ? allOrderedNames : allOrderedNames.slice(0, 3);
+  const hasHidden = allOrderedNames.length > 3 && !_podcastPillsExpanded;
   const allPill = `<button class="ep-podcast-pill${window._activePodcast === 'all' ? ' active' : ''}" onclick="setEpisodePodcast('all')">All</button>`;
   const podcastPills = podcastPillsToShow.map(name =>
     `<button class="ep-podcast-pill${window._activePodcast === name ? ' active' : ''}" onclick="setEpisodePodcast('${name.replace(/'/g, "\\'")}')">${name}</button>`
