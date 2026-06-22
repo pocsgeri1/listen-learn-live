@@ -4606,7 +4606,7 @@
     max-width: 1300px;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: 520px 1fr;
+    grid-template-columns: 560px 1fr;
     gap: 4rem;
     align-items: start;
   }
@@ -4632,9 +4632,9 @@
 
   .founder-photo-montage {
     position: relative;
-    width: 520px;
-    height: 570px;
-    margin-top: 44px; /* v2.3f: aligns the top of the first photo with the heading text, not the label pill above it */
+    width: 560px;
+    height: 660px;
+    margin-top: 44px;
     flex-shrink: 0;
   }
   .fpm-piece {
@@ -4690,11 +4690,10 @@
     .fpm-piece:hover .fpm-expand-hint { opacity: 1; }
   }
 
-  /* Main — portrait, top-left. z-index 1: sits at the back, the two pieces
-     that touch its corners (notes, notes2) layer on top of it. */
+  /* Main — portrait, top-left */
   .fpm-main {
-    width: 250px;
-    height: 320px;
+    width: 285px;
+    height: 365px;
     top: 0;
     left: 0;
     z-index: 1;
@@ -4703,23 +4702,23 @@
     transform: rotate(-4deg);
   }
 
-  /* Systems screenshot #1 — landscape, top-right, overlapping main's top-right corner */
+  /* Systems screenshot #1 — landscape, top-right */
   .fpm-notes {
-    width: 280px;
-    height: 200px;
+    width: 310px;
+    height: 220px;
     top: -10px;
-    left: 230px;
+    left: 260px;
     z-index: 2;
     border-radius: 90px 24px 90px 24px / 28px 100px 28px 100px;
     box-shadow: 0 16px 36px rgba(0,0,0,0.45);
     transform: rotate(4deg);
   }
 
-  /* Systems screenshot #2 — now landscape too, overlapping main's bottom edge */
+  /* Systems screenshot #2 — landscape, overlapping main's bottom */
   .fpm-notes2 {
-    width: 260px;
-    height: 180px;
-    top: 280px;
+    width: 290px;
+    height: 200px;
+    top: 330px;
     left: 40px;
     z-index: 2;
     border-radius: 24px 90px 24px 90px / 100px 28px 100px 28px;
@@ -4727,18 +4726,18 @@
     transform: rotate(-5deg);
   }
 
-  /* Gym — portrait, bottom-right, frontmost, overlapping notes2's corner, never cropped */
+  /* Gym — portrait, bottom-right, frontmost */
   .fpm-gym {
-    width: 250px;
-    height: 320px;
-    top: 240px;
+    width: 280px;
+    height: 360px;
+    top: 290px;
     right: 0;
     z-index: 3;
     border-radius: 100px 24px 100px 24px / 24px 110px 24px 110px;
     box-shadow: 0 16px 36px rgba(0,0,0,0.5);
     transform: rotate(-5deg);
   }
-  .fpm-gym img { object-fit: contain; }
+  .fpm-gym img { object-fit: cover; }
 
   /* Caption chips — separate elements, positioned to overlap each photo's
      own edge but live outside its overflow:hidden box, so text can never
@@ -4759,23 +4758,23 @@
     white-space: nowrap;
   }
   .fpm-tag-main {
-    top: 232px;
+    top: 265px;
     left: -10px;
     transform: rotate(-4deg);
   }
   .fpm-tag-notes {
-    top: 156px;
-    left: 248px;
+    top: 178px;
+    left: 270px;
     transform: rotate(-3deg);
   }
   .fpm-tag-notes2 {
-    top: 432px;
+    top: 496px;
     left: 56px;
     transform: rotate(3deg);
   }
   .fpm-tag-gym {
-    top: 516px;
-    right: 26px;
+    top: 604px;
+    right: 22px;
     transform: rotate(3deg);
   }
 
@@ -4879,7 +4878,33 @@
     margin-bottom: 1.1rem;
   }
   .founder-text p:last-child { margin-bottom: 0; }
-  .founder-text p em { font-style: italic; } /* v2.3f: italic only, no gold — gold reserved for the standalone emphasis lines */
+  .founder-text p em { font-style: italic; }
+  .founder-bullets {
+    list-style: none;
+    padding: 0;
+    margin: 0.6rem 0 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+  .founder-bullets li {
+    font-size: 0.92rem;
+    color: var(--muted2);
+    line-height: 1.6;
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+  }
+  .founder-bullets li strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+  .founder-bullet-arrow {
+    color: var(--accent);
+    font-size: 0.8rem;
+    flex-shrink: 0;
+    opacity: 0.85;
+  } /* v2.3f: italic only, no gold — gold reserved for the standalone emphasis lines */
   .founder-text p.founder-line-emphasis {
     color: var(--text);
     font-size: 1.08rem;
@@ -4973,6 +4998,7 @@
     .founder-heading { font-size: 1.4rem; }
     .founder-text p { font-size: 0.88rem; }
     .founder-text p.founder-line-emphasis { font-size: 0.98rem; }
+    .founder-bullets li { font-size: 0.82rem; }
   }
 
   /* MOBILE */
@@ -5055,7 +5081,7 @@
     .site-footer { padding: 44px 1.5rem 28px; }
     .footer-bottom { flex-direction: column; align-items: flex-start; }
     .footer-brand { font-size: 1.2rem; }
-    .footer-tagline { font-size: 0.78rem; white-space: normal; max-width: 280px; }
+    .footer-tagline { font-size: 0.8rem; white-space: normal; max-width: 360px; }
     .footer-link-btn { font-size: 0.74rem; }
     .footer-copyright { font-size: 0.6rem; }
     .footer-links { gap: 1.1rem; }
@@ -7967,7 +7993,13 @@
       <h2 class="founder-heading">The <em>sentence</em> I kept losing.</h2>
       <p>I used to confuse listening with learning. I'd hit the gym or commute with Modern Wisdom on, catch a sharp idea, and feel <em>smart</em> and <em>productive</em> instantly, like I owned it.</p>
       <p class="founder-line-emphasis">By the next morning, 90% of it was gone. "Poof, see ya later..."</p>
-      <p>I hated losing my words when I wanted to explain what I just heard, so I tried to fix it: Readwise highlights I never reopened. A podcast summary app that gave me bullet points I'd skim once and forget. Even writing things down in my little Notion cheat sheet. None of it stuck. It just turned into more noise in my head.</p>
+      <p>I hated losing my words when I wanted to explain what I just heard, so I tried to fix it:</p>
+      <ul class="founder-bullets">
+        <li><span class="founder-bullet-arrow">➣</span> <strong>Readwise highlights</strong> — never reopened.</li>
+        <li><span class="founder-bullet-arrow">➣</span> <strong>Podcast summary app</strong> — bullet points I'd skim once and forget.</li>
+        <li><span class="founder-bullet-arrow">➣</span> <strong>Notion dashboard</strong> — writing things down in my little cheat sheet.</li>
+      </ul>
+      <p>None of it stuck. I still kept stumbling on my words when it was time to explain what I thought I'd just learned. Frustratingly, it all just turned into more noise in my head.</p>
       <div class="founder-mobile-notes">
         <div class="fpm-piece fpm-notes" onclick="openFpmLightbox('/assets/notes-system.jpg','My &quot;smart&quot; Notion cheat sheet...')">
           <img src="/assets/notes-system.jpg" alt="Notion cheat sheet" onerror="this.style.display='none';" />
@@ -7984,7 +8016,7 @@
           <div class="fpm-tag">...then I built a whole taxonomy</div>
         </div>
       </div>
-      <p class="founder-line-emphasis">Passive listening is just mental masturbation... and a broken learning format.</p>
+      <p class="founder-line-emphasis">I realized, passive listening is just mental masturbation... and a broken learning format.</p>
       <p>Along the way, that personal cheat sheet turned into an actual library. Concept by concept, episode by episode, until it was clearly useful to people like me too: expats, non-native English speakers, podcast lovers.</p>
       <p class="founder-line-emphasis">So I built the tool I wished existed.</p>
       <p>Epistemic isn't trying to make you smarter. It's trying to make sure the smart thing you already know doesn't die in your head the next time it matters. If that's a problem you know personally, I think you'll feel right at home here.</p>
@@ -10534,8 +10566,12 @@ function buildEpisodes() {
     `<button class="ep-podcast-pill${window._activePodcast === name ? ' active' : ''}" onclick="setEpisodePodcast('${name.replace(/'/g, "\\'")}')">${name}</button>`
   ).join('');
 
-  // Determine which podcasts to show
-  const visiblePodcasts = window._activePodcast === 'all' ? podcastNames : [window._activePodcast];
+  // Determine which podcasts to show — v2.3h: respects the pill limit/expanded state
+  // so the episode rows below match exactly what the pills show. When 'all' is active
+  // and not expanded, only the first 3 podcasts render (same as the visible pills).
+  const visiblePodcasts = window._activePodcast === 'all'
+    ? (_podcastPillsExpanded ? allOrderedNames : allOrderedNames.slice(0, 3))
+    : [window._activePodcast];
 
   // Gallery view (single podcast selected) vs scroll-row view (all)
   const isGallery = window._activePodcast !== 'all';
