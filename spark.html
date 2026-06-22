@@ -199,36 +199,43 @@
     body::before { display: none; }
   }
 
-  /* ============================================
-     CUSTOM CURSOR — v2.3f. A small gold ring that trails the real cursor
-     with a soft lag. Decorative only — the native cursor stays visible and
-     fully functional, this just adds a touch of life on top of it. Desktop
-     only (hover:hover + pointer:fine), one RAF loop, one DOM element.
-     ============================================ */
+  /* CUSTOM CURSOR — v2.3f: editorial crosshair. Two thin gold hairlines
+     trailing the cursor — no circle, no fill, just two perpendicular lines
+     like a film camera viewfinder. Grows on hover, tightens on click.
+     Desktop only. Never replaces the native cursor. */
   #epCursor {
     position: fixed;
     top: 0;
     left: 0;
-    width: 22px;
-    height: 22px;
-    border: 1.5px solid var(--accent);
-    border-radius: 50%;
+    width: 28px;
+    height: 28px;
     pointer-events: none;
     z-index: 99999;
     opacity: 0;
-    transition: width 0.25s cubic-bezier(0.22,1,0.36,1), height 0.25s cubic-bezier(0.22,1,0.36,1), background 0.25s ease, opacity 0.2s ease;
+    transition: opacity 0.2s ease;
     will-change: transform;
   }
-  #epCursor.ep-cursor-active { opacity: 0.85; }
-  #epCursor.ep-cursor-hover {
-    width: 38px;
-    height: 38px;
-    background: rgba(232,213,163,0.12);
+  #epCursor::before,
+  #epCursor::after {
+    content: '';
+    position: absolute;
+    background: var(--accent);
+    border-radius: 1px;
+    opacity: 0.7;
+    transition: width 0.28s cubic-bezier(0.22,1,0.36,1),
+                height 0.28s cubic-bezier(0.22,1,0.36,1),
+                top 0.28s cubic-bezier(0.22,1,0.36,1),
+                left 0.28s cubic-bezier(0.22,1,0.36,1),
+                opacity 0.2s ease;
   }
-  #epCursor.ep-cursor-down { width: 16px; height: 16px; }
-  @media (hover: none), (pointer: coarse) {
-    #epCursor { display: none; }
-  }
+  #epCursor::before { width: 28px; height: 1px; top: 50%; left: 0; transform: translateY(-50%); }
+  #epCursor::after  { width: 1px; height: 28px; left: 50%; top: 0; transform: translateX(-50%); }
+  #epCursor.ep-cursor-active { opacity: 1; }
+  #epCursor.ep-cursor-hover::before { width: 44px; left: -8px; opacity: 1; }
+  #epCursor.ep-cursor-hover::after  { height: 44px; top: -8px; opacity: 1; }
+  #epCursor.ep-cursor-down::before { width: 14px; left: 7px; }
+  #epCursor.ep-cursor-down::after  { height: 14px; top: 7px; }
+  @media (hover: none), (pointer: coarse) { #epCursor { display: none; } }
 
   /* ============================================
      GLOBAL FOCUS-VISIBLE — gold outline for keyboard nav,
@@ -4772,6 +4779,10 @@
     .fpm-gym:hover { transform: rotate(-2deg) scale(1.04); z-index: 5; }
   }
 
+  /* On desktop, .fpm-notes-row is a transparent wrapper so mobile CSS can
+     convert it to a flex row without touching the absolute-positioned desktop layout */
+  .fpm-notes-row { display: contents; }
+
   /* Lightbox — click any piece to see it full-size */
   .fpm-lightbox {
     display: none;
@@ -4859,7 +4870,7 @@
     margin-bottom: 1.1rem;
   }
   .founder-text p:last-child { margin-bottom: 0; }
-  .founder-text p em { font-style: italic; color: var(--accent); }
+  .founder-text p em { font-style: italic; } /* v2.3f: italic only, no gold — gold reserved for the standalone emphasis lines */
   .founder-text p.founder-line-emphasis {
     color: var(--text);
     font-size: 1.08rem;
@@ -4869,23 +4880,66 @@
   }
 
   @media (max-width: 700px) {
-    .founder-section { padding: 60px 1.5rem; }
+    .founder-section { padding: 48px 1.5rem 56px; overflow-x: hidden; }
     .founder-inner {
       grid-template-columns: 1fr;
-      text-align: center;
-      gap: 1.75rem;
+      gap: 2rem;
       max-width: 100%;
     }
+
+    /* On mobile we completely override the absolute-positioned montage
+       with a simple centered stack — no scale() transforms, no overflow,
+       no invisible overflow causing horizontal scroll. Three photos in a
+       natural flow: main portrait centered up top, two system screenshots
+       side by side below it. The absolute-positioned tags are hidden (too
+       small to read at this size) and replaced by the lightbox captions. */
     .founder-photo-montage {
-      transform: scale(0.58);
-      transform-origin: top center;
-      margin: 0 auto -225px;
+      position: relative;
+      width: 100%;
+      height: auto;
+      margin-top: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
     }
+    .fpm-piece {
+      position: relative;
+      top: auto; left: auto; right: auto; bottom: auto;
+      transform: none !important;
+      width: 100%;
+      max-width: 280px;
+      height: 220px;
+    }
+    .fpm-main { max-width: 300px; height: 340px; border-radius: 16px 60px 16px 60px / 60px 16px 60px 16px; }
+    .fpm-notes { max-width: 240px; height: 160px; border-radius: 60px 16px 60px 16px / 16px 60px 16px 60px; }
+    .fpm-notes2 { max-width: 240px; height: 160px; border-radius: 16px 60px 16px 60px / 60px 16px 60px 16px; }
+    .fpm-gym { max-width: 220px; height: 260px; border-radius: 60px 16px 60px 16px; }
+
+    /* Put notes + notes2 side by side on mobile */
+    .founder-photo-montage::before {
+      content: '';
+      display: none;
+    }
+    .fpm-notes, .fpm-notes2 {
+      position: relative;
+    }
+
+    /* Simple two-up row for system screenshots */
+    .fpm-notes-row {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+      justify-content: center;
+    }
+    .fpm-notes-row .fpm-piece { max-width: calc(50% - 5px); width: auto; height: 140px; }
+
+    .fpm-tag { display: none; } /* captions shown in lightbox on mobile */
+
     .founder-label { font-size: 0.62rem; padding: 5px 13px; }
     .founder-heading { font-size: 1.4rem; }
-    .founder-text p { font-size: 0.85rem; text-align: left; }
-    .founder-text p.founder-line-emphasis { font-size: 0.95rem; }
-    .fpm-tag { font-size: 0.56rem; padding: 5px 11px; }
+    .founder-text p { font-size: 0.88rem; }
+    .founder-text p.founder-line-emphasis { font-size: 0.98rem; }
   }
 
   /* MOBILE */
@@ -7841,23 +7895,25 @@
         <div class="fpm-fallback"><span>G</span></div>
         <div class="fpm-expand-hint">&#8599;</div>
       </div>
-      <div class="fpm-piece fpm-notes" onclick="openFpmLightbox('/assets/notes-system.jpg','My &quot;smart&quot; Notion cheat sheet...')">
-        <img
-          src="/assets/notes-system.jpg"
-          alt="A screenshot of an old, failed note-taking system"
-          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-        />
-        <div class="fpm-fallback fpm-fallback-icon"><span>&#128221;</span></div>
-        <div class="fpm-expand-hint">&#8599;</div>
-      </div>
-      <div class="fpm-piece fpm-notes2" onclick="openFpmLightbox('/assets/notes-system2.jpg','...then I built a whole taxonomy')">
-        <img
-          src="/assets/notes-system2.jpg"
-          alt="Another screenshot of an old note-taking system"
-          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-        />
-        <div class="fpm-fallback fpm-fallback-icon"><span>&#128203;</span></div>
-        <div class="fpm-expand-hint">&#8599;</div>
+      <div class="fpm-notes-row">
+        <div class="fpm-piece fpm-notes" onclick="openFpmLightbox('/assets/notes-system.jpg','My &quot;smart&quot; Notion cheat sheet...')">
+          <img
+            src="/assets/notes-system.jpg"
+            alt="A screenshot of an old, failed note-taking system"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+          <div class="fpm-fallback fpm-fallback-icon"><span>&#128221;</span></div>
+          <div class="fpm-expand-hint">&#8599;</div>
+        </div>
+        <div class="fpm-piece fpm-notes2" onclick="openFpmLightbox('/assets/notes-system2.jpg','...then I built a whole taxonomy')">
+          <img
+            src="/assets/notes-system2.jpg"
+            alt="Another screenshot of an old note-taking system"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+          <div class="fpm-fallback fpm-fallback-icon"><span>&#128203;</span></div>
+          <div class="fpm-expand-hint">&#8599;</div>
+        </div>
       </div>
       <div class="fpm-piece fpm-gym" onclick="openFpmLightbox('/assets/gym-cast.jpg','Where it all began...')">
         <img
@@ -7876,10 +7932,10 @@
     <div class="founder-text">
       <div class="founder-label">Why Epistemic Exists</div>
       <h2 class="founder-heading">The <em>sentence</em> I kept losing.</h2>
-      <p>I used to confuse listening with learning. I'd hit the gym or commute with Modern Wisdom on, catch a sharp idea, and feel <em>smart</em> and <em>productive</em> instantly, like I owned it.</p>
+      <p>I used to confuse listening with learning. I'd hit the gym or commute with Modern Wisdom on, catch a sharp idea, and feel <em>smart</em> and <em>productive</em> instantly, like I owned it. Like at a dinner party, when you want to explain something you heard and just... can't find the words.</p>
       <p class="founder-line-emphasis">By the next morning, 90% of it was gone. "Poof, see ya later..."</p>
       <p>I tried to fix it: Readwise highlights I never reopened. A podcast summary app that gave me bullet points I'd skim once and forget. Even writing things down in my little Notion cheat sheet. None of it stuck. It just turned into more noise in my head.</p>
-      <p class="founder-line-emphasis">Passive listening is just mental masturbation... and a broken learning format (especially as an expat).</p>
+      <p class="founder-line-emphasis">Passive listening is just mental masturbation... and a broken learning format.</p>
       <p>Along the way, that personal cheat sheet turned into an actual library. Concept by concept, episode by episode, until it was clearly useful to people like me too: expats, non-native English speakers, podcast lovers.</p>
       <p class="founder-line-emphasis">So I built the tool I wished existed.</p>
       <p>Epistemic isn't trying to make you smarter. It's trying to make sure the smart thing you already know doesn't die in your head the next time it matters. If that's a problem you know personally, I think you'll feel right at home here.</p>
@@ -7903,7 +7959,7 @@
   <div class="footer-inner">
     <div class="footer-top">
       <div class="footer-brand">Epistemic<span>.</span></div>
-      <div class="footer-tagline">Turn 3 hours of podcast into 3 ideas you'll actually say out loud.</div>
+      <div class="footer-tagline">For ambitious non-native professionals who want to sound as sharp in English as they do in their first language.</div>
     </div>
 
     <div class="footer-bottom">
@@ -8244,7 +8300,7 @@ let FUSE = null;
   function loop() {
     cx += (mx - cx) * 0.18;
     cy += (my - cy) * 0.18;
-    cursor.style.transform = `translate(${cx - 11}px, ${cy - 11}px)`;
+    cursor.style.transform = `translate(${cx - 14}px, ${cy - 14}px)`;
     requestAnimationFrame(loop);
   }
   requestAnimationFrame(loop);
@@ -8894,6 +8950,13 @@ function initMagneticCards() {
 }
 function render() { buildCats(); initMagneticPills(); buildGrid(); updateProgress(); buildEpisodes(); buildShorts(); }
 
+// v2.3f: lightweight variant used exclusively by setCat(). Only rebuilds the
+// Library grid and category nav — NOT episodes or shorts, which don't change
+// when the user taps a category pill. Rebuilding three grids simultaneously in
+// a 100ms setTimeout was the root cause of the iOS mobile crash: too much DOM
+// work deferred off a touch event, OOM on lower-end devices.
+function renderCatOnly() { buildCats(); initMagneticPills(); buildGrid(); updateProgress(); }
+
 let _currentOpenCardId = null;
 
 let _toggleCardLast = 0;
@@ -9282,9 +9345,9 @@ function updateDailyGoal() {
 }
 
 function setCat(cat) {
-  playPillSFX();
+  playPillSFX(); // must run in the gesture frame — calling it inside the setTimeout (via _swapContent → _playSwapSFX) loses the user-gesture context on iOS and can crash
   activeCat = cat;
-  _swapContent(document.getElementById('netflixRows'), render, '.nf-section', 6);
+  _swapContent(document.getElementById('netflixRows'), renderCatOnly, '.nf-section', 6); // v2.3f: renderCatOnly, not render
 }
 // ── READING PROGRESS + SESSION TOAST — v1.92 ────────────────────────────────
 // #1: IntersectionObserver marks cards as read as they enter viewport.
@@ -10399,9 +10462,15 @@ function buildEpisodes() {
     `;
   }
 
-  // Build podcast pills HTML
+  // Build podcast pills HTML — v2.3f: show first 3 by default, rest behind "Show all" button.
+  // "All" + up to 3 named podcasts visible initially; the rest are hidden until expanded.
+  const DEFAULT_PODCAST_PILL_LIMIT = 3;
+  let _podcastPillsExpanded = window._podcastPillsExpanded || false;
+  const podcastPillsToShow = _podcastPillsExpanded ? podcastNames : podcastNames.slice(0, DEFAULT_PODCAST_PILL_LIMIT);
+  const hiddenPodcasts = podcastNames.slice(DEFAULT_PODCAST_PILL_LIMIT);
+  const hasHidden = hiddenPodcasts.length > 0 && !_podcastPillsExpanded;
   const allPill = `<button class="ep-podcast-pill${window._activePodcast === 'all' ? ' active' : ''}" onclick="setEpisodePodcast('all')">All</button>`;
-  const podcastPills = podcastNames.map(name =>
+  const podcastPills = podcastPillsToShow.map(name =>
     `<button class="ep-podcast-pill${window._activePodcast === name ? ' active' : ''}" onclick="setEpisodePodcast('${name.replace(/'/g, "\\'")}')">${name}</button>`
   ).join('');
 
@@ -10454,6 +10523,7 @@ function buildEpisodes() {
         <input type="text" id="episodeSearch" placeholder="Search episodes…" oninput="buildEpisodes()" />
       </div>
     </div>
+    ${hasHidden ? `<button class="themes-show-all" onclick="window._podcastPillsExpanded=true;buildEpisodes()">Show all podcasts ↓</button>` : ''}
     ${groupsHtml}
   `;
 
