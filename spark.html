@@ -1865,7 +1865,19 @@
   }
   .themes-show-all:hover { color: var(--text); }
 
-  /* Theme preview-expand zone — v1.84 */
+  /* "Show all podcasts" sits below the episode rows — give it more breathing room */
+  .ep-show-all-podcasts { margin: 2rem auto 0; }
+
+  /* Smooth entrance for newly-revealed podcast groups when "Show all" is clicked */
+  @keyframes epGroupSlideIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .episodes-podcast-group.ep-reveal-new {
+    animation: epGroupSlideIn 0.35s cubic-bezier(0.22,1,0.36,1) both;
+  }
+
+
   .theme-card--active {
     border-color: var(--accent);
     position: relative;
@@ -4999,6 +5011,14 @@
     .founder-text p { font-size: 0.88rem; }
     .founder-text p.founder-line-emphasis { font-size: 0.98rem; }
     .founder-bullets li { font-size: 0.82rem; }
+    /* Mobile: switch from flex to inline flow so the arrow, bold label and
+       description all sit in one continuous text run. No more 2-col grid effect. */
+    .founder-bullets li {
+      display: block;
+      line-height: 1.65;
+    }
+    .founder-bullet-arrow { display: inline; margin-right: 0.3rem; }
+    .founder-bullets li strong { display: inline; }
   }
 
   /* MOBILE */
@@ -10551,14 +10571,22 @@ function buildEpisodes() {
     `;
   }
 
-  // Build podcast pills HTML — v2.3g: pin the first 3 to a fixed priority list
-  // (MW, DOAC, Dan Koe) regardless of episode count so the "Show all" button
-  // is reliably about the same 3 every time. Remaining podcasts go behind it.
-  const PINNED_PODCASTS = ['Modern Wisdom', 'Diary of a CEO', 'Dan Koe'];
-  const pinnedVisible = PINNED_PODCASTS.filter(n => grouped[n]);
-  const rest = podcastNames.filter(n => !PINNED_PODCASTS.includes(n));
-  const allOrderedNames = [...pinnedVisible, ...rest];
+  // Build podcast pills HTML — v2.3i.
+  // Order: MW first (always highest count), then remaining by episode count (natural sort).
+  // Uncensored CMO and any others go behind "Show all" but remain selectable — if the
+  // user picks a hidden podcast (e.g. from localStorage), it auto-expands the section.
+  const PRIORITY_FIRST = 'Modern Wisdom';
+  const topPodcast = grouped[PRIORITY_FIRST] ? [PRIORITY_FIRST] : [];
+  const othersByCount = podcastNames.filter(n => n !== PRIORITY_FIRST);
+  const allOrderedNames = [...topPodcast, ...othersByCount]; // already sorted by count from above
   let _podcastPillsExpanded = window._podcastPillsExpanded || false;
+
+  // If the active podcast is one of the hidden ones, auto-expand so it stays visible
+  const activeIsHidden = window._activePodcast !== 'all'
+    && !allOrderedNames.slice(0, 3).includes(window._activePodcast)
+    && allOrderedNames.includes(window._activePodcast);
+  if (activeIsHidden) { _podcastPillsExpanded = true; window._podcastPillsExpanded = true; }
+
   const podcastPillsToShow = _podcastPillsExpanded ? allOrderedNames : allOrderedNames.slice(0, 3);
   const hasHidden = allOrderedNames.length > 3 && !_podcastPillsExpanded;
   const allPill = `<button class="ep-podcast-pill${window._activePodcast === 'all' ? ' active' : ''}" onclick="setEpisodePodcast('all')">All</button>`;
@@ -10619,18 +10647,27 @@ function buildEpisodes() {
         <input type="text" id="episodeSearch" placeholder="Search episodes…" oninput="buildEpisodes()" />
       </div>
     </div>
-    ${hasHidden ? `<button class="themes-show-all" onclick="window._podcastPillsExpanded=true;buildEpisodes()">Show all podcasts ↓</button>` : ''}
     ${groupsHtml}
+    ${hasHidden ? `<button class="themes-show-all ep-show-all-podcasts" onclick="window._podcastPillsExpanded=true;buildEpisodes()">Show all podcasts ↓</button>` : ''}
   `;
 
   // Restore search value and focus
   const newSearch = document.getElementById('episodeSearch');
   if (newSearch && prevVal) {
     newSearch.value = prevVal;
-    // Set cursor at end
     newSearch.setSelectionRange(prevVal.length, prevVal.length);
   }
   if (newSearch && prevFocused) newSearch.focus();
+
+  // v2.3i: animate newly-revealed groups (only when just expanded from 3 → all)
+  if (_podcastPillsExpanded && !hasHidden) {
+    const groups = row.querySelectorAll('.episodes-podcast-group');
+    // Only groups beyond the original 3 get the slide-in animation
+    Array.from(groups).slice(3).forEach((g, i) => {
+      g.classList.add('ep-reveal-new');
+      g.style.animationDelay = (i * 80) + 'ms';
+    });
+  }
 
   // Re-init drag-scroll after fresh render
   initDragScroll();
@@ -10642,6 +10679,17 @@ function setEpisodePodcast(name) {
   playPillSFX();
   window._activePodcast = name;
   try { localStorage.setItem('lll_podcast_filter', name); } catch (e) {} // v2.2
+  // v2.3i: if the user picks a podcast that's hidden behind "Show all",
+  // auto-expand so it becomes visible and selected. This fires before buildEpisodes()
+  // which re-reads window._podcastPillsExpanded on each render.
+  if (name !== 'all') {
+    const epSection = document.getElementById('episodesSection');
+    const pills = epSection ? epSection.querySelectorAll('.ep-podcast-pill:not(:first-child)') : [];
+    const visibleNames = Array.from(pills).map(p => p.textContent.trim()).filter(Boolean);
+    if (visibleNames.length > 0 && !visibleNames.includes(name)) {
+      window._podcastPillsExpanded = true;
+    }
+  }
   buildEpisodes();
 }
 function buildShorts() {
