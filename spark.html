@@ -4938,9 +4938,13 @@
   }
   .founder-text p.founder-line-bold {
     color: var(--text);
-    font-size: 1.12rem;
-    font-weight: 600;
+    font-size: 1.08rem;
+    font-style: italic;
+    font-weight: 700;
     margin: 1.6rem 0;
+  }
+  .founder-text p.founder-italic-body {
+    font-style: italic;
   }
 
   @media (max-width: 700px) {
@@ -5028,7 +5032,7 @@
     .founder-heading { font-size: 1.4rem; }
     .founder-text p { font-size: 0.88rem; }
     .founder-text p.founder-line-emphasis { font-size: 0.98rem; }
-    .founder-text p.founder-line-bold { font-size: 1.02rem; }
+    .founder-text p.founder-line-bold { font-size: 0.98rem; }
     .founder-bullets li { font-size: 0.82rem; }
     /* Mobile: switch from flex to inline flow so the arrow, bold label and
        description all sit in one continuous text run. No more 2-col grid effect. */
@@ -5330,10 +5334,6 @@
     position: relative;
     z-index: 1;
     padding: 5rem 0 120px;
-    background: #131313;
-  }
-  [data-theme="light"] .app {
-    background: #e8e0d0;
   }
 
   /* Centred controls wrapper — header, progress bar, vault row, pills, count */
@@ -8066,8 +8066,8 @@
       <p class="founder-line-bold founder-reveal">Passive listening is just mental masturbation... and a broken learning format.</p>
       <p class="founder-reveal">But along the way, I realised other people — expats, non-native English speakers, podcast lovers — were stumbling on their words too.</p>
       <p class="founder-line-bold founder-reveal">So I built the tool I wished existed.</p>
-      <p class="founder-line-emphasis founder-reveal">Epistemic isn't trying to make you smarter. It's just trying to make sure what you already know doesn't die before it matters.</p>
-      <p class="founder-reveal">If you've ever gone '<em><span class="founder-accent">nevermind</span></em>' mid-sentence — this is for you.</p>
+      <p class="founder-italic-body founder-reveal"><span class="founder-accent">Epistemic</span> isn't trying to make you smarter. It's just trying to make sure what you already know doesn't die before it matters.</p>
+      <p class="founder-reveal">If you've ever gone '<em>nevermind</em>' mid-sentence — this is for you.</p>
       <div class="founder-mobile-gym founder-reveal">
         <div class="fpm-piece fpm-gym" onclick="openFpmLightbox('/assets/gym-cast.jpg','Where it all began...')">
           <img src="/assets/gym-cast.jpg" alt="Listening to a podcast at the gym" onerror="this.style.display='none';" />
