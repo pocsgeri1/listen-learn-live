@@ -4936,6 +4936,12 @@
     font-weight: 400;
     margin: 1.6rem 0;
   }
+  .founder-text p.founder-line-bold {
+    color: var(--text);
+    font-size: 1.12rem;
+    font-weight: 600;
+    margin: 1.6rem 0;
+  }
 
   @media (max-width: 700px) {
     .founder-section { padding: 48px 1.5rem 56px; overflow-x: hidden; }
@@ -5022,6 +5028,7 @@
     .founder-heading { font-size: 1.4rem; }
     .founder-text p { font-size: 0.88rem; }
     .founder-text p.founder-line-emphasis { font-size: 0.98rem; }
+    .founder-text p.founder-line-bold { font-size: 1.02rem; }
     .founder-bullets li { font-size: 0.82rem; }
     /* Mobile: switch from flex to inline flow so the arrow, bold label and
        description all sit in one continuous text run. No more 2-col grid effect. */
@@ -5323,7 +5330,7 @@
     position: relative;
     z-index: 1;
     padding: 5rem 0 120px;
-    background: #111010;
+    background: #131313;
   }
   [data-theme="light"] .app {
     background: #e8e0d0;
@@ -7848,7 +7855,10 @@
         <button class="sp-sort-pill" data-sort="picks" onclick="spSetSort('picks',this)">★ Picks</button>
         <button class="sp-sort-pill" data-sort="mastered" onclick="spSetSort('mastered',this)">◈ Mastered</button>
       </div>
-      <button class="sp-scan-toggle" id="spScanToggle" onclick="spToggleScan(this)" title="Toggle scan / full view">◫</button>
+      <div class="sp-view-pair">
+        <button class="sp-scan-toggle active" id="spViewGrid" onclick="spSetScanMode(false)" title="Grid view">◫</button>
+        <button class="sp-scan-toggle" id="spViewScan" onclick="spSetScanMode(true)" title="Scan view">⊞</button>
+      </div>
     </div>
     <div class="search-wrap">
       <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M10 10l3.5 3.5"/></svg>
@@ -7870,12 +7880,6 @@
 
   <!-- CATEGORIES — pill filter row -->
   <div class="cat-grid" id="catGrid"></div>
-
-  <!-- Mobile view toggle — ◫ / ⊞ (mobile only, mirrors desktop spScanToggle) -->
-  <div class="sp-mobile-view-row" id="spMobileViewRow">
-    <button class="sp-mobile-view-btn" id="spMobileViewGrid" onclick="spSetScanMode(false)" title="Grid view">◫</button>
-    <button class="sp-mobile-view-btn" id="spMobileViewScan" onclick="spSetScanMode(true)" title="Scan view">⊞</button>
-  </div>
 
   <!-- SEARCH COUNT -->
   <div class="results-count" id="resultCount" style="display:none"></div>
@@ -8032,14 +8036,14 @@
     </div>
     <div class="founder-text" id="founderText">
       <div class="founder-label founder-reveal">Why Epistemic Exists</div>
-      <h2 class="founder-heading founder-reveal">The <em>Sentence That Never Made It Out</em></h2>
+      <h2 class="founder-heading founder-reveal">The <em>sentence</em> I kept losing.</h2>
       <p class="founder-reveal">I used to confuse listening with learning. I'd hit the gym or commute with Modern Wisdom on, catch a sharp idea, and feel <em>smart</em> and <em>productive</em> instantly, like I owned it.</p>
       <p class="founder-line-emphasis founder-reveal">By the next morning, 90% of it was gone. "Poof, see ya later..."</p>
-      <p class="founder-reveal">I hated being mid-conversation, going — 'it's like… there's actually a word for this, I heard it last week, basically… ugh, <span class="founder-accent">nevermind</span>.'</p>
+      <p class="founder-reveal">I hated being mid-conversation, going — <em>'it's like… there's actually a word for this, I heard it last week, basically… ugh, <span class="founder-accent">nevermind</span>.'</em></p>
       <p class="founder-reveal">So, I tried to fix it:</p>
       <ul class="founder-bullets founder-reveal">
         <li><span class="founder-bullet-arrow">➣</span> <strong>Readwise highlights</strong> — never reopened.</li>
-        <li><span class="founder-bullet-arrow">➣</span> <strong>Podcast summaries</strong> — bullet points I'd skim and forget.</li>
+        <li><span class="founder-bullet-arrow">➣</span> <strong>Podcast summaries</strong> — bullet points I'd forget.</li>
         <li><span class="founder-bullet-arrow">➣</span> <strong>Notion dashboards</strong> — my little cheat sheet.</li>
       </ul>
       <div class="founder-mobile-notes founder-reveal">
@@ -8058,10 +8062,12 @@
           <div class="fpm-tag">...then I built a whole taxonomy</div>
         </div>
       </div>
-      <p class="founder-reveal">None of it stuck. I just had a better-organised version of the same problem. Passive listening is just mental masturbation... and a broken learning format.</p>
-      <p class="founder-reveal">But along the way, episode by episode, that little cheat sheet turned into a proper library. And I realised other people — expats, non-native English speakers, podcast lovers — were losing the same sentence too. So I built the tool I wished existed.</p>
+      <p class="founder-reveal">None of it stuck. I just had a better-organised version of the same problem.</p>
+      <p class="founder-line-bold founder-reveal">Passive listening is just mental masturbation... and a broken learning format.</p>
+      <p class="founder-reveal">But along the way, I realised other people — expats, non-native English speakers, podcast lovers — were stumbling on their words too.</p>
+      <p class="founder-line-bold founder-reveal">So I built the tool I wished existed.</p>
       <p class="founder-line-emphasis founder-reveal">Epistemic isn't trying to make you smarter. It's just trying to make sure what you already know doesn't die before it matters.</p>
-      <p class="founder-reveal">If you've ever gone '<span class="founder-accent">nevermind</span>' mid-sentence — this is for you.</p>
+      <p class="founder-reveal">If you've ever gone '<em><span class="founder-accent">nevermind</span></em>' mid-sentence — this is for you.</p>
       <div class="founder-mobile-gym founder-reveal">
         <div class="fpm-piece fpm-gym" onclick="openFpmLightbox('/assets/gym-cast.jpg','Where it all began...')">
           <img src="/assets/gym-cast.jpg" alt="Listening to a podcast at the gym" onerror="this.style.display='none';" />
@@ -8617,9 +8623,6 @@ async function loadConcepts() {
     updateProgress();
     updateHeaderCounts();
     initMagneticCards();
-    // Set mobile view toggle initial state — grid view (◫) active by default
-    var _mBtnGrid = document.getElementById('spMobileViewGrid');
-    if (_mBtnGrid) _mBtnGrid.classList.add('active');
     // Scroll-reveal for founder section elements — v2.4
     initScrollReveal('.founder-reveal', document.getElementById('founderText'));
     // Remove preload guard after first paint — prevents flashing on hard refresh
@@ -10979,12 +10982,10 @@ function spSetSort(sort, btn) {
   if (container.classList.contains('scan-mode')) {
     container.classList.remove('scan-mode');
     container.querySelectorAll('.sc-tile').forEach(t => t.remove());
-    const scanBtn = document.getElementById('spScanToggle');
-    if (scanBtn) { scanBtn.textContent = '◫'; scanBtn.classList.remove('active'); }
-    var mBtnGrid = document.getElementById('spMobileViewGrid');
-    var mBtnScan = document.getElementById('spMobileViewScan');
-    if (mBtnGrid) mBtnGrid.classList.add('active');
-    if (mBtnScan) mBtnScan.classList.remove('active');
+    var _rBtnGrid = document.getElementById('spViewGrid');
+    var _rBtnScan = document.getElementById('spViewScan');
+    if (_rBtnGrid) _rBtnGrid.classList.add('active');
+    if (_rBtnScan) _rBtnScan.classList.remove('active');
   }
 
   if (sort === 'latest') {
@@ -11040,17 +11041,11 @@ function spSetScanMode(on) {
   const isOn = !!on;
   grid.classList.toggle('scan-mode', isOn);
 
-  // Sync desktop toggle
-  const desktopBtn = document.getElementById('spScanToggle');
-  if (desktopBtn) {
-    desktopBtn.textContent = isOn ? '⊞' : '◫';
-    desktopBtn.classList.toggle('active', isOn);
-  }
-  // Sync mobile toggle buttons
-  var mBtnGrid = document.getElementById('spMobileViewGrid');
-  var mBtnScan = document.getElementById('spMobileViewScan');
-  if (mBtnGrid) mBtnGrid.classList.toggle('active', !isOn);
-  if (mBtnScan) mBtnScan.classList.toggle('active', isOn);
+  // Sync ◫ / ⊞ pair
+  var btnGrid = document.getElementById('spViewGrid');
+  var btnScan = document.getElementById('spViewScan');
+  if (btnGrid) btnGrid.classList.toggle('active', !isOn);
+  if (btnScan) btnScan.classList.toggle('active', isOn);
 
   if (isOn) {
     _spReinjectScanTiles(grid);
@@ -11067,8 +11062,7 @@ function spSetScanMode(on) {
 function spToggleScan(btn) {
   const grid = document.getElementById('netflixRows');
   if (!grid) return;
-  const isOn = !grid.classList.contains('scan-mode');
-  spSetScanMode(isOn);
+  spSetScanMode(!grid.classList.contains('scan-mode'));
 }
 
 // ── DRAWER VIEW MODES (flip | scan | all) ─────────────────────────
@@ -18050,50 +18044,11 @@ function playStreakMilestoneSFX() {
   color: #0d0d0d;
   background: var(--accent);
 }
-/* Scan toggle — icon-only pill, visually distinct from the filter group */
-/* Mobile-only view toggle row — ◫ / ⊞ */
-.sp-mobile-view-row {
-  display: none; /* shown only on mobile via media query */
-  justify-content: flex-end;
-  align-items: center;
-  gap: 4px;
-  padding: 0.5rem 0 0.25rem;
-}
-@media (max-width: 700px) {
-  .sp-mobile-view-row { display: flex; }
-}
-.sp-mobile-view-btn {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.95rem;
-  line-height: 1;
-  color: var(--muted2);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  width: 32px;
-  height: 32px;
+/* Scan toggle pair — ◫ / ⊞ in same row as sort pills */
+.sp-view-pair {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: color 0.15s, border-color 0.15s, background 0.15s;
-  flex-shrink: 0;
-}
-.sp-mobile-view-btn:hover { color: var(--text); border-color: var(--border-hover); }
-.sp-mobile-view-btn.active {
-  color: var(--accent);
-  border-color: var(--accent);
-  background: rgba(232,213,163,0.08);
-}
-[data-theme="light"] .sp-mobile-view-btn {
-  background: var(--surface2);
-  border-color: var(--border);
-  color: var(--muted2);
-}
-[data-theme="light"] .sp-mobile-view-btn.active {
-  color: var(--accent2);
-  border-color: var(--accent2);
-  background: rgba(184,134,11,0.08);
+  gap: 4px;
+  margin-left: auto;
 }
 
 .sp-scan-toggle {
