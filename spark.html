@@ -1992,6 +1992,11 @@
     height: 1px;
     background: var(--border);
   }
+  @media (max-width: 700px) {
+    .nf-section-rule { display: none; }
+    .nf-section { padding-top: 1rem; }
+    .nf-section-header { padding-bottom: 0.5rem; }
+  }
   .nf-scroll-wrap {
     position: relative;
   }
@@ -2459,6 +2464,7 @@
   }
   .nav-mobile-link:last-child { border-bottom: none; }
   .nav-mobile-link:hover { color: var(--accent); }
+  .nav-mobile-no-border { border-bottom: none !important; }
   .nav-mobile-epic { color: var(--accent); opacity: 0.85; }
 
   /* Mobile nav divider */
@@ -4868,6 +4874,11 @@
     border: 1px solid rgba(232,213,163,0.2);
     border-radius: 999px;
   }
+  [data-theme="light"] .founder-label {
+    border-color: rgba(180,140,60,0.55);
+    border-width: 2px;
+  }
+
   .founder-heading {
     font-family: 'Playfair Display', serif;
     font-size: clamp(1.6rem, 3.2vw, 2.2rem);
@@ -4891,6 +4902,7 @@
   }
   .founder-text p:last-child { margin-bottom: 0; }
   .founder-text p em { font-style: italic; }
+  .founder-accent { color: var(--accent); font-weight: 500; }
   .founder-bullets {
     list-style: none;
     padding: 0;
@@ -5311,6 +5323,10 @@
     position: relative;
     z-index: 1;
     padding: 5rem 0 120px;
+    background: #111010;
+  }
+  [data-theme="light"] .app {
+    background: #e8e0d0;
   }
 
   /* Centred controls wrapper — header, progress bar, vault row, pills, count */
@@ -7352,12 +7368,12 @@
 <!-- MOBILE NAV MENU -->
 <div class="nav-mobile-menu" id="navMobileMenu">
   <!-- v1.73b: epic button first in mobile menu -->
-  <button class="nav-mobile-link nav-mobile-epic" onclick="openEgg();playNavSFX();closeMobileNav()">😎 I feel epic!</button>
+  <button class="nav-mobile-link nav-mobile-epic nav-mobile-no-border" onclick="openEgg();playNavSFX();closeMobileNav()">😎 I feel epic!</button>
   <div class="nav-mobile-divider"></div>
   <!-- v1.71: mobile nav — Spark | Browse | Stash | Sign Up -->
   <button class="nav-mobile-link nav-mobile-cs" onclick="playNavSFX();_csOpenPanel();closeMobileNav()">💬 Spark</button>
   <button class="nav-mobile-link" onclick="playNavSFX();document.getElementById('app').scrollIntoView({behavior:'smooth'});closeMobileNav()">📚 Library</button>
-  <button class="nav-mobile-link nav-mobile-conv" onclick="playNavSFX();openConversations();closeMobileNav()">📌 Collection</button>
+  <button class="nav-mobile-link nav-mobile-conv nav-mobile-no-border" onclick="playNavSFX();openConversations();closeMobileNav()">📌 Collection</button>
   <div class="nav-mobile-divider"></div>
   <button class="nav-mobile-link nav-mobile-signup" onclick="playNavSFX();scrollToSection('signup');closeMobileNav()">◉ Sign Up 🎁 — Free Founding Access</button>
   <!-- hidden v1.70 — preserved:
@@ -7855,6 +7871,12 @@
   <!-- CATEGORIES — pill filter row -->
   <div class="cat-grid" id="catGrid"></div>
 
+  <!-- Mobile view toggle — ◫ / ⊞ (mobile only, mirrors desktop spScanToggle) -->
+  <div class="sp-mobile-view-row" id="spMobileViewRow">
+    <button class="sp-mobile-view-btn" id="spMobileViewGrid" onclick="spSetScanMode(false)" title="Grid view">◫</button>
+    <button class="sp-mobile-view-btn" id="spMobileViewScan" onclick="spSetScanMode(true)" title="Scan view">⊞</button>
+  </div>
+
   <!-- SEARCH COUNT -->
   <div class="results-count" id="resultCount" style="display:none"></div>
   </div><!-- /.app-controls -->
@@ -8008,19 +8030,19 @@
       <div class="fpm-tag fpm-tag-notes2">...then I built a whole taxonomy</div>
       <div class="fpm-tag fpm-tag-gym">where it all began...</div>
     </div>
-    <div class="founder-text">
-      <div class="founder-label">Why Epistemic Exists</div>
-      <h2 class="founder-heading">The <em>sentence</em> I kept losing.</h2>
-      <p>I used to confuse listening with learning. I'd hit the gym or commute with Modern Wisdom on, catch a sharp idea, and feel <em>smart</em> and <em>productive</em> instantly, like I owned it.</p>
-      <p class="founder-line-emphasis">By the next morning, 90% of it was gone. "Poof, see ya later..."</p>
-      <p>I hated losing my words when I wanted to explain what I just heard, so I tried to fix it:</p>
-      <ul class="founder-bullets">
+    <div class="founder-text" id="founderText">
+      <div class="founder-label founder-reveal">Why Epistemic Exists</div>
+      <h2 class="founder-heading founder-reveal">The <em>Sentence That Never Made It Out</em></h2>
+      <p class="founder-reveal">I used to confuse listening with learning. I'd hit the gym or commute with Modern Wisdom on, catch a sharp idea, and feel <em>smart</em> and <em>productive</em> instantly, like I owned it.</p>
+      <p class="founder-line-emphasis founder-reveal">By the next morning, 90% of it was gone. "Poof, see ya later..."</p>
+      <p class="founder-reveal">I hated being mid-conversation, going — 'it's like… there's actually a word for this, I heard it last week, basically… ugh, <span class="founder-accent">nevermind</span>.'</p>
+      <p class="founder-reveal">So, I tried to fix it:</p>
+      <ul class="founder-bullets founder-reveal">
         <li><span class="founder-bullet-arrow">➣</span> <strong>Readwise highlights</strong> — never reopened.</li>
-        <li><span class="founder-bullet-arrow">➣</span> <strong>Podcast summary app</strong> — bullet points I'd skim once and forget.</li>
-        <li><span class="founder-bullet-arrow">➣</span> <strong>Notion dashboard</strong> — writing things down in my little cheat sheet.</li>
+        <li><span class="founder-bullet-arrow">➣</span> <strong>Podcast summaries</strong> — bullet points I'd skim and forget.</li>
+        <li><span class="founder-bullet-arrow">➣</span> <strong>Notion dashboards</strong> — my little cheat sheet.</li>
       </ul>
-      <p>None of it stuck. I still kept stumbling on my words when it was time to explain what I thought I'd just learned. Frustratingly, it all just turned into more noise in my head.</p>
-      <div class="founder-mobile-notes">
+      <div class="founder-mobile-notes founder-reveal">
         <div class="fpm-piece fpm-notes" onclick="openFpmLightbox('/assets/notes-system.jpg','My &quot;smart&quot; Notion cheat sheet...')">
           <img src="/assets/notes-system.jpg" alt="Notion cheat sheet" onerror="this.style.display='none';" />
           <div class="fpm-fallback fpm-fallback-icon"><span>&#128221;</span></div>
@@ -8036,11 +8058,11 @@
           <div class="fpm-tag">...then I built a whole taxonomy</div>
         </div>
       </div>
-      <p class="founder-line-emphasis">I realized, passive listening is just mental masturbation... and a broken learning format.</p>
-      <p>Along the way, that personal cheat sheet turned into an actual library. Concept by concept, episode by episode, until it was clearly useful to people like me too: expats, non-native English speakers, podcast lovers.</p>
-      <p class="founder-line-emphasis">So I built the tool I wished existed.</p>
-      <p>Epistemic isn't trying to make you smarter. It's trying to make sure the smart thing you already know doesn't die in your head the next time it matters. If that's a problem you know personally, I think you'll feel right at home here.</p>
-      <div class="founder-mobile-gym">
+      <p class="founder-reveal">None of it stuck. I just had a better-organised version of the same problem. Passive listening is just mental masturbation... and a broken learning format.</p>
+      <p class="founder-reveal">But along the way, episode by episode, that little cheat sheet turned into a proper library. And I realised other people — expats, non-native English speakers, podcast lovers — were losing the same sentence too. So I built the tool I wished existed.</p>
+      <p class="founder-line-emphasis founder-reveal">Epistemic isn't trying to make you smarter. It's just trying to make sure what you already know doesn't die before it matters.</p>
+      <p class="founder-reveal">If you've ever gone '<span class="founder-accent">nevermind</span>' mid-sentence — this is for you.</p>
+      <div class="founder-mobile-gym founder-reveal">
         <div class="fpm-piece fpm-gym" onclick="openFpmLightbox('/assets/gym-cast.jpg','Where it all began...')">
           <img src="/assets/gym-cast.jpg" alt="Listening to a podcast at the gym" onerror="this.style.display='none';" />
           <div class="fpm-fallback fpm-fallback-icon"><span>&#127939;</span></div>
@@ -8595,6 +8617,11 @@ async function loadConcepts() {
     updateProgress();
     updateHeaderCounts();
     initMagneticCards();
+    // Set mobile view toggle initial state — grid view (◫) active by default
+    var _mBtnGrid = document.getElementById('spMobileViewGrid');
+    if (_mBtnGrid) _mBtnGrid.classList.add('active');
+    // Scroll-reveal for founder section elements — v2.4
+    initScrollReveal('.founder-reveal', document.getElementById('founderText'));
     // Remove preload guard after first paint — prevents flashing on hard refresh
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
@@ -10954,6 +10981,10 @@ function spSetSort(sort, btn) {
     container.querySelectorAll('.sc-tile').forEach(t => t.remove());
     const scanBtn = document.getElementById('spScanToggle');
     if (scanBtn) { scanBtn.textContent = '◫'; scanBtn.classList.remove('active'); }
+    var mBtnGrid = document.getElementById('spMobileViewGrid');
+    var mBtnScan = document.getElementById('spMobileViewScan');
+    if (mBtnGrid) mBtnGrid.classList.add('active');
+    if (mBtnScan) mBtnScan.classList.remove('active');
   }
 
   if (sort === 'latest') {
@@ -11003,12 +11034,23 @@ function _spReinjectScanTiles(grid, matchIds, isVault) {
   grid.addEventListener('click', grid._scanDelegate, true);
 }
 
-function spToggleScan(btn) {
+function spSetScanMode(on) {
   const grid = document.getElementById('netflixRows');
   if (!grid) return;
-  const isOn = grid.classList.toggle('scan-mode');
-  btn.textContent = isOn ? '⊞' : '◫';
-  btn.classList.toggle('active', isOn);
+  const isOn = !!on;
+  grid.classList.toggle('scan-mode', isOn);
+
+  // Sync desktop toggle
+  const desktopBtn = document.getElementById('spScanToggle');
+  if (desktopBtn) {
+    desktopBtn.textContent = isOn ? '⊞' : '◫';
+    desktopBtn.classList.toggle('active', isOn);
+  }
+  // Sync mobile toggle buttons
+  var mBtnGrid = document.getElementById('spMobileViewGrid');
+  var mBtnScan = document.getElementById('spMobileViewScan');
+  if (mBtnGrid) mBtnGrid.classList.toggle('active', !isOn);
+  if (mBtnScan) mBtnScan.classList.toggle('active', isOn);
 
   if (isOn) {
     _spReinjectScanTiles(grid);
@@ -11020,6 +11062,13 @@ function spToggleScan(btn) {
     }
     grid.querySelectorAll('.nf-row').forEach(updateArrowVisibility);
   }
+}
+
+function spToggleScan(btn) {
+  const grid = document.getElementById('netflixRows');
+  if (!grid) return;
+  const isOn = !grid.classList.contains('scan-mode');
+  spSetScanMode(isOn);
 }
 
 // ── DRAWER VIEW MODES (flip | scan | all) ─────────────────────────
@@ -18002,6 +18051,51 @@ function playStreakMilestoneSFX() {
   background: var(--accent);
 }
 /* Scan toggle — icon-only pill, visually distinct from the filter group */
+/* Mobile-only view toggle row — ◫ / ⊞ */
+.sp-mobile-view-row {
+  display: none; /* shown only on mobile via media query */
+  justify-content: flex-end;
+  align-items: center;
+  gap: 4px;
+  padding: 0.5rem 0 0.25rem;
+}
+@media (max-width: 700px) {
+  .sp-mobile-view-row { display: flex; }
+}
+.sp-mobile-view-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.95rem;
+  line-height: 1;
+  color: var(--muted2);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+  flex-shrink: 0;
+}
+.sp-mobile-view-btn:hover { color: var(--text); border-color: var(--border-hover); }
+.sp-mobile-view-btn.active {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: rgba(232,213,163,0.08);
+}
+[data-theme="light"] .sp-mobile-view-btn {
+  background: var(--surface2);
+  border-color: var(--border);
+  color: var(--muted2);
+}
+[data-theme="light"] .sp-mobile-view-btn.active {
+  color: var(--accent2);
+  border-color: var(--accent2);
+  background: rgba(184,134,11,0.08);
+}
+
 .sp-scan-toggle {
   font-family: 'DM Mono', monospace;
   font-size: 0.95rem;
