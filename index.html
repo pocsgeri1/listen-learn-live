@@ -3591,8 +3591,9 @@
     opacity: 0; transform: translateY(6px);
     transition: opacity 0.35s ease, transform 0.35s ease;
     font-family: 'DM Sans', sans-serif;
-    font-size: 0.8rem; color: var(--muted2); line-height: 1.5;
-    padding: 7px 12px; border-left: 2px solid #d4715a;
+    font-size: 0.84rem; color: var(--muted2); line-height: 1.55;
+    font-style: italic;
+    padding: 8px 12px; border-left: 2px solid #d4715a;
     background: rgba(212,113,90,0.04);
     border-radius: 0 6px 6px 0;
   }
@@ -12550,19 +12551,18 @@ function openSparkPanel(conceptId) {
     _renderCSShell(concept);
     _wireCSEvents();
     _csPushToStack(concept);
+    openCS();
+    // Try to restore cached AI data — shows prompt + coaching without re-generating
+    _csRestoreOrLoad(concept);
   } else if (_csConcept) {
-    // Restore last state — panel was previously opened
-    // If AI data cached, _applyAIToCtx handles it; else show Generate button
-    if (_csAIData && _csAIData['universal']) {
-      // Already have data — just open
-    } else {
+    openCS();
+    if (!_csAIData || !_csAIData['universal']) {
       const genRow = document.getElementById('csGenerateRow');
       const genBtn = document.getElementById('csGenerateBtn');
       if (genRow) genRow.style.display = 'block';
       if (genBtn) { genBtn.disabled = false; genBtn.innerHTML = '<span class="cs-generate-btn-icon">✦</span> Spark'; }
     }
   } else {
-    // First ever open — pick a random editors_pick or random concept
     const picks = CONCEPTS.filter(c => c.editors_pick && !c.duplicate_of);
     const pool = picks.length > 0 ? picks : CONCEPTS.filter(c => !c.duplicate_of);
     const concept = pool[Math.floor(Math.random() * pool.length)];
@@ -12573,15 +12573,7 @@ function openSparkPanel(conceptId) {
     _renderCSShell(concept);
     _wireCSEvents();
     _csPushToStack(concept);
-  }
-
-  openCS();
-  // Always show Generate button if no AI data
-  if (!_csAIData || !_csAIData['universal']) {
-    const genRow = document.getElementById('csGenerateRow');
-    const genBtn = document.getElementById('csGenerateBtn');
-    if (genRow) genRow.style.display = 'block';
-    if (genBtn) { genBtn.disabled = false; genBtn.innerHTML = '<span class="cs-generate-btn-icon">✦</span> Spark'; }
+    openCS();
   }
 }
 
@@ -13249,12 +13241,32 @@ function _applyAIData(d, doTypewriter) {
       }
     }, 18 + Math.random() * 14);
   } else {
+    // Restore — smooth expand animation (no typewriter)
     if (inner && promptEl) {
       inner.style.display = 'block';
       inner.classList.remove('cs-prompt-hidden', 'cs-prompt-visible');
       promptEl.textContent = d.prompt || '';
     }
-    _showCoaching(false);
+    // Prompt block fades+slides in
+    if (block) {
+      block.style.opacity = '0';
+      block.style.transform = 'translateY(8px)';
+      block.style.transition = 'opacity 0.45s ease, transform 0.45s ease';
+      block.style.display = 'block';
+      requestAnimationFrame(function() {
+        requestAnimationFrame(function() {
+          block.style.opacity = '1';
+          block.style.transform = 'translateY(0)';
+          setTimeout(function() {
+            block.style.transition = '';
+            block.style.opacity = '';
+            block.style.transform = '';
+          }, 500);
+        });
+      });
+    }
+    // Coaching appears 500ms later with same smooth expand
+    setTimeout(function() { _showCoaching(false); }, 500);
   }
 
   _csLogHistoryWithPrompt(_csConcept, 'universal', d.prompt);
@@ -14528,7 +14540,7 @@ function _csRestoreOrLoad(concept) {
     const cv = sessionStorage.getItem(ck);
     if (cv) {
       _csAIData = { universal: JSON.parse(cv) };
-      _applyAIData(_csAIData['universal'], false); // no typewriter on restore
+      _applyAIData(_csAIData['universal'], false);
       return;
     }
   } catch(e) {}
@@ -14540,7 +14552,7 @@ function _csRestoreOrLoad(concept) {
       const d = savedEntry.aiData['universal'] || savedEntry.aiData['friend'] || null;
       if (d) {
         _csAIData = { universal: d };
-        _applyAIData(d, false); // no typewriter on restore
+        _applyAIData(d, false);
         return;
       }
     }
@@ -14548,6 +14560,10 @@ function _csRestoreOrLoad(concept) {
 
   // Nothing cached — show Generate button
   _csAIData = null;
+  const genRow = document.getElementById('csGenerateRow');
+  const genBtn = document.getElementById('csGenerateBtn');
+  if (genRow) genRow.style.display = 'block';
+  if (genBtn) { genBtn.disabled = false; genBtn.innerHTML = '<span class="cs-generate-btn-icon">✦</span> Spark'; }
   const actEl = document.getElementById('csActions');
   if (actEl) { actEl.classList.remove('cs-hidden'); actEl.classList.add('cs-visible'); }
 }
@@ -17157,6 +17173,16 @@ function playStreakMilestoneSFX() {
 .conv-hist-entry {
   animation: panelItemIn 0.4s ease both;
 }
+/* Stash hover-lift */
+.conv-saved-entry {
+  transition: background 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+  cursor: default;
+}
+.conv-saved-entry:hover {
+  background: rgba(232,213,163,0.04);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+}
 .conv-saved-entry:nth-child(1), .conv-hist-entry:nth-child(1) { animation-delay: 0.05s; }
 .conv-saved-entry:nth-child(2), .conv-hist-entry:nth-child(2) { animation-delay: 0.10s; }
 .conv-saved-entry:nth-child(3), .conv-hist-entry:nth-child(3) { animation-delay: 0.15s; }
@@ -17242,13 +17268,6 @@ function playStreakMilestoneSFX() {
 }
 .conv-hist-entry:last-child { border-bottom: none; }
 .conv-hist-left { display: none; } /* removed v2.5 */
-.conv-hist-ts {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.58rem;
-  letter-spacing: 0.06em;
-  color: var(--muted);
-  white-space: nowrap;
-}
 
 /* conv-panel layout defined above with bottom drawer CSS */
 
@@ -17498,16 +17517,18 @@ function playStreakMilestoneSFX() {
 }
 /* All stash openers use gold border — no grey alt */
 .stash-opener--alt { border-left-color: var(--accent); }
-.stash-pitfall {
-  font-family: 'DM Sans', sans-serif; font-size: 0.76rem;
-  color: var(--muted2); margin-bottom: 4px;
-  padding: 5px 10px; border-left: 2px solid #d4715a;
-  background: rgba(212,113,90,0.04); border-radius: 0 5px 5px 0;
-}
+.stash-pitfall-block { margin-top: 4px; }
 .stash-pitfall-label {
-  font-family: 'DM Mono', monospace; font-size: 0.56rem;
-  letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--red); margin-right: 5px; font-style: normal;
+  font-family: 'DM Mono', monospace; font-size: 0.58rem;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: #d4715a; display: block; margin-bottom: 3px; font-style: normal;
+  opacity: 0.85;
+}
+.stash-pitfall-line {
+  font-family: 'DM Sans', sans-serif; font-size: 0.84rem;
+  color: var(--muted2); line-height: 1.55; font-style: italic;
+  padding: 8px 12px; border-left: 2px solid #d4715a;
+  background: rgba(212,113,90,0.04); border-radius: 0 6px 6px 0;
 }
 
 /* v2.5: Spark loading message — shown while API generates */
@@ -17540,16 +17561,26 @@ function playStreakMilestoneSFX() {
 .hist-spark-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(232,213,163,0.06); }
 
 .conv-hist-top {
-  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%;
+}
+.conv-hist-meta-right {
+  display: flex; align-items: center; gap: 8px; flex-shrink: 0;
 }
 .conv-hist-term {
-  font-family: 'DM Mono', monospace; font-size: 0.72rem;
-  letter-spacing: 0.06em; text-transform: uppercase;
+  font-family: 'DM Mono', monospace; font-size: 0.7rem;
+  letter-spacing: 0.07em; text-transform: uppercase;
   color: var(--text); font-weight: 500;
+  flex: 1; min-width: 0;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.conv-hist-ts {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.56rem; letter-spacing: 0.06em;
+  color: var(--muted); white-space: nowrap;
 }
 .hist-snippet {
-  font-family: 'DM Sans', sans-serif; font-size: 0.76rem;
-  color: var(--muted2); line-height: 1.5; margin-top: 4px;
+  font-family: 'DM Sans', sans-serif; font-size: 0.78rem;
+  color: var(--muted2); line-height: 1.5; margin-top: 2px;
   font-style: italic;
 }
 
@@ -19100,7 +19131,7 @@ function _convDetailHTML(entry) {
   return `
     <div class="stash-prompt-text">${_escHtml(d.prompt || '')}</div>
     ${openers ? '<div class="stash-openers">' + openers + '</div>' : ''}
-    ${d.pitfall ? '<div class="stash-pitfall"><span class="stash-pitfall-label">Watch out:</span> ' + _escHtml(d.pitfall) + '</div>' : ''}`;
+    ${d.pitfall ? '<div class="stash-pitfall-block"><div class="stash-pitfall-label">Watch out for:</div><div class="stash-pitfall-line">' + _escHtml(d.pitfall) + '</div></div>' : ''}`;
 }
 
 function _convCtxBlock(d, id, ctx) {
@@ -19399,8 +19430,10 @@ function _convRenderHistory() {
     return '<div class="conv-hist-entry">' +
       '<div class="conv-hist-top">' +
         '<span class="conv-hist-term">' + _escHtml(h.term || '') + '</span>' +
-        '<span class="conv-entry-cat" style="color:' + catColor + '">' + (h.category || '') + '</span>' +
-        '<span class="conv-hist-ts">' + dateStr + '</span>' +
+        '<div class="conv-hist-meta-right">' +
+          '<span class="conv-entry-cat" style="color:' + catColor + '">' + (h.category || '') + '</span>' +
+          '<span class="conv-hist-ts">' + dateStr + '</span>' +
+        '</div>' +
       '</div>' +
       snippet +
       '<button class="hist-spark-btn" onclick="_convOpenCSById(' + h.id + ')">✦ Spark</button>' +
