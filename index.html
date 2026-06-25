@@ -3885,16 +3885,19 @@
     margin-bottom: 0.6rem;
   }
   .cs-nav-btn {
-    background: none; border: 1px solid var(--border);
-    border-radius: 999px; padding: 4px 11px;
-    font-family: 'DM Mono', monospace; font-size: 0.6rem;
+    background: none;
+    border: 1px solid var(--border-hover);
+    border-radius: 999px; padding: 5px 13px;
+    font-family: 'DM Mono', monospace; font-size: 0.65rem;
     letter-spacing: 0.08em; text-transform: uppercase;
-    color: var(--muted); cursor: pointer;
-    transition: border-color 0.2s, color 0.2s;
+    color: var(--muted2); cursor: pointer;
+    transition: border-color 0.2s, color 0.2s, background 0.2s;
     display: flex; align-items: center; gap: 5px;
   }
-  .cs-nav-btn:hover { border-color: var(--border-hover); color: var(--muted2); }
-  .cs-nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+  .cs-nav-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(232,213,163,0.06); }
+  .cs-nav-btn:disabled { opacity: 0.25; cursor: not-allowed; }
+  [data-theme="light"] .cs-nav-btn { border-color: rgba(0,0,0,0.2); color: var(--muted2); }
+  [data-theme="light"] .cs-nav-btn:hover { border-color: var(--accent); color: var(--accent); }
 
   /* Help ? button + speech bubble — v1.72c */
   .cs-headline-row {
@@ -7376,7 +7379,7 @@
 
   <div class="nav-island" id="navIsland">
     <!-- v2.5: Browse · Spark · Story -->
-    <a class="nav-link nav-browse-btn" onclick="playNavSFX();document.getElementById('app').scrollIntoView({behavior:'smooth'})"><span class="nav-browse-emoji">📚</span>Browse</a>
+    <a class="nav-link nav-browse-btn" onclick="playNavSFX();document.getElementById('app').scrollIntoView({behavior:'smooth'})"><span class="nav-browse-emoji">🎬</span>Browse</a>
     <a class="nav-link nav-spark-btn" onclick="openSparkPanel();playNavSFX()"><span class="nav-spark-emoji">💬</span>Spark</a>
     <a class="nav-link nav-story-btn" onclick="openStoriesPanel();playNavSFX()"><span class="nav-story-emoji">📖</span>Story</a>
   </div>
@@ -7401,7 +7404,7 @@
   <button class="nav-mobile-link nav-mobile-epic nav-mobile-no-border" onclick="openEgg();playNavSFX();closeMobileNav()">😎 I feel epic!</button>
   <div class="nav-mobile-divider"></div>
   <!-- v2.5: Browse · Spark · Story -->
-  <button class="nav-mobile-link" onclick="playNavSFX();document.getElementById('app').scrollIntoView({behavior:'smooth'});closeMobileNav()">📚 Browse</button>
+  <button class="nav-mobile-link" onclick="playNavSFX();document.getElementById('app').scrollIntoView({behavior:'smooth'});closeMobileNav()">🎬 Browse</button>
   <button class="nav-mobile-link nav-mobile-cs" onclick="playNavSFX();openSparkPanel();closeMobileNav()">💬 Spark</button>
   <button class="nav-mobile-link nav-mobile-no-border" onclick="playNavSFX();openStoriesPanel();closeMobileNav()">📖 Story</button>
   <div class="nav-mobile-divider"></div>
@@ -7588,7 +7591,7 @@
     <!-- Help bubble — teleported to body by JS, shown on hover -->
     <div class="cs-help-bubble" id="csHelpBubble" style="display:none">
       <div class="cs-help-step"><span class="cs-help-num">01</span><span>Pick any concept from the library — or search for one above.</span></div>
-      <div class="cs-help-step"><span class="cs-help-num">02</span><span>Hit <strong>Ignite</strong> and get a ready-to-use conversation starter.</span></div>
+      <div class="cs-help-step"><span class="cs-help-num">02</span><span>Hit <strong>Spark it</strong> and get a ready-to-use conversation starter.</span></div>
       <div class="cs-help-step"><span class="cs-help-num">03</span><span>Copy it, use it tonight, tell us if it landed.</span></div>
       <div style="margin-top:10px;font-size:0.8rem;font-style:italic;color:var(--accent);font-family:'Playfair Display',serif">Now go say something worth saying. ✦</div>
     </div>
@@ -7599,7 +7602,7 @@
         <button class="cs-help-overlay-close" onclick="_csHelpOverlayClose()">✕</button>
         <div class="cs-help-overlay-title">How does this work?</div>
         <div class="cs-help-step"><span class="cs-help-num">01</span><span>Pick any concept from the library — or search for one above.</span></div>
-        <div class="cs-help-step" style="margin-top:10px"><span class="cs-help-num">02</span><span>Hit <strong>Ignite</strong> and get a ready-to-use conversation starter.</span></div>
+        <div class="cs-help-step" style="margin-top:10px"><span class="cs-help-num">02</span><span>Hit <strong>Spark it</strong> and get a ready-to-use conversation starter.</span></div>
         <div class="cs-help-step" style="margin-top:10px"><span class="cs-help-num">03</span><span>Copy it, use it tonight, tell us if it landed.</span></div>
         <div style="margin-top:14px;font-size:0.9rem;font-style:italic;color:var(--accent);font-family:'Playfair Display',serif;text-align:center">Now go say something worth saying. ✦</div>
       </div>
@@ -7633,7 +7636,7 @@
     <!-- Generate button -->
     <div class="cs-generate-row" id="csGenerateRow" style="display:none">
       <button class="cs-generate-btn" id="csGenerateBtn">
-        <span class="cs-generate-btn-icon">✦</span> Ignite
+        <span class="cs-generate-btn-icon">✦</span> Spark it
       </button>
     </div>
 
@@ -12545,7 +12548,7 @@ function openSparkPanel(conceptId) {
       const genRow = document.getElementById('csGenerateRow');
       const genBtn = document.getElementById('csGenerateBtn');
       if (genRow) genRow.style.display = 'block';
-      if (genBtn) { genBtn.disabled = false; genBtn.innerHTML = '<span class="cs-generate-btn-icon">✦</span> Ignite'; }
+      if (genBtn) { genBtn.disabled = false; genBtn.innerHTML = '<span class="cs-generate-btn-icon">✦</span> Spark it'; }
     }
   } else {
     // First ever open — pick a random editors_pick or random concept
@@ -12567,7 +12570,7 @@ function openSparkPanel(conceptId) {
     const genRow = document.getElementById('csGenerateRow');
     const genBtn = document.getElementById('csGenerateBtn');
     if (genRow) genRow.style.display = 'block';
-    if (genBtn) { genBtn.disabled = false; genBtn.innerHTML = '<span class="cs-generate-btn-icon">✦</span> Ignite'; }
+    if (genBtn) { genBtn.disabled = false; genBtn.innerHTML = '<span class="cs-generate-btn-icon">✦</span> Spark it'; }
   }
 }
 
@@ -12709,7 +12712,7 @@ function _csPickerShowMain() {
     const genRow = document.getElementById('csGenerateRow');
     const genBtn = document.getElementById('csGenerateBtn');
     if (genRow) genRow.style.display = 'block';
-    if (genBtn) { genBtn.disabled = false; genBtn.classList.remove('loading'); genBtn.textContent = '✦ Ignite'; }
+    if (genBtn) { genBtn.disabled = false; genBtn.classList.remove('loading'); genBtn.textContent = '✦ Spark it'; }
     // Hide coaching since there's nothing to show yet
     const coaching = document.getElementById('csCoaching');
     if (coaching) { coaching.classList.add('cs-hidden'); coaching.classList.remove('cs-visible'); }
@@ -12913,7 +12916,7 @@ function _csPickerGenerate(conceptId) {
     else if (data && data.contexts && data.contexts[ctx]) d = data.contexts[ctx];
     if (!d || !d.prompt) {
       genBtn.disabled = false; genBtn.classList.remove('loading');
-      genBtn.textContent = '✦ Ignite';
+      genBtn.textContent = '✦ Spark it';
       return;
     }
     // Cache to session
@@ -12935,7 +12938,7 @@ function _csPickerGenerate(conceptId) {
   })
   .catch(function() {
     genBtn.disabled = false; genBtn.classList.remove('loading');
-    genBtn.textContent = '✦ Ignite';
+    genBtn.textContent = '✦ Spark it';
   });
 }
 
@@ -13112,7 +13115,7 @@ function _renderCSShell(concept) {
   const genRow = document.getElementById('csGenerateRow');
   const genBtn = document.getElementById('csGenerateBtn');
   if (genRow) genRow.style.display = 'block';
-  if (genBtn) { genBtn.disabled = false; genBtn.innerHTML = '<span class="cs-generate-btn-icon">✦</span> Ignite'; }
+  if (genBtn) { genBtn.disabled = false; genBtn.innerHTML = '<span class="cs-generate-btn-icon">✦</span> Spark it'; }
 
   // Actions always visible (Prev/Next navigation)
   const actionsEl = document.getElementById('csActions');
@@ -13888,7 +13891,7 @@ function _csCloseStoryMode() {
         var genRow = document.getElementById('csGenerateRow');
         var genBtn = document.getElementById('csGenerateBtn');
         if (genRow) genRow.style.display = 'block';
-        if (genBtn) { genBtn.disabled = false; genBtn.classList.remove('loading'); genBtn.textContent = '✦ Ignite'; }
+        if (genBtn) { genBtn.disabled = false; genBtn.classList.remove('loading'); genBtn.textContent = '✦ Spark it'; }
         var coaching = document.getElementById('csCoaching');
         if (coaching) { coaching.classList.add('cs-hidden'); coaching.classList.remove('cs-visible'); }
         var divider = document.getElementById('csDivider');
@@ -14713,13 +14716,13 @@ function _loadAI(concept) {
       _applyAIData(ctxData);
     } else {
       _csLoading = false;
-      if (genBtn) { genBtn.disabled = false; genBtn.innerHTML = '<span class="cs-generate-btn-icon">✦</span> Ignite'; }
+      if (genBtn) { genBtn.disabled = false; genBtn.innerHTML = '<span class="cs-generate-btn-icon">✦</span> Spark it'; }
       if (genRow) genRow.style.display = 'block';
     }
   })
   .catch(function() {
     _csLoading = false;
-    if (genBtn) { genBtn.disabled = false; genBtn.innerHTML = '<span class="cs-generate-btn-icon">✦</span> Ignite'; }
+    if (genBtn) { genBtn.disabled = false; genBtn.innerHTML = '<span class="cs-generate-btn-icon">✦</span> Spark it'; }
     if (genRow) genRow.style.display = 'block';
   });
 }
@@ -14950,14 +14953,14 @@ function _wireCSEvents() {
     });
   }
 
-  // Generate button
+  // Generate button — wire every time (onclick attribute is the fallback)
   const genBtn = document.getElementById('csGenerateBtn');
-  if (genBtn && !genBtn._wired) {
-    genBtn._wired = true;
-    genBtn.addEventListener('click', function() {
-      if (!_csConcept || _csLoading) return;
+  if (genBtn) {
+    genBtn.onclick = function() {
+      if (!_csConcept) { console.warn('[Spark] genBtn clicked but _csConcept is null'); return; }
+      if (_csLoading) { console.warn('[Spark] genBtn clicked but _csLoading is true — resetting'); _csLoading = false; }
       _loadAI(_csConcept);
-    });
+    };
   }
 
   // Close button
@@ -16874,7 +16877,7 @@ function playStreakMilestoneSFX() {
 
 /* Search results dropdown */
 .spark-search-results {
-  margin: 0 20px 10px;
+  margin: 0 20px 14px;
   border: 1px solid var(--border-hover);
   border-radius: 10px;
   overflow: hidden;
@@ -16942,8 +16945,9 @@ function playStreakMilestoneSFX() {
 
 /* ── v2.5: Concept term display — minimalist, no expand box ── */
 .spark-concept-row {
-  padding: 14px 20px 10px;
+  padding: 18px 20px 10px;
   border-top: 1px solid var(--border);
+  margin-top: 10px;
 }
 .spark-concept-label {
   font-family: 'DM Mono', monospace;
@@ -16951,7 +16955,7 @@ function playStreakMilestoneSFX() {
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--muted);
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 .spark-concept-term-wrap {
   display: flex;
