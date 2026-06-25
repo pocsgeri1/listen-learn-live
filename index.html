@@ -3559,26 +3559,26 @@
     color: var(--muted); margin-bottom: 7px;
   }
   .cs-coaching-label--warn { color: #d4715a; opacity: 0.85; }
-  .cs-openers-list { display: flex; flex-direction: column; gap: 8px; }
-  .cs-opener-line {
+  .cs-openers-list { display: flex; flex-direction: column; gap: 10px; }
+  .cs-opener-block {
     opacity: 0;
     transform: translateY(6px);
     transition: opacity 0.35s ease, transform 0.35s ease;
+  }
+  .cs-opener-block.visible { opacity: 1; transform: translateY(0); }
+  .cs-opener-intro {
+    font-family: 'DM Mono', monospace; font-size: 0.58rem;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 4px;
+    font-style: normal;
+  }
+  .cs-opener-line {
     font-family: 'DM Sans', sans-serif;
     font-size: 0.84rem; line-height: 1.55; color: var(--muted2);
     font-style: italic; padding: 8px 12px;
     border-left: 2px solid var(--accent);
     background: rgba(232,213,163,0.04);
     border-radius: 0 6px 6px 0;
-  }
-  .cs-opener-line.visible {
-    opacity: 1; transform: translateY(0);
-  }
-  .cs-opener-intro {
-    font-family: 'DM Mono', monospace; font-size: 0.58rem;
-    letter-spacing: 0.12em; text-transform: uppercase;
-    color: var(--accent); display: block; margin-bottom: 3px;
-    font-style: normal;
   }
   .cs-pitfall {
     opacity: 0; transform: translateY(6px);
@@ -11820,22 +11820,30 @@ function _spPreviewCard(id, anchorEl, opts) {
   }
 
   // Position: anchor to element if provided, else left of search bar
+  // card is position:fixed so all coords are viewport-relative — no scrollY
   let top, cardLeft;
   if (anchorEl) {
     const rect = anchorEl.getBoundingClientRect();
-    top = Math.max(80, rect.top + window.scrollY - 20);
-    // Panel is on the right — position card to the LEFT of panel
+    // Align top of preview with the anchor element
+    top = Math.max(70, rect.top - 10);
+    // Position left of the panel
     const panelEl = document.getElementById('convPanel');
     const panelLeft = panelEl ? panelEl.getBoundingClientRect().left : window.innerWidth - 520;
-    cardLeft = Math.max(12, panelLeft - 260);
+    cardLeft = Math.max(8, panelLeft - 268);
+    // Clamp so preview doesn't go off bottom
+    const cardH = 260; // approximate
+    if (top + cardH > window.innerHeight - 20) {
+      top = Math.max(70, window.innerHeight - cardH - 20);
+    }
   } else {
     const searchWrap = document.getElementById('spSearchWrap');
     const rect = searchWrap ? searchWrap.getBoundingClientRect() : null;
-    top = rect ? Math.max(80, rect.top - 40) : 200;
+    top = rect ? Math.max(70, rect.top - 30) : 180;
     const leftEdge = rect ? rect.left : window.innerWidth / 2 - 320;
-    cardLeft = Math.max(12, leftEdge - 24 - 240);
+    cardLeft = Math.max(8, leftEdge - 24 - 240);
   }
 
+  card.style.position = 'fixed';
   card.style.top = top + 'px';
   card.style.left = cardLeft + 'px';
   card.style.right = 'auto';
@@ -12481,19 +12489,18 @@ function _csIsSaved(id) {
 function _csLogHistory(concept, ctx) {
   try {
     const hist = JSON.parse(localStorage.getItem(CS_HISTORY_KEY) || '[]');
-    const todayStr = new Date().toISOString().slice(0, 10);
-    // Deduplicate: skip if same concept already logged today
-    const alreadyToday = hist.some(h => h.id === concept.id && h.ts && h.ts.slice(0, 10) === todayStr);
-    if (alreadyToday) return;
-    hist.unshift({
+    // Remove any existing entry for this concept (we'll re-add at top)
+    const filtered = hist.filter(h => h.id !== concept.id);
+    filtered.unshift({
       id: concept.id,
       term: concept.term,
       category: concept.category || '',
-      ctx: ctx || 'partner',
+      ctx: ctx || 'universal',
+      promptText: '',
       ts: new Date().toISOString()
     });
-    if (hist.length > CS_HISTORY_MAX) hist.length = CS_HISTORY_MAX;
-    localStorage.setItem(CS_HISTORY_KEY, JSON.stringify(hist));
+    if (filtered.length > CS_HISTORY_MAX) filtered.length = CS_HISTORY_MAX;
+    localStorage.setItem(CS_HISTORY_KEY, JSON.stringify(filtered));
   } catch(e) {}
 }
 
@@ -13027,6 +13034,11 @@ function _csLoadNewConcept(concept) {
 function _renderCSShell(concept) {
   if (!concept) return;
 
+  // Log to history on every concept view (with no promptText — that gets added when Sparked)
+  if (concept && concept.id) {
+    _csLogHistory(concept, 'universal');
+  }
+
   // Concept pill
   document.getElementById('csConceptPillTerm').textContent = concept.term;
 
@@ -13170,7 +13182,11 @@ function _applyAIData(d, doTypewriter) {
 
     if (openersList) {
       openersList.innerHTML = (d.openers || []).map(function(o, i) {
-        return '<div class="cs-opener-line"><span class="cs-opener-intro">' + (i === 0 ? intro : 'Or try') + '</span>' + _escHtml(o) + '</div>';
+        var label = i === 0 ? intro : 'Or try';
+        return '<div class="cs-opener-block">' +
+          '<div class="cs-opener-intro">' + label + '</div>' +
+          '<div class="cs-opener-line">' + _escHtml(o) + '</div>' +
+          '</div>';
       }).join('');
     }
     if (pitfallEl) {
@@ -13180,8 +13196,8 @@ function _applyAIData(d, doTypewriter) {
     // Show coaching container
     setTimeout(function() { _csShowPostPrompt(); }, 80);
 
-    // Stagger each opener line
-    var lines = openersList ? openersList.querySelectorAll('.cs-opener-line') : [];
+    // Stagger each opener block
+    var lines = openersList ? openersList.querySelectorAll('.cs-opener-block') : [];
     lines.forEach(function(line, i) {
       setTimeout(function() { line.classList.add('visible'); }, 140 + i * 160);
     });
@@ -14464,19 +14480,18 @@ function _csLogHistoryWithPrompt(concept, ctx, promptText) {
   if (!concept) return;
   try {
     const hist = JSON.parse(localStorage.getItem(CS_HISTORY_KEY) || '[]');
-    const todayStr = new Date().toISOString().slice(0, 10);
-    // Update existing entry for same concept+ctx today, or add new
-    const existIdx = hist.findIndex(h => h.id === concept.id && h.ctx === ctx && h.ts && h.ts.slice(0, 10) === todayStr);
+    // Update existing entry if present, or add new at top
+    const idx = hist.findIndex(h => h.id === concept.id);
     const entry = {
       id: concept.id,
       term: concept.term,
       category: concept.category || '',
-      ctx: ctx || 'friend',
+      ctx: ctx || 'universal',
       promptText: promptText || '',
       ts: new Date().toISOString()
     };
-    if (existIdx > -1) {
-      hist[existIdx] = entry; // update with latest prompt
+    if (idx > -1) {
+      hist[idx] = entry; // update in place, keep position
     } else {
       hist.unshift(entry);
     }
@@ -14620,45 +14635,68 @@ function _csRollNewConcept() {
   const pool = CONCEPTS.filter(c => !c.duplicate_of && (!_csConcept || c.id !== _csConcept.id));
   if (!pool.length) return;
   const target = pool[Math.floor(Math.random() * pool.length)];
-
   const termEl = document.getElementById('csConceptPillTerm');
-  if (!termEl) { _csLoadNewConcept(target); return; }
-
-  // Disable button during roll
   const btn = document.getElementById('csNewConceptBtn');
   if (btn) { btn.disabled = true; btn.textContent = '↺ Rolling…'; }
 
-  // 12 shuffled terms to roll through
-  const shuffled = pool.slice().sort(() => Math.random() - 0.5).slice(0, 12);
-  const rollTerms = shuffled.map(c => c.term);
+  // Collapse prompt + coaching smoothly
+  const block = document.getElementById('csPromptBlock');
+  const coaching = document.getElementById('csCoaching');
+  const divider = document.getElementById('csDivider');
+  const feedbackRow = document.getElementById('csFeedbackRow');
 
-  let idx = 0;
-  const totalFrames = rollTerms.length;
-  // Speed curve: fast in middle, slow at end
-  function getDelay(i) {
-    if (i < 4) return 60;
-    if (i < 8) return 90;
-    if (i < 10) return 140;
-    return 200;
+  function _collapseEl(el) {
+    if (!el) return;
+    el.style.transition = 'opacity 0.18s ease, transform 0.18s ease';
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(-4px)';
+    setTimeout(function() {
+      el.style.display = 'none';
+      el.style.opacity = '';
+      el.style.transform = '';
+      el.style.transition = '';
+    }, 200);
   }
+  [block, coaching, divider, feedbackRow].forEach(_collapseEl);
 
-  function rollStep() {
-    if (idx < totalFrames) {
-      termEl.textContent = rollTerms[idx];
-      termEl.style.transform = 'translateY(-3px)';
-      setTimeout(function() { termEl.style.transform = ''; }, 60);
-      setTimeout(rollStep, getDelay(idx));
-      idx++;
-    } else {
-      // Land on target
-      termEl.textContent = target.term;
-      termEl.style.transform = 'translateY(-3px)';
-      setTimeout(function() { termEl.style.transform = ''; }, 100);
-      _csLoadNewConcept(target);
-      if (btn) { btn.disabled = false; btn.textContent = '↺ New concept'; }
+  // Also reset coaching visible states
+  setTimeout(function() {
+    document.querySelectorAll('.cs-opener-block, #csPitfall').forEach(function(el) {
+      el.classList.remove('visible');
+    });
+  }, 200);
+
+  // Roll after collapse settles
+  setTimeout(function() {
+    if (!termEl) { _csLoadNewConcept(target); if (btn) { btn.disabled = false; btn.textContent = '↺ New concept'; } return; }
+
+    const shuffled = pool.slice().sort(() => Math.random() - 0.5).slice(0, 12);
+    const rollTerms = shuffled.map(c => c.term);
+    let idx = 0;
+    function getDelay(i) {
+      if (i < 4) return 60;
+      if (i < 8) return 90;
+      if (i < 10) return 140;
+      return 200;
     }
-  }
-  rollStep();
+    function rollStep() {
+      if (idx < rollTerms.length) {
+        termEl.textContent = rollTerms[idx];
+        termEl.style.transition = 'transform 0.06s ease';
+        termEl.style.transform = 'translateY(-3px)';
+        setTimeout(function() { termEl.style.transform = ''; }, 60);
+        setTimeout(rollStep, getDelay(idx));
+        idx++;
+      } else {
+        termEl.textContent = target.term;
+        termEl.style.transform = 'translateY(-3px)';
+        setTimeout(function() { termEl.style.transform = ''; }, 100);
+        _csLoadNewConcept(target);
+        if (btn) { btn.disabled = false; btn.textContent = '↺ New concept'; }
+      }
+    }
+    rollStep();
+  }, 220);
 }
 
 // Legacy shim
@@ -17406,17 +17444,18 @@ function playStreakMilestoneSFX() {
   margin-bottom: 10px;
   font-style: italic;
 }
-.stash-openers { margin-bottom: 8px; display: flex; flex-direction: column; gap: 6px; }
+.stash-openers { margin-bottom: 8px; display: flex; flex-direction: column; gap: 10px; }
+.stash-opener-block { display: flex; flex-direction: column; gap: 4px; }
 .stash-opener {
-  font-family: 'DM Sans', sans-serif; font-size: 0.8rem;
-  color: var(--muted2); line-height: 1.5; font-style: italic;
-  padding: 6px 10px; border-left: 2px solid var(--accent);
-  background: rgba(232,213,163,0.04); border-radius: 0 5px 5px 0;
+  font-family: 'DM Sans', sans-serif; font-size: 0.82rem;
+  color: var(--muted2); line-height: 1.55; font-style: italic;
+  padding: 8px 12px; border-left: 2px solid var(--accent);
+  background: rgba(232,213,163,0.04); border-radius: 0 6px 6px 0;
 }
 .stash-opener-label {
-  font-family: 'DM Mono', monospace; font-size: 0.56rem;
-  letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--accent); display: block; margin-bottom: 2px; font-style: normal;
+  font-family: 'DM Mono', monospace; font-size: 0.58rem;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--muted); display: block; margin-bottom: 3px; font-style: normal;
 }
 .stash-opener--alt { border-left-color: var(--border-hover); }
 .stash-opener--alt .stash-opener-label { color: var(--muted); }
@@ -17445,7 +17484,7 @@ function playStreakMilestoneSFX() {
   min-height: 2.4em;
 }
 
-/* v2.5: History — Spark it again pill */
+/* v2.5: History — Spark pill */
 .hist-spark-btn {
   display: inline-flex; align-items: center; gap: 5px;
   font-family: 'DM Mono', monospace;
@@ -17456,8 +17495,8 @@ function playStreakMilestoneSFX() {
   color: var(--muted2);
   padding: 5px 12px;
   cursor: pointer;
-  margin-top: 8px;
   transition: border-color 0.2s, color 0.2s, background 0.2s;
+  align-self: flex-start;
 }
 .hist-spark-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(232,213,163,0.06); }
 
@@ -19009,9 +19048,10 @@ function _convDetailHTML(entry) {
   const d = (entry.aiData && (entry.aiData['universal'] || entry.aiData['friend'] || entry.aiData['partner'] || entry.aiData['colleague'])) || null;
   if (!d) return `<button class="stash-spark-btn" onclick="_convOpenCS(${entry.id})">✦ Spark</button>`;
   const openers = (d.openers || []).map(function(o, i) {
-    return '<div class="stash-opener' + (i > 0 ? ' stash-opener--alt' : '') + '">' +
-      '<span class="stash-opener-label">' + (i === 0 ? 'Try saying' : 'Or') + '</span>' +
-      _escHtml(o) + '</div>';
+    return '<div class="stash-opener-block">' +
+      '<div class="stash-opener-label">' + (i === 0 ? 'Try saying' : 'Or try') + '</div>' +
+      '<div class="stash-opener' + (i > 0 ? ' stash-opener--alt' : '') + '">' + _escHtml(o) + '</div>' +
+      '</div>';
   }).join('');
   return `
     <div class="stash-prompt-text">${_escHtml(d.prompt || '')}</div>
