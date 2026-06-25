@@ -6,7 +6,94 @@
 
 ---
 
-## v2.4 → v2.4f — 2026-06-24 — index.html (promoted from spark.html): founder copy + scroll-reveal, view toggle, UI polish, SEO head tags
+## v2.5 → v2.5j — 2026-06-25 — index.html + cs-generate.js: Spark panel rebuild, unified entry, coaching redesign
+
+**Session scope:** Full rebuild of the Spark (CS) panel. Killed scenario system. New panel architecture: search bar, typewriter prompt, block-by-block coaching animation. History and Stash redesigned. cs-generate.js fixed. Stories panel deferred to v2.6.
+
+### Nav bar — 3 items (Browse · Spark · Story)
+- Replaced 4-item nav (Spark · Library · Collection) with Browse 🎬 · Spark 💬 · Story 📖
+- Desktop hover reveals emoji (same animation as existing). Story is stubbed → `openStoriesPanel()` placeholder for v2.6.
+- Mobile hamburger updated to match.
+
+### Spark panel — unified entry (`openSparkPanel`)
+- `openSparkPanel(conceptId?)` replaces `openCSFromNav()` + `_csOpenPanel()` + card-level `openCS()`. Single entry point, no auto-fire, no scenario.
+- On `conceptId` provided: renders concept, calls `_csRestoreOrLoad()` — shows cached prompt+coaching instantly if available, else shows Generate button.
+- On no arg + no prior concept: picks random from editors_picks pool.
+- `openCSFromNav`, `_csOpenPanel`, `_csClosePanel` kept as aliases to avoid any stray call-site crashes.
+
+### Scenario system killed
+- Removed: `CS_OPENERS`, `_csCtx`, `_csCat` (kept as dummies for story mode compat), `_csPickerHideMain/ShowMain`, `_csPickerBuildCatRow`, `_csPickerLoad`, `_csPickerToggle`, `_csPickerGenerate`, `_csPickerShowResult`, `_csPickerCommit`, `_csPickerMore`, `_csPickerCtxButtons`, `_csPickerSetCtx`, `_csSwapConcept` picker logic, `_csToggleTopicReveal`, `_csToggleScenarioReveal`, `_csToggleRelatedReveal`, `_csConnectsChipClick`, `_csUpdateScenarioBadges`, `_buildCsCatRow`, `_csClosePicker`.
+- Removed from DOM: `csRevealRow`, `csCatSection`, `csScenarioSection`, `csRelatedSection`, `csTopicPickerWrap`, `csPickerStoryBtn`, `csConnectsChip`, `csSkeleton`, `csOpener`, `csDate`, `csBackToStoryBtn`, `csSurpriseBtn`.
+- `_csSwapConcept(id)` kept as minimal stub for story mode term pills.
+- `spScenarioPill(el, scenario)` rewritten: opens Spark panel with seed concept (no story mode until v2.6).
+
+### Panel search bar
+- New `sparkSearchWrap` at top of panel — bordered box, ✦ icon, italic DM Sans placeholder — distinct from hero search.
+- Reuses existing `FUSE` instance (bug: was called `FUSE_INSTANCE` — fixed to `FUSE`).
+- Results: category-colour dot + term (DM Mono caps) + hook (DM Sans italic), 7 results max.
+- Term-first result ordering: exact match → startsWith → includes → Fuse score.
+- Outside click and Escape dismiss.
+
+### Concept display — term only, no expand
+- Killed expandable pill. Replaced with eyebrow label ("An epic idea to discuss" / "From [podcast]") + large Playfair bold term.
+- Desktop hover on term → side preview card (term + hook + plain only, `panelMode:true`). Preview positioned via fixed viewport coords — no `scrollY` offset (was causing bottom-of-screen bug).
+- Hover wired via DOM clone on every `_renderCSShell` call — eliminates stale listener accumulation.
+
+### Generate flow
+- Button: gold filled pill, label "✦ Spark". No auto-fire ever.
+- On click: button spins (CSS `sparkSpin` keyframe on ✦). Loading messages rotate below button (10 fun messages, 3.2s interval, fade in/out). Label → "Sparking…".
+- On API response: loading messages stop, prompt block reveals.
+- Prompt block: `display:none` until first generate or restore. Italic Playfair, gold top border.
+- Typewriter: character-by-character at 18–32ms/char. Fires only on fresh generate.
+- Coaching: appears after typewriter finishes. Each block (opener + pitfall) fades+slides in (140ms + 160ms stagger). On restore: prompt fades in (0.45s), coaching follows 500ms later (instant, no typewriter).
+
+### Coaching design
+- Container: `background: var(--surface2)`, 10px border-radius, distinct from the italic prompt above.
+- Opener label ("A natural way to say it:" / "Or try") sits ABOVE the gold left-border quote line as a sibling div — same pattern as "Watch out for:" above the red line.
+- All bordered lines (gold + red) are italic DM Sans 0.84rem — consistent.
+- "You could say:" label removed.
+
+### Casino roll — New concept
+- "↺ New concept" button: collapses prompt + coaching with 0.18s fade, then 220ms later fires 12-term casino roll with speed curve (60→200ms intervals). Lands on random concept.
+- `_csSurprise()` kept as alias.
+
+### History tab
+- Now logs every concept viewed in `_renderCSShell` (not just sparked ones) via `_csLogHistory()`.
+- `_csLogHistoryWithPrompt()` updates existing entry with promptText when sparked — no duplicate.
+- Layout: term left (`flex:1`, truncates with ellipsis), category pill + timestamp right-aligned together in `.conv-hist-meta-right`.
+- "Start talking about it" → compact "✦ Spark" pill (`hist-spark-btn`). `_convOpenCSById(id)` now calls `openSparkPanel(id)` which triggers `_csRestoreOrLoad` — prompt + coaching restore correctly.
+
+### Stash tab
+- 4-scenario tabs removed. Single universal prompt view.
+- Opener structure matches coaching panel exactly: label above, gold left-border line.
+- Watch out: label above, red left-border line (italic DM Sans).
+- "Generate conversation starters →" → "✦ Spark" pill. "Spark again" removed.
+- Copy button added to entry actions. `_convCopyEntry(id)` copies prompt + term + attribution.
+- Stash entries: hover-lift (`translateY(-1px)` + gold tint + shadow).
+
+### Tab animation
+- `panelSwitchTab`: entering section slides in with `translateY(10px → 0)` + opacity fade (0.45s ease). Outgoing fades in 0.18s.
+- Stash + history entries stagger in via `panelItemIn` keyframe.
+
+### cs-generate.js fix
+- **Root cause of all 500 errors:** model was `claude-sonnet-4-5` — this model ID no longer valid. Fixed to `claude-sonnet-4-6`. All other API files were already on the correct model; `cs-generate.js` was missed.
+- Added `universal` ctx branch (rotating tone styles, server-side variety). Legacy `friend` ctx still works for backwards compat.
+- Frontend sends `ctx: 'friend'` — works with both old and new server file.
+
+### CSS bug fix (v2.5j)
+- Stray orphaned CSS block (bare property declarations with no selector) between `.cs-opener-line` and `.cs-pitfall` was causing browser to misparse `.cs-pitfall` — losing italic and correct font. Removed.
+
+### Headline
+- "Say something" normal Playfair, " *epic.*" italic gold via `.spark-headline-accent`. Matches hero copy pattern.
+
+### Panel B (Stories) — deferred to v2.6
+- Stories tab removed from Spark panel tabs (was added in v1.96).
+- `openStoriesPanel()` is a stub — opens Spark as placeholder.
+- Full Panel B architecture designed and documented in roadmap.md.
+
+---
+
+
 
 **File rename note:** `spark.html` is now `index.html`. `spark.html` is retired. The old `index.html` (legacy v172 base) has been archived as `index-legacy.html`. All future sessions work in `index.html`. See architecture.md "Files of record" for the updated table.
 
