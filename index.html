@@ -12571,15 +12571,394 @@ function openSparkPanel(conceptId) {
 }
 
 // Story panel — placeholder for v2.6 Stories panel build
+// ============================================================
+// PANEL B — STORY MODE  v2.6
+// State machine: 0=Entry 1=Loading 2=Story 3=TermPeek 4=Outro
+// ============================================================
+
+var _sp2State = 0;
+var _sp2Scenario = null;    // 'friend'|'dinner'|'date'|'work'
+var _sp2ConceptObjs = [];   // [{id,term,hook,plain,category}, …] for current story
+var _sp2ActiveTab = 'stories';
+
+var SP2_LOADING_MSGS = [
+  'Setting the scene…',
+  'Finding the right moment…',
+  'Reading the room…',
+  'Pulling the thread…',
+  'Mixing the drinks…',
+];
+
+var SP2_SCENARIO_META = {
+  friend:  { emoji: '🍺', label: 'With a friend',   eyebrow: 'WITH A FRIEND' },
+  dinner:  { emoji: '🍽', label: 'At dinner',        eyebrow: 'AT A DINNER PARTY' },
+  date:    { emoji: '💘', label: 'On a date',        eyebrow: 'ON A DATE' },
+  work:    { emoji: '💼', label: 'At work',          eyebrow: 'AT WORK' },
+};
+
+// ---- Open / Close ----
+
 function openStoriesPanel() {
-  // For now: open Spark panel and switch to the stories section inside it
-  // Full Stories panel will be a separate right-slide panel in v2.6
-  if (typeof panelSwitchTab === 'function') {
-    openCS();
-    // Stories tab removed from Spark panel in v2.5; will open dedicated panel in v2.6
+  const overlay = document.getElementById('storiesOverlay');
+  if (!overlay) return;
+  overlay.classList.add('active');
+  document.body.classList.add('sp2-panel-open');
+  sp2SwitchTab('stories');
+  sp2ShowEntry();
+  setTimeout(function() {
+    document.addEventListener('click', _sp2OutsideClick, { capture: true });
+    document.addEventListener('keydown', _sp2EscHandler);
+  }, 60);
+}
+
+function closeStoriesPanel() {
+  const overlay = document.getElementById('storiesOverlay');
+  if (overlay) overlay.classList.remove('active');
+  document.body.classList.remove('sp2-panel-open');
+  document.removeEventListener('click', _sp2OutsideClick, { capture: true });
+  document.removeEventListener('keydown', _sp2EscHandler);
+  sp2ClosePeek();
+}
+
+function _sp2OutsideClick(e) {
+  const panel = document.getElementById('storiesPanel');
+  const peek  = document.getElementById('sp2Peek');
+  if (peek && peek.classList.contains('visible') && !peek.contains(e.target)) {
+    sp2ClosePeek(); return;
   }
-  // Temporary: open Spark panel with a random concept
-  openSparkPanel();
+  if (panel && !panel.contains(e.target)) {
+    closeStoriesPanel();
+  }
+}
+
+function _sp2EscHandler(e) {
+  if (e.key === 'Escape') closeStoriesPanel();
+}
+
+// ---- Tab switch ----
+
+function sp2SwitchTab(tab) {
+  _sp2ActiveTab = tab;
+  document.querySelectorAll('.stories-tab').forEach(function(t) { t.classList.remove('active'); });
+  document.querySelectorAll('.stories-tab-section').forEach(function(s) { s.classList.remove('active'); });
+  if (tab === 'stories') {
+    document.getElementById('storyTabStories').classList.add('active');
+    document.getElementById('sp2SectionStories').classList.add('active');
+    if (_sp2State === 0) sp2ShowEntry();
+  } else {
+    document.getElementById('storyTabMine').classList.add('active');
+    document.getElementById('sp2SectionMine').classList.add('active');
+    sp2RenderMyStories();
+  }
+}
+
+// ---- State helpers ----
+
+function _sp2SetSection(html) {
+  var sec = document.getElementById('sp2SectionStories');
+  if (!sec) return;
+  sec.innerHTML = html;
+}
+
+// ---- State 0: Entry ----
+
+function sp2ShowEntry() {
+  _sp2State = 0;
+  _sp2SetSection(
+    '<div class="sp2-entry">' +
+      '<div class="sp2-headline">See ideas<br>in the wild.</div>' +
+      '<div class="sp2-subline">Pick a situation. Watch ideas land.</div>' +
+      '<div class="sp2-scenario-grid">' +
+        _sp2PillHtml('friend')  +
+        _sp2PillHtml('dinner')  +
+        _sp2PillHtml('date')    +
+        _sp2PillHtml('work')    +
+      '</div>' +
+    '</div>'
+  );
+}
+
+function _sp2PillHtml(key) {
+  var m = SP2_SCENARIO_META[key];
+  return '<button class="sp2-scenario-pill" id="sp2Pill_' + key + '" onclick="sp2PickScenario(\'' + key + '\')">' +
+    '<span class="sp2-pill-emoji">' + m.emoji + '</span>' +
+    '<span class="sp2-pill-label">' + m.label + '</span>' +
+  '</button>';
+}
+
+// ---- State 1: Loading ----
+
+function sp2PickScenario(key) {
+  _sp2Scenario = key;
+  _sp2State = 1;
+  var meta = SP2_SCENARIO_META[key];
+  var msgIdx = 0;
+  _sp2SetSection(
+    '<div class="sp2-loading">' +
+      '<div class="sp2-loading-scenario">' + meta.eyebrow + '</div>' +
+      '<div class="sp2-loading-msg" id="sp2LoadMsg">' + SP2_LOADING_MSGS[0] + '</div>' +
+    '</div>'
+  );
+
+  // Rotate loading messages
+  var _msgTimer = setInterval(function() {
+    msgIdx = (msgIdx + 1) % SP2_LOADING_MSGS.length;
+    var el = document.getElementById('sp2LoadMsg');
+    if (el) el.textContent = SP2_LOADING_MSGS[msgIdx];
+  }, 1100);
+
+  // Brief delay then render story (seeds are instant — delay makes transition feel intentional)
+  setTimeout(function() {
+    clearInterval(_msgTimer);
+    var seed = SP_STORY_SEEDS[key];
+    if (seed) {
+      _sp2LoadSeed(seed);
+    } else {
+      // No seed and no AI path yet — show coming soon
+      _sp2SetSection(
+        '<div class="sp2-entry" style="gap:14px">' +
+          '<div class="sp2-headline" style="font-size:1.1rem">Coming soon</div>' +
+          '<div class="sp2-subline">This story is being written.<br>Check back soon.</div>' +
+          '<button class="sp2-outro-btn" style="margin-top:12px" onclick="sp2ShowEntry()">↺ Back</button>' +
+        '</div>'
+      );
+    }
+  }, 900);
+}
+
+// ---- State 2: Story ----
+
+function _sp2LoadSeed(seed) {
+  _sp2State = 2;
+
+  // Fetch concept objects from CONCEPTS array
+  _sp2ConceptObjs = [];
+  seed.concept_ids.forEach(function(cid) {
+    var c = (typeof CONCEPTS !== 'undefined' ? CONCEPTS : []).find(function(x) { return x.id === cid; });
+    if (c) _sp2ConceptObjs.push(c);
+  });
+
+  var processedHtml = _sp2ParseStoryText(seed.story, _sp2ConceptObjs);
+  var meta = SP2_SCENARIO_META[_sp2Scenario];
+
+  _sp2SetSection(
+    '<div class="sp2-story-wrap" id="sp2StoryWrap">' +
+      '<div class="sp2-story-eyebrow">A SHORT STORY &middot; ' + meta.eyebrow + '</div>' +
+      '<div class="sp2-story-body" id="sp2StoryBody">' + processedHtml + '</div>' +
+      '<div class="sp2-attribution">— Epistemic</div>' +
+      _sp2WhatHappenedHtml(_sp2ConceptObjs) +
+    '</div>'
+  );
+
+  // Fade in outro after a beat
+  setTimeout(function() {
+    var wrap = document.getElementById('sp2StoryWrap');
+    if (wrap) {
+      var outro = document.createElement('div');
+      outro.id = 'sp2Outro';
+      outro.className = 'sp2-outro';
+      outro.innerHTML = _sp2OutroHtml();
+      wrap.appendChild(outro);
+    }
+  }, 600);
+}
+
+// Parse [[LABEL:Term]] and **bold** and *italic* markers → HTML
+function _sp2ParseStoryText(text, concepts) {
+  // Build term→concept map for peek data
+  var termMap = {};
+  concepts.forEach(function(c) { termMap[c.term.toLowerCase()] = c; });
+
+  // Replace [[LABEL:Term]] with clickable gold chip
+  var processed = text.replace(/\[\[LABEL:([^\]]+)\]\]/g, function(match, term) {
+    var safe = term.replace(/"/g, '&quot;').replace(/</g, '&lt;');
+    return '<span class="sp2-term-chip" onclick="sp2OpenPeek(this, \'' + safe.replace(/'/g, "\\'") + '\')" tabindex="0">' + _escHtml(term) + '</span>';
+  });
+
+  // **bold** → <strong>
+  processed = processed.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+  // *italic* → <em>
+  processed = processed.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+
+  // Split on double newlines → paragraphs
+  var paras = processed.split(/\n\n+/).filter(function(p) { return p.trim(); });
+  return paras.map(function(p) {
+    return '<p>' + p.trim().replace(/\n/g, ' ') + '</p>';
+  }).join('');
+}
+
+function _sp2WhatHappenedHtml(concepts) {
+  if (!concepts.length) return '';
+  var rows = concepts.map(function(c) {
+    var color = (typeof CAT_COLOR !== 'undefined' && CAT_COLOR[c.category]) || '#e8d5a3';
+    return '<div class="sp2-concept-row" onclick="openCardById(' + c.id + ')" title="Open concept">' +
+      '<div class="sp2-cr-dot" style="background:' + color + '"></div>' +
+      '<div class="sp2-cr-info">' +
+        '<div class="sp2-cr-term">' + _escHtml(c.term) + '</div>' +
+        '<div class="sp2-cr-hook">' + _escHtml(c.hook) + '</div>' +
+      '</div>' +
+      '<div class="sp2-cr-arrow">→</div>' +
+    '</div>';
+  }).join('');
+  return '<div class="sp2-what-happened">' +
+    '<div class="sp2-wh-label">What happened here?</div>' +
+    rows +
+  '</div>';
+}
+
+// ---- State 4: Outro ----
+
+function _sp2OutroHtml() {
+  var firstId = _sp2ConceptObjs.length ? _sp2ConceptObjs[0].id : null;
+  return (firstId
+    ? '<button class="sp2-outro-btn primary" onclick="closeStoriesPanel();openSparkPanel(' + firstId + ')"><span class="sp2-outro-icon">✦</span> Spark this idea</button>'
+    : '') +
+    '<button class="sp2-outro-btn" onclick="sp2SaveStory()"><span class="sp2-outro-icon">🔖</span> Save this story</button>' +
+    '<button class="sp2-outro-btn" onclick="sp2ShowEntry()"><span class="sp2-outro-icon">↺</span> Another story</button>' +
+    '<div class="sp2-outro-saved-note" id="sp2SavedNote">✓ Saved to My Stories</div>';
+}
+
+// ---- Term peek (State 3) ----
+
+function sp2OpenPeek(el, termName) {
+  // Find concept obj by term
+  var c = _sp2ConceptObjs.find(function(x) { return x.term === termName; });
+  if (!c) return;
+  var peek = document.getElementById('sp2Peek');
+  if (!peek) return;
+  document.getElementById('sp2PeekTerm').textContent = c.term;
+  document.getElementById('sp2PeekHook').textContent = c.hook;
+  document.getElementById('sp2PeekPlain').textContent = c.plain;
+
+  // Position: right of panel on desktop; bottom sheet on mobile handled by CSS
+  if (window.innerWidth > 599) {
+    var panel = document.getElementById('storiesPanel');
+    var panelRect = panel ? panel.getBoundingClientRect() : null;
+    var chipRect  = el ? el.getBoundingClientRect() : null;
+    if (panelRect && chipRect) {
+      var top = Math.max(80, Math.min(chipRect.top, window.innerHeight - 240));
+      peek.style.top  = top + 'px';
+      peek.style.left = (panelRect.left - 320) + 'px';
+      peek.style.bottom = '';
+    }
+  } else {
+    peek.style.top = '';
+    peek.style.left = '';
+    peek.style.bottom = '20px';
+  }
+
+  peek.classList.add('visible');
+}
+
+function sp2ClosePeek() {
+  var peek = document.getElementById('sp2Peek');
+  if (peek) peek.classList.remove('visible');
+}
+
+// ---- Save / My Stories ----
+
+var SP2_STORIES_KEY = 'lll_stories_v1';
+
+function sp2SaveStory() {
+  if (!_sp2Scenario) return;
+  var storyEl = document.getElementById('sp2StoryBody');
+  var fullText = storyEl ? storyEl.innerText : '';
+  var entry = {
+    scenario: _sp2Scenario,
+    date: new Date().toISOString(),
+    preview: fullText.slice(0, 80),
+    fullHtml: storyEl ? storyEl.innerHTML : '',
+    eyebrow: SP2_SCENARIO_META[_sp2Scenario].eyebrow,
+    conceptIds: _sp2ConceptObjs.map(function(c) { return c.id; }),
+  };
+  try {
+    var existing = JSON.parse(localStorage.getItem(SP2_STORIES_KEY) || '[]');
+    existing.unshift(entry);
+    if (existing.length > 20) existing = existing.slice(0, 20);
+    localStorage.setItem(SP2_STORIES_KEY, JSON.stringify(existing));
+  } catch(e) {}
+  var note = document.getElementById('sp2SavedNote');
+  if (note) { note.classList.add('visible'); setTimeout(function() { note.classList.remove('visible'); }, 2200); }
+}
+
+function sp2RenderMyStories() {
+  var sec = document.getElementById('sp2SectionMine');
+  if (!sec) return;
+  try {
+    var stories = JSON.parse(localStorage.getItem(SP2_STORIES_KEY) || '[]');
+    if (!stories.length) {
+      sec.innerHTML = '<div class="sp2-empty-state"><div class="sp2-empty-icon">📖</div><div class="sp2-empty-text">Save your first story<br>to keep it here.</div></div>';
+      return;
+    }
+    var html = '<div class="sp2-my-stories-list">' +
+      stories.map(function(s, i) {
+        var d = new Date(s.date);
+        var dateStr = d.toLocaleDateString('en-GB', { day:'numeric', month:'short' });
+        var meta = SP2_SCENARIO_META[s.scenario] || {};
+        return '<div class="sp2-saved-entry">' +
+          '<div class="sp2-saved-meta">' +
+            '<span class="sp2-saved-scenario">' + (meta.emoji || '') + ' ' + (meta.label || s.scenario) + '</span>' +
+            '<span class="sp2-saved-date">' + dateStr + '</span>' +
+          '</div>' +
+          '<div class="sp2-saved-preview">' + _escHtml(s.preview) + '…</div>' +
+          '<button class="sp2-saved-replay" onclick="sp2ReplayStory(' + i + ')">▷ Read again</button>' +
+        '</div>';
+      }).join('') +
+    '</div>';
+    sec.innerHTML = html;
+  } catch(e) {
+    sec.innerHTML = '<div class="sp2-empty-state"><div class="sp2-empty-text">Couldn\'t load saved stories.</div></div>';
+  }
+}
+
+function sp2ReplayStory(idx) {
+  try {
+    var stories = JSON.parse(localStorage.getItem(SP2_STORIES_KEY) || '[]');
+    var s = stories[idx];
+    if (!s) return;
+    _sp2Scenario = s.scenario;
+    // Rebuild concept objs
+    _sp2ConceptObjs = [];
+    (s.conceptIds || []).forEach(function(cid) {
+      var c = (typeof CONCEPTS !== 'undefined' ? CONCEPTS : []).find(function(x) { return x.id === cid; });
+      if (c) _sp2ConceptObjs.push(c);
+    });
+    sp2SwitchTab('stories');
+    _sp2State = 2;
+    var meta = SP2_SCENARIO_META[_sp2Scenario] || {};
+    _sp2SetSection(
+      '<div class="sp2-story-wrap" id="sp2StoryWrap">' +
+        '<div class="sp2-story-eyebrow">A SHORT STORY &middot; ' + (meta.eyebrow || '') + '</div>' +
+        '<div class="sp2-story-body" id="sp2StoryBody">' + (s.fullHtml || '') + '</div>' +
+        '<div class="sp2-attribution">— Epistemic</div>' +
+        _sp2WhatHappenedHtml(_sp2ConceptObjs) +
+      '</div>'
+    );
+    setTimeout(function() {
+      var wrap = document.getElementById('sp2StoryWrap');
+      if (wrap) {
+        var outro = document.createElement('div');
+        outro.id = 'sp2Outro';
+        outro.className = 'sp2-outro';
+        outro.innerHTML = _sp2OutroHtml();
+        wrap.appendChild(outro);
+      }
+    }, 300);
+  } catch(e) {}
+}
+
+// ─── openCardById helper (opens a concept card in the library) ───────────────
+function openCardById(id) {
+  // toggleCard is the standard card flip/expand function in the main library
+  if (typeof toggleCard === 'function') {
+    closeStoriesPanel();
+    // Small delay so panel close animation completes before card opens
+    setTimeout(function() { toggleCard(id); }, 220);
+    return;
+  }
+  // Fallback: close stories, open Spark with this concept
+  closeStoriesPanel();
+  openSparkPanel(id);
 }
 
 // Legacy aliases — kept so any remaining call sites don't throw
@@ -18663,6 +19042,569 @@ body.cs-panel-open .sp-trigger-hint { display: none; }
   border-color: var(--border);
   color: var(--accent);
 }
+
+/* ============================================================
+   PANEL B — STORY MODE  v2.6
+   Separate overlay from convOverlay so both panels are
+   fully independent. Background is slightly warmer than
+   the Spark panel to give the Stories tab its own feel.
+   ============================================================ */
+
+.stories-overlay {
+  position: fixed; inset: 0; z-index: 1200;
+  display: none;
+  background: rgba(8,6,4,0.55);
+  pointer-events: none;
+}
+.stories-overlay.active {
+  display: flex;
+  justify-content: flex-end;
+  pointer-events: all;
+}
+
+.stories-panel {
+  pointer-events: auto;
+  width: min(560px, 100vw);
+  height: 100%;
+  background: #111009;
+  border-left: 1px solid rgba(232,213,163,0.10);
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 0.32s cubic-bezier(0.22, 0.61, 0.36, 1);
+  overflow: hidden;
+}
+.stories-overlay.active .stories-panel {
+  transform: translateX(0);
+}
+[data-theme="light"] .stories-overlay { background: rgba(0,0,0,0.28); }
+[data-theme="light"] .stories-panel {
+  background: #faf8f3;
+  border-left: 1px solid rgba(0,0,0,0.08);
+}
+
+/* ---- header ---- */
+.stories-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px 0;
+  flex-shrink: 0;
+}
+.stories-header-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  opacity: 0.7;
+}
+.stories-close {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 4px;
+  transition: color 0.15s, background 0.15s;
+  line-height: 1;
+}
+.stories-close:hover { color: var(--text); background: rgba(255,255,255,0.06); }
+
+/* ---- tabs ---- */
+.stories-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--border);
+  padding: 0 20px;
+  margin-top: 12px;
+  flex-shrink: 0;
+}
+.stories-tab {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--muted);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  padding: 10px 16px 10px 0;
+  margin-right: 4px;
+  cursor: pointer;
+  transition: color 0.18s, border-color 0.18s;
+  white-space: nowrap;
+}
+.stories-tab:hover { color: var(--muted2); }
+.stories-tab.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+/* ---- tab content areas ---- */
+.stories-tab-section {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: none;
+  flex-direction: column;
+  padding: 0;
+}
+.stories-tab-section.active { display: flex; }
+.stories-tab-section::-webkit-scrollbar { width: 4px; }
+.stories-tab-section::-webkit-scrollbar-thumb { background: rgba(232,213,163,0.15); border-radius: 2px; }
+
+/* ---- State 0: scenario picker ---- */
+.sp2-entry {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  padding: 52px 28px 40px;
+  min-height: 340px;
+}
+.sp2-headline {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.55rem;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--text);
+  text-align: center;
+  line-height: 1.35;
+}
+.sp2-subline {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem;
+  color: var(--muted);
+  text-align: center;
+  margin-top: -14px;
+}
+.sp2-scenario-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  width: 100%;
+  max-width: 360px;
+}
+.sp2-scenario-pill {
+  background: rgba(232,213,163,0.04);
+  border: 1px solid rgba(232,213,163,0.14);
+  border-radius: 12px;
+  color: var(--muted2);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 400;
+  padding: 14px 16px;
+  cursor: pointer;
+  text-align: center;
+  transition: background 0.18s, border-color 0.2s, color 0.18s, transform 0.15s;
+  position: relative;
+  overflow: hidden;
+}
+.sp2-scenario-pill:hover {
+  background: rgba(232,213,163,0.09);
+  border-color: rgba(232,213,163,0.32);
+  color: var(--accent);
+  transform: translateY(-1px);
+}
+.sp2-scenario-pill.selected {
+  background: rgba(232,213,163,0.12);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.sp2-scenario-pill .sp2-pill-emoji {
+  display: block;
+  font-size: 1.4rem;
+  margin-bottom: 5px;
+  line-height: 1;
+}
+.sp2-scenario-pill .sp2-pill-label {
+  display: block;
+  font-size: 0.78rem;
+  letter-spacing: 0.01em;
+}
+.sp2-coming-soon-note {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--muted);
+  text-align: center;
+  letter-spacing: 0.06em;
+  opacity: 0.6;
+  margin-top: -10px;
+}
+
+/* ---- State 1: Loading ---- */
+.sp2-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 60px 28px;
+  min-height: 340px;
+}
+.sp2-loading-scenario {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  opacity: 0.7;
+}
+.sp2-loading-msg {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 1.05rem;
+  color: var(--muted2);
+  text-align: center;
+  animation: sp2FadeMsg 1.4s ease-in-out infinite alternate;
+}
+@keyframes sp2FadeMsg {
+  from { opacity: 0.35; }
+  to   { opacity: 0.85; }
+}
+
+/* ---- State 2: Story ---- */
+.sp2-story-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 24px 28px 20px;
+  flex: 1;
+}
+.sp2-story-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+  opacity: 0.55;
+  margin-bottom: 18px;
+}
+.sp2-story-body {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.97rem;
+  font-weight: 400;
+  line-height: 1.82;
+  color: var(--text);
+  flex: 1;
+}
+.sp2-story-body p {
+  margin: 0 0 1em;
+}
+/* bold + italic inside story */
+.sp2-story-body strong {
+  font-weight: 700;
+  color: var(--accent);
+}
+.sp2-story-body em {
+  font-style: italic;
+  opacity: 0.9;
+}
+/* inline term pill chips */
+.sp2-term-chip {
+  display: inline;
+  border-bottom: 1.5px solid rgba(232,213,163,0.5);
+  color: var(--accent);
+  cursor: pointer;
+  font-style: normal;
+  font-weight: 400;
+  font-size: inherit;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.78em;
+  letter-spacing: 0.03em;
+  padding: 0 2px;
+  transition: border-color 0.15s, opacity 0.15s;
+  white-space: nowrap;
+}
+.sp2-term-chip:hover {
+  border-bottom-color: var(--accent);
+  opacity: 0.8;
+}
+/* attribution */
+.sp2-attribution {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-top: 8px;
+  margin-bottom: 24px;
+  opacity: 0.45;
+}
+/* what happened here section */
+.sp2-what-happened {
+  border-top: 1px solid var(--border);
+  padding-top: 20px;
+  margin-top: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.sp2-wh-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 12px;
+  opacity: 0.55;
+}
+.sp2-concept-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  cursor: pointer;
+  transition: background 0.15s;
+  border-radius: 6px;
+  padding: 10px 8px;
+  margin: 0 -8px;
+}
+.sp2-concept-row:hover { background: rgba(232,213,163,0.05); }
+.sp2-concept-row:last-child { border-bottom: none; }
+.sp2-cr-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+.sp2-cr-info { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
+.sp2-cr-term {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sp2-cr-hook {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.78rem;
+  color: var(--muted2);
+  line-height: 1.4;
+}
+.sp2-cr-arrow {
+  color: var(--muted);
+  font-size: 0.75rem;
+  margin-top: 4px;
+  flex-shrink: 0;
+  transition: color 0.15s, transform 0.15s;
+}
+.sp2-concept-row:hover .sp2-cr-arrow { color: var(--accent); transform: translateX(2px); }
+
+/* ---- State 4: Outro ---- */
+.sp2-outro {
+  border-top: 1px solid rgba(232,213,163,0.1);
+  padding: 20px 28px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex-shrink: 0;
+  animation: sp2FadeUp 0.4s ease forwards;
+}
+@keyframes sp2FadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.sp2-outro-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(232,213,163,0.05);
+  border: 1px solid rgba(232,213,163,0.14);
+  border-radius: 10px;
+  color: var(--muted2);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.84rem;
+  padding: 12px 16px;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.18s, border-color 0.18s, color 0.18s, transform 0.15s;
+  width: 100%;
+}
+.sp2-outro-btn:hover {
+  background: rgba(232,213,163,0.10);
+  border-color: rgba(232,213,163,0.30);
+  color: var(--text);
+  transform: translateY(-1px);
+}
+.sp2-outro-btn.primary {
+  background: rgba(232,213,163,0.10);
+  border-color: rgba(232,213,163,0.28);
+  color: var(--accent);
+  font-weight: 500;
+}
+.sp2-outro-btn.primary:hover {
+  background: rgba(232,213,163,0.18);
+  border-color: var(--accent);
+}
+.sp2-outro-icon { font-size: 1rem; flex-shrink: 0; }
+.sp2-outro-saved-note {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  color: var(--accent);
+  opacity: 0.7;
+  text-align: center;
+  padding-top: 2px;
+  display: none;
+}
+.sp2-outro-saved-note.visible { display: block; }
+
+/* ---- Term peek bottom sheet (mobile) / side card (desktop) ---- */
+.sp2-peek {
+  position: fixed;
+  z-index: 1300;
+  background: #1a170f;
+  border: 1px solid rgba(232,213,163,0.2);
+  border-radius: 14px;
+  padding: 20px 20px 18px;
+  max-width: 300px;
+  width: calc(100vw - 48px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.55);
+  animation: sp2PeekIn 0.2s cubic-bezier(0.25,0.46,0.45,0.94) forwards;
+  display: none;
+}
+.sp2-peek.visible { display: block; }
+@keyframes sp2PeekIn {
+  from { opacity: 0; transform: translateY(8px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.sp2-peek-term {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+.sp2-peek-hook {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 0.88rem;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+.sp2-peek-plain {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.78rem;
+  color: var(--muted2);
+  line-height: 1.55;
+}
+.sp2-peek-close {
+  position: absolute;
+  top: 10px; right: 12px;
+  background: none; border: none;
+  color: var(--muted); font-size: 0.9rem;
+  cursor: pointer; padding: 4px;
+  transition: color 0.15s;
+}
+.sp2-peek-close:hover { color: var(--text); }
+/* Mobile: anchor to bottom */
+@media (max-width: 599px) {
+  .sp2-peek {
+    position: fixed;
+    bottom: 20px; left: 50%;
+    transform: translateX(-50%);
+    max-width: calc(100vw - 32px);
+    width: calc(100vw - 32px);
+    border-radius: 16px;
+  }
+  @keyframes sp2PeekIn {
+    from { opacity: 0; transform: translateX(-50%) translateY(16px); }
+    to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+  }
+}
+
+/* ---- My Stories tab ---- */
+.sp2-my-stories-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 16px 20px;
+  flex: 1;
+}
+.sp2-saved-entry {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  cursor: default;
+}
+.sp2-saved-entry:last-child { border-bottom: none; }
+.sp2-saved-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.sp2-saved-scenario {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  opacity: 0.7;
+}
+.sp2-saved-date {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  color: var(--muted);
+  opacity: 0.5;
+}
+.sp2-saved-preview {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem;
+  color: var(--muted2);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.sp2-saved-replay {
+  background: none;
+  border: 1px solid rgba(232,213,163,0.14);
+  border-radius: 6px;
+  color: var(--accent);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  padding: 6px 12px;
+  cursor: pointer;
+  align-self: flex-start;
+  transition: background 0.15s, border-color 0.15s;
+  margin-top: 2px;
+}
+.sp2-saved-replay:hover {
+  background: rgba(232,213,163,0.08);
+  border-color: rgba(232,213,163,0.3);
+}
+.sp2-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 60px 28px;
+  text-align: center;
+  flex: 1;
+}
+.sp2-empty-icon { font-size: 2rem; opacity: 0.3; }
+.sp2-empty-text {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+/* light mode overrides */
+[data-theme="light"] .sp2-peek { background: #faf8f3; border-color: rgba(0,0,0,0.1); }
+[data-theme="light"] .stories-panel .sp2-story-body { color: var(--text); }
 </style>
 
 <div class="conv-overlay" id="convOverlay" role="dialog" aria-modal="true" aria-label="Saved Conversations">
@@ -19445,6 +20387,48 @@ function _convOpenCSById(id) {
 </script>
 <!-- Spark trigger hint — desktop only; hides after first panel open -->
 <button class="sp-trigger-hint" id="spTriggerHint" onclick="_csOpenPanel();this.style.display='none'" aria-label="Open conversation starter" title="Start a conversation">✦</button>
+
+<!-- ============================================================
+     PANEL B — STORY MODE  v2.6
+     ============================================================ -->
+<div class="stories-overlay" id="storiesOverlay" role="dialog" aria-modal="true" aria-label="Story Mode">
+  <div class="stories-panel" id="storiesPanel">
+
+    <!-- Header -->
+    <div class="stories-header">
+      <span class="stories-header-label">📖 Story</span>
+      <button class="stories-close" id="storiesClose" onclick="closeStoriesPanel()" aria-label="Close">✕</button>
+    </div>
+
+    <!-- Tabs -->
+    <div class="stories-tabs">
+      <button class="stories-tab active" id="storyTabStories" onclick="sp2SwitchTab('stories')">Stories</button>
+      <button class="stories-tab" id="storyTabMine" onclick="sp2SwitchTab('mine')">My Stories</button>
+    </div>
+
+    <!-- STORIES TAB -->
+    <div class="stories-tab-section active" id="sp2SectionStories">
+      <!-- State 0: Scenario picker — injected by sp2ShowEntry() -->
+      <!-- State 1: Loading — injected by sp2ShowLoading() -->
+      <!-- State 2+3: Story + term peek — injected by sp2ShowStory() -->
+      <!-- State 4: Outro — injected by sp2ShowOutro() -->
+    </div>
+
+    <!-- MY STORIES TAB -->
+    <div class="stories-tab-section" id="sp2SectionMine">
+      <!-- rendered by sp2RenderMyStories() -->
+    </div>
+
+  </div>
+</div>
+
+<!-- Term peek card — floats, shared between states -->
+<div class="sp2-peek" id="sp2Peek">
+  <button class="sp2-peek-close" onclick="sp2ClosePeek()">✕</button>
+  <div class="sp2-peek-term" id="sp2PeekTerm"></div>
+  <div class="sp2-peek-hook" id="sp2PeekHook"></div>
+  <div class="sp2-peek-plain" id="sp2PeekPlain"></div>
+</div>
 
 </body>
 </html>
