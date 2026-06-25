@@ -3543,36 +3543,53 @@
     color: var(--accent); margin-bottom: 10px;
   }
 
-  /* Coaching layer */
+  /* Coaching layer — v2.5 redesign */
   .cs-coaching {
-    background: var(--surface2); border: 1px solid var(--border);
-    border-top: none; border-radius: 0 0 10px 10px;
-    padding: 14px 22px 16px; margin-top: -2px; margin-bottom: 0.9rem;
+    margin: 0 20px 14px;
+    padding: 16px 18px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
   }
-  .cs-coaching-section { margin-bottom: 10px; }
+  .cs-coaching-section { margin-bottom: 12px; }
   .cs-coaching-section:last-child { margin-bottom: 0; }
   .cs-coaching-label {
-    font-family: 'DM Mono', monospace; font-size: 0.6rem;
+    font-family: 'DM Mono', monospace; font-size: 0.58rem;
     letter-spacing: 0.14em; text-transform: uppercase;
-    color: var(--muted); margin-bottom: 6px;
+    color: var(--muted); margin-bottom: 7px;
   }
-  .cs-coaching-label--warn { color: #d4715a; opacity: 0.8; }
-  .cs-openers-list { display: flex; flex-direction: column; gap: 6px; }
+  .cs-coaching-label--warn { color: #d4715a; opacity: 0.85; }
+  .cs-openers-list { display: flex; flex-direction: column; gap: 8px; }
   .cs-opener-line {
-    font-size: 0.88rem; line-height: 1.55; color: var(--muted2);
-    font-style: italic; padding-left: 10px;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.84rem; line-height: 1.55; color: var(--muted2);
+    font-style: italic; padding: 8px 12px;
     border-left: 2px solid var(--accent);
-    display: flex; flex-direction: column; gap: 2px;
+    background: rgba(232,213,163,0.04);
+    border-radius: 0 6px 6px 0;
   }
-  .cs-opener-idx {
+  .cs-opener-line.visible {
+    opacity: 1; transform: translateY(0);
+  }
+  .cs-opener-intro {
     font-family: 'DM Mono', monospace; font-size: 0.58rem;
     letter-spacing: 0.12em; text-transform: uppercase;
-    color: var(--accent); font-style: normal;
+    color: var(--accent); display: block; margin-bottom: 3px;
+    font-style: normal;
   }
   .cs-pitfall {
-    font-size: 0.82rem; color: var(--muted2); line-height: 1.5;
-    padding-left: 10px; border-left: 2px solid #d4715a;
+    opacity: 0; transform: translateY(6px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem; color: var(--muted2); line-height: 1.5;
+    padding: 7px 12px; border-left: 2px solid #d4715a;
+    background: rgba(212,113,90,0.04);
+    border-radius: 0 6px 6px 0;
   }
+  .cs-pitfall.visible { opacity: 1; transform: translateY(0); }
 
   /* Meta row — now at top under headline */
   .cs-meta-row {
@@ -7632,11 +7649,10 @@
 
     <!-- Coaching layer -->
     <div class="cs-coaching cs-post-prompt cs-hidden" id="csCoaching">
-      <div class="cs-coaching-section">
-        <div class="cs-coaching-label">You could say:</div>
+      <div class="cs-coaching-section" id="csCoachingOpeners">
         <div class="cs-openers-list" id="csOpenersList"></div>
       </div>
-      <div class="cs-coaching-section cs-pitfall-wrap">
+      <div class="cs-coaching-section cs-pitfall-wrap" id="csCoachingPitfall">
         <div class="cs-coaching-label cs-coaching-label--warn">Watch out for:</div>
         <div class="cs-pitfall" id="csPitfall"></div>
       </div>
@@ -13065,30 +13081,40 @@ function _renderCSShell(concept) {
     };
   }
 
-  // Wire concept pill toggle (expand/collapse)
-  const pill = document.getElementById('csConceptPill');
-  const expand = document.getElementById('csConceptExpand');
-  pill.onclick = function() {
-    const open = expand.classList.toggle('open');
-    pill.classList.toggle('expanded', open);
-    playExpandSFX(open);
-  };
-
-  // Wire concept pill hover preview (desktop only) — use flag to prevent duplicate listeners
-  if (window.innerWidth > 1024 && !pill.dataset.hoverWired) {
-    pill.dataset.hoverWired = '1';
-    let _pillPreviewTimer = null;
-    pill.addEventListener('mouseenter', function() {
-      const c = _csConcept;
-      if (!c) return;
-      _pillPreviewTimer = setTimeout(function() {
-        _spPreviewCard(c.id, pill, { panelMode: true });
-      }, 200);
-    });
-    pill.addEventListener('mouseleave', function() {
-      clearTimeout(_pillPreviewTimer);
-      setTimeout(spDismissPreview, 400);
-    });
+  // Wire concept pill — clone to remove stale listeners, then re-add
+  var pill = document.getElementById('csConceptPill');
+  if (pill && window.innerWidth > 1024) {
+    var freshPill = pill.cloneNode(true);
+    pill.parentNode.replaceChild(freshPill, pill);
+    pill = freshPill;
+    // Re-wire id reference in case anything queries by id
+    pill.id = 'csConceptPill';
+  }
+  if (pill) {
+    pill.onclick = null; // clear any old inline
+    // Expand/collapse on mobile (desktop gets hover instead)
+    if (window.innerWidth <= 1024) {
+      pill.onclick = function() {
+        var exp = document.getElementById('csConceptExpand');
+        if (!exp) return;
+        var open = exp.classList.toggle('open');
+        pill.classList.toggle('expanded', open);
+        playExpandSFX(open);
+      };
+    }
+    // Desktop hover → side preview
+    if (window.innerWidth > 1024) {
+      var _pt = null;
+      pill.addEventListener('mouseenter', function() {
+        var c = _csConcept;
+        if (!c) return;
+        _pt = setTimeout(function() { _spPreviewCard(c.id, pill, { panelMode: true }); }, 200);
+      });
+      pill.addEventListener('mouseleave', function() {
+        clearTimeout(_pt);
+        setTimeout(spDismissPreview, 400);
+      });
+    }
   }
 
   // Show generate button, hide post-prompt
@@ -13138,18 +13164,34 @@ function _applyAIData(d, doTypewriter) {
   const promptEl = document.getElementById('csPromptText');
 
   function _showCoaching() {
-    const openersList = document.getElementById('csOpenersList');
+    var openersList = document.getElementById('csOpenersList');
+    var pitfallEl = document.getElementById('csPitfall');
+    var intro = _SPARK_COACHING_INTROS[Math.floor(Math.random() * _SPARK_COACHING_INTROS.length)];
+
     if (openersList) {
-      const intro = _SPARK_COACHING_INTROS[Math.floor(Math.random() * _SPARK_COACHING_INTROS.length)];
       openersList.innerHTML = (d.openers || []).map(function(o, i) {
-        return '<div class="cs-opener-line"><span class="cs-opener-idx">' + (i === 0 ? intro : 'Or try') + '</span>' + _escHtml(o) + '</div>';
+        return '<div class="cs-opener-line"><span class="cs-opener-intro">' + (i === 0 ? intro : 'Or try') + '</span>' + _escHtml(o) + '</div>';
       }).join('');
     }
-    const pitfallEl = document.getElementById('csPitfall');
-    if (pitfallEl) pitfallEl.textContent = d.pitfall || '';
+    if (pitfallEl) {
+      pitfallEl.textContent = d.pitfall || '';
+    }
+
+    // Show coaching container
     setTimeout(function() { _csShowPostPrompt(); }, 80);
+
+    // Stagger each opener line
+    var lines = openersList ? openersList.querySelectorAll('.cs-opener-line') : [];
+    lines.forEach(function(line, i) {
+      setTimeout(function() { line.classList.add('visible'); }, 140 + i * 160);
+    });
+    // Pitfall after openers
     setTimeout(function() {
-      const fr = document.getElementById('csFeedbackRow');
+      if (pitfallEl) pitfallEl.classList.add('visible');
+    }, 140 + lines.length * 160 + 120);
+
+    setTimeout(function() {
+      var fr = document.getElementById('csFeedbackRow');
       if (fr) { fr.classList.remove('cs-hidden'); fr.classList.add('cs-visible'); }
     }, 8000);
     _csUpdateSaveBtn();
@@ -14661,8 +14703,9 @@ function _loadAI(concept) {
   const genRow = document.getElementById('csGenerateRow');
   if (genBtn) {
     genBtn.disabled = true;
-    genBtn.innerHTML = '<span class="cs-generate-btn-icon cs-gen-spinning">✦</span> Generating…';
+    genBtn.innerHTML = '<span class="cs-generate-btn-icon cs-gen-spinning">✦</span> Sparking…';
   }
+  _startSparkLoadMsg();
 
   fetch('/api/cs-generate', {
     method: 'POST',
@@ -14699,11 +14742,13 @@ function _loadAI(concept) {
       if (!_csAIData) _csAIData = {};
       _csAIData['universal'] = ctxData;
       try { sessionStorage.setItem(cacheKey, JSON.stringify(ctxData)); } catch(e) {}
+      _stopSparkLoadMsg();
       if (genRow) genRow.style.display = 'none';
       _applyAIData(ctxData, true); // true = typewriter
     } else {
       console.error('[Spark] No ctxData in response:', JSON.stringify(data));
       _csLoading = false;
+      _stopSparkLoadMsg();
       if (genBtn) { genBtn.disabled = false; genBtn.innerHTML = '<span class="cs-generate-btn-icon">✦</span> Spark'; }
       if (genRow) genRow.style.display = 'block';
     }
@@ -14711,15 +14756,59 @@ function _loadAI(concept) {
   .catch(function(err) {
     console.error('[Spark] fetch error:', err);
     _csLoading = false;
+    _stopSparkLoadMsg();
     if (genBtn) { genBtn.disabled = false; genBtn.innerHTML = '<span class="cs-generate-btn-icon">✦</span> Spark'; }
     if (genRow) genRow.style.display = 'block';
   });
 }
 
-// v2.5: Loading skeleton removed. _showCSLoading/_startLoadingMessages are no-ops kept for any stray call sites.
-function _showCSLoading(on) { /* no-op — skeleton removed v2.5 */ }
-function _startLoadingMessages(ctx, brandVoice) { /* no-op */ }
-function _stopLoadingMessages() { /* no-op */ }
+const _SPARK_LOADING_MSGS = [
+  "Most apps want your time. This one wants you to leave and go talk to someone.",
+  "The best ideas aren't the ones you remember — they're the ones you actually use.",
+  "You finished a 3-hour podcast. Now say something worth saying.",
+  "Setting the scene for tonight's conversation…",
+  "Finding the right angle for this one…",
+  "Turning this idea into something you'd actually say out loud…",
+  "Almost there — this one's worth getting right.",
+  "This is the only app that wants you to close it. In a good way.",
+  "Not a notification. Not a streak. Just one thing worth saying out loud.",
+  "Crafting something that sounds like you, not a textbook…"
+];
+var _sparkLoadMsgEl = null;
+var _sparkLoadTimer = null;
+
+function _startSparkLoadMsg() {
+  var genRow = document.getElementById('csGenerateRow');
+  if (!genRow) return;
+  if (!_sparkLoadMsgEl) {
+    _sparkLoadMsgEl = document.createElement('div');
+    _sparkLoadMsgEl.className = 'spark-load-msg';
+    genRow.parentNode.insertBefore(_sparkLoadMsgEl, genRow.nextSibling);
+  }
+  var idx = Math.floor(Math.random() * _SPARK_LOADING_MSGS.length);
+  _sparkLoadMsgEl.textContent = _SPARK_LOADING_MSGS[idx];
+  _sparkLoadMsgEl.style.opacity = '1';
+  _sparkLoadTimer = setInterval(function() {
+    _sparkLoadMsgEl.style.opacity = '0';
+    setTimeout(function() {
+      if (!_sparkLoadMsgEl) return;
+      idx = (idx + 1) % _SPARK_LOADING_MSGS.length;
+      _sparkLoadMsgEl.textContent = _SPARK_LOADING_MSGS[idx];
+      _sparkLoadMsgEl.style.opacity = '1';
+    }, 300);
+  }, 3200);
+}
+
+function _stopSparkLoadMsg() {
+  if (_sparkLoadTimer) { clearInterval(_sparkLoadTimer); _sparkLoadTimer = null; }
+  if (_sparkLoadMsgEl) {
+    _sparkLoadMsgEl.style.opacity = '0';
+    setTimeout(function() {
+      if (_sparkLoadMsgEl && _sparkLoadMsgEl.parentNode) _sparkLoadMsgEl.parentNode.removeChild(_sparkLoadMsgEl);
+      _sparkLoadMsgEl = null;
+    }, 300);
+  }
+}
 
 // Loading phase messages — per scenario, shown on manual re-generates
 // (Loading messages removed v2.5 — skeleton killed)
@@ -17069,21 +17158,19 @@ function playStreakMilestoneSFX() {
 /* v1.71 history entry layout */
 .conv-hist-entry {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 12px;
-  padding: 12px 18px;
+  flex-direction: column;
+  gap: 5px;
+  padding: 12px 20px;
   border-bottom: 1px solid var(--border);
 }
+.conv-hist-entry:last-child { border-bottom: none; }
 .conv-hist-left { display: none; } /* removed v2.5 */
 .conv-hist-ts {
   font-family: 'DM Mono', monospace;
-  font-size: 0.6rem;
-  color: var(--muted2);
+  font-size: 0.58rem;
+  letter-spacing: 0.06em;
+  color: var(--muted);
   white-space: nowrap;
-  text-align: right;
-  padding-top: 2px;
-  flex-shrink: 0;
 }
 
 /* conv-panel layout defined above with bottom drawer CSS */
@@ -17316,18 +17403,46 @@ function playStreakMilestoneSFX() {
   font-family: 'DM Sans', sans-serif;
   font-size: 0.82rem; line-height: 1.6;
   color: var(--text);
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   font-style: italic;
 }
-.stash-openers { margin-bottom: 6px; }
+.stash-openers { margin-bottom: 8px; display: flex; flex-direction: column; gap: 6px; }
+.stash-opener {
+  font-family: 'DM Sans', sans-serif; font-size: 0.8rem;
+  color: var(--muted2); line-height: 1.5; font-style: italic;
+  padding: 6px 10px; border-left: 2px solid var(--accent);
+  background: rgba(232,213,163,0.04); border-radius: 0 5px 5px 0;
+}
+.stash-opener-label {
+  font-family: 'DM Mono', monospace; font-size: 0.56rem;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--accent); display: block; margin-bottom: 2px; font-style: normal;
+}
+.stash-opener--alt { border-left-color: var(--border-hover); }
+.stash-opener--alt .stash-opener-label { color: var(--muted); }
 .stash-pitfall {
-  font-family: 'DM Sans', sans-serif; font-size: 0.72rem;
+  font-family: 'DM Sans', sans-serif; font-size: 0.76rem;
   color: var(--muted2); margin-bottom: 4px;
+  padding: 5px 10px; border-left: 2px solid #d4715a;
+  background: rgba(212,113,90,0.04); border-radius: 0 5px 5px 0;
 }
 .stash-pitfall-label {
-  font-family: 'DM Mono', monospace; font-size: 0.58rem;
+  font-family: 'DM Mono', monospace; font-size: 0.56rem;
   letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--red); margin-right: 5px;
+  color: var(--red); margin-right: 5px; font-style: normal;
+}
+
+/* v2.5: Spark loading message — shown while API generates */
+.spark-load-msg {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.8rem; font-style: italic;
+  color: var(--muted2);
+  text-align: center;
+  padding: 12px 20px 0;
+  line-height: 1.5;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  min-height: 2.4em;
 }
 
 /* v2.5: History — Spark it again pill */
@@ -17416,24 +17531,7 @@ function playStreakMilestoneSFX() {
 }
 .conv-ctx-remove-btn:hover { opacity: 1; color: var(--red); }
 
-/* History entry (simpler) */
-.conv-hist-entry {
-  display: flex; align-items: center; gap: 10px;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--border);
-}
-.conv-hist-entry:last-child { border-bottom: none; }
-.conv-hist-term {
-  font-family: 'Playfair Display', serif;
-  font-size: 0.88rem; font-weight: 700;
-  color: var(--text); flex: 1;
-}
-.conv-hist-meta {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.55rem; letter-spacing: 0.08em;
-  color: var(--muted); text-align: right;
-  flex-shrink: 0;
-}
+/* (conv-hist-entry defined above) */
 
 /* Empty state */
 .conv-empty {
@@ -18894,6 +18992,7 @@ function _convEntryHTML(entry) {
         ${hasAI ? _convDetailHTML(entry) : _convNoAIHTML(entry)}
         <div class="conv-entry-actions">
           <button class="conv-action-btn conv-delete-btn" onclick="_convDelete(${entry.id})">✕ Remove</button>
+          <button class="conv-action-btn" onclick="_convCopyEntry(${entry.id})">↑ Copy</button>
           <button class="conv-action-btn" onclick="_convOpenConcept(${entry.id})">Open card →</button>
         </div>
       </div>
@@ -18910,13 +19009,14 @@ function _convDetailHTML(entry) {
   const d = (entry.aiData && (entry.aiData['universal'] || entry.aiData['friend'] || entry.aiData['partner'] || entry.aiData['colleague'])) || null;
   if (!d) return `<button class="stash-spark-btn" onclick="_convOpenCS(${entry.id})">✦ Spark</button>`;
   const openers = (d.openers || []).map(function(o, i) {
-    return '<div class="conv-opener' + (i > 0 ? ' conv-opener--alt' : '') + '">' + _escHtml(o) + '</div>';
+    return '<div class="stash-opener' + (i > 0 ? ' stash-opener--alt' : '') + '">' +
+      '<span class="stash-opener-label">' + (i === 0 ? 'Try saying' : 'Or') + '</span>' +
+      _escHtml(o) + '</div>';
   }).join('');
   return `
     <div class="stash-prompt-text">${_escHtml(d.prompt || '')}</div>
     ${openers ? '<div class="stash-openers">' + openers + '</div>' : ''}
-    ${d.pitfall ? '<div class="stash-pitfall"><span class="stash-pitfall-label">Watch out:</span> ' + _escHtml(d.pitfall) + '</div>' : ''}
-    <button class="stash-spark-btn" onclick="_convOpenCS(${entry.id})" style="margin-top:10px">✦ Spark again</button>`;
+    ${d.pitfall ? '<div class="stash-pitfall"><span class="stash-pitfall-label">Watch out:</span> ' + _escHtml(d.pitfall) + '</div>' : ''}`;
 }
 
 function _convCtxBlock(d, id, ctx) {
@@ -19057,6 +19157,23 @@ function _convToggleEntry(id) {
   el.classList.toggle('open');
 }
 
+function _convCopyEntry(id) {
+  try {
+    const saved = _convGetSaved();
+    const entry = saved.find(s => s.id === id);
+    if (!entry) return;
+    const d = entry.aiData && (entry.aiData['universal'] || entry.aiData['friend'] || entry.aiData['partner'] || entry.aiData['colleague']);
+    const text = d
+      ? (d.prompt || '') + '\n\n— Epistemic · epistemic.live · ' + (entry.term || '')
+      : (entry.term || '') + ' — Epistemic · epistemic.live';
+    navigator.clipboard.writeText(text).then(function() {
+      // Brief visual feedback on the button
+      const btn = document.querySelector(`#convEntry${id} .conv-action-btn:nth-child(2)`);
+      if (btn) { const orig = btn.textContent; btn.textContent = '✓ Copied'; setTimeout(function() { btn.textContent = orig; }, 1800); }
+    }).catch(function() {});
+  } catch(e) {}
+}
+
 function _convDelete(id) {
   // Capture for undo
   try {
@@ -19194,7 +19311,7 @@ function _convRenderHistory() {
   list.innerHTML = hist.map(function(h) {
     var catColor = CAT_COLOR[h.category] || '#e8d5a3';
     var dateStr = h.ts ? new Date(h.ts).toLocaleString('en-GB', {day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}) : '';
-    var snippet = h.promptText ? '<div class="hist-snippet">"' + _escHtml(h.promptText.length > 100 ? h.promptText.slice(0,97)+'…' : h.promptText) + '"</div>' : '';
+    var snippet = h.promptText ? '<div class="hist-snippet">"' + _escHtml(h.promptText.length > 120 ? h.promptText.slice(0,117)+'…' : h.promptText) + '"</div>' : '';
     return '<div class="conv-hist-entry">' +
       '<div class="conv-hist-top">' +
         '<span class="conv-hist-term">' + _escHtml(h.term || '') + '</span>' +
@@ -19202,7 +19319,7 @@ function _convRenderHistory() {
         '<span class="conv-hist-ts">' + dateStr + '</span>' +
       '</div>' +
       snippet +
-      '<button class="hist-spark-btn" onclick="_convOpenCSById(' + h.id + ')">✦ Spark it again</button>' +
+      '<button class="hist-spark-btn" onclick="_convOpenCSById(' + h.id + ')">✦ Spark</button>' +
     '</div>';
   }).join('');
 }
