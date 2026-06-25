@@ -285,15 +285,63 @@ Active file. All `v172.html` logic preserved verbatim; structural additions only
 - Founder emphasis classes: `.founder-line-bold` (italic + 700 weight, same size as `.founder-line-emphasis`), `.founder-italic-body` (italic, body size), `.founder-accent` (gold + weight 500).
 - Podcast pills: always show all pills regardless of row-expand state. "Show less podcasts ↑" button added when rows are expanded beyond the default 3.
 
-### Unified right panel
-- `conv-overlay` / `conv-panel` now houses **four tabs**: Spark · Stash · History · Stories
-- `openCS()` → opens `conv-panel`, activates Spark tab (`panelSwitchTab('spark', true)`)
+### Unified right panel (v2.5+)
+- `conv-overlay` / `conv-panel` houses **three tabs**: Spark · Stash · History (Stories tab removed in v2.5, moves to dedicated Panel B in v2.6)
+- `openSparkPanel(conceptId?)` — single entry point for ALL Spark panel opens. Replaces `openCSFromNav()` + `_csOpenPanel()`. Calls `_csRestoreOrLoad(concept)` after render — always tries to restore cached AI data before showing Generate button.
 - `openConversations()` → opens `conv-panel`, activates Stash tab (`panelSwitchTab('stash')`)
-- `_convOpenCSById()` (History "Start talking") → stays in panel, calls `panelSwitchTab('spark', true)` — no panel close/reopen
+- `_convOpenCSById(id)` → `panelSwitchTab('spark', true)` + `openSparkPanel(id)` — restores correctly
 - `_mountCSInPanel()` — called once after concepts load; moves `cs-card-inner-scroll` into `#panelSectionSpark`
-- `panelSwitchTab('stories')` → calls `_convRenderStories()` which reads `lll_cs_stories_v1`
+- `panelSwitchTab(tab)` — entering section: `translateY(10px→0)` + opacity 0.45s. Items stagger via `panelItemIn` keyframe.
 - `cs-overlay` and `cs-card` shell: `display:none !important` — content is in the panel
-- Tab switching: opacity + display crossfade, 220ms
+
+**Spark tab state machine (v2.5):**
+```
+State READY:    concept loaded, Generate button visible, no AI data
+State LOADING:  button spins, loading messages rotate below
+State GENERATED: prompt (Playfair italic) + coaching block (surface2 container)
+State SEARCHING: search results overlay concept area (clears on pick or Escape)
+```
+No scenario states. No picker states. No story states in Spark panel.
+
+**Scenario system (killed v2.5):**
+- `CS_OPENERS`, `_csCtx`, `_csCat` — removed (kept as `var` dummies for story mode compat)
+- All picker/topic/scenario DOM and JS removed. ~400 lines deleted.
+- `_csSwapConcept(id)` kept as minimal stub for story mode term pills.
+- `spScenarioPill(el, scenario)` rewritten to open Spark with seed concept.
+
+**Spark panel search bar (v2.5):**
+- `#sparkSearchWrap` — bordered box (distinct from hero search), ✦ icon, italic placeholder
+- Reuses `FUSE` instance (not `FUSE_INSTANCE` — important: the variable is called `FUSE`)
+- Term-first sort: exact → startsWith → includes → Fuse score
+- `_initSparkSearch()` called after concepts load
+
+**Concept display (v2.5):**
+- Eyebrow label + Playfair bold term (no expand pill)
+- Desktop hover → `_spPreviewCard(id, pill, { panelMode:true })` — `position:fixed`, NO `+window.scrollY`, viewport-clipped
+- Hover wired via DOM clone on every `_renderCSShell()` — no stale listener accumulation
+
+**Coaching layer (v2.5):**
+- `_applyAIData(d, doTypewriter)` — `true` fires typewriter then coaching; `false` expands prompt (0.45s fade) then coaching (500ms delay, instant `.visible`)
+- `_showCoaching(animate)` — builds innerHTML, calls `_csShowPostPrompt()` (which clears inline `display:none` from roll collapse), staggers `.cs-opener-block.visible`
+- Opener structure: `.cs-opener-intro` label (above) + `.cs-opener-line` (gold left border, italic) — label is a sibling, not inside the border
+- Same structure for stash: `.stash-opener-block` > `.stash-opener-label` + `.stash-opener` (gold left border)
+- Pitfall: `.cs-pitfall` (red left border, italic) — same size/style as opener lines
+
+**Casino roll (v2.5):**
+- `_csRollNewConcept()` — collapses prompt+coaching (0.18s), waits 220ms, rolls 12 terms, lands on random
+- `_csSurprise()` kept as alias
+
+### cs-generate.js (v2.5)
+- **Model: `claude-sonnet-4-6`** — was `claude-sonnet-4-5` (deprecated, caused all 500 errors in prior sessions)
+- `ctx: 'friend'` sent from frontend — compatible with old deployed file
+- `ctx: 'universal'` branch added: 8 rotating tone styles (server-side variety), returns `{ ctx: { prompt, openers, pitfall } }`
+- Legacy all-4 path still present as fallback
+- Frontend fallback: `data.ctx` → `data.contexts.friend` → error reset
+
+### Panel B — Stories (v2.6 — not yet built)
+State machine designed: Entry (4 pills) → Loading → Story (typewriter + inline term pills) → Outro (Spark CTA + Save). My Stories tab. Locked seeds 1–2 in `SP_STORY_SEEDS`. See roadmap.md for full build sequence. `openStoriesPanel()` is a stub in v2.5.
+
+
 
 ### Hero Zone 1 (spark.html only)
 - Tagline: "Ideas die in *your earbuds.*" + sub-tagline
@@ -319,7 +367,11 @@ Active file. All `v172.html` logic preserved verbatim; structural additions only
 - **Why:** `conv-overlay` (`z-index:1100`) creates a stacking context. Any `position:fixed` child is painted within that context regardless of its own z-index. Teleporting to `<body>` escapes all stacking contexts. `z-index:99999`.
 
 ### spark.html localStorage (additions only — all v172 keys unchanged)
-- `lll_cs_stories_v1` — array, max 20 (ring buffer, newest first). Written by `_csSaveStory()` on every successful story generation. Each entry: `{ id, term, conceptIds[], conceptTerms[], conceptCategories[], story, opener, ts }`. Read by `_convRenderStories()` in the Stories tab.
+- `lll_cs_stories_v1` — array, max 20 (ring buffer, newest first). Written by `_csSaveStory()` on every successful story generation. Each entry: `{ id, term, conceptIds[], conceptTerms[], conceptCategories[], story, opener, ts }`. Read by `_convRenderStories()` (moved to Panel B in v2.6).
+- `lll_cs_history_v1` — array, max CS_HISTORY_MAX. Written by `_csLogHistory()` on every concept load in `_renderCSShell()`, updated with promptText by `_csLogHistoryWithPrompt()` when sparked. Each entry: `{ id, term, category, ctx, promptText, ts }`.
+- `lll_cs_saved_v1` — Stash entries. Shape: `{ id, term, category, aiData: { universal: { prompt, openers, pitfall } } }`.
+- `lll_user_context_v1` — (planned v2.7) personalized context. Shape: `{ role, situation, interests[] }`.
+- `CS_SESSION_KEY` (`lll_cs_ai_`) + conceptId + `_universal` — session cache for generated AI data. Cleared on tab close.
 
 ### Typewriter utility — `_csTypewriter(el, rawText, opts)` (v1.97)
 - Tokenises raw text into: `char`, `break` (`\n\n`), `label` (`[[LABEL:Term]]`), `bold_start`/`bold_end` (`**text**`)
@@ -339,8 +391,8 @@ Active file. All `v172.html` logic preserved verbatim; structural additions only
 - Tile click → `_spScanTileClick(id, anchorEl)`: first click shows `_spScanPreview()`; second click on same tile calls `_spSelectConcept(id)`
 - `_spScanPreview()`: fixed-position card anchored right of tile (or left if near screen edge); outside-click dismiss stored as `card._dismissFn` and removed cleanly by `spDismissPreview()`
 
-### cs-generate.js (v1.97)
-- Model: `claude-sonnet-4-6` (updated from `claude-sonnet-4-5`)
+### cs-generate.js (v1.97 / updated v2.5)
+- Model: `claude-sonnet-4-6` (**was `claude-sonnet-4-5`** — updating this was the fix for all 500 errors across CS generation sessions. Never revert.)
 - Story mode system prompt: Perel+Koe voice, "you" POV, profanity allowed, no em-dashes, no triads, no awakening moments, specific nouns, show-don't-tell, end small. Scene hints injected per `storyCtx` value.
 - Story output format: `{"story": "text with [[LABEL:Term]] and **bold**", "opener": "..."}` — labels on their own line (tokeniser handles inline placement)
 - Conversation starter mode: unchanged structure; prompts tightened (no therapy-speak, no em-dashes)
