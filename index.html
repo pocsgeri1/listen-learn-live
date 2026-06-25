@@ -7591,7 +7591,7 @@
     <!-- Help bubble — teleported to body by JS, shown on hover -->
     <div class="cs-help-bubble" id="csHelpBubble" style="display:none">
       <div class="cs-help-step"><span class="cs-help-num">01</span><span>Pick any concept from the library — or search for one above.</span></div>
-      <div class="cs-help-step"><span class="cs-help-num">02</span><span>Hit <strong>Spark it</strong> and get a ready-to-use conversation starter.</span></div>
+      <div class="cs-help-step"><span class="cs-help-num">02</span><span>Hit <strong>Spark</strong> and get a ready-to-use conversation starter.</span></div>
       <div class="cs-help-step"><span class="cs-help-num">03</span><span>Copy it, use it tonight, tell us if it landed.</span></div>
       <div style="margin-top:10px;font-size:0.8rem;font-style:italic;color:var(--accent);font-family:'Playfair Display',serif">Now go say something worth saying. ✦</div>
     </div>
@@ -7602,7 +7602,7 @@
         <button class="cs-help-overlay-close" onclick="_csHelpOverlayClose()">✕</button>
         <div class="cs-help-overlay-title">How does this work?</div>
         <div class="cs-help-step"><span class="cs-help-num">01</span><span>Pick any concept from the library — or search for one above.</span></div>
-        <div class="cs-help-step" style="margin-top:10px"><span class="cs-help-num">02</span><span>Hit <strong>Spark it</strong> and get a ready-to-use conversation starter.</span></div>
+        <div class="cs-help-step" style="margin-top:10px"><span class="cs-help-num">02</span><span>Hit <strong>Spark</strong> and get a ready-to-use conversation starter.</span></div>
         <div class="cs-help-step" style="margin-top:10px"><span class="cs-help-num">03</span><span>Copy it, use it tonight, tell us if it landed.</span></div>
         <div style="margin-top:14px;font-size:0.9rem;font-style:italic;color:var(--accent);font-family:'Playfair Display',serif;text-align:center">Now go say something worth saying. ✦</div>
       </div>
@@ -7636,7 +7636,7 @@
     <!-- Generate button -->
     <div class="cs-generate-row" id="csGenerateRow" style="display:none">
       <button class="cs-generate-btn" id="csGenerateBtn">
-        <span class="cs-generate-btn-icon">✦</span> Spark it
+        <span class="cs-generate-btn-icon">✦</span> Spark
       </button>
     </div>
 
@@ -12548,7 +12548,7 @@ function openSparkPanel(conceptId) {
       const genRow = document.getElementById('csGenerateRow');
       const genBtn = document.getElementById('csGenerateBtn');
       if (genRow) genRow.style.display = 'block';
-      if (genBtn) { genBtn.disabled = false; genBtn.innerHTML = '<span class="cs-generate-btn-icon">✦</span> Spark it'; }
+      if (genBtn) { genBtn.disabled = false; genBtn.innerHTML = '<span class="cs-generate-btn-icon">✦</span> Spark'; }
     }
   } else {
     // First ever open — pick a random editors_pick or random concept
@@ -12570,7 +12570,7 @@ function openSparkPanel(conceptId) {
     const genRow = document.getElementById('csGenerateRow');
     const genBtn = document.getElementById('csGenerateBtn');
     if (genRow) genRow.style.display = 'block';
-    if (genBtn) { genBtn.disabled = false; genBtn.innerHTML = '<span class="cs-generate-btn-icon">✦</span> Spark it'; }
+    if (genBtn) { genBtn.disabled = false; genBtn.innerHTML = '<span class="cs-generate-btn-icon">✦</span> Spark'; }
   }
 }
 
@@ -12712,7 +12712,7 @@ function _csPickerShowMain() {
     const genRow = document.getElementById('csGenerateRow');
     const genBtn = document.getElementById('csGenerateBtn');
     if (genRow) genRow.style.display = 'block';
-    if (genBtn) { genBtn.disabled = false; genBtn.classList.remove('loading'); genBtn.textContent = '✦ Spark it'; }
+    if (genBtn) { genBtn.disabled = false; genBtn.classList.remove('loading'); genBtn.textContent = '✦ Spark'; }
     // Hide coaching since there's nothing to show yet
     const coaching = document.getElementById('csCoaching');
     if (coaching) { coaching.classList.add('cs-hidden'); coaching.classList.remove('cs-visible'); }
@@ -12916,7 +12916,7 @@ function _csPickerGenerate(conceptId) {
     else if (data && data.contexts && data.contexts[ctx]) d = data.contexts[ctx];
     if (!d || !d.prompt) {
       genBtn.disabled = false; genBtn.classList.remove('loading');
-      genBtn.textContent = '✦ Spark it';
+      genBtn.textContent = '✦ Spark';
       return;
     }
     // Cache to session
@@ -12938,7 +12938,7 @@ function _csPickerGenerate(conceptId) {
   })
   .catch(function() {
     genBtn.disabled = false; genBtn.classList.remove('loading');
-    genBtn.textContent = '✦ Spark it';
+    genBtn.textContent = '✦ Spark';
   });
 }
 
@@ -13115,7 +13115,7 @@ function _renderCSShell(concept) {
   const genRow = document.getElementById('csGenerateRow');
   const genBtn = document.getElementById('csGenerateBtn');
   if (genRow) genRow.style.display = 'block';
-  if (genBtn) { genBtn.disabled = false; genBtn.innerHTML = '<span class="cs-generate-btn-icon">✦</span> Spark it'; }
+  if (genBtn) { genBtn.disabled = false; genBtn.innerHTML = '<span class="cs-generate-btn-icon">✦</span> Spark'; }
 
   // Actions always visible (Prev/Next navigation)
   const actionsEl = document.getElementById('csActions');
@@ -13891,7 +13891,7 @@ function _csCloseStoryMode() {
         var genRow = document.getElementById('csGenerateRow');
         var genBtn = document.getElementById('csGenerateBtn');
         if (genRow) genRow.style.display = 'block';
-        if (genBtn) { genBtn.disabled = false; genBtn.classList.remove('loading'); genBtn.textContent = '✦ Spark it'; }
+        if (genBtn) { genBtn.disabled = false; genBtn.classList.remove('loading'); genBtn.textContent = '✦ Spark'; }
         var coaching = document.getElementById('csCoaching');
         if (coaching) { coaching.classList.add('cs-hidden'); coaching.classList.remove('cs-visible'); }
         var divider = document.getElementById('csDivider');
@@ -14716,13 +14716,13 @@ function _loadAI(concept) {
       _applyAIData(ctxData);
     } else {
       _csLoading = false;
-      if (genBtn) { genBtn.disabled = false; genBtn.innerHTML = '<span class="cs-generate-btn-icon">✦</span> Spark it'; }
+      if (genBtn) { genBtn.disabled = false; genBtn.innerHTML = '<span class="cs-generate-btn-icon">✦</span> Spark'; }
       if (genRow) genRow.style.display = 'block';
     }
   })
   .catch(function() {
     _csLoading = false;
-    if (genBtn) { genBtn.disabled = false; genBtn.innerHTML = '<span class="cs-generate-btn-icon">✦</span> Spark it'; }
+    if (genBtn) { genBtn.disabled = false; genBtn.innerHTML = '<span class="cs-generate-btn-icon">✦</span> Spark'; }
     if (genRow) genRow.style.display = 'block';
   });
 }
@@ -14957,8 +14957,8 @@ function _wireCSEvents() {
   const genBtn = document.getElementById('csGenerateBtn');
   if (genBtn) {
     genBtn.onclick = function() {
-      if (!_csConcept) { console.warn('[Spark] genBtn clicked but _csConcept is null'); return; }
-      if (_csLoading) { console.warn('[Spark] genBtn clicked but _csLoading is true — resetting'); _csLoading = false; }
+      if (!_csConcept) { console.warn('[Spark] _csConcept is null'); return; }
+      if (_csLoading) { _csLoading = false; }
       _loadAI(_csConcept);
     };
   }
@@ -16823,7 +16823,7 @@ function playStreakMilestoneSFX() {
   display: flex;
   align-items: center;
   gap: 0;
-  margin: 0 20px 6px;
+  margin: 0 20px 16px;
   border: 1px solid var(--border-hover);
   border-radius: 8px;
   padding: 9px 12px;
@@ -16877,7 +16877,7 @@ function playStreakMilestoneSFX() {
 
 /* Search results dropdown */
 .spark-search-results {
-  margin: 0 20px 14px;
+  margin: 0 20px 18px;
   border: 1px solid var(--border-hover);
   border-radius: 10px;
   overflow: hidden;
@@ -16945,9 +16945,9 @@ function playStreakMilestoneSFX() {
 
 /* ── v2.5: Concept term display — minimalist, no expand box ── */
 .spark-concept-row {
-  padding: 18px 20px 10px;
+  padding: 22px 20px 10px;
   border-top: 1px solid var(--border);
-  margin-top: 10px;
+  margin-top: 4px;
 }
 .spark-concept-label {
   font-family: 'DM Mono', monospace;
