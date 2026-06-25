@@ -4230,27 +4230,8 @@
   .cs-post-prompt.cs-hidden { opacity: 0; pointer-events: none; }
   .cs-post-prompt.cs-visible { opacity: 1; pointer-events: auto; }
 
-  /* History "Start talking" button — v1.72 redesign */
-  .conv-hist-action-btn {
-    display: inline-flex; align-items: center; gap: 6px;
-    margin-top: 8px;
-    font-family: 'Playfair Display', serif;
-    font-size: 0.8rem; font-style: italic;
-    color: var(--accent);
-    background: rgba(232,213,163,0.07);
-    border: 1px solid rgba(232,213,163,0.3);
-    border-radius: 8px;
-    padding: 6px 14px;
-    cursor: pointer;
-    transition: background 0.2s, border-color 0.2s;
-    width: 100%;
-    justify-content: center;
-  }
-  .conv-hist-action-btn:hover {
-    background: rgba(232,213,163,0.14);
-    border-color: var(--accent);
-  }
-  .conv-hist-action-btn::after { content: '→'; font-style: normal; font-size: 0.75rem; }
+  /* History action button — replaced by hist-spark-btn in v2.5 */
+  .conv-hist-action-btn { display: none; }
 
   /* Stash history category pill vertical align fix — v1.72 */
   .conv-entry-cat {
@@ -13144,66 +13125,71 @@ const _SPARK_COACHING_INTROS = [
   "One way in:",
 ];
 
-function _applyAIData(d) {
+function _applyAIData(d, doTypewriter) {
   if (!d) return;
 
-  // Reset feedback row
   const frReset = document.getElementById('csFeedbackRow');
   if (frReset) { frReset.classList.add('cs-hidden'); frReset.classList.remove('cs-visible'); }
 
-  // Show prompt block (hidden until first generate)
   const block = document.getElementById('csPromptBlock');
   if (block) block.style.display = 'block';
 
-  // Typewriter — prompt text
   const inner = document.getElementById('csPromptInner');
   const promptEl = document.getElementById('csPromptText');
-  if (inner && promptEl) {
+
+  function _showCoaching() {
+    const openersList = document.getElementById('csOpenersList');
+    if (openersList) {
+      const intro = _SPARK_COACHING_INTROS[Math.floor(Math.random() * _SPARK_COACHING_INTROS.length)];
+      openersList.innerHTML = (d.openers || []).map(function(o, i) {
+        return '<div class="cs-opener-line"><span class="cs-opener-idx">' + (i === 0 ? intro : 'Or try') + '</span>' + _escHtml(o) + '</div>';
+      }).join('');
+    }
+    const pitfallEl = document.getElementById('csPitfall');
+    if (pitfallEl) pitfallEl.textContent = d.pitfall || '';
+    setTimeout(function() { _csShowPostPrompt(); }, 80);
+    setTimeout(function() {
+      const fr = document.getElementById('csFeedbackRow');
+      if (fr) { fr.classList.remove('cs-hidden'); fr.classList.add('cs-visible'); }
+    }, 8000);
+    _csUpdateSaveBtn();
+  }
+
+  if (doTypewriter && inner && promptEl) {
     inner.style.display = 'block';
-    inner.classList.remove('cs-prompt-hidden','cs-prompt-visible');
+    inner.classList.remove('cs-prompt-hidden', 'cs-prompt-visible');
     promptEl.textContent = '';
     promptEl.classList.add('tw-active');
-    let pi = 0;
-    const ptext = d.prompt || '';
-    const cursor = document.createElement('span');
+
+    var pi = 0;
+    var ptext = d.prompt || '';
+    var cursor = document.createElement('span');
     cursor.className = 'tw-cursor';
     promptEl.appendChild(cursor);
-    const ptimer = setInterval(function() {
+
+    var ptimer = setInterval(function() {
       if (pi < ptext.length) {
         promptEl.insertBefore(document.createTextNode(ptext[pi++]), cursor);
       } else {
         clearInterval(ptimer);
         cursor.className = 'tw-cursor tw-done';
         promptEl.classList.remove('tw-active');
+        // Coaching appears after typewriter finishes
+        _showCoaching();
       }
-    }, 16 + Math.random() * 18);
+    }, 18 + Math.random() * 14);
+  } else {
+    // No typewriter — instant display (from cache/stash)
+    if (inner && promptEl) {
+      inner.style.display = 'block';
+      inner.classList.remove('cs-prompt-hidden', 'cs-prompt-visible');
+      promptEl.textContent = d.prompt || '';
+    }
+    _showCoaching();
   }
 
-  // Coaching — rotating intro label
-  const openersList = document.getElementById('csOpenersList');
-  if (openersList) {
-    const intro = _SPARK_COACHING_INTROS[Math.floor(Math.random() * _SPARK_COACHING_INTROS.length)];
-    openersList.innerHTML = (d.openers || []).map((o, i) =>
-      `<div class="cs-opener-line"><span class="cs-opener-idx">${i === 0 ? intro : 'Or try'}</span>${_escHtml(o)}</div>`
-    ).join('');
-  }
-  const pitfallEl = document.getElementById('csPitfall');
-  if (pitfallEl) pitfallEl.textContent = d.pitfall || '';
-
-  // Log history and auto-save
   _csLogHistoryWithPrompt(_csConcept, 'universal', d.prompt);
   if (_csConcept) _csSaveConcept(_csConcept, _csAIData);
-
-  // Show post-prompt with stagger
-  setTimeout(function() { _csShowPostPrompt(); }, 200);
-
-  // Show feedback row after 8s
-  setTimeout(function() {
-    const fr = document.getElementById('csFeedbackRow');
-    if (fr) { fr.classList.remove('cs-hidden'); fr.classList.add('cs-visible'); }
-  }, 8000);
-
-  _csUpdateSaveBtn();
 }
 
 // Keep _applyAIToCtx as a legacy shim so story mode and picker remnants don't throw
@@ -14460,18 +14446,16 @@ function _csLogHistoryWithPrompt(concept, ctx, promptText) {
 // Restore aiData from session cache or saved storage; fall back to fresh generate.
 // Fixes prev/next reliability — concept already generated in session is restored, not re-generated. — v1.73b
 function _csRestoreOrLoad(concept) {
-  // Try session cache for universal ctx
   const ck = CS_SESSION_KEY + concept.id + '_universal';
   try {
     const cv = sessionStorage.getItem(ck);
     if (cv) {
       _csAIData = { universal: JSON.parse(cv) };
-      _applyAIData(_csAIData['universal']);
+      _applyAIData(_csAIData['universal'], false); // no typewriter on restore
       return;
     }
   } catch(e) {}
 
-  // Try saved Stash
   try {
     const savedArr = JSON.parse(localStorage.getItem(CS_SAVED_KEY) || '[]');
     const savedEntry = savedArr.find(function(s) { return s && s.id === concept.id; });
@@ -14479,7 +14463,7 @@ function _csRestoreOrLoad(concept) {
       const d = savedEntry.aiData['universal'] || savedEntry.aiData['friend'] || null;
       if (d) {
         _csAIData = { universal: d };
-        _applyAIData(d);
+        _applyAIData(d, false); // no typewriter on restore
         return;
       }
     }
@@ -14660,21 +14644,19 @@ function _csSwapConcept(id) {
 function _loadAI(concept) {
   if (_csLoading) return;
 
-  // Check session cache
   const cacheKey = CS_SESSION_KEY + concept.id + '_universal';
   try {
     const cached = sessionStorage.getItem(cacheKey);
     if (cached) {
       if (!_csAIData) _csAIData = {};
       _csAIData['universal'] = JSON.parse(cached);
-      _applyAIData(_csAIData['universal']);
+      _applyAIData(_csAIData['universal'], false); // false = no typewriter (cached)
       return;
     }
   } catch(e) {}
 
   _csLoading = true;
 
-  // Spin the generate button — no skeleton, no loading messages
   const genBtn = document.getElementById('csGenerateBtn');
   const genRow = document.getElementById('csGenerateRow');
   if (genBtn) {
@@ -14694,33 +14676,40 @@ function _loadAI(concept) {
         prompt: concept.prompt,
         category: concept.category
       },
-      ctx: 'friend'  // 'friend' works with both old and new cs-generate.js; new API adds variety via universal tone
+      ctx: 'friend'
     })
   })
-  .then(r => r.json())
-  .then(data => {
+  .then(function(r) {
+    if (!r.ok) {
+      return r.text().then(function(txt) {
+        console.error('[Spark] API error ' + r.status + ':', txt);
+        throw new Error('API ' + r.status);
+      });
+    }
+    return r.json();
+  })
+  .then(function(data) {
     _csLoading = false;
-    let ctxData = null;
-    // Single-ctx response (new or legacy single)
+    var ctxData = null;
     if (data && data.ctx) ctxData = data.ctx;
-    // All-4 legacy response
     else if (data && data.contexts) {
       ctxData = data.contexts['friend'] || data.contexts['colleague'] || data.contexts['partner'] || null;
     }
-
     if (ctxData) {
       if (!_csAIData) _csAIData = {};
       _csAIData['universal'] = ctxData;
       try { sessionStorage.setItem(cacheKey, JSON.stringify(ctxData)); } catch(e) {}
       if (genRow) genRow.style.display = 'none';
-      _applyAIData(ctxData);
+      _applyAIData(ctxData, true); // true = typewriter
     } else {
+      console.error('[Spark] No ctxData in response:', JSON.stringify(data));
       _csLoading = false;
       if (genBtn) { genBtn.disabled = false; genBtn.innerHTML = '<span class="cs-generate-btn-icon">✦</span> Spark'; }
       if (genRow) genRow.style.display = 'block';
     }
   })
-  .catch(function() {
+  .catch(function(err) {
+    console.error('[Spark] fetch error:', err);
     _csLoading = false;
     if (genBtn) { genBtn.disabled = false; genBtn.innerHTML = '<span class="cs-generate-btn-icon">✦</span> Spark'; }
     if (genRow) genRow.style.display = 'block';
@@ -17086,7 +17075,7 @@ function playStreakMilestoneSFX() {
   padding: 12px 18px;
   border-bottom: 1px solid var(--border);
 }
-.conv-hist-left { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 0; }
+.conv-hist-left { display: none; } /* removed v2.5 */
 .conv-hist-ts {
   font-family: 'DM Mono', monospace;
   font-size: 0.6rem;
@@ -17308,17 +17297,69 @@ function playStreakMilestoneSFX() {
 }
 .conv-more-scen-btn:hover { border-color: var(--accent); background: rgba(232,213,163,0.07); }
 
-.conv-generate-btn {
-  width: 100%; padding: 11px;
-  border: 1px dashed rgba(196,122,122,0.4);
-  border-radius: 8px; background: none;
-  color: #c47a7a; cursor: pointer;
+/* v2.5: Stash — replace old generate button with Spark pill */
+.stash-spark-btn {
+  display: inline-flex; align-items: center; gap: 6px;
   font-family: 'DM Mono', monospace;
-  font-size: 0.62rem; letter-spacing: 0.12em;
-  text-transform: uppercase; margin-bottom: 10px;
-  transition: all 0.2s;
+  font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase;
+  background: rgba(232,213,163,0.1);
+  border: 1px solid rgba(232,213,163,0.35);
+  border-radius: 999px;
+  color: var(--accent);
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
 }
-.conv-generate-btn:hover { border-color: #c47a7a; background: rgba(196,122,122,0.06); }
+.stash-spark-btn:hover { background: rgba(232,213,163,0.18); border-color: var(--accent); }
+
+.stash-prompt-text {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem; line-height: 1.6;
+  color: var(--text);
+  margin-bottom: 8px;
+  font-style: italic;
+}
+.stash-openers { margin-bottom: 6px; }
+.stash-pitfall {
+  font-family: 'DM Sans', sans-serif; font-size: 0.72rem;
+  color: var(--muted2); margin-bottom: 4px;
+}
+.stash-pitfall-label {
+  font-family: 'DM Mono', monospace; font-size: 0.58rem;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--red); margin-right: 5px;
+}
+
+/* v2.5: History — Spark it again pill */
+.hist-spark-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase;
+  background: none;
+  border: 1px solid var(--border-hover);
+  border-radius: 999px;
+  color: var(--muted2);
+  padding: 5px 12px;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+.hist-spark-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(232,213,163,0.06); }
+
+.conv-hist-top {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+}
+.conv-hist-term {
+  font-family: 'DM Mono', monospace; font-size: 0.72rem;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--text); font-weight: 500;
+}
+.hist-snippet {
+  font-family: 'DM Sans', sans-serif; font-size: 0.76rem;
+  color: var(--muted2); line-height: 1.5; margin-top: 4px;
+  font-style: italic;
+}
+
 
 .conv-prompt-label {
   font-family: 'DM Mono', monospace; font-size: 0.58rem;
@@ -18861,24 +18902,21 @@ function _convEntryHTML(entry) {
 }
 
 function _convNoAIHTML(entry) {
-  return `<button class="conv-generate-btn" onclick="_convOpenCS(${entry.id})">💬 Generate conversation starters →</button>`;
+  return `<button class="stash-spark-btn" onclick="_convOpenCS(${entry.id})">✦ Spark</button>`;
 }
 
 function _convDetailHTML(entry) {
-  const contexts = ['partner','friend','colleague','meeting'];
-  const labels = { partner:'Partner', friend:'Friend', colleague:'Colleague', meeting:'Meeting' };
-  const firstCtx = contexts.find(c => entry.aiData && entry.aiData[c]) || 'partner';
-  const tabs = contexts.map(c => {
-    const hasData = !!(entry.aiData && entry.aiData[c]);
-    const isFirst = c === firstCtx;
-    const cls = ['conv-ctx-tab', isFirst ? 'active' : '', hasData ? '' : 'ungenerated'].filter(Boolean).join(' ');
-    const label = hasData ? labels[c] : labels[c] + ' ＋';
-    return `<button class="${cls}" data-ctx="${c}" onclick="_convSwitchCtx(${entry.id},'${c}')">${label}</button>`;
+  // v2.5: single universal prompt — no scenario tabs
+  const d = (entry.aiData && (entry.aiData['universal'] || entry.aiData['friend'] || entry.aiData['partner'] || entry.aiData['colleague'])) || null;
+  if (!d) return `<button class="stash-spark-btn" onclick="_convOpenCS(${entry.id})">✦ Spark</button>`;
+  const openers = (d.openers || []).map(function(o, i) {
+    return '<div class="conv-opener' + (i > 0 ? ' conv-opener--alt' : '') + '">' + _escHtml(o) + '</div>';
   }).join('');
-  const d = (entry.aiData && entry.aiData[firstCtx]) || null;
   return `
-    <div class="conv-ctx-tabs">${tabs}</div>
-    <div id="convCtxContent${entry.id}" class="conv-ctx-content-wrap">${d ? _convCtxBlock(d, entry.id, firstCtx) : _convUnpromptedBlock(firstCtx)}</div>`;
+    <div class="stash-prompt-text">${_escHtml(d.prompt || '')}</div>
+    ${openers ? '<div class="stash-openers">' + openers + '</div>' : ''}
+    ${d.pitfall ? '<div class="stash-pitfall"><span class="stash-pitfall-label">Watch out:</span> ' + _escHtml(d.pitfall) + '</div>' : ''}
+    <button class="stash-spark-btn" onclick="_convOpenCS(${entry.id})" style="margin-top:10px">✦ Spark again</button>`;
 }
 
 function _convCtxBlock(d, id, ctx) {
@@ -19153,47 +19191,25 @@ function _convRenderHistory() {
     return;
   }
 
-  list.innerHTML = hist.map(h => {
-    const catColor = CAT_COLOR[h.category] || '#e8d5a3';
-    const dateStr = h.ts ? new Date(h.ts).toLocaleString('en-GB', {day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}) : '';
-    const ctxLabel = { partner: 'With partner', friend: 'With friend', colleague: 'With colleague', meeting: 'In meeting' }[h.ctx] || h.ctx || '';
-    const promptSnippet = h.promptText ? `<div style="font-family:'DM Sans',sans-serif;font-size:0.78rem;color:var(--muted2);line-height:1.5;margin-top:4px;font-style:italic">"${h.promptText.length > 90 ? h.promptText.slice(0,87)+'…' : h.promptText}"</div>` : '';
-    return `<div class="conv-hist-entry">
-      <div class="conv-hist-left">
-        <div class="conv-hist-term">${_escHtml(h.term || '')}</div>
-        <div style="display:flex;align-items:center;gap:8px;margin-top:2px">
-          <span class="conv-entry-cat" style="color:${catColor}">${h.category || ''}</span>
-          <span style="font-family:'DM Mono',monospace;font-size:0.52rem;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase">${ctxLabel}</span>
-        </div>
-        ${promptSnippet}
-        <button class="conv-hist-action-btn" onclick="_convOpenCSById(${h.id}, '${h.ctx || 'friend'}')">Start talking about it</button>
-      </div>
-      <div class="conv-hist-ts">${dateStr}</div>
-    </div>`;
+  list.innerHTML = hist.map(function(h) {
+    var catColor = CAT_COLOR[h.category] || '#e8d5a3';
+    var dateStr = h.ts ? new Date(h.ts).toLocaleString('en-GB', {day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}) : '';
+    var snippet = h.promptText ? '<div class="hist-snippet">"' + _escHtml(h.promptText.length > 100 ? h.promptText.slice(0,97)+'…' : h.promptText) + '"</div>' : '';
+    return '<div class="conv-hist-entry">' +
+      '<div class="conv-hist-top">' +
+        '<span class="conv-hist-term">' + _escHtml(h.term || '') + '</span>' +
+        '<span class="conv-entry-cat" style="color:' + catColor + '">' + (h.category || '') + '</span>' +
+        '<span class="conv-hist-ts">' + dateStr + '</span>' +
+      '</div>' +
+      snippet +
+      '<button class="hist-spark-btn" onclick="_convOpenCSById(' + h.id + ')">✦ Spark it again</button>' +
+    '</div>';
   }).join('');
 }
 
-function _convOpenCSById(id, ctx) {
-  const concept = CONCEPTS.find(x => x.id === id);
-  if (!concept) return;
-
-  setTimeout(() => {
-    _csConcept = concept;
-    _csCat = concept.category || 'psychology';
-    _csCtx = ctx || 'friend';
-    _buildCsCatRow();
-    _renderCSShell(concept);
-    _csPushToStack(concept);
-
-    ['csRevealRow','csActions'].forEach(function(id) {
-      const el = document.getElementById(id);
-      if (el) { el.classList.remove('cs-hidden'); el.classList.add('cs-visible'); }
-    });
-
-    _csRestoreOrLoad(concept);
-    // Switch to Spark tab in unified panel (panel already open)
-    panelSwitchTab('spark', true);
-  }, 200);
+function _convOpenCSById(id) {
+  panelSwitchTab('spark', true);
+  openSparkPanel(id);
 }
 
 // ============================================
