@@ -1,7 +1,7 @@
 # Epistemic Plain Style Guide — v2.2
 **Scope:** The `plain` field only (the concept's actual explanation)
-**Last updated:** June 2026 (v2.0 built from full-library audit of 636 concepts; v2.2 corrects v2.0 after live-testing against 636 real concepts exposed a real failure — see "Why v2.0 was wrong" below)
-**Companion doc:** hook-style-guide.md (hooks), term-style-guide.md (terms), analogy/prompt guide (future)
+**Last updated:** June 2026 (v2.0 built from full-library audit of 636 concepts; v2.2 corrects v2.0 after live-testing; extraction prompt updated to v1.8 which compresses plain rules to 8 max for reliable model output — this guide remains the full editorial reference for human review)
+**Companion doc:** hook-style-guide.md (hooks), term-style-guide.md (terms)
 
 ---
 
