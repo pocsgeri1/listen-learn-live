@@ -3580,6 +3580,13 @@
     background: rgba(232,213,163,0.04);
     border-radius: 0 6px 6px 0;
   }
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.84rem; line-height: 1.55; color: var(--muted2);
+    font-style: italic; padding: 8px 12px;
+    border-left: 2px solid var(--accent);
+    background: rgba(232,213,163,0.04);
+    border-radius: 0 6px 6px 0;
+  }
   .cs-pitfall {
     opacity: 0; transform: translateY(6px);
     transition: opacity 0.35s ease, transform 0.35s ease;
@@ -7582,7 +7589,7 @@
     <div class="spark-panel-header">
       <div class="spark-panel-headline">
         <button class="cs-help-btn" id="csHelpBtn" onclick="_sparkHelpClick()" aria-label="How does this work">❓</button>
-        <span class="spark-headline-text">Say something epic.</span>
+        <span class="spark-headline-text">Say something <em class="spark-headline-accent">epic.</em></span>
       </div>
     </div>
 
@@ -13175,7 +13182,7 @@ function _applyAIData(d, doTypewriter) {
   const inner = document.getElementById('csPromptInner');
   const promptEl = document.getElementById('csPromptText');
 
-  function _showCoaching() {
+  function _showCoaching(animate) {
     var openersList = document.getElementById('csOpenersList');
     var pitfallEl = document.getElementById('csPitfall');
     var intro = _SPARK_COACHING_INTROS[Math.floor(Math.random() * _SPARK_COACHING_INTROS.length)];
@@ -13193,18 +13200,23 @@ function _applyAIData(d, doTypewriter) {
       pitfallEl.textContent = d.pitfall || '';
     }
 
-    // Show coaching container
-    setTimeout(function() { _csShowPostPrompt(); }, 80);
+    // Show coaching container (clears any inline display:none)
+    setTimeout(function() { _csShowPostPrompt(); }, 60);
 
-    // Stagger each opener block
-    var lines = openersList ? openersList.querySelectorAll('.cs-opener-block') : [];
-    lines.forEach(function(line, i) {
-      setTimeout(function() { line.classList.add('visible'); }, 140 + i * 160);
-    });
-    // Pitfall after openers
-    setTimeout(function() {
+    if (animate) {
+      // Stagger each opener block in
+      var lines = openersList ? openersList.querySelectorAll('.cs-opener-block') : [];
+      lines.forEach(function(line, i) {
+        setTimeout(function() { line.classList.add('visible'); }, 140 + i * 160);
+      });
+      setTimeout(function() {
+        if (pitfallEl) pitfallEl.classList.add('visible');
+      }, 140 + (openersList ? openersList.querySelectorAll('.cs-opener-block').length : 0) * 160 + 120);
+    } else {
+      // Instant — no animation on restore
+      if (openersList) openersList.querySelectorAll('.cs-opener-block').forEach(function(el) { el.classList.add('visible'); });
       if (pitfallEl) pitfallEl.classList.add('visible');
-    }, 140 + lines.length * 160 + 120);
+    }
 
     setTimeout(function() {
       var fr = document.getElementById('csFeedbackRow');
@@ -13233,17 +13245,16 @@ function _applyAIData(d, doTypewriter) {
         cursor.className = 'tw-cursor tw-done';
         promptEl.classList.remove('tw-active');
         // Coaching appears after typewriter finishes
-        _showCoaching();
+        _showCoaching(true);
       }
     }, 18 + Math.random() * 14);
   } else {
-    // No typewriter — instant display (from cache/stash)
     if (inner && promptEl) {
       inner.style.display = 'block';
       inner.classList.remove('cs-prompt-hidden', 'cs-prompt-visible');
       promptEl.textContent = d.prompt || '';
     }
-    _showCoaching();
+    _showCoaching(false);
   }
 
   _csLogHistoryWithPrompt(_csConcept, 'universal', d.prompt);
@@ -14291,7 +14302,11 @@ function _csStoryShareOpener() {
 function _csHidePostPrompt() {
   ['csCoaching','csDivider','csFeedbackRow'].forEach(function(id) {
     const el = document.getElementById(id);
-    if (el) { el.classList.add('cs-hidden'); el.classList.remove('cs-visible'); }
+    if (el) {
+      el.style.display = '';   // clear inline from roll collapse
+      el.classList.add('cs-hidden');
+      el.classList.remove('cs-visible');
+    }
   });
   // Hide prompt block entirely until generate fires
   const block = document.getElementById('csPromptBlock');
@@ -14313,7 +14328,12 @@ function _csHideAll() {
 function _csShowPostPrompt() {
   ['csCoaching','csDivider','csActions'].forEach(function(id) {
     const el = document.getElementById(id);
-    if (el) { el.classList.remove('cs-hidden'); el.classList.add('cs-visible'); }
+    if (el) {
+      // Clear inline display:none that may have been set by roll collapse
+      el.style.display = '';
+      el.classList.remove('cs-hidden');
+      el.classList.add('cs-visible');
+    }
   });
 }
 
@@ -16926,12 +16946,16 @@ function playStreakMilestoneSFX() {
 .spark-headline-text {
   font-family: 'Playfair Display', serif;
   font-size: 1.55rem;
-  font-style: italic;
+  font-style: normal;
   font-weight: 400;
   color: var(--text);
   letter-spacing: -0.01em;
   line-height: 1.2;
   flex: 1;
+}
+.spark-headline-accent {
+  font-style: italic;
+  color: var(--accent);
 }
 
 /* ── v2.5: Panel search bar — distinct from hero (underline + gold ✦) ── */
@@ -17124,7 +17148,22 @@ function playStreakMilestoneSFX() {
 .spark-output .cs-swipe-x    { left: 0;   color: #d4715a; }
 .spark-output .cs-swipe-save { right: 0;  color: #7aaf8a; }
 
-/* ── v2.5: concept pill hover — subtle glow to hint at desktop preview ── */
+/* ── v2.5g: Tab content item stagger animation ── */
+@keyframes panelItemIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.conv-saved-entry,
+.conv-hist-entry {
+  animation: panelItemIn 0.4s ease both;
+}
+.conv-saved-entry:nth-child(1), .conv-hist-entry:nth-child(1) { animation-delay: 0.05s; }
+.conv-saved-entry:nth-child(2), .conv-hist-entry:nth-child(2) { animation-delay: 0.10s; }
+.conv-saved-entry:nth-child(3), .conv-hist-entry:nth-child(3) { animation-delay: 0.15s; }
+.conv-saved-entry:nth-child(4), .conv-hist-entry:nth-child(4) { animation-delay: 0.20s; }
+.conv-saved-entry:nth-child(5), .conv-hist-entry:nth-child(5) { animation-delay: 0.25s; }
+.conv-saved-entry:nth-child(6), .conv-hist-entry:nth-child(6) { animation-delay: 0.28s; }
+.conv-saved-entry:nth-child(n+7), .conv-hist-entry:nth-child(n+7) { animation-delay: 0.30s; }
 .conv-header {
   display: flex;
   align-items: center;
@@ -17457,8 +17496,8 @@ function playStreakMilestoneSFX() {
   letter-spacing: 0.12em; text-transform: uppercase;
   color: var(--muted); display: block; margin-bottom: 3px; font-style: normal;
 }
-.stash-opener--alt { border-left-color: var(--border-hover); }
-.stash-opener--alt .stash-opener-label { color: var(--muted); }
+/* All stash openers use gold border — no grey alt */
+.stash-opener--alt { border-left-color: var(--accent); }
 .stash-pitfall {
   font-family: 'DM Sans', sans-serif; font-size: 0.76rem;
   color: var(--muted2); margin-bottom: 4px;
@@ -18694,12 +18733,10 @@ function _mountCSInPanel() {
 // Switch between Spark / Stash / History tabs
 function panelSwitchTab(tab, skipRender) {
   _panelTab = tab;
-  // Update tab buttons
   ['spark','stash','history'].forEach(t => {
     const btn = document.getElementById('panelTab' + t.charAt(0).toUpperCase() + t.slice(1));
     if (btn) btn.classList.toggle('active', t === tab);
   });
-  // Show/hide sections
   const sections = { spark: 'panelSectionSpark', stash: 'panelSectionStash', history: 'panelSectionHistory' };
   Object.keys(sections).forEach(t => {
     const el = document.getElementById(sections[t]);
@@ -18709,14 +18746,24 @@ function panelSwitchTab(tab, skipRender) {
       el.style.flexDirection = 'column';
       el.style.flex = '1';
       el.style.overflow = (t === 'spark') ? 'hidden' : 'auto';
-      requestAnimationFrame(() => { el.style.opacity = '1'; el.style.pointerEvents = ''; });
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(10px)';
+      el.style.transition = 'opacity 0.45s ease, transform 0.45s ease';
+      el.style.pointerEvents = '';
+      requestAnimationFrame(function() {
+        requestAnimationFrame(function() {
+          el.style.opacity = '1';
+          el.style.transform = 'translateY(0)';
+        });
+      });
     } else {
       el.style.opacity = '0';
+      el.style.transform = 'translateY(0)';
+      el.style.transition = 'opacity 0.18s ease';
       el.style.pointerEvents = 'none';
-      setTimeout(() => { el.style.display = 'none'; }, 220);
+      setTimeout(function() { el.style.display = 'none'; }, 200);
     }
   });
-  // Render content for the active tab
   if (tab === 'stash' && !skipRender) {
     document.getElementById('convSavedControls').style.display = '';
     document.getElementById('convWarnBanner').style.display = 'none';
@@ -18724,11 +18771,8 @@ function panelSwitchTab(tab, skipRender) {
     _convRenderSaved();
     _convCheckWarn();
   } else if (tab === 'history' && !skipRender) {
-    // Render history into panelSectionHistory
     const histSection = document.getElementById('panelSectionHistory');
-    if (histSection) {
-      _convRenderHistoryInto(histSection);
-    }
+    if (histSection) _convRenderHistoryInto(histSection);
   }
 }
 let _convTab = 'saved'; // kept for legacy convSwitchTab compat
