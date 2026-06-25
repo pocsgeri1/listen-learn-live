@@ -1,7 +1,7 @@
 # Epistemic Hook Style Guide — v2.0
 **Scope:** Hook field rewrites and generation for all concepts
-**Last updated:** June 2026 — added craft layer from direct-response/viral-hook mechanics (specificity, front-loading, single dominant lever, explicit emotion/relatability checkpoint). Tone stays Dan Koe-led and quiet — sarcasm-as-default and negativity-bias-as-default were considered and explicitly rejected. See "What v2.0 changed" at bottom.
-**Companion doc:** term-style-guide.md (terms), plain/analogy/prompt guide (future)
+**Last updated:** June 2026 — v2.0 added craft layer from direct-response/viral-hook mechanics. Extraction prompt updated to v1.8 (June 2026): hook rules compressed to 8 max per field, em-dash ban moved to field header (❌ at write time, not self-check), generation sequence and pattern menu removed from active prompt (too many constraints for reliable output). This guide remains the full editorial reference for human review.
+**Companion doc:** term-style-guide.md (terms), plain-style-guide.md (plain)
 
 ---
 
@@ -122,6 +122,13 @@ For scientific or academic-sounding concept names, replace the mechanism with an
 - **Sarcasm/wit as the default register (new in v2.0).** Sarcasm pattern #2 in the approved list above stays available as one option in rotation, never the default lever. It's the hardest register for a fluent non-native reader to parse under any cognitive load, and it's garnish, not the engine — the point must survive with the sarcasm removed.
 - **Negativity/threat as the default lever (new in v2.0).** Loss aversion and cost-of-inaction (Hormozi lane) stay in the voice blend, but they're one lever among several, not the default. If every hook in a batch is running fear, status anxiety, or "you're doing this wrong," the batch has collapsed into one register — rotate levers per the category seasoning table below.
 
+## Analogy hard bans (v1.8 — extracted from extraction prompt)
+
+- Em-dashes (—) anywhere
+- Opening with "It's like…" — vary the opener on every analogy, without exception
+- Abstract comparisons ("like the difference between X and Y" without a specific picturable scene)
+- "Do NOT use: 'It's like a machine that…', 'Think of it as a process…', 'Imagine a system where…'"
+
 ---
 
 ## The no-overlap rule (critical)
@@ -168,4 +175,3 @@ Source: a working session comparing this guide against aggressive/viral social-h
 - Negativity bias / threat-framing as a default lever — stays available (cost-of-inaction, Hormozi lane) but must rotate with the other levers, not dominate a batch
 
 **Reasoning:** the audience opens the app by choice (not a cold scroll being stopped), sarcasm doesn't survive translation across fluency levels, and negativity-as-default would flatten the category voice seasoning system (Hormozi/Koe/Naval/Sutherland/Perel) into one repeated register.
-
