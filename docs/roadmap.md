@@ -7,23 +7,30 @@
 
 ## Next up
 
-- **Founder section photos** — still need `/assets/founder-photo.jpg`, `/assets/gym-cast.jpg`, `/assets/notes-system.jpg`, `/assets/notes-system2.jpg` uploaded to GitHub at `listen-learn-live/assets/` (folder auto-creates on first upload via GitHub web UI). Photo montage shows graceful fallbacks until then.
-- **OG image** — `/og-image.png` not yet in repo root. Add it so `og:image` and `twitter:image` tags (currently omitted) can be added to `index.html` `<head>`.
-- **Legal pages review** — `privacy.html` and `terms.html` have structural placeholder content. Must be reviewed by a qualified professional before relying on them, especially GDPR obligations (Netherlands-based, collecting EU email via newsletter). KVK number, legal entity name, and address still bracketed.
-- **Collection 501 keep/cut decision** — 30 relationships/dating-science concepts reviewed term-by-term (17 flagged cut, 13 flagged keep/rewrite) but the decision was deferred mid-session and never executed. `concepts.json` as currently delivered still contains all 30 unchanged. Needs a dedicated session to finalize and execute.
-- **Plain rewrite — remaining ~500 concepts not yet touched** — 94 of 594 were trimmed to the new 350-char ceiling this session (the genuine worst offenders). The other ~500 were never measured against the v2.2 rule set in full (only checked for raw length, not jargon/repeat-back/all-fields-overlap). A full pass using the corrected v2.2 rules (and likely the trim-weakest-sentence method, proven this session) is still outstanding.
-- **`plain-batch.js`/`.html` tool — built but unproven at scale** — v2.1 exists and is rule-synced, but was never the method actually used for this session's 94-concept trim (done manually in-chat instead). Test on a small batch before trusting it for a large pass — see build-journal lesson 4.
-- **Hook rewrite v2.0 — continue remaining ~487 concepts** — style guide locked in `hook-style-guide.md`. 149 of 636 concept hooks reviewed (120 rewritten, 29 kept). Same worst-first scoring + 3-variation review process. Source of truth for approved hooks: `hook-approved-batch1.md`. Note: library is now 594 concepts post-cleanup (was 636), so the "remaining" count needs re-checking against the current id set.
-- **Story seeds 5–8** — With family, Networking, Podcast Talk, Think it Through. Same style guide as seeds 1–4 (locked in `epistemic-story-seeds.docx`). Write seeds first (in chat), lock them, then wire with `_csPlayLockedSeed`.
-- **Generate/regenerate theme images** — 16 images now live at `/images/themes/theme-101.jpg`...`theme-116.jpg` (surreal/retro style, v1.80). If results don't perform well or feel off-brand long-term, `theme-image-prompts.md` (minimalist editorial alternative) is ready to regenerate from.
-- **CS modal auto-fire decision** — disabled in v1.79. Decide: first-visit-only auto-generate vs. permanent manual trigger.
-- **Admin editorial picks tool** — two options proposed: (a) `admin-picks.html` at `tools.epistemic.live` behind Cloudflare Zero Trust (one-click toggle, GitHub commit), (b) `score-picks.js` auto-score script for bootstrapping. Build `admin-picks.html` for ongoing control + script for one-time bootstrap to lift picks from ~103 → ~200.
-- **Tier 3 features deferred** — "Concept collisions" mini-game, "Term of the conversation" share cards, "Concept constellation" connections chip (partially built — "connects to →" chip landed in v1.89) — revisit after D7 retention data.
-- **`duplicate_of` suppression bug in `index.html`** — duplicate concepts (e.g. id 492, dup_of 136) are hidden from search/library grid entirely instead of only affecting drawer-level display. Flagged for a dedicated debugging session, not yet fixed.
+- **Panel B — Stories (v2.6):** Full separate right-slide panel. State machine: Entry (4 scenario pills) → Loading → Story (typewriter + inline term pills) → Outro (Spark CTA + Save). My Stories tab. Locked seeds 1–2 already in codebase (`SP_STORY_SEEDS`). AI path for date/work scenarios. See architecture.md Panel B section for full design.
+- **Practice Mode (v2.6+):** Sub-state in Panel B Outro. User types their conversation opener → single API call returns coaching note + rewritten version. No multi-turn.
+- **Learning path strip (v2.6):** 3 "What to read next" cards below coaching in Spark panel. Pure JS — `related_ids` + stash filter + category/picks weighting. Zero API cost.
+- **Personalized context modal (v2.7):** One-time 3-field setup (role, situation, interests). Stored in `lll_user_context_v1`. Injected into all API calls for tailored openers and scenarios.
+- **Role-play simulation (v2.8):** Multi-turn back-and-forth in Panel B. Claude plays the other person. Max 8 turns then auto-debrief.
+- **RAG / knowledge-grounded responses (v3.0):** Embed all concept `plain` fields, store in Supabase pgvector, inject top-5 similar concepts per API call. Prerequisite: library ≥1000 concepts.
+- **OG image** — `/og-image.png` not yet in repo root. Add for `og:image` + `twitter:image` tags.
+- **Hero scenario pills** — currently open Spark panel with seed concept (placeholder). Wire to Panel B in v2.6.
+- **Story seeds 3–4 (On a Date, At Work)** — not yet written. Seeds 1–2 locked in `epistemic-story-seeds.docx`.
+- **`duplicate_of` bug** — concepts with `duplicate_of` set are suppressed from library/search entirely. Correct behaviour: only affects drawer-level display. Separate session fix.
+- **Collection 501 keep/cut decision** — 17 flagged for cut, 13 keep/rewrite. Deferred. All 30 still in `concepts.json`.
+- **Plain rewrite — ~500 concepts not yet touched** against v2.2 rules. Trim-weakest-sentence method proven.
+- **Hook rewrite v2.0 — ~487 concepts remaining** after batch 1 (120 rewritten, 29 kept).
+- **Admin editorial picks tool** — `admin-picks.html` at `tools.epistemic.live` for ongoing picks management.
+- **Legal pages review** — `privacy.html` and `terms.html` need professional review before relying on them (GDPR, Netherlands).
+- **Extraction prompt v1.8** — drafted in `extraction-prompt-v1_8.txt`, approved but not yet executed in `extract-concepts.js` (Phase 2) or `extract.html` (Phase 3).
 
 ## Recently completed
 
+- v2.5–v2.5j ✅ — 2026-06-25 — **index.html + cs-generate.js: Spark panel rebuild, unified entry, coaching redesign:**
+  Full scenario system killed. `openSparkPanel(id?)` single entry. Panel search bar (Fuse-powered, term-first ordering). Concept display: eyebrow + Playfair bold term, no expand pill. Desktop hover → side preview (fixed positioning bug: no scrollY offset). Casino roll "↺ New concept" with collapse animation. Typewriter fires only on fresh generate; smooth expand on restore (prompt 0.45s, coaching 500ms later). Coaching: block-by-block stagger animation, labels above border lines. Loading messages (10 rotating, fun). cs-generate.js: model `claude-sonnet-4-5` → `claude-sonnet-4-6` (root cause of all 500s). History: logs every concept viewed; layout fixed (term left, cat+date right). Stash: scenario tabs killed, universal prompt view, copy button. Tab animation: slide-down 0.45s. Stash hover-lift. Headlines: "Say something" normal + "epic." italic gold. Orphaned CSS block removed (was corrupting pitfall styling). See build-journal for 9 lessons.
+
 - v2.4–v2.4f ✅ — 2026-06-24 — **index.html: founder polish, view toggle, podcast pills, spark.html promotion:**
+
   Founder section scroll-reveal (`.founder-reveal` class + `initScrollReveal` post-render). Founder copy rewrite: new emphasis classes (`.founder-line-bold`, `.founder-italic-body`, `.founder-accent`), all three bold/italic lines now visually identical. Light-mode founder-label thicker border. Library view toggle: single `◫` replaced by `◫` / `⊞` pair in sort pills row (`spViewGrid`/`spViewScan`; `spSetScanMode()` drives both). Mobile hamburger double-divider fixed (`.nav-mobile-no-border` on two buttons). Mobile library `.nf-section-rule` hidden + spacing tightened. Editorial hairline top-label ("IDEAS WORTH SAYING OUT LOUD") removed from both SVG data URLs (was duplicating nav eyebrow). Podcast pills always-visible (all pills, episode rows still default to 3); "Show less podcasts ↑" button added. Founder images repositioned on desktop (+60px on main/notes2/gym + captions, container height +80px). **`spark.html` promoted to `index.html`**: old `index.html` archived as `index-legacy.html`; `vercel.json` updated with `/spark → /` 301 redirect; canonical + OG + Twitter meta tags added to `<head>`. See build-journal for 4 lessons.
 
 - v2.1–v2.3i ✅ — 2026-06-21/23 — **spark.html UI overhaul + founder section + mobile fixes + podcast/library UX:**
