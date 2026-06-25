@@ -8482,7 +8482,7 @@ document.addEventListener('keydown', e => {
 
 async function loadCollections() {
   try {
-    const res = await fetch('./collections.json');
+    const res = await fetch('./collections.json?v=' + Date.now());
     if (!res.ok) return;
     const data = await res.json();
     if (!Array.isArray(data)) return;
@@ -8613,7 +8613,7 @@ async function loadConcepts() {
   }
 
   try {
-    const response = await fetch('./concepts.json');
+    const response = await fetch('./concepts.json?v=' + Date.now());
 
     if (!response.ok) {
       throw new Error('Could not load concepts.json — status: ' + response.status);
