@@ -1,7 +1,7 @@
 # Epistemic Term Style Guide — v2.0
 **Scope:** The `term` field only (2-5 words, the concept's name)
-**Last updated:** June 2026 (revised after full-library editorial pass, 636 concepts)
-**Companion doc:** hook-style-guide.md (hooks), plain/analogy/prompt guide (future)
+**Last updated:** June 2026 (revised after full-library editorial pass, 636 concepts; extraction prompt updated to v1.8 — term rules unchanged, performing correctly)
+**Companion doc:** hook-style-guide.md (hooks), plain-style-guide.md (plain)
 
 ---
 
