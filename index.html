@@ -4200,6 +4200,32 @@
     color: var(--accent);
   }
 
+  /* v2.5 — New concept button (casino roll) */
+  .cs-btn--new {
+    background: none;
+    border: 1px solid var(--border-hover);
+    color: var(--muted2);
+    transition: color 0.2s, border-color 0.2s, background 0.2s;
+  }
+  .cs-btn--new:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(232,213,163,0.05);
+  }
+  .cs-btn--new:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* v2.5 — spinning ✦ on generate button while loading */
+  @keyframes sparkSpin {
+    0%   { transform: rotate(0deg) scale(1); }
+    50%  { transform: rotate(180deg) scale(1.2); }
+    100% { transform: rotate(360deg) scale(1); }
+  }
+  .cs-gen-spinning {
+    display: inline-block;
+    animation: sparkSpin 1.1s linear infinite;
+    transform-origin: center;
+  }
+
   /* Actions + feedback hidden until prompt visible — v1.72 */
   .cs-post-prompt {
     transition: opacity 0.3s ease;
@@ -7355,18 +7381,10 @@
   </div>
 
   <div class="nav-island" id="navIsland">
-    <!-- spark.html nav v1.76 C3 — Spark + Library + Collection -->
-    <a class="nav-link nav-spark-btn" onclick="_csOpenPanel();playNavSFX()"><span class="nav-spark-emoji">💬</span>Spark</a>
-    <a class="nav-link nav-library-btn" onclick="playNavSFX();document.getElementById('app').scrollIntoView({behavior:'smooth'})"><span class="nav-library-emoji">📚</span>Library</a>
-    <a class="nav-link nav-conv-btn" onclick="openConversations();playNavSFX()" title="Saved ideas" id="navSavedLink"><span id="navSavedBadge" class="nav-saved-badge" style="display:none"></span><span class="nav-stash-emoji">🔖</span>Collection</a>
-    <!-- hidden v1.70: Episodes, Shorts, Vault, Map, Quiz, Prompts, Today(COTD) -->
-    <!-- <a class="nav-link" onclick="playNavSFX();scrollToSection('episodesSection')">Episodes</a> -->
-    <!-- <a class="nav-link" onclick="playNavSFX();scrollToSection('shortsSection')">Shorts</a> -->
-    <!-- <a class="nav-link" onclick="playNavSFX();toggleVault();scrollToSection('app')">Vault</a> -->
-    <!-- <a class="nav-link" onclick="openCotdFromNav();playNavSFX()">Today (COTD)</a> -->
-    <!-- <a class="nav-link nav-cs-btn" onclick="openCSFromNav();playNavSFX()"><span class="cs-nav-emoji" aria-hidden="true">💬</span>Prompts</a> -->
-    <!-- <a class="nav-link nav-map-btn" href="/map" onclick="track('map_opened');playNavSFX()">◈ Map</a> -->
-    <!-- <button class="nav-quiz-btn" id="navQuizBtn" onclick="playNavSFX();openQuiz()">◈ Quiz</button> -->
+    <!-- v2.5: Browse · Spark · Story -->
+    <a class="nav-link nav-browse-btn" onclick="playNavSFX();document.getElementById('app').scrollIntoView({behavior:'smooth'})"><span class="nav-browse-emoji">📚</span>Browse</a>
+    <a class="nav-link nav-spark-btn" onclick="openSparkPanel();playNavSFX()"><span class="nav-spark-emoji">💬</span>Spark</a>
+    <a class="nav-link nav-story-btn" onclick="openStoriesPanel();playNavSFX()"><span class="nav-story-emoji">✦</span>Story</a>
   </div>
   <!-- v1.71: epic button is now inside nav-right -->
 
@@ -7388,21 +7406,12 @@
   <!-- v1.73b: epic button first in mobile menu -->
   <button class="nav-mobile-link nav-mobile-epic nav-mobile-no-border" onclick="openEgg();playNavSFX();closeMobileNav()">😎 I feel epic!</button>
   <div class="nav-mobile-divider"></div>
-  <!-- v1.71: mobile nav — Spark | Browse | Stash | Sign Up -->
-  <button class="nav-mobile-link nav-mobile-cs" onclick="playNavSFX();_csOpenPanel();closeMobileNav()">💬 Spark</button>
-  <button class="nav-mobile-link" onclick="playNavSFX();document.getElementById('app').scrollIntoView({behavior:'smooth'});closeMobileNav()">📚 Library</button>
-  <button class="nav-mobile-link nav-mobile-conv nav-mobile-no-border" onclick="playNavSFX();openConversations();closeMobileNav()">📌 Collection</button>
+  <!-- v2.5: Browse · Spark · Story -->
+  <button class="nav-mobile-link" onclick="playNavSFX();document.getElementById('app').scrollIntoView({behavior:'smooth'});closeMobileNav()">📚 Browse</button>
+  <button class="nav-mobile-link nav-mobile-cs" onclick="playNavSFX();openSparkPanel();closeMobileNav()">💬 Spark</button>
+  <button class="nav-mobile-link nav-mobile-no-border" onclick="playNavSFX();openStoriesPanel();closeMobileNav()">✦ Story</button>
   <div class="nav-mobile-divider"></div>
   <button class="nav-mobile-link nav-mobile-signup" onclick="playNavSFX();scrollToSection('signup');closeMobileNav()">◉ Sign Up 🎁 — Free Founding Access</button>
-  <!-- hidden v1.70 — preserved:
-  <button class="nav-mobile-link nav-mobile-map" onclick="playNavSFX();track('map_opened');window.location='/map'">◈ Map</button>
-  <button class="nav-mobile-link nav-mobile-quiz" onclick="playNavSFX();openQuiz();closeMobileNav()">◈ Quiz</button>
-  <button class="nav-mobile-link" onclick="playNavSFX();scrollToSection('episodesSection');closeMobileNav()">◎ Episodes</button>
-  <button class="nav-mobile-link" onclick="playNavSFX();scrollToSection('shortsSection');closeMobileNav()">◈ Shorts</button>
-  <button class="nav-mobile-link" onclick="playNavSFX();toggleVault();scrollToSection('app');closeMobileNav()">◆ Vault</button>
-  <button class="nav-mobile-link" onclick="playNavSFX();openCotdFromNav();closeMobileNav()">◇ Today's Concept</button>
-  <button class="nav-mobile-link nav-mobile-cs" onclick="playNavSFX();openCSFromNav();closeMobileNav()">💬 Conversation Starters</button>
-  -->
 </div>
 
 <!-- EASTER EGG OVERLAY — v1.70 — 3 taps on logo -->
@@ -7574,39 +7583,15 @@
     <div class="cs-card-inner-scroll">
     <button class="cs-close" id="csClose" aria-label="Close">✕</button>
 
-    <div class="cs-eyebrow">
-      <span class="cs-eyebrow-dot"></span>
-      <span>Daily Spark</span>
-      <span class="cs-eyebrow-date" id="csDate"></span>
+    <!-- v2.5: Panel search bar — distinct from hero search -->
+    <div class="spark-search-wrap" id="sparkSearchWrap">
+      <span class="spark-search-icon">✦</span>
+      <input class="spark-search-input" id="sparkSearchInput" type="text" placeholder="Search concepts, topics, episodes…" autocomplete="off" />
+      <button class="spark-search-clear" id="sparkSearchClear" style="display:none" onclick="sparkSearchClear()" aria-label="Clear">✕</button>
     </div>
+    <div class="spark-search-results" id="sparkSearchResults" style="display:none"></div>
 
-    <div class="cs-headline-row">
-      <button class="cs-help-btn" id="csHelpBtn" onclick="_csHelpClick()" aria-label="How does this work">
-        ❓
-      </button>
-      <h2 class="cs-headline" id="csHeadline">Today's Conversation Starter</h2>
-    </div>
-
-    <!-- Help bubble lives at body level so it escapes stacking contexts -->
-    <div class="cs-help-bubble" id="csHelpBubble" style="display:none">
-      <div class="cs-help-step"><span class="cs-help-num">01</span><span>An interesting idea from a podcast gets picked for you. Tap it to see what it means — in plain English.</span></div>
-      <div class="cs-help-step"><span class="cs-help-num">02</span><span>Read your conversation starter tailored to who you're talking to. Change topic or scenario below anytime.</span></div>
-      <div class="cs-help-step"><span class="cs-help-num">03</span><span>Did it land? Do tell us! Stash saves the ones worth keeping for later.</span></div>
-      <div style="margin-top:10px;font-size:0.8rem;font-style:italic;color:var(--accent);font-family:'Playfair Display',serif">Now go say something worth saying! ✦</div>
-    </div>
-
-    <!-- Help overlay for mobile -->
-    <div class="cs-help-overlay" id="csHelpOverlay" onclick="_csHelpOverlayClose(event)">
-      <div class="cs-help-overlay-card">
-        <button class="cs-help-overlay-close" onclick="_csHelpOverlayClose()">✕</button>
-        <div class="cs-help-overlay-title">How does this work?</div>
-        <div class="cs-help-step"><span class="cs-help-num">01</span><span>An interesting idea from a podcast gets picked for you. Tap it to see what it means — in plain English.</span></div>
-        <div class="cs-help-step" style="margin-top:10px"><span class="cs-help-num">02</span><span>Read your conversation starter tailored to who you're talking to. Change topic or scenario below anytime.</span></div>
-        <div class="cs-help-step" style="margin-top:10px"><span class="cs-help-num">03</span><span>Did it land? Do tell us! Stash saves the ones worth keeping for later.</span></div>
-        <div style="margin-top:14px;font-size:0.9rem;font-style:italic;color:var(--accent);font-family:'Playfair Display',serif;text-align:center">Now go say something worth saying! ✦</div>
-      </div>
-    </div>
-    <!-- Concept expandable pill — term only -->
+    <!-- Concept pill — hover on desktop shows side preview -->
     <div class="cs-source-label" id="csSourceLabel">An epic idea to discuss</div>
     <div class="cs-concept-pill-wrap" id="csConceptPillWrap">
       <button class="cs-concept-pill" id="csConceptPill">
@@ -7621,29 +7606,23 @@
       </div>
     </div>
 
-    <!-- Generate button — shown when concept loaded but no prompt yet -->
+    <!-- Generate button -->
     <div class="cs-generate-row" id="csGenerateRow" style="display:none">
       <button class="cs-generate-btn" id="csGenerateBtn">
         <span class="cs-generate-btn-icon">✦</span> Generate conversation starter
       </button>
     </div>
 
-    <!-- Swipeable prompt block -->
+    <!-- Prompt block — typewriter reveal only, no skeleton -->
     <div class="cs-prompt-block" id="csPromptBlock">
-      <div class="cs-skeleton" id="csSkeleton" style="display:none">
-        <div class="cs-skel-line cs-skel-line--short"></div>
-        <div class="cs-skel-line"></div>
-        <div class="cs-skel-line cs-skel-line--med"></div>
-      </div>
       <div id="csPromptInner" class="cs-prompt-hidden">
-        <div class="cs-opener" id="csOpener">At lunch with a friend:</div>
-        <p class="cs-prompt-text" id="csPromptText">—</p>
+        <p class="cs-prompt-text" id="csPromptText"></p>
       </div>
       <div class="cs-swipe-x" id="csSwipeX">✕</div>
       <div class="cs-swipe-save" id="csSwipeSave">♡ Saved</div>
     </div>
 
-    <!-- Coaching layer — immediately after prompt -->
+    <!-- Coaching layer -->
     <div class="cs-coaching cs-post-prompt cs-hidden" id="csCoaching">
       <div class="cs-coaching-section">
         <div class="cs-coaching-label">You could say:</div>
@@ -7652,72 +7631,6 @@
       <div class="cs-coaching-section cs-pitfall-wrap">
         <div class="cs-coaching-label cs-coaching-label--warn">Watch out for:</div>
         <div class="cs-pitfall" id="csPitfall"></div>
-      </div>
-    </div>
-
-    <!-- Connects-to chip — v1.89 Phase 2 -->
-    <div class="cs-connects-chip cs-post-prompt cs-hidden" id="csConnectsChip">
-      <span class="cs-connects-chip-label">connects to →</span>
-      <button class="cs-connects-chip-btn" id="csConnectsChipBtn" onclick="_csConnectsChipClick()">—</button>
-    </div>
-
-    <!-- Bottom controls: Change topic · Change scenario · Related — v1.72c -->
-    <!-- Related button disabled v1.89 (chip replaces it); separator hidden too -->
-    <div class="cs-reveal-row cs-post-prompt cs-hidden" id="csRevealRow">
-      <button class="cs-reveal-link" id="csRevealTopic" onclick="_csToggleTopicReveal()">Change topic</button>
-      <span class="cs-reveal-sep">·</span>
-      <button class="cs-reveal-link" id="csRevealScenario" onclick="_csToggleScenarioReveal()">Change scenario</button>
-      <!-- DISABLED v1.89: replaced by connects-to chip above
-      <span class="cs-reveal-sep" id="csRevealRelatedSep">·</span>
-      <button class="cs-reveal-link" id="csRevealRelated" onclick="_csToggleRelatedReveal()">Related concepts</button>
-      -->
-    </div>
-
-    <!-- Category pills — expands below the reveal row -->
-    <div class="cs-reveal-section" id="csCatSection">
-      <div class="cs-reveal-section-inner">
-        <div style="height:0.5rem"></div>
-        <div class="cs-cat-row" id="csCatRow"></div>
-        <div style="height:0.4rem"></div>
-      </div>
-    </div>
-
-    <!-- Topic picker — shown when Change topic is active (State 2+) -->
-    <div id="csTopicPickerWrap">
-      <div class="cs-picker-cat-row" id="csPickerCatRow"></div>
-      <div class="cs-candidate-list" id="csCandidateList"></div>
-      <button class="cs-picker-more-btn" id="csPickerMoreBtn" onclick="_csPickerMore()">More ideas →</button>
-    </div>
-    <button class="cs-story-btn" id="csPickerStoryBtn" onclick="_csOpenStoryMode()">★ See how these connect</button>
-
-    <!-- Scenario buttons — expands below the reveal row -->
-    <div class="cs-reveal-section" id="csScenarioSection">
-      <div class="cs-reveal-section-inner">
-        <div class="cs-scenario-branch-wrap">
-          <!-- Curved hairlines from center — 4 bezier arcs, on-brand color -->
-          <svg class="cs-scenario-branch-svg" id="csScenarioBranchSvg" viewBox="0 0 1 1" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-            <path class="cs-branch-curve cs-branch-c1" d=""/>
-            <path class="cs-branch-curve cs-branch-c2" d=""/>
-            <path class="cs-branch-curve cs-branch-c3" d=""/>
-            <path class="cs-branch-curve cs-branch-c4" d=""/>
-          </svg>
-          <div class="cs-context-row cs-context-row--branched">
-            <button class="cs-ctx-btn" data-ctx="partner">Partner</button>
-            <button class="cs-ctx-btn active" data-ctx="friend">Friend</button>
-            <button class="cs-ctx-btn" data-ctx="colleague">Colleague</button>
-            <button class="cs-ctx-btn" data-ctx="meeting">Meeting</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Related concepts — expands below the reveal row -->
-    <div class="cs-reveal-section" id="csRelatedSection">
-      <div class="cs-reveal-section-inner">
-        <div style="height:0.5rem"></div>
-        <div class="cs-related-label" id="csRelatedLabel">Related concepts</div>
-        <div class="cs-related-row" id="csRelatedRow"></div>
-        <div style="height:0.4rem"></div>
       </div>
     </div>
 
@@ -7749,11 +7662,10 @@
     </div>
     <div class="cs-feedback-msg" id="csFeedbackMsg" style="display:none;font-family:'DM Sans',sans-serif;font-size:0.82rem;color:var(--accent);line-height:1.5;margin-bottom:0.75rem;font-style:italic"></div>
 
-    <!-- Actions: Copy & Share · Save · Surprise Me + Prev/Next -->
+    <!-- Actions: Copy · New concept · Prev/Next -->
     <div class="cs-actions cs-post-prompt cs-hidden" id="csActions">
-      <button class="cs-btn cs-btn--primary" id="csShareBtn">↑ Copy &amp; Share</button>
-      <button class="cs-btn cs-btn--surprise" id="csSurpriseBtn">✦ Surprise me</button>
-      <button class="cs-btn" id="csBackToStoryBtn" onclick="_csReopenStory()" style="display:none;font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.08em;text-transform:uppercase;background:transparent;border:1px solid var(--border);border-radius:20px;padding:5px 14px;color:var(--muted2);cursor:pointer;">↩ Story</button>
+      <button class="cs-btn cs-btn--primary" id="csShareBtn">↑ Copy</button>
+      <button class="cs-btn cs-btn--new" id="csNewConceptBtn" onclick="_csRollNewConcept()">↺ New concept</button>
       <div style="display:flex;gap:6px;margin-left:auto">
         <button class="cs-nav-btn" id="csPrevBtn" title="Previous concept" disabled>⤺</button>
         <button class="cs-nav-btn" id="csNextBtn" title="Next concept">⤻</button>
@@ -8482,7 +8394,7 @@ document.addEventListener('keydown', e => {
 
 async function loadCollections() {
   try {
-    const res = await fetch('./collections.json?v=' + Date.now());
+    const res = await fetch('./collections.json');
     if (!res.ok) return;
     const data = await res.json();
     if (!Array.isArray(data)) return;
@@ -8613,7 +8525,7 @@ async function loadConcepts() {
   }
 
   try {
-    const response = await fetch('./concepts.json?v=' + Date.now());
+    const response = await fetch('./concepts.json');
 
     if (!response.ok) {
       throw new Error('Could not load concepts.json — status: ' + response.status);
@@ -10951,6 +10863,7 @@ loadConcepts().then(() => {
   // initConceptOfTheDay();
   initConversationStarter();
   initSparkHero(); // spark.html v1.76 — hero search
+  _initSparkSearch(); // v2.5 — panel search bar
   window.addEventListener('resize', () => {
     if (_themeOpenId !== null) {
       const card = document.getElementById('themeCard' + _themeOpenId);
@@ -11825,45 +11738,27 @@ function _spHighlightItem(items) {
 }
 
 function _spSelectConcept(id) {
-  const concept = CONCEPTS.find(x => x.id === id);
-  if (!concept) return;
   _spHideDropdown();
   spDismissPreview();
-  _csCat = concept.category;
-  _csCtx = _csCtx || 'friend';
-  _renderCSShell(concept);
-  _wireCSEvents();
-  _csLoadNewConcept(concept);
-  _csOpenPanel();
-  _loadAI(concept, _csCtx, true);
+  openSparkPanel(id);
 }
 
-// Mobile: load concept into CS panel without auto-firing AI generation — v1.90
-// User can then pick context and hit Generate manually
+// Mobile: load concept into Spark panel without auto-firing AI — v2.5
 function _spLoadConceptNoFire(id) {
-  const concept = CONCEPTS.find(x => x.id === id);
-  if (!concept) return;
   _spHideDropdown();
-  _csCat = concept.category;
-  _csCtx = 'friend';
-  _renderCSShell(concept);
-  _wireCSEvents();
-  _csLoadNewConcept(concept);
-  _csOpenPanel();
-  // Do NOT call _loadAI — user taps Generate when ready
+  openSparkPanel(id);
 }
 
 // Show floating concept preview card (back-face style: plain + analogy)
-function _spPreviewCard(id, anchorEl) {
+function _spPreviewCard(id, anchorEl, opts) {
   const concept = CONCEPTS.find(x => x.id === id);
   if (!concept) return;
   const card = document.getElementById('spPreviewCard');
   if (!card) return;
 
-  // On small screens the card is hidden via CSS — skip JS work
+  // On small screens skip
   if (window.innerWidth <= 1024) return;
 
-  // Cancel any pending hide-timeout from a previous dismiss
   if (card._hideTimeout) {
     clearTimeout(card._hideTimeout);
     card._hideTimeout = null;
@@ -11871,27 +11766,44 @@ function _spPreviewCard(id, anchorEl) {
 
   const color = CAT_COLOR[concept.category] || '#e8d5a3';
   const catName = (CATEGORIES.find(x => x.id === concept.category) || {}).name || concept.category;
+  const panelMode = opts && opts.panelMode;
 
   card.style.setProperty('--preview-color', color);
 
-  // Build back-face content: plain + analogy only
-  card.innerHTML = `
-    <div class="sp-preview-cat" style="color:${color}">${_spEsc(catName)}</div>
-    <div class="sp-preview-term">${_spEsc(concept.term)}</div>
-    <div class="sp-preview-section-label">What it means</div>
-    <div class="sp-preview-plain">${_spEsc(concept.plain || '')}</div>
-    <div class="sp-preview-section-label">Analogy</div>
-    <div class="sp-preview-analogy" style="border-left-color:${color}">${_spEsc(concept.analogy || '')}</div>
-    <div class="sp-preview-footer">
-      <button class="sp-preview-talk-btn" onclick="event.stopPropagation();spDismissPreview();_spSelectConcept(${id})">💬 Talk about this →</button>
-    </div>`;
+  if (panelMode) {
+    // Panel hover: term + hook + plain only — no analogy (quicker read)
+    card.innerHTML = `
+      <div class="sp-preview-cat" style="color:${color}">${_spEsc(catName)}</div>
+      <div class="sp-preview-term">${_spEsc(concept.term)}</div>
+      ${concept.hook ? `<div class="sp-preview-section-label">In one line</div><div class="sp-preview-plain" style="font-style:italic;color:var(--accent)">${_spEsc(concept.hook)}</div>` : ''}
+      <div class="sp-preview-section-label">What it means</div>
+      <div class="sp-preview-plain">${_spEsc(concept.plain || '')}</div>
+      <div class="sp-preview-footer">
+        <button class="sp-preview-talk-btn" onclick="event.stopPropagation();spDismissPreview();">✕ Close</button>
+      </div>`;
+  } else {
+    // Standard preview: plain + analogy
+    card.innerHTML = `
+      <div class="sp-preview-cat" style="color:${color}">${_spEsc(catName)}</div>
+      <div class="sp-preview-term">${_spEsc(concept.term)}</div>
+      <div class="sp-preview-section-label">What it means</div>
+      <div class="sp-preview-plain">${_spEsc(concept.plain || '')}</div>
+      <div class="sp-preview-section-label">Analogy</div>
+      <div class="sp-preview-analogy" style="border-left-color:${color}">${_spEsc(concept.analogy || '')}</div>
+      <div class="sp-preview-footer">
+        <button class="sp-preview-talk-btn" onclick="event.stopPropagation();spDismissPreview();_spSelectConcept(${id})">💬 Talk about this →</button>
+      </div>`;
+  }
 
-  // Position: anchor to tile if provided, else left of search bar
+  // Position: anchor to element if provided, else left of search bar
   let top, cardLeft;
   if (anchorEl) {
     const rect = anchorEl.getBoundingClientRect();
     top = Math.max(80, rect.top + window.scrollY - 20);
-    cardLeft = Math.max(12, rect.left - 264);
+    // Panel is on the right — position card to the LEFT of panel
+    const panelEl = document.getElementById('convPanel');
+    const panelLeft = panelEl ? panelEl.getBoundingClientRect().left : window.innerWidth - 520;
+    cardLeft = Math.max(12, panelLeft - 260);
   } else {
     const searchWrap = document.getElementById('spSearchWrap');
     const rect = searchWrap ? searchWrap.getBoundingClientRect() : null;
@@ -12031,89 +11943,46 @@ function spToggleMorePills() {
 }
 
 function spScenarioPill(el, scenario) {
-  // Mark active — clear all, then mark clicked pill + any duplicate pills for this scenario
+  // v2.5: Scenario pills open Spark panel with the seed concept.
+  // Full Story panel (Panel B) wiring comes in v2.6.
   document.querySelectorAll('.sp-pill').forEach(p => p.classList.remove('active'));
   if (el) el.classList.add('active');
-  // Also mark duplicate pills for same scenario in row2 (mobile/desktop split)
   try {
     document.querySelectorAll(`.sp-pill[onclick*="'${scenario}'"]`).forEach(p => p.classList.add('active'));
-  } catch(e) { /* selector safety */ }
+  } catch(e) {}
 
   function _spLaunchScenario() {
     if (typeof CONCEPTS === 'undefined' || !CONCEPTS.length) {
       setTimeout(_spLaunchScenario, 200);
       return;
     }
-
-    // ── LOCKED SEED PATH ────────────────────────────────────────────────────
+    // Use locked seed primary concept if available, else pick random
     const seed = SP_STORY_SEEDS[scenario];
-    if (seed) {
-      const seedConcepts = seed.concept_ids.map(function(id) {
-        return CONCEPTS.find(function(c) { return c.id === id; });
-      }).filter(Boolean);
-
-      const SP_CTX_MAP = {
-        friend: 'friend', dinner: 'friend', date: 'partner',
-        work: 'colleague', family: 'friend', networking: 'colleague',
-        podcast: 'friend', solo: 'friend'
+    let conceptId = null;
+    if (seed && seed.concept_ids && seed.concept_ids.length) {
+      conceptId = seed.concept_ids[0];
+    } else {
+      // Pick random from scenario-relevant categories
+      const SP_SCENARIO_CATS = {
+        family:     ['health','identity','relationships','philosophy'],
+        networking: ['language','business','power'],
+        podcast:    ['thinking','tech-ai','science','creativity'],
+        solo:       ['thinking','philosophy','psychology','identity'],
+        friend:     ['psychology','relationships','identity'],
+        dinner:     ['psychology','thinking','philosophy','society'],
+        date:       ['relationships','language','philosophy'],
+        work:       ['business','thinking','power']
       };
-      _csCtx = SP_CTX_MAP[scenario] || 'friend';
-
-      const primary = seedConcepts[0] || CONCEPTS[0];
-      _csConcept = primary;
-      _csCat = primary.category;
-      _csAIData = null;
-      _renderCSShell(primary);
-      _csPushToStack(primary);
-
-      openCS();
-
-      setTimeout(function() {
-        _csPlayLockedSeed(seed, seedConcepts);
-      }, 320);
-
-      if (typeof track === 'function') track('sp_scenario_pill', { scenario, seed: true });
-      return;
+      const cats = SP_SCENARIO_CATS[scenario] || ['psychology'];
+      const pool = CONCEPTS.filter(c => cats.includes(c.category) && !c.duplicate_of);
+      const pick = pool[Math.floor(Math.random() * pool.length)];
+      if (pick) conceptId = pick.id;
     }
-
-    // ── AI-GENERATED PATH (unlocked scenarios) ──────────────────────────────
-    const SP_SCENARIO_CATS = {
-      family:      ['health','identity','relationships','philosophy'],
-      networking:  ['language','business','power'],
-      podcast:     ['thinking','tech-ai','science','creativity'],
-      solo:        ['thinking','philosophy','psychology','identity']
-    };
-    const cats = SP_SCENARIO_CATS[scenario] || ['psychology','thinking'];
-    const pool = CONCEPTS.filter(function(c) {
-      return cats.includes(c.category) && !c.duplicate_of;
-    });
-    if (pool.length < 2) { _csOpenPanel(); return; }
-
-    const shuffled = pool.slice().sort(function() { return Math.random() - 0.5; });
-    const primary = shuffled[0];
-    const withRelated = shuffled.filter(function(c) { return c.id !== primary.id && c.related_ids && c.related_ids.length > 0; });
-    const withoutRelated = shuffled.filter(function(c) { return c.id !== primary.id && (!c.related_ids || !c.related_ids.length); });
-    const rest = withRelated.concat(withoutRelated).slice(0, 2);
-    const candidates = [primary].concat(rest);
-
-    const SP_CTX_MAP = {
-      friend: 'friend', dinner: 'friend', date: 'partner',
-      work: 'colleague', family: 'friend', networking: 'colleague',
-      podcast: 'friend', solo: 'friend'
-    };
-    _csCtx = SP_CTX_MAP[scenario] || 'friend';
-    _csConcept = primary;
-    _csCat = primary.category;
-    _csAIData = null;
-    _renderCSShell(primary);
-    _csPushToStack(primary);
-
-    openCS();
-
-    setTimeout(function() {
-      _csInjectCandidatesAndStory(candidates, scenario);
-    }, 350);
-
+    if (conceptId) {
+      openSparkPanel(conceptId);
+    } else {
+      openSparkPanel();
+    }
     if (typeof track === 'function') track('sp_scenario_pill', { scenario });
   }
 
@@ -12605,71 +12474,95 @@ function _csLogHistory(concept, ctx) {
 }
 
 
-// Static opener prefixes (used during loading / fallback only)
-const CS_OPENERS = {
-  partner:   'Tonight with your partner:',
-  friend:    'At lunch with a friend:',
-  colleague: 'With a colleague today:',
-  meeting:   'In your next meeting:'
-};
+// v2.5: CS_OPENERS removed — single universal opener pool in _SPARK_OPENERS
+// Kept as empty object so any stray picker refs don't throw
+const CS_OPENERS = {};
+// _csCtx and _csCat kept as dummies for story-mode code still referencing them
+var _csCtx = 'universal'; // legacy compat — not used by Spark panel
+var _csCat = 'psychology'; // legacy compat — not used by Spark panel
 
 let _csConcept   = null;   // currently displayed concept
-let _csCtx       = 'friend';
-let _csAIData    = null;   // { partner, friend, colleague, meeting } from API
+let _csAIData    = null;   // { universal: {...} } from API
 let _csLoading   = false;
-let _csCat       = 'psychology';  // default category v1.72
 let _csConceptStack = [];  // history for prev/next — array of concept IDs
 let _csStackIdx  = -1;     // current position in stack
 
 // ---- INIT ----
 
 function initConversationStarter() {
-  if (!CONCEPTS || CONCEPTS.length === 0) return;
-
-  // v1.72: default to psychology + friend
-  _csCat = 'psychology';
-  _csCtx = 'friend';
-
-  _buildCsCatRow();
-
-  // Pick a random psychology concept
-  _csConcept = _csPickForCat('psychology', false);
-  if (!_csConcept) _csConcept = _csPickForCat('all', true); // fallback
-  if (!_csConcept) return;
-
-  _renderCSShell(_csConcept);
-  _csPushToStack(_csConcept);
+  // v2.5: No auto-open, no auto-fire. Panel opens on demand via openSparkPanel().
+  // Just wire events so the panel is ready when first opened.
   _wireCSEvents();
-
-  // v1.79: auto-open disabled during testing — modal no longer opens
-  // or fires the AI on page load. User must click Spark/nav to open it,
-  // and "Generate starter" button to fire the API.
 }
 
 // Called from nav — always opens regardless of dismissed state
-function openCSFromNav() {
+// ── v2.5: UNIFIED ENTRY POINT ────────────────────────────────────────────────
+// openSparkPanel(conceptId?) — single entry point for ALL Spark panel opens.
+// No auto-fire. No ctx. Just: load concept → show Generate button → open panel.
+function openSparkPanel(conceptId) {
   if (!CONCEPTS || CONCEPTS.length === 0) return;
-  track('cs_opened', { source: 'nav' });
-  if (!_csConcept) {
-    // First ever open — init with psychology + friend
-    _csCat = 'psychology';
-    _csCtx = 'friend';
-    _csConcept = _csPickForCat('psychology', false);
-    if (!_csConcept) return;
-    _renderCSShell(_csConcept);
+  track('spark_opened', { source: conceptId ? 'concept' : 'nav' });
+
+  if (conceptId) {
+    const concept = CONCEPTS.find(c => c.id === conceptId);
+    if (!concept) return;
+    _csConcept = concept;
+    _csAIData = null;
+    _csStoryGenerated = false;
+    _renderCSShell(concept);
     _wireCSEvents();
+    _csPushToStack(concept);
+  } else if (_csConcept) {
+    // Restore last state — panel was previously opened
+    // If AI data cached, _applyAIToCtx handles it; else show Generate button
+    if (_csAIData && _csAIData['universal']) {
+      // Already have data — just open
+    } else {
+      const genRow = document.getElementById('csGenerateRow');
+      const genBtn = document.getElementById('csGenerateBtn');
+      if (genRow) genRow.style.display = 'block';
+      if (genBtn) { genBtn.disabled = false; genBtn.innerHTML = '<span class="cs-generate-btn-icon">✦</span> Generate conversation starter'; }
+    }
+  } else {
+    // First ever open — pick a random editors_pick or random concept
+    const picks = CONCEPTS.filter(c => c.editors_pick && !c.duplicate_of);
+    const pool = picks.length > 0 ? picks : CONCEPTS.filter(c => !c.duplicate_of);
+    const concept = pool[Math.floor(Math.random() * pool.length)];
+    if (!concept) return;
+    _csConcept = concept;
+    _csAIData = null;
+    _csStoryGenerated = false;
+    _renderCSShell(concept);
+    _wireCSEvents();
+    _csPushToStack(concept);
   }
+
   openCS();
-  // v1.79: never auto-fire the API on open — always show Generate button
-  // unless we already have AI data for this context.
-  if (!_csAIData || !_csAIData[_csCtx]) {
+  // Always show Generate button if no AI data
+  if (!_csAIData || !_csAIData['universal']) {
     const genRow = document.getElementById('csGenerateRow');
     const genBtn = document.getElementById('csGenerateBtn');
     if (genRow) genRow.style.display = 'block';
-    if (genBtn) { genBtn.disabled = false; genBtn.classList.remove('loading'); }
+    if (genBtn) { genBtn.disabled = false; genBtn.innerHTML = '<span class="cs-generate-btn-icon">✦</span> Generate conversation starter'; }
   }
-  // If _csAIData[_csCtx] exists — prompt already visible, nothing to do
 }
+
+// Story panel — placeholder for v2.6 Stories panel build
+function openStoriesPanel() {
+  // For now: open Spark panel and switch to the stories section inside it
+  // Full Stories panel will be a separate right-slide panel in v2.6
+  if (typeof panelSwitchTab === 'function') {
+    openCS();
+    // Stories tab removed from Spark panel in v2.5; will open dedicated panel in v2.6
+  }
+  // Temporary: open Spark panel with a random concept
+  openSparkPanel();
+}
+
+// Legacy aliases — kept so any remaining call sites don't throw
+function openCSFromNav() { openSparkPanel(); }
+function _csOpenPanel()  { openSparkPanel(); }
+function _csClosePanel(persist) { closeCS(persist); }
 
 // ---- CATEGORY FILTER ----
 
@@ -13093,39 +12986,27 @@ function _csPickForCat(cat, deterministic) {
 
 function _csLoadNewConcept(concept) {
   _csConcept = concept;
-  _csAIData  = null; // clear ALL previous concept's aiData — prevents badge bleed
-  _csStoryGenerated = false; // new concept = new story state
+  _csAIData  = null;
+  _csStoryGenerated = false;
   var backBtn = document.getElementById('csBackToStoryBtn');
   if (backBtn) backBtn.style.display = 'none';
-  // Clear has-prompt badges immediately
-  document.querySelectorAll('.cs-ctx-btn').forEach(function(b) { b.classList.remove('has-prompt'); });
   _renderCSShell(concept);
   _csPushToStack(concept);
-  // Hide coaching/divider/feedback but keep nav controls visible
   _csHidePostPrompt();
-  // Show reveal row + actions so user can always navigate — v1.73b
-  ['csRevealRow','csActions'].forEach(function(id) {
-    const el = document.getElementById(id);
-    if (el) { el.classList.remove('cs-hidden'); el.classList.add('cs-visible'); }
-  });
-  // Reset surprise button label
-  const surBtn = document.getElementById('csSurpriseBtn');
-  if (surBtn) surBtn.textContent = '✦ Surprise me';
+  // Actions always visible for Prev/Next nav
+  const actEl = document.getElementById('csActions');
+  if (actEl) { actEl.classList.remove('cs-hidden'); actEl.classList.add('cs-visible'); }
 }
 
 // ---- RENDER ----
 
 function _renderCSShell(concept) {
   if (!concept) return;
-  // NOTE: history is logged only in _csLogHistoryWithPrompt (after AI generates), not here
-  document.getElementById('csDate').textContent = formatTodayLabel();
-  document.getElementById('csPromptText').textContent = concept.prompt;
-  document.getElementById('csOpener').textContent = CS_OPENERS[_csCtx] || '';
 
-  // Concept expandable pill — term only (hook removed v1.72)
+  // Concept pill
   document.getElementById('csConceptPillTerm').textContent = concept.term;
 
-  // Source label — "From [podcast]:" if episode, else fallback
+  // Source label
   const sourceLabelEl = document.getElementById('csSourceLabel');
   if (sourceLabelEl) {
     const col = concept.collection_id != null ? COLLECTIONS_BY_ID[concept.collection_id] : null;
@@ -13138,17 +13019,13 @@ function _renderCSShell(concept) {
     }
   }
 
-  // Plain text — truncated to ~120 chars with ellipsis as teaser
-  const plain = concept.plain || '';
-  const plainTrunc = plain.length > 130 ? plain.slice(0, 127) + '…' : plain;
-  document.getElementById('csConceptPlain').textContent = plain; // full text (visible when expanded)
+  // Plain text (full, visible on expand)
+  document.getElementById('csConceptPlain').textContent = concept.plain || '';
 
-  // Source + timestamp link — redesigned as pill + action row
+  // Source + timestamp meta
   const col = concept.collection_id != null ? COLLECTIONS_BY_ID[concept.collection_id] : null;
   const metaEl = document.getElementById('csConceptMeta');
-
   let metaHtml = '';
-  // Action row: Watch at timestamp + See more — one line
   const actions = [];
   if (col && concept.timestamp && col.episode_url) {
     const tsUrl = buildTimestampedUrl(col.episode_url, concept.timestamp);
@@ -13162,19 +13039,17 @@ function _renderCSShell(concept) {
     actions.push(`<button class="cs-episode-action-btn" id="csOpenEpisodeBtn">↳ More from this episode</button>`);
   }
   if (actions.length) metaHtml += `<div class="cs-episode-actions">${actions.join('')}</div>`;
-
-  // Episode title pill — below actions
   if (col) {
     const epTitle = col.title.length > 55 ? col.title.slice(0,52)+'…' : col.title;
     metaHtml += `<div class="cs-episode-pill" style="margin-top:8px"><span class="cs-episode-pill-icon">◎</span>${_escHtml(epTitle)}</div>`;
   }
   metaEl.innerHTML = metaHtml;
 
-  // Re-wire the dynamically created episode button
+  // Re-wire episode button
   const epBtnDyn = document.getElementById('csOpenEpisodeBtn');
   if (epBtnDyn && col) {
     epBtnDyn.onclick = function() {
-      closeCS(false); // don't mark dismissed — user may return
+      closeCS(false);
       _csFromDrawer = true;
       openEpisodeDrawer(col.id);
       const backBtn = document.getElementById('epDrawerBackCS');
@@ -13182,7 +13057,7 @@ function _renderCSShell(concept) {
     };
   }
 
-  // Wire concept pill toggle
+  // Wire concept pill toggle (expand/collapse)
   const pill = document.getElementById('csConceptPill');
   const expand = document.getElementById('csConceptExpand');
   pill.onclick = function() {
@@ -13191,27 +13066,62 @@ function _renderCSShell(concept) {
     playExpandSFX(open);
   };
 
-  // Hide coaching and post-prompt elements until generated
-  _csHidePostPrompt();
-  document.getElementById('csFeedbackRow').classList.add('cs-hidden');
-  // Reflect saved state on button — v1.73b (don't always reset to unsaved)
-  _csUpdateSaveBtn();
+  // Wire concept pill hover preview (desktop only)
+  if (window.innerWidth > 1024) {
+    let _pillPreviewTimer = null;
+    pill.addEventListener('mouseenter', function() {
+      _pillPreviewTimer = setTimeout(function() {
+        _spPreviewCard(concept.id, pill, { panelMode: true });
+      }, 180);
+    });
+    pill.addEventListener('mouseleave', function() {
+      clearTimeout(_pillPreviewTimer);
+      setTimeout(spDismissPreview, 300);
+    });
+  }
 
-  _renderRelated(concept);
+  // Show generate button, hide post-prompt
+  _csHidePostPrompt();
+  const genRow = document.getElementById('csGenerateRow');
+  const genBtn = document.getElementById('csGenerateBtn');
+  if (genRow) genRow.style.display = 'block';
+  if (genBtn) { genBtn.disabled = false; genBtn.innerHTML = '<span class="cs-generate-btn-icon">✦</span> Generate conversation starter'; }
+
+  // Actions always visible (Prev/Next navigation)
+  const actionsEl = document.getElementById('csActions');
+  if (actionsEl) { actionsEl.classList.remove('cs-hidden'); actionsEl.classList.add('cs-visible'); }
+
+  _csUpdateSaveBtn();
 }
 
-function _applyAIToCtx(ctx) {
-  if (!_csAIData) return;
-  const d = _csAIData[ctx];
+// ── v2.5: Universal opener pool — variety without scenarios ──────────────────
+const _SPARK_OPENERS = [
+  "Something I've been thinking about—",
+  "Heard something wild recently—",
+  "This reframed how I see things—",
+  "Been sitting with this idea—",
+  "You'll find this interesting—",
+  "Someone said this to me and it stuck—",
+  "Random thing, but—",
+  "This made me think of you actually—"
+];
+const _SPARK_COACHING_INTROS = [
+  "When this comes up in conversation:",
+  "A natural way to say it:",
+  "How you might bring it up:",
+  "To make it land:",
+  "The way to open it:",
+  "One way in:",
+];
+
+function _applyAIData(d) {
   if (!d) return;
 
-  // Reset feedback row so it re-appears for every new generated prompt
+  // Reset feedback row
   const frReset = document.getElementById('csFeedbackRow');
   if (frReset) { frReset.classList.add('cs-hidden'); frReset.classList.remove('cs-visible'); }
 
-  document.getElementById('csOpener').textContent = CS_OPENERS[ctx] || '';
-
-  // Typewriter prompt text
+  // Typewriter — prompt text only (no opener div)
   const inner = document.getElementById('csPromptInner');
   const promptEl = document.getElementById('csPromptText');
   if (inner && promptEl) {
@@ -13219,7 +13129,6 @@ function _applyAIToCtx(ctx) {
     inner.classList.remove('cs-prompt-hidden','cs-prompt-visible');
     promptEl.textContent = '';
     promptEl.classList.add('tw-active');
-    // Inline typewriter for the short prompt text (no labels/bold)
     let pi = 0;
     const ptext = d.prompt || '';
     const cursor = document.createElement('span');
@@ -13234,48 +13143,40 @@ function _applyAIToCtx(ctx) {
         promptEl.classList.remove('tw-active');
       }
     }, 16 + Math.random() * 18);
-  } else if (promptEl) {
-    promptEl.textContent = d.prompt || '';
   }
 
-  // Coaching layer
-  const coaching = document.getElementById('csCoaching');
+  // Coaching — use rotating intro label for variety
   const openersList = document.getElementById('csOpenersList');
-  openersList.innerHTML = (d.openers || []).map((o, i) =>
-    `<div class="cs-opener-line"><span class="cs-opener-idx">${i === 0 ? 'Try saying' : 'Or try'}</span>${_escHtml(o)}</div>`
-  ).join('');
-  document.getElementById('csPitfall').textContent = d.pitfall || '';
+  if (openersList) {
+    const intro = _SPARK_COACHING_INTROS[Math.floor(Math.random() * _SPARK_COACHING_INTROS.length)];
+    openersList.innerHTML = (d.openers || []).map((o, i) =>
+      `<div class="cs-opener-line"><span class="cs-opener-idx">${i === 0 ? intro : 'Or try'}</span>${_escHtml(o)}</div>`
+    ).join('');
+  }
+  const pitfallEl = document.getElementById('csPitfall');
+  if (pitfallEl) pitfallEl.textContent = d.pitfall || '';
 
-  // Auto-save generated prompt to history (with prompt text) — v1.72
-  _csLogHistoryWithPrompt(_csConcept, ctx, d.prompt);
-
-  // Auto-save to Stash — no manual save needed — v1.74d
+  // Log history and auto-save
+  _csLogHistoryWithPrompt(_csConcept, 'universal', d.prompt);
   if (_csConcept) _csSaveConcept(_csConcept, _csAIData);
 
-  // Hide generate button
-  const genRow = document.getElementById('csGenerateRow');
-  if (genRow) genRow.style.display = 'none';
-
-  // Reveal row is shown via _csShowPostPrompt — no extra action needed
-
-  // Show post-prompt elements with staggered fade
+  // Show post-prompt with stagger
   setTimeout(function() { _csShowPostPrompt(); }, 200);
 
-  // Show feedback row after 8s — gives user time to read prompt before rating
+  // Show feedback row after 8s
   setTimeout(function() {
     const fr = document.getElementById('csFeedbackRow');
     if (fr) { fr.classList.remove('cs-hidden'); fr.classList.add('cs-visible'); }
   }, 8000);
 
-  // Update Surprise me button to "Give me another one" after first use
-  const surBtn = document.getElementById('csSurpriseBtn');
-  if (surBtn && surBtn.textContent.indexOf('Surprise') > -1) {
-    // keep label until first surprise click
-  }
-
-  // Update scenario badges + save state — v1.73b
-  _csUpdateScenarioBadges();
   _csUpdateSaveBtn();
+}
+
+// Keep _applyAIToCtx as a legacy shim so story mode and picker remnants don't throw
+function _applyAIToCtx(ctx) {
+  if (!_csAIData) return;
+  const d = _csAIData[ctx] || _csAIData['universal'];
+  if (d) _applyAIData(d);
 }
 
 function _renderRelated(concept) {
@@ -14310,38 +14211,30 @@ function _csStoryShareOpener() {
 // ---- v1.72 HELPERS ----
 
 function _csHidePostPrompt() {
-  // Hide coaching, divider, feedback — but keep reveal row + actions visible
-  // so user can always navigate prev/next and change topic/scenario — v1.73b
   ['csCoaching','csDivider','csFeedbackRow'].forEach(function(id) {
     const el = document.getElementById(id);
     if (el) { el.classList.add('cs-hidden'); el.classList.remove('cs-visible'); }
   });
-  // Close all reveal sections
-  ['csCatSection','csScenarioSection','csRelatedSection'].forEach(function(id) {
-    const el = document.getElementById(id);
-    if (el) el.classList.remove('open');
-  });
-  ['csRevealTopic','csRevealScenario','csRevealRelated'].forEach(function(id) {
-    const el = document.getElementById(id);
-    if (el) el.classList.remove('active');
-  });
-  // Story button lives in picker — no action needed here
+  // Clear prompt text and hide inner
+  const promptEl = document.getElementById('csPromptText');
+  if (promptEl) promptEl.textContent = '';
+  const inner = document.getElementById('csPromptInner');
+  if (inner) { inner.classList.add('cs-prompt-hidden'); inner.classList.remove('cs-prompt-visible'); }
 }
 
-// Full hide — used only on modal open before first concept loads
+// Full hide — used on panel open before first concept loads
 function _csHideAll() {
-  ['csCoaching','csDivider','csFeedbackRow','csActions','csRevealRow'].forEach(function(id) {
+  ['csCoaching','csDivider','csFeedbackRow','csActions'].forEach(function(id) {
     const el = document.getElementById(id);
     if (el) { el.classList.add('cs-hidden'); el.classList.remove('cs-visible'); }
   });
 }
 
 function _csShowPostPrompt() {
-  ['csCoaching','csDivider','csActions','csRevealRow'].forEach(function(id) {
+  ['csCoaching','csDivider','csActions'].forEach(function(id) {
     const el = document.getElementById(id);
     if (el) { el.classList.remove('cs-hidden'); el.classList.add('cs-visible'); }
   });
-  // Story button now lives in picker — nothing to do here
 }
 
 // Help ? button — mobile tap opens overlay, desktop hover shows bubble
@@ -14530,58 +14423,35 @@ function _csLogHistoryWithPrompt(concept, ctx, promptText) {
 // Restore aiData from session cache or saved storage; fall back to fresh generate.
 // Fixes prev/next reliability — concept already generated in session is restored, not re-generated. — v1.73b
 function _csRestoreOrLoad(concept) {
-  // 1. Try session cache for all ctxs first
-  var restoredAny = false;
-  var newAiData = {};
-  ['partner','friend','colleague','meeting'].forEach(function(c) {
-    var ck = (typeof CS_SESSION_KEY !== 'undefined' ? CS_SESSION_KEY : 'lll_cs_session_') + concept.id + '_' + c;
-    try {
-      var cv = sessionStorage.getItem(ck);
-      if (cv) { newAiData[c] = JSON.parse(cv); restoredAny = true; }
-    } catch(e) {}
-  });
-
-  // 2. Merge saved storage for any ctxs not in session cache
-  // Always load ALL saved aiData — not just current ctx — so switching scenarios works
+  // Try session cache for universal ctx
+  const ck = CS_SESSION_KEY + concept.id + '_universal';
   try {
-    var savedArr = JSON.parse(localStorage.getItem(CS_SAVED_KEY) || '[]');
-    var savedEntry = savedArr.find(function(s) { return s && s.id === concept.id; });
-    if (savedEntry && savedEntry.aiData) {
-      ['partner','friend','colleague','meeting'].forEach(function(c) {
-        if (!newAiData[c] && savedEntry.aiData[c]) {
-          newAiData[c] = savedEntry.aiData[c];
-          restoredAny = true;
-        }
-      });
+    const cv = sessionStorage.getItem(ck);
+    if (cv) {
+      _csAIData = { universal: JSON.parse(cv) };
+      _applyAIData(_csAIData['universal']);
+      return;
     }
   } catch(e) {}
 
-  if (restoredAny) {
-    _csAIData = newAiData;
-    // Update has-prompt badges for all ctxs that have data
-    _csUpdateScenarioBadges();
-    if (_csAIData[_csCtx]) {
-      _applyAIToCtx(_csCtx);
-      _csUpdateSaveBtn();
-      return;
+  // Try saved Stash
+  try {
+    const savedArr = JSON.parse(localStorage.getItem(CS_SAVED_KEY) || '[]');
+    const savedEntry = savedArr.find(function(s) { return s && s.id === concept.id; });
+    if (savedEntry && savedEntry.aiData) {
+      const d = savedEntry.aiData['universal'] || savedEntry.aiData['friend'] || null;
+      if (d) {
+        _csAIData = { universal: d };
+        _applyAIData(d);
+        return;
+      }
     }
-    // Current ctx has no data — show controls so user can generate
-    ['csRevealRow','csActions'].forEach(function(id) {
-      var el = document.getElementById(id);
-      if (el) { el.classList.remove('cs-hidden'); el.classList.add('cs-visible'); }
-    });
-    _csUpdateSaveBtn();
-    return;
-  }
+  } catch(e) {}
 
-  // 3. Nothing cached anywhere — fresh generate
+  // Nothing cached — show Generate button
   _csAIData = null;
-  ['csRevealRow','csActions'].forEach(function(id) {
-    var el = document.getElementById(id);
-    if (el) { el.classList.remove('cs-hidden'); el.classList.add('cs-visible'); }
-  });
-  _csUpdateSaveBtn();
-  _loadAI(concept, _csCtx, false);
+  const actEl = document.getElementById('csActions');
+  if (actEl) { actEl.classList.remove('cs-hidden'); actEl.classList.add('cs-visible'); }
 }
 
 // Reflect saved state on the Stash button — per-scenario v1.74b
@@ -14682,116 +14552,98 @@ function _csConnectsChipClick() {
 }
 
 // Surprise me — random concept from any category
-function _csSurprise() {
+// ── v2.5: CASINO ROLL — New concept button ───────────────────────────────────
+function _csRollNewConcept() {
   const pool = CONCEPTS.filter(c => !c.duplicate_of && (!_csConcept || c.id !== _csConcept.id));
   if (!pool.length) return;
-  const concept = pool[Math.floor(Math.random() * pool.length)];
-  _csCat = concept.category || 'all';
-  _buildCsCatRow();
+  const target = pool[Math.floor(Math.random() * pool.length)];
 
-  _csConcept = concept;
-  _csAIData = null;
-  document.querySelectorAll('.cs-ctx-btn').forEach(function(b) { b.classList.remove('has-prompt'); });
+  const termEl = document.getElementById('csConceptPillTerm');
+  if (!termEl) { _csLoadNewConcept(target); return; }
 
-  // Clear any inline display:none left by _csPickerHideMain
-  ['csCoaching','csDivider','csFeedbackRow','csGenerateRow','csConceptPill','csPromptBlock'].forEach(function(id) {
-    const el = document.getElementById(id);
-    if (el) el.style.display = '';
-  });
+  // Disable button during roll
+  const btn = document.getElementById('csNewConceptBtn');
+  if (btn) { btn.disabled = true; btn.textContent = '↺ Rolling…'; }
 
-  // Render shell first
-  _renderCSShell(concept);
-  _csPushToStack(concept);
+  // 12 shuffled terms to roll through
+  const shuffled = pool.slice().sort(() => Math.random() - 0.5).slice(0, 12);
+  const rollTerms = shuffled.map(c => c.term);
 
-  // IMMEDIATELY wipe prompt text + hide coaching/divider/feedback
-  // Only the concept pill + shimmer + loading messages should be visible
-  const promptText = document.getElementById('csPromptText');
-  if (promptText) promptText.textContent = '';
-  const inner = document.getElementById('csPromptInner');
-  if (inner) { inner.classList.add('cs-prompt-hidden'); inner.classList.remove('cs-prompt-visible'); }
+  let idx = 0;
+  const totalFrames = rollTerms.length;
+  // Speed curve: fast in middle, slow at end
+  function getDelay(i) {
+    if (i < 4) return 60;
+    if (i < 8) return 90;
+    if (i < 10) return 140;
+    return 200;
+  }
 
-  // Force-hide coaching, divider, feedback row via inline style
-  ['csCoaching','csDivider','csFeedbackRow'].forEach(function(id) {
-    const el = document.getElementById(id);
-    if (el) { el.style.display = 'none'; el.classList.add('cs-hidden'); el.classList.remove('cs-visible'); }
-  });
-
-  // Show shimmer immediately
-  _showCSLoading(true);
-
-  // Keep nav visible
-  ['csRevealRow','csActions'].forEach(function(id) {
-    const el = document.getElementById(id);
-    if (el) { el.classList.remove('cs-hidden'); el.classList.add('cs-visible'); }
-  });
-
-  // Fire AI
-  _loadAI(concept, _csCtx, false);
-
-  const surBtn = document.getElementById('csSurpriseBtn');
-  if (surBtn) surBtn.textContent = '→ Give me another one';
+  function rollStep() {
+    if (idx < totalFrames) {
+      termEl.textContent = rollTerms[idx];
+      termEl.style.transform = 'translateY(-3px)';
+      setTimeout(function() { termEl.style.transform = ''; }, 60);
+      setTimeout(rollStep, getDelay(idx));
+      idx++;
+    } else {
+      // Land on target
+      termEl.textContent = target.term;
+      termEl.style.transform = 'translateY(-3px)';
+      setTimeout(function() { termEl.style.transform = ''; }, 100);
+      _csLoadNewConcept(target);
+      if (btn) { btn.disabled = false; btn.textContent = '↺ New concept'; }
+    }
+  }
+  rollStep();
 }
 
-// ---- USE THIS INSTEAD ----
-// Swaps the active CS concept with a related one — full reset, ready to generate.
+// Legacy shim
+function _csSurprise() { _csRollNewConcept(); }
+
+// Swaps the active concept — used by story mode term pills
 function _csSwapConcept(id) {
   const concept = CONCEPTS.find(c => c.id === id);
   if (!concept) return;
   _playSwapSFX();
-  // Close picker if open — ensures prompt block is visible before loading
-  const pickerWrap = document.getElementById('csTopicPickerWrap');
-  if (pickerWrap && pickerWrap.classList.contains('active')) _csClosePicker();
-  // Clear any inline display:none left by _csPickerHideMain
-  ['csCoaching','csDivider','csFeedbackRow','csGenerateRow','csConceptPill','csPromptBlock'].forEach(function(eid) {
-    const el = document.getElementById(eid);
-    if (el) el.style.display = '';
-  });
   _csConcept = concept;
   _csAIData  = null;
-  _csCat = concept.category || _csCat;
-  _buildCsCatRow();
   _renderCSShell(concept);
   _csPushToStack(concept);
   _csHidePostPrompt();
-  // Keep nav controls visible — v1.73b
-  ['csRevealRow','csActions'].forEach(function(id) {
-    const el = document.getElementById(id);
-    if (el) { el.classList.remove('cs-hidden'); el.classList.add('cs-visible'); }
-  });
-  const relSec = document.getElementById('csRelatedSection');
-  if (relSec) relSec.classList.remove('open');
-  const relLnk = document.getElementById('csRevealRelated');
-  if (relLnk) relLnk.classList.remove('active');
-  // Ensure prompt block is visible so shimmer renders inside it
-  const pb = document.getElementById('csPromptBlock');
-  if (pb) pb.style.display = '';
-  _csRestoreOrLoad(concept);
+  const actEl = document.getElementById('csActions');
+  if (actEl) { actEl.classList.remove('cs-hidden'); actEl.classList.add('cs-visible'); }
 }
 
 // ---- AI CALL — v1.71: generates only for selected scenario ----
 // _csAIData is now keyed by ctx: { partner: {...}, friend: {...}, ... }
 // Only the requested ctx is generated; others generated on-demand when user switches tab.
 
-function _loadAI(concept, ctx, brandVoice) {
+// ── v2.5: SIMPLIFIED AI CALL — universal ctx, no scenario ────────────────────
+function _loadAI(concept) {
   if (_csLoading) return;
-  ctx = ctx || _csCtx;
 
-  // Check per-ctx session cache
-  const cacheKey = CS_SESSION_KEY + concept.id + '_' + ctx;
+  // Check session cache
+  const cacheKey = CS_SESSION_KEY + concept.id + '_universal';
   try {
     const cached = sessionStorage.getItem(cacheKey);
     if (cached) {
       if (!_csAIData) _csAIData = {};
-      _csAIData[ctx] = JSON.parse(cached);
-      _showCSLoading(false);
-      _applyAIToCtx(ctx);
+      _csAIData['universal'] = JSON.parse(cached);
+      _applyAIData(_csAIData['universal']);
       return;
     }
   } catch(e) {}
 
   _csLoading = true;
-  _showCSLoading(true);
-  _startLoadingMessages(ctx, brandVoice);
+
+  // Spin the generate button — no skeleton, no loading messages
+  const genBtn = document.getElementById('csGenerateBtn');
+  const genRow = document.getElementById('csGenerateRow');
+  if (genBtn) {
+    genBtn.disabled = true;
+    genBtn.innerHTML = '<span class="cs-generate-btn-icon cs-gen-spinning">✦</span> Generating…';
+  }
 
   fetch('/api/cs-generate', {
     method: 'POST',
@@ -14805,123 +14657,44 @@ function _loadAI(concept, ctx, brandVoice) {
         prompt: concept.prompt,
         category: concept.category
       },
-      ctx: ctx
+      ctx: 'universal'
     })
   })
   .then(r => r.json())
   .then(data => {
     _csLoading = false;
-    _stopLoadingMessages();
-    _showCSLoading(false);
-    // Support both single-ctx response { ctx: {...} } and legacy all-ctx { contexts: {...} }
     let ctxData = null;
-    if (data && data.ctx) {
-      ctxData = data.ctx;
-    } else if (data && data.contexts && data.contexts[ctx]) {
-      ctxData = data.contexts[ctx];
-    }
+    if (data && data.ctx) ctxData = data.ctx;
+    else if (data && data.contexts && data.contexts['universal']) ctxData = data.contexts['universal'];
+    else if (data && data.contexts && data.contexts['friend']) ctxData = data.contexts['friend']; // legacy fallback
+
     if (ctxData) {
       if (!_csAIData) _csAIData = {};
-      _csAIData[ctx] = ctxData;
+      _csAIData['universal'] = ctxData;
       try { sessionStorage.setItem(cacheKey, JSON.stringify(ctxData)); } catch(e) {}
-      _applyAIToCtx(ctx);
+      if (genRow) genRow.style.display = 'none';
+      _applyAIData(ctxData);
     } else {
-      // Server returned error JSON — reset button so user can retry
-      const genBtn = document.getElementById('csGenerateBtn');
-      const genRow = document.getElementById('csGenerateRow');
-      if (genBtn) { genBtn.disabled = false; genBtn.classList.remove('loading'); genBtn.textContent = '✶ Generate conversation starter'; }
+      // Error — reset button so user can retry
+      _csLoading = false;
+      if (genBtn) { genBtn.disabled = false; genBtn.innerHTML = '<span class="cs-generate-btn-icon">✦</span> Try again'; }
       if (genRow) genRow.style.display = 'block';
     }
   })
   .catch(function() {
     _csLoading = false;
-    _stopLoadingMessages();
-    _showCSLoading(false);
-    // Reset button so user can retry
-    const genBtn = document.getElementById('csGenerateBtn');
-    const genRow = document.getElementById('csGenerateRow');
-    if (genBtn) { genBtn.disabled = false; genBtn.classList.remove('loading'); genBtn.textContent = '✶ Try again'; }
+    if (genBtn) { genBtn.disabled = false; genBtn.innerHTML = '<span class="cs-generate-btn-icon">✦</span> Try again'; }
     if (genRow) genRow.style.display = 'block';
   });
 }
 
-// Brand-voice loading messages — shown on first auto-fire (v1.72)
-const _CS_BRAND_MSGS = [
-  "Most apps want your time. This one wants you to leave and go talk to someone.",
-  "The best ideas aren't the ones you remember — they're the ones you actually use.",
-  "You finished a 3-hour podcast. Now say something worth saying.",
-  "This is the only app that's trying to get rid of you. In a good way.",
-  "Not a notification. Not a streak. Just one thing worth saying out loud tonight."
-];
+// v2.5: Loading skeleton removed. _showCSLoading/_startLoadingMessages are no-ops kept for any stray call sites.
+function _showCSLoading(on) { /* no-op — skeleton removed v2.5 */ }
+function _startLoadingMessages(ctx, brandVoice) { /* no-op */ }
+function _stopLoadingMessages() { /* no-op */ }
 
 // Loading phase messages — per scenario, shown on manual re-generates
-const _CS_LOAD_MSGS = window._CS_LOAD_MSGS = {
-  partner: [
-    "Setting the mood for tonight's conversation… 🕯️",
-    "Finding something worth saying that doesn't sound rehearsed… 💬",
-    "Making sure you don't accidentally start a philosophy lecture… 😅",
-    "Warming up the right words for the right person… ✨"
-  ],
-  friend: [
-    "Finding something your friend will actually find interesting… 🍺",
-    "Making sure you won't sound like you just read a self-help book… 📖",
-    "Looking for a conversation that doesn't end in 'anyway, how are you'… 😄",
-    "Sourcing the right tangent for a proper catch-up… 🎯"
-  ],
-  colleague: [
-    "Finding something smart to say that doesn't sound like a TED talk… 💼",
-    "Making sure you're the most interesting person in the next meeting… 😎",
-    "Locating an idea that lands between too casual and too intense… ⚖️",
-    "Brainstorming material your colleagues will actually respect… 🧠"
-  ],
-  meeting: [
-    "Preparing something worth saying out loud in a room full of people… 🎤",
-    "Finding the insight that makes everyone go quiet in a good way… 🤫",
-    "Making sure you won't just nod along again… 🙋",
-    "Drafting something that survives eye contact across a conference table… 👀"
-  ]
-};
-
-let _loadMsgTimer = null;
-let _loadMsgIdx = 0;
-let _loadMsgCtx = 'friend';
-let _loadMsgBrand = false;
-
-function _startLoadingMessages(ctx, brandVoice) {
-  _loadMsgCtx = ctx || _csCtx || 'friend';
-  _loadMsgIdx = 0;
-  _loadMsgBrand = !!brandVoice;
-  _updateLoadMsg();
-  _loadMsgTimer = setInterval(function() {
-    const pool = _loadMsgBrand ? _CS_BRAND_MSGS : (_CS_LOAD_MSGS[_loadMsgCtx] || _CS_LOAD_MSGS.friend);
-    _loadMsgIdx = (_loadMsgIdx + 1) % pool.length;
-    _updateLoadMsg();
-  }, 3500);
-}
-
-function _updateLoadMsg() {
-  const skel = document.getElementById('csSkeleton');
-  if (!skel) return;
-  let msgEl = skel.querySelector('.cs-skel-msg');
-  if (!msgEl) {
-    msgEl = document.createElement('div');
-    msgEl.className = 'cs-skel-msg';
-    skel.appendChild(msgEl);
-  }
-  const pool = _loadMsgBrand ? _CS_BRAND_MSGS : (_CS_LOAD_MSGS[_loadMsgCtx] || _CS_LOAD_MSGS.friend);
-  msgEl.style.opacity = '0';
-  msgEl.style.transition = 'opacity 0.4s';
-  requestAnimationFrame(function() {
-    msgEl.textContent = pool[_loadMsgIdx];
-    msgEl.style.opacity = '1';
-  });
-}
-
-function _stopLoadingMessages() {
-  if (_loadMsgTimer) { clearInterval(_loadMsgTimer); _loadMsgTimer = null; }
-  const skel = document.getElementById('csSkeleton');
-  if (skel) { const m = skel.querySelector('.cs-skel-msg'); if (m) m.remove(); }
-}
+// (Loading messages removed v2.5 — skeleton killed)
 
 // Lightweight expand/collapse swoosh SFX
 function playExpandSFX(opening) {
@@ -15089,12 +14862,15 @@ function _wireSwipe() {
 }
 
 function _csSwipeLeft() {
-  // Skip — load next random concept in same category
   track('cs_swiped', { dir: 'left', concept_id: _csConcept ? _csConcept.id : null });
-  const next = _csPickForCat(_csCat, false);
-  if (next && next.id !== (_csConcept && _csConcept.id)) {
-    _csLoadNewConcept(next);
-  }
+  // Pick random from same category as current concept
+  const cat = _csConcept ? _csConcept.category : null;
+  const pool = cat
+    ? CONCEPTS.filter(c => c.category === cat && !c.duplicate_of && c.id !== (_csConcept && _csConcept.id))
+    : CONCEPTS.filter(c => !c.duplicate_of);
+  if (!pool.length) return;
+  const next = pool[Math.floor(Math.random() * pool.length)];
+  if (next) _csLoadNewConcept(next);
 }
 
 function _csSwipeRight() {
@@ -15113,136 +14889,74 @@ function _csSwipeRight() {
 // ---- WIRE EVENTS ----
 
 function _wireCSEvents() {
-  // Teleport cs-help-bubble to <body> so it escapes all stacking contexts
-  const bubble = document.getElementById('csHelpBubble');
-  if (bubble && bubble.parentElement !== document.body) {
-    document.body.appendChild(bubble);
-  }
-  if (bubble) bubble.style.display = '';
-
-  // Wire help button: show/hide bubble on mouseenter/leave + position via getBoundingClientRect
-  const helpBtn = document.getElementById('csHelpBtn');
-  if (helpBtn && bubble) {
-    helpBtn.addEventListener('mouseenter', function() {
-      const rect = helpBtn.getBoundingClientRect();
-      bubble.style.position = 'fixed';
-      bubble.style.top = rect.top + 'px';
-      bubble.style.right = (window.innerWidth - rect.left + 10) + 'px';
-      bubble.style.left = 'auto';
-      bubble.style.zIndex = '99999';
-      bubble.classList.add('cs-help-bubble--visible');
-    });
-    helpBtn.addEventListener('mouseleave', function() {
-      bubble.classList.remove('cs-help-bubble--visible');
-    });
-  }
-
-  // Generate button — shown when concept loaded but no AI data yet
+  // Generate button — fires _loadAI with current concept, no ctx
   const genBtn = document.getElementById('csGenerateBtn');
-  if (genBtn) {
+  if (genBtn && !genBtn._wired) {
+    genBtn._wired = true;
     genBtn.addEventListener('click', function() {
       if (!_csConcept || _csLoading) return;
-      genBtn.disabled = true;
-      genBtn.classList.add('loading');
-      genBtn.innerHTML = '<span class="cs-generate-btn-icon">✦</span> Generating…';
-      _loadAI(_csConcept, _csCtx, false);
+      _loadAI(_csConcept);
     });
   }
 
-  // Context buttons — auto-generate; section stays open until "Change scenario" re-clicked
-  document.querySelectorAll('.cs-ctx-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-      document.querySelectorAll('.cs-ctx-btn').forEach(b => b.classList.remove('active'));
-      this.classList.add('active');
-      _csCtx = this.dataset.ctx;
-      _playSwapSFX();
-
-      if (_csAIData && _csAIData[_csCtx]) {
-        // Cached — instant swap
-        _applyAIToCtx(_csCtx);
-      } else {
-        // Fire generate for this scenario
-        _loadAI(_csConcept, _csCtx, false);
-      }
-      // Update Stash button state for new scenario
-      _csUpdateSaveBtn();
-      // Collapse topic section only
-      const catSec = document.getElementById('csCatSection');
-      if (catSec) catSec.classList.remove('open');
-      const catLnkEl = document.getElementById('csRevealTopic');
-      if (catLnkEl) catLnkEl.classList.remove('active');
-    });
-  });
-
   // Close button
-  document.getElementById('csClose').onclick = function() { closeCS(true); };
+  const csCloseBtn = document.getElementById('csClose');
+  if (csCloseBtn) csCloseBtn.onclick = function() { closeCS(true); };
 
   // Share / copy
-  document.getElementById('csShareBtn').onclick = function() {
-    // If picker is active, commit the last generated concept first
-    const pickerWrap = document.getElementById('csTopicPickerWrap');
-    if (pickerWrap && pickerWrap.classList.contains('active') && _csPickerLastConceptId) {
-      _csPickerCommit();
-      // Allow a frame for state to settle before copying
-      setTimeout(function() { document.getElementById('csShareBtn').click(); }, 80);
-      return;
-    }
-    const opener = _csAIData ? CS_OPENERS[_csCtx] : (CS_OPENERS[_csCtx] || '');
-    const promptTxt = _csAIData
-      ? (_csAIData[_csCtx] && _csAIData[_csCtx].prompt) || (_csConcept && _csConcept.prompt)
-      : (_csConcept && _csConcept.prompt || '');
-    const term = _csConcept ? _csConcept.term : '';
-    const text = opener + ' ' + promptTxt + '\n\n— Epistemic · epistemic.live · Concept: ' + term;
-    try {
-      navigator.clipboard.writeText(text).then(function() {
-        const btn = document.getElementById('csShareBtn');
-        const orig = btn.textContent;
-        btn.textContent = '✓ Copied!';
-        setTimeout(function() { btn.textContent = orig; }, 2000);
-      });
-    } catch(e) {
-      const ta = document.createElement('textarea');
-      ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
-      document.body.appendChild(ta); ta.select(); document.execCommand('copy');
-      document.body.removeChild(ta);
-    }
-    track('prompt_shared', { ctx: _csCtx, concept_id: _csConcept ? _csConcept.id : null });
-  };
-
-  // Surprise me button
-  const surBtn = document.getElementById('csSurpriseBtn');
-  if (surBtn) surBtn.addEventListener('click', function() {
-    _csClosePicker();
-    _csSurprise();
-  });
+  const shareBtn = document.getElementById('csShareBtn');
+  if (shareBtn && !shareBtn._wired) {
+    shareBtn._wired = true;
+    shareBtn.addEventListener('click', function() {
+      const promptTxt = _csAIData && _csAIData['universal']
+        ? (_csAIData['universal'].prompt || (_csConcept && _csConcept.prompt))
+        : (_csConcept && _csConcept.prompt || '');
+      const opener = _SPARK_OPENERS[Math.floor(Math.random() * _SPARK_OPENERS.length)];
+      const term = _csConcept ? _csConcept.term : '';
+      const text = opener + ' ' + promptTxt + '\n\n— Epistemic · epistemic.live · Concept: ' + term;
+      try {
+        navigator.clipboard.writeText(text).then(function() {
+          const orig = shareBtn.textContent;
+          shareBtn.textContent = '✓ Copied!';
+          setTimeout(function() { shareBtn.textContent = orig; }, 2000);
+        });
+      } catch(e) {
+        const ta = document.createElement('textarea');
+        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+      track('prompt_shared', { concept_id: _csConcept ? _csConcept.id : null });
+    });
+  }
 
   // Prev / Next
   const prevBtn = document.getElementById('csPrevBtn');
   const nextBtn = document.getElementById('csNextBtn');
-  if (prevBtn) prevBtn.addEventListener('click', function() { _csClosePicker(); _csPrev(); });
-  if (nextBtn) nextBtn.addEventListener('click', function() { _csClosePicker(); _csNext(); });
+  if (prevBtn && !prevBtn._wired) { prevBtn._wired = true; prevBtn.addEventListener('click', function() { _csPrev(); }); }
+  if (nextBtn && !nextBtn._wired) { nextBtn._wired = true; nextBtn.addEventListener('click', function() { _csNext(); }); }
 
   // Feedback thumbs
-  document.getElementById('csFbUp').onclick = function() {
-    this.classList.add('voted-up');
-    document.getElementById('csFbDown').classList.remove('voted-down');
-    track('prompt_feedback', { result: 'up', concept_id: _csConcept ? _csConcept.id : null, ctx: _csCtx });
-    setTimeout(() => _csFeedbackDone(true), 800);
-  };
-  document.getElementById('csFbDown').onclick = function() {
-    this.classList.add('voted-down');
-    document.getElementById('csFbUp').classList.remove('voted-up');
-    track('prompt_feedback', { result: 'down', concept_id: _csConcept ? _csConcept.id : null, ctx: _csCtx });
-    setTimeout(() => _csFeedbackDone(false), 800);
-  };
-
-  // Backdrop + Esc
-  document.getElementById('csOverlay').addEventListener('click', function(e) {
-    if (e.target === this) closeCS(true);
-  });
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && document.getElementById('csOverlay').classList.contains('active')) closeCS(true);
-  });
+  const fbUp = document.getElementById('csFbUp');
+  const fbDown = document.getElementById('csFbDown');
+  if (fbUp && !fbUp._wired) {
+    fbUp._wired = true;
+    fbUp.onclick = function() {
+      this.classList.add('voted-up');
+      if (fbDown) fbDown.classList.remove('voted-down');
+      track('prompt_feedback', { result: 'up', concept_id: _csConcept ? _csConcept.id : null });
+      setTimeout(() => _csFeedbackDone(true), 800);
+    };
+  }
+  if (fbDown && !fbDown._wired) {
+    fbDown._wired = true;
+    fbDown.onclick = function() {
+      this.classList.add('voted-down');
+      if (fbUp) fbUp.classList.remove('voted-up');
+      track('prompt_feedback', { result: 'down', concept_id: _csConcept ? _csConcept.id : null });
+      setTimeout(() => _csFeedbackDone(false), 800);
+    };
+  }
 
   _wireSwipe();
 }
@@ -15312,9 +15026,7 @@ function closeCS(persist) {
   if (persist) markDismissedTodayCS();
 }
 
-// Aliases used by PHASE C wiring
-function _csOpenPanel() { openCSFromNav(); }
-function _csClosePanel(persist) { closeCS(persist); }
+// (aliases defined in openSparkPanel block above)
 
 // ---- PERSISTENCE ----
 
@@ -16999,7 +16711,8 @@ function playStreakMilestoneSFX() {
 .nav-spark-emoji,
 .nav-browse-emoji,
 .nav-stash-emoji,
-.nav-library-emoji {
+.nav-library-emoji,
+.nav-story-emoji {
   display: inline-block;
   opacity: 0;
   max-width: 0;
@@ -17013,13 +16726,136 @@ function playStreakMilestoneSFX() {
 .nav-spark-btn:hover .nav-spark-emoji,
 .nav-browse-btn:hover .nav-browse-emoji,
 .nav-conv-btn:hover .nav-stash-emoji,
-.nav-library-btn:hover .nav-library-emoji {
+.nav-library-btn:hover .nav-library-emoji,
+.nav-story-btn:hover .nav-story-emoji {
   opacity: 1;
   max-width: 1.4em;
   margin-right: 4px;
 }
 
-/* ── Unified panel tabs (Spark / Stash / History) ── */
+/* ── v2.5: Spark panel search bar — intentionally distinct from hero search ── */
+.spark-search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin: 16px 20px 10px;
+  border-bottom: 1.5px solid var(--border-hover);
+  padding-bottom: 10px;
+  position: relative;
+  transition: border-color 0.2s;
+}
+.spark-search-wrap:focus-within {
+  border-bottom-color: var(--accent);
+}
+.spark-search-icon {
+  font-size: 0.9rem;
+  color: var(--accent);
+  flex-shrink: 0;
+  margin-right: 10px;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+  font-family: 'DM Mono', monospace;
+}
+.spark-search-wrap:focus-within .spark-search-icon { opacity: 1; }
+.spark-search-input {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  color: var(--text);
+  padding: 0;
+  min-width: 0;
+}
+.spark-search-input::placeholder {
+  color: var(--muted);
+  font-style: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.65rem;
+}
+.spark-search-clear {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 0.7rem;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 3px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+}
+.spark-search-clear:hover { color: var(--text); }
+.spark-search-results {
+  margin: 0 20px 6px;
+  border: 1px solid var(--border-hover);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--surface2);
+  max-height: 300px;
+  overflow-y: auto;
+}
+.spark-search-result {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  width: 100%;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  padding: 11px 14px;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s;
+}
+.spark-search-result:last-child { border-bottom: none; }
+.spark-search-result:hover { background: rgba(255,255,255,0.04); }
+.spark-result-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 5px;
+}
+.spark-result-term {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  color: var(--text);
+  text-transform: uppercase;
+  white-space: nowrap;
+  min-width: 0;
+  flex-shrink: 0;
+  max-width: 45%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.spark-result-hook {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.72rem;
+  color: var(--muted2);
+  line-height: 1.4;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.spark-search-empty {
+  padding: 14px 16px;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+[data-theme="light"] .spark-search-result:hover { background: rgba(0,0,0,0.03); }
+
+/* ── v2.5: concept pill hover — subtle glow to hint at desktop preview ── */
 .conv-header {
   display: flex;
   align-items: center;
@@ -18442,7 +18278,6 @@ body.cs-panel-open .sp-trigger-hint { display: none; }
         <button class="conv-panel-tab active" id="panelTabSpark" onclick="panelSwitchTab('spark')"><span class="conv-panel-tab-emoji">💬</span>Spark</button>
         <button class="conv-panel-tab" id="panelTabStash" onclick="panelSwitchTab('stash')"><span class="conv-panel-tab-emoji">🔖</span>Stash</button>
         <button class="conv-panel-tab" id="panelTabHistory" onclick="panelSwitchTab('history')"><span class="conv-panel-tab-emoji">📖</span>History</button>
-        <button class="conv-panel-tab" id="panelTabStories" onclick="panelSwitchTab('stories')"><span class="conv-panel-tab-emoji">✦</span>Stories</button>
       </div>
       <button class="conv-close" id="convClose" aria-label="Close">✕</button>
     </div>
@@ -18529,17 +18364,17 @@ function _mountCSInPanel() {
 function panelSwitchTab(tab, skipRender) {
   _panelTab = tab;
   // Update tab buttons
-  ['spark','stash','history','stories'].forEach(t => {
+  ['spark','stash','history'].forEach(t => {
     const btn = document.getElementById('panelTab' + t.charAt(0).toUpperCase() + t.slice(1));
     if (btn) btn.classList.toggle('active', t === tab);
   });
-  // Show/hide sections — use opacity + pointer-events for smooth crossfade
-  const sections = { spark: 'panelSectionSpark', stash: 'panelSectionStash', history: 'panelSectionHistory', stories: 'panelSectionStories' };
+  // Show/hide sections
+  const sections = { spark: 'panelSectionSpark', stash: 'panelSectionStash', history: 'panelSectionHistory' };
   Object.keys(sections).forEach(t => {
     const el = document.getElementById(sections[t]);
     if (!el) return;
     if (t === tab) {
-      el.style.display = t === 'stash' ? 'flex' : 'flex';
+      el.style.display = 'flex';
       el.style.flexDirection = 'column';
       el.style.flex = '1';
       el.style.overflow = (t === 'spark') ? 'hidden' : 'auto';
@@ -18563,8 +18398,6 @@ function panelSwitchTab(tab, skipRender) {
     if (histSection) {
       _convRenderHistoryInto(histSection);
     }
-  } else if (tab === 'stories' && !skipRender) {
-    _convRenderStories();
   }
 }
 let _convTab = 'saved'; // kept for legacy convSwitchTab compat
@@ -18572,6 +18405,84 @@ let _convCatFilter = 'all';
 let _convCtxFilter = 'all';
 let _convUndoEntry = null;
 let _convUndoTimer = null;
+
+// ── v2.5: SPARK PANEL SEARCH ─────────────────────────────────────────────────
+// Reuses FUSE_INSTANCE from the main hero search. Renders results inside the panel.
+let _sparkSearchActive = false;
+
+function _initSparkSearch() {
+  const input = document.getElementById('sparkSearchInput');
+  const clearBtn = document.getElementById('sparkSearchClear');
+  const resultsEl = document.getElementById('sparkSearchResults');
+  if (!input) return;
+
+  input.addEventListener('input', function() {
+    const q = this.value.trim();
+    if (clearBtn) clearBtn.style.display = q ? 'inline-flex' : 'none';
+    if (!q) {
+      resultsEl.style.display = 'none';
+      _sparkSearchActive = false;
+      return;
+    }
+    _sparkSearchActive = true;
+    // Use same FUSE_INSTANCE as hero search
+    if (typeof FUSE_INSTANCE === 'undefined' || !FUSE_INSTANCE) {
+      resultsEl.innerHTML = '<div class="spark-search-empty">Search not ready yet…</div>';
+      resultsEl.style.display = 'block';
+      return;
+    }
+    const hits = FUSE_INSTANCE.search(q).slice(0, 8);
+    if (!hits.length) {
+      resultsEl.innerHTML = '<div class="spark-search-empty">No concepts found</div>';
+      resultsEl.style.display = 'block';
+      return;
+    }
+    resultsEl.innerHTML = hits.map(h => {
+      const c = h.item;
+      const color = CAT_COLOR[c.category] || 'var(--accent)';
+      return `<button class="spark-search-result" onclick="_sparkPickConcept(${c.id})">
+        <span class="spark-result-dot" style="background:${color}"></span>
+        <span class="spark-result-term">${_escHtml(c.term)}</span>
+        <span class="spark-result-hook">${_escHtml(c.hook || '')}</span>
+      </button>`;
+    }).join('');
+    resultsEl.style.display = 'block';
+  });
+
+  input.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') { sparkSearchClear(); }
+  });
+
+  // Close on outside click
+  document.addEventListener('click', function(e) {
+    if (_sparkSearchActive && !e.target.closest('#sparkSearchWrap') && !e.target.closest('#sparkSearchResults')) {
+      sparkSearchClear();
+    }
+  }, { capture: false });
+}
+
+function sparkSearchClear() {
+  const input = document.getElementById('sparkSearchInput');
+  const clearBtn = document.getElementById('sparkSearchClear');
+  const resultsEl = document.getElementById('sparkSearchResults');
+  if (input) input.value = '';
+  if (clearBtn) clearBtn.style.display = 'none';
+  if (resultsEl) resultsEl.style.display = 'none';
+  _sparkSearchActive = false;
+}
+
+function _sparkPickConcept(id) {
+  sparkSearchClear();
+  const concept = CONCEPTS.find(c => c.id === id);
+  if (!concept) return;
+  _csConcept = concept;
+  _csAIData = null;
+  _csStoryGenerated = false;
+  _renderCSShell(concept);
+  _csPushToStack(concept);
+  panelSwitchTab('spark', true);
+  track('spark_concept_picked', { id, source: 'panel_search' });
+}
 
 // Helper: render history into a target element (not convList)
 function _convRenderHistoryInto(container) {
@@ -19008,28 +18919,8 @@ function _convRemoveCtx(id, ctx) {
 }
 
 function _convOpenCS(id) {
-  // Open CS modal pre-loaded with this concept
   closeConversations();
-  const concept = CONCEPTS.find(x => x.id === id);
-  if (concept) {
-    setTimeout(() => {
-      _csConcept = concept;
-      _csAIData = null;
-      _renderCSShell(concept);
-      _csPushToStack(concept);
-      // Always show nav controls — v1.73b
-      ['csRevealRow','csActions'].forEach(function(id) {
-        const el = document.getElementById(id);
-        if (el) { el.classList.remove('cs-hidden'); el.classList.add('cs-visible'); }
-      });
-      // Show generate button
-      const genRow = document.getElementById('csGenerateRow');
-      const genBtn = document.getElementById('csGenerateBtn');
-      if (genRow) genRow.style.display = 'block';
-      if (genBtn) { genBtn.disabled = false; genBtn.classList.remove('loading'); genBtn.innerHTML = '<span class="cs-generate-btn-icon">✦</span> Generate conversation starter'; }
-      openCS();
-    }, 200);
-  }
+  setTimeout(() => openSparkPanel(id), 200);
 }
 
 function _convOpenConcept(id) {
