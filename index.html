@@ -3768,35 +3768,29 @@
     margin: 0.75rem 0 0.5rem;
     display: flex; justify-content: center;
   }
+  .cs-generate-row {
+    padding: 0 20px 14px;
+  }
   .cs-generate-btn {
     font-family: 'DM Mono', monospace;
     font-size: 0.65rem;
     font-weight: 500;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    background: none;
-    border: 1px solid rgba(232,213,163,0.35);
-    color: var(--accent);
+    background: var(--accent);
+    border: none;
+    color: #0d0d0d;
     border-radius: 999px;
-    padding: 8px 22px;
+    padding: 9px 22px;
     cursor: pointer;
-    transition: border-color 0.2s, background 0.2s, opacity 0.2s;
-    display: inline-flex; align-items: center; gap: 8px;
+    transition: opacity 0.2s, transform 0.1s;
+    display: inline-flex; align-items: center; gap: 7px;
+    box-shadow: 0 2px 8px rgba(232,213,163,0.15);
   }
-  .cs-generate-btn:hover {
-    border-color: var(--accent);
-    background: rgba(232,213,163,0.07);
-  }
-  .cs-generate-btn:active { opacity: 0.75; }
-  .cs-generate-btn:disabled {
-    opacity: 0.4; cursor: not-allowed;
-  }
-  .cs-generate-btn.loading {
-    opacity: 0.55; cursor: wait;
-  }
-  .cs-generate-btn-icon {
-    font-size: 0.75rem; opacity: 0.7;
-  }
+  .cs-generate-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+  .cs-generate-btn:active { opacity: 0.75; transform: translateY(0); }
+  .cs-generate-btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+  .cs-generate-btn-icon { font-size: 0.7rem; }
 
   /* Related accordion */
   .cs-related-row {
@@ -7583,11 +7577,31 @@
     <div class="cs-card-inner-scroll">
     <button class="cs-close" id="csClose" aria-label="Close">✕</button>
 
-    <!-- v2.5: Panel header — headline + help -->
+    <!-- v2.5: Panel header — help button LEFT, headline right -->
     <div class="spark-panel-header">
       <div class="spark-panel-headline">
-        <span class="spark-headline-text">Say something real.</span>
-        <button class="spark-help-btn" id="sparkHelpBtn" onclick="_sparkHelpClick()" aria-label="How does this work">?</button>
+        <button class="cs-help-btn" id="csHelpBtn" onclick="_sparkHelpClick()" aria-label="How does this work">❓</button>
+        <span class="spark-headline-text">Say something epic.</span>
+      </div>
+    </div>
+
+    <!-- Help bubble — teleported to body by JS, shown on hover -->
+    <div class="cs-help-bubble" id="csHelpBubble" style="display:none">
+      <div class="cs-help-step"><span class="cs-help-num">01</span><span>Pick any concept from the library — or search for one above.</span></div>
+      <div class="cs-help-step"><span class="cs-help-num">02</span><span>Hit <strong>Ignite</strong> and get a ready-to-use conversation starter.</span></div>
+      <div class="cs-help-step"><span class="cs-help-num">03</span><span>Copy it, use it tonight, tell us if it landed.</span></div>
+      <div style="margin-top:10px;font-size:0.8rem;font-style:italic;color:var(--accent);font-family:'Playfair Display',serif">Now go say something worth saying. ✦</div>
+    </div>
+
+    <!-- Help overlay for mobile -->
+    <div class="cs-help-overlay" id="csHelpOverlay" onclick="_csHelpOverlayClose(event)">
+      <div class="cs-help-overlay-card">
+        <button class="cs-help-overlay-close" onclick="_csHelpOverlayClose()">✕</button>
+        <div class="cs-help-overlay-title">How does this work?</div>
+        <div class="cs-help-step"><span class="cs-help-num">01</span><span>Pick any concept from the library — or search for one above.</span></div>
+        <div class="cs-help-step" style="margin-top:10px"><span class="cs-help-num">02</span><span>Hit <strong>Ignite</strong> and get a ready-to-use conversation starter.</span></div>
+        <div class="cs-help-step" style="margin-top:10px"><span class="cs-help-num">03</span><span>Copy it, use it tonight, tell us if it landed.</span></div>
+        <div style="margin-top:14px;font-size:0.9rem;font-style:italic;color:var(--accent);font-family:'Playfair Display',serif;text-align:center">Now go say something worth saying. ✦</div>
       </div>
     </div>
 
@@ -7619,7 +7633,7 @@
     <!-- Generate button -->
     <div class="cs-generate-row" id="csGenerateRow" style="display:none">
       <button class="cs-generate-btn" id="csGenerateBtn">
-        <span class="cs-generate-btn-icon">✦</span> Generate conversation starter
+        <span class="cs-generate-btn-icon">✦</span> Ignite
       </button>
     </div>
 
@@ -12531,7 +12545,7 @@ function openSparkPanel(conceptId) {
       const genRow = document.getElementById('csGenerateRow');
       const genBtn = document.getElementById('csGenerateBtn');
       if (genRow) genRow.style.display = 'block';
-      if (genBtn) { genBtn.disabled = false; genBtn.innerHTML = '<span class="cs-generate-btn-icon">✦</span> Generate conversation starter'; }
+      if (genBtn) { genBtn.disabled = false; genBtn.innerHTML = '<span class="cs-generate-btn-icon">✦</span> Ignite'; }
     }
   } else {
     // First ever open — pick a random editors_pick or random concept
@@ -12553,7 +12567,7 @@ function openSparkPanel(conceptId) {
     const genRow = document.getElementById('csGenerateRow');
     const genBtn = document.getElementById('csGenerateBtn');
     if (genRow) genRow.style.display = 'block';
-    if (genBtn) { genBtn.disabled = false; genBtn.innerHTML = '<span class="cs-generate-btn-icon">✦</span> Generate conversation starter'; }
+    if (genBtn) { genBtn.disabled = false; genBtn.innerHTML = '<span class="cs-generate-btn-icon">✦</span> Ignite'; }
   }
 }
 
@@ -12695,7 +12709,7 @@ function _csPickerShowMain() {
     const genRow = document.getElementById('csGenerateRow');
     const genBtn = document.getElementById('csGenerateBtn');
     if (genRow) genRow.style.display = 'block';
-    if (genBtn) { genBtn.disabled = false; genBtn.classList.remove('loading'); genBtn.textContent = '✶ Generate conversation starter'; }
+    if (genBtn) { genBtn.disabled = false; genBtn.classList.remove('loading'); genBtn.textContent = '✦ Ignite'; }
     // Hide coaching since there's nothing to show yet
     const coaching = document.getElementById('csCoaching');
     if (coaching) { coaching.classList.add('cs-hidden'); coaching.classList.remove('cs-visible'); }
@@ -12899,7 +12913,7 @@ function _csPickerGenerate(conceptId) {
     else if (data && data.contexts && data.contexts[ctx]) d = data.contexts[ctx];
     if (!d || !d.prompt) {
       genBtn.disabled = false; genBtn.classList.remove('loading');
-      genBtn.textContent = '✦ Generate conversation starter';
+      genBtn.textContent = '✦ Ignite';
       return;
     }
     // Cache to session
@@ -12921,7 +12935,7 @@ function _csPickerGenerate(conceptId) {
   })
   .catch(function() {
     genBtn.disabled = false; genBtn.classList.remove('loading');
-    genBtn.textContent = '✦ Generate conversation starter';
+    genBtn.textContent = '✦ Ignite';
   });
 }
 
@@ -13098,7 +13112,7 @@ function _renderCSShell(concept) {
   const genRow = document.getElementById('csGenerateRow');
   const genBtn = document.getElementById('csGenerateBtn');
   if (genRow) genRow.style.display = 'block';
-  if (genBtn) { genBtn.disabled = false; genBtn.innerHTML = '<span class="cs-generate-btn-icon">✦</span> Generate conversation starter'; }
+  if (genBtn) { genBtn.disabled = false; genBtn.innerHTML = '<span class="cs-generate-btn-icon">✦</span> Ignite'; }
 
   // Actions always visible (Prev/Next navigation)
   const actionsEl = document.getElementById('csActions');
@@ -13874,7 +13888,7 @@ function _csCloseStoryMode() {
         var genRow = document.getElementById('csGenerateRow');
         var genBtn = document.getElementById('csGenerateBtn');
         if (genRow) genRow.style.display = 'block';
-        if (genBtn) { genBtn.disabled = false; genBtn.classList.remove('loading'); genBtn.textContent = '✶ Generate conversation starter'; }
+        if (genBtn) { genBtn.disabled = false; genBtn.classList.remove('loading'); genBtn.textContent = '✦ Ignite'; }
         var coaching = document.getElementById('csCoaching');
         if (coaching) { coaching.classList.add('cs-hidden'); coaching.classList.remove('cs-visible'); }
         var divider = document.getElementById('csDivider');
@@ -14256,12 +14270,14 @@ function _csShowPostPrompt() {
   });
 }
 
-// Help ? button for Spark panel
 function _sparkHelpClick() {
-  const overlay = document.getElementById('csHelpOverlay');
-  if (overlay) overlay.classList.add('active');
+  // Mobile: tap opens overlay; desktop: hover already handled by _wireCSEvents
+  if (window.matchMedia('(hover: none)').matches) {
+    const overlay = document.getElementById('csHelpOverlay');
+    if (overlay) overlay.classList.add('active');
+  }
 }
-function _csHelpClick() { _sparkHelpClick(); } // legacy alias
+function _csHelpClick() { _sparkHelpClick(); }
 function _csHelpOverlayClose(e) {
   if (!e || e.target === document.getElementById('csHelpOverlay') || e.currentTarget.classList.contains('cs-help-overlay-close')) {
     document.getElementById('csHelpOverlay').classList.remove('active');
@@ -14675,18 +14691,18 @@ function _loadAI(concept) {
         prompt: concept.prompt,
         category: concept.category
       },
-      ctx: 'universal'
+      ctx: 'friend'  // 'friend' works with both old and new cs-generate.js; new API adds variety via universal tone
     })
   })
   .then(r => r.json())
   .then(data => {
     _csLoading = false;
     let ctxData = null;
-    // v2.5 universal response
+    // Single-ctx response (new or legacy single)
     if (data && data.ctx) ctxData = data.ctx;
-    // legacy fallback — old cs-generate returns contexts.friend
+    // All-4 legacy response
     else if (data && data.contexts) {
-      ctxData = data.contexts['universal'] || data.contexts['friend'] || data.contexts['colleague'] || null;
+      ctxData = data.contexts['friend'] || data.contexts['colleague'] || data.contexts['partner'] || null;
     }
 
     if (ctxData) {
@@ -14697,13 +14713,13 @@ function _loadAI(concept) {
       _applyAIData(ctxData);
     } else {
       _csLoading = false;
-      if (genBtn) { genBtn.disabled = false; genBtn.innerHTML = '<span class="cs-generate-btn-icon">✦</span> Try again'; }
+      if (genBtn) { genBtn.disabled = false; genBtn.innerHTML = '<span class="cs-generate-btn-icon">✦</span> Ignite'; }
       if (genRow) genRow.style.display = 'block';
     }
   })
-  .catch(function(err) {
+  .catch(function() {
     _csLoading = false;
-    if (genBtn) { genBtn.disabled = false; genBtn.innerHTML = '<span class="cs-generate-btn-icon">✦</span> Try again'; }
+    if (genBtn) { genBtn.disabled = false; genBtn.innerHTML = '<span class="cs-generate-btn-icon">✦</span> Ignite'; }
     if (genRow) genRow.style.display = 'block';
   });
 }
@@ -14909,7 +14925,32 @@ function _csSwipeRight() {
 // ---- WIRE EVENTS ----
 
 function _wireCSEvents() {
-  // Generate button — fires _loadAI with current concept, no ctx
+  // Teleport cs-help-bubble to <body> so it escapes panel overflow clipping
+  const bubble = document.getElementById('csHelpBubble');
+  if (bubble && bubble.parentElement !== document.body) {
+    document.body.appendChild(bubble);
+  }
+  if (bubble) bubble.style.display = '';
+
+  // Wire help button: desktop hover shows bubble LEFT of panel; mobile tap opens overlay
+  const helpBtn = document.getElementById('csHelpBtn');
+  if (helpBtn && bubble && !helpBtn._wired) {
+    helpBtn._wired = true;
+    helpBtn.addEventListener('mouseenter', function() {
+      const rect = helpBtn.getBoundingClientRect();
+      bubble.style.position = 'fixed';
+      bubble.style.top = rect.top + 'px';
+      bubble.style.right = (window.innerWidth - rect.left + 10) + 'px';
+      bubble.style.left = 'auto';
+      bubble.style.zIndex = '99999';
+      bubble.classList.add('cs-help-bubble--visible');
+    });
+    helpBtn.addEventListener('mouseleave', function() {
+      bubble.classList.remove('cs-help-bubble--visible');
+    });
+  }
+
+  // Generate button
   const genBtn = document.getElementById('csGenerateBtn');
   if (genBtn && !genBtn._wired) {
     genBtn._wired = true;
@@ -16755,36 +16796,24 @@ function playStreakMilestoneSFX() {
 
 /* ── v2.5: Spark panel header ── */
 .spark-panel-header {
-  padding: 20px 20px 0;
+  padding: 20px 20px 4px;
 }
 .spark-panel-headline {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 16px;
+  gap: 12px;
+  margin-bottom: 14px;
 }
 .spark-headline-text {
   font-family: 'Playfair Display', serif;
-  font-size: 1.15rem;
+  font-size: 1.55rem;
   font-style: italic;
   font-weight: 400;
   color: var(--text);
   letter-spacing: -0.01em;
+  line-height: 1.2;
+  flex: 1;
 }
-.spark-help-btn {
-  width: 24px; height: 24px;
-  border-radius: 50%;
-  border: 1px solid var(--border-hover);
-  background: none;
-  color: var(--muted);
-  font-family: 'DM Mono', monospace;
-  font-size: 0.68rem;
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: border-color 0.2s, color 0.2s;
-  flex-shrink: 0;
-}
-.spark-help-btn:hover { border-color: var(--accent); color: var(--accent); }
 
 /* ── v2.5: Panel search bar — distinct from hero (underline + gold ✦) ── */
 .spark-search-wrap {
@@ -18544,13 +18573,23 @@ function _initSparkSearch() {
       return;
     }
     _sparkSearchActive = true;
-    // Use FUSE (same instance as hero search)
     if (typeof FUSE === 'undefined' || !FUSE) {
       resultsEl.innerHTML = '<div class="spark-search-empty">Loading…</div>';
       resultsEl.style.display = 'block';
       return;
     }
-    const hits = FUSE.search(q).slice(0, 7);
+    const raw = FUSE.search(q);
+    // Sort: exact/starts-with term matches bubble to top
+    const ql = q.toLowerCase();
+    raw.sort(function(a, b) {
+      const at = (a.item.term || '').toLowerCase();
+      const bt = (b.item.term || '').toLowerCase();
+      const aRank = at === ql ? 0 : at.startsWith(ql) ? 1 : at.includes(ql) ? 2 : 3;
+      const bRank = bt === ql ? 0 : bt.startsWith(ql) ? 1 : bt.includes(ql) ? 2 : 3;
+      if (aRank !== bRank) return aRank - bRank;
+      return (a.score || 0) - (b.score || 0);
+    });
+    const hits = raw.slice(0, 7);
     if (!hits.length) {
       resultsEl.innerHTML = '<div class="spark-search-empty">No concepts found</div>';
       resultsEl.style.display = 'block';
