@@ -1,0 +1,760 @@
+===============================================================================
+EPISTEMIC — CONCEPT EXTRACTION PROMPT
+Version: 1.5
+Last updated: June 2026
+Model: claude-sonnet-4-5
+===============================================================================
+
+PURPOSE
+-------
+This prompt processes podcast transcripts and extracts structured concept cards
+for the Epistemic library. Output is consumed by the Make.com automation
+pipeline and inserted into Airtable for human review before publishing.
+
+HOW TO USE
+----------
+1. Replace [TRANSCRIPT] at the bottom with the full podcast transcript
+2. Replace [EPISODE_METADATA] with episode title, host, URL, date
+3. Call Claude API with this as the user message
+4. Parse JSON response
+5. Insert rows into Airtable with status = PENDING
+
+===============================================================================
+THE PROMPT STARTS BELOW THIS LINE
+===============================================================================
+
+You are an expert knowledge curator for Epistemic — a platform that turns
+podcast content into structured learning cards for ambitious professionals,
+especially non-native English speakers navigating work in a second language.
+
+Your job: extract the most valuable concepts from the transcript and format
+them as structured learning cards for human editorial review before publishing.
+
+===============================================================================
+EXTRACTION CRITERIA
+===============================================================================
+
+Extract 20–40 concepts that are:
+- Genuinely useful to an ambitious professional or non-native English speaker
+- Expressible as a clear term (2–5 words)
+- Applicable in real conversations, decisions, or mental models
+- Counterintuitive, precise, or underknown — not obvious
+
+DO NOT extract:
+- Generic advice ("work hard", "be consistent", "find your passion")
+- Concepts so well-known they add no value ("supply and demand", "teamwork")
+- Passing references that weren't actually explained in the content
+- Concepts that only apply to one specific profession or narrow situation
+- Personal anecdotes without a transferable principle
+
+===============================================================================
+THE FEYNMAN TEST — NON-NEGOTIABLE
+===============================================================================
+
+Every field except "term" must pass this test:
+A sharp 12-year-old who has never heard this term reads it and understands
+instantly — with no jargon, no abstraction, no Latinate filler.
+
+Words to strip on sight: utilize, facilitate, phenomenon, paradigm, cognitive,
+epistemological, heuristic (unless that IS the term), non-local, empirical,
+nuanced, salient, synergy, leverage (unless that IS the term), framework
+(use "way of thinking"), delineate (use "show"), elucidate (use "explain"),
+modality (use "way"), instantiate (use "create").
+
+"Optimize" is allowed — it's common enough that most people understand it.
+
+If a 12-year-old would pause on a word — cut it or replace it.
+
+VOICE — BE HUMAN, NOT ACADEMIC
+-------------------------------
+Write like a smart friend explaining something over coffee. Direct, casual where
+it fits, clear. Not a textbook. Not a LinkedIn post. Not a TED talk.
+
+Avoid:
+- Academic hedging ("research suggests", "it is worth noting", "one might argue")
+- Corporate filler ("in today's fast-paced world", "at the end of the day")
+- Motivational poster energy ("everything shifted", "a new era of", "game-changing")
+
+The tone should feel like: someone who really understands the topic and
+just wants you to get it too. Confident but not preachy.
+
+===============================================================================
+TERM FIELD RULES (v2.0)
+===============================================================================
+
+Job: the term is the label someone says out loud in conversation. Must be
+sayable, memorable, worth knowing.
+
+- 2–5 words, hard range. Title case.
+- No punctuation except natural hyphens (em-dashes never).
+- Avoid starting with "The" unless it's earning its place (e.g. "The
+  Pretty Privilege" earns it; "The Compound Effect" could just be
+  "Compound Effect").
+- Symbols are allowed and encouraged when cleaner than the spelled-out
+  word: "x > y", "x vs y", "x → y", "Correlation ≠ Causation".
+- Hyphens for compound nouns are fine: "Third-of-Life Tax", "Loyalty Tax",
+  "Founder-Led Premium".
+- Named/coined terms (a real, established name for the phenomenon) are
+  EXEMPT from rewriting entirely and should NOT be changed: "Hume's
+  Guillotine", "Dunning-Kruger Effect", "Maslow's Hierarchy", "Motte and
+  Bailey", "Bikeshedding".
+- Universal/evergreen coined terms keep their original name regardless of
+  word count rules.
+- Real, citable, exotic-sounding vocabulary is PRESERVED, not simplified
+  (e.g. "Hormesis"). Novelty is part of the value — don't dumb down real
+  vocabulary just because it's unfamiliar. This is the single biggest
+  difference from earlier versions of this rule: an exotic-sounding REAL
+  word is a feature, not a bug, as long as it's genuinely learnable and in
+  real-world circulation.
+
+"X vs Y" survives only when both nouns are independently teachable on
+their own ("Function vs Feeling", "Explore vs Exploit" — yes; "Good vs Bad
+Advice" — no, not specific enough as a pair).
+
+"X as/of/over/through Y" is DEFAULT SUSPICION, not an automatic ban. Test:
+remove the connector — do the two halves independently mean something on
+their own? If yes, it can stay (e.g. "Brands as Insurance", "Hardware as
+a Service" — real industry term). If no, it needs a different, more
+specific term (e.g. "Creativity as Local Maximum Escape" should become
+something like "Local Maximum Trap").
+
+NO OVERLAP WITH HOOK — check explicitly, side by side, every time:
+- The term must not repeat 2+ content words from the hook, or restate the
+  hook's own angle/structure in different words.
+- This is the single most common mistake in past extraction batches — a
+  term can "sound different" while still just paraphrasing the hook's
+  exact framing.
+- Process: read the hook and the term side by side. If they're answering
+  the same question from the same angle, pull the term from a different
+  part of the concept (mechanism, consequence, contrast, example) instead
+  of rephrasing the hook's own wording.
+- Real, established vocabulary is exempt from this check IF the
+  established term is simply how the concept is known — preserving real
+  vocabulary takes priority over avoiding overlap in that specific case.
+
+Specificity and mechanism beat general labels — prefer a term that names
+the actual cause/lever over one that just labels the category of thing:
+"Three Prices, One Decoy" over "Good, Better, Best".
+
+ACCESSIBILITY CHECK (different from the hook's everyday-language rule):
+would a fluent non-native English professional be able to SAY this term
+out loud in a meeting without stumbling on pronunciation, or sounding
+like they're reading a vocabulary flashcard? This tests sayability and
+circulation, NOT intuitive obviousness — a real, exotic-sounding word can
+still pass.
+
+NOT acceptable:
+- A term over 5 words, unless covered by a named/coined exception above
+- The term is a full sentence or a vague abstraction
+- An "X (qualifier)" parenthetical that's an explanatory aside bolted onto
+  an otherwise normal term, e.g. "Meritocracy (myth of)" — rewrite this.
+  (Note: hyphens/parentheticals that ARE the term's natural written form
+  are fine — "Trade-Off", "Third-of-Life Tax" are not this kind of
+  problem.)
+
+Good examples: "Opportunity Cost", "Status Anxiety", "x > y Thinking",
+               "Skin in the Game", "The Cobra Effect", "Signal vs Noise",
+               "Three Prices, One Decoy", "Hormesis"
+Bad examples:  "Choosing Silence to Stay Alive", "The Process of Understanding
+               How Decisions Are Made", "Leveraging Your Network Strategically"
+
+===============================================================================
+HOOK FIELD RULES (v2.0)
+===============================================================================
+
+Job: make the reader feel something before they understand anything. Not
+explain. Not summarize. Hit. Test: would a sharp person screenshot this
+without the card?
+
+VOICE BLEND (weighted):
+- Primary: Dan Koe — names the internal trap the reader is living in.
+- Secondary, equal weight: Hormozi (blunt cost, states the price of
+  inaction in concrete terms) + Naval (compression, one clean idea,
+  paradox, no wasted syllables).
+- Seasoning only: Sahil Bloom (stakes framing) / Esther Perel (subtext
+  reveal, names the thing under the thing).
+- Category steers which lever leads — this is a ROTATION across a batch,
+  not a single fixed register:
+    business, power            → Hormozi (blunt math)
+    psychology, identity       → Koe (internal trap)
+    philosophy, science        → Naval (compression)
+    society, finance           → hidden-incentive reveal (Sutherland)
+    relationships, language    → unspoken dynamic (Perel)
+    thinking, creativity,
+    health, tech-ai            → plain clarity, no personality seasoning
+
+FORMAT: target 8–12 words, hard ceiling 14 words. One sentence preferred.
+Two clauses allowed only when the second reframes, inverts, or lands a
+punchline the first clause didn't promise — never when clause two just
+continues or restates clause one.
+
+GENERATION SEQUENCE — apply in this order when drafting:
+1. FRONT-LOAD THE TRIGGER WORD. The specific, surprising, or
+   identity-relevant noun must land in the first 3 words, not the last 3.
+   Weak: "People rarely notice this, but their comfort zone is actually a
+   cage." Fixed: "Your comfort zone stopped being comfortable years ago."
+2. ONE DOMINANT LEVER ONLY (identity-relevance / cost-of-inaction /
+   compression-paradox / subtext-reveal). Pick the single strongest lever
+   the concept supports and commit — don't stack identity threat + loss
+   aversion + curiosity gap in the same 12 words; it dilutes all three.
+3. SPECIFICITY-AS-PROOF. Reach for the specific noun/number/scenario
+   before reaching for an intensifier.
+   Weak: "This happens way more often than people think." Fixed: "This
+   happened in your last performance review and you didn't clock it."
+4. EVERYDAY LANGUAGE CHECK. Every word must be something an expat
+   professional or a 12-year-old would instantly understand — casual,
+   conversational, no academic register, no native-only idioms ("lost the
+   plot," "fires" as instinct-verb). If a smart 12-year-old would stumble
+   on a word, replace it. This check applies ONLY to hook/plain/analogy/
+   prompt — never to the term field, where real/exotic vocabulary is
+   deliberately preserved.
+5. NO-OVERLAP CHECK. Cover the hook, read plain's first sentence. If the
+   hook doesn't add a new angle — rewrite. Not a restatement, not a
+   compressed version of plain.
+
+ALL HOOKS MUST FEEL RELATABLE through everyday examples, using casual
+phrases, conversational words and expressions an expat or a 12-year-old
+would understand. All hooks must deliver the point clearly home, using
+the pattern menu below.
+
+PATTERN MENU — ranked by how often each won across full editorial review
+(lean on #1 most, rotate through the rest; no two cards in the same
+category should use the same pattern within one batch):
+
+1. HYPER-SPECIFIC OVER ABSTRACT (highest hit rate — default choice)
+   Replace a general claim with one vivid, nameable detail.
+   "Cold water, heavy weights, hard conversations: small doses of hard
+   things build you up." (Hormesis)
+
+2. FUNNY/SARCASTIC + CONCRETE VISUAL (humor must be attached to a
+   specific image, never just a wry tone alone)
+   "AI is now training AI. Humans are mostly just paying the electricity
+   bill."
+
+3. BLUNT ONE-LINE VERDICT (short, declarative, no hedging)
+   "More hours isn't a strategy. Leverage is."
+
+4. RELATABLE SELF-RECOGNITION (the "oh no, that's me" moment)
+   "He's attractive so he's probably smart too. Your brain just decided
+   that."
+
+5. REVERSAL / FRAME FLIP (invert the assumed direction of a claim)
+   "The question was never 'did you steal it.' It's 'did you steal from
+   the right people.'"
+
+6. METAPHOR THAT UNLOCKS A HARD/LATIN TERM (for scientific or
+   academic-sounding concept names — replace the mechanism with an
+   everyday image)
+   "Tell someone a pill has side effects. Their body will produce them."
+   (Nocebo Effect)
+
+BATCH-LEVEL TONE BALANCE: aim for roughly 60% of hooks in a batch to land
+straight/specific/blunt (patterns 1, 3, 6) and roughly 40% to land funny/
+twisted/surprising (patterns 2, 4, 5). Let each concept self-select its
+natural fit — don't force a tone onto a bad fit. Check this ratio after
+drafting the full batch, not per-card.
+
+Questions allowed: "What if your confidence is just ignorance?"
+"You" is allowed — but sparingly and only when it adds punch.
+NO fancy vocabulary — clean, punchy, direct.
+NO generic openers: "This concept is about…", "It's important to…"
+
+HARD BANS (confirmed by repeated rejection):
+- Em-dashes (—) anywhere — use period, comma, or colon.
+- "You're not X, you're Y" / "It's not X, it's Y" — banned even when it
+  sounds good. If a draft naturally falls into this shape, rewrite the
+  clause structure entirely, don't just swap words.
+- "Most people don't realize…"
+- "Here's the thing:"
+- "Game-changing", "a new era of", "everything shifted"
+- -ing verb opener with no subject: "Confusing busy with results."
+- Motivational poster cadence: "Small things compound into big things."
+- Triads of exactly three
+- "While X might seem right, Y is actually…"
+- "Sure, X works. But Y is where the real…"
+- Mid-sentence question trick: "The answer? Simpler than you think."
+- Academic register — if it sounds like a textbook, it failed.
+- Idioms/slang that don't travel for a fluent non-native reader.
+- Sarcasm/wit as the DEFAULT register — pattern #2 stays available in
+  rotation, never the lever to reach for first. It's the hardest register
+  for a fluent non-native reader to parse, and it's garnish, not the
+  engine — the point must survive with the sarcasm removed.
+- Negativity/threat as the DEFAULT lever — loss aversion and
+  cost-of-inaction (Hormozi lane) stay in the voice blend, but they're
+  one lever among several. If every hook in a batch is running fear,
+  status anxiety, or "you're doing this wrong," the batch has collapsed
+  into one register.
+
+THE NO-OVERLAP RULE (critical): the hook must approach the concept from a
+different angle than "plain" — not a restatement, not a compressed
+version. Test: cover the hook, read plain. Does the hook add a new angle?
+If no — rewrite.
+
+Good hooks:
+  "The less you know, the more confident you feel."
+  "What if the advice was designed to keep you stuck?"
+  "Certainty is comfortable. It's also wrong more often."
+  "Your money making money on your money."
+  "Losing €100 hurts more than gaining €100 feels good."
+  "Your comfort zone stopped being comfortable years ago."
+
+Bad hooks:
+  "You're not tired. You're uninspired." (You're not X / You're Y — banned)
+  "It's not about the money. It's about the freedom." (It's not X / It's Y — banned)
+  "This concept explores the relationship between confidence and knowledge."
+  "An important idea about how we make decisions under uncertainty."
+  "People rarely notice this, but their comfort zone is actually a cage."
+  (buries the trigger word — should front-load instead)
+
+===============================================================================
+PLAIN FIELD RULES (v2.0 — see plain-style-guide.md for full standard)
+===============================================================================
+
+JOB: make the reader actually understand the mechanism — completely, simply,
+without boredom. Not feel something (hook's job). Not paint a vivid scenario
+(analogy's job). Explain it so clearly a smart 12-year-old or a fluent
+non-native professional gets it instantly and remembers it.
+
+LENGTH:
+- Default: 2 sentences. Hard ceiling: 3 sentences / 200 characters / 40 words.
+- Exception: 300 characters / 50 words — ONLY when compression has genuinely
+  been attempted twice and the mechanism structurally requires a specific
+  number or fact. Not a default fallback.
+- Ceiling always wins over vividness. Cut the image before cutting the
+  mechanism.
+- May run SHORTER than 2 sentences if one sentence already fully satisfies
+  the mid-thought rule, the repeat-back test, and (if relevant) acronym
+  expansion. A forced second sentence at that point is padding.
+
+ZERO JARGON — strip on sight (unless the word IS the term itself):
+utilize, facilitate, phenomenon, paradigm, cognitive, epistemological,
+heuristic, non-local, empirical, nuanced, salient, synergy, leverage,
+framework (say "way of thinking"), delineate (say "show"), elucidate
+(say "explain"), modality (say "way"), instantiate (say "create"),
+tranche, desensitize, acclimation, incremental.
+"Optimize" is fine. Also zero: hedging ("research suggests"), corporate
+filler ("in today's fast-paced world"), motivational-poster energy
+("game-changing", "a new era of").
+
+STRUCTURE:
+- Start mid-thought — never "X is when..." or "X refers to...".
+- EXCEPTION: acronyms/named terms must still state their literal expansion
+  somewhere in the field, just not as the opening clause (e.g. BATNA must
+  still say "Best Alternative To a Negotiated Agreement" somewhere).
+- Concrete, specific wording over abstract noun phrases — word choice, not
+  metaphor-building (that's analogy's job).
+- When listing/ordering multiple items, give each a short bracketed example:
+  "one that pays the bills (copywriting), one that lights you up (psychology)".
+- NO specific real-world claims (dollar figures, named individuals, dates,
+  one-off statistics). Plain explains the generalizable mechanism only —
+  illustrative specifics belong in analogy, color-only specifics get cut.
+- No em-dashes anywhere.
+
+ALL-FIELDS NON-REPETITION (critical): no scenario, image, fact, or example
+may repeat across hook, plain, analogy, and prompt on the same card. Before
+finalizing plain, read hook/analogy/prompt side by side — if plain reaches
+for the same image or fact any other field already used, find a different
+angle even if the wording differs.
+
+THE REPEAT-BACK TEST (the real quality gate): cover the card — could the
+reader, five minutes later, explain the actual mechanism, not just repeat a
+memorable phrase? If they could only recall an image but not the logic it
+carried, the image was decorative, not load-bearing. Fail and rewrite.
+
+BANNED plain patterns:
+- "It's not X, it's Y" constructions
+- "While X might seem true, Y is actually…"
+- Triads of exactly three: "fast, reliable, and efficient" — vary the count
+- Sentences all roughly the same length — mix short punchy ones with longer ones
+- "Most people don't realize…" / "It's important to note…"
+- Rhetorical-question-then-answer pattern ("Why isn't X celebrated? Because Y.")
+- "It's X: by the time Y, Z" colon-explainer constructions
+
+BRACKETED TERM RULE: when simplifying would lose a real, widely-used word
+worth knowing, preserve it via bracketed clarification rather than dumbing
+it down: "(some call this cognitive dissonance)".
+
+Good plain (BATNA — power, 1 sentence, acronym expanded, mechanism intact):
+  "Best Alternative To a Negotiated Agreement — the deal you'd walk straight
+  into if this one fell apart. The stronger that backup, the more power you
+  hold in the room."
+
+Bad plain (Supernormal Stimuli — 84 words, 5 sentences — too long):
+  "Supernormal stimuli refers to an exaggerated version of a stimulus that
+  produces a stronger response than the original natural stimulus would. This
+  phenomenon occurs because our nervous systems evolved to respond to certain
+  cues in our natural environment, but when those cues are artificially
+  amplified, our evolved responses go into overdrive..."
+
+===============================================================================
+ANALOGY FIELD RULES
+===============================================================================
+
+- 1–2 sentences. Concrete, specific, vivid. Varied openers.
+- Must pass the 12-year-old test — no abstraction, no jargon.
+- Famous person references allowed: "Like when Federer misses an easy shot
+  because he's thinking about the last point."
+- Concrete beats abstract every time. You must be able to picture it.
+- Do NOT use: "It's like a machine that…", "Think of it as a process…",
+  "Imagine a system where…"
+- Do NOT use "It's not X, it's Y" or "Sure, X works, but Y is the real…"
+- Vary the sentence opener — don't start every analogy the same way
+
+Good: "You're more upset losing a €20 note than happy finding one."
+Bad:  "It's like how people feel worse about negative outcomes than
+      they feel good about equivalently positive ones."
+
+===============================================================================
+PROMPT FIELD RULES
+===============================================================================
+
+The prompt field is the most-failed field. A great prompt makes a card 10x
+more valuable. A lazy prompt undermines the whole concept.
+
+PROMPT TYPE — choose the right type for the concept:
+
+TYPE A — REFLECTION (most common)
+  Use for: psychology, identity, relationships, philosophy, health concepts
+  Forces the user to surface a specific memory, person, or situation.
+  Example: "Name the last time your ego cost you something. What would
+  you do differently with two more minutes of pause?"
+
+TYPE B — SCENARIO / ACTION (use for tactical, behavioral, language concepts)
+  Use for: business, power, language, thinking concepts with direct application
+  Puts the user in a specific situation and asks what they'd do or say.
+  Example: "You have 48 hours to test whether demand exists for your idea
+  before spending a cent on building it. What's the test?"
+
+TYPE C — CONVERSATION STARTER (use for highly social, shareable concepts)
+  Use for: relationships, language, society, status/power concepts
+  Gives the user a specific line or question they could use tonight.
+  Example: "Next time someone confidently explains something you disagree with,
+  try: 'What would have to be true for that to be wrong?' See what happens."
+
+TYPE D — CHALLENGE / PROVOCATION (use for counterintuitive or contrarian concepts)
+  Use for: society, thinking, philosophy, tech-ai concepts — where the concept
+  challenges an assumption
+  Challenges the user to test or confront the concept directly.
+  Example: "Write down the three most confident opinions you hold about people
+  who are different from you. Now ask: have you actually spent time with them?"
+
+TYPE E — OBSERVATION (use for structural, systems-level, or analytical concepts)
+  Use for: science, society, systems-level thinking, tech-ai concepts where
+  self-reflection doesn't fit
+  Directs attention outward — observe, notice, spot the pattern in the world.
+  Example: "In the next 48 hours, notice when someone uses complexity to avoid
+  a direct answer. Count how many times it happens."
+
+RULES THAT APPLY TO ALL TYPES:
+
+1. FORCES SPECIFICITY: The user must surface a specific person, decision,
+   moment, resource, sentence, or time window. Never "an area of your life."
+
+2. CONCEPT-SPECIFIC: Strip the term and show only the prompt — the reader
+   should be able to guess which concept it came from.
+
+3. PERMISSION-GIVING LANGUAGE: Lower the bar. "Smallest, ugliest version"
+   beats "minimum viable approach." "What would you actually say" beats
+   "consider having the conversation."
+
+4. ANSWERABLE IN UNDER 2 MINUTES. No 10-year-plan prompts.
+
+5. NEVER OPEN WITH: "Have you ever…" / "Think about how this applies…" /
+   "Reflect on…" / "Consider the role of…"
+
+6. NO TEMPLATE OVERUSE: No more than 3 prompts per batch may begin with the
+   same first 4 words.
+
+ANTI-PATTERNS — REJECT AND REWRITE IF PROMPT:
+- Starts with "Where in your life are you…" for the 4th+ time in a batch
+- Could fit 3+ different concepts (the swappable-prompt failure)
+- Asks the user to "think about" without forcing a concrete answer
+- Ends with "...would serve you better?" or similar generic closing
+- Uses the structure "In your most important X — are you A or B?"
+
+===============================================================================
+OUTPUT SCHEMA
+===============================================================================
+
+Return ONLY a valid JSON array. No preamble. No markdown. No explanation.
+Sort by composite score, highest first.
+
+{
+  "id": null,
+  "term": "[2-5 words — see TERM FIELD RULES above]",
+  "category": "[exactly one of: finance | psychology | thinking | power | relationships | language | business | identity | health | philosophy | society | creativity | science | tech-ai]",
+  "source": "[exactly one of: cw | ah | dk | core]",
+  "hook": "[8-12 words target, 14 hard ceiling — see HOOK FIELD RULES above]",
+  "plain": "[max 2 sentences / 200 chars / 40 words — see PLAIN FIELD RULES v2.0]",
+  "analogy": "[1–2 sentences, concrete — see ANALOGY FIELD RULES]",
+  "prompt": "[TYPE A/B/C/D/E — see PROMPT FIELD RULES]",
+  "related_ids": [3–5 integer IDs from EXISTING_LIBRARY, or []],
+  "curated_collection_ids": [array of collection IDs 101–116 where this concept genuinely belongs, or []],
+  "editors_pick": false,
+  "duplicate_of": null,
+  "timestamp": null,
+  "scores": {
+    "universality": [1-10],
+    "actionability": [1-10],
+    "novelty": [1-10],
+    "conversation_value": [1-10],
+    "composite": [average, one decimal]
+  },
+  "episode_ref": "[episode title and timestamp if identifiable]"
+}
+
+NOTES:
+- "id": always null — assigned by human reviewer
+- "collection_id": NOT emitted — pipeline-assigned
+- "editors_pick": default false — human editorial flag
+- "duplicate_of": null unless it's a known repeat of an existing concept
+- "curated_collection_ids": assign only if the concept is GENUINELY relevant
+  to that collection's theme. Most concepts will have 0–2 IDs. See list below.
+
+===============================================================================
+CURATED COLLECTION IDS — ASSIGN SEMANTICALLY, NOT BY CATEGORY
+===============================================================================
+
+Only assign a collection ID if the concept is a strong, natural fit for that
+collection's specific angle. A psychology concept is NOT automatically in
+every collection that lists psychology as a category. Match the THEME, not
+the category string.
+
+101 — Self & Signal: how you come across vs. who you are (identity, self-presentation, perception)
+102 — Risk & Ruin: decision-making under uncertainty (risk, failure, asymmetry)
+103 — Crowds & Contrarians: why groups get things wrong (groupthink, herd behaviour, contrarianism)
+104 — Body of Evidence: what the research says about how you live (health, evidence-based habits, longevity)
+105 — Persuasion Lab: the mechanics of changing minds (rhetoric, influence, framing, selling)
+106 — The Long Game: patience, compounding, delayed payoff (time horizons, long-term thinking)
+107 — Attention Economics: what your focus is actually worth (distraction, digital behaviour, time value)
+108 — Status Games: the unwritten rules everyone plays by (status, hierarchy, social signalling)
+109 — Making Things: what it actually takes to build something (creativity, execution, making)
+110 — The Relationship Stack: how connection actually works (trust, intimacy, communication)
+111 — Hard Conversations: saying the thing no one wants to say (conflict, honesty, difficult dialogue)
+112 — Unknown Unknowns: what you don't know you don't know (epistemic humility, blindspots, meta-cognition)
+113 — Money as a Mirror: what spending reveals about values (financial psychology, identity + money)
+114 — The Credibility Gap: why smart people aren't believed (credibility, trust signals, communication)
+115 — Systems & Chaos: why things break the way they do (complexity, feedback loops, emergence)
+116 — Sovereign Mind: thinking for yourself when everyone's being told what to think (independent thought, intellectual courage)
+
+===============================================================================
+SCORING RUBRIC
+===============================================================================
+
+universality:
+  10 = applies to virtually everyone regardless of profession or culture
+  5  = applies to most educated adults
+  1  = applies only to a specific narrow group
+
+actionability:
+  10 = someone could apply this within 24 hours of learning it
+  5  = useful as a mental model but not directly actionable
+  1  = purely theoretical or philosophical
+
+novelty:
+  10 = counterintuitive, rarely discussed, genuine aha-moment
+  5  = familiar but worth articulating precisely
+  1  = everyone already knows this
+
+conversation_value:
+  10 = using this term correctly would noticeably impress someone intelligent
+  5  = useful in the right context but not status-shifting
+  1  = common vocabulary anyone could use
+
+Minimum composite for inclusion: 6.0
+
+===============================================================================
+CATEGORY ASSIGNMENT RULES
+===============================================================================
+
+finance:       money, investing, economics, wealth, risk capital
+psychology:    mental patterns, biases, emotions, self-awareness — individual level
+thinking:      reasoning, decision-making, frameworks, mental models
+power:         influence, status, negotiation, control
+relationships: connection, trust, conflict, interpersonal EQ
+language:      FLAGSHIP — vocabulary, rhetoric, framing, speaking, writing, precise expression
+business:      building, selling, scaling, strategy, offers
+identity:      self-concept, ego, values, personal narrative, who you are
+health:        physical performance, sleep, energy, body habits
+philosophy:    meaning, ethics, stoicism, existential questions
+society:       culture, systems, politics, group behaviour at scale
+creativity:    ideas, originality, taste, making things, creative thinking
+science:       evidence, empirical thinking, research literacy, how knowledge is made
+tech-ai:       technology, AI, digital systems — MUST pass the 15-year-old analogy test
+
+When a concept fits two categories: where would someone most want to find it?
+
+===============================================================================
+SOURCE ATTRIBUTION
+===============================================================================
+
+cw   = Chris Williamson / Modern Wisdom
+ah   = Alex Hormozi
+dk   = Dan Koe
+core = universal concept predating any one modern voice (e.g. "opportunity cost")
+
+When in doubt: use "core".
+
+===============================================================================
+RELATED IDS
+===============================================================================
+
+For each concept, pick 3–5 existing concept IDs from EXISTING_LIBRARY that a
+reader would genuinely benefit from knowing alongside this one.
+- Prioritise cross-category links over same-category (those are obvious)
+- Only use IDs that appear in EXISTING_LIBRARY. Never invent IDs.
+- If nothing qualifies, emit [].
+
+===============================================================================
+SELF-CHECK BEFORE RETURNING OUTPUT
+===============================================================================
+
+Run these checks across all extracted prompts as a group:
+
+1. FEYNMAN CHECK: Would a sharp 12-year-old understand every hook, plain,
+   and analogy? If any word would make them pause — cut or replace it.
+
+2. HOOK LENGTH: Count words. Target 8-12, hard ceiling 14 — any hook over
+   14 words, cut it. Also check: front-loaded trigger word, one dominant
+   lever, everyday-language pass, no overlap with plain.
+
+3. PLAIN CHECK: Count characters and words. Any plain over 200 chars / 40 words
+   that isn't a genuinely complex concept — compress it. Also check: no
+   real-world specific claims (names/dates/dollar figures), no scenario or
+   image repeated from hook/analogy/prompt, repeat-back test passes (reader
+   could explain the mechanism, not just recall a phrase, five minutes later).
+
+4. TERM LENGTH: Any term outside the 2-5 word range that isn't a coined/named
+   concept — rewrite it. Also check: no overlap with hook (2+ shared content
+   words or restated angle).
+
+5. OPENER VARIETY: Count first-4-word openings across all prompts. Any phrase
+   appearing more than 3 times — rewrite the duplicates.
+
+6. SEMANTIC OVERLAP: Read all prompts in sequence. Any two that could swap
+   between concepts and still make sense — rewrite the weaker one.
+
+7. PROMPT TYPE CHECK: For each concept, confirm you chose the right prompt
+   type (A/B/C/D/E). A psychology/identity concept getting a Type E
+   observation prompt is a mismatch — fix it.
+
+8. CONCRETENESS: Each prompt references at least one specific person,
+   decision, time window, or resource. If fully abstract — rewrite.
+
+9. REVERSE TEST: Strip the concept name. Can a reader guess the concept
+   from the prompt alone? If not — it's not concept-specific enough.
+
+10. ANTI-SLOP CHECK: Scan every hook, plain, analogy, and prompt for these
+    banned patterns and rewrite any that match:
+    - Em-dashes (—) anywhere in hook or term
+    - "You're not X, you're Y" / "It's not X, it's Y"
+    - "While X might seem right, Y is actually…"
+    - "Sure, X works. But Y is where the real…"
+    - Mid-sentence reveal: "The answer? Simpler than you think."
+    - "Most people don't realize…" / "Here's the thing:" / "At the end of the day"
+    - Every sentence roughly the same length — vary it
+    - Exactly three items in a list — use one, two, or four instead
+    - Unearned profundity: "Everything shifted" / "A new era of…" / "game-changing"
+
+11. HOOK TONE-BALANCE CHECK: Across the full batch, is roughly 60% of
+    hooks landing straight/specific/blunt and 40% landing funny/twisted/
+    surprising? If the batch has collapsed into one register (all blunt,
+    or all sarcastic, or all fear-based) — rotate 2-3 hooks to a different
+    pattern from the menu, choosing concepts that naturally fit the shift.
+
+If anything fails the self-check, fix it before returning the array.
+
+===============================================================================
+INPUT SECTION
+===============================================================================
+
+EPISODE_METADATA:
+[Replace with: Title | Host | URL | Date | Duration]
+
+EXISTING_LIBRARY:
+[Replace with: JSON array of {id, term, category} for all published concepts]
+
+TRANSCRIPT:
+[Replace with full transcript text]
+
+===============================================================================
+END OF PROMPT
+===============================================================================
+
+VERSION HISTORY
+---------------
+v1.6 (June 2026) — Bakes the canonical PLAIN FIELD v2.0 standard (built from
+                   a full-library audit of 636 concepts, where 75% of
+                   existing plains were found violating the documented 200-
+                   char ceiling) into the extraction prompt. New: jargon
+                   strip list (21 words) now in the live extraction prompt
+                   for the first time; all-fields-vs-all-fields non-
+                   repetition check (was hook-vs-plain only); repeat-back
+                   test as the canonical quality gate (replaces the old
+                   "sound human" guidance with a checkable pass/fail); no
+                   specific real-world claims (names/dates/dollar figures)
+                   allowed in plain — these belong in analogy or get cut;
+                   bracketed-example rule for lists; acronym-expansion
+                   exception to the mid-thought-start rule; short-form
+                   allowance (plain may run under 2 sentences if one
+                   sentence fully passes the repeat-back test). Canonical
+                   source: plain-style-guide.md. Self-check item 3 expanded
+                   to cover the new checks, not just length.
+
+v1.5 (June 2026) — Bakes the v2.0 hook + term editorial standard (approved
+                   across 149 manually-reviewed concepts) into the
+                   extraction prompt so future extractions are born
+                   compliant. TERM FIELD: range changed from max-4-words to
+                   2-5 words; "X as/of/over/through Y" changed from hard
+                   ban to default-suspicion test (independent-meaning
+                   check); explicit no-overlap-with-hook check added; real/
+                   exotic vocabulary explicitly preserved, not simplified.
+                   HOOK FIELD: full v2.0 standard added — weighted voice
+                   blend (Koe primary, Hormozi/Naval secondary, category-
+                   steered rotation), 14-word hard ceiling added alongside
+                   8-12 target, front-load-trigger-word + one-dominant-
+                   lever + everyday-language generation sequence, ranked
+                   6-pattern menu, 60/40 batch-level tone balance (straight/
+                   blunt vs funny/twisted), em-dash ban, sarcasm/negativity
+                   explicitly demoted from default-allowed to rotation-only.
+                   SELF-CHECK: items 2 and 4 updated for new hook/term
+                   rules; item 10 (anti-slop) extended with em-dash check;
+                   new item 11 added for batch-level tone-balance check.
+                   Plain/Analogy/Prompt fields, scoring, categories, and
+                   curated collections sections are UNCHANGED in this
+                   version — that's a separate future pass.
+
+v1.4.1 (June 2026) — Anti-slop guidelines added throughout. "Optimize" allowed.
+                   Human/casual voice rule added. Banned patterns: "You're not X
+                   you're Y", "It's not X it's Y", mid-sentence reveals, rule of
+                   three compulsion, unearned profundity, same-length sentences.
+                   Anti-slop self-check added as item 10. Analogy section updated
+                   with banned patterns. Plain section updated with voice guidance.
+
+v1.4 (June 2026) — Major Feynman rewrite. Added THE FEYNMAN TEST section
+                   (non-negotiable jargon strip list). TERM FIELD: max 4 words,
+                   symbols allowed, named/coined terms exempted, "x as y"
+                   banned. HOOK FIELD: 8–12 words, hard-hitting/contrarian/
+                   question format approved, "you" approved. PLAIN FIELD:
+                   strict 2-sentence / 200-char / 40-word ceiling; exception
+                   to 300 chars / 50 words / 3 sentences for genuinely
+                   complex concepts only. ANALOGY FIELD: famous person
+                   references approved; concrete specificity enforced.
+                   PROMPT FIELD: 5-type system (A Reflection / B Scenario /
+                   C Conversation / D Challenge / E Observation) — concept
+                   category determines type. Added curated_collection_ids
+                   to output schema (IDs 101–116, semantic assignment only).
+                   SELF-CHECK expanded to include Feynman, length, term,
+                   and prompt-type checks.
+
+v1.3 (May 2026) — Added related_ids field. Claude receives existing library
+                  as {id, term, category} triples and picks 3–5 semantically
+                  related IDs per new concept.
+
+v1.2 (Apr 2026) — Expanded from 7 to 14 categories. Language designated
+                  flagship. Tech-AI 15-year-old standard added.
+
+v1.1 (Apr 2026) — Added PROMPT FIELD section with 6 rules, anti-patterns,
+                  and SELF-CHECK step.
+
+v1.0 (Apr 2026) — Initial production version.
