@@ -7384,7 +7384,7 @@
     <!-- v2.5: Browse · Spark · Story -->
     <a class="nav-link nav-browse-btn" onclick="playNavSFX();document.getElementById('app').scrollIntoView({behavior:'smooth'})"><span class="nav-browse-emoji">📚</span>Browse</a>
     <a class="nav-link nav-spark-btn" onclick="openSparkPanel();playNavSFX()"><span class="nav-spark-emoji">💬</span>Spark</a>
-    <a class="nav-link nav-story-btn" onclick="openStoriesPanel();playNavSFX()"><span class="nav-story-emoji">✦</span>Story</a>
+    <a class="nav-link nav-story-btn" onclick="openStoriesPanel();playNavSFX()"><span class="nav-story-emoji">📖</span>Story</a>
   </div>
   <!-- v1.71: epic button is now inside nav-right -->
 
@@ -7409,7 +7409,7 @@
   <!-- v2.5: Browse · Spark · Story -->
   <button class="nav-mobile-link" onclick="playNavSFX();document.getElementById('app').scrollIntoView({behavior:'smooth'});closeMobileNav()">📚 Browse</button>
   <button class="nav-mobile-link nav-mobile-cs" onclick="playNavSFX();openSparkPanel();closeMobileNav()">💬 Spark</button>
-  <button class="nav-mobile-link nav-mobile-no-border" onclick="playNavSFX();openStoriesPanel();closeMobileNav()">✦ Story</button>
+  <button class="nav-mobile-link nav-mobile-no-border" onclick="playNavSFX();openStoriesPanel();closeMobileNav()">📖 Story</button>
   <div class="nav-mobile-divider"></div>
   <button class="nav-mobile-link nav-mobile-signup" onclick="playNavSFX();scrollToSection('signup');closeMobileNav()">◉ Sign Up 🎁 — Free Founding Access</button>
 </div>
@@ -7583,25 +7583,35 @@
     <div class="cs-card-inner-scroll">
     <button class="cs-close" id="csClose" aria-label="Close">✕</button>
 
+    <!-- v2.5: Panel header — headline + help -->
+    <div class="spark-panel-header">
+      <div class="spark-panel-headline">
+        <span class="spark-headline-text">Say something real.</span>
+        <button class="spark-help-btn" id="sparkHelpBtn" onclick="_sparkHelpClick()" aria-label="How does this work">?</button>
+      </div>
+    </div>
+
     <!-- v2.5: Panel search bar — distinct from hero search -->
     <div class="spark-search-wrap" id="sparkSearchWrap">
       <span class="spark-search-icon">✦</span>
-      <input class="spark-search-input" id="sparkSearchInput" type="text" placeholder="Search concepts, topics, episodes…" autocomplete="off" />
+      <input class="spark-search-input" id="sparkSearchInput" type="text" placeholder="Search any concept…" autocomplete="off" />
       <button class="spark-search-clear" id="sparkSearchClear" style="display:none" onclick="sparkSearchClear()" aria-label="Clear">✕</button>
     </div>
     <div class="spark-search-results" id="sparkSearchResults" style="display:none"></div>
 
-    <!-- Concept pill — hover on desktop shows side preview -->
-    <div class="cs-source-label" id="csSourceLabel">An epic idea to discuss</div>
-    <div class="cs-concept-pill-wrap" id="csConceptPillWrap">
-      <button class="cs-concept-pill" id="csConceptPill">
-        <span class="cs-concept-pill-term" id="csConceptPillTerm">—</span>
-        <span class="cs-pill-arrow" id="csConceptPillArrow">▾</span>
-      </button>
-      <div class="cs-concept-expand" id="csConceptExpand">
+    <!-- Concept display — term only, no expand, hover shows side preview -->
+    <div class="spark-concept-row" id="sparkConceptRow">
+      <div class="spark-concept-label" id="csSourceLabel">An epic idea to discuss</div>
+      <div class="spark-concept-term-wrap" id="csConceptPillWrap">
+        <button class="spark-concept-term-btn" id="csConceptPill">
+          <span id="csConceptPillTerm">—</span>
+        </button>
+      </div>
+      <!-- Hidden plain/meta for expand compat — no longer shown -->
+      <div style="display:none" id="csConceptExpand">
         <div class="cs-expand-inner">
-          <div class="cs-concept-plain" id="csConceptPlain"></div>
-          <div class="cs-concept-meta" id="csConceptMeta"></div>
+          <div id="csConceptPlain"></div>
+          <div id="csConceptMeta"></div>
         </div>
       </div>
     </div>
@@ -7613,8 +7623,8 @@
       </button>
     </div>
 
-    <!-- Prompt block — typewriter reveal only, no skeleton -->
-    <div class="cs-prompt-block" id="csPromptBlock">
+    <!-- Prompt output — hidden until content arrives, no empty box -->
+    <div class="spark-output" id="csPromptBlock" style="display:none">
       <div id="csPromptInner" class="cs-prompt-hidden">
         <p class="cs-prompt-text" id="csPromptText"></p>
       </div>
@@ -13066,17 +13076,20 @@ function _renderCSShell(concept) {
     playExpandSFX(open);
   };
 
-  // Wire concept pill hover preview (desktop only)
-  if (window.innerWidth > 1024) {
+  // Wire concept pill hover preview (desktop only) — use flag to prevent duplicate listeners
+  if (window.innerWidth > 1024 && !pill.dataset.hoverWired) {
+    pill.dataset.hoverWired = '1';
     let _pillPreviewTimer = null;
     pill.addEventListener('mouseenter', function() {
+      const c = _csConcept;
+      if (!c) return;
       _pillPreviewTimer = setTimeout(function() {
-        _spPreviewCard(concept.id, pill, { panelMode: true });
-      }, 180);
+        _spPreviewCard(c.id, pill, { panelMode: true });
+      }, 200);
     });
     pill.addEventListener('mouseleave', function() {
       clearTimeout(_pillPreviewTimer);
-      setTimeout(spDismissPreview, 300);
+      setTimeout(spDismissPreview, 400);
     });
   }
 
@@ -13121,7 +13134,11 @@ function _applyAIData(d) {
   const frReset = document.getElementById('csFeedbackRow');
   if (frReset) { frReset.classList.add('cs-hidden'); frReset.classList.remove('cs-visible'); }
 
-  // Typewriter — prompt text only (no opener div)
+  // Show prompt block (hidden until first generate)
+  const block = document.getElementById('csPromptBlock');
+  if (block) block.style.display = 'block';
+
+  // Typewriter — prompt text
   const inner = document.getElementById('csPromptInner');
   const promptEl = document.getElementById('csPromptText');
   if (inner && promptEl) {
@@ -13145,7 +13162,7 @@ function _applyAIData(d) {
     }, 16 + Math.random() * 18);
   }
 
-  // Coaching — use rotating intro label for variety
+  // Coaching — rotating intro label
   const openersList = document.getElementById('csOpenersList');
   if (openersList) {
     const intro = _SPARK_COACHING_INTROS[Math.floor(Math.random() * _SPARK_COACHING_INTROS.length)];
@@ -14215,7 +14232,9 @@ function _csHidePostPrompt() {
     const el = document.getElementById(id);
     if (el) { el.classList.add('cs-hidden'); el.classList.remove('cs-visible'); }
   });
-  // Clear prompt text and hide inner
+  // Hide prompt block entirely until generate fires
+  const block = document.getElementById('csPromptBlock');
+  if (block) block.style.display = 'none';
   const promptEl = document.getElementById('csPromptText');
   if (promptEl) promptEl.textContent = '';
   const inner = document.getElementById('csPromptInner');
@@ -14237,13 +14256,12 @@ function _csShowPostPrompt() {
   });
 }
 
-// Help ? button — mobile tap opens overlay, desktop hover shows bubble
-function _csHelpClick() {
-  // Touch devices: open overlay; desktop hover is wired in _wireCSEvents
-  if (window.matchMedia('(hover: none)').matches) {
-    document.getElementById('csHelpOverlay').classList.add('active');
-  }
+// Help ? button for Spark panel
+function _sparkHelpClick() {
+  const overlay = document.getElementById('csHelpOverlay');
+  if (overlay) overlay.classList.add('active');
 }
+function _csHelpClick() { _sparkHelpClick(); } // legacy alias
 function _csHelpOverlayClose(e) {
   if (!e || e.target === document.getElementById('csHelpOverlay') || e.currentTarget.classList.contains('cs-help-overlay-close')) {
     document.getElementById('csHelpOverlay').classList.remove('active');
@@ -14664,9 +14682,12 @@ function _loadAI(concept) {
   .then(data => {
     _csLoading = false;
     let ctxData = null;
+    // v2.5 universal response
     if (data && data.ctx) ctxData = data.ctx;
-    else if (data && data.contexts && data.contexts['universal']) ctxData = data.contexts['universal'];
-    else if (data && data.contexts && data.contexts['friend']) ctxData = data.contexts['friend']; // legacy fallback
+    // legacy fallback — old cs-generate returns contexts.friend
+    else if (data && data.contexts) {
+      ctxData = data.contexts['universal'] || data.contexts['friend'] || data.contexts['colleague'] || null;
+    }
 
     if (ctxData) {
       if (!_csAIData) _csAIData = {};
@@ -14675,13 +14696,12 @@ function _loadAI(concept) {
       if (genRow) genRow.style.display = 'none';
       _applyAIData(ctxData);
     } else {
-      // Error — reset button so user can retry
       _csLoading = false;
       if (genBtn) { genBtn.disabled = false; genBtn.innerHTML = '<span class="cs-generate-btn-icon">✦</span> Try again'; }
       if (genRow) genRow.style.display = 'block';
     }
   })
-  .catch(function() {
+  .catch(function(err) {
     _csLoading = false;
     if (genBtn) { genBtn.disabled = false; genBtn.innerHTML = '<span class="cs-generate-btn-icon">✦</span> Try again'; }
     if (genRow) genRow.style.display = 'block';
@@ -16733,28 +16753,64 @@ function playStreakMilestoneSFX() {
   margin-right: 4px;
 }
 
-/* ── v2.5: Spark panel search bar — intentionally distinct from hero search ── */
+/* ── v2.5: Spark panel header ── */
+.spark-panel-header {
+  padding: 20px 20px 0;
+}
+.spark-panel-headline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.spark-headline-text {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.15rem;
+  font-style: italic;
+  font-weight: 400;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+.spark-help-btn {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  border: 1px solid var(--border-hover);
+  background: none;
+  color: var(--muted);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color 0.2s, color 0.2s;
+  flex-shrink: 0;
+}
+.spark-help-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ── v2.5: Panel search bar — distinct from hero (underline + gold ✦) ── */
 .spark-search-wrap {
   display: flex;
   align-items: center;
   gap: 0;
-  margin: 16px 20px 10px;
-  border-bottom: 1.5px solid var(--border-hover);
-  padding-bottom: 10px;
-  position: relative;
-  transition: border-color 0.2s;
+  margin: 0 20px 6px;
+  border: 1px solid var(--border-hover);
+  border-radius: 8px;
+  padding: 9px 12px;
+  background: var(--surface2);
+  transition: border-color 0.2s, background 0.2s;
 }
 .spark-search-wrap:focus-within {
-  border-bottom-color: var(--accent);
+  border-color: var(--accent);
+  background: var(--surface);
 }
 .spark-search-icon {
-  font-size: 0.9rem;
+  font-size: 0.75rem;
   color: var(--accent);
   flex-shrink: 0;
-  margin-right: 10px;
-  opacity: 0.7;
+  margin-right: 9px;
+  opacity: 0.6;
   transition: opacity 0.2s;
   font-family: 'DM Mono', monospace;
+  line-height: 1;
 }
 .spark-search-wrap:focus-within .spark-search-icon { opacity: 1; }
 .spark-search-input {
@@ -16762,98 +16818,162 @@ function playStreakMilestoneSFX() {
   background: none;
   border: none;
   outline: none;
-  font-family: 'DM Mono', monospace;
-  font-size: 0.72rem;
-  letter-spacing: 0.08em;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem;
   color: var(--text);
   padding: 0;
   min-width: 0;
 }
 .spark-search-input::placeholder {
   color: var(--muted);
-  font-style: normal;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  font-size: 0.65rem;
+  font-style: italic;
 }
 .spark-search-clear {
   background: none;
   border: none;
   color: var(--muted);
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   cursor: pointer;
   padding: 2px 4px;
   border-radius: 3px;
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
+  line-height: 1;
 }
 .spark-search-clear:hover { color: var(--text); }
+
+/* Search results dropdown */
 .spark-search-results {
-  margin: 0 20px 6px;
+  margin: 0 20px 10px;
   border: 1px solid var(--border-hover);
   border-radius: 10px;
   overflow: hidden;
-  background: var(--surface2);
-  max-height: 300px;
-  overflow-y: auto;
+  background: var(--surface);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+  animation: sparkResultsFade 0.15s ease;
+}
+@keyframes sparkResultsFade {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 .spark-search-result {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 10px;
   width: 100%;
   background: none;
   border: none;
   border-bottom: 1px solid var(--border);
-  padding: 11px 14px;
+  padding: 10px 14px;
   cursor: pointer;
   text-align: left;
-  transition: background 0.15s;
+  transition: background 0.12s;
 }
 .spark-search-result:last-child { border-bottom: none; }
-.spark-search-result:hover { background: rgba(255,255,255,0.04); }
+.spark-search-result:hover { background: rgba(232,213,163,0.06); }
 .spark-result-dot {
-  width: 6px;
-  height: 6px;
+  width: 5px; height: 5px;
   border-radius: 50%;
   flex-shrink: 0;
-  margin-top: 5px;
+  margin-top: 2px;
+}
+.spark-result-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
 }
 .spark-result-term {
   font-family: 'DM Mono', monospace;
-  font-size: 0.7rem;
-  letter-spacing: 0.06em;
+  font-size: 0.68rem;
+  letter-spacing: 0.07em;
   color: var(--text);
   text-transform: uppercase;
   white-space: nowrap;
-  min-width: 0;
-  flex-shrink: 0;
-  max-width: 45%;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .spark-result-hook {
   font-family: 'DM Sans', sans-serif;
-  font-size: 0.72rem;
+  font-size: 0.74rem;
   color: var(--muted2);
-  line-height: 1.4;
-  flex: 1;
-  min-width: 0;
+  line-height: 1.35;
+  white-space: nowrap;
   overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
 }
 .spark-search-empty {
-  padding: 14px 16px;
-  font-family: 'DM Mono', monospace;
-  font-size: 0.68rem;
+  padding: 12px 14px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.78rem;
   color: var(--muted);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-style: italic;
 }
-[data-theme="light"] .spark-search-result:hover { background: rgba(0,0,0,0.03); }
+
+/* ── v2.5: Concept term display — minimalist, no expand box ── */
+.spark-concept-row {
+  padding: 14px 20px 10px;
+  border-top: 1px solid var(--border);
+}
+.spark-concept-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.spark-concept-term-wrap {
+  display: flex;
+  align-items: center;
+}
+.spark-concept-term-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: default;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.2;
+  text-align: left;
+  letter-spacing: -0.01em;
+  transition: color 0.2s;
+}
+@media (hover: hover) {
+  .spark-concept-term-btn { cursor: default; }
+  .spark-concept-term-btn:hover { color: var(--accent); }
+}
+
+/* ── v2.5: Spark output — appears only after generate, editorial style ── */
+.spark-output {
+  margin: 0 20px 14px;
+  padding: 18px 0 0;
+  border-top: 1.5px solid var(--accent);
+  position: relative;
+}
+.spark-output .cs-prompt-text {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.02rem;
+  font-weight: 400;
+  line-height: 1.65;
+  color: var(--text);
+  margin: 0;
+  font-style: italic;
+}
+/* Swipe indicators within spark-output */
+.spark-output .cs-swipe-x,
+.spark-output .cs-swipe-save {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  font-family: 'DM Mono', monospace; font-size: 0.75rem;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  opacity: 0; transition: opacity 0.15s; pointer-events: none;
+  font-weight: 600;
+}
+.spark-output .cs-swipe-x    { left: 0;   color: #d4715a; }
+.spark-output .cs-swipe-save { right: 0;  color: #7aaf8a; }
 
 /* ── v2.5: concept pill hover — subtle glow to hint at desktop preview ── */
 .conv-header {
@@ -18407,7 +18527,6 @@ let _convUndoEntry = null;
 let _convUndoTimer = null;
 
 // ── v2.5: SPARK PANEL SEARCH ─────────────────────────────────────────────────
-// Reuses FUSE_INSTANCE from the main hero search. Renders results inside the panel.
 let _sparkSearchActive = false;
 
 function _initSparkSearch() {
@@ -18425,13 +18544,13 @@ function _initSparkSearch() {
       return;
     }
     _sparkSearchActive = true;
-    // Use same FUSE_INSTANCE as hero search
-    if (typeof FUSE_INSTANCE === 'undefined' || !FUSE_INSTANCE) {
-      resultsEl.innerHTML = '<div class="spark-search-empty">Search not ready yet…</div>';
+    // Use FUSE (same instance as hero search)
+    if (typeof FUSE === 'undefined' || !FUSE) {
+      resultsEl.innerHTML = '<div class="spark-search-empty">Loading…</div>';
       resultsEl.style.display = 'block';
       return;
     }
-    const hits = FUSE_INSTANCE.search(q).slice(0, 8);
+    const hits = FUSE.search(q).slice(0, 7);
     if (!hits.length) {
       resultsEl.innerHTML = '<div class="spark-search-empty">No concepts found</div>';
       resultsEl.style.display = 'block';
@@ -18440,10 +18559,15 @@ function _initSparkSearch() {
     resultsEl.innerHTML = hits.map(h => {
       const c = h.item;
       const color = CAT_COLOR[c.category] || 'var(--accent)';
+      // Get category label
+      const concept = CONCEPTS.find(x => x.id === c.id);
+      const catLabel = concept ? concept.category : '';
       return `<button class="spark-search-result" onclick="_sparkPickConcept(${c.id})">
         <span class="spark-result-dot" style="background:${color}"></span>
-        <span class="spark-result-term">${_escHtml(c.term)}</span>
-        <span class="spark-result-hook">${_escHtml(c.hook || '')}</span>
+        <div class="spark-result-body">
+          <span class="spark-result-term">${_escHtml(c.term)}</span>
+          <span class="spark-result-hook">${_escHtml(c.hook || '')}</span>
+        </div>
       </button>`;
     }).join('');
     resultsEl.style.display = 'block';
@@ -18458,7 +18582,7 @@ function _initSparkSearch() {
     if (_sparkSearchActive && !e.target.closest('#sparkSearchWrap') && !e.target.closest('#sparkSearchResults')) {
       sparkSearchClear();
     }
-  }, { capture: false });
+  });
 }
 
 function sparkSearchClear() {
@@ -18467,20 +18591,13 @@ function sparkSearchClear() {
   const resultsEl = document.getElementById('sparkSearchResults');
   if (input) input.value = '';
   if (clearBtn) clearBtn.style.display = 'none';
-  if (resultsEl) resultsEl.style.display = 'none';
+  if (resultsEl) { resultsEl.style.display = 'none'; }
   _sparkSearchActive = false;
 }
 
 function _sparkPickConcept(id) {
   sparkSearchClear();
-  const concept = CONCEPTS.find(c => c.id === id);
-  if (!concept) return;
-  _csConcept = concept;
-  _csAIData = null;
-  _csStoryGenerated = false;
-  _renderCSShell(concept);
-  _csPushToStack(concept);
-  panelSwitchTab('spark', true);
+  openSparkPanel(id);
   track('spark_concept_picked', { id, source: 'panel_search' });
 }
 
