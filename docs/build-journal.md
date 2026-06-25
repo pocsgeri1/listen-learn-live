@@ -8,7 +8,59 @@
 
 ## Entries
 
-### 2026-06-24 — index.html v2.4–v2.4f: founder polish, UI toggles, podcast pills, spark.html promotion
+### 2026-06-25 — index.html v2.5–v2.5j: Spark panel rebuild, cs-generate fix, coaching animation, history/stash redesign
+
+**What was built:**
+Complete rebuild of the Spark (CS) panel: unified `openSparkPanel()` entry, killed scenario picker system, panel search bar (Fuse-powered), casino roll new concept, typewriter prompt, block-by-block coaching animation, loading messages, History/Stash redesign, cs-generate model fix, multiple CSS animation bugs fixed.
+
+---
+
+**Lesson 1 — `FUNCTION_INVOCATION_FAILED` on Vercel with no detail = model name mismatch, not a code bug.**
+All `cs-generate.js` calls returned 500 for 6+ sessions. The error `FUNCTION_INVOCATION_FAILED` masked the actual issue. Root cause: model string was `claude-sonnet-4-5` — deprecated/invalid. The Anthropic API rejected it, cs-generate caught the upstream error and re-threw a 500. All other API files in the project had been updated to `claude-sonnet-4-6` in a previous session; `cs-generate.js` was missed. **Rule: when ALL other API files are updated to a new model string, grep every `.js` file in the project for the old model name before closing the session.**
+
+---
+
+**Lesson 2 — Fuse instance variable name: `FUSE`, not `FUSE_INSTANCE`. Always grep before referencing.**
+The panel search bar was coded to use `FUSE_INSTANCE` (assumed name). The actual variable is `FUSE`. Result: search showed "Loading…" indefinitely. **Rule: before referencing any global variable that wasn't written in the current session, grep the file for its actual declaration. Never assume the name.**
+
+---
+
+**Lesson 3 — `position:fixed` preview cards must NOT add `window.scrollY` to `getBoundingClientRect().top`.**
+The hover preview card used `top = rect.top + window.scrollY`. For a `position:fixed` card, `rect.top` from `getBoundingClientRect()` is already viewport-relative. Adding `scrollY` offsets it by the full page scroll, pushing the card to the bottom of the page on any scrolled page. **Rule: `position:fixed` elements use viewport coordinates. `getBoundingClientRect()` returns viewport coordinates. Never add `scrollY` or `scrollX` when positioning a fixed element from a `getBoundingClientRect()` value.**
+
+---
+
+**Lesson 4 — DOM node clone is the cleanest way to remove all stale event listeners on a re-rendered element.**
+The concept pill hover preview was wired once with a `_wired` flag on `dataset`. After each `_renderCSShell()` call the same DOM node was reused, listeners accumulated, and hover fired multiple times or with stale concept references. Fix: clone the pill node (`cloneNode(true)`), replace it in the DOM, then re-add listeners. DOM clones have no event listeners attached. **Rule: for interactive elements inside templates that re-render frequently, clone-and-replace is simpler and safer than tracking/removing individual listeners.**
+
+---
+
+**Lesson 5 — `_applyAIData()` was called before coaching HTML was built when restoring from cache, then `_csShowPostPrompt()` ran immediately and made the (empty) container visible.**
+When `doTypewriter=false`, `_showCoaching()` called `_csShowPostPrompt()` with a `setTimeout(80ms)`. But the coaching elements had `opacity:0` by default and only became visible via `.visible` class from JS. The container was shown (class toggled) but individual items were never given `.visible` because `querySelectorAll` ran before `innerHTML` had been set. Fix: build HTML first, then call `_csShowPostPrompt()`, then in the same tick or next RAF add `.visible` to each item. **Rule: always set `innerHTML` before querying children of that element. `querySelectorAll` on a node whose `innerHTML` was just set in the same call frame may return stale results depending on execution order.**
+
+---
+
+**Lesson 6 — Stray orphaned CSS properties (no selector) between valid rules corrupt adjacent rule parsing.**
+A copy-paste error left bare CSS property declarations with no selector between `.cs-opener-line {}` and `.cs-pitfall {}`. The browser parsed these as part of the preceding rule or discarded them, which corrupted `.cs-pitfall` — it lost its `font-style:italic` and font-size overrides. The visual result was a different font/size in the Watch out section vs. the opener lines, despite the CSS looking "right" in the source. **Rule: any time a CSS block looks right but renders wrong, check for unclosed braces or orphaned properties just before and after the rule. The browser's error recovery for malformed CSS is unpredictable.**
+
+---
+
+**Lesson 7 — `_csShowPostPrompt()` that only toggles CSS classes cannot un-hide elements with inline `display:none`.**
+The casino roll collapse used `el.style.display = 'none'` (inline style, highest specificity). `_csShowPostPrompt()` only added/removed `cs-hidden`/`cs-visible` classes. On the next Spark or restore, the coaching container stayed hidden because the inline style overrode the class. Fix: `_csShowPostPrompt()` must also clear `el.style.display = ''` before toggling classes. **Rule: if any code path sets `el.style.display` directly (inline style), every corresponding show function must also clear `el.style.display` — not just toggle classes.**
+
+---
+
+**Lesson 8 — `openSparkPanel(id)` was setting `_csAIData = null` and then NOT calling `_csRestoreOrLoad()`, so history/stash "Spark" always showed empty panel.**
+The function set `_csAIData = null` to force a clean state, then checked `!_csAIData` at the end to show the Generate button — which was always true. `_csRestoreOrLoad()` was never called. History "Spark" buttons always opened an empty shell. Fix: after `_renderCSShell()`, always call `_csRestoreOrLoad(concept)`, which checks session cache + stash and calls `_applyAIData(d, false)` if found. **Rule: any function that opens a concept in the Spark panel must call `_csRestoreOrLoad()` after rendering. This is the contract — don't bypass it.**
+
+---
+
+**Lesson 9 — The output file at `/mnt/user-data/outputs/index.html` is NOT the project file at `/mnt/project/index.html`. The project file is what gets deployed.**
+Multiple sessions produced correct output files but the user continued deploying the old project file (which had v1.x code). The generate button appeared to never work because the deployed file had the old `_loadAI(concept, ctx, brandVoice)` signature. **Rule: always make clear to the user that `outputs/index.html` is the file to commit to GitHub — it is NOT automatically synced to `/mnt/project/`. Always present the output file and state explicitly which file needs to be pushed.**
+
+---
+
+
 
 **What was built:**
 Founder section scroll-reveal, copy rewrite with new CSS emphasis classes, light-mode pill border, library ◫/⊞ view toggle pair, mobile hamburger double-divider fix, mobile library rule/spacing cleanup, editorial hairline top-label removal, podcast pills always-visible + "Show less", founder image desktop repositioning, spark.html promoted to index.html with canonical/OG meta tags.
