@@ -7380,7 +7380,7 @@
     <!-- v2.5: Browse · Spark · Story -->
     <a class="nav-link nav-browse-btn" onclick="playNavSFX();document.getElementById('app').scrollIntoView({behavior:'smooth'})"><span class="nav-browse-emoji">🎬</span>Browse</a>
     <a class="nav-link nav-spark-btn" onclick="openSparkPanel();playNavSFX()"><span class="nav-spark-emoji">💬</span>Spark</a>
-    <a class="nav-link nav-story-btn" onclick="openStoriesPanel();playNavSFX()"><span class="nav-story-emoji">📖</span>Story</a>
+    <a class="nav-link nav-story-btn" onclick="openStoriesPanel();playNavSFX()" style="display:none"><span class="nav-story-emoji">📖</span>Story</a>
   </div>
   <!-- v1.71: epic button is now inside nav-right -->
 
@@ -7405,7 +7405,7 @@
   <!-- v2.5: Browse · Spark · Story -->
   <button class="nav-mobile-link" onclick="playNavSFX();document.getElementById('app').scrollIntoView({behavior:'smooth'});closeMobileNav()">🎬 Browse</button>
   <button class="nav-mobile-link nav-mobile-cs" onclick="playNavSFX();openSparkPanel();closeMobileNav()">💬 Spark</button>
-  <button class="nav-mobile-link nav-mobile-no-border" onclick="playNavSFX();openStoriesPanel();closeMobileNav()">📖 Story</button>
+  <button class="nav-mobile-link nav-mobile-no-border" onclick="playNavSFX();openStoriesPanel();closeMobileNav()" style="display:none">📖 Story</button>
   <div class="nav-mobile-divider"></div>
   <button class="nav-mobile-link nav-mobile-signup" onclick="playNavSFX();scrollToSection('signup');closeMobileNav()">◉ Sign Up 🎁 — Free Founding Access</button>
 </div>
@@ -7717,25 +7717,51 @@
     </div>
   </div>
 
-  <!-- Center column: tagline + search + scenario pills -->
+  <!-- Center column: tagline + search + mode toggle -->
   <div class="sp-hero-col">
 
-    <h1 class="sp-tagline">Ideas die in<br><em id="spTaglineTyped" aria-label="your earbuds."></em></h1>
+    <!-- Headline — words wrapped individually for stagger-out animation -->
+    <h1 class="sp-tagline" id="spTagline" aria-label="Ideas die in your earbuds.">
+      <span class="sp-hw" id="spHW0">Ideas</span>
+      <span class="sp-hw" id="spHW1">die</span>
+      <span class="sp-hw" id="spHW2">in</span><br>
+      <em><span class="sp-hw" id="spHW3" aria-label="your earbuds."></span></em>
+    </h1>
+
+    <!-- Corner mode tagline — hidden in Explore mode -->
+    <p class="sp-corner-tagline" id="spCornerTagline" aria-hidden="true">What are you walking into?</p>
+
+    <!-- Explore sub-tagline -->
     <p class="sp-sub" id="spSub" style="opacity:0;transform:scale(0.96)">Turn 3 hours of podcast into 3 ideas you'll actually say out loud.</p>
 
-    <!-- Hero search bar -->
+    <!-- Hero search bar — shared between Explore and Corner modes -->
     <div class="sp-search-wrap" id="spSearchWrap">
-      <svg class="sp-search-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M10 10l3.5 3.5"/></svg>
+      <!-- Icon swaps between modes -->
+      <span class="sp-mode-icon" id="spModeIcon">🔍</span>
       <input class="sp-search-input" id="spSearchInput" type="text" placeholder="Search an idea, topic, or concept…" autocomplete="off" />
-      <!-- Placeholder overlay for crossfade cycling — hidden when input has focus or value -->
       <span class="sp-ph-overlay" id="spPhOverlay" aria-hidden="true"></span>
       <button class="sp-search-clear" id="spSearchClear" style="display:none" onclick="spClearSearch()" aria-label="Clear search">✕</button>
+      <!-- Corner submit button — hidden in Explore mode -->
+      <button class="sp-corner-submit" id="spCornerSubmit" onclick="cornerSubmit()" style="display:none" aria-label="Corner me">Corner me →</button>
     </div>
-    <!-- Dropdown results -->
+    <!-- Dropdown results (Explore mode only) -->
     <div class="sp-dropdown" id="spDropdown" style="display:none" role="listbox"></div>
 
-    <!-- Scenario pills — 2 visible on mobile via CSS, all 5 on desktop -->
-    <div class="sp-pills-wrap">
+    <!-- Corner loading state — hidden by default -->
+    <div class="sp-corner-loading" id="spCornerLoading" aria-live="polite"></div>
+
+    <!-- Mode toggle row — replaces scenario pills -->
+    <div class="sp-mode-toggle-row" id="spModeToggleRow">
+      <button class="sp-mode-pill active" id="spModeExplore" onclick="exitCornerMode()">
+        🔍 Explore
+      </button>
+      <button class="sp-mode-pill" id="spModeCorner" onclick="enterCornerMode()">
+        🥊 Corner
+      </button>
+    </div>
+
+    <!-- Scenario pills — HIDDEN (story mode disabled v2.7) -->
+    <div class="sp-pills-wrap" style="display:none" aria-hidden="true">
       <div class="sp-pills-row" id="spPillsRow1">
         <button class="sp-pill" onclick="spScenarioPill(this,'friend')">💬 With a friend</button>
         <button class="sp-pill sp-pill-hide-mobile" onclick="spScenarioPill(this,'dinner')">🍷 Dinner party</button>
@@ -11449,7 +11475,7 @@ function initSparkHero() {
   }, 1100);
 
   // #6 Typewriter on "your earbuds." — one-shot per session
-  const _typeEl = document.getElementById('spTaglineTyped');
+  const _typeEl = document.getElementById('spHW3');
   const _typeText = 'your earbuds.';
   if (_typeEl) {
     const _typeKey = 'ep_typed_v1';
@@ -12571,6 +12597,489 @@ function openSparkPanel(conceptId) {
 }
 
 // Story panel — placeholder for v2.6 Stories panel build
+
+// ============================================================
+// CORNER MODE  v2.7
+// Mode switch: Explore ↔ Corner
+// Animation: nav up, headline words scatter up, content falls down,
+// search bar zooms to viewport center, Corner tagline fades in.
+// Corner panel (repurposed Panel B) shows Brief cards with fit scores.
+// ============================================================
+
+var _cornerActive = false;
+var _cornerAudioCtx = null;
+var _cornerPlaceholderTimer = null;
+var _cornerLoadingTimer = null;
+
+var CORNER_PLACEHOLDERS = [
+  'I\'m about to ask my manager for a raise…',
+  'I need to give feedback to someone without damaging the relationship…',
+  'I have a job interview in an hour…',
+  'I need to say no to something important…',
+  'I\'m having a difficult conversation with my partner tonight…',
+];
+
+var CORNER_LOADING_MSGS = [
+  'Reading your situation…',
+  'Finding your frame…',
+  'Almost there…',
+];
+
+// ---- SFX via Web Audio API — no external files ----
+function _cornerPlaySFX(enter) {
+  try {
+    if (!_cornerAudioCtx) _cornerAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    var ctx = _cornerAudioCtx;
+    if (ctx.state === 'suspended') ctx.resume();
+
+    var osc  = ctx.createOscillator();
+    var osc2 = ctx.createOscillator();
+    var gain = ctx.createGain();
+
+    osc.type  = 'sine';
+    osc2.type = 'sine';
+
+    if (enter) {
+      // Deep resonant enter tone: 88Hz + 176Hz harmonic
+      osc.frequency.setValueAtTime(88, ctx.currentTime);
+      osc2.frequency.setValueAtTime(176, ctx.currentTime);
+      gain.gain.setValueAtTime(0, ctx.currentTime);
+      gain.gain.linearRampToValueAtTime(0.14, ctx.currentTime + 0.04);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.65);
+    } else {
+      // Shorter higher exit tone: 140Hz
+      osc.frequency.setValueAtTime(140, ctx.currentTime);
+      osc2.frequency.setValueAtTime(280, ctx.currentTime);
+      gain.gain.setValueAtTime(0, ctx.currentTime);
+      gain.gain.linearRampToValueAtTime(0.10, ctx.currentTime + 0.03);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.38);
+    }
+
+    osc.connect(gain);
+    osc2.connect(gain);
+    gain.connect(ctx.destination);
+
+    var dur = enter ? 0.7 : 0.42;
+    osc.start(ctx.currentTime);
+    osc2.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + dur);
+    osc2.stop(ctx.currentTime + dur);
+  } catch(e) {}
+}
+
+// ---- Calculate translateY to center search bar in viewport ----
+function _cornerCalcTranslate() {
+  var nav    = document.getElementById('mainNav');
+  var hero   = document.getElementById('spHero');
+  var wrap   = document.getElementById('spSearchWrap');
+  if (!wrap) return 0;
+  var navH   = nav ? nav.getBoundingClientRect().height : 64;
+  var wrapRect = wrap.getBoundingClientRect();
+  var vpH    = window.innerHeight;
+  // Target: center of search bar should be at 42% of viewport
+  var targetCenterY = vpH * 0.42;
+  var currentCenterY = wrapRect.top + wrapRect.height / 2;
+  var delta = targetCenterY - currentCenterY;
+  // Cap on short viewports
+  return Math.min(Math.max(delta, -60), 80);
+}
+
+// ---- Enter Corner Mode ----
+function enterCornerMode() {
+  if (_cornerActive) return;
+  _cornerActive = true;
+
+  _cornerPlaySFX(true);
+
+  // Set translate-Y CSS var before adding class (so transition starts from correct value)
+  var ty = _cornerCalcTranslate();
+  document.body.style.setProperty('--corner-translate-y', ty + 'px');
+
+  // Add body class — CSS transitions fire
+  document.body.classList.add('corner-mode');
+
+  // Toggle pill states
+  var pe = document.getElementById('spModeExplore');
+  var pc = document.getElementById('spModeCorner');
+  if (pe) pe.classList.remove('active');
+  if (pc) pc.classList.add('active');
+
+  // Swap icon
+  var icon = document.getElementById('spModeIcon');
+  if (icon) icon.textContent = '🥊';
+
+  // Switch input to Corner mode
+  var input = document.getElementById('spSearchInput');
+  var clear = document.getElementById('spSearchClear');
+  var submit = document.getElementById('spCornerSubmit');
+  var dropdown = document.getElementById('spDropdown');
+  var phOverlay = document.getElementById('spPhOverlay');
+
+  if (dropdown) dropdown.style.display = 'none';
+  if (clear)  clear.style.display = 'none';
+  if (submit) submit.style.display = '';
+  if (input) {
+    input.value = '';
+    input.setAttribute('placeholder', '');
+    // Remove Explore event listeners — refocus on Corner
+    input.onkeydown = function(e) { if (e.key === 'Enter') cornerSubmit(); };
+  }
+
+  // Start placeholder cycling for Corner
+  if (phOverlay) {
+    phOverlay.classList.remove('hidden');
+    phOverlay.style.fontStyle = 'italic';
+  }
+  _cornerCyclePlaceholders(0);
+
+  // Focus input after animation settles
+  setTimeout(function() { if (input) input.focus(); }, 480);
+}
+
+// ---- Exit Corner Mode ----
+function exitCornerMode() {
+  if (!_cornerActive) return;
+  _cornerActive = false;
+
+  _cornerPlaySFX(false);
+
+  // Clear Corner placeholder cycling
+  if (_cornerPlaceholderTimer) { clearTimeout(_cornerPlaceholderTimer); _cornerPlaceholderTimer = null; }
+
+  document.body.classList.remove('corner-mode');
+  document.body.style.removeProperty('--corner-translate-y');
+
+  // Toggle pill states
+  var pe = document.getElementById('spModeExplore');
+  var pc = document.getElementById('spModeCorner');
+  if (pe) pe.classList.add('active');
+  if (pc) pc.classList.remove('active');
+
+  // Swap icon back
+  var icon = document.getElementById('spModeIcon');
+  if (icon) icon.textContent = '🔍';
+
+  // Restore input to Explore mode
+  var input = document.getElementById('spSearchInput');
+  var submit = document.getElementById('spCornerSubmit');
+  var phOverlay = document.getElementById('spPhOverlay');
+  var loading = document.getElementById('spCornerLoading');
+
+  if (submit) { submit.style.display = 'none'; submit.disabled = false; submit.textContent = 'Corner me →'; }
+  if (loading) { loading.classList.remove('visible'); loading.textContent = ''; }
+  if (input) {
+    input.value = '';
+    input.setAttribute('placeholder', 'Search an idea, topic, or concept…');
+    input.onkeydown = null; // restore default Explore handler
+    // Re-trigger Explore placeholder cycling
+    if (typeof _spStartPlaceholderCycle === 'function') _spStartPlaceholderCycle();
+  }
+  if (phOverlay) {
+    phOverlay.style.fontStyle = '';
+    phOverlay.classList.remove('hidden');
+  }
+}
+
+// ---- Corner placeholder cycling ----
+function _cornerCyclePlaceholders(idx) {
+  var phOverlay = document.getElementById('spPhOverlay');
+  var input = document.getElementById('spSearchInput');
+  if (!phOverlay || !_cornerActive) return;
+  // Hide if input has value
+  if (input && input.value) { phOverlay.classList.add('hidden'); return; }
+
+  phOverlay.classList.remove('hidden');
+  phOverlay.classList.add('fading');
+  _cornerPlaceholderTimer = setTimeout(function() {
+    phOverlay.textContent = CORNER_PLACEHOLDERS[idx % CORNER_PLACEHOLDERS.length];
+    phOverlay.classList.remove('fading');
+    _cornerPlaceholderTimer = setTimeout(function() {
+      _cornerCyclePlaceholders(idx + 1);
+    }, 3500);
+  }, 340);
+}
+
+// ---- Corner submit ----
+function cornerSubmit() {
+  var input = document.getElementById('spSearchInput');
+  var userInput = input ? input.value.trim() : '';
+  if (!userInput || userInput.length < 5) {
+    if (input) { input.focus(); }
+    return;
+  }
+
+  // Lock input
+  var submit = document.getElementById('spCornerSubmit');
+  var loading = document.getElementById('spCornerLoading');
+  if (submit) { submit.disabled = true; submit.textContent = '◉ Finding your frame…'; }
+  if (input) input.disabled = true;
+
+  // Show loading message
+  if (loading) {
+    loading.textContent = CORNER_LOADING_MSGS[0];
+    loading.classList.add('visible');
+    var _lIdx = 0;
+    _cornerLoadingTimer = setInterval(function() {
+      _lIdx = (_lIdx + 1) % CORNER_LOADING_MSGS.length;
+      if (loading) loading.textContent = CORNER_LOADING_MSGS[_lIdx];
+    }, 1000);
+  }
+
+  // Client-side Fuse pre-filter
+  var candidates = _cornerGetCandidates(userInput);
+
+  // API call
+  _cornerCallAPI(userInput, candidates).then(function(result) {
+    clearInterval(_cornerLoadingTimer);
+    if (loading) loading.classList.remove('visible');
+    if (submit) { submit.disabled = false; submit.textContent = 'Corner me →'; }
+    if (input) input.disabled = false;
+    _cornerOpenPanel(userInput, result);
+  }).catch(function(err) {
+    clearInterval(_cornerLoadingTimer);
+    if (loading) { loading.textContent = 'Something went wrong. Try again.'; }
+    if (submit) { submit.disabled = false; submit.textContent = 'Corner me →'; }
+    if (input) input.disabled = false;
+    setTimeout(function() { if (loading) loading.classList.remove('visible'); }, 2500);
+  });
+}
+
+// ---- Fuse pre-filter: returns top ~15 concept candidates ----
+function _cornerGetCandidates(query) {
+  if (typeof CONCEPTS === 'undefined') return [];
+  // Wider Fuse search across plain + hook + term
+  var fuse = new Fuse(CONCEPTS, {
+    keys: [
+      { name: 'plain', weight: 2 },
+      { name: 'hook',  weight: 1.5 },
+      { name: 'term',  weight: 1 },
+    ],
+    threshold: 0.55,
+    includeScore: true,
+    minMatchCharLength: 3,
+  });
+  var fuseResults = fuse.search(query).slice(0, 12).map(function(r) { return r.item; });
+
+  // Add 4 editors_picks from categories not already in results
+  var resultCats = new Set(fuseResults.map(function(c) { return c.category; }));
+  var picks = CONCEPTS.filter(function(c) {
+    return c.editors_pick === true && !resultCats.has(c.category) && !fuseResults.find(function(r) { return r.id === c.id; });
+  }).slice(0, 4);
+
+  var combined = fuseResults.concat(picks).slice(0, 15);
+  // Return only fields needed for API
+  return combined.map(function(c) {
+    return { id: c.id, term: c.term, hook: c.hook, plain: c.plain, category: c.category };
+  });
+}
+
+// ---- API call: cs-generate.js mode=situation ----
+async function _cornerCallAPI(userInput, candidates) {
+  var res = await fetch('/api/cs-generate', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      mode: 'situation',
+      userInput: userInput,
+      candidates: candidates,
+    }),
+  });
+  if (!res.ok) throw new Error('API error ' + res.status);
+  return await res.json();
+}
+
+// ---- Open Corner panel with results ----
+function _cornerOpenPanel(userInput, result) {
+  var overlay = document.getElementById('storiesOverlay');
+  if (!overlay) return;
+
+  // Repurpose the stories panel for Corner
+  var panel = document.getElementById('storiesPanel');
+  if (!panel) return;
+
+  // Build Corner panel header + body
+  var conceptCount = typeof CONCEPTS !== 'undefined' ? CONCEPTS.length : 670;
+  var concepts = result.concepts || [];
+  var opener = result.opener || '';
+
+  panel.innerHTML =
+    '<div class="stories-header">' +
+      '<span class="stories-header-label">🥊 Corner</span>' +
+      '<button class="stories-close" onclick="closeCornerPanel()" aria-label="Close">✕</button>' +
+    '</div>' +
+    '<div class="corner-panel-situation">' +
+      '<div class="corner-panel-situation-label">Your situation</div>' +
+      '<div class="corner-panel-situation-text">"' + _escHtml(userInput) + '"</div>' +
+      '<div class="corner-panel-curation">↳ Matched against ' + conceptCount + ' human-curated concepts</div>' +
+    '</div>' +
+    '<div class="corner-panel-body" id="cornerPanelBody">' +
+      _cornerBuildCards(concepts) +
+      _cornerBuildOpener(opener) +
+      _cornerBuildRelated(concepts) +
+    '</div>';
+
+  document.body.classList.add('corner-panel-open');
+  overlay.classList.add('active');
+
+  // Stagger card animations in
+  setTimeout(function() {
+    var cards = panel.querySelectorAll('.corner-brief-card');
+    cards.forEach(function(card, i) {
+      setTimeout(function() {
+        card.classList.add('visible');
+        // Animate fit bar fill
+        var fill = card.querySelector('.corner-fit-bar-fill');
+        if (fill) {
+          var score = parseInt(fill.dataset.score || '0', 10);
+          setTimeout(function() { fill.style.width = score + '%'; }, 50);
+        }
+      }, i * 130);
+    });
+    // Opener + related after cards
+    var openerEl = panel.querySelector('.corner-opener-block');
+    var relatedEl = panel.querySelector('.corner-related-wrap');
+    var delay = cards.length * 130 + 180;
+    if (openerEl) setTimeout(function() { openerEl.classList.add('visible'); }, delay);
+    if (relatedEl) setTimeout(function() { relatedEl.classList.add('visible'); }, delay + 120);
+  }, 80);
+
+  // Outside click to close
+  setTimeout(function() {
+    document.addEventListener('click', _cornerOutsideClick, { capture: true });
+    document.addEventListener('keydown', _cornerEscHandler);
+  }, 60);
+}
+
+function _cornerBuildCards(concepts) {
+  if (!concepts || !concepts.length) {
+    return '<div style="padding:20px;color:var(--muted2);font-family:\'DM Sans\',sans-serif;font-size:0.84rem">No matching frames found. Try describing your situation differently.</div>';
+  }
+  return concepts.map(function(c, i) {
+    var concept = (typeof CONCEPTS !== 'undefined' ? CONCEPTS : []).find(function(x) { return x.id === c.conceptId; });
+    if (!concept) return '';
+    var color = (typeof CAT_COLOR !== 'undefined' && CAT_COLOR[concept.category]) || '#e8d5a3';
+    var catName = ((typeof CATEGORIES !== 'undefined' ? CATEGORIES : []).find(function(x) { return x.id === concept.category; }) || {}).name || concept.category;
+    var score = Math.min(100, Math.max(0, c.fitScore || 80));
+
+    return '<div class="corner-brief-card" id="cornerCard' + i + '">' +
+      '<div class="corner-brief-card-header">' +
+        '<div class="corner-cat-dot-label">' +
+          '<div class="corner-cat-dot" style="background:' + color + '"></div>' +
+          '<span>' + _escHtml(catName) + '</span>' +
+        '</div>' +
+        '<div class="corner-fit-score-wrap">' +
+          '<div class="corner-fit-bar-track">' +
+            '<div class="corner-fit-bar-fill" data-score="' + score + '"></div>' +
+          '</div>' +
+          '<span class="corner-fit-score-label">' + score + ' / 100</span>' +
+        '</div>' +
+      '</div>' +
+      '<div class="corner-curated-chip">✓ human-curated</div>' +
+      '<div class="corner-term" onclick="openSparkPanel(' + concept.id + ')" title="Open in Spark">' + _escHtml(concept.term) + '</div>' +
+      '<div class="corner-block">' +
+        '<div class="corner-block-label">Why this fits</div>' +
+        '<div class="corner-block-text">' + _escHtml(c.whyThisFits || '') + '</div>' +
+      '</div>' +
+      '<div class="corner-block">' +
+        '<div class="corner-block-label">To frame it well</div>' +
+        '<div class="corner-block-text">' + _escHtml(c.toFrameItWell || '') + '</div>' +
+      '</div>' +
+      '<div class="corner-block">' +
+        '<div class="corner-block-label">Watch out for</div>' +
+        '<div class="corner-block-text">' + _escHtml(c.watchOutFor || '') + '</div>' +
+      '</div>' +
+      '<button class="corner-spark-btn" ' +
+        'onmouseenter="if(window.innerWidth>1024)_spPreviewCard(' + concept.id + ',this,{panelMode:true})" ' +
+        'onmouseleave="if(window.innerWidth>1024){clearTimeout(_pt);_pt=setTimeout(spDismissPreview,200)}" ' +
+        'onclick="_cornerSparkSituation(' + concept.id + ', this.closest(\'.corner-brief-card\').dataset.situation || \'\')">' +
+        '✦ Corner Spark' +
+      '</button>' +
+    '</div>';
+  }).join('');
+}
+
+function _cornerBuildOpener(opener) {
+  if (!opener) return '';
+  return '<div class="corner-opener-block">' +
+    '<div class="corner-opener-label">Your line for this moment</div>' +
+    '<div class="corner-opener-text">"' + _escHtml(opener) + '"</div>' +
+    '<button class="corner-copy-btn" onclick="_cornerCopy(this, \'' + opener.replace(/'/g, "\\'").replace(/"/g, '&quot;') + '\')">' +
+      'Copy' +
+    '</button>' +
+  '</div>';
+}
+
+function _cornerBuildRelated(concepts) {
+  if (!concepts || !concepts.length || typeof CONCEPTS === 'undefined') return '';
+  // Collect related_ids from matched concepts, deduplicate
+  var seen = new Set(concepts.map(function(c) { return c.conceptId; }));
+  var relatedIds = [];
+  concepts.forEach(function(c) {
+    var full = CONCEPTS.find(function(x) { return x.id === c.conceptId; });
+    if (full && full.related_ids) {
+      full.related_ids.forEach(function(rid) {
+        if (!seen.has(rid)) { seen.add(rid); relatedIds.push(rid); }
+      });
+    }
+  });
+  var relatedConcepts = relatedIds.slice(0, 6).map(function(rid) {
+    return CONCEPTS.find(function(x) { return x.id === rid; });
+  }).filter(Boolean);
+  if (!relatedConcepts.length) return '';
+
+  var chips = relatedConcepts.map(function(c) {
+    var color = (typeof CAT_COLOR !== 'undefined' && CAT_COLOR[c.category]) || '#e8d5a3';
+    return '<button class="corner-related-chip" onclick="openSparkPanel(' + c.id + ')">' +
+      '<span style="width:6px;height:6px;border-radius:50%;background:' + color + ';flex-shrink:0;display:inline-block"></span>' +
+      '<span>' + _escHtml(c.term) + '</span>' +
+    '</button>';
+  }).join('');
+
+  return '<div class="corner-related-wrap">' +
+    '<div class="corner-related-label">Explore further</div>' +
+    '<div class="corner-related-scroll">' + chips + '</div>' +
+  '</div>';
+}
+
+// ---- Corner Spark — Spark with situational context ----
+function _cornerSparkSituation(conceptId, situation) {
+  // Store situation context for Spark to pick up
+  try { sessionStorage.setItem('corner_situation', situation || ''); } catch(e) {}
+  closeCornerPanel();
+  setTimeout(function() { openSparkPanel(conceptId); }, 180);
+}
+
+// ---- Copy opener ----
+function _cornerCopy(btn, text) {
+  if (!text) return;
+  navigator.clipboard.writeText(text).then(function() {
+    var orig = btn.textContent;
+    btn.textContent = '✓ Copied';
+    setTimeout(function() { btn.textContent = orig; }, 1600);
+  }).catch(function() {
+    btn.textContent = 'Copy failed';
+    setTimeout(function() { btn.textContent = 'Copy'; }, 1600);
+  });
+}
+
+// ---- Close Corner panel ----
+function closeCornerPanel() {
+  var overlay = document.getElementById('storiesOverlay');
+  if (overlay) overlay.classList.remove('active');
+  document.body.classList.remove('corner-panel-open');
+  document.removeEventListener('click', _cornerOutsideClick, { capture: true });
+  document.removeEventListener('keydown', _cornerEscHandler);
+  spDismissPreview();
+}
+
+function _cornerOutsideClick(e) {
+  var panel = document.getElementById('storiesPanel');
+  var peek  = document.getElementById('spPreviewCard');
+  if (peek && peek.style.display !== 'none' && !peek.contains(e.target)) { spDismissPreview(); }
+  if (panel && !panel.contains(e.target)) { closeCornerPanel(); }
+}
+function _cornerEscHandler(e) { if (e.key === 'Escape') closeCornerPanel(); }
+
 // ============================================================
 // PANEL B — STORY MODE  v2.6
 // State machine: 0=Entry 1=Loading 2=Story 3=TermPeek 4=Outro
@@ -19042,6 +19551,489 @@ body.cs-panel-open .sp-trigger-hint { display: none; }
   border-color: var(--border);
   color: var(--accent);
 }
+
+body.cs-panel-open .sp-trigger-hint { display: none; }
+@media (max-width: 899px) {
+  .sp-trigger-hint { display: none !important; }
+}
+[data-theme="light"] .sp-trigger-hint {
+  background: var(--surface);
+  border-color: var(--border);
+  color: var(--accent);
+}
+
+/* ============================================================
+   CORNER MODE  v2.7
+   Mode toggle + animated hero transform + Corner panel
+   Performance rules: only transform + opacity on transitions.
+   No backdrop-filter. No continuously pulsing animations.
+   ============================================================ */
+
+/* ---- Headline word spans for stagger animation ---- */
+.sp-hw {
+  display: inline-block;
+  transition: opacity 0.32s ease, transform 0.32s cubic-bezier(0.4,0,0.2,1);
+  will-change: opacity, transform;
+}
+/* When Corner mode activates, each word flies up and fades */
+body.corner-mode .sp-hw {
+  opacity: 0;
+  transform: translateY(-48px);
+}
+body.corner-mode #spHW0 { transition-delay: 0ms; }
+body.corner-mode #spHW1 { transition-delay: 55ms; }
+body.corner-mode #spHW2 { transition-delay: 110ms; }
+body.corner-mode #spHW3 { transition-delay: 165ms; }
+
+/* ---- Corner tagline ---- */
+.sp-corner-tagline {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: clamp(1rem, 2vw, 1.18rem);
+  color: var(--accent);
+  margin: 0 0 1.5rem;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.38s ease, transform 0.38s cubic-bezier(0.22,0.61,0.36,1);
+  pointer-events: none;
+  /* sits in same vertical space as sp-sub; both never visible at same time */
+}
+body.corner-mode .sp-corner-tagline {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+  transition-delay: 320ms; /* after words have exited */
+}
+
+/* ---- Nav push-up ---- */
+#mainNav {
+  transition: transform 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.4s ease;
+  will-change: transform, opacity;
+}
+body.corner-mode #mainNav {
+  transform: translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ---- Content push-down ---- */
+/* Everything below the hero fades and slides away */
+.browse-toggle-wrap,
+#episodesSection,
+#themesSection,
+#netflixRows,
+#libSection,
+#signupSection {
+  transition: transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94), opacity 0.45s ease;
+  will-change: transform, opacity;
+}
+body.corner-mode .browse-toggle-wrap,
+body.corner-mode #episodesSection,
+body.corner-mode #themesSection,
+body.corner-mode #netflixRows,
+body.corner-mode #libSection,
+body.corner-mode #signupSection {
+  transform: translateY(80px);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ---- sp-sub fades out in Corner mode ---- */
+#spSub {
+  transition: opacity 0.28s ease, transform 0.28s ease !important;
+}
+body.corner-mode #spSub {
+  opacity: 0 !important;
+  pointer-events: none;
+}
+
+/* ---- Search bar Corner state ---- */
+body.corner-mode .sp-search-wrap {
+  border-color: rgba(232,213,163,0.5);
+  box-shadow:
+    0 0 0 1px rgba(232,213,163,0.10),
+    0 0 32px rgba(232,213,163,0.12),
+    0 4px 24px rgba(0,0,0,0.35);
+  background: rgba(232,213,163,0.04);
+}
+
+/* ---- Search bar zoom-to-center ---- */
+/* JS sets --corner-translate-y via inline style on body */
+.sp-hero-col {
+  transition: transform 0.45s cubic-bezier(0.22,0.61,0.36,1);
+  will-change: transform;
+}
+body.corner-mode .sp-hero-col {
+  transform: translateY(var(--corner-translate-y, 0px)) scale(1.035);
+}
+
+/* ---- Mode icon swap ---- */
+.sp-mode-icon {
+  font-size: 1rem;
+  flex-shrink: 0;
+  line-height: 1;
+  transition: opacity 0.2s ease;
+  /* replaces the old SVG search icon */
+  padding: 0 2px;
+  color: var(--muted);
+}
+
+/* ---- Corner submit button ---- */
+.sp-corner-submit {
+  background: var(--accent);
+  color: #0d0d0d;
+  border: none;
+  border-radius: 7px;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  font-weight: 500;
+  padding: 8px 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: opacity 0.2s ease, transform 0.15s ease, background 0.2s;
+}
+.sp-corner-submit:hover {
+  background: #f0e0b0;
+  transform: translateX(1px);
+}
+.sp-corner-submit:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ---- Corner loading line ---- */
+.sp-corner-loading {
+  min-height: 0;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.3s cubic-bezier(0.25,0.46,0.45,0.94), opacity 0.28s ease;
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 0.9rem;
+  color: var(--muted2);
+  text-align: center;
+  margin-top: 0;
+}
+.sp-corner-loading.visible {
+  max-height: 60px;
+  opacity: 1;
+  margin-top: 12px;
+}
+
+/* ---- Mode toggle row ---- */
+.sp-mode-toggle-row {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 1.1rem;
+}
+.sp-mode-pill {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: none;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 999px;
+  padding: 7px 16px;
+  cursor: pointer;
+  transition: color 0.18s, border-color 0.18s, background 0.18s;
+}
+.sp-mode-pill:hover { color: var(--muted2); border-color: rgba(255,255,255,0.14); }
+.sp-mode-pill.active {
+  color: var(--accent);
+  border-color: rgba(232,213,163,0.35);
+  background: rgba(232,213,163,0.06);
+}
+[data-theme="light"] .sp-mode-pill { border-color: rgba(0,0,0,0.1); }
+[data-theme="light"] .sp-mode-pill.active {
+  border-color: rgba(184,134,11,0.4);
+  background: rgba(184,134,11,0.07);
+}
+
+/* ---- Corner results panel (repurposed Panel B) ---- */
+/* Override stories-panel for Corner mode */
+body.corner-panel-open .stories-panel {
+  background: #0f0d0a;
+}
+
+/* ---- Brief card ---- */
+.corner-brief-card {
+  background: rgba(232,213,163,0.04);
+  border: 1px solid rgba(232,213,163,0.10);
+  border-radius: 14px;
+  padding: 20px 20px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.22,0.61,0.36,1);
+}
+.corner-brief-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.corner-brief-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.corner-cat-dot-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.75rem;
+  color: var(--muted2);
+}
+.corner-cat-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.corner-fit-score-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.corner-fit-bar-track {
+  width: 80px;
+  height: 3px;
+  background: rgba(232,213,163,0.12);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.corner-fit-bar-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 2px;
+  width: 0%;
+  transition: width 0.65s cubic-bezier(0.22,0.61,0.36,1);
+}
+.corner-fit-score-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+  white-space: nowrap;
+}
+.corner-curated-chip {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  opacity: 0.55;
+  white-space: nowrap;
+}
+.corner-term {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: 1.28rem;
+  color: var(--text);
+  line-height: 1.2;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+.corner-term:hover { color: var(--accent); }
+.corner-block-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 4px;
+  opacity: 0.65;
+}
+.corner-block-text {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.84rem;
+  color: var(--muted2);
+  line-height: 1.6;
+}
+.corner-block { display: flex; flex-direction: column; }
+.corner-spark-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: 1px solid rgba(232,213,163,0.2);
+  border-radius: 8px;
+  color: var(--accent);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  padding: 9px 14px;
+  cursor: pointer;
+  transition: background 0.18s, border-color 0.18s, transform 0.15s;
+  align-self: flex-start;
+  margin-top: 2px;
+}
+.corner-spark-btn:hover {
+  background: rgba(232,213,163,0.08);
+  border-color: rgba(232,213,163,0.38);
+  transform: translateX(2px);
+}
+
+/* ---- Opener block ---- */
+.corner-opener-block {
+  background: rgba(232,213,163,0.04);
+  border: 1px solid rgba(232,213,163,0.12);
+  border-radius: 12px;
+  padding: 18px 20px;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.22,0.61,0.36,1);
+}
+.corner-opener-block.visible { opacity: 1; transform: translateY(0); }
+.corner-opener-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  opacity: 0.65;
+  margin-bottom: 10px;
+}
+.corner-opener-text {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 0.97rem;
+  color: var(--accent);
+  line-height: 1.6;
+  margin-bottom: 14px;
+}
+.corner-copy-btn {
+  background: none;
+  border: 1px solid rgba(232,213,163,0.2);
+  border-radius: 6px;
+  color: var(--muted2);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+.corner-copy-btn:hover { color: var(--accent); border-color: rgba(232,213,163,0.35); background: rgba(232,213,163,0.05); }
+
+/* ---- Related strip ---- */
+.corner-related-wrap {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.22,0.61,0.36,1);
+}
+.corner-related-wrap.visible { opacity: 1; transform: translateY(0); }
+.corner-related-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  opacity: 0.55;
+  margin-bottom: 10px;
+}
+.corner-related-scroll {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 4px;
+  /* Fade right edge to signal scrollability */
+  mask-image: linear-gradient(to right, black 85%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, black 85%, transparent 100%);
+}
+.corner-related-scroll::-webkit-scrollbar { display: none; }
+.corner-related-chip {
+  flex-shrink: 0;
+  scroll-snap-align: start;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 999px;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.04em;
+  color: var(--muted2);
+  white-space: nowrap;
+}
+.corner-related-chip:hover {
+  background: rgba(232,213,163,0.07);
+  border-color: rgba(232,213,163,0.22);
+  color: var(--accent);
+}
+
+/* ---- Corner panel header situation echo ---- */
+.corner-panel-situation {
+  padding: 14px 20px 12px;
+  border-bottom: 1px solid rgba(232,213,163,0.08);
+  flex-shrink: 0;
+}
+.corner-panel-situation-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  opacity: 0.55;
+  margin-bottom: 5px;
+}
+.corner-panel-situation-text {
+  font-family: 'DM Sans', sans-serif;
+  font-style: italic;
+  font-size: 0.84rem;
+  color: var(--muted2);
+  line-height: 1.5;
+}
+.corner-panel-curation {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  opacity: 0.5;
+  margin-top: 6px;
+}
+
+/* ---- Corner panel content area ---- */
+.corner-panel-body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px 20px 28px;
+}
+.corner-panel-body::-webkit-scrollbar { width: 3px; }
+.corner-panel-body::-webkit-scrollbar-thumb { background: rgba(232,213,163,0.12); border-radius: 2px; }
+
+/* light mode */
+[data-theme="light"] .corner-brief-card {
+  background: rgba(184,134,11,0.04);
+  border-color: rgba(184,134,11,0.12);
+}
+[data-theme="light"] .corner-opener-block {
+  background: rgba(184,134,11,0.04);
+  border-color: rgba(184,134,11,0.14);
+}
+
+/* ============================================================
+   END CORNER MODE CSS
+   ============================================================ */
 
 /* ============================================================
    PANEL B — STORY MODE  v2.6
