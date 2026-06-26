@@ -13205,6 +13205,8 @@ function _cornerShowPreview(id, anchorEl) {
     requestAnimationFrame(function() { card.classList.add('sp-preview-visible'); });
   });
 }
+
+function _cornerBuildCards(concepts, userInput) {
   if (!concepts || !concepts.length) {
     return '<div style="padding:20px;color:var(--muted2);font-family:\'DM Sans\',sans-serif;font-size:0.84rem">No matching frames found. Try describing your situation differently.</div>';
   }
@@ -20008,6 +20010,7 @@ body.corner-mode #signupSection {
 /* ---- Scroll lock + misc ---- */
 body.corner-mode { overflow: hidden; }
 body.corner-mode .sp-trigger-hint { display: none !important; }
+body.corner-mode::before, body.corner-mode::after { opacity: 0; }
 #spSub { transition: opacity 0.28s ease, transform 0.28s ease !important; }
 body.corner-mode #spSub { opacity: 0 !important; pointer-events: none; }
 
