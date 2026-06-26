@@ -15,7 +15,96 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'Server misconfigured: ANTHROPIC_API_KEY missing.' });
   }
 
-  const { concept, ctx } = req.body || {};
+  const { concept, ctx, mode, userInput, candidates } = req.body || {};
+
+  // ── SITUATION MODE (Corner Mode) ───────────────────────────────────────────
+  if (mode === 'situation') {
+    if (!userInput || !Array.isArray(candidates) || !candidates.length) {
+      return res.status(400).json({ error: 'userInput and candidates array required for situation mode.' });
+    }
+
+    const situationSystemPrompt = `You are an expert conversation coach for ambitious professionals, many of whom are non-native English speakers. You help people find the exact intellectual frame for a real situation they are about to face.
+
+You ONLY use concepts from the provided candidate list — never invent or hallucinate concepts. You pick 1–3 that genuinely fit the user's situation, explain precisely why, and give one actionable opener sentence.
+
+Output ONLY valid JSON. No markdown, no preamble, no explanation outside the JSON.`;
+
+    const candidateList = candidates.map((c, i) =>
+      `${i + 1}. ID:${c.id} | "${c.term}" (${c.category})\n   Hook: ${c.hook}\n   Plain: ${c.plain}`
+    ).join('\n\n');
+
+    const situationPrompt = `The user is preparing for this situation:
+"${userInput}"
+
+Choose 1–3 concepts from this curated list that genuinely apply. Rank them by fit.
+
+CANDIDATE CONCEPTS:
+${candidateList}
+
+For each chosen concept, write:
+- conceptId: the integer ID from the list
+- fitScore: integer 0–100 representing how well it fits this exact situation
+- whyThisFits: 2–3 sentences explaining why this concept is relevant to their specific situation. Be direct and specific — reference their actual words.
+- toFrameItWell: 1–2 sentences of prescriptive coaching. What should they actually do or say?
+- watchOutFor: 1–2 sentences. The thing a mentor would warn them about that nobody else mentions.
+
+Also write:
+- opener: one sentence in first-person ("I...") the user could actually say in this situation. Natural, not textbook.
+
+Respond ONLY with this JSON:
+{
+  "concepts": [
+    {
+      "conceptId": 123,
+      "fitScore": 94,
+      "whyThisFits": "...",
+      "toFrameItWell": "...",
+      "watchOutFor": "..."
+    }
+  ],
+  "opener": "..."
+}`;
+
+    try {
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': ANTHROPIC_API_KEY,
+          'anthropic-version': '2023-06-01',
+        },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-5',
+          max_tokens: 900,
+          system: situationSystemPrompt,
+          messages: [{ role: 'user', content: situationPrompt }],
+        }),
+      });
+
+      if (!response.ok) {
+        const err = await response.text();
+        console.error('Anthropic API error (situation):', err);
+        return res.status(502).json({ error: 'Upstream API error.' });
+      }
+
+      const data = await response.json();
+      const raw = data?.content?.[0]?.text || '';
+      const clean = raw.replace(/```json|```/g, '').trim();
+      const parsed = JSON.parse(clean);
+
+      if (!Array.isArray(parsed.concepts) || !parsed.concepts.length) {
+        return res.status(502).json({ error: 'Malformed situation API response.' });
+      }
+
+      return res.status(200).json(parsed);
+
+    } catch (e) {
+      console.error('cs-generate situation error:', e);
+      return res.status(500).json({ error: 'Internal server error.' });
+    }
+  }
+  // ── END SITUATION MODE ─────────────────────────────────────────────────────
+
   if (!concept || !concept.term) {
     return res.status(400).json({ error: 'concept object with term is required.' });
   }
@@ -60,7 +149,7 @@ Respond ONLY with this JSON (no extra fields):
           'anthropic-version': '2023-06-01',
         },
         body: JSON.stringify({
-          model: 'claude-sonnet-4-6',
+          model: 'claude-sonnet-4-5',
           max_tokens: 700,
           system: systemPrompt,
           messages: [{ role: 'user', content: userPrompt }],
@@ -129,7 +218,7 @@ Respond ONLY with this JSON structure:
         'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-6',
+        model: 'claude-sonnet-4-5',
         max_tokens: 1200,
         system: systemPrompt,
         messages: [{ role: 'user', content: userPrompt }],
