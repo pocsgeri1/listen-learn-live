@@ -23,40 +23,45 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'userInput and candidates array required for situation mode.' });
     }
 
-    const situationSystemPrompt = `You are an expert conversation coach for ambitious professionals, many of whom are non-native English speakers. You help people find the exact intellectual frame for a real situation they are about to face.
+    const situationSystemPrompt = `You are a sharp, direct conversation coach — think of a smart friend who reads a lot and gives real advice, not a self-help book. You help people find the right mental frame for a real situation they're about to face.
 
-You ONLY use concepts from the provided candidate list — never invent or hallucinate concepts. You pick 1–3 that genuinely fit the user's situation, explain precisely why, and give one actionable opener sentence.
-
-Output ONLY valid JSON. No markdown, no preamble, no explanation outside the JSON.`;
+Rules:
+- Only use concepts from the provided candidate list. Never hallucinate or invent concepts.
+- Pick 2–3 concepts. At least one should be an obvious strong fit. Include one wildcard: a concept that applies in a surprising or non-obvious way — label it as such.
+- Write like a person, not a product. Short sentences. No corporate language. No em-dashes.
+- The "opener" field is a practical tip or reframe — not a script to memorize. It should be specific to their actual situation. Think: what would a sharp mentor say right before they walked in?
+- Output ONLY valid JSON. No markdown, no preamble.`;
 
     const candidateList = candidates.map((c, i) =>
       `${i + 1}. ID:${c.id} | "${c.term}" (${c.category})\n   Hook: ${c.hook}\n   Plain: ${c.plain}`
     ).join('\n\n');
 
-    const situationPrompt = `The user is preparing for this situation:
+    const situationPrompt = `Someone just told me this about their situation:
 "${userInput}"
 
-Choose 1–3 concepts from this curated list that genuinely apply. Rank them by fit.
+Pick 2–3 concepts from the list below that genuinely help them. Include one wildcard pick — something that applies in a surprising way. Mark it with isWildcard: true.
+
+For each concept, write:
+- conceptId: the integer ID
+- fitScore: 0–100 (how well it fits their actual situation, not the concept in general)
+- isWildcard: boolean
+- whyThisFits: 2–3 sentences. Be specific — reference their actual words. Sound like a person, not a product description.
+- toFrameItWell: 1–2 sentences. What should they actually do or think before they walk in? Be concrete.
+- watchOutFor: 1–2 sentences. The thing a real mentor would warn them about. The thing people don't say.
+
+Also write:
+- opener: a practical tip or mindset shift specific to their situation. This is NOT a line to memorize — it's a reframe, an insight, or a step-by-step micro-tip they can actually use. Keep it short (2–3 sentences max). Make it feel like something a sharp friend texted them right before.
 
 CANDIDATE CONCEPTS:
 ${candidateList}
 
-For each chosen concept, write:
-- conceptId: the integer ID from the list
-- fitScore: integer 0–100 representing how well it fits this exact situation
-- whyThisFits: 2–3 sentences explaining why this concept is relevant to their specific situation. Be direct and specific — reference their actual words.
-- toFrameItWell: 1–2 sentences of prescriptive coaching. What should they actually do or say?
-- watchOutFor: 1–2 sentences. The thing a mentor would warn them about that nobody else mentions.
-
-Also write:
-- opener: one sentence in first-person ("I...") the user could actually say in this situation. Natural, not textbook.
-
-Respond ONLY with this JSON:
+Respond ONLY with valid JSON:
 {
   "concepts": [
     {
       "conceptId": 123,
       "fitScore": 94,
+      "isWildcard": false,
       "whyThisFits": "...",
       "toFrameItWell": "...",
       "watchOutFor": "..."
