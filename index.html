@@ -4218,7 +4218,7 @@
   /* v2.5 — New concept button (casino roll) */
   .cs-btn--new {
     background: none;
-    border: 1px solid var(--border-hover);
+    border: 1px solid rgba(255,255,255,0.22);
     color: var(--muted2);
     transition: color 0.2s, border-color 0.2s, background 0.2s;
   }
@@ -4429,10 +4429,15 @@
     cursor: pointer; transition: border-color 0.2s, color 0.2s;
   }
   .cs-btn:hover { border-color: var(--accent); color: var(--accent); }
-  .cs-btn--primary { background: var(--accent); border-color: var(--accent); color: #0d0d0d; }
+  .cs-btn--primary {
+    background: transparent;
+    border-color: rgba(255,255,255,0.22);
+    color: var(--muted2);
+  }
   .cs-btn--primary:hover {
-    background: color-mix(in srgb, var(--accent) 85%, white);
-    border-color: color-mix(in srgb, var(--accent) 85%, white); color: #0d0d0d;
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(232,213,163,0.05);
   }
 
   @media (max-width: 600px) {
@@ -12959,98 +12964,137 @@ function _cornerStartConstellation() {
   canvas.height = window.innerHeight;
 
   var ctx2d = canvas.getContext('2d');
-  var cx = canvas.width / 2;
-
-  // Hub sits below the search bar — no overlap with text
-  var searchEl = document.getElementById('spCornerSearchWrap') || document.getElementById('spSearchWrap');
-  var searchBottom = searchEl ? searchEl.getBoundingClientRect().bottom + 60 : canvas.height * 0.58;
-  var availH = canvas.height - searchBottom - 20;
-  var cy = searchBottom + availH * 0.38;
-
-  var maxR = Math.min(availH * 0.46, canvas.width * 0.32, 220);
-  var r1r = maxR * 0.38, r2r = maxR * 0.7, r3r = maxR;
+  var W = canvas.width, H = canvas.height;
   var ac = [232, 213, 163];
-  var hub = { x: cx, y: cy, r: 8 };
 
-  function ring(count, radius, nr, angleOffset) {
-    var arr = [];
+  // Spread across FULL width, occupying lower 60% of screen
+  // Hub is centered horizontally, 68% down
+  var cx = W / 2;
+  var topBound = H * 0.36; // nothing above here (keeps clear of text)
+  var cy = H * 0.64;       // hub well below search bar
+
+  // Rings scale to fill the screen width
+  var maxR = Math.min(W * 0.44, H * 0.52, 380);
+  var r1r = maxR * 0.28;
+  var r2r = maxR * 0.56;
+  var r3r = maxR * 0.82;
+  var r4r = maxR;
+
+  function makeRing(count, radius, nodeR, jitter) {
+    var nodes = [];
     for (var i = 0; i < count; i++) {
-      var ang = (i / count) * Math.PI * 2 + (angleOffset || 0) + Math.random() * 0.25;
-      arr.push({
-        baseX: cx + Math.cos(ang) * radius,
-        baseY: cy + Math.sin(ang) * radius,
-        x: 0, y: 0, phase: Math.random() * Math.PI * 2,
-        speed: 0.25 + Math.random() * 0.2, drift: 6 + Math.random() * 10, r: nr
+      var ang = (i / count) * Math.PI * 2 + (Math.random() - 0.5) * (jitter || 0.4);
+      var rx = cx + Math.cos(ang) * radius;
+      var ry = cy + Math.sin(ang) * radius;
+      // Skip nodes that fall above topBound
+      if (ry < topBound) ry = topBound + Math.random() * 20;
+      nodes.push({
+        baseX: rx, baseY: ry, x: 0, y: 0,
+        phase: Math.random() * Math.PI * 2,
+        speedX: 0.18 + Math.random() * 0.28,
+        speedY: 0.14 + Math.random() * 0.22,
+        driftX: 8 + Math.random() * 18,
+        driftY: 5 + Math.random() * 12,
+        r: nodeR,
+        // random direction offsets for organic feel
+        dirX: Math.random() > 0.5 ? 1 : -1,
+        dirY: Math.random() > 0.5 ? 1 : -1,
       });
     }
-    return arr;
+    return nodes;
   }
 
-  var r1 = ring(7,  r1r, 4,   0.4);
-  var r2 = ring(12, r2r, 2.8, 0.2);
-  var r3 = ring(16, r3r, 1.8, 0.0);
+  var hub = { x: cx, y: cy, r: 9 };
+  var r1 = makeRing(8,  r1r, 4.2, 0.3);
+  var r2 = makeRing(14, r2r, 3.0, 0.5);
+  var r3 = makeRing(18, r3r, 2.0, 0.6);
+  var r4 = makeRing(22, r4r, 1.3, 0.8);
+
   var start = performance.now();
 
-  function drawEdge(x1,y1,x2,y2,alpha,lw) {
+  function drawEdge(x1, y1, x2, y2, alpha, lw) {
     ctx2d.beginPath();
-    ctx2d.strokeStyle = 'rgba('+ac[0]+','+ac[1]+','+ac[2]+','+alpha+')';
+    ctx2d.strokeStyle = 'rgba(' + ac[0] + ',' + ac[1] + ',' + ac[2] + ',' + alpha.toFixed(3) + ')';
     ctx2d.lineWidth = lw;
-    ctx2d.moveTo(x1,y1); ctx2d.lineTo(x2,y2); ctx2d.stroke();
+    ctx2d.moveTo(x1, y1);
+    ctx2d.lineTo(x2, y2);
+    ctx2d.stroke();
   }
 
   function draw(ts) {
     if (!_cornerCanvas) return;
     var t = (ts - start) / 1000;
-    ctx2d.clearRect(0, 0, canvas.width, canvas.height);
+    ctx2d.clearRect(0, 0, W, H);
 
-    [r1,r2,r3].forEach(function(ring) {
+    // Update — each node drifts independently in both axes
+    [r1, r2, r3, r4].forEach(function(ring) {
       ring.forEach(function(n) {
-        n.x = n.baseX + Math.sin(t * n.speed + n.phase) * n.drift;
-        n.y = n.baseY + Math.cos(t * n.speed * 0.75 + n.phase) * (n.drift * 0.65);
+        n.x = n.baseX + Math.sin(t * n.speedX * n.dirX + n.phase) * n.driftX;
+        n.y = n.baseY + Math.cos(t * n.speedY * n.dirY + n.phase * 0.7) * n.driftY;
+        // Clamp above topBound
+        if (n.y < topBound) n.y = topBound;
       });
     });
 
-    // Hub → ring1
+    // Hub → ring1 (brightest spokes)
     r1.forEach(function(n) {
-      var pulse = 0.55 + 0.45 * Math.sin(t * 1.5 + n.phase);
-      drawEdge(hub.x, hub.y, n.x, n.y, 0.28 + pulse * 0.38, 1.4);
+      var pulse = 0.5 + 0.5 * Math.sin(t * 1.6 + n.phase);
+      drawEdge(hub.x, hub.y, n.x, n.y, 0.3 + pulse * 0.38, 1.5);
     });
+
     // Ring1 → ring2
-    r1.forEach(function(a) { r2.forEach(function(b) {
-      var d = Math.hypot(a.x-b.x, a.y-b.y);
-      if (d < r2r * 0.7) drawEdge(a.x,a.y,b.x,b.y, (1-d/(r2r*0.7))*0.32, 0.9);
-    }); });
+    r1.forEach(function(a) {
+      r2.forEach(function(b) {
+        var d = Math.hypot(a.x - b.x, a.y - b.y);
+        if (d < r2r * 0.68) drawEdge(a.x, a.y, b.x, b.y, (1 - d / (r2r * 0.68)) * 0.3, 1.0);
+      });
+    });
+
     // Ring2 → ring3
-    r2.forEach(function(a) { r3.forEach(function(b) {
-      var d = Math.hypot(a.x-b.x, a.y-b.y);
-      if (d < r3r * 0.48) drawEdge(a.x,a.y,b.x,b.y, (1-d/(r3r*0.48))*0.14, 0.5);
-    }); });
+    r2.forEach(function(a) {
+      r3.forEach(function(b) {
+        var d = Math.hypot(a.x - b.x, a.y - b.y);
+        if (d < r3r * 0.52) drawEdge(a.x, a.y, b.x, b.y, (1 - d / (r3r * 0.52)) * 0.18, 0.7);
+      });
+    });
+
+    // Ring3 → ring4 (faintest outer web)
+    r3.forEach(function(a) {
+      r4.forEach(function(b) {
+        var d = Math.hypot(a.x - b.x, a.y - b.y);
+        if (d < r4r * 0.38) drawEdge(a.x, a.y, b.x, b.y, (1 - d / (r4r * 0.38)) * 0.10, 0.4);
+      });
+    });
+
+    // Occasional random cross-ring spark (ring2→ring4 skip)
+    if (Math.sin(t * 0.7) > 0.88) {
+      var a = r2[Math.floor(t * 3) % r2.length];
+      var b = r4[Math.floor(t * 5) % r4.length];
+      if (a && b) drawEdge(a.x, a.y, b.x, b.y, 0.14, 0.5);
+    }
 
     // Hub glow
-    var hp = 0.6 + 0.4 * Math.sin(t * 2.4);
-    var g = ctx2d.createRadialGradient(hub.x,hub.y,0,hub.x,hub.y,hub.r*5*hp);
-    g.addColorStop(0,   'rgba('+ac[0]+','+ac[1]+','+ac[2]+',0.55)');
-    g.addColorStop(0.4, 'rgba('+ac[0]+','+ac[1]+','+ac[2]+',0.18)');
-    g.addColorStop(1,   'rgba('+ac[0]+','+ac[1]+','+ac[2]+',0)');
-    ctx2d.beginPath(); ctx2d.arc(hub.x,hub.y,hub.r*5*hp,0,Math.PI*2);
+    var hp = 0.65 + 0.35 * Math.sin(t * 2.6);
+    var g = ctx2d.createRadialGradient(hub.x, hub.y, 0, hub.x, hub.y, hub.r * 6 * hp);
+    g.addColorStop(0,   'rgba(' + ac[0] + ',' + ac[1] + ',' + ac[2] + ',0.6)');
+    g.addColorStop(0.35,'rgba(' + ac[0] + ',' + ac[1] + ',' + ac[2] + ',0.2)');
+    g.addColorStop(1,   'rgba(' + ac[0] + ',' + ac[1] + ',' + ac[2] + ',0)');
+    ctx2d.beginPath(); ctx2d.arc(hub.x, hub.y, hub.r * 6 * hp, 0, Math.PI * 2);
     ctx2d.fillStyle = g; ctx2d.fill();
-    ctx2d.beginPath(); ctx2d.arc(hub.x,hub.y,hub.r*hp,0,Math.PI*2);
-    ctx2d.fillStyle = 'rgba('+ac[0]+','+ac[1]+','+ac[2]+',0.94)'; ctx2d.fill();
+    ctx2d.beginPath(); ctx2d.arc(hub.x, hub.y, hub.r * hp, 0, Math.PI * 2);
+    ctx2d.fillStyle = 'rgba(' + ac[0] + ',' + ac[1] + ',' + ac[2] + ',0.96)'; ctx2d.fill();
 
-    r1.forEach(function(n) {
-      var p = 0.5+0.5*Math.sin(t*1.1+n.phase);
-      ctx2d.beginPath(); ctx2d.arc(n.x,n.y,n.r*(0.82+0.18*p),0,Math.PI*2);
-      ctx2d.fillStyle='rgba('+ac[0]+','+ac[1]+','+ac[2]+','+(0.62+0.28*p)+')'; ctx2d.fill();
-    });
-    r2.forEach(function(n) {
-      var p = 0.5+0.5*Math.sin(t*0.85+n.phase);
-      ctx2d.beginPath(); ctx2d.arc(n.x,n.y,n.r,0,Math.PI*2);
-      ctx2d.fillStyle='rgba('+ac[0]+','+ac[1]+','+ac[2]+','+(0.38+0.2*p)+')'; ctx2d.fill();
-    });
-    r3.forEach(function(n) {
-      var p = 0.5+0.5*Math.sin(t*0.6+n.phase);
-      ctx2d.beginPath(); ctx2d.arc(n.x,n.y,n.r,0,Math.PI*2);
-      ctx2d.fillStyle='rgba('+ac[0]+','+ac[1]+','+ac[2]+','+(0.18+0.1*p)+')'; ctx2d.fill();
+    // Nodes by ring — brightness decreases with distance
+    var rings = [[r1, 0.72, 0.25], [r2, 0.46, 0.18], [r3, 0.28, 0.12], [r4, 0.16, 0.08]];
+    rings.forEach(function(row) {
+      var ring = row[0], baseAlpha = row[1], pulseRange = row[2];
+      ring.forEach(function(n) {
+        var p = 0.5 + 0.5 * Math.sin(t * (0.6 + Math.random() * 0.01) + n.phase);
+        ctx2d.beginPath();
+        ctx2d.arc(n.x, n.y, n.r * (0.8 + 0.2 * p), 0, Math.PI * 2);
+        ctx2d.fillStyle = 'rgba(' + ac[0] + ',' + ac[1] + ',' + ac[2] + ',' + (baseAlpha + pulseRange * p).toFixed(2) + ')';
+        ctx2d.fill();
+      });
     });
 
     _cornerCanvasRAF = requestAnimationFrame(draw);
@@ -13129,6 +13173,16 @@ function _cornerOpenPanel(userInput, result) {
   setTimeout(function() {
     var cards = panel.querySelectorAll('.corner-brief-card');
     cards.forEach(function(card, i) {
+      if (i === 0) {
+        // First card already has .visible from _cornerBuildCards; just animate its fit bar
+        var fill = card.querySelector('.corner-fit-bar-fill');
+        if (fill) {
+          var score = parseInt(fill.dataset.score || '0', 10);
+          setTimeout(function() { fill.style.width = score + '%'; }, 100);
+        }
+        return;
+      }
+      // Rest stagger in slowly
       setTimeout(function() {
         card.classList.add('visible');
         var fill = card.querySelector('.corner-fit-bar-fill');
@@ -13136,14 +13190,14 @@ function _cornerOpenPanel(userInput, result) {
           var score = parseInt(fill.dataset.score || '0', 10);
           setTimeout(function() { fill.style.width = score + '%'; }, 80);
         }
-      }, i * 220);
+      }, i * 380);
     });
     var openerEl = panel.querySelector('.corner-opener-block');
     var relatedEl = panel.querySelector('.corner-related-wrap');
-    var delay = cards.length * 220 + 180;
+    var delay = Math.max(1, cards.length) * 380;
     if (openerEl) setTimeout(function() { openerEl.classList.add('visible'); }, delay);
-    if (relatedEl) setTimeout(function() { relatedEl.classList.add('visible'); }, delay + 160);
-  }, 720);
+    if (relatedEl) setTimeout(function() { relatedEl.classList.add('visible'); }, delay + 200);
+  }, 500);
 
   setTimeout(function() {
     document.addEventListener('click', _cornerOutsideClick, { capture: true });
@@ -21280,8 +21334,6 @@ body.corner-panel-open .stories-panel {
 <div class="conv-overlay" id="convOverlay" role="dialog" aria-modal="true" aria-label="Saved Conversations">
   <div class="conv-panel" id="convPanel">
     <div class="conv-header">
-      <!-- Back to Corner button — only shown when arriving from Corner Spark -->
-      <button class="corner-back-btn" id="cornerBackBtn" style="display:none" onclick="_cornerBackFromSpark()" title="Back to Corner">← Corner</button>
       <div class="conv-panel-tabs" id="convPanelTabs">
         <button class="conv-panel-tab active" id="panelTabSpark" onclick="panelSwitchTab('spark')"><span class="conv-panel-tab-emoji">💬</span>Spark</button>
         <button class="conv-panel-tab" id="panelTabStash" onclick="panelSwitchTab('stash')"><span class="conv-panel-tab-emoji">🔖</span>Stash</button>
