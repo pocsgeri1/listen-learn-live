@@ -7381,6 +7381,7 @@
     <a class="nav-link nav-browse-btn" onclick="playNavSFX();document.getElementById('app').scrollIntoView({behavior:'smooth'})"><span class="nav-browse-emoji">🎬</span>Browse</a>
     <a class="nav-link nav-spark-btn" onclick="openSparkPanel();playNavSFX()"><span class="nav-spark-emoji">💬</span>Spark</a>
     <a class="nav-link nav-story-btn" onclick="openStoriesPanel();playNavSFX()" style="display:none"><span class="nav-story-emoji">📖</span>Story</a>
+    <a class="nav-link nav-corner-nav-btn" onclick="openCornerHistory();playNavSFX()"><span class="nav-corner-emoji">🥊</span>Corner</a>
   </div>
   <!-- v1.71: epic button is now inside nav-right -->
 
@@ -7406,6 +7407,7 @@
   <button class="nav-mobile-link" onclick="playNavSFX();document.getElementById('app').scrollIntoView({behavior:'smooth'});closeMobileNav()">🎬 Browse</button>
   <button class="nav-mobile-link nav-mobile-cs" onclick="playNavSFX();openSparkPanel();closeMobileNav()">💬 Spark</button>
   <button class="nav-mobile-link nav-mobile-no-border" onclick="playNavSFX();openStoriesPanel();closeMobileNav()" style="display:none">📖 Story</button>
+  <button class="nav-mobile-link nav-mobile-no-border" onclick="playNavSFX();openCornerHistory();closeMobileNav()">🥊 Corner</button>
   <div class="nav-mobile-divider"></div>
   <button class="nav-mobile-link nav-mobile-signup" onclick="playNavSFX();scrollToSection('signup');closeMobileNav()">◉ Sign Up 🎁 — Free Founding Access</button>
 </div>
@@ -7734,18 +7736,23 @@
     <!-- Explore sub-tagline -->
     <p class="sp-sub" id="spSub" style="opacity:0;transform:scale(0.96)">Turn 3 hours of podcast into 3 ideas you'll actually say out loud.</p>
 
-    <!-- Hero search bar — shared between Explore and Corner modes -->
+    <!-- EXPLORE search bar (default, visible in Explore mode) -->
     <div class="sp-search-wrap" id="spSearchWrap">
-      <!-- Icon swaps between modes -->
-      <span class="sp-mode-icon" id="spModeIcon">🔍</span>
-      <input class="sp-search-input" id="spSearchInput" type="text" placeholder="Search an idea, topic, or concept…" autocomplete="off" />
+      <svg class="sp-search-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M10 10l3.5 3.5"/></svg>
+      <input class="sp-search-input" id="spSearchInput" type="text" placeholder="" autocomplete="off" />
       <span class="sp-ph-overlay" id="spPhOverlay" aria-hidden="true"></span>
       <button class="sp-search-clear" id="spSearchClear" style="display:none" onclick="spClearSearch()" aria-label="Clear search">✕</button>
-      <!-- Corner submit button — hidden in Explore mode -->
-      <button class="sp-corner-submit" id="spCornerSubmit" onclick="cornerSubmit()" style="display:none" aria-label="Corner me">Corner me →</button>
     </div>
-    <!-- Dropdown results (Explore mode only) -->
+    <!-- Explore dropdown results -->
     <div class="sp-dropdown" id="spDropdown" style="display:none" role="listbox"></div>
+
+    <!-- CORNER search bar (hidden until Corner mode) -->
+    <div class="sp-search-wrap sp-corner-search-wrap" id="spCornerSearchWrap" style="display:none">
+      <span class="sp-corner-search-icon">🥊</span>
+      <input class="sp-search-input" id="spCornerInput" type="text" placeholder="" autocomplete="off" />
+      <span class="sp-ph-overlay" id="spCornerPhOverlay" aria-hidden="true"></span>
+      <button class="sp-corner-submit" id="spCornerSubmit" onclick="cornerSubmit()" aria-label="Corner me">Corner me →</button>
+    </div>
 
     <!-- Corner loading state — hidden by default -->
     <div class="sp-corner-loading" id="spCornerLoading" aria-live="polite"></div>
@@ -11568,14 +11575,12 @@ function initSparkHero() {
     _phInput.placeholder = '';
 
     _phInput.addEventListener('focus', () => {
-      if (_cornerActive) return; // Corner mode handles its own placeholder
       clearTimeout(_phTimer);
       _phTyping = false;
       _phOverlay.classList.add('hidden');
       _phInput.placeholder = 'Search an idea, topic, or concept…';
     });
     _phInput.addEventListener('blur', () => {
-      if (_cornerActive) return;
       if (!_phInput.value) {
         setTimeout(() => {
           _phInput.placeholder = '';
@@ -11584,18 +11589,24 @@ function initSparkHero() {
       }
     });
     _phInput.addEventListener('input', () => {
-      if (_cornerActive) {
-        // In Corner mode: hide overlay if user is typing, show if empty
-        if (_phInput.value) { _phOverlay.classList.add('hidden'); }
-        else { _phOverlay.classList.remove('hidden'); }
-        return;
-      }
       if (_phInput.value) {
         _phOverlay.classList.add('hidden');
       } else if (document.activeElement !== _phInput) {
         _phOverlay.classList.remove('hidden');
       }
     });
+  }
+
+  // Wire Corner input: hide overlay on type, show on clear
+  var _cInput = document.getElementById('spCornerInput');
+  var _cPh    = document.getElementById('spCornerPhOverlay');
+  if (_cInput && _cPh) {
+    _cInput.addEventListener('input', function() {
+      if (_cInput.value) { _cPh.classList.add('hidden'); }
+      else { _cPh.classList.remove('hidden'); }
+    });
+    _cInput.addEventListener('focus', function() { if (_cInput.value) _cPh.classList.add('hidden'); });
+    _cInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') cornerSubmit(); });
   }
 
   // #7 Streak watcher — starts after first grid build (reading progress inited separately)
@@ -11620,8 +11631,6 @@ function _spInitSearch() {
   if (!input || !dropdown) return;
 
   input.addEventListener('input', () => {
-    // Corner mode: never trigger concept search dropdown
-    if (_cornerActive) return;
     clearTimeout(_spSearchTimer);
     const q = input.value.trim();
     clear.style.display = q ? '' : 'none';
@@ -11630,11 +11639,6 @@ function _spInitSearch() {
   });
 
   input.addEventListener('keydown', e => {
-    // Corner mode: Enter fires cornerSubmit, not dropdown navigation
-    if (_cornerActive) {
-      if (e.key === 'Enter') { e.preventDefault(); cornerSubmit(); }
-      return;
-    }
     const items = dropdown.querySelectorAll('.sp-drop-item, .sp-drop-ep-item');
     if (e.key === 'ArrowDown') {
       e.preventDefault();
@@ -12719,11 +12723,8 @@ function enterCornerMode() {
 
   _cornerPlaySFX(true);
 
-  // Set translate-Y CSS var before adding class (so transition starts from correct value)
   var ty = _cornerCalcTranslate();
   document.body.style.setProperty('--corner-translate-y', ty + 'px');
-
-  // Add body class — CSS transitions fire
   document.body.classList.add('corner-mode');
 
   // Toggle pill states
@@ -12732,36 +12733,26 @@ function enterCornerMode() {
   if (pe) pe.classList.remove('active');
   if (pc) pc.classList.add('active');
 
-  // Swap icon
-  var icon = document.getElementById('spModeIcon');
-  if (icon) icon.textContent = '🥊';
+  // Swap search bars — hide Explore, show Corner
+  var exploreBar = document.getElementById('spSearchWrap');
+  var cornerBar  = document.getElementById('spCornerSearchWrap');
+  var dropdown   = document.getElementById('spDropdown');
+  if (exploreBar) exploreBar.style.display = 'none';
+  if (dropdown)   dropdown.style.display = 'none';
+  if (cornerBar)  cornerBar.style.display = '';
 
-  // Switch input to Corner mode
-  var input = document.getElementById('spSearchInput');
-  var clear = document.getElementById('spSearchClear');
-  var submit = document.getElementById('spCornerSubmit');
-  var dropdown = document.getElementById('spDropdown');
-  var phOverlay = document.getElementById('spPhOverlay');
-
-  if (dropdown) dropdown.style.display = 'none';
-  if (clear)  clear.style.display = 'none';
-  if (submit) submit.style.display = '';
-  if (input) {
-    input.value = '';
-    input.setAttribute('placeholder', '');
-    // Remove Explore event listeners — refocus on Corner
-    input.onkeydown = function(e) { if (e.key === 'Enter') cornerSubmit(); };
+  // Reset Corner input
+  var cornerInput = document.getElementById('spCornerInput');
+  if (cornerInput) {
+    cornerInput.value = '';
+    cornerInput.onkeydown = function(e) { if (e.key === 'Enter') cornerSubmit(); };
   }
 
-  // Start placeholder cycling for Corner
-  if (phOverlay) {
-    phOverlay.classList.remove('hidden');
-    phOverlay.style.fontStyle = 'italic';
-  }
+  // Start Corner placeholder cycling
   _cornerCyclePlaceholders(0);
 
-  // Focus input after animation settles
-  setTimeout(function() { if (input) input.focus(); }, 480);
+  // Focus Corner input after animation settles
+  setTimeout(function() { if (cornerInput) cornerInput.focus(); }, 480);
 }
 
 // ---- Exit Corner Mode ----
@@ -12771,7 +12762,6 @@ function exitCornerMode() {
 
   _cornerPlaySFX(false);
 
-  // Clear Corner placeholder cycling
   if (_cornerPlaceholderTimer) { clearTimeout(_cornerPlaceholderTimer); _cornerPlaceholderTimer = null; }
 
   document.body.classList.remove('corner-mode');
@@ -12783,37 +12773,27 @@ function exitCornerMode() {
   if (pe) pe.classList.add('active');
   if (pc) pc.classList.remove('active');
 
-  // Swap icon back
-  var icon = document.getElementById('spModeIcon');
-  if (icon) icon.textContent = '🔍';
+  // Swap search bars — show Explore, hide Corner
+  var exploreBar = document.getElementById('spSearchWrap');
+  var cornerBar  = document.getElementById('spCornerSearchWrap');
+  var loading    = document.getElementById('spCornerLoading');
+  var submit     = document.getElementById('spCornerSubmit');
+  var cornerInput = document.getElementById('spCornerInput');
+  var cornerPh   = document.getElementById('spCornerPhOverlay');
 
-  // Restore input to Explore mode
-  var input = document.getElementById('spSearchInput');
-  var submit = document.getElementById('spCornerSubmit');
-  var phOverlay = document.getElementById('spPhOverlay');
-  var loading = document.getElementById('spCornerLoading');
-
-  if (submit) { submit.style.display = 'none'; submit.disabled = false; submit.textContent = 'Corner me →'; }
-  if (loading) { loading.classList.remove('visible'); loading.textContent = ''; }
-  if (input) {
-    input.value = '';
-    input.setAttribute('placeholder', 'Search an idea, topic, or concept…');
-    input.onkeydown = null; // restore default Explore handler
-    // Re-trigger Explore placeholder cycling
-    if (typeof _spStartPlaceholderCycle === 'function') _spStartPlaceholderCycle();
-  }
-  if (phOverlay) {
-    phOverlay.style.fontStyle = '';
-    phOverlay.classList.remove('hidden');
-  }
+  if (cornerBar)  cornerBar.style.display = 'none';
+  if (exploreBar) exploreBar.style.display = '';
+  if (loading)  { loading.classList.remove('visible'); loading.textContent = ''; }
+  if (submit)   { submit.disabled = false; submit.textContent = 'Corner me →'; }
+  if (cornerInput) { cornerInput.value = ''; cornerInput.disabled = false; }
+  if (cornerPh) { cornerPh.textContent = ''; cornerPh.classList.remove('hidden', 'fading'); }
 }
 
 // ---- Corner placeholder cycling ----
 function _cornerCyclePlaceholders(idx) {
-  var phOverlay = document.getElementById('spPhOverlay');
-  var input = document.getElementById('spSearchInput');
+  var phOverlay = document.getElementById('spCornerPhOverlay');
+  var input = document.getElementById('spCornerInput');
   if (!phOverlay || !_cornerActive) return;
-  // Hide if input has value
   if (input && input.value) { phOverlay.classList.add('hidden'); return; }
 
   phOverlay.classList.remove('hidden');
@@ -12829,12 +12809,16 @@ function _cornerCyclePlaceholders(idx) {
 
 // ---- Corner submit ----
 function cornerSubmit() {
-  var input = document.getElementById('spSearchInput');
+  var input = document.getElementById('spCornerInput');
   var userInput = input ? input.value.trim() : '';
   if (!userInput || userInput.length < 5) {
     if (input) { input.focus(); }
     return;
   }
+
+  // Hide Corner placeholder overlay
+  var cornerPh = document.getElementById('spCornerPhOverlay');
+  if (cornerPh) cornerPh.classList.add('hidden');
 
   // Lock input
   var submit = document.getElementById('spCornerSubmit');
@@ -12865,14 +12849,15 @@ function cornerSubmit() {
     _cornerStopConstellation();
     if (loading) loading.classList.remove('visible');
     if (submit) { submit.disabled = false; submit.textContent = 'Corner me →'; }
-    if (input) input.disabled = false;
+    var inp = document.getElementById('spCornerInput'); if (inp) inp.disabled = false;
+    _cornerAutoSave(userInput, result);
     _cornerOpenPanel(userInput, result);
   }).catch(function(err) {
     clearInterval(_cornerLoadingTimer);
     _cornerStopConstellation();
     if (loading) { loading.textContent = 'Something went wrong. Try again.'; }
     if (submit) { submit.disabled = false; submit.textContent = 'Corner me →'; }
-    if (input) input.disabled = false;
+    var inp = document.getElementById('spCornerInput'); if (inp) inp.disabled = false;
     setTimeout(function() { if (loading) loading.classList.remove('visible'); }, 2500);
   });
 }
@@ -12921,7 +12906,7 @@ async function _cornerCallAPI(userInput, candidates) {
   return await res.json();
 }
 
-// ---- Constellation canvas animation during loading ----
+// ---- Neural network canvas animation during loading ----
 var _cornerCanvas = null;
 var _cornerCanvasRAF = null;
 
@@ -12931,78 +12916,133 @@ function _cornerStartConstellation() {
 
   var canvas = document.createElement('canvas');
   canvas.id = 'cornerConstellationCanvas';
-  canvas.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:1;opacity:0;transition:opacity 0.4s ease;';
+  canvas.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:1;opacity:0;transition:opacity 0.5s ease;';
   document.body.appendChild(canvas);
   _cornerCanvas = canvas;
 
-  // Size to viewport
   canvas.width  = window.innerWidth;
   canvas.height = window.innerHeight;
 
   var ctx2d = canvas.getContext('2d');
-  var nodes = [];
-  var NODE_COUNT = 28;
-  var accent = [232, 213, 163];
+  var cx = canvas.width / 2;
+  var cy = canvas.height * 0.42; // align with search bar center
 
-  // Spawn nodes randomly across viewport
-  for (var i = 0; i < NODE_COUNT; i++) {
-    nodes.push({
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height,
-      vx: (Math.random() - 0.5) * 0.35,
-      vy: (Math.random() - 0.5) * 0.35,
-      r: 1.2 + Math.random() * 1.4,
+  // Hub node — center
+  var hub = { x: cx, y: cy, r: 5, pulse: 0 };
+
+  // Two concentric rings of nodes
+  var ring1 = [], ring2 = [];
+  var r1count = 6, r2count = 10;
+  var r1radius = 80, r2radius = 160;
+
+  for (var i = 0; i < r1count; i++) {
+    var angle = (i / r1count) * Math.PI * 2 + Math.PI / 6;
+    ring1.push({
+      x: cx + Math.cos(angle) * r1radius,
+      y: cy + Math.sin(angle) * r1radius,
+      vx: (Math.random() - 0.5) * 0.18,
+      vy: (Math.random() - 0.5) * 0.18,
+      baseX: cx + Math.cos(angle) * r1radius,
+      baseY: cy + Math.sin(angle) * r1radius,
       phase: Math.random() * Math.PI * 2,
+      r: 2.5,
+    });
+  }
+  for (var j = 0; j < r2count; j++) {
+    var angle2 = (j / r2count) * Math.PI * 2 + Math.PI / 10;
+    ring2.push({
+      x: cx + Math.cos(angle2) * r2radius,
+      y: cy + Math.sin(angle2) * r2radius,
+      baseX: cx + Math.cos(angle2) * r2radius,
+      baseY: cy + Math.sin(angle2) * r2radius,
+      phase: Math.random() * Math.PI * 2,
+      r: 1.8,
     });
   }
 
+  var allNodes = ring1.concat(ring2);
   var start = performance.now();
+  var accent = [232, 213, 163];
 
   function draw(ts) {
     if (!_cornerCanvas) return;
-    var elapsed = (ts - start) / 1000;
+    var t = (ts - start) / 1000;
     ctx2d.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Update positions
-    nodes.forEach(function(n) {
-      n.x += n.vx;
-      n.y += n.vy;
-      if (n.x < 0 || n.x > canvas.width)  n.vx *= -1;
-      if (n.y < 0 || n.y > canvas.height) n.vy *= -1;
+    // Gently drift ring1 nodes around their base
+    ring1.forEach(function(n) {
+      n.x = n.baseX + Math.sin(t * 0.4 + n.phase) * 8;
+      n.y = n.baseY + Math.cos(t * 0.35 + n.phase) * 6;
+    });
+    // Ring2 barely moves
+    ring2.forEach(function(n) {
+      n.x = n.baseX + Math.sin(t * 0.2 + n.phase) * 4;
+      n.y = n.baseY + Math.cos(t * 0.18 + n.phase) * 3;
     });
 
-    // Draw edges between close nodes
-    for (var i = 0; i < nodes.length; i++) {
-      for (var j = i + 1; j < nodes.length; j++) {
-        var dx = nodes[i].x - nodes[j].x;
-        var dy = nodes[i].y - nodes[j].y;
+    // Draw hub→ring1 edges (primary connections)
+    ring1.forEach(function(n) {
+      var pulse = 0.55 + 0.45 * Math.sin(t * 1.1 + n.phase);
+      ctx2d.beginPath();
+      ctx2d.strokeStyle = 'rgba(' + accent[0] + ',' + accent[1] + ',' + accent[2] + ',' + (pulse * 0.35) + ')';
+      ctx2d.lineWidth = 1;
+      ctx2d.moveTo(hub.x, hub.y);
+      ctx2d.lineTo(n.x, n.y);
+      ctx2d.stroke();
+    });
+
+    // Draw ring1→ring2 nearest edges
+    ring1.forEach(function(n1) {
+      ring2.forEach(function(n2) {
+        var dx = n1.x - n2.x, dy = n1.y - n2.y;
         var dist = Math.sqrt(dx*dx + dy*dy);
-        var maxDist = 160;
-        if (dist < maxDist) {
-          var alpha = (1 - dist / maxDist) * 0.18;
+        if (dist < 95) {
+          var alpha = (1 - dist / 95) * 0.18;
           ctx2d.beginPath();
           ctx2d.strokeStyle = 'rgba(' + accent[0] + ',' + accent[1] + ',' + accent[2] + ',' + alpha + ')';
-          ctx2d.lineWidth = 0.7;
-          ctx2d.moveTo(nodes[i].x, nodes[i].y);
-          ctx2d.lineTo(nodes[j].x, nodes[j].y);
+          ctx2d.lineWidth = 0.6;
+          ctx2d.moveTo(n1.x, n1.y);
+          ctx2d.lineTo(n2.x, n2.y);
           ctx2d.stroke();
         }
-      }
-    }
+      });
+    });
 
-    // Draw nodes with subtle pulse
-    nodes.forEach(function(n) {
-      var pulse = 0.4 + 0.6 * (0.5 + 0.5 * Math.sin(elapsed * 1.2 + n.phase));
+    // Draw hub
+    var hubPulse = 0.6 + 0.4 * Math.sin(t * 1.8);
+    ctx2d.beginPath();
+    ctx2d.arc(hub.x, hub.y, hub.r * hubPulse, 0, Math.PI * 2);
+    ctx2d.fillStyle = 'rgba(' + accent[0] + ',' + accent[1] + ',' + accent[2] + ',0.85)';
+    ctx2d.fill();
+
+    // Soft outer ring on hub
+    ctx2d.beginPath();
+    ctx2d.arc(hub.x, hub.y, hub.r * 2.5 * hubPulse, 0, Math.PI * 2);
+    ctx2d.strokeStyle = 'rgba(' + accent[0] + ',' + accent[1] + ',' + accent[2] + ',0.15)';
+    ctx2d.lineWidth = 1;
+    ctx2d.stroke();
+
+    // Draw ring1 nodes
+    ring1.forEach(function(n) {
+      var p = 0.5 + 0.5 * Math.sin(t * 0.9 + n.phase);
+      ctx2d.beginPath();
+      ctx2d.arc(n.x, n.y, n.r * (0.85 + 0.15 * p), 0, Math.PI * 2);
+      ctx2d.fillStyle = 'rgba(' + accent[0] + ',' + accent[1] + ',' + accent[2] + ',' + (0.55 + 0.2 * p) + ')';
+      ctx2d.fill();
+    });
+
+    // Draw ring2 nodes — dimmer
+    ring2.forEach(function(n) {
+      var p = 0.5 + 0.5 * Math.sin(t * 0.6 + n.phase);
       ctx2d.beginPath();
       ctx2d.arc(n.x, n.y, n.r, 0, Math.PI * 2);
-      ctx2d.fillStyle = 'rgba(' + accent[0] + ',' + accent[1] + ',' + accent[2] + ',' + (pulse * 0.55) + ')';
+      ctx2d.fillStyle = 'rgba(' + accent[0] + ',' + accent[1] + ',' + accent[2] + ',' + (0.28 + 0.12 * p) + ')';
       ctx2d.fill();
     });
 
     _cornerCanvasRAF = requestAnimationFrame(draw);
   }
 
-  // Fade in
   requestAnimationFrame(function() {
     canvas.style.opacity = '1';
     _cornerCanvasRAF = requestAnimationFrame(draw);
@@ -13030,9 +13070,6 @@ function _cornerOpenPanel(userInput, result) {
   var concepts = result.concepts || [];
   var opener = result.opener || '';
 
-  // Store current corner result for saving
-  _cornerLastResult = { userInput: userInput, result: result, ts: new Date().toISOString() };
-
   panel.innerHTML =
     '<div class="stories-header">' +
       '<span class="stories-header-label">🥊 Corner</span>' +
@@ -13041,7 +13078,7 @@ function _cornerOpenPanel(userInput, result) {
         '<button class="stories-close" onclick="closeCornerPanel()" aria-label="Close">✕</button>' +
       '</div>' +
     '</div>' +
-    '<div class="corner-panel-situation">' +
+    '<div class="corner-panel-situation" id="cornerPanelSituation">' +
       '<div class="corner-panel-situation-label">Your situation</div>' +
       '<div class="corner-panel-situation-text">"' + _escHtml(userInput) + '"</div>' +
       '<div class="corner-panel-curation">↳ Matched against ' + conceptCount + ' human-curated concepts</div>' +
@@ -13053,9 +13090,23 @@ function _cornerOpenPanel(userInput, result) {
     '</div>';
 
   document.body.classList.add('corner-panel-open');
+
+  // Step 1: open overlay (background fades in via CSS)
   overlay.classList.add('active');
 
-  // Stagger card animations in
+  // Step 2: situation block fades in after panel slides in
+  setTimeout(function() {
+    var sit = document.getElementById('cornerPanelSituation');
+    if (sit) sit.classList.add('cp-visible');
+  }, 320);
+
+  // Step 3: body fades in
+  setTimeout(function() {
+    var body = document.getElementById('cornerPanelBody');
+    if (body) body.classList.add('cp-visible');
+  }, 480);
+
+  // Step 4: stagger Brief cards
   setTimeout(function() {
     var cards = panel.querySelectorAll('.corner-brief-card');
     cards.forEach(function(card, i) {
@@ -13066,14 +13117,14 @@ function _cornerOpenPanel(userInput, result) {
           var score = parseInt(fill.dataset.score || '0', 10);
           setTimeout(function() { fill.style.width = score + '%'; }, 50);
         }
-      }, i * 140);
+      }, i * 150);
     });
     var openerEl = panel.querySelector('.corner-opener-block');
     var relatedEl = panel.querySelector('.corner-related-wrap');
-    var delay = cards.length * 140 + 200;
+    var delay = cards.length * 150 + 120;
     if (openerEl) setTimeout(function() { openerEl.classList.add('visible'); }, delay);
-    if (relatedEl) setTimeout(function() { relatedEl.classList.add('visible'); }, delay + 130);
-  }, 80);
+    if (relatedEl) setTimeout(function() { relatedEl.classList.add('visible'); }, delay + 100);
+  }, 560);
 
   setTimeout(function() {
     document.addEventListener('click', _cornerOutsideClick, { capture: true });
@@ -13084,19 +13135,76 @@ function _cornerOpenPanel(userInput, result) {
 var _cornerLastResult = null;
 var CORNER_SAVES_KEY = 'lll_corner_saves_v1';
 
-function _cornerSaveResult() {
-  if (!_cornerLastResult) return;
+// Auto-save every result (no manual click needed)
+function _cornerAutoSave(userInput, result) {
+  _cornerLastResult = { userInput: userInput, result: result, ts: new Date().toISOString() };
   try {
     var saves = JSON.parse(localStorage.getItem(CORNER_SAVES_KEY) || '[]');
     saves.unshift(_cornerLastResult);
     if (saves.length > 30) saves = saves.slice(0, 30);
     localStorage.setItem(CORNER_SAVES_KEY, JSON.stringify(saves));
-    var btn = document.getElementById('cornerSaveBtn');
-    if (btn) { btn.textContent = '✓ Saved'; btn.disabled = true; }
   } catch(e) {}
 }
 
-function _cornerBuildCards(concepts, userInput) {
+function _cornerSaveResult() {
+  // Already auto-saved; just show feedback
+  var btn = document.getElementById('cornerSaveBtn');
+  if (btn) { btn.textContent = '✓ Saved'; btn.disabled = true; }
+}
+
+// ---- Preview a related concept chip ----
+function _cornerPreviewRelated(id, anchorEl) {
+  if (window.innerWidth <= 1024) {
+    if (typeof _spOpenMobilePreview === 'function') _spOpenMobilePreview(id, { fromSearch: true });
+    return;
+  }
+  _cornerShowPreview(id, anchorEl);
+}
+
+// ---- Corner term/chip preview — always left of the panel ----
+function _cornerShowPreview(id, anchorEl) {
+  var concept = (typeof CONCEPTS !== 'undefined' ? CONCEPTS : []).find(function(x) { return x.id === id; });
+  if (!concept) return;
+  var card = document.getElementById('spPreviewCard');
+  if (!card) return;
+
+  var color = (typeof CAT_COLOR !== 'undefined' && CAT_COLOR[concept.category]) || '#e8d5a3';
+  var catName = ((typeof CATEGORIES !== 'undefined' ? CATEGORIES : []).find(function(x) { return x.id === concept.category; }) || {}).name || concept.category;
+
+  card.style.setProperty('--preview-color', color);
+  card.innerHTML =
+    '<div class="sp-preview-cat" style="color:' + color + '">' + _escHtml(catName) + '</div>' +
+    '<div class="sp-preview-term">' + _escHtml(concept.term) + '</div>' +
+    '<div class="sp-preview-section-label">In one line</div>' +
+    '<div class="sp-preview-plain" style="font-style:italic;color:var(--accent)">' + _escHtml(concept.hook || '') + '</div>' +
+    '<div class="sp-preview-section-label">What it means</div>' +
+    '<div class="sp-preview-plain">' + _escHtml(concept.plain || '') + '</div>' +
+    '<div class="sp-preview-footer">' +
+      '<button class="sp-preview-talk-btn" onclick="event.stopPropagation();spDismissPreview()">✕ Close</button>' +
+    '</div>';
+
+  // Position: left of the Corner panel
+  var panel = document.getElementById('storiesPanel');
+  var panelRect = panel ? panel.getBoundingClientRect() : null;
+  var anchorRect = anchorEl ? anchorEl.getBoundingClientRect() : null;
+
+  var top = anchorRect
+    ? Math.max(80, Math.min(anchorRect.top - 10, window.innerHeight - 280))
+    : Math.max(80, window.innerHeight / 2 - 140);
+  var left = panelRect
+    ? Math.max(8, panelRect.left - 272)
+    : Math.max(8, window.innerWidth - 820);
+
+  card.style.position = 'fixed';
+  card.style.top  = top + 'px';
+  card.style.left = left + 'px';
+  card.style.right = 'auto';
+  card.style.display = 'flex';
+  card.classList.remove('sp-preview-visible');
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() { card.classList.add('sp-preview-visible'); });
+  });
+}
   if (!concepts || !concepts.length) {
     return '<div style="padding:20px;color:var(--muted2);font-family:\'DM Sans\',sans-serif;font-size:0.84rem">No matching frames found. Try describing your situation differently.</div>';
   }
@@ -13131,7 +13239,7 @@ function _cornerBuildCards(concepts, userInput) {
         '<div class="corner-brief-card-detail" id="cornerDetail' + i + '" style="display:none">' +
           '<div class="corner-curated-chip" style="margin-bottom:10px">✓ human-curated</div>' +
           '<div class="corner-term" ' +
-            'onmouseenter="if(window.innerWidth>1024)_spPreviewCard(' + concept.id + ',this,{panelMode:true})" ' +
+            'onmouseenter="_cornerShowPreview(' + concept.id + ', this)" ' +
             'onmouseleave="if(window.innerWidth>1024){clearTimeout(_pt);_pt=setTimeout(spDismissPreview,200)}">' +
             _escHtml(concept.term) +
           '</div>' +
@@ -13157,7 +13265,7 @@ function _cornerBuildCards(concepts, userInput) {
       '</div>' +
       '<div class="corner-curated-chip">✓ human-curated</div>' +
       '<div class="corner-term" ' +
-        'onmouseenter="if(window.innerWidth>1024)_spPreviewCard(' + concept.id + ',this,{panelMode:true})" ' +
+        'onmouseenter="_cornerShowPreview(' + concept.id + ', this)" ' +
         'onmouseleave="if(window.innerWidth>1024){clearTimeout(_pt);_pt=setTimeout(spDismissPreview,200)}">' +
         _escHtml(concept.term) +
       '</div>' +
@@ -13229,7 +13337,9 @@ function _cornerBuildRelated(concepts) {
 
   var chips = relatedConcepts.map(function(c) {
     var color = (typeof CAT_COLOR !== 'undefined' && CAT_COLOR[c.category]) || '#e8d5a3';
-    return '<button class="corner-related-chip" onclick="openSparkPanel(' + c.id + ')">' +
+    return '<button class="corner-related-chip" ' +
+      'onclick="_cornerPreviewRelated(' + c.id + ', this)" ' +
+      'title="' + _escHtml(c.term) + '">' +
       '<span style="width:6px;height:6px;border-radius:50%;background:' + color + ';flex-shrink:0;display:inline-block"></span>' +
       '<span>' + _escHtml(c.term) + '</span>' +
     '</button>';
@@ -13282,6 +13392,64 @@ function closeCornerPanel() {
   document.removeEventListener('click', _cornerOutsideClick, { capture: true });
   document.removeEventListener('keydown', _cornerEscHandler);
   spDismissPreview();
+}
+
+// ---- Open Corner History (via nav button) ----
+function openCornerHistory() {
+  var overlay = document.getElementById('storiesOverlay');
+  var panel   = document.getElementById('storiesPanel');
+  if (!overlay || !panel) return;
+
+  var saves = [];
+  try { saves = JSON.parse(localStorage.getItem(CORNER_SAVES_KEY) || '[]'); } catch(e) {}
+
+  panel.innerHTML =
+    '<div class="stories-header">' +
+      '<span class="stories-header-label">🥊 Corner</span>' +
+      '<button class="stories-close" onclick="closeCornerPanel()" aria-label="Close">✕</button>' +
+    '</div>' +
+    '<div class="corner-panel-body" id="cornerPanelBody" style="opacity:1">' +
+      _cornerBuildHistory(saves) +
+    '</div>';
+
+  document.body.classList.add('corner-panel-open');
+  overlay.classList.add('active');
+
+  setTimeout(function() {
+    document.addEventListener('click', _cornerOutsideClick, { capture: true });
+    document.addEventListener('keydown', _cornerEscHandler);
+  }, 60);
+}
+
+function _cornerBuildHistory(saves) {
+  if (!saves || !saves.length) {
+    return '<div class="sp2-empty-state"><div class="sp2-empty-icon">🥊</div>' +
+      '<div class="sp2-empty-text">Your Corner sessions will appear here.<br>Describe a situation and let Epistemic find your frame.</div></div>';
+  }
+  return saves.map(function(s, i) {
+    var d = new Date(s.ts);
+    var dateStr = d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+    var concepts = (s.result && s.result.concepts) || [];
+    var termList = concepts.map(function(c) {
+      var concept = (typeof CONCEPTS !== 'undefined' ? CONCEPTS : []).find(function(x) { return x.id === c.conceptId; });
+      return concept ? concept.term : '';
+    }).filter(Boolean).join(' · ');
+    return '<div class="corner-hist-entry">' +
+      '<div class="corner-hist-date">' + dateStr + '</div>' +
+      '<div class="corner-hist-situation">"' + _escHtml((s.userInput || '').slice(0, 100)) + (s.userInput && s.userInput.length > 100 ? '…' : '') + '"</div>' +
+      (termList ? '<div class="corner-hist-terms">' + _escHtml(termList) + '</div>' : '') +
+      '<button class="corner-hist-replay" onclick="_cornerReplayHistory(' + i + ')">↺ Revisit</button>' +
+    '</div>';
+  }).join('');
+}
+
+function _cornerReplayHistory(idx) {
+  try {
+    var saves = JSON.parse(localStorage.getItem(CORNER_SAVES_KEY) || '[]');
+    var s = saves[idx];
+    if (!s) return;
+    _cornerOpenPanel(s.userInput, s.result);
+  } catch(e) {}
 }
 
 function _cornerOutsideClick(e) {
@@ -18021,7 +18189,8 @@ function playStreakMilestoneSFX() {
 .nav-browse-emoji,
 .nav-stash-emoji,
 .nav-library-emoji,
-.nav-story-emoji {
+.nav-story-emoji,
+.nav-corner-emoji {
   display: inline-block;
   opacity: 0;
   max-width: 0;
@@ -18036,7 +18205,8 @@ function playStreakMilestoneSFX() {
 .nav-browse-btn:hover .nav-browse-emoji,
 .nav-conv-btn:hover .nav-stash-emoji,
 .nav-library-btn:hover .nav-library-emoji,
-.nav-story-btn:hover .nav-story-emoji {
+.nav-story-btn:hover .nav-story-emoji,
+.nav-corner-nav-btn:hover .nav-corner-emoji {
   opacity: 1;
   max-width: 1.4em;
   margin-right: 4px;
@@ -19784,56 +19954,47 @@ body.cs-panel-open .sp-trigger-hint { display: none; }
 /* ---- Headline word spans for stagger animation ---- */
 .sp-hw {
   display: inline-block;
-  transition: opacity 0.45s ease, transform 0.45s cubic-bezier(0.4,0,0.2,1);
-  will-change: opacity, transform;
+  transition: opacity 0.28s ease, transform 0.28s cubic-bezier(0.4,0,0.2,1);
 }
-/* When Corner mode activates, each word flies up and fades */
-body.corner-mode .sp-hw {
-  opacity: 0;
-  transform: translateY(-56px);
-}
+/* Corner mode: words scatter upward */
+body.corner-mode .sp-hw { opacity: 0; transform: translateY(-44px); }
 body.corner-mode #spHW0 { transition-delay: 0ms; }
-body.corner-mode #spHW1 { transition-delay: 75ms; }
-body.corner-mode #spHW2 { transition-delay: 150ms; }
-body.corner-mode #spHW3 { transition-delay: 225ms; }
+body.corner-mode #spHW1 { transition-delay: 45ms; }
+body.corner-mode #spHW2 { transition-delay: 90ms; }
+body.corner-mode #spHW3 { transition-delay: 135ms; }
 
-/* ---- Corner tagline ---- */
+/* ---- Corner tagline 30% larger ---- */
 .sp-corner-tagline {
   font-family: 'Playfair Display', serif;
   font-style: italic;
-  font-size: clamp(1rem, 2vw, 1.18rem);
+  font-size: clamp(1.3rem, 2.8vw, 1.55rem);
   color: var(--accent);
   margin: 0 0 1.5rem;
   opacity: 0;
   transform: translateY(10px);
-  transition: opacity 0.42s ease, transform 0.42s cubic-bezier(0.22,0.61,0.36,1);
+  transition: opacity 0.32s ease, transform 0.32s cubic-bezier(0.22,0.61,0.36,1);
   pointer-events: none;
 }
 body.corner-mode .sp-corner-tagline {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
-  transition-delay: 440ms; /* after words have exited */
+  opacity: 1; transform: translateY(0); pointer-events: auto;
+  transition-delay: 260ms;
 }
 
-/* ---- Nav push-up ---- */
-#mainNav {
-  transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
-}
+/* ---- Nav fade — island+right fade, logo stays ---- */
+#mainNav { transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease; }
 body.corner-mode #mainNav {
-  transform: translateY(-100%);
-  opacity: 0;
-  pointer-events: none;
+  transform: none; opacity: 1; pointer-events: none;
+  background: transparent; border-bottom-color: transparent; box-shadow: none;
 }
+#mainNav .nav-island, #mainNav .nav-right { transition: opacity 0.25s ease; }
+body.corner-mode #mainNav .nav-island,
+body.corner-mode #mainNav .nav-right { opacity: 0; pointer-events: none; }
+body.corner-mode #mainNav .nav-logo { opacity: 1; pointer-events: none; }
 
 /* ---- Content push-down ---- */
-.browse-toggle-wrap,
-#episodesSection,
-#themesSection,
-#netflixRows,
-#libSection,
-#signupSection {
-  transition: transform 0.65s cubic-bezier(0.25,0.46,0.45,0.94), opacity 0.6s ease;
+.browse-toggle-wrap, #episodesSection, #themesSection,
+#netflixRows, #libSection, #signupSection {
+  transition: transform 0.42s cubic-bezier(0.25,0.46,0.45,0.94), opacity 0.38s ease;
 }
 body.corner-mode .browse-toggle-wrap,
 body.corner-mode #episodesSection,
@@ -19841,104 +20002,52 @@ body.corner-mode #themesSection,
 body.corner-mode #netflixRows,
 body.corner-mode #libSection,
 body.corner-mode #signupSection {
-  transform: translateY(100px);
-  opacity: 0;
-  pointer-events: none;
+  transform: translateY(80px); opacity: 0; pointer-events: none;
 }
 
-/* ---- Scroll lock in Corner mode ---- */
-body.corner-mode {
-  overflow: hidden;
-}
+/* ---- Scroll lock + misc ---- */
+body.corner-mode { overflow: hidden; }
+body.corner-mode .sp-trigger-hint { display: none !important; }
+#spSub { transition: opacity 0.28s ease, transform 0.28s ease !important; }
+body.corner-mode #spSub { opacity: 0 !important; pointer-events: none; }
 
-/* ---- Hide trigger hint in Corner mode ---- */
-body.corner-mode .sp-trigger-hint {
-  display: none !important;
-}
-
-/* ---- Keep nav logo visible in Corner mode ---- */
-body.corner-mode .nav-logo {
-  opacity: 1 !important;
-  pointer-events: auto !important;
-}
-/* Hide nav island + nav right except logo */
-body.corner-mode .nav-island,
-body.corner-mode .nav-right {
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.35s ease;
-}
-/* Override the full nav translateY — logo stays, rest goes */
-/* We do this by removing translateY from mainNav and instead
-   hiding only the nav content, keeping logo fixed */
-/* REVISED APPROACH: nav slides up but logo stays via fixed positioning */
-/* Actually: slide whole nav up BUT re-show logo via a fixed clone */
-/* Simpler: don't slide nav, just fade out island + right, keep logo */
-body.corner-mode #mainNav {
-  transform: none;
-  opacity: 1;
-  pointer-events: none;
-  background: transparent;
-  border-bottom-color: transparent;
-  box-shadow: none;
-  transition: background 0.4s, border-color 0.4s, box-shadow 0.4s;
-}
-/* Island and right side fade out */
-#mainNav .nav-island,
-#mainNav .nav-right {
-  transition: opacity 0.35s ease;
-}
-body.corner-mode #mainNav .nav-island,
-body.corner-mode #mainNav .nav-right {
-  opacity: 0;
-  pointer-events: none;
-}
-/* Logo stays fully visible */
-body.corner-mode #mainNav .nav-logo {
-  opacity: 1;
-  pointer-events: none;
-}
-
-/* ---- sp-sub fades out in Corner mode ---- */
-#spSub {
-  transition: opacity 0.4s ease, transform 0.4s ease !important;
-}
-body.corner-mode #spSub {
-  opacity: 0 !important;
-  pointer-events: none;
-}
-
-/* ---- Search bar Corner state ---- */
-body.corner-mode .sp-search-wrap {
-  border-color: rgba(232,213,163,0.5);
-  box-shadow:
-    0 0 0 1px rgba(232,213,163,0.10),
-    0 0 32px rgba(232,213,163,0.12),
-    0 4px 24px rgba(0,0,0,0.35);
-  background: rgba(232,213,163,0.04);
-}
-
-/* ---- Search bar zoom-to-center ---- */
-.sp-hero-col {
-  transition: transform 0.62s cubic-bezier(0.22,0.61,0.36,1);
-  will-change: transform;
-}
+/* ---- Search bar zoom ---- */
+.sp-hero-col { transition: transform 0.42s cubic-bezier(0.22,0.61,0.36,1); }
 body.corner-mode .sp-hero-col {
   transform: translateY(var(--corner-translate-y, 0px)) scale(1.04);
 }
 
+/* ---- Corner search bar amber glow ---- */
+body.corner-mode #spCornerSearchWrap {
+  border-color: rgba(232,213,163,0.5);
+  box-shadow: 0 0 0 1px rgba(232,213,163,0.10),
+    0 0 28px rgba(232,213,163,0.10), 0 4px 20px rgba(0,0,0,0.3);
+  background: rgba(232,213,163,0.04);
+}
+
+/* ---- Corner search icon ---- */
+.sp-corner-search-icon {
+  font-size: 1rem; flex-shrink: 0; line-height: 1; padding: 0 2px;
+}
+
+/* ---- Corner placeholder overlay ---- */
+#spCornerPhOverlay {
+  left: 42px; font-style: italic;
+  max-width: calc(100% - 170px);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+/* ---- Panel overlay smooth fade ---- */
+.stories-overlay { background: rgba(8,6,4,0); transition: background 0.35s ease; }
+
 /* ---- Mode icon swap ---- */
 .sp-mode-icon {
-  font-size: 1rem;
-  flex-shrink: 0;
-  line-height: 1;
-  transition: opacity 0.2s ease;
-  /* replaces the old SVG search icon */
-  padding: 0 2px;
-  color: var(--muted);
+  font-size: 1rem; flex-shrink: 0; line-height: 1;
+  transition: opacity 0.2s ease; padding: 0 2px; color: var(--muted);
 }
 
 /* ---- Corner submit button ---- */
+
 .sp-corner-submit {
   background: var(--accent);
   color: #0d0d0d;
@@ -20356,6 +20465,55 @@ body.corner-panel-open .corner-panel-situation {
   transition: transform 0.2s ease;
 }
 
+/* ---- Corner history entries ---- */
+.corner-hist-entry {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.corner-hist-entry:last-child { border-bottom: none; }
+.corner-hist-date {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  opacity: 0.5;
+}
+.corner-hist-situation {
+  font-family: 'DM Sans', sans-serif;
+  font-style: italic;
+  font-size: 0.84rem;
+  color: var(--muted2);
+  line-height: 1.45;
+}
+.corner-hist-terms {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.04em;
+  color: var(--accent);
+  opacity: 0.7;
+}
+.corner-hist-replay {
+  background: none;
+  border: 1px solid rgba(232,213,163,0.14);
+  border-radius: 6px;
+  color: var(--accent);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  padding: 6px 12px;
+  cursor: pointer;
+  align-self: flex-start;
+  margin-top: 2px;
+  transition: background 0.15s, border-color 0.15s;
+}
+.corner-hist-replay:hover {
+  background: rgba(232,213,163,0.08);
+  border-color: rgba(232,213,163,0.3);
+}
+
 /* ============================================================
    END CORNER MODE CSS
    ============================================================ */
@@ -20370,12 +20528,14 @@ body.corner-panel-open .corner-panel-situation {
 .stories-overlay {
   position: fixed; inset: 0; z-index: 1200;
   display: none;
-  background: rgba(8,6,4,0.55);
+  background: rgba(8,6,4,0);
   pointer-events: none;
+  transition: background 0.35s ease;
 }
 .stories-overlay.active {
   display: flex;
   justify-content: flex-end;
+  background: rgba(8,6,4,0.55);
   pointer-events: all;
 }
 
@@ -20388,12 +20548,21 @@ body.corner-panel-open .corner-panel-situation {
   display: flex;
   flex-direction: column;
   transform: translateX(100%);
-  transition: transform 0.32s cubic-bezier(0.22, 0.61, 0.36, 1);
+  transition: transform 0.38s cubic-bezier(0.22, 0.61, 0.36, 1);
   overflow: hidden;
 }
 .stories-overlay.active .stories-panel {
   transform: translateX(0);
 }
+
+/* Corner panel sequential fade-in */
+.corner-panel-situation {
+  opacity: 0; transform: translateY(8px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.corner-panel-situation.cp-visible { opacity: 1; transform: translateY(0); }
+.corner-panel-body { opacity: 0; transition: opacity 0.25s ease; }
+.corner-panel-body.cp-visible { opacity: 1; }
 [data-theme="light"] .stories-overlay { background: rgba(0,0,0,0.28); }
 [data-theme="light"] .stories-panel {
   background: #faf8f3;
