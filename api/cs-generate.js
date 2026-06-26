@@ -110,6 +110,39 @@ Respond ONLY with valid JSON:
   }
   // ── END SITUATION MODE ─────────────────────────────────────────────────────
 
+  // ── SPARRING MODE ──────────────────────────────────────────────────────────
+  if (mode === 'sparring') {
+    const sparConcept = req.body.concept;
+    const situation   = req.body.situation || '';
+    if (!sparConcept || !sparConcept.term) {
+      return res.status(400).json({ error: 'concept required for sparring mode.' });
+    }
+    const sparPrompt = `You are a sharp, direct conversation coach. A person is preparing for this situation: "${situation}". They have already been introduced to the concept "${sparConcept.term}" (${sparConcept.hook}). Now go deeper.
+
+Give them three things:
+1. anotherAngle: A different way to apply this concept to their specific situation. Not a summary — a fresh angle they haven't considered. 2–3 sentences, direct and concrete.
+2. counterPerspective: What the other person in this situation might be thinking or feeling. What's their mental model? What are they protecting? This helps the user not be blindsided. 2–3 sentences.
+3. oneLiner: One real, natural sentence they could actually say in this situation right now. First person. Not a script — a frame. Under 25 words.
+
+Respond ONLY with valid JSON:
+{ "anotherAngle": "...", "counterPerspective": "...", "oneLiner": "..." }`;
+
+    try {
+      const r = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-api-key': ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
+        body: JSON.stringify({ model: 'claude-sonnet-4-5', max_tokens: 500, system: 'Output only valid JSON. No markdown, no preamble.', messages: [{ role: 'user', content: sparPrompt }] }),
+      });
+      const d = await r.json();
+      const raw = d?.content?.[0]?.text || '';
+      const parsed = JSON.parse(raw.replace(/```json|```/g, '').trim());
+      return res.status(200).json(parsed);
+    } catch(e) {
+      return res.status(500).json({ error: 'Sparring error.' });
+    }
+  }
+  // ── END SPARRING MODE ──────────────────────────────────────────────────────
+
   if (!concept || !concept.term) {
     return res.status(400).json({ error: 'concept object with term is required.' });
   }
