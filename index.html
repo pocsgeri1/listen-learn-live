@@ -1651,7 +1651,7 @@
     justify-content: flex-start;
     gap: 1.8rem;
     max-width: 1100px;
-    margin: 0 auto 1.75rem;
+    margin: 1.5rem auto 1.75rem;
     padding: 0 2rem 1.2rem;
     border-bottom: 1px solid var(--border);
     box-sizing: border-box;
@@ -4424,7 +4424,7 @@
   .cs-btn {
     font-family: 'DM Mono', monospace; font-size: 0.7rem;
     letter-spacing: 0.1em; text-transform: uppercase;
-    border: 1px solid var(--border); background: transparent;
+    border: 1px solid rgba(255,255,255,0.14); background: transparent;
     color: var(--muted2); border-radius: 8px; padding: 10px 18px;
     cursor: pointer; transition: border-color 0.2s, color 0.2s;
   }
@@ -4439,8 +4439,9 @@
     .cs-card { padding: 24px 18px 20px; }
     .cs-headline { font-size: 1.2rem; }
     .cs-prompt-text { font-size: 0.95rem; }
-    .cs-actions { flex-direction: column; }
-    .cs-btn { text-align: center; }
+    /* Keep buttons in one row on mobile — don't stack */
+    .cs-actions { flex-direction: row; flex-wrap: wrap; }
+    .cs-btn { text-align: center; flex: 1; min-width: 0; }
     /* P18: prevent concept expand content overflow — no internal scroll */
     .cs-concept-plain { font-size: 0.78rem; line-height: 1.5; }
     .cs-episode-actions { flex-wrap: wrap; gap: 5px; }
@@ -13084,10 +13085,7 @@ function _cornerOpenPanel(userInput, result) {
   panel.innerHTML =
     '<div class="stories-header">' +
       '<span class="stories-header-label">🥊 Corner</span>' +
-      '<div style="display:flex;align-items:center;gap:8px">' +
-        '<span class="corner-autosaved-badge">✓ Auto-saved</span>' +
-        '<button class="stories-close" onclick="closeCornerPanel()" aria-label="Close">✕</button>' +
-      '</div>' +
+      '<button class="stories-close" onclick="closeCornerPanel()" aria-label="Close">✕</button>' +
     '</div>' +
     '<div class="stories-tabs">' +
       '<button class="stories-tab active" id="cornerTabResult" onclick="_cornerSwitchTab(\'result\')">Results</button>' +
@@ -13114,9 +13112,7 @@ function _cornerOpenPanel(userInput, result) {
   // Render history tab content
   var histSection = panel.querySelector('#cornerSectionHistory');
   if (histSection) {
-    var saves = [];
-    try { saves = JSON.parse(localStorage.getItem(CORNER_SAVES_KEY) || '[]'); } catch(e) {}
-    histSection.innerHTML = '<div class="corner-panel-body" style="opacity:1">' + _cornerBuildHistory(saves) + '</div>';
+    histSection.innerHTML = '<div class="corner-panel-body" style="opacity:1">' + _cornerBuildHistory(_cornerLoadSaves()) + '</div>';
   }
 
   // Sequential fade-in — total ~1.4s
@@ -13250,9 +13246,8 @@ function _cornerShowPreview(id, anchorEl) {
 function _cornerBuildCards(concepts, userInput) {
   _cornerSituationForCards = userInput || '';
   if (!concepts || !concepts.length) {
-    return '<div style="padding:20px;color:var(--muted2);font-family:\'DM Sans\',sans-serif;font-size:0.84rem">No matching frames found.</div>';
+    return '<div style="padding:20px;color:var(--muted2);font-family:\'DM Sans\',sans-serif;font-size:0.84rem">No matching frames found. Try a different description.</div>';
   }
-  var isMobile = window.innerWidth <= 768;
   return concepts.map(function(c, i) {
     var concept = (typeof CONCEPTS !== 'undefined' ? CONCEPTS : []).find(function(x) { return x.id === c.conceptId; });
     if (!concept) return '';
@@ -13263,42 +13258,43 @@ function _cornerBuildCards(concepts, userInput) {
     var hoverIn  = 'if(window.innerWidth>1024)_cornerShowPreview(' + concept.id + ',this)';
     var hoverOut = 'if(window.innerWidth>1024)_cornerDismissPreviewDelayed()';
 
-    if (isMobile) {
-      return '<div class="corner-brief-card corner-brief-card--accordion" id="cornerCard' + i + '" data-expanded="false">' +
-        '<div class="corner-brief-card-summary" onclick="_cornerToggleAccordion(' + i + ')">' +
-          '<div class="corner-brief-card-header">' +
-            '<div class="corner-cat-dot-label">' +
-              '<div class="corner-cat-dot" style="background:' + color + '"></div>' +
-              '<span class="corner-term-inline">' + _escHtml(concept.term) + '</span>' +
-            '</div>' +
-            '<div style="display:flex;align-items:center;gap:8px">' +
-              '<div class="corner-fit-score-wrap">' +
-                '<div class="corner-fit-bar-track"><div class="corner-fit-bar-fill" data-score="' + score + '"></div></div>' +
-                '<span class="corner-fit-score-label">' + score + ' / 100</span>' +
-              '</div>' +
-              '<span class="corner-accordion-arrow" id="cornerArrow' + i + '">↓</span>' +
-            '</div>' +
-          '</div>' +
-        '</div>' +
-        '<div class="corner-brief-card-detail" id="cornerDetail' + i + '" style="display:none">' +
-          '<div class="corner-curated-chip" style="margin-bottom:10px">' + cMsg + '</div>' +
-          '<div class="corner-term" onmouseenter="' + hoverIn + '" onmouseleave="' + hoverOut + '">' + _escHtml(concept.term) + '</div>' +
-          _cornerBlocksHtml(c) +
-          '<button class="corner-spark-btn" onclick="_cornerSparkSituation(' + concept.id + ')">✦ Corner Spark</button>' +
-        '</div>' +
-      '</div>';
-    }
+    // First card: expanded by default. Rest: collapsed accordion.
+    var isFirst = (i === 0);
 
-    return '<div class="corner-brief-card" id="cornerCard' + i + '">' +
-      '<div class="corner-brief-card-header">' +
-        '<div class="corner-cat-dot-label"><div class="corner-cat-dot" style="background:' + color + '"></div><span>' + _escHtml(catName) + '</span></div>' +
-        '<div class="corner-fit-score-wrap"><div class="corner-fit-bar-track"><div class="corner-fit-bar-fill" data-score="' + score + '"></div></div><span class="corner-fit-score-label">' + score + ' / 100</span></div>' +
+    var header = '<div class="corner-brief-card-header">' +
+      '<div class="corner-cat-dot-label">' +
+        '<div class="corner-cat-dot" style="background:' + color + '"></div>' +
+        '<span class="corner-term-header-label">' + _escHtml(concept.term) + '</span>' +
       '</div>' +
-      '<div class="corner-curated-chip">' + cMsg + '</div>' +
+      '<div style="display:flex;align-items:center;gap:8px">' +
+        '<div class="corner-fit-score-wrap">' +
+          '<div class="corner-fit-bar-track"><div class="corner-fit-bar-fill" data-score="' + score + '"></div></div>' +
+          '<span class="corner-fit-score-label">' + score + ' / 100</span>' +
+        '</div>' +
+        (isFirst ? '' : '<span class="corner-accordion-arrow" id="cornerArrow' + i + '">↓</span>') +
+      '</div>' +
+    '</div>';
+
+    var body = '<div class="corner-curated-chip">' + cMsg + '</div>' +
       '<div class="corner-term" onmouseenter="' + hoverIn + '" onmouseleave="' + hoverOut + '">' + _escHtml(concept.term) + '</div>' +
       _cornerBlocksHtml(c) +
-      '<button class="corner-spark-btn" onclick="_cornerSparkSituation(' + concept.id + ')">✦ Corner Spark</button>' +
-    '</div>';
+      '<button class="corner-sparring-btn" id="cornerSparBtn' + i + '" onclick="_cornerSparring(' + concept.id + ',' + i + ')">' +
+        '⚡ Sparring' +
+      '</button>' +
+      '<div class="corner-sparring-result" id="cornerSparResult' + i + '"></div>';
+
+    if (isFirst) {
+      // First card: fully expanded, no toggle
+      return '<div class="corner-brief-card visible" id="cornerCard' + i + '">' +
+        header + body +
+      '</div>';
+    } else {
+      // Collapsed accordion
+      return '<div class="corner-brief-card corner-brief-card--accordion" id="cornerCard' + i + '" data-expanded="false">' +
+        '<div class="corner-brief-card-summary" onclick="_cornerToggleAccordion(' + i + ')">' + header + '</div>' +
+        '<div class="corner-brief-card-detail" id="cornerDetail' + i + '" style="display:none;flex-direction:column;gap:12px;">' + body + '</div>' +
+      '</div>';
+    }
   }).join('');
 }
 function _cornerBlocksHtml(c) {
@@ -13375,7 +13371,59 @@ function _cornerBuildRelated(concepts) {
   '</div>';
 }
 
-// ---- Hover preview dismiss with delay (so user can move to preview card) ----
+// ---- Sparring — deep dive on one concept within Corner ----
+function _cornerSparring(conceptId, cardIdx) {
+  var resultEl = document.getElementById('cornerSparResult' + cardIdx);
+  var btn = document.getElementById('cornerSparBtn' + cardIdx);
+  if (!resultEl || !btn) return;
+  if (resultEl.dataset.loaded === '1') {
+    // Toggle: hide/show if already loaded
+    resultEl.style.display = resultEl.style.display === 'none' ? 'flex' : 'none';
+    return;
+  }
+
+  var concept = (typeof CONCEPTS !== 'undefined' ? CONCEPTS : []).find(function(x) { return x.id === conceptId; });
+  if (!concept) return;
+
+  btn.disabled = true;
+  btn.textContent = '◉ Sparring…';
+  resultEl.style.display = 'flex';
+  resultEl.innerHTML = '<div class="corner-spar-loading">Finding another angle…</div>';
+
+  fetch('/api/cs-generate', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      mode: 'sparring',
+      concept: { id: concept.id, term: concept.term, hook: concept.hook, plain: concept.plain, category: concept.category },
+      situation: _cornerSituationForCards,
+    }),
+  }).then(function(r) { return r.json(); }).then(function(data) {
+    btn.disabled = false;
+    btn.textContent = '⚡ Sparring';
+    resultEl.dataset.loaded = '1';
+    resultEl.innerHTML =
+      '<div class="corner-spar-block">' +
+        '<div class="corner-block-label">Another angle</div>' +
+        '<div class="corner-block-text">' + _escHtml(data.anotherAngle || '') + '</div>' +
+      '</div>' +
+      '<div class="corner-spar-block">' +
+        '<div class="corner-block-label">What the other person might be thinking</div>' +
+        '<div class="corner-block-text">' + _escHtml(data.counterPerspective || '') + '</div>' +
+      '</div>' +
+      '<div class="corner-spar-block corner-spar-highlight">' +
+        '<div class="corner-block-label">One real thing to say</div>' +
+        '<div class="corner-block-text">' + _escHtml(data.oneLiner || '') + '</div>' +
+      '</div>';
+  }).catch(function() {
+    btn.disabled = false;
+    btn.textContent = '⚡ Sparring';
+    resultEl.innerHTML = '<div class="corner-spar-loading">Something went wrong. Try again.</div>';
+  });
+}
+
+// (old _cornerSparkSituation kept as no-op for safety)
+function _cornerSparkSituation(conceptId) { _cornerSparring(conceptId, 0); }
 var _cornerPreviewTimer = null;
 function _cornerDismissPreviewDelayed() {
   _cornerPreviewTimer = setTimeout(function() { spDismissPreview(); }, 280);
@@ -13432,16 +13480,22 @@ function openCornerHistory() {
   var panel   = document.getElementById('storiesPanel');
   if (!overlay || !panel) return;
 
-  var saves = [];
-  try { saves = JSON.parse(localStorage.getItem(CORNER_SAVES_KEY) || '[]'); } catch(e) {}
-
+  // Build unified panel (same as _cornerOpenPanel but no result content)
   panel.innerHTML =
     '<div class="stories-header">' +
       '<span class="stories-header-label">🥊 Corner</span>' +
       '<button class="stories-close" onclick="closeCornerPanel()" aria-label="Close">✕</button>' +
     '</div>' +
-    '<div class="corner-panel-body" id="cornerPanelBody" style="opacity:1">' +
-      _cornerBuildHistory(saves) +
+    '<div class="stories-tabs">' +
+      '<button class="stories-tab" id="cornerTabResult" onclick="_cornerSwitchTab(\'result\')">Results</button>' +
+      '<button class="stories-tab active" id="cornerTabHistory" onclick="_cornerSwitchTab(\'history\')">History</button>' +
+    '</div>' +
+    '<div id="cornerSectionResult" style="flex:1;overflow-y:auto;overflow-x:hidden;display:none;flex-direction:column;">' +
+      '<div class="sp2-empty-state"><div class="sp2-empty-icon">🥊</div>' +
+        '<div class="sp2-empty-text">Start a Corner session to see results here.</div></div>' +
+    '</div>' +
+    '<div id="cornerSectionHistory" style="flex:1;overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column;">' +
+      '<div class="corner-panel-body" style="opacity:1">' + _cornerBuildHistory(_cornerLoadSaves()) + '</div>' +
     '</div>';
 
   document.body.classList.add('corner-panel-open');
@@ -13451,6 +13505,10 @@ function openCornerHistory() {
     document.addEventListener('click', _cornerOutsideClick, { capture: true });
     document.addEventListener('keydown', _cornerEscHandler);
   }, 60);
+}
+
+function _cornerLoadSaves() {
+  try { return JSON.parse(localStorage.getItem(CORNER_SAVES_KEY) || '[]'); } catch(e) { return []; }
 }
 
 function _cornerBuildHistory(saves) {
@@ -18999,7 +19057,7 @@ function playStreakMilestoneSFX() {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 72px 2rem 2rem;
+  padding: 80px 2rem 3.5rem;
   overflow: visible; /* row2 absolute pills and dropdown need to escape */
 }
 
@@ -20129,20 +20187,21 @@ body.corner-mode #spCornerSearchWrap {
 /* ---- Mode toggle row ---- */
 .sp-mode-toggle-row {
   display: flex;
-  gap: 8px;
+  gap: 10px;
   justify-content: center;
-  margin-top: 1.1rem;
+  margin-top: 1.6rem;
+  margin-bottom: 0.4rem;
 }
 .sp-mode-pill {
   font-family: 'DM Mono', monospace;
-  font-size: 0.65rem;
+  font-size: 0.78rem;
   letter-spacing: 0.09em;
   text-transform: uppercase;
   color: var(--muted);
   background: none;
   border: 1px solid rgba(255,255,255,0.08);
   border-radius: 999px;
-  padding: 7px 16px;
+  padding: 9px 20px;
   cursor: pointer;
   transition: color 0.18s, border-color 0.18s, background 0.18s;
 }
@@ -20512,12 +20571,22 @@ body.corner-panel-open .stories-panel {
   border-bottom: 1px solid rgba(255,255,255,0.05);
 }
 .corner-hist-entry:last-child { border-bottom: none; }
+/* ---- History entries ---- */
+.corner-hist-entry {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.corner-hist-entry:last-child { border-bottom: none; }
+/* Timestamp — more visible than before */
 .corner-hist-date {
   font-family: 'DM Mono', monospace;
-  font-size: 0.6rem;
+  font-size: 0.62rem;
   letter-spacing: 0.08em;
-  color: var(--muted);
-  opacity: 0.5;
+  color: var(--muted2);
+  opacity: 0.75;
 }
 .corner-hist-situation {
   font-family: 'DM Sans', sans-serif;
@@ -20551,6 +20620,83 @@ body.corner-panel-open .stories-panel {
   background: rgba(232,213,163,0.08);
   border-color: rgba(232,213,163,0.3);
 }
+
+/* ---- Light mode corner card fix — cards darker than panel bg ---- */
+[data-theme="light"] .corner-brief-card {
+  background: #e8dfd0;
+  border-color: rgba(0,0,0,0.10);
+}
+[data-theme="light"] .corner-brief-card-header { border-bottom-color: rgba(0,0,0,0.06); }
+[data-theme="light"] .corner-block-text { color: #3a3028; }
+[data-theme="light"] .corner-opener-block {
+  background: #e0d4c2;
+  border-color: rgba(0,0,0,0.12);
+}
+[data-theme="light"] .corner-panel-situation { border-bottom-color: rgba(0,0,0,0.08); }
+
+/* ---- Term in card header for accordion summary ---- */
+.corner-term-header-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  color: var(--text);
+  font-weight: 500;
+}
+
+/* ---- Sparring button ---- */
+.corner-sparring-btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(232,213,163,0.06);
+  border: 1px solid rgba(232,213,163,0.18);
+  border-radius: 8px;
+  color: var(--muted2);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.07em;
+  padding: 9px 14px;
+  cursor: pointer;
+  align-self: flex-start;
+  margin-top: 2px;
+  transition: background 0.18s, border-color 0.18s, color 0.18s;
+}
+.corner-sparring-btn:hover {
+  background: rgba(232,213,163,0.12);
+  border-color: rgba(232,213,163,0.38);
+  color: var(--accent);
+}
+.corner-sparring-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+/* ---- Sparring result blocks ---- */
+.corner-sparring-result {
+  display: none;
+  border-top: 1px solid rgba(232,213,163,0.1);
+  padding-top: 14px;
+  flex-direction: column;
+  gap: 12px;
+  animation: sp2FadeUp 0.32s ease forwards;
+}
+.corner-spar-block { display: flex; flex-direction: column; gap: 4px; }
+.corner-spar-highlight {
+  background: rgba(232,213,163,0.06);
+  border: 1px solid rgba(232,213,163,0.14);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+.corner-spar-loading {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 0.84rem;
+  color: var(--muted2);
+  animation: sp2FadeMsg 1.4s ease-in-out infinite alternate;
+}
+
+/* ---- Constellation canvas — behind text (z-index:1) but above bg ---- */
+#cornerConstellationCanvas { z-index: 1; }
+/* Ensure mode toggle row + loading text sit above canvas ---- */
+.sp-mode-toggle-row, .sp-corner-loading, #spCornerSearchWrap,
+.sp-corner-tagline, .sp-tagline, .sp-sub, #spSub { position: relative; z-index: 2; }
 
 /* ============================================================
    END CORNER MODE CSS
