@@ -6,6 +6,28 @@
 
 ---
 
+## Standing Rules — Cowork Workflow
+
+### Commit message format (enforced every session)
+```
+Title:  v[X.Y] - [short imperative description]
+Body:   - bullet 1
+        - bullet 2
+        - bullet 3
+```
+- Always start with version number first: `v2.9 - Corner: ding SFX, hero restore, panel header`
+- Title uses dash after version, not colon
+- Body bullets: one change per line, no prose
+- Claude writes the commit, Gergely clicks "Push origin" in GitHub Desktop
+
+### Git workflow (Cowork sessions)
+- Claude edits files directly in `/Users/gergelypocs/Documents/GitHub/listen-learn-live/`
+- Claude runs `git add [files] && git commit -m "..."` via bash at end of each session
+- Gergely clicks **Push origin** in GitHub Desktop — one click, done
+- Vercel auto-deploys on push
+
+---
+
 ## Entries
 
 ### 2026-06-27 — index.html v2.6–v2.8f: Corner Mode, Story Mode (hidden), Sparring, cs-generate extensions
