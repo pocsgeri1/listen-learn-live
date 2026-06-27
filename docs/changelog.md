@@ -6,6 +6,91 @@
 
 ---
 
+## v2.6 → v2.8f — 2026-06-27 — index.html + cs-generate.js: Corner Mode, Panel B (Story), Sparring
+
+**Session scope:** Two major feature arcs built and refined across ~20 sub-versions. Panel B (Story Mode) fully built then deliberately hidden pending a stronger interactive mechanic. Corner Mode built from scratch as the primary new user-facing feature. cs-generate.js extended with two new API branches.
+
+---
+
+### Panel B — Story Mode (v2.6, now hidden)
+
+- New `storiesOverlay` / `storiesPanel` DOM — fully independent of `convPanel`, z-index 1200.
+- State machine: Entry (4 scenario pills) → Loading (rotating messages) → Story (Playfair body + inline gold term chips) → Term Peek (float card) → Outro (Spark CTA + Save + Another).
+- My Stories tab with `localStorage` ring buffer (`lll_stories_v1`, max 20). Replay loads instantly.
+- Locked seeds 1–2 (`SP_STORY_SEEDS`) both active (concepts 332/394/402, 419/547/480).
+- Story mode hidden in v2.7 (nav button `display:none`, scenario pills `display:none`, `openStoriesPanel()` stub) — code preserved, not deleted.
+- Scenario pills on hero section hidden at same time.
+
+---
+
+### Corner Mode (v2.7 → v2.8f)
+
+**Concept:** User types a real situation. Epistemic matches 1–3 curated concepts, returns personalised coaching (Why this fits / To frame it well / Watch out for) + a practical opener tip. All within Corner — no Spark panel mixing.
+
+**Hero mode toggle:**
+- `[ 🔍 Explore ]  [ 🥊 Corner ]` pills replace scenario pills below hero search bar.
+- Clicking Corner fires `enterCornerMode()` — nav island fades (logo stays), headline slides up as one block, sub-tagline slides down, content below pushes off-screen, search bar zooms to 42% viewport height, Corner tagline fades in.
+- Body gets `overflow:hidden` (scroll lock). `body::before` / `body::after` hairlines fade out.
+- SFX: Web Audio API — 78Hz + 156Hz + 234Hz resonant chord, 1.1s decay on enter; 155Hz exit tone.
+- `exitCornerMode()` reverses all transitions.
+- Corner pill hover: `cornerPillVibrate` keyframe shake + 55Hz sub-bass ping on mouseenter.
+- **Two completely separate search bars:** `spSearchWrap` (Explore, SVG magnifier, concept dropdown) and `spCornerSearchWrap` (Corner, 🥊 icon, `spCornerInput`, `spCornerPhOverlay`, "Corner me →" button). Zero shared state between them.
+- Corner placeholders: 5 situational prompts, italic, crossfade cycling. No bleed with Explore placeholders.
+- 8 random Corner tagline variants (`CORNER_TAGLINES[]`, random on each enter).
+- Corner input: `caretColor: transparent` until first keypress (no blinking cursor while placeholders show).
+
+**Corner panel (repurposed Panel B):**
+- Header: `🥊 Corner` label (hidden), two tabs using `conv-panel-tab` CSS (identical to Spark): `🥊 Corner` (results) + `🎪 Situations` (history).
+- Panel background: `#1a1a1a` dark grey (distinct from Spark `#141414` and Stories `#111009`). Light mode: `#f2ece0` warm cream, cards `#e8dfd0`.
+- Situation echo + curation line (`↳ Matched against N human-curated concepts`, live count).
+- **Brief cards:** all accordion (summary row always visible). Card 0 pre-expanded (`data-expanded="true"`). Summary shows: category dot + term + fit score bar + arrow. Detail shows: curated chip (6 random variations) + term (hover → preview card) + 3 coaching blocks + ⚡ Sparring button.
+- Fit score bar animates `0% → score%` on card open.
+- Panel sequential fade-in: overlay bg → panel slide → situation block (380ms) → body (600ms) → cards stagger (500ms+, 350–380ms apart).
+- Auto-saved to `lll_corner_saves_v1` (max 30) on every result.
+
+**Sparring (v2.8e):**
+- `⚡ Sparring` button per card replaces "Corner Spark" (which mixed Spark+Corner state machines — removed).
+- Single `mode: 'sparring'` API call to `cs-generate.js` returning `{ anotherAngle, counterPerspective, oneLiner }`.
+- Renders inline below card, toggleable. No panel switching.
+
+**Neural network constellation (loading animation):**
+- `requestAnimationFrame` canvas: hub + 3 rings (7/12/16 nodes in v2.8d, 8/14/18/22 in v2.8e).
+- Hub positioned below search bar bottom + 60px (no text overlap).
+- Rings scale to available viewport height. Each node has independent X/Y drift speed/direction.
+- Cross-ring random spark (ring2→ring4). Hub has radial gradient glow.
+- Canvas `z-index:1`; text elements `z-index:2` (no overlap).
+- Fades in on submit, fades out when results arrive.
+
+**Corner History (Situations tab):**
+- `openCornerHistory()` opens unified Corner panel with Situations tab pre-selected.
+- Shows date, situation quote, matched concept terms, Revisit button.
+- `_cornerReplayHistory(idx)` reloads full result into Results tab.
+
+**cs-generate.js — two new modes:**
+- `mode: 'situation'`: picks 1–3 concepts from candidate list only (no hallucination guard), returns `{ concepts: [{conceptId, fitScore, isWildcard, whyThisFits, toFrameItWell, watchOutFor}], opener }`. Wildcard concept instruction included. Human-voice coaching prompt.
+- `mode: 'sparring'`: single concept + situation → `{ anotherAngle, counterPerspective, oneLiner }`. Concise 500-token call.
+
+**Fuse.js pre-filter (client-side, zero API cost):**
+- Runs against `plain` (2x weight), `hook` (1.5x), `term` (1x).
+- Top 12 Fuse results + 4 editors_pick wildcards from under-represented categories = 15 candidates to API.
+
+---
+
+### Other changes this session
+
+- **Spark Copy + New Concept buttons:** stripped of gold fill. Now `transparent` bg, `rgba(255,255,255,0.22)` border, hover gold. Mobile stays row layout (was stacking vertically).
+- **Corner pill vibration on hover:** `cornerPillVibrate` CSS keyframe (±2px X, 0.38s) + 55Hz sub-bass ping. Only fires in Explore mode.
+- **Hero spacing:** `sp-hero` padding-bottom `3.5rem` (was `2rem`). Browse toggle wrap `margin-top: 1.5rem`.
+- **Mode pills:** 20% larger (`0.78rem`, `9px 20px` padding), `1.6rem` top margin.
+- **Headline animation:** `.sp-tagline` now transitions as a single block (`translateY(-40px) + opacity:0`) on Corner enter — no per-word stagger, no reflow from `<br>`. Sub-tagline slides down (`translateY(30px)`). Star Wars–style wipe.
+- **Stray `-->`** text node (orphaned comment close, line 7575) deleted.
+- **`body::before/after` hidden in corner mode** so hairlines don't show when nav fades.
+- **Corner nav button:** `🥊 Corner` in desktop nav + mobile hamburger. Hover reveals 🥊 emoji (same pattern as Spark).
+- **Nav Corner → opens unified Corner panel** (same panel as results, Situations tab pre-selected).
+- **Light mode:** Corner mode pills darker border/text. History entries have visible dividers + readable timestamps. Revisit + Sparring buttons visible with distinct border/bg.
+
+---
+
 ## v2.5 → v2.5j — 2026-06-25 — index.html + cs-generate.js: Spark panel rebuild, unified entry, coaching redesign
 
 **Session scope:** Full rebuild of the Spark (CS) panel. Killed scenario system. New panel architecture: search bar, typewriter prompt, block-by-block coaching animation. History and Stash redesigned. cs-generate.js fixed. Stories panel deferred to v2.6.
