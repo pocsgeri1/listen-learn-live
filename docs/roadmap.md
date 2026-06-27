@@ -7,26 +7,30 @@
 
 ## Next up
 
-- **Panel B — Stories (v2.6):** Full separate right-slide panel. State machine: Entry (4 scenario pills) → Loading → Story (typewriter + inline term pills) → Outro (Spark CTA + Save). My Stories tab. Locked seeds 1–2 already in codebase (`SP_STORY_SEEDS`). AI path for date/work scenarios. See architecture.md Panel B section for full design.
-- **Practice Mode (v2.6+):** Sub-state in Panel B Outro. User types their conversation opener → single API call returns coaching note + rewritten version. No multi-turn.
-- **Learning path strip (v2.6):** 3 "What to read next" cards below coaching in Spark panel. Pure JS — `related_ids` + stash filter + category/picks weighting. Zero API cost.
-- **Personalized context modal (v2.7):** One-time 3-field setup (role, situation, interests). Stored in `lll_user_context_v1`. Injected into all API calls for tailored openers and scenarios.
-- **Role-play simulation (v2.8):** Multi-turn back-and-forth in Panel B. Claude plays the other person. Max 8 turns then auto-debrief.
-- **RAG / knowledge-grounded responses (v3.0):** Embed all concept `plain` fields, store in Supabase pgvector, inject top-5 similar concepts per API call. Prerequisite: library ≥1000 concepts.
+- **Corner pre-programmed scenarios** — quick-access pills below Corner search bar (pre-written situations → instant pre-programmed results, no API call). Content and mechanic to be designed separately.
+- **Fluency Fingerprint (v2.9):** Pure localStorage. Track every Sparked/stashed concept. Derive: strongest category, blind spot, stash-vs-sparked ratio. Surface in Stash tab as 3–4 lines. Zero API cost.
+- **Lightweight user ID system (v2.9):** UUID in localStorage → `lll_user_id`. Every Spark/stash action pings a lightweight endpoint that writes `{user_id, concept_id, action, ts}` to Airtable. Unlocks cross-device and Weekly Push email.
+- **Weekly Concept Push (v3.0):** Brevo email via Make.com reading from Airtable. Personalised: concepts from stash not yet sparked + blind spot category pick.
+- **Story Mode activation (v3.0+):** Panel B is built and hidden. Activate when an interactive mechanic (Practice Mode or Role-Play) is ready to make stories functional rather than passive reading.
+- **RAG / knowledge-grounded responses (v3.0):** Embed all concept `plain` fields, store in Supabase pgvector, inject top-5 similar per API call. Prerequisite: library ≥1000 concepts.
 - **OG image** — `/og-image.png` not yet in repo root. Add for `og:image` + `twitter:image` tags.
-- **Hero scenario pills** — currently open Spark panel with seed concept (placeholder). Wire to Panel B in v2.6.
-- **Story seeds 3–4 (On a Date, At Work)** — not yet written. Seeds 1–2 locked in `epistemic-story-seeds.docx`.
 - **`duplicate_of` bug** — concepts with `duplicate_of` set are suppressed from library/search entirely. Correct behaviour: only affects drawer-level display. Separate session fix.
-- **Collection 501 keep/cut decision** — 17 flagged for cut, 13 keep/rewrite. Deferred. All 30 still in `concepts.json`.
-- **Plain rewrite — ~500 concepts not yet touched** against v2.2 rules. Trim-weakest-sentence method proven.
-- **Hook rewrite v2.0 — ~487 concepts remaining** after batch 1 (120 rewritten, 29 kept).
-- **Admin editorial picks tool** — `admin-picks.html` at `tools.epistemic.live` for ongoing picks management.
-- **Legal pages review** — `privacy.html` and `terms.html` need professional review before relying on them (GDPR, Netherlands).
-- **Extraction prompt v1.8** — drafted in `extraction-prompt-v1_8.txt`, approved but not yet executed in `extract-concepts.js` (Phase 2) or `extract.html` (Phase 3).
+- **Collection 501 keep/cut decision** — 17 flagged for cut, 13 keep/rewrite. Deferred.
+- **Plain rewrite — ~500 concepts not yet touched** against v2.2 rules.
+- **Hook rewrite v2.0 — ~487 concepts remaining.**
+- **Admin editorial picks tool** — `admin-picks.html` at `tools.epistemic.live`.
+- **Legal pages review** — `privacy.html` and `terms.html` need professional review.
+- **Extraction prompt v1.8** — approved but not yet executed in `extract-concepts.js` or `extract.html`.
 
 ## Recently completed
 
+- v2.6–v2.8f ✅ — 2026-06-27 — **index.html + cs-generate.js: Corner Mode, Story Mode (hidden), Sparring:**
+  Panel B (Story Mode) built and hidden — code preserved, nav button + scenario pills `display:none`. Corner Mode: hero Explore/Corner toggle, two separate search bars (`spSearchWrap` Explore + `spCornerSearchWrap` Corner), Web Audio SFX (78Hz chord enter, 155Hz exit), 8 random taglines, constellation neural-network loading animation (hub + 3 rings, RAF canvas, no text overlap), Brief cards (all accordion, card 0 pre-expanded), 3 coaching blocks per card (Why/Frame/Watch out), fit score bars animate on open, auto-save to `lll_corner_saves_v1`, Situations history tab. Corner panel: `conv-panel-tab` design (identical to Spark), `🥊 Corner` + `🎪 Situations` tabs. Sparring: `⚡ Sparring` per card → `mode:'sparring'` API → anotherAngle/counterPerspective/oneLiner inline. cs-generate.js: `mode:'situation'` branch (Fuse pre-filter, wildcard concept, human-voice coaching) + `mode:'sparring'` branch. Headline animates as single block (no per-word stagger). Corner pill hover: vibration keyframe + 55Hz ping. Stray `-->` text node deleted. Spark Copy/New Concept buttons muted (no gold fill). Hero + section spacing improved. Two separate search inputs (no shared state — eliminates all placeholder bleed).
+
 - v2.5–v2.5j ✅ — 2026-06-25 — **index.html + cs-generate.js: Spark panel rebuild, unified entry, coaching redesign:**
+  Full scenario system killed. `openSparkPanel(id?)` single entry. Panel search bar (Fuse-powered, term-first ordering). Concept display: eyebrow + Playfair bold term, no expand pill. Desktop hover → side preview (fixed positioning bug: no scrollY offset). Casino roll "↺ New concept" with collapse animation. Typewriter fires only on fresh generate; smooth expand on restore (prompt 0.45s, coaching 500ms later). Coaching: block-by-block stagger animation, labels above border lines. Loading messages (10 rotating, fun). cs-generate.js: model `claude-sonnet-4-5` → `claude-sonnet-4-6` (root cause of all 500s). History: logs every concept viewed; layout fixed (term left, cat+date right). Stash: scenario tabs killed, universal prompt view, copy button. Tab animation: slide-down 0.45s. Stash hover-lift. Headlines: "Say something" normal + "epic." italic gold. Orphaned CSS block removed (was corrupting pitfall styling). See build-journal for 9 lessons.
+
+
   Full scenario system killed. `openSparkPanel(id?)` single entry. Panel search bar (Fuse-powered, term-first ordering). Concept display: eyebrow + Playfair bold term, no expand pill. Desktop hover → side preview (fixed positioning bug: no scrollY offset). Casino roll "↺ New concept" with collapse animation. Typewriter fires only on fresh generate; smooth expand on restore (prompt 0.45s, coaching 500ms later). Coaching: block-by-block stagger animation, labels above border lines. Loading messages (10 rotating, fun). cs-generate.js: model `claude-sonnet-4-5` → `claude-sonnet-4-6` (root cause of all 500s). History: logs every concept viewed; layout fixed (term left, cat+date right). Stash: scenario tabs killed, universal prompt view, copy button. Tab animation: slide-down 0.45s. Stash hover-lift. Headlines: "Say something" normal + "epic." italic gold. Orphaned CSS block removed (was corrupting pitfall styling). See build-journal for 9 lessons.
 
 - v2.4–v2.4f ✅ — 2026-06-24 — **index.html: founder polish, view toggle, podcast pills, spark.html promotion:**
