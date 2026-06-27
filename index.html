@@ -7767,7 +7767,7 @@
       <button class="sp-mode-pill active" id="spModeExplore" onclick="exitCornerMode()">
         🔍 Explore
       </button>
-      <button class="sp-mode-pill" id="spModeCorner" onclick="enterCornerMode()">
+      <button class="sp-mode-pill" id="spModeCorner" onclick="enterCornerMode()" onmouseenter="_cornerPillHoverIn()" onmouseleave="_cornerPillHoverOut()">
         🥊 Corner
       </button>
     </div>
@@ -12635,7 +12635,33 @@ var _cornerAudioCtx = null;
 var _cornerPlaceholderTimer = null;
 var _cornerLoadingTimer = null;
 
-var CORNER_TAGLINES = [
+// ---- Corner pill magnetic hover vibration ----
+var _cornerPillVibTimer = null;
+function _cornerPillHoverIn() {
+  if (_cornerActive) return;
+  var pill = document.getElementById('spModeCorner');
+  if (!pill) return;
+  pill.classList.add('sp-mode-pill--vibrate');
+  // Subtle sub-bass ping — very quiet
+  try {
+    if (!_cornerAudioCtx) _cornerAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    var ctx = _cornerAudioCtx;
+    if (ctx.state === 'suspended') ctx.resume();
+    var osc = ctx.createOscillator();
+    var g   = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(55, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(45, ctx.currentTime + 0.18);
+    g.gain.setValueAtTime(0.04, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.22);
+    osc.connect(g); g.connect(ctx.destination);
+    osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.24);
+  } catch(e) {}
+}
+function _cornerPillHoverOut() {
+  var pill = document.getElementById('spModeCorner');
+  if (pill) pill.classList.remove('sp-mode-pill--vibrate');
+}
   'What are you walking into?',
   'Tell me what\'s next. I\'ll find your frame.',
   'Focus. What\'s the situation?',
@@ -13128,12 +13154,11 @@ function _cornerOpenPanel(userInput, result) {
 
   panel.innerHTML =
     '<div class="stories-header">' +
-      '<span class="stories-header-label">🥊 Corner</span>' +
       '<button class="stories-close" onclick="closeCornerPanel()" aria-label="Close">✕</button>' +
     '</div>' +
-    '<div class="stories-tabs">' +
-      '<button class="stories-tab active" id="cornerTabResult" onclick="_cornerSwitchTab(\'result\')">Results</button>' +
-      '<button class="stories-tab" id="cornerTabHistory" onclick="_cornerSwitchTab(\'history\')">History</button>' +
+    '<div class="conv-panel-tabs" id="cornerTabBar">' +
+      '<button class="conv-panel-tab active" id="cornerTabResult" onclick="_cornerSwitchTab(\'result\')"><span class="conv-panel-tab-emoji">🥊</span>Corner</button>' +
+      '<button class="conv-panel-tab" id="cornerTabHistory" onclick="_cornerSwitchTab(\'history\')"><span class="conv-panel-tab-emoji">🎪</span>Situations</button>' +
     '</div>' +
     '<div id="cornerSectionResult" style="flex:1;overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column;">' +
       '<div class="corner-panel-situation" id="cornerPanelSituation">' +
@@ -13170,31 +13195,26 @@ function _cornerOpenPanel(userInput, result) {
     if (body) body.classList.add('cp-visible');
   }, 600);
 
+  // Animate fit bars for ALL cards (first card is pre-expanded, others on accordion open)
   setTimeout(function() {
-    var cards = panel.querySelectorAll('.corner-brief-card');
-    cards.forEach(function(card, i) {
-      if (i === 0) {
-        // First card already has .visible from _cornerBuildCards; just animate its fit bar
-        var fill = card.querySelector('.corner-fit-bar-fill');
-        if (fill) {
-          var score = parseInt(fill.dataset.score || '0', 10);
-          setTimeout(function() { fill.style.width = score + '%'; }, 100);
-        }
-        return;
+    // Animate first card's fit bar immediately
+    var firstCard = panel.querySelector('#cornerCard0');
+    if (firstCard) {
+      var fill = firstCard.querySelector('.corner-fit-bar-fill');
+      if (fill) {
+        var score = parseInt(fill.dataset.score || '0', 10);
+        setTimeout(function() { fill.style.width = score + '%'; }, 80);
       }
-      // Rest stagger in slowly
-      setTimeout(function() {
-        card.classList.add('visible');
-        var fill = card.querySelector('.corner-fit-bar-fill');
-        if (fill) {
-          var score = parseInt(fill.dataset.score || '0', 10);
-          setTimeout(function() { fill.style.width = score + '%'; }, 80);
-        }
-      }, i * 380);
+    }
+    // Fade in collapsed cards (2nd, 3rd) with stagger
+    var cards = panel.querySelectorAll('.corner-brief-card--accordion:not(#cornerCard0)');
+    cards.forEach(function(card, i) {
+      setTimeout(function() { card.classList.add('visible'); }, (i + 1) * 380);
     });
     var openerEl = panel.querySelector('.corner-opener-block');
     var relatedEl = panel.querySelector('.corner-related-wrap');
-    var delay = Math.max(1, cards.length) * 380;
+    var totalCards = panel.querySelectorAll('.corner-brief-card').length;
+    var delay = totalCards * 280;
     if (openerEl) setTimeout(function() { openerEl.classList.add('visible'); }, delay);
     if (relatedEl) setTimeout(function() { relatedEl.classList.add('visible'); }, delay + 200);
   }, 500);
@@ -13211,13 +13231,13 @@ function _cornerSwitchTab(tab) {
   var rSec = document.getElementById('cornerSectionResult');
   var hSec = document.getElementById('cornerSectionHistory');
   if (tab === 'result') {
-    if (rBtn) rBtn.classList.add('active');
-    if (hBtn) hBtn.classList.remove('active');
+    if (rBtn) { rBtn.classList.add('active'); }
+    if (hBtn) { hBtn.classList.remove('active'); }
     if (rSec) rSec.style.display = '';
     if (hSec) hSec.style.display = 'none';
   } else {
-    if (hBtn) hBtn.classList.add('active');
-    if (rBtn) rBtn.classList.remove('active');
+    if (hBtn) { hBtn.classList.add('active'); }
+    if (rBtn) { rBtn.classList.remove('active'); }
     if (hSec) hSec.style.display = '';
     if (rSec) rSec.style.display = 'none';
   }
@@ -13311,44 +13331,38 @@ function _cornerBuildCards(concepts, userInput) {
     var cMsg = _cornerCuratedMsg();
     var hoverIn  = 'if(window.innerWidth>1024)_cornerShowPreview(' + concept.id + ',this)';
     var hoverOut = 'if(window.innerWidth>1024)_cornerDismissPreviewDelayed()';
+    var isFirst  = (i === 0);
 
-    // First card: expanded by default. Rest: collapsed accordion.
-    var isFirst = (i === 0);
-
-    var header = '<div class="corner-brief-card-header">' +
-      '<div class="corner-cat-dot-label">' +
-        '<div class="corner-cat-dot" style="background:' + color + '"></div>' +
-        '<span class="corner-term-header-label">' + _escHtml(concept.term) + '</span>' +
-      '</div>' +
-      '<div style="display:flex;align-items:center;gap:8px">' +
-        '<div class="corner-fit-score-wrap">' +
-          '<div class="corner-fit-bar-track"><div class="corner-fit-bar-fill" data-score="' + score + '"></div></div>' +
-          '<span class="corner-fit-score-label">' + score + ' / 100</span>' +
+    // Summary row (always visible in accordion header)
+    var summary = '<div class="corner-brief-card-summary" onclick="_cornerToggleAccordion(' + i + ')">' +
+      '<div class="corner-brief-card-header">' +
+        '<div class="corner-cat-dot-label">' +
+          '<div class="corner-cat-dot" style="background:' + color + '"></div>' +
+          '<span class="corner-term-header-label">' + _escHtml(concept.term) + '</span>' +
         '</div>' +
-        (isFirst ? '' : '<span class="corner-accordion-arrow" id="cornerArrow' + i + '">↓</span>') +
+        '<div style="display:flex;align-items:center;gap:8px">' +
+          '<div class="corner-fit-score-wrap">' +
+            '<div class="corner-fit-bar-track"><div class="corner-fit-bar-fill" data-score="' + score + '"></div></div>' +
+            '<span class="corner-fit-score-label">' + score + ' / 100</span>' +
+          '</div>' +
+          '<span class="corner-accordion-arrow" id="cornerArrow' + i + '">' + (isFirst ? '↑' : '↓') + '</span>' +
+        '</div>' +
       '</div>' +
     '</div>';
 
-    var body = '<div class="corner-curated-chip">' + cMsg + '</div>' +
+    // Detail body
+    var detail = '<div class="corner-brief-card-detail" id="cornerDetail' + i + '" style="display:' + (isFirst ? 'flex' : 'none') + ';flex-direction:column;gap:12px;">' +
+      '<div class="corner-curated-chip">' + cMsg + '</div>' +
       '<div class="corner-term" onmouseenter="' + hoverIn + '" onmouseleave="' + hoverOut + '">' + _escHtml(concept.term) + '</div>' +
       _cornerBlocksHtml(c) +
-      '<button class="corner-sparring-btn" id="cornerSparBtn' + i + '" onclick="_cornerSparring(' + concept.id + ',' + i + ')">' +
-        '⚡ Sparring' +
-      '</button>' +
-      '<div class="corner-sparring-result" id="cornerSparResult' + i + '"></div>';
+      '<button class="corner-sparring-btn" id="cornerSparBtn' + i + '" onclick="_cornerSparring(' + concept.id + ',' + i + ')">⚡ Sparring</button>' +
+      '<div class="corner-sparring-result" id="cornerSparResult' + i + '"></div>' +
+    '</div>';
 
-    if (isFirst) {
-      // First card: fully expanded, no toggle
-      return '<div class="corner-brief-card visible" id="cornerCard' + i + '">' +
-        header + body +
-      '</div>';
-    } else {
-      // Collapsed accordion
-      return '<div class="corner-brief-card corner-brief-card--accordion" id="cornerCard' + i + '" data-expanded="false">' +
-        '<div class="corner-brief-card-summary" onclick="_cornerToggleAccordion(' + i + ')">' + header + '</div>' +
-        '<div class="corner-brief-card-detail" id="cornerDetail' + i + '" style="display:none;flex-direction:column;gap:12px;">' + body + '</div>' +
-      '</div>';
-    }
+    // All cards are accordion; first is pre-expanded
+    return '<div class="corner-brief-card corner-brief-card--accordion' + (isFirst ? ' visible' : '') + '" id="cornerCard' + i + '" data-expanded="' + (isFirst ? 'true' : 'false') + '">' +
+      summary + detail +
+    '</div>';
   }).join('');
 }
 function _cornerBlocksHtml(c) {
@@ -13358,7 +13372,7 @@ function _cornerBlocksHtml(c) {
 }
 
 function _cornerToggleAccordion(idx) {
-  var card = document.getElementById('cornerCard' + idx);
+  var card   = document.getElementById('cornerCard' + idx);
   var detail = document.getElementById('cornerDetail' + idx);
   var arrow  = document.getElementById('cornerArrow' + idx);
   if (!card || !detail) return;
@@ -13375,7 +13389,10 @@ function _cornerToggleAccordion(idx) {
     if (arrow) arrow.textContent = '↑';
     // Animate fit bar when expanded
     var fill = detail.querySelector('.corner-fit-bar-fill');
-    if (fill) { var sc = parseInt(fill.dataset.score||'0',10); setTimeout(function(){fill.style.width=sc+'%';},50); }
+    if (fill && !fill.style.width) {
+      var sc = parseInt(fill.dataset.score || '0', 10);
+      setTimeout(function() { fill.style.width = sc + '%'; }, 50);
+    }
   }
 }
 
@@ -13537,12 +13554,11 @@ function openCornerHistory() {
   // Build unified panel (same as _cornerOpenPanel but no result content)
   panel.innerHTML =
     '<div class="stories-header">' +
-      '<span class="stories-header-label">🥊 Corner</span>' +
       '<button class="stories-close" onclick="closeCornerPanel()" aria-label="Close">✕</button>' +
     '</div>' +
-    '<div class="stories-tabs">' +
-      '<button class="stories-tab" id="cornerTabResult" onclick="_cornerSwitchTab(\'result\')">Results</button>' +
-      '<button class="stories-tab active" id="cornerTabHistory" onclick="_cornerSwitchTab(\'history\')">History</button>' +
+    '<div class="conv-panel-tabs" id="cornerTabBar">' +
+      '<button class="conv-panel-tab" id="cornerTabResult" onclick="_cornerSwitchTab(\'result\')"><span class="conv-panel-tab-emoji">🥊</span>Corner</button>' +
+      '<button class="conv-panel-tab active" id="cornerTabHistory" onclick="_cornerSwitchTab(\'history\')"><span class="conv-panel-tab-emoji">🎪</span>Situations</button>' +
     '</div>' +
     '<div id="cornerSectionResult" style="flex:1;overflow-y:auto;overflow-x:hidden;display:none;flex-direction:column;">' +
       '<div class="sp2-empty-state"><div class="sp2-empty-icon">🥊</div>' +
@@ -19126,6 +19142,7 @@ function playStreakMilestoneSFX() {
 }
 
 /* --- Tagline --- */
+/* sp-tagline base — transition + Corner animation in Corner Mode CSS block below */
 .sp-tagline {
   font-family: 'Playfair Display', serif;
   font-weight: 700;
@@ -19135,10 +19152,7 @@ function playStreakMilestoneSFX() {
   margin: 0 0 1rem;
   letter-spacing: -0.01em;
 }
-.sp-tagline em {
-  font-style: italic;
-  color: var(--accent);
-}
+.sp-tagline em { font-style: italic; color: var(--accent); }
 
 /* --- Sub-tagline --- */
 .sp-sub {
@@ -20096,16 +20110,36 @@ body.cs-panel-open .sp-trigger-hint { display: none; }
    ============================================================ */
 
 /* ---- Headline word spans for stagger animation ---- */
+/* ---- Headline — animate as one block, not word-by-word ---- */
+/* sp-hw spans stay inline-block for layout but transition as unit via parent */
 .sp-hw {
   display: inline-block;
-  transition: opacity 0.28s ease, transform 0.28s cubic-bezier(0.4,0,0.2,1);
+  /* No individual transitions — tagline parent handles the move */
 }
-/* Corner mode: words scatter upward */
-body.corner-mode .sp-hw { opacity: 0; transform: translateY(-44px); }
+/* The tagline itself slides up and fades as one piece */
+.sp-tagline {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: clamp(2.4rem, 5vw, 3.8rem);
+  line-height: 1.1;
+  color: var(--text);
+  margin: 0 0 1rem;
+  letter-spacing: -0.01em;
+  transition: opacity 0.45s cubic-bezier(0.4,0,0.6,1), transform 0.45s cubic-bezier(0.4,0,0.6,1);
+  transform-origin: center top;
+}
+.sp-tagline em { font-style: italic; color: var(--accent); }
+body.corner-mode .sp-tagline {
+  opacity: 0;
+  transform: translateY(-40px);
+  pointer-events: none;
+}
+/* Remove per-word transitions and per-word corner-mode rules */
+body.corner-mode .sp-hw { opacity: 1; transform: none; }
 body.corner-mode #spHW0 { transition-delay: 0ms; }
-body.corner-mode #spHW1 { transition-delay: 45ms; }
-body.corner-mode #spHW2 { transition-delay: 90ms; }
-body.corner-mode #spHW3 { transition-delay: 135ms; }
+body.corner-mode #spHW1 { transition-delay: 0ms; }
+body.corner-mode #spHW2 { transition-delay: 0ms; }
+body.corner-mode #spHW3 { transition-delay: 0ms; }
 
 /* ---- Corner tagline 30% larger ---- */
 .sp-corner-tagline {
@@ -20153,8 +20187,8 @@ body.corner-mode #signupSection {
 body.corner-mode { overflow: hidden; }
 body.corner-mode .sp-trigger-hint { display: none !important; }
 body.corner-mode::before, body.corner-mode::after { opacity: 0; }
-#spSub { transition: opacity 0.28s ease, transform 0.28s ease !important; }
-body.corner-mode #spSub { opacity: 0 !important; pointer-events: none; }
+#spSub { transition: opacity 0.38s cubic-bezier(0.4,0,0.6,1), transform 0.38s cubic-bezier(0.4,0,0.6,1) !important; }
+body.corner-mode #spSub { opacity: 0 !important; transform: translateY(30px) !important; pointer-events: none; }
 
 /* ---- Search bar zoom ---- */
 .sp-hero-col { transition: transform 0.42s cubic-bezier(0.22,0.61,0.36,1); }
@@ -20265,10 +20299,18 @@ body.corner-mode #spCornerSearchWrap {
   border-color: rgba(232,213,163,0.35);
   background: rgba(232,213,163,0.06);
 }
-[data-theme="light"] .sp-mode-pill { border-color: rgba(0,0,0,0.1); }
+[data-theme="light"] .sp-mode-pill {
+  border-color: rgba(0,0,0,0.18);
+  color: #5a4f3c;
+}
+[data-theme="light"] .sp-mode-pill:hover {
+  border-color: rgba(0,0,0,0.32);
+  color: #3a3028;
+}
 [data-theme="light"] .sp-mode-pill.active {
-  border-color: rgba(184,134,11,0.4);
-  background: rgba(184,134,11,0.07);
+  border-color: rgba(184,134,11,0.55);
+  background: rgba(184,134,11,0.10);
+  color: #8a6a00;
 }
 
 /* ---- Corner results panel background ---- */
@@ -20751,6 +20793,67 @@ body.corner-panel-open .stories-panel {
 /* Ensure mode toggle row + loading text sit above canvas ---- */
 .sp-mode-toggle-row, .sp-corner-loading, #spCornerSearchWrap,
 .sp-corner-tagline, .sp-tagline, .sp-sub, #spSub { position: relative; z-index: 2; }
+
+/* ---- Corner pill magnetic vibration on hover ---- */
+@keyframes cornerPillVibrate {
+  0%   { transform: translateX(0); }
+  15%  { transform: translateX(-2px) rotate(-0.5deg); }
+  30%  { transform: translateX(2px) rotate(0.5deg); }
+  45%  { transform: translateX(-1.5px); }
+  60%  { transform: translateX(1.5px); }
+  75%  { transform: translateX(-1px); }
+  90%  { transform: translateX(0.8px); }
+  100% { transform: translateX(0); }
+}
+.sp-mode-pill--vibrate {
+  animation: cornerPillVibrate 0.38s cubic-bezier(0.36,0.07,0.19,0.97) forwards;
+}
+
+/* ---- Corner tab bar border ---- */
+#cornerTabBar {
+  border-bottom: 1px solid var(--border);
+  padding: 0 20px;
+  flex-shrink: 0;
+}
+
+/* ---- Light mode: history entries more visible ---- */
+[data-theme="light"] .corner-hist-entry {
+  border-bottom-color: rgba(0,0,0,0.10);
+}
+[data-theme="light"] .corner-hist-date {
+  color: #6b5d4a;
+  opacity: 1;
+}
+[data-theme="light"] .corner-hist-situation {
+  color: #3a3028;
+}
+[data-theme="light"] .corner-hist-terms {
+  color: #8a6a00;
+  opacity: 1;
+}
+[data-theme="light"] .corner-hist-replay {
+  border-color: rgba(0,0,0,0.18);
+  color: #8a6a00;
+}
+[data-theme="light"] .corner-hist-replay:hover {
+  background: rgba(138,106,0,0.08);
+  border-color: rgba(138,106,0,0.35);
+}
+/* ---- Light mode: sparring button ---- */
+[data-theme="light"] .corner-sparring-btn {
+  border-color: rgba(0,0,0,0.18);
+  color: #5a4f3c;
+  background: rgba(0,0,0,0.04);
+}
+[data-theme="light"] .corner-sparring-btn:hover {
+  border-color: rgba(138,106,0,0.45);
+  color: #8a6a00;
+  background: rgba(138,106,0,0.06);
+}
+/* ---- Light mode: brief card accordion summary border ---- */
+[data-theme="light"] .corner-brief-card-summary {
+  border-bottom-color: rgba(0,0,0,0.08);
+}
 
 /* ============================================================
    END CORNER MODE CSS
