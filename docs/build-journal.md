@@ -8,7 +8,53 @@
 
 ## Entries
 
-### 2026-06-25 — index.html v2.5–v2.5j: Spark panel rebuild, cs-generate fix, coaching animation, history/stash redesign
+### 2026-06-27 — index.html v2.6–v2.8f: Corner Mode, Story Mode (hidden), Sparring, cs-generate extensions
+
+**What was built:** Panel B (Story Mode) fully built then deliberately hidden. Corner Mode built from scratch: hero mode toggle, two separate search bars, constellation loading animation, Corner panel with Results + Situations tabs, Brief cards with Sparring, auto-save history. cs-generate.js extended with `situation` + `sparring` modes.
+
+---
+
+**Lesson 1 — `will-change: transform, opacity` in the base (non-animated) state kills hero rendering.**
+Applied `will-change` to `#netflixRows`, `#mainNav`, and `.browse-toggle-wrap` in base CSS rules (not inside `body.corner-mode`). This created persistent GPU compositor layers that caused the hero section to not paint correctly — hero was invisible, concept grid was empty, `ep-preload` guard appeared never removed. Root cause: persistent compositor layers interfere with normal paint order when `ep-preload` opacity transitions fire. **Rule: `will-change` must ONLY appear inside the state selector that actually triggers the animation (e.g. `body.corner-mode .element`), never on the base element rule.**
+
+---
+
+**Lesson 2 — An unescaped apostrophe inside a single-quoted JS string is invisible to `new Function()` but breaks the live browser parser.**
+`'Almost — this one's worth getting right…'` — the `'s` terminated the string early. `new Function(allJs)` didn't catch it because of how it handles internal string parsing. The live browser threw `Uncaught SyntaxError: Unexpected identifier 's'` and crashed the entire script block, making the page blank. **Rule: when writing JS string arrays with `var foo = ['...']` syntax, grep for `[a-z]'s` patterns inside single-quoted strings before presenting the file. Use `\\'` or rewrite to avoid the apostrophe.**
+
+---
+
+**Lesson 3 — Sharing a single input element between two modes (Explore search + Corner input) always produces bleed: placeholder cycles, event listeners, and dropdown triggers fight each other.**
+Multiple guard flags (`_cornerActive`) were added to the Explore event listeners, but the underlying problem was architectural. Every new patch created a new failure mode. **Rule: any time two features need different input behaviour from the same `<input>`, build two separate `<input>` elements and toggle visibility. `display:none` + `display:''` between modes is infinitely cleaner than gating shared event listeners.**
+
+---
+
+**Lesson 4 — Orphaned HTML comment close (`-->`) renders as visible text when not inside a comment opening.**
+Line 7575 had a stray `-->` (remnant of a disabled COTD block). It was hidden under the nav bar at normal scroll position — only became visible when the nav faded out in Corner mode. **Rule: when disabling large HTML blocks with `<!-- ... -->`, always grep for stray `-->` that might be left outside the actual comment pair. They render as text nodes.**
+
+---
+
+**Lesson 5 — Inline onclick string escaping breaks when the userInput contains quotes, commas, or special characters.**
+`_cornerSparkSituation(id, 'situation text here')` — if the situation string had an apostrophe, the inline `onclick` attribute broke. The button silently did nothing. Fix: store situation in a global variable (`_cornerSituationForCards`) at card-build time; `onclick` reads the global instead of injecting the string inline. **Rule: never inject user-entered text into inline `onclick` attribute strings. Always store it in a variable and reference that.**
+
+---
+
+**Lesson 6 — Animating `.sp-tagline` word-by-word via individual `<span>` transitions causes layout reflow on restore.**
+Per-word `translateY(-44px)` exit animations interacted with the `<br>` tag between "in" and "your earbuds." — when word spans became `opacity:0` + translated, the remaining visible text reflowed into a different position, so on restore the headline landed in the wrong place. Fix: animate the entire `.sp-tagline` element as one block. **Rule: if a headline has a line break inside it, never animate its child text spans individually — the reflow from one span disappearing shifts the other line unpredictably. Animate the parent.**
+
+---
+
+**Lesson 7 — Two `.sp-corner-loading.visible` CSS rules and two `.stories-overlay` rules with conflicting `display` and `background` values silently fight each other — later rule wins, earlier is wasted.**
+Multiple CSS additions across sub-versions produced duplicated rules. The later Panel B definition of `.stories-overlay` with `background: rgba(8,6,4,0.55)` overwrote the Corner Mode rule setting `background: rgba(8,6,4,0)` for the fade transition. **Rule: before adding a CSS rule for any selector, grep for existing definitions of that selector. Consolidate — never duplicate.**
+
+---
+
+**Lesson 8 — `_cornerBuildCards` function declaration was consumed by a `str_replace` that used the function's opening line as its anchor, causing `Uncaught SyntaxError: Illegal return statement`.**
+The `str_replace` pattern ended at `function _cornerBuildCards(concepts, userInput) {` but the replacement started with helper functions, so the function declaration was never re-emitted. The `return` inside `_cornerBuildCards` body appeared at top level. **Rule: when inserting code BEFORE a function declaration using str_replace, always verify the function declaration itself is present in the output. Never use `function X() {` as the old string anchor without including it verbatim in the new string.**
+
+---
+
+
 
 **What was built:**
 Complete rebuild of the Spark (CS) panel: unified `openSparkPanel()` entry, killed scenario picker system, panel search bar (Fuse-powered), casino roll new concept, typewriter prompt, block-by-block coaching animation, loading messages, History/Stash redesign, cs-generate model fix, multiple CSS animation bugs fixed.
