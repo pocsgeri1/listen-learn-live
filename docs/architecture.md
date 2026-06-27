@@ -508,6 +508,20 @@ The modal operates as a 4-state machine:
 
 **sessionStorage keys (v1.74):** `lll_cs_ai_{conceptId}_{ctx}` — written by both `_loadAI()` (CS modal) and `_convGenerateCtx()` (Stash inline generate). This is the shared hot cache. Any surface that generates a prompt must write here so the other surface picks it up without re-fetching.
 
+**sessionStorage keys added in v2.7:** `corner_situation` — written by `_cornerSparkSituation()` before opening Spark. Not currently used (Sparring replaced Corner Spark).
+
+**localStorage keys — full list (as of v2.8f):**
+| Key | Purpose |
+|-----|---------|
+| `lll_cs_saved_v1` | Spark stash. Entry: `{ id, term, category, savedAt, aiData }`. |
+| `lll_cs_history_v1` | Spark history (max 50). Entry: `{ id, term, category, ctx, ts, promptText }`. |
+| `lll_badge_date_v1` | Orphaned — still written but badge reads saved array directly. |
+| `lll_badge_count_v1` | Orphaned — same. |
+| `lll_corner_saves_v1` | Corner sessions (max 30). Entry: `{ userInput, result, ts }`. Auto-saved every result. |
+| `lll_stories_v1` | Story Mode saves (max 20). Entry: `{ scenario, date, preview, fullHtml, eyebrow, conceptIds }`. Dormant — Story Mode hidden. |
+| `lll_streak_v1` | Reading streak tracker. |
+| `lll_theme` | Dark/light mode preference. |
+
 **`_csRestoreOrLoad` v1.74c behaviour:** Loads ALL ctxs from session cache + saved storage in one pass (merged). Never drops to fresh generate if *any* ctx has data — only generates fresh if the concept has zero cached data anywhere. `_csUpdateScenarioBadges()` called after every restore.
 
 ## LocalStorage keys added/changed in v1.72
@@ -637,7 +651,59 @@ Replaces "Related concepts" button in the CS panel reveal row. Rendered as `.cs-
 
 **Mobile concept preview modal (v1.99j+):** `_spOpenMobilePreview(id, opts)` / `spDismissMobilePreview(goingToCS)` — full-screen, blurred-backdrop modal showing term/hook/plain/analogy/prompt, reusing `.back-section-label`/`.back-text`/`.back-analogy`/`.back-prompt` field classes so content always matches the real card-back. Replaces the desktop-only floating `.sp-preview-card` (CSS `display:none` ≤1024px) for three entry points: Library scan tiles, drawer scan tiles, and mobile search-result taps. `opts.fromSearch` flag controls what's left underneath on close (dropdown stays rendered, untouched, never hidden — modal just sits on top). Entrance animation: `rotateX(-8deg)` tilt settling flat, echoing the card-flip mechanic, 0.3s.
 
-**Scroll lock — `position:fixed` pattern (v1.99k+):** `_spLockBodyScroll()`/`_spUnlockBodyScroll()` — saves `window.scrollY`, pins `body` with `position:fixed; top:-scrollY`, restores exact scroll position on unlock. Used by the mobile preview modal. **Do not use plain `document.body.style.overflow = 'hidden'/''` toggling for new modals** — it's known to leave the page stuck unscrollable on iOS Safari when paired with an inner `overflow-y:auto` element that was itself scrolled. (Note: ~7 older call sites elsewhere in `spark.html` — CS panel, episode drawer, theme drawer, nav menu — still use the plain toggle and have not been retrofitted; only fix forward if a scroll-stuck bug is actually reported there.)
+## Corner Mode — v2.7–v2.8f (index.html)
+
+**Entry point:** `enterCornerMode()` / `exitCornerMode()` driven by `body.corner-mode` CSS class. All transitions are CSS-only (no JS mid-animation style writes beyond the class toggle + one CSS variable `--corner-translate-y`).
+
+**Two search bars — separate DOM elements, no shared state:**
+- `#spSearchWrap` — Explore mode. Has SVG magnifier icon, `#spSearchInput`, `#spPhOverlay`, `#spSearchClear`, `#spDropdown`. Hidden via `display:none` in Corner mode.
+- `#spCornerSearchWrap` — Corner mode. Has 🥊 emoji icon, `#spCornerInput`, `#spCornerPhOverlay`, `#spCornerSubmit`. Hidden by default, shown on `enterCornerMode()`. Wired in `initSparkHero()` independently. Zero event listener sharing with Explore bar.
+- **Why separate:** sharing a single input between two different modes always produces bleed. See build-journal Lesson 3.
+
+**Fuse.js pre-filter (client-side):**
+- Weights: `plain` 2x, `hook` 1.5x, `term` 1x. Threshold 0.55.
+- Top 12 Fuse results + 4 editors_pick wildcards from underrepresented categories = 15 candidates to API.
+- Runs synchronously in `_cornerGetCandidates()` before the API call fires.
+
+**cs-generate.js branches:**
+- `mode: 'situation'`: strict JSON, picks 1–3 from candidates only (no hallucination). Returns `{ concepts: [{conceptId, fitScore, isWildcard, whyThisFits, toFrameItWell, watchOutFor}], opener }`.
+- `mode: 'sparring'`: single concept + situation → `{ anotherAngle, counterPerspective, oneLiner }`. 500 token limit.
+
+**Corner panel (reuses Panel B DOM):**
+- `storiesOverlay` + `storiesPanel` repurposed. Panel background: `#1a1a1a` (dark mode), `#f2ece0` (light mode).
+- Tabs use `.conv-panel-tab` CSS class (identical to Spark panel tabs). `🥊 Corner` (results) + `🎪 Situations` (history).
+- Brief cards: all `.corner-brief-card--accordion`. Card 0 `data-expanded="true"` (pre-expanded). Others collapsed. `_cornerToggleAccordion(idx)` handles all states.
+- Sparring: `⚡ Sparring` button per card → `_cornerSparring(conceptId, cardIdx)` → `mode:'sparring'` API call → result fades in inline. Toggleable.
+- Auto-save: `_cornerAutoSave()` called on every API success → `lll_corner_saves_v1` (max 30, ring buffer).
+
+**Neural network constellation:**
+- `requestAnimationFrame` canvas, `z-index:1`. Text elements at `z-index:2`.
+- Hub anchored to `searchEl.getBoundingClientRect().bottom + 60px`. Rings scale to available height.
+- 4 rings: 8 + 14 + 18 + 22 nodes. Each node has independent `speedX/Y`, `driftX/Y`, `dirX/Y` for organic motion.
+- Fades in on `cornerSubmit()`, fades out on result arrival.
+
+**localStorage keys added:**
+| Key | Purpose |
+|-----|---------|
+| `lll_corner_saves_v1` | Array (max 30). Entry: `{ userInput, result, ts }`. Auto-saved on every API result. |
+
+**Performance notes:**
+- `will-change` only on `body.corner-mode .element` selectors — never on base element rules.
+- `body::before/after` fades out in corner mode (`opacity:0`) to hide hairlines.
+- No `backdrop-filter` anywhere in Corner Mode.
+- Canvas animation paused via `cancelAnimationFrame` on result arrival.
+
+---
+
+## Panel B — Story Mode (v2.6, currently hidden)
+
+Built and preserved. Story nav button `display:none`, scenario pills `display:none`, `openStoriesPanel()` is a no-op stub. `SP_STORY_SEEDS` with locked seeds 1–2 remains in codebase. `lll_stories_v1` localStorage key reserved (max 20 entries). Activate when an interactive mechanic justifies passive story reading.
+
+**State machine (dormant):** Entry (scenario picker) → Loading → Story (Playfair body + `[[LABEL:Term]]` chip markers → gold term chips) → Term Peek (floats left of panel / bottom sheet mobile) → Outro (Spark CTA + Save + Another). My Stories tab with Revisit.
+
+---
+
+ `_spLockBodyScroll()`/`_spUnlockBodyScroll()` — saves `window.scrollY`, pins `body` with `position:fixed; top:-scrollY`, restores exact scroll position on unlock. Used by the mobile preview modal. **Do not use plain `document.body.style.overflow = 'hidden'/''` toggling for new modals** — it's known to leave the page stuck unscrollable on iOS Safari when paired with an inner `overflow-y:auto` element that was itself scrolled. (Note: ~7 older call sites elsewhere in `spark.html` — CS panel, episode drawer, theme drawer, nav menu — still use the plain toggle and have not been retrofitted; only fix forward if a scroll-stuck bug is actually reported there.)
 
 **Two separate scan-tile implementations (do not assume a fix in one covers the other):** Library scan mode uses `.sc-tile` (built by `_spReinjectScanTiles`, delegated click listener on `#netflixRows`). Episode/theme drawers use a completely separate `.ep-drawer-scan-tile` (built inline inside `setDrawerView`, per-tile click listeners). Both should call `_spScanTileClick(id, anchorEl)` as their click handler — that function is mobile/desktop-aware (routes to `_spOpenMobilePreview` vs `_spScanPreview`). If either implementation is changed independently, check the other.
 
