@@ -12692,6 +12692,28 @@ var CORNER_LOADING_MSGS = [
 ];
 
 // ---- SFX via Web Audio API — no external files ----
+function _cornerDingSFX() {
+  // Boxing bell "ding ding" — two metallic triangle tones 0.38s apart
+  try {
+    if (!_cornerAudioCtx) _cornerAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    var ctx = _cornerAudioCtx;
+    if (ctx.state === 'suspended') ctx.resume();
+    function _bell(t) {
+      var o1 = ctx.createOscillator(), o2 = ctx.createOscillator(), g = ctx.createGain();
+      o1.type = o2.type = 'triangle';
+      o1.frequency.setValueAtTime(820, t);
+      o2.frequency.setValueAtTime(1640, t);
+      g.gain.setValueAtTime(0, t);
+      g.gain.linearRampToValueAtTime(0.18, t + 0.012);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 1.6);
+      o1.connect(g); o2.connect(g); g.connect(ctx.destination);
+      o1.start(t); o2.start(t); o1.stop(t + 1.7); o2.stop(t + 1.7);
+    }
+    _bell(ctx.currentTime);
+    _bell(ctx.currentTime + 0.38);
+  } catch(e) {}
+}
+
 function _cornerPlaySFX(enter) {
   try {
     if (!_cornerAudioCtx) _cornerAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -12819,7 +12841,12 @@ function exitCornerMode() {
   if (_cornerPlaceholderTimer) { clearTimeout(_cornerPlaceholderTimer); _cornerPlaceholderTimer = null; }
 
   document.body.classList.remove('corner-mode');
+  void document.body.offsetHeight; // force reflow so CSS transitions fire from new state
   document.body.style.removeProperty('--corner-translate-y');
+
+  // Reset corner tagline transition-delay so it doesn't trap the fade-out
+  var ctag = document.getElementById('spCornerTagline');
+  if (ctag) { ctag.style.transitionDelay = ''; }
 
   // Toggle pill states
   var pe = document.getElementById('spModeExplore');
@@ -12869,6 +12896,7 @@ function cornerSubmit() {
     if (input) { input.focus(); }
     return;
   }
+  _cornerDingSFX();
 
   // Hide Corner placeholder overlay
   var cornerPh = document.getElementById('spCornerPhOverlay');
@@ -13155,12 +13183,12 @@ function _cornerOpenPanel(userInput, result) {
   var opener = result.opener || '';
 
   panel.innerHTML =
-    '<div class="stories-header">' +
-      '<button class="stories-close" onclick="closeCornerPanel()" aria-label="Close">✕</button>' +
-    '</div>' +
-    '<div class="conv-panel-tabs" id="cornerTabBar">' +
-      '<button class="conv-panel-tab active" id="cornerTabResult" onclick="_cornerSwitchTab(\'result\')"><span class="conv-panel-tab-emoji">🥊</span>Corner</button>' +
-      '<button class="conv-panel-tab" id="cornerTabHistory" onclick="_cornerSwitchTab(\'history\')"><span class="conv-panel-tab-emoji">🎪</span>Situations</button>' +
+    '<div class="conv-header">' +
+      '<div class="conv-panel-tabs" id="cornerTabBar">' +
+        '<button class="conv-panel-tab active" id="cornerTabResult" onclick="_cornerSwitchTab(\'result\')"><span class="conv-panel-tab-emoji">🥊</span>Corner</button>' +
+        '<button class="conv-panel-tab" id="cornerTabHistory" onclick="_cornerSwitchTab(\'history\')"><span class="conv-panel-tab-emoji">🎪</span>Situations</button>' +
+      '</div>' +
+      '<button class="conv-close" onclick="closeCornerPanel()" aria-label="Close">✕</button>' +
     '</div>' +
     '<div id="cornerSectionResult" style="flex:1;overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column;">' +
       '<div class="corner-panel-situation" id="cornerPanelSituation">' +
@@ -13555,12 +13583,12 @@ function openCornerHistory() {
 
   // Build unified panel (same as _cornerOpenPanel but no result content)
   panel.innerHTML =
-    '<div class="stories-header">' +
-      '<button class="stories-close" onclick="closeCornerPanel()" aria-label="Close">✕</button>' +
-    '</div>' +
-    '<div class="conv-panel-tabs" id="cornerTabBar">' +
-      '<button class="conv-panel-tab" id="cornerTabResult" onclick="_cornerSwitchTab(\'result\')"><span class="conv-panel-tab-emoji">🥊</span>Corner</button>' +
-      '<button class="conv-panel-tab active" id="cornerTabHistory" onclick="_cornerSwitchTab(\'history\')"><span class="conv-panel-tab-emoji">🎪</span>Situations</button>' +
+    '<div class="conv-header">' +
+      '<div class="conv-panel-tabs" id="cornerTabBar">' +
+        '<button class="conv-panel-tab" id="cornerTabResult" onclick="_cornerSwitchTab(\'result\')"><span class="conv-panel-tab-emoji">🥊</span>Corner</button>' +
+        '<button class="conv-panel-tab active" id="cornerTabHistory" onclick="_cornerSwitchTab(\'history\')"><span class="conv-panel-tab-emoji">🎪</span>Situations</button>' +
+      '</div>' +
+      '<button class="conv-close" onclick="closeCornerPanel()" aria-label="Close">✕</button>' +
     '</div>' +
     '<div id="cornerSectionResult" style="flex:1;overflow-y:auto;overflow-x:hidden;display:none;flex-direction:column;">' +
       '<div class="sp2-empty-state"><div class="sp2-empty-icon">🥊</div>' +

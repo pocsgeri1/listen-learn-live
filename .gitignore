@@ -1,0 +1,14 @@
+# macOS system files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# Editor temp files
+*.swp
+*.swo
+*~
+
+# Node (if ever needed)
+node_modules/
