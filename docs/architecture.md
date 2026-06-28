@@ -5,7 +5,7 @@
 ### Layer 1 — Concepts (the unit)
 - Stored in `concepts.json` on GitHub, served from Vercel as `./concepts.json`
 - Each concept has the 10-field schema (see quality-rules.md). 10th field `timestamp` (integer seconds, nullable) added v1.34 — drives the deep-link "↗ Listen" button on the live site with an 8-second pre-roll buffer.
-- **Live count: ~594 records as of v2.0c (2026-06-21). 42 concepts (ids 425–466) deleted this cycle when collections 513/514 were removed. Do not cite a fixed number in docs or code — query `max(id)` from `concepts.json` instead.**
+- **Live count: ~669 records as of v2.10 (2026-06-28). Do not cite a fixed number in docs or code — query `max(id)` from `concepts.json` instead.**
 - Belongs to **one** category (of 14) and optionally **one** legacy
   `collection_id` (episode/curated-pack collection, may be `null`)
 - **`curated_collection_ids` (added v1.78):** array of 0–2 ids pointing into
@@ -256,17 +256,19 @@ fire in immediate succession with another (e.g. category pill → theme tile
 
 | File              | Owns                                              |
 |-------------------|---------------------------------------------------|
-| concepts.json     | The concept entities (the source of truth) — 594 concepts as of 2026-06-21 (was 636; collections 513/514 deleted) |
-| collections.json  | The collection entities (curated packs + episodes) — 44 entries as of 2026-06-21 |
-| **index.html**    | **The live site (v2.4+). spark.html was promoted to index.html on 2026-06-24. spark.html is retired. Old index.html archived as index-legacy.html.** |
+| concepts.json     | The concept entities (the source of truth) — 669 concepts as of 2026-06-28 (was 594; 31 new concepts IDs 639–669 added, collection 519). Do not cite a fixed number in docs or code. |
+| collections.json  | The collection entities (curated packs + episodes) — includes collection 519 (Something Is Very Wrong With Modern Life, Modern Wisdom) as of 2026-06-28 |
+| **index.html**    | **The live site (v2.4+). spark.html promoted to index.html 2026-06-24. spark.html retired. Old index.html archived as index-legacy.html. Both JSON fetches cache-busted with `?v=Date.now()` (added v2.10).** |
 | index-legacy.html | Archived legacy UI (v172 base, pre-spark, ~10k lines). Not served in production. Safe to delete after 2026-07-24. |
 | airtable          | Editorial workflow + APPROVED gating              |
 | make.com          | Glue between Airtable and the GitHub publish API  |
-| /api/extract-concepts.js | Claude API → candidate concepts. **Live Automation 1 endpoint** — the actual prompt Make.com triggers, distinct from the reference `extraction-prompt-v1_X.txt` files. Confirm changes land here, not just in the reference doc. |
+| /api/extract-concepts.js | Claude API → candidate concepts. **Live Automation 1 endpoint** — the actual prompt Make.com triggers, distinct from the reference `extraction-prompt-v1_X.txt` files. Confirm changes land here, not just in the reference doc. Active prompt: v1.8.1 (2026-06-28). |
 | /api/publish-concept.js  | Approved concept → committed to GitHub     |
 | /api/subscribe.js | Newsletter signup (Brevo)                       |
-| hook-style-guide.md / term-style-guide.md / plain-style-guide.md | Canonical editorial rule sets for hook/term/plain fields. Kept in sync across `extract-concepts.js`, `extract.html`'s regen prompt, and `extraction-prompt-v1_X.txt` — when one changes, check all three. |
+| hook-style-guide.md / term-style-guide.md / plain-style-guide.md / analogy-style-guide.md / prompt-style-guide.md | Canonical editorial rule sets for all 5 concept fields. Kept in sync across `extract-concepts.js`, `extract.html`'s 3 prompt strings (EXTRACTION_PROMPT, SHORT_EXTRACTION_PROMPT, REGEN_SYSTEM_PROMPT), and `extraction-prompt-v1_X.txt` — when one changes, update all four locations. `analogy-style-guide.md` and `prompt-style-guide.md` added v2.10. |
 | plain-batch.js / plain-batch.html | Plain-field batch rewrite tool (v2.1). Built but not yet proven at scale — see build-journal 2026-06-20/21 entry before relying on it for a large pass. |
+| concept-rewrite-prompt.md | Reusable prompt for rewriting individual live concepts in a fresh chat. Contains all v1.8 field rules + self-check + commit format. Added v2.10. |
+| extraction-prompt-v1_8.txt | Reference doc for the active extraction prompt. **NOT a live source** — `extract-concepts.js` and `extract.html` are the live files. Update this after updating the live files, not before. |
 
 - Newsletter signup: `/api/subscribe.js` → Brevo POST /v3/contacts → list ID 3
 - Feedback capture: `/api/feedback.js` → Brevo POST /v3/smtp/email → getepistemic.app@gmail.com
