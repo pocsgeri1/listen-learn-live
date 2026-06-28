@@ -6,6 +6,27 @@
 
 ---
 
+## v2.11 — 2026-06-28 — episode_meta.json + index.html: Episode DNA pill row
+
+**Session scope:** Phase 1 + 2 of Episode Intelligence Layer. New `episode_meta.json` data file. DNA pill + popover in episode and theme drawers.
+
+### New file: episode_meta.json
+- Scaffolded for all 30 existing episodes (collection_ids 1–519 where concepts exist)
+- `dna` field computed from `concepts.json` — category % distribution per episode, sorted highest to lowest
+- All other fields (`summary`, `sharpest_line`, `tension`, `verdict_listen`, `verdict_skip`, `vocab_vault`) null — ready for extraction pipeline
+
+### index.html — Episode Intel pill row
+- New `ep-intel-row` div inserted between `ep-drawer-mix` and `ep-drawer-filter-row` in both episode and theme drawers
+- `DNA` pill: live, styled (DM Mono, 10px uppercase, ghost border). Shows category breakdown on hover (desktop) / tap (mobile)
+- DNA popover: floats above pill row, no layout shift. Shows category name + coloured 3px bar + % — sorted highest to lowest. Categories at 0% omitted
+- Future pills (`Summary`, `Line`, `Tension`, `Verdict`, `Vocab`) rendered greyed out (`opacity: 0.28`, pointer-events none) — placeholder until data exists
+- `EPISODE_META` fetch + cache added (fetches once, reused across all drawer opens)
+- Intel row cleared on each drawer re-open (no stale state)
+- Full light-mode + mobile support
+- Theme drawer wired identically to episode drawer (theme `collection_id` lookup)
+
+---
+
 ## v2.9 — 2026-06-28 — index.html: Corner Mode bug fixes + Cowork workflow established
 
 **Session scope:** Three Corner Mode fixes. GitHub Desktop + Cowork auto-commit workflow set up. Identity documents created. No new features.

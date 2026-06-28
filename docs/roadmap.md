@@ -9,7 +9,8 @@
 
 - **Identity docs v1 fine-tuning** — `epistemic-identity-private.md` and `epistemic-identity-public.md` created (2026-06-28). Private: 1,500-word manifesto (taste as product philosophy, moat framing, belonging machine thesis). Public: ~400-word about/one-pager. Both v1 — need Gergely's corrections before finalising.
 - **Founder section → expandable** — add "Read more ↓" arrow at bottom of founder section; expanded state reveals selected passages from identity docs + Moat framing. Design TBD.
-- **"Is it worth my time?" feature + 5 transcript data ideas** — full spec session needed. Ideas in play: episode narrative summary (journalist tone, not bullet points), verdict block (listen if X / skip if Y), sharpest line, concept prerequisite map, episode DNA category bar, tension tracker, vocabulary vault. Explore more extreme / unexplored uses of transcript + episode data. Spec to include extraction prompt changes, data model (new field on episode object vs separate file), UI placement (episode drawer, behind button).
+- **Episode Intelligence Layer — Phase 2** — full intelligence block (Summary, Sharpest Line, Tension, Verdict, Vocab Vault). All 6 pills live with popovers. Requires style guide session (in-chat) + extraction prompt extension. yt-dlp recovery script for existing episodes. Theme drawer intel block deferred until theme drawer overhaul.
+- **Theme drawer overhaul** — theme names need simplification (more like the 14 foundational categories). Full restructure session needed before wiring Episode Intel into theme drawer.
 - **Corner pre-programmed scenarios** — quick-access pills below Corner search bar (pre-written situations → instant pre-programmed results, no API call). Content and mechanic to be designed separately.
 - **Fluency Fingerprint (v2.9):** Pure localStorage. Track every Sparked/stashed concept. Derive: strongest category, blind spot, stash-vs-sparked ratio. Surface in Stash tab as 3–4 lines. Zero API cost.
 - **Lightweight user ID system (v2.9):** UUID in localStorage → `lll_user_id`. Every Spark/stash action pings a lightweight endpoint that writes `{user_id, concept_id, action, ts}` to Airtable. Unlocks cross-device and Weekly Push email.
@@ -25,6 +26,8 @@
 - **Admin editorial picks tool** — `admin-picks.html` at `tools.epistemic.live`.
 
 ## Recently completed
+
+- v2.11 ✅ — 2026-06-28 — **episode_meta.json + index.html: Episode DNA pill row.** New `episode_meta.json` scaffolded (30 episodes, DNA populated from concepts.json). DNA pill + hover popover in episode and theme drawers. Future intel pills (Summary, Line, Tension, Verdict, Vocab) greyed out as placeholders. Full spec for Phase 2 complete (in-chat).
 
 - v2.9 ✅ — 2026-06-28 — **index.html: Corner ding SFX, hero text restore, panel header layout.** `.gitignore` added. Cowork auto-commit workflow established.
 

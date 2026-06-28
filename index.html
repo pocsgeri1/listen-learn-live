@@ -1118,6 +1118,132 @@
   .ep-drawer-mix {
     display: none;
   }
+
+  /* ── EPISODE INTEL PILL ROW — v2.11 ─────────────────────────────────────── */
+  .ep-intel-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0.55rem 2rem 0.45rem;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .ep-intel-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 3px 9px;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: transparent;
+    color: rgba(240,237,232,0.45);
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s, background 0.15s;
+    position: relative;
+    white-space: nowrap;
+  }
+  [data-theme="light"] .ep-intel-pill {
+    border-color: rgba(0,0,0,0.12);
+    color: rgba(30,27,22,0.45);
+  }
+  .ep-intel-pill:hover,
+  .ep-intel-pill.active {
+    color: rgba(240,237,232,0.88);
+    border-color: rgba(255,255,255,0.22);
+    background: rgba(232,213,163,0.07);
+  }
+  [data-theme="light"] .ep-intel-pill:hover,
+  [data-theme="light"] .ep-intel-pill.active {
+    color: rgba(30,27,22,0.88);
+    border-color: rgba(0,0,0,0.2);
+    background: rgba(232,213,163,0.12);
+  }
+  .ep-intel-pill[data-empty] {
+    opacity: 0.28;
+    cursor: default;
+    pointer-events: none;
+  }
+  /* DNA popover */
+  .ep-intel-popover {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 0;
+    z-index: 999;
+    background: #161616;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    padding: 13px 16px;
+    min-width: 220px;
+    max-width: 320px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.55);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+  }
+  [data-theme="light"] .ep-intel-popover {
+    background: #f0ede8;
+    border-color: rgba(0,0,0,0.1);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  }
+  .ep-intel-popover.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .ep-intel-popover-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.55rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(240,237,232,0.38);
+    margin-bottom: 10px;
+  }
+  [data-theme="light"] .ep-intel-popover-label {
+    color: rgba(30,27,22,0.38);
+  }
+  .ep-dna-row {
+    display: grid;
+    grid-template-columns: 80px 1fr 28px;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 6px;
+  }
+  .ep-dna-row:last-child { margin-bottom: 0; }
+  .ep-dna-cat {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    text-transform: capitalize;
+    color: rgba(240,237,232,0.65);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  [data-theme="light"] .ep-dna-cat { color: rgba(30,27,22,0.65); }
+  .ep-dna-bar-wrap {
+    height: 3px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  [data-theme="light"] .ep-dna-bar-wrap { background: rgba(0,0,0,0.08); }
+  .ep-dna-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+  }
+  .ep-dna-pct {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    color: rgba(240,237,232,0.45);
+    text-align: right;
+  }
+  [data-theme="light"] .ep-dna-pct { color: rgba(30,27,22,0.45); }
+  @media (max-width: 768px) {
+    .ep-intel-row { padding: 0.5rem 1.25rem 0.4rem; gap: 5px; overflow-x: auto; flex-wrap: nowrap; scrollbar-width: none; }
+    .ep-intel-row::-webkit-scrollbar { display: none; }
+    .ep-intel-popover { max-width: calc(100vw - 32px); }
+  }
+  /* ── END EPISODE INTEL ───────────────────────────────────────────────────── */
+
   .ep-drawer-pills {
     display: flex;
     flex-wrap: wrap;
@@ -7893,6 +8019,7 @@
   </div>
   <div class="ep-drawer-pills" id="epDrawerPills"></div>
   <div class="ep-drawer-mix" id="epDrawerMix"></div>
+  <div class="ep-intel-row" id="epIntelRow"></div>
   <div class="ep-drawer-filter-row">
     <div class="ep-drawer-cat-filter" id="epDrawerCatFilter"></div>
     <div class="ep-drawer-sort-row" id="epDrawerSortRow" style="display:none">
@@ -7923,6 +8050,7 @@
   </div>
   <div class="ep-drawer-pills" id="themeDrawerPills"></div>
   <div class="ep-drawer-mix" id="themeDrawerMix"></div>
+  <div class="ep-intel-row" id="themeIntelRow"></div>
   <div class="ep-drawer-filter-row">
     <div class="ep-drawer-cat-filter" id="themeDrawerCatFilter"></div>
     <div class="ep-drawer-sort-row" id="themeDrawerSortRow" style="display:none">
@@ -8642,6 +8770,111 @@ const CAT_COLOR = {
   power:'#d4715a', psychology:'#a08fd4', relationships:'#c47a9f', science:'#6ab0c4',
   society:'#7090a8', 'tech-ai':'#b8a07a', thinking:'#7aaf8a'
 };
+
+// ── EPISODE INTEL — v2.11 ─────────────────────────────────────────────────
+// Fetches episode_meta.json once, caches in EPISODE_META. Renders intel pill
+// row (DNA-only for now) into the given row element.
+
+let EPISODE_META = null;
+let _episodeMetaPromise = null;
+
+function _loadEpisodeMeta() {
+  if (EPISODE_META) return Promise.resolve(EPISODE_META);
+  if (_episodeMetaPromise) return _episodeMetaPromise;
+  _episodeMetaPromise = fetch('/episode_meta.json')
+    .then(r => r.json())
+    .then(data => { EPISODE_META = data; return data; })
+    .catch(() => { EPISODE_META = { episodes: {} }; return EPISODE_META; });
+  return _episodeMetaPromise;
+}
+
+function _renderIntelRow(rowEl, collectionId) {
+  if (!rowEl) return;
+  rowEl.innerHTML = '';
+  _loadEpisodeMeta().then(meta => {
+    const entry = meta.episodes && meta.episodes[String(collectionId)];
+    const dna = entry && entry.dna && Object.keys(entry.dna).length > 0 ? entry.dna : null;
+
+    // DNA pill
+    const dnaPill = document.createElement('button');
+    dnaPill.className = 'ep-intel-pill';
+    dnaPill.textContent = 'DNA';
+    if (!dna) dnaPill.setAttribute('data-empty', '1');
+    rowEl.appendChild(dnaPill);
+
+    // Future pills — greyed out until data exists
+    ['Summary','Line','Tension','Verdict','Vocab'].forEach(label => {
+      const p = document.createElement('button');
+      p.className = 'ep-intel-pill';
+      p.textContent = label;
+      p.setAttribute('data-empty', '1');
+      rowEl.appendChild(p);
+    });
+
+    if (!dna) return;
+
+    // Build popover
+    const popover = document.createElement('div');
+    popover.className = 'ep-intel-popover';
+    const labelEl = document.createElement('div');
+    labelEl.className = 'ep-intel-popover-label';
+    labelEl.textContent = 'Episode DNA';
+    popover.appendChild(labelEl);
+
+    Object.entries(dna).forEach(([cat, pct]) => {
+      const row = document.createElement('div');
+      row.className = 'ep-dna-row';
+      const catColor = CAT_COLOR[cat] || '#e8d5a3';
+      row.innerHTML = `
+        <div class="ep-dna-cat">${cat}</div>
+        <div class="ep-dna-bar-wrap"><div class="ep-dna-bar-fill" style="width:${pct}%;background:${catColor}"></div></div>
+        <div class="ep-dna-pct">${pct}%</div>`;
+      popover.appendChild(row);
+    });
+
+    // Position popover relative to pill row (row must be position:relative)
+    rowEl.style.position = 'relative';
+    rowEl.appendChild(popover);
+
+    // Hover bridge — show popover when over pill or popover
+    let _hideTimer = null;
+    function showPopover() {
+      clearTimeout(_hideTimer);
+      // Align popover left edge to DNA pill
+      const pillRect = dnaPill.getBoundingClientRect();
+      const rowRect = rowEl.getBoundingClientRect();
+      popover.style.left = (pillRect.left - rowRect.left) + 'px';
+      popover.classList.add('visible');
+    }
+    function scheduleHide() {
+      _hideTimer = setTimeout(() => popover.classList.remove('visible'), 120);
+    }
+    dnaPill.addEventListener('mouseenter', showPopover);
+    dnaPill.addEventListener('mouseleave', scheduleHide);
+    popover.addEventListener('mouseenter', () => clearTimeout(_hideTimer));
+    popover.addEventListener('mouseleave', scheduleHide);
+
+    // Mobile: tap to toggle
+    dnaPill.addEventListener('click', function(e) {
+      if (window.matchMedia('(hover:none)').matches) {
+        e.stopPropagation();
+        if (popover.classList.contains('visible')) {
+          popover.classList.remove('visible');
+        } else {
+          showPopover();
+        }
+      }
+    });
+    // Tap outside to close on mobile
+    document.addEventListener('click', function _closeIntelPopover(e) {
+      if (!rowEl.contains(e.target)) {
+        popover.classList.remove('visible');
+        document.removeEventListener('click', _closeIntelPopover);
+      }
+    });
+  });
+}
+// ── END EPISODE INTEL ─────────────────────────────────────────────────────
 
 // Convert a hex color to rgba() with given opacity — used for card bg tints.
 function hexToRgba(hex, alpha) {
@@ -9633,6 +9866,7 @@ function openEpisodeDrawer(collectionId) {
   document.getElementById('epDrawerSubtitle').textContent = '';
   document.getElementById('epDrawerCountBadge').textContent = '';
   document.getElementById('epDrawerPills').innerHTML = '';
+  document.getElementById('epIntelRow').innerHTML = '';
   document.getElementById('epDrawerCatFilter').innerHTML = '';
   document.getElementById('epDrawerGrid').innerHTML = _emptyStateHtml('loading', 'Loading concepts…');
   document.getElementById('epBackdrop').classList.add('open');
@@ -9682,6 +9916,9 @@ function _renderDrawerContent(col, collectionId) {
   // and colored by its top categories. Complements (doesn't match) the
   // painterly AI images used for theme drawers.
   _setEpisodeHeroBg(col, sortedCats);
+
+  // Episode intel pill row — v2.11
+  _renderIntelRow(document.getElementById('epIntelRow'), collectionId);
 
   // Concept cards — grouped by category, one column per category
   const grid = document.getElementById('epDrawerGrid');
@@ -10239,6 +10476,7 @@ function openThemeDrawer(id) {
   document.getElementById('themeDrawerTitle').textContent = col.title;
   document.getElementById('themeDrawerSubtitle').textContent = col.tagline || '';
   document.getElementById('themeDrawerPills').innerHTML = '';
+  document.getElementById('themeIntelRow').innerHTML = '';
   document.getElementById('themeDrawerCountBadge').textContent = '';
   document.getElementById('themeDrawerCatFilter').innerHTML = '';
   document.getElementById('themeDrawerGrid').innerHTML = _emptyStateHtml('loading', 'Loading concepts…');
@@ -10279,6 +10517,9 @@ function _renderThemeDrawerContent(col, id) {
         return `<div class="episode-mix-segment" style="width:${pct}%;background:${CAT_COLOR[cat]||'#e8d5a3'}"></div>`;
       }).join('')
     : '';
+
+  // Episode intel pill row — v2.11
+  _renderIntelRow(document.getElementById('themeIntelRow'), id);
 
   const grid = document.getElementById('themeDrawerGrid');
   if (!matches.length) {

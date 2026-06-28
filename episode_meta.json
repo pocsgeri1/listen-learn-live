@@ -1,0 +1,474 @@
+{
+  "episodes": {
+    "1": {
+      "collection_id": 1,
+      "summary": null,
+      "sharpest_line": null,
+      "tension": null,
+      "verdict_listen": null,
+      "verdict_skip": null,
+      "vocab_vault": [],
+      "dna": {
+        "thinking": 67,
+        "psychology": 33
+      }
+    },
+    "2": {
+      "collection_id": 2,
+      "summary": null,
+      "sharpest_line": null,
+      "tension": null,
+      "verdict_listen": null,
+      "verdict_skip": null,
+      "vocab_vault": [],
+      "dna": {
+        "finance": 100
+      }
+    },
+    "3": {
+      "collection_id": 3,
+      "summary": null,
+      "sharpest_line": null,
+      "tension": null,
+      "verdict_listen": null,
+      "verdict_skip": null,
+      "vocab_vault": [],
+      "dna": {
+        "society": 44,
+        "relationships": 29,
+        "power": 26
+      }
+    },
+    "4": {
+      "collection_id": 4,
+      "summary": null,
+      "sharpest_line": null,
+      "tension": null,
+      "verdict_listen": null,
+      "verdict_skip": null,
+      "vocab_vault": [],
+      "dna": {
+        "language": 100
+      }
+    },
+    "5": {
+      "collection_id": 5,
+      "summary": null,
+      "sharpest_line": null,
+      "tension": null,
+      "verdict_listen": null,
+      "verdict_skip": null,
+      "vocab_vault": [],
+      "dna": {
+        "philosophy": 43,
+        "identity": 43,
+        "health": 14
+      }
+    },
+    "6": {
+      "collection_id": 6,
+      "summary": null,
+      "sharpest_line": null,
+      "tension": null,
+      "verdict_listen": null,
+      "verdict_skip": null,
+      "vocab_vault": [],
+      "dna": {
+        "business": 100
+      }
+    },
+    "10": {
+      "collection_id": 10,
+      "summary": null,
+      "sharpest_line": null,
+      "tension": null,
+      "verdict_listen": null,
+      "verdict_skip": null,
+      "vocab_vault": [],
+      "dna": {
+        "finance": 100
+      }
+    },
+    "11": {
+      "collection_id": 11,
+      "summary": null,
+      "sharpest_line": null,
+      "tension": null,
+      "verdict_listen": null,
+      "verdict_skip": null,
+      "vocab_vault": [],
+      "dna": {
+        "creativity": 27,
+        "language": 27,
+        "business": 27,
+        "thinking": 9,
+        "psychology": 9
+      }
+    },
+    "12": {
+      "collection_id": 12,
+      "summary": null,
+      "sharpest_line": null,
+      "tension": null,
+      "verdict_listen": null,
+      "verdict_skip": null,
+      "vocab_vault": [],
+      "dna": {
+        "business": 50,
+        "psychology": 15,
+        "thinking": 10,
+        "relationships": 5,
+        "language": 5,
+        "power": 5,
+        "society": 5,
+        "finance": 5
+      }
+    },
+    "13": {
+      "collection_id": 13,
+      "summary": null,
+      "sharpest_line": null,
+      "tension": null,
+      "verdict_listen": null,
+      "verdict_skip": null,
+      "vocab_vault": [],
+      "dna": {
+        "psychology": 30,
+        "relationships": 30,
+        "thinking": 22,
+        "language": 15,
+        "identity": 4
+      }
+    },
+    "14": {
+      "collection_id": 14,
+      "summary": null,
+      "sharpest_line": null,
+      "tension": null,
+      "verdict_listen": null,
+      "verdict_skip": null,
+      "vocab_vault": [],
+      "dna": {
+        "psychology": 29,
+        "relationships": 21,
+        "identity": 13,
+        "thinking": 13,
+        "language": 8,
+        "society": 8,
+        "business": 4,
+        "tech-ai": 4
+      }
+    },
+    "15": {
+      "collection_id": 15,
+      "summary": null,
+      "sharpest_line": null,
+      "tension": null,
+      "verdict_listen": null,
+      "verdict_skip": null,
+      "vocab_vault": [],
+      "dna": {
+        "health": 27,
+        "tech-ai": 23,
+        "science": 18,
+        "psychology": 9,
+        "society": 9,
+        "finance": 9,
+        "business": 5
+      }
+    },
+    "500": {
+      "collection_id": 500,
+      "summary": null,
+      "sharpest_line": null,
+      "tension": null,
+      "verdict_listen": null,
+      "verdict_skip": null,
+      "vocab_vault": [],
+      "dna": {
+        "psychology": 67,
+        "thinking": 33
+      }
+    },
+    "501": {
+      "collection_id": 501,
+      "summary": null,
+      "sharpest_line": null,
+      "tension": null,
+      "verdict_listen": null,
+      "verdict_skip": null,
+      "vocab_vault": [],
+      "dna": {
+        "relationships": 33,
+        "society": 23,
+        "psychology": 17,
+        "identity": 10,
+        "power": 10,
+        "science": 3,
+        "thinking": 3
+      }
+    },
+    "502": {
+      "collection_id": 502,
+      "summary": null,
+      "sharpest_line": null,
+      "tension": null,
+      "verdict_listen": null,
+      "verdict_skip": null,
+      "vocab_vault": [],
+      "dna": {
+        "tech-ai": 29,
+        "business": 14,
+        "society": 14,
+        "thinking": 10,
+        "power": 10,
+        "identity": 10,
+        "philosophy": 10,
+        "health": 5
+      }
+    },
+    "503": {
+      "collection_id": 503,
+      "summary": null,
+      "sharpest_line": null,
+      "tension": null,
+      "verdict_listen": null,
+      "verdict_skip": null,
+      "vocab_vault": [],
+      "dna": {
+        "business": 29,
+        "thinking": 14,
+        "finance": 14,
+        "identity": 10,
+        "psychology": 5,
+        "creativity": 5,
+        "relationships": 5,
+        "language": 5,
+        "tech-ai": 5,
+        "philosophy": 5,
+        "society": 5
+      }
+    },
+    "504": {
+      "collection_id": 504,
+      "summary": null,
+      "sharpest_line": null,
+      "tension": null,
+      "verdict_listen": null,
+      "verdict_skip": null,
+      "vocab_vault": [],
+      "dna": {
+        "psychology": 30,
+        "thinking": 25,
+        "business": 15,
+        "identity": 10,
+        "finance": 10,
+        "society": 5,
+        "philosophy": 5
+      }
+    },
+    "505": {
+      "collection_id": 505,
+      "summary": null,
+      "sharpest_line": null,
+      "tension": null,
+      "verdict_listen": null,
+      "verdict_skip": null,
+      "vocab_vault": [],
+      "dna": {
+        "relationships": 25,
+        "psychology": 16,
+        "philosophy": 16,
+        "thinking": 9,
+        "society": 9,
+        "power": 9,
+        "identity": 6,
+        "creativity": 6,
+        "tech-ai": 3
+      }
+    },
+    "506": {
+      "collection_id": 506,
+      "summary": null,
+      "sharpest_line": null,
+      "tension": null,
+      "verdict_listen": null,
+      "verdict_skip": null,
+      "vocab_vault": [],
+      "dna": {
+        "thinking": 50,
+        "identity": 50
+      }
+    },
+    "507": {
+      "collection_id": 507,
+      "summary": null,
+      "sharpest_line": null,
+      "tension": null,
+      "verdict_listen": null,
+      "verdict_skip": null,
+      "vocab_vault": [],
+      "dna": {
+        "psychology": 50,
+        "philosophy": 50
+      }
+    },
+    "508": {
+      "collection_id": 508,
+      "summary": null,
+      "sharpest_line": null,
+      "tension": null,
+      "verdict_listen": null,
+      "verdict_skip": null,
+      "vocab_vault": [],
+      "dna": {
+        "psychology": 50,
+        "identity": 50
+      }
+    },
+    "509": {
+      "collection_id": 509,
+      "summary": null,
+      "sharpest_line": null,
+      "tension": null,
+      "verdict_listen": null,
+      "verdict_skip": null,
+      "vocab_vault": [],
+      "dna": {
+        "business": 100
+      }
+    },
+    "510": {
+      "collection_id": 510,
+      "summary": null,
+      "sharpest_line": null,
+      "tension": null,
+      "verdict_listen": null,
+      "verdict_skip": null,
+      "vocab_vault": [],
+      "dna": {
+        "psychology": 100
+      }
+    },
+    "511": {
+      "collection_id": 511,
+      "summary": null,
+      "sharpest_line": null,
+      "tension": null,
+      "verdict_listen": null,
+      "verdict_skip": null,
+      "vocab_vault": [],
+      "dna": {
+        "psychology": 67,
+        "relationships": 33
+      }
+    },
+    "512": {
+      "collection_id": 512,
+      "summary": null,
+      "sharpest_line": null,
+      "tension": null,
+      "verdict_listen": null,
+      "verdict_skip": null,
+      "vocab_vault": [],
+      "dna": {
+        "business": 100
+      }
+    },
+    "515": {
+      "collection_id": 515,
+      "summary": null,
+      "sharpest_line": null,
+      "tension": null,
+      "verdict_listen": null,
+      "verdict_skip": null,
+      "vocab_vault": [],
+      "dna": {
+        "psychology": 48,
+        "thinking": 32,
+        "identity": 8,
+        "creativity": 4,
+        "business": 4,
+        "philosophy": 4
+      }
+    },
+    "516": {
+      "collection_id": 516,
+      "summary": null,
+      "sharpest_line": null,
+      "tension": null,
+      "verdict_listen": null,
+      "verdict_skip": null,
+      "vocab_vault": [],
+      "dna": {
+        "business": 48,
+        "thinking": 16,
+        "philosophy": 16,
+        "identity": 4,
+        "psychology": 4,
+        "tech-ai": 4,
+        "language": 4,
+        "society": 4
+      }
+    },
+    "517": {
+      "collection_id": 517,
+      "summary": null,
+      "sharpest_line": null,
+      "tension": null,
+      "verdict_listen": null,
+      "verdict_skip": null,
+      "vocab_vault": [],
+      "dna": {
+        "business": 48,
+        "thinking": 24,
+        "psychology": 14,
+        "creativity": 10,
+        "relationships": 5
+      }
+    },
+    "518": {
+      "collection_id": 518,
+      "summary": null,
+      "sharpest_line": null,
+      "tension": null,
+      "verdict_listen": null,
+      "verdict_skip": null,
+      "vocab_vault": [],
+      "dna": {
+        "business": 26,
+        "thinking": 23,
+        "psychology": 16,
+        "society": 10,
+        "creativity": 10,
+        "philosophy": 3,
+        "tech-ai": 3,
+        "language": 3,
+        "finance": 3,
+        "power": 3
+      }
+    },
+    "519": {
+      "collection_id": 519,
+      "summary": null,
+      "sharpest_line": null,
+      "tension": null,
+      "verdict_listen": null,
+      "verdict_skip": null,
+      "vocab_vault": [],
+      "dna": {
+        "tech-ai": 16,
+        "psychology": 16,
+        "philosophy": 13,
+        "science": 10,
+        "relationships": 10,
+        "business": 10,
+        "thinking": 10,
+        "identity": 6,
+        "society": 3,
+        "health": 3,
+        "creativity": 3
+      }
+    }
+  }
+}

@@ -30,6 +30,19 @@ Body:   - bullet 1
 
 ## Entries
 
+### 2026-06-28 — v2.11: Episode Intelligence Layer Phase 1 (DNA pill)
+
+**Lesson 8 — Compute derived data at build time, not runtime.**
+Category % DNA is computed from `concepts.json` via Node script at session start and stored in `episode_meta.json`. Zero runtime cost. The browser already had equivalent logic (the old `ep-drawer-mix` bar) but running server-side means consistent data across all surfaces and no repeated computation per drawer open.
+
+**Lesson 9 — Floating popovers need `position:relative` on the pill row, not the drawer.**
+`ep-intel-row` is `position:relative`; the popover is `position:absolute` relative to it. If scoped to the drawer, it would shift on scroll. Always anchor absolute overlays to their nearest scroll-independent ancestor.
+
+**Lesson 10 — Use `window.matchMedia('(hover:none)')` to gate tap-toggle on mobile.**
+True on touch-only devices, false on desktop (even touchscreens with a mouse). Correct way to distinguish hover behaviour from click behaviour without relying on `ontouchstart` checks.
+
+---
+
 ### 2026-06-28 — index.html v2.9: Corner fixes + Cowork workflow
 
 **Lesson 4 — CSS class removal alone doesn't guarantee transitions fire cleanly.**
