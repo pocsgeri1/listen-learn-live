@@ -81,7 +81,7 @@ Job: explain the mechanism so clearly the reader could explain it back five minu
 5. No jargon (see Feynman strip list above).
 6. No overlap with hook or analogy — no scenario, image, or fact repeated across fields.
 7. Over the limit? Cut the single weakest sentence WHOLE. Never rewrite surviving sentences vaguer. Repeat until under ceiling.
-8. Never use a metaphor or image in the plain. That belongs in the analogy.
+8. Never use a metaphor or image in the plain — that belongs in the analogy.
 9. EXCEPTION: acronyms/named terms must still spell out their expansion somewhere in the field, just not as the opening clause.
 
 ANALOGY FIELD RULES
@@ -91,12 +91,12 @@ ANALOGY FIELD RULES
 Job: one concrete image that makes the mechanism click. Not explain. Not summarise. Just the scene.
 
 1. Hard ceiling: 25 words. Count before moving on.
-2. Strong preference: land it in 1 sentence. 2 sentences only if the second genuinely adds — never explains.
-3. NEVER open with "It's like…" — vary the opener every time.
-4. No explanation after the image. The scene speaks for itself. If you feel the urge to add "which means…" or "just like…" — cut it.
-5. No abstract comparisons ("like the difference between X and Y" without a specific picturable scene).
-6. Never use a metaphor or image already used in the hook or plain.
-7. No jargon. No academic register.
+2. Strong preference: 1 sentence. 2 only if the second genuinely adds — never explains.
+3. NEVER open with "It's like…". Vary the opener on every card — no two analogies in a batch should start the same way.
+4. Concrete, vivid, specific. Must be picturable. Famous people, specific objects, real places are encouraged. Abstract = cut.
+5. No explanation after the image. Cut anything starting with "which means," "just like," or "in the same way."
+6. No abstract comparisons ("the difference between X and Y") without a specific picturable scene.
+7. Never repeat a metaphor or image already used in the hook or plain on this card.
 
 PROMPT FIELD RULES
 ------------------
@@ -225,7 +225,7 @@ SELF-CHECK BEFORE RETURNING OUTPUT (5 checks only — run all 5)
 1. EM-DASH SCAN: Search every hook, plain, and analogy for "—". Zero allowed. Replace with period, comma, or colon.
 2. HOOK LENGTH + ONE IDEA: Count words. Any hook over 14 words — cut it. Any hook with two clauses where the second just continues the first — cut to one.
 3. PLAIN LENGTH: Count characters. Any plain over 350 chars / 55 words — cut the single weakest sentence whole. Do not rewrite. Do not abstract.
-4. ANALOGY CHECK: (a) Read first 3 words of every analogy — any that starts with "It's like" rewrite the opener. (b) Count words — any analogy over 25 words, cut to the core image. (c) If there's an explanation sentence after the image, delete it.
+4. ANALOGY CHECK: (a) starts with "It's like" → rewrite opener. (b) over 25 words → cut to core image only. (c) explanation sentence after the image → delete it.
 5. ANTI-SLOP SCAN: Check every hook and plain for: "You're not X, you're Y" / "It's not X, it's Y"; "Most people don't realize…"; "Here's the thing:"; -ing verb opener with no subject; motivational poster cadence; triads of exactly three. Rewrite any that match before returning.
 
 Return ONLY a valid JSON array. No preamble. No markdown. No explanation.`;
