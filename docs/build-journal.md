@@ -46,6 +46,25 @@ The sandbox has no SSH key or stored credential for github.com. `git push` exits
 
 ---
 
+### 2026-06-28 — v2.10: Pipeline — extraction prompt v1.8/v1.8.1, cache fix, concept rewrites
+
+**Lesson 1 — Prompt rules disappear silently during compression without a diff against a test batch.**
+v1.7→v1.8 compressed each field to max 8 rules. Three analogy rules ("concrete/vivid/specific", "vary opener across batch", "famous people/objects/places encouraged") didn't survive. They weren't explicitly removed — they just didn't make the cut. Discovered only after live-testing 31 concepts. **Rule: when compressing a prompt, diff removed rules against a known-good test batch. Any rule whose absence would cause a failure must survive.**
+
+**Lesson 2 — "It's like" ban is not enough. The model adds explanation sentences after varied openers too.**
+A 4-sentence analogy starting with "A cruise ship circling…" passed the opener check but still ran 35 words with two appended explanation sentences. Root cause: no explicit rule against explanation sentences, no word ceiling. **Rule: put the ceiling as rule 1. Add an explicit "no explanation after the image" rule. Ceiling without no-explanation doesn't prevent bloat.**
+
+**Lesson 3 — CDN cache doesn't reliably invalidate when a static file shrinks then grows.**
+`fetch('./concepts.json')` worked fine when the file only grew. After deleting ~42 concepts then publishing 31 new ones, Vercel CDN served the old cached version on some edge nodes. Drawer showed 0 concepts. Fix: `?v=Date.now()`. **Rule: any static JSON used as a live data source that may shrink must be cache-busted.**
+
+**Lesson 4 — Reviewing 31 concepts in one shot is unmanageable. Batch size 5 is the limit.**
+First pass: all 31 rewrites generated at once. Issues missed. Fix: 5-concept batch workflow with PASS/REWRITE diagnosis per field, approval, running JSON log, final merge. **Rule: batch size 5 for editorial review. Running log file — not memory. Never merge speculatively.**
+
+**Lesson 5 — Fixing an analogy opener means changing only the opener, not the content.**
+Early rewrites replaced whole analogies — new content, new image. Correct fix: preserve the original image exactly, rewrite only the first 3 words. **Rule: if new opener conveys the same image as the old one, the fix is right. If the content changed, you went too far.**
+
+---
+
 ### 2026-06-27 — index.html v2.6–v2.8f: Corner Mode, Story Mode (hidden), Sparring, cs-generate extensions
 
 **What was built:** Panel B (Story Mode) fully built then deliberately hidden. Corner Mode built from scratch: hero mode toggle, two separate search bars, constellation loading animation, Corner panel with Results + Situations tabs, Brief cards with Sparring, auto-save history. cs-generate.js extended with `situation` + `sparring` modes.
