@@ -21,6 +21,42 @@
 
 ---
 
+## v2.10 — 2026-06-28 — Pipeline: extraction prompt v1.8/v1.8.1, cache fix, concept rewrites (collection 519)
+
+**Session scope:** Editorial and pipeline session. No frontend version changes. Extraction prompt overhauled, cache bug fixed, 31 concepts rewritten, new style guides and tools created.
+
+### Extraction prompt v1.8 — simplification pass
+Root cause of live failures (31 concepts from collection 519): prompt had grown to 15–20 rules per field through v1.4–v1.7 accretion. Symptoms: hooks with 2 clauses continuing the same idea, plains averaging 60–75 words, em-dashes in every plain, all analogies opening with "It's like…"
+
+- Each field compressed to max 8 rules
+- Em-dash ban moved from self-check to `❌ NO EM-DASHES` header at top of each field — visible at write time, not audit time
+- "It's like" ban added to analogy section AND self-check item 4
+- Self-check trimmed from 11 items to 5 highest-signal checks
+- Removed: hook pattern menu, voice-blend weighting table, generation sequence, repeat-back gate, bracketed-example rule
+
+### Extraction prompt v1.8.1 — analogy rules tightened
+After live-testing: analogies still bloated (3–4 sentences with explanatory tails). Also found v1.7→v1.8 migration had silently dropped three analogy rules.
+
+- Analogy: 25-word hard ceiling, 1-sentence preference, no-explanation-after-image rule
+- Analogy: restored "concrete/vivid/specific/picturable", "vary opener per batch", "famous people/objects/places encouraged"
+- Plain: new rule 8 — never use metaphor/image in plain (belongs in analogy)
+- Self-check item 4 upgraded: checks opener + word count + explanation sentence in one step
+- Applied across: `extract-concepts.js`, all 3 prompt strings in `extract.html` (EXTRACTION_PROMPT, SHORT_EXTRACTION_PROMPT, REGEN_SYSTEM_PROMPT), `extraction-prompt-v1_8.txt`
+- `feynman-batch.js` not modified (separate job)
+
+### Bug fix — concepts.json cache not invalidating after publish
+`fetch('./concepts.json')` with no cache param worked fine when file only ever grew. After deleting ~42 concepts then publishing 31 new ones, CDN served the old cached version — drawer showed 0 concepts for collection 519. Fix: `?v=' + Date.now()` appended to both `concepts.json` and `collections.json` fetches in `index.html`.
+
+### Concept rewrites — collection 519 (31 concepts, IDs 639–669)
+All 31 concepts extracted before v1.8 rewritten field-by-field against v1.8 rules. Batch workflow: 5 per batch, PASS/REWRITE diagnosis per field, approval, running JSON log, single merge to `concepts.json`. Fields changed: hook, plain, analogy across all 31. Terms and prompts largely preserved. Key fixes: em-dashes removed, "It's like" openers rewritten (content kept, opener only changed), plains trimmed to ≤55 words.
+
+### New files
+- `analogy-style-guide.md` — same format as hook/plain/term guides. Full rules, good/bad examples, self-check.
+- `prompt-style-guide.md` — same format. All 5 prompt types (A–E) with examples, hard rules, self-check.
+- `concept-rewrite-prompt.md` — reusable prompt for rewriting individual live concepts in a fresh chat. Contains all v1.8 field rules + self-check + commit format.
+
+---
+
 ## v2.6 → v2.8f — 2026-06-27 — index.html + cs-generate.js: Corner Mode, Panel B (Story), Sparring
 
 **Session scope:** Two major feature arcs built and refined across ~20 sub-versions. Panel B (Story Mode) fully built then deliberately hidden pending a stronger interactive mechanic. Corner Mode built from scratch as the primary new user-facing feature. cs-generate.js extended with two new API branches.
