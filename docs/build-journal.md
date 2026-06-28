@@ -30,6 +30,15 @@ Body:   - bullet 1
 
 ## Entries
 
+### 2026-06-28 — v2.11: git disaster + standing rule
+
+**Lesson 11 — NEVER use GIT_INDEX_FILE workaround. Ever.**
+Using `GIT_INDEX_FILE=/tmp/...` to bypass index.lock creates a blank staging area. The commit goes through but contains only the files explicitly added to that temp index — everything else gets deleted from git tracking. The repo looks intact on disk but GitHub shows 74 files missing. Recovery requires a force push, which caused 30 minutes of pain. The only correct response to index.lock is: stop, tell the user to run `rm -f .git/index.lock` in Terminal, then commit normally. No shortcuts.
+
+**Standing rule (enforced from now on):** If index.lock or HEAD.lock blocks a bash commit, Claude gives the user a single `rm -f` command for Terminal and waits. No workarounds. No alternative git invocations.
+
+---
+
 ### 2026-06-28 — v2.11: Episode Intelligence Layer Phase 1 (DNA pill)
 
 **Lesson 8 — Compute derived data at build time, not runtime.**
