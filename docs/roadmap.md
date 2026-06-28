@@ -19,15 +19,17 @@
 - **OG image** — `/og-image.png` not yet in repo root. Add for `og:image` + `twitter:image` tags.
 - **`duplicate_of` bug** — concepts with `duplicate_of` set are suppressed from library/search entirely. Correct behaviour: only affects drawer-level display. Separate session fix.
 - **Collection 501 keep/cut decision** — 17 flagged for cut, 13 keep/rewrite. Deferred.
-- **Plain rewrite — ~500 concepts not yet touched** against v2.2 rules.
+- **Plain rewrite — ~500 concepts not yet touched** against v2.2 rules. Use `concept-rewrite-prompt.md` for individual rewrites.
 - **Hook rewrite v2.0 — ~487 concepts remaining.**
+- **Analogy rewrite pass** — pre-v1.8 concepts likely have "It's like" openers and over-long explanations. Prioritise after hook rewrite. Use `concept-rewrite-prompt.md`.
 - **Admin editorial picks tool** — `admin-picks.html` at `tools.epistemic.live`.
-- **Legal pages review** — `privacy.html` and `terms.html` need professional review.
-- **Extraction prompt v1.8** — approved but not yet executed in `extract-concepts.js` or `extract.html`.
 
 ## Recently completed
 
 - v2.9 ✅ — 2026-06-28 — **index.html: Corner ding SFX, hero text restore, panel header layout.** `.gitignore` added. Cowork auto-commit workflow established.
+
+- v2.10 ✅ — 2026-06-28 — **Pipeline: extraction prompt v1.8/v1.8.1, cache fix, concept rewrites (collection 519):**
+  Extraction prompt simplified from v1.7 (15–20 rules/field → max 8). Em-dash ban moved to field headers. Analogy: 25-word ceiling, 1-sentence preference, no-explanation-after-image, "It's like" ban, vary-opener-per-batch, concrete/vivid/specific restored, famous-people/objects/places restored. Plain: no-metaphor rule added. Self-check trimmed to 5 items. Applied across `extract-concepts.js` + all 3 prompt strings in `extract.html`. Cache-busting added to both JSON fetches (`?v=Date.now()`). 31 concepts (IDs 639–669, collection 519) rewritten field-by-field. New files: `analogy-style-guide.md`, `prompt-style-guide.md`, `concept-rewrite-prompt.md`.
 
 - v2.6–v2.8f ✅ — 2026-06-27 — **index.html + cs-generate.js: Corner Mode, Story Mode (hidden), Sparring:**
   Panel B (Story Mode) built and hidden — code preserved, nav button + scenario pills `display:none`. Corner Mode: hero Explore/Corner toggle, two separate search bars (`spSearchWrap` Explore + `spCornerSearchWrap` Corner), Web Audio SFX (78Hz chord enter, 155Hz exit), 8 random taglines, constellation neural-network loading animation (hub + 3 rings, RAF canvas, no text overlap), Brief cards (all accordion, card 0 pre-expanded), 3 coaching blocks per card (Why/Frame/Watch out), fit score bars animate on open, auto-save to `lll_corner_saves_v1`, Situations history tab. Corner panel: `conv-panel-tab` design (identical to Spark), `🥊 Corner` + `🎪 Situations` tabs. Sparring: `⚡ Sparring` per card → `mode:'sparring'` API → anotherAngle/counterPerspective/oneLiner inline. cs-generate.js: `mode:'situation'` branch (Fuse pre-filter, wildcard concept, human-voice coaching) + `mode:'sparring'` branch. Headline animates as single block (no per-word stagger). Corner pill hover: vibration keyframe + 55Hz ping. Stray `-->` text node deleted. Spark Copy/New Concept buttons muted (no gold fill). Hero + section spacing improved. Two separate search inputs (no shared state — eliminates all placeholder bleed).
