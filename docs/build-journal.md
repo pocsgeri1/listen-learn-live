@@ -30,6 +30,22 @@ Body:   - bullet 1
 
 ## Entries
 
+### 2026-06-28 — index.html v2.9: Corner fixes + Cowork workflow
+
+**Lesson 4 — CSS class removal alone doesn't guarantee transitions fire cleanly.**
+Removing `corner-mode` from `body.classList` should trigger CSS transitions back to base state — but the browser may batch it with other DOM reads in the same frame, so the transition sees no state change. Fix: `void document.body.offsetHeight` immediately after `classList.remove()` forces a synchronous reflow, making the browser commit the new state before the transition engine runs. Without it, hero text stayed displaced after exiting Corner mode.
+
+**Lesson 5 — `transition-delay` on entry doesn't auto-clear on exit.**
+`sp-corner-tagline` had `transition-delay: 260ms` on the `body.corner-mode` selector. When exiting, removing the class should reverse the transition — but the delay was inherited from the previous enter state and trapped the fade-out. Fix: explicitly reset `el.style.transitionDelay = ''` in `exitCornerMode()` immediately after class removal.
+
+**Lesson 6 — Bash git operations conflict with GitHub Desktop if both run against the same repo simultaneously.**
+Running `git add` / `git commit` from the Cowork bash sandbox while GitHub Desktop has the repo open leaves `.git/HEAD.lock` and `.git/objects/maintenance.lock` behind. GitHub Desktop then refuses to fetch/pull with "lock file already exists." Fix going forward: always close or background GitHub Desktop before running git commands from bash. If locks appear, user deletes them via Terminal: `rm -f ~/Documents/GitHub/listen-learn-live/.git/*.lock` and similar.
+
+**Lesson 7 — The Cowork bash sandbox cannot `git push` — no GitHub credentials available.**
+The sandbox has no SSH key or stored credential for github.com. `git push` exits 128 with "could not read Username." Commits work fine (local). Push must be done by the user in GitHub Desktop (one click: "Push origin"). This is the permanent workflow — don't attempt to automate push from bash.
+
+---
+
 ### 2026-06-27 — index.html v2.6–v2.8f: Corner Mode, Story Mode (hidden), Sparring, cs-generate extensions
 
 **What was built:** Panel B (Story Mode) fully built then deliberately hidden. Corner Mode built from scratch: hero mode toggle, two separate search bars, constellation loading animation, Corner panel with Results + Situations tabs, Brief cards with Sparring, auto-save history. cs-generate.js extended with `situation` + `sparring` modes.

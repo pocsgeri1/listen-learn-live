@@ -7,6 +7,9 @@
 
 ## Next up
 
+- **Identity docs v1 fine-tuning** — `epistemic-identity-private.md` and `epistemic-identity-public.md` created (2026-06-28). Private: 1,500-word manifesto (taste as product philosophy, moat framing, belonging machine thesis). Public: ~400-word about/one-pager. Both v1 — need Gergely's corrections before finalising.
+- **Founder section → expandable** — add "Read more ↓" arrow at bottom of founder section; expanded state reveals selected passages from identity docs + Moat framing. Design TBD.
+- **"Is it worth my time?" feature + 5 transcript data ideas** — full spec session needed. Ideas in play: episode narrative summary (journalist tone, not bullet points), verdict block (listen if X / skip if Y), sharpest line, concept prerequisite map, episode DNA category bar, tension tracker, vocabulary vault. Explore more extreme / unexplored uses of transcript + episode data. Spec to include extraction prompt changes, data model (new field on episode object vs separate file), UI placement (episode drawer, behind button).
 - **Corner pre-programmed scenarios** — quick-access pills below Corner search bar (pre-written situations → instant pre-programmed results, no API call). Content and mechanic to be designed separately.
 - **Fluency Fingerprint (v2.9):** Pure localStorage. Track every Sparked/stashed concept. Derive: strongest category, blind spot, stash-vs-sparked ratio. Surface in Stash tab as 3–4 lines. Zero API cost.
 - **Lightweight user ID system (v2.9):** UUID in localStorage → `lll_user_id`. Every Spark/stash action pings a lightweight endpoint that writes `{user_id, concept_id, action, ts}` to Airtable. Unlocks cross-device and Weekly Push email.
@@ -23,6 +26,8 @@
 - **Extraction prompt v1.8** — approved but not yet executed in `extract-concepts.js` or `extract.html`.
 
 ## Recently completed
+
+- v2.9 ✅ — 2026-06-28 — **index.html: Corner ding SFX, hero text restore, panel header layout.** `.gitignore` added. Cowork auto-commit workflow established.
 
 - v2.6–v2.8f ✅ — 2026-06-27 — **index.html + cs-generate.js: Corner Mode, Story Mode (hidden), Sparring:**
   Panel B (Story Mode) built and hidden — code preserved, nav button + scenario pills `display:none`. Corner Mode: hero Explore/Corner toggle, two separate search bars (`spSearchWrap` Explore + `spCornerSearchWrap` Corner), Web Audio SFX (78Hz chord enter, 155Hz exit), 8 random taglines, constellation neural-network loading animation (hub + 3 rings, RAF canvas, no text overlap), Brief cards (all accordion, card 0 pre-expanded), 3 coaching blocks per card (Why/Frame/Watch out), fit score bars animate on open, auto-save to `lll_corner_saves_v1`, Situations history tab. Corner panel: `conv-panel-tab` design (identical to Spark), `🥊 Corner` + `🎪 Situations` tabs. Sparring: `⚡ Sparring` per card → `mode:'sparring'` API → anotherAngle/counterPerspective/oneLiner inline. cs-generate.js: `mode:'situation'` branch (Fuse pre-filter, wildcard concept, human-voice coaching) + `mode:'sparring'` branch. Headline animates as single block (no per-word stagger). Corner pill hover: vibration keyframe + 55Hz ping. Stray `-->` text node deleted. Spark Copy/New Concept buttons muted (no gold fill). Hero + section spacing improved. Two separate search inputs (no shared state — eliminates all placeholder bleed).

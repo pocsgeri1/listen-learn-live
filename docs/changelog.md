@@ -6,6 +6,21 @@
 
 ---
 
+## v2.9 — 2026-06-28 — index.html: Corner Mode bug fixes + Cowork workflow established
+
+**Session scope:** Three Corner Mode fixes. GitHub Desktop + Cowork auto-commit workflow set up. Identity documents created. No new features.
+
+### Corner Mode fixes
+- **Ding ding SFX** — `_cornerDingSFX()` added: two metallic triangle-oscillator bell tones (820Hz + 1640Hz harmonic), 0.38s apart, fired at top of `cornerSubmit()`. Boxing bell on every "Corner me →" submit. Reuses `_cornerAudioCtx`.
+- **Hero text restore on exit** — `exitCornerMode()` now forces a reflow tick (`void document.body.offsetHeight`) immediately after `classList.remove('corner-mode')` so CSS transitions read the new state cleanly before firing. Also resets `transitionDelay` on `spCornerTagline` so the 260ms entry delay doesn't trap the fade-out on exit.
+- **Corner panel header layout** — both `_cornerOpenPanel()` and `openCornerHistory()` now use `conv-header` wrapping `conv-panel-tabs` (left, `flex:1`) + `conv-close` button (right). Identical structure to Spark panel. Previously used `stories-header` (X left, no flex) + loose `conv-panel-tabs` below — tabs took up half the panel height.
+
+### Infrastructure
+- `.gitignore` added to repo root — suppresses `.DS_Store` and editor temp files permanently.
+- Cowork auto-commit workflow live: Claude edits files + commits via bash; Gergely clicks Push origin in GitHub Desktop.
+
+---
+
 ## v2.6 → v2.8f — 2026-06-27 — index.html + cs-generate.js: Corner Mode, Panel B (Story), Sparring
 
 **Session scope:** Two major feature arcs built and refined across ~20 sub-versions. Panel B (Story Mode) fully built then deliberately hidden pending a stronger interactive mechanic. Corner Mode built from scratch as the primary new user-facing feature. cs-generate.js extended with two new API branches.
