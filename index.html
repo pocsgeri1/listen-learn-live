@@ -1119,14 +1119,20 @@
     display: none;
   }
 
-  /* ── EPISODE INTEL PILL ROW — v2.11 ─────────────────────────────────────── */
-  .ep-intel-row {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 0.55rem 2rem 0.45rem;
+  /* ── EPISODE INTEL PILLS — v2.11b ───────────────────────────────────────── */
+  /* Pills injected into ep-drawer-pills row. Desktop: inline. Mobile: wraps. */
+  .ep-pills-intel-sep {
+    display: inline-block;
+    width: 1px;
+    height: 12px;
+    background: rgba(255,255,255,0.12);
+    margin: 0 2px;
+    align-self: center;
     flex-shrink: 0;
-    position: relative;
+  }
+  [data-theme="light"] .ep-pills-intel-sep { background: rgba(0,0,0,0.12); }
+  @media (max-width: 768px) {
+    .ep-pills-intel-sep { width: 100%; height: 0; background: none; margin: 0; }
   }
   .ep-intel-pill {
     font-family: 'DM Mono', monospace;
@@ -1238,8 +1244,6 @@
   }
   [data-theme="light"] .ep-dna-pct { color: rgba(30,27,22,0.45); }
   @media (max-width: 768px) {
-    .ep-intel-row { padding: 0.5rem 1.25rem 0.4rem; gap: 5px; overflow-x: auto; flex-wrap: nowrap; scrollbar-width: none; }
-    .ep-intel-row::-webkit-scrollbar { display: none; }
     .ep-intel-popover { max-width: calc(100vw - 32px); }
   }
   /* ── END EPISODE INTEL ───────────────────────────────────────────────────── */
@@ -8019,7 +8023,6 @@
   </div>
   <div class="ep-drawer-pills" id="epDrawerPills"></div>
   <div class="ep-drawer-mix" id="epDrawerMix"></div>
-  <div class="ep-intel-row" id="epIntelRow"></div>
   <div class="ep-drawer-filter-row">
     <div class="ep-drawer-cat-filter" id="epDrawerCatFilter"></div>
     <div class="ep-drawer-sort-row" id="epDrawerSortRow" style="display:none">
@@ -8050,7 +8053,6 @@
   </div>
   <div class="ep-drawer-pills" id="themeDrawerPills"></div>
   <div class="ep-drawer-mix" id="themeDrawerMix"></div>
-  <div class="ep-intel-row" id="themeIntelRow"></div>
   <div class="ep-drawer-filter-row">
     <div class="ep-drawer-cat-filter" id="themeDrawerCatFilter"></div>
     <div class="ep-drawer-sort-row" id="themeDrawerSortRow" style="display:none">
@@ -8788,19 +8790,25 @@ function _loadEpisodeMeta() {
   return _episodeMetaPromise;
 }
 
-function _renderIntelRow(rowEl, collectionId) {
-  if (!rowEl) return;
-  rowEl.innerHTML = '';
+function _renderIntelRow(pillsEl, collectionId) {
+  // Injects intel pills directly into the drawer pills row (ep-drawer-pills).
+  // Desktop: pills sit inline after date/listen. Mobile: wraps to next line.
+  if (!pillsEl) return;
   _loadEpisodeMeta().then(meta => {
     const entry = meta.episodes && meta.episodes[String(collectionId)];
     const dna = entry && entry.dna && Object.keys(entry.dna).length > 0 ? entry.dna : null;
+
+    // Thin separator between date/listen pills and intel pills
+    const sep = document.createElement('span');
+    sep.className = 'ep-pills-intel-sep';
+    pillsEl.appendChild(sep);
 
     // DNA pill
     const dnaPill = document.createElement('button');
     dnaPill.className = 'ep-intel-pill';
     dnaPill.textContent = 'DNA';
     if (!dna) dnaPill.setAttribute('data-empty', '1');
-    rowEl.appendChild(dnaPill);
+    pillsEl.appendChild(dnaPill);
 
     // Future pills — greyed out until data exists
     ['Summary','Line','Tension','Verdict','Vocab'].forEach(label => {
@@ -8808,12 +8816,12 @@ function _renderIntelRow(rowEl, collectionId) {
       p.className = 'ep-intel-pill';
       p.textContent = label;
       p.setAttribute('data-empty', '1');
-      rowEl.appendChild(p);
+      pillsEl.appendChild(p);
     });
 
     if (!dna) return;
 
-    // Build popover
+    // Build popover anchored to pillsEl
     const popover = document.createElement('div');
     popover.className = 'ep-intel-popover';
     const labelEl = document.createElement('div');
@@ -8822,27 +8830,25 @@ function _renderIntelRow(rowEl, collectionId) {
     popover.appendChild(labelEl);
 
     Object.entries(dna).forEach(([cat, pct]) => {
-      const row = document.createElement('div');
-      row.className = 'ep-dna-row';
+      const rowDiv = document.createElement('div');
+      rowDiv.className = 'ep-dna-row';
       const catColor = CAT_COLOR[cat] || '#e8d5a3';
-      row.innerHTML = `
+      rowDiv.innerHTML = `
         <div class="ep-dna-cat">${cat}</div>
         <div class="ep-dna-bar-wrap"><div class="ep-dna-bar-fill" style="width:${pct}%;background:${catColor}"></div></div>
         <div class="ep-dna-pct">${pct}%</div>`;
-      popover.appendChild(row);
+      popover.appendChild(rowDiv);
     });
 
-    // Position popover relative to pill row (row must be position:relative)
-    rowEl.style.position = 'relative';
-    rowEl.appendChild(popover);
+    pillsEl.style.position = 'relative';
+    pillsEl.appendChild(popover);
 
-    // Hover bridge — show popover when over pill or popover
+    // Hover bridge
     let _hideTimer = null;
     function showPopover() {
       clearTimeout(_hideTimer);
-      // Align popover left edge to DNA pill
       const pillRect = dnaPill.getBoundingClientRect();
-      const rowRect = rowEl.getBoundingClientRect();
+      const rowRect = pillsEl.getBoundingClientRect();
       popover.style.left = (pillRect.left - rowRect.left) + 'px';
       popover.classList.add('visible');
     }
@@ -8854,20 +8860,15 @@ function _renderIntelRow(rowEl, collectionId) {
     popover.addEventListener('mouseenter', () => clearTimeout(_hideTimer));
     popover.addEventListener('mouseleave', scheduleHide);
 
-    // Mobile: tap to toggle
+    // Mobile tap-toggle
     dnaPill.addEventListener('click', function(e) {
       if (window.matchMedia('(hover:none)').matches) {
         e.stopPropagation();
-        if (popover.classList.contains('visible')) {
-          popover.classList.remove('visible');
-        } else {
-          showPopover();
-        }
+        popover.classList.contains('visible') ? popover.classList.remove('visible') : showPopover();
       }
     });
-    // Tap outside to close on mobile
     document.addEventListener('click', function _closeIntelPopover(e) {
-      if (!rowEl.contains(e.target)) {
+      if (!pillsEl.contains(e.target)) {
         popover.classList.remove('visible');
         document.removeEventListener('click', _closeIntelPopover);
       }
@@ -9866,7 +9867,6 @@ function openEpisodeDrawer(collectionId) {
   document.getElementById('epDrawerSubtitle').textContent = '';
   document.getElementById('epDrawerCountBadge').textContent = '';
   document.getElementById('epDrawerPills').innerHTML = '';
-  document.getElementById('epIntelRow').innerHTML = '';
   document.getElementById('epDrawerCatFilter').innerHTML = '';
   document.getElementById('epDrawerGrid').innerHTML = _emptyStateHtml('loading', 'Loading concepts…');
   document.getElementById('epBackdrop').classList.add('open');
@@ -9917,8 +9917,8 @@ function _renderDrawerContent(col, collectionId) {
   // painterly AI images used for theme drawers.
   _setEpisodeHeroBg(col, sortedCats);
 
-  // Episode intel pill row — v2.11
-  _renderIntelRow(document.getElementById('epIntelRow'), collectionId);
+  // Episode intel pills — v2.11b (injected into pills row)
+  _renderIntelRow(document.getElementById('epDrawerPills'), collectionId);
 
   // Concept cards — grouped by category, one column per category
   const grid = document.getElementById('epDrawerGrid');
@@ -10476,7 +10476,6 @@ function openThemeDrawer(id) {
   document.getElementById('themeDrawerTitle').textContent = col.title;
   document.getElementById('themeDrawerSubtitle').textContent = col.tagline || '';
   document.getElementById('themeDrawerPills').innerHTML = '';
-  document.getElementById('themeIntelRow').innerHTML = '';
   document.getElementById('themeDrawerCountBadge').textContent = '';
   document.getElementById('themeDrawerCatFilter').innerHTML = '';
   document.getElementById('themeDrawerGrid').innerHTML = _emptyStateHtml('loading', 'Loading concepts…');
@@ -10518,8 +10517,8 @@ function _renderThemeDrawerContent(col, id) {
       }).join('')
     : '';
 
-  // Episode intel pill row — v2.11
-  _renderIntelRow(document.getElementById('themeIntelRow'), id);
+  // Theme intel pills — v2.11b (injected into pills row)
+  _renderIntelRow(document.getElementById('themeDrawerPills'), id);
 
   const grid = document.getElementById('themeDrawerGrid');
   if (!matches.length) {

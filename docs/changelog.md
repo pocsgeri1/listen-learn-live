@@ -6,9 +6,24 @@
 
 ---
 
-## v2.11 — 2026-06-28 — episode_meta.json + index.html: Episode DNA pill row
+## v2.11 — 2026-06-28 — Episode Intelligence Layer: DNA + style guide + extraction prompt v1.9
 
-**Session scope:** Phase 1 + 2 of Episode Intelligence Layer. New `episode_meta.json` data file. DNA pill + popover in episode and theme drawers.
+**Session scope:** Episode Intelligence Layer Phase 1. New `episode_meta.json`. DNA pill live. Summary style guide locked. Extraction prompt v1.9 written.
+
+### New files
+- `episode_meta.json` — 46 entries (30 episodes + 16 themes). DNA computed from concepts.json for all. All intel fields null pending extraction pipeline.
+- `docs/summary-style-guide.md` — locked style guide for episode summary field. Voice, format, bans, worked example.
+- `docs/extraction-prompt-v1_9.txt` — extends v1.8 with episode_intel output block (summary, sharpest_line, tension, verdict_listen, verdict_skip, vocab_vault). Output schema changed to `{episode_intel, concepts}`.
+
+### index.html
+- Intel pill row injected into `ep-drawer-pills` (date/listen row). Desktop inline, mobile wraps to new line via flex separator.
+- DNA pill: hover popover with category/bar/% sorted high to low. Tap-toggle on mobile.
+- Future pills (Summary, Line, Tension, Verdict, Vocab) greyed out as placeholders.
+- `EPISODE_META` fetch + cache. Both episode and theme drawers wired.
+
+---
+
+## v2.9 — 2026-06-28 — index.html: Corner Mode bug fixes + Cowork workflow established
 
 ### New file: episode_meta.json
 - Scaffolded for all 30 existing episodes (collection_ids 1–519 where concepts exist)
