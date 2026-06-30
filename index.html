@@ -7658,10 +7658,12 @@
   grid-template-rows: 0fr;
   opacity: 0;
   transition: grid-template-rows 0.65s cubic-bezier(0.16,1,0.3,1), opacity 0.5s ease;
-  width: 100%;
+  grid-column: 1 / -1;
+  margin-top: 0.5rem;
 }
 .og-section.open { grid-template-rows: 1fr; opacity: 1; }
 .og-section-inner { padding-top: 2.5rem; min-height: 0; overflow: hidden; }
+.og-story { max-width: 680px; }
 .og-story .og-divider {
   width: 32px; height: 1px; background: rgba(232,213,163,0.2); margin: 2rem 0;
 }
@@ -7679,15 +7681,35 @@
 }
 .og-map-wrap {
   position: relative;
-  /* pull left to span full founder-section width (past the 560px photo col + 4rem gap) */
-  width: calc(100% + 560px + 4rem);
-  margin-left: calc(-560px - 4rem);
+  width: 100%;
   margin-top: 2.5rem;
   margin-bottom: 1rem;
   background: #0a0a0a;
   border: 1px solid rgba(232,213,163,0.1);
   border-radius: 6px;
   overflow: hidden;
+  user-select: none;
+}
+.og-zoom-bar {
+  display: flex; gap: 6px; justify-content: flex-end;
+  padding: 8px 10px 0; position: absolute; top: 0; right: 0; z-index: 10;
+}
+.og-zoom-btn {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: rgba(10,10,10,0.85); border: 1px solid rgba(232,213,163,0.25);
+  color: var(--accent); font-size: 1rem; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: border-color 0.2s; flex-shrink: 0;
+}
+.og-zoom-btn:hover { border-color: rgba(232,213,163,0.6); }
+.og-map-scroll {
+  width: 100%; overflow: hidden; cursor: grab; touch-action: none;
+}
+.og-map-scroll:active { cursor: grabbing; }
+.og-map-inner {
+  transform-origin: 0 0;
+  transition: transform 0.1s ease;
+  line-height: 0;
 }
 .og-map-wrap svg { width: 100%; height: auto; display: block; }
 
@@ -8370,6 +8392,30 @@
       </div>
 
       <!-- v2.13: OG COLLAPSIBLE SECTION -->
+
+      <!-- OG concept panel -->
+      <div class="og-panel-backdrop" id="ogPanelBackdrop" onclick="ogClosePanel()"></div>
+      <div class="og-concept-panel" id="ogConceptPanel">
+        <div class="og-panel-header">
+          <div>
+            <div class="og-panel-title" id="ogPanelTitle">—</div>
+            <div class="og-panel-subtitle" id="ogPanelSubtitle">Concepts from the library</div>
+          </div>
+          <button class="og-panel-close" onclick="ogClosePanel()" aria-label="Close">
+            <svg viewBox="0 0 10 10" fill="none" stroke-width="1.5" stroke-linecap="round" stroke="currentColor"><path d="M1 1l8 8M9 1L1 9"/></svg>
+          </button>
+        </div>
+        <div id="ogPanelCards" class="og-panel-cards"><div class="og-panel-loading">Loading…</div></div>
+      </div>
+      <div class="founder-mobile-gym founder-reveal">
+        <div class="fpm-piece fpm-gym" onclick="openFpmLightbox('/assets/gym-cast.jpg','Where it all began...')">
+          <img src="/assets/gym-cast.jpg" alt="Listening to a podcast at the gym" onerror="this.style.display='none';" />
+          <div class="fpm-fallback fpm-fallback-icon"><span>&#127939;</span></div>
+          <div class="fpm-expand-hint">&#8599;</div>
+        </div>
+        <div class="fpm-tag">where it all began...</div>
+      </div>
+    </div>
       <div class="og-section" id="ogSection">
         <div class="og-section-inner">
           <div class="og-story founder-text">
@@ -8415,6 +8461,13 @@
               <p class="og-map-hint">tap any node to explore the concepts behind this</p>
 
           <div class="og-map-wrap">
+            <div class="og-zoom-bar">
+              <button class="og-zoom-btn" onclick="ogZoom(-0.25)" title="Zoom out">&#8722;</button>
+              <button class="og-zoom-btn" onclick="ogZoom(0)" title="Reset">&#8635;</button>
+              <button class="og-zoom-btn" onclick="ogZoom(0.25)" title="Zoom in">&#43;</button>
+            </div>
+            <div class="og-map-scroll" id="ogMapScroll">
+              <div class="og-map-inner" id="ogMapInner">
             <svg viewBox="0 0 2400 1500" xmlns="http://www.w3.org/2000/svg" role="img" id="ogImpossibleMap">
               <title>Stalk the Impossible — Motivation Decoded</title>
               <defs>
@@ -8672,34 +8725,12 @@
               <text x="1200" y="1476" text-anchor="middle" fill="#e8d5a3" font-size="10.5" font-family="Georgia,serif" font-style="italic" opacity="0.45">"Flow is evolution's gift for stalking the impossible." — Steven Kotler</text>
               <text x="2080" y="1494" text-anchor="end" fill="#e8d5a3" font-size="6" font-family="'DM Mono',monospace" opacity="0.18" font-style="italic">After Steven Kotler — The Art of Impossible</text>
             </svg>
+              </div>
+            </div>
           </div>
 
         </div>
       </div>
-
-      <!-- OG concept panel -->
-      <div class="og-panel-backdrop" id="ogPanelBackdrop" onclick="ogClosePanel()"></div>
-      <div class="og-concept-panel" id="ogConceptPanel">
-        <div class="og-panel-header">
-          <div>
-            <div class="og-panel-title" id="ogPanelTitle">—</div>
-            <div class="og-panel-subtitle" id="ogPanelSubtitle">Concepts from the library</div>
-          </div>
-          <button class="og-panel-close" onclick="ogClosePanel()" aria-label="Close">
-            <svg viewBox="0 0 10 10" fill="none" stroke-width="1.5" stroke-linecap="round" stroke="currentColor"><path d="M1 1l8 8M9 1L1 9"/></svg>
-          </button>
-        </div>
-        <div id="ogPanelCards" class="og-panel-cards"><div class="og-panel-loading">Loading…</div></div>
-      </div>
-      <div class="founder-mobile-gym founder-reveal">
-        <div class="fpm-piece fpm-gym" onclick="openFpmLightbox('/assets/gym-cast.jpg','Where it all began...')">
-          <img src="/assets/gym-cast.jpg" alt="Listening to a podcast at the gym" onerror="this.style.display='none';" />
-          <div class="fpm-fallback fpm-fallback-icon"><span>&#127939;</span></div>
-          <div class="fpm-expand-hint">&#8599;</div>
-        </div>
-        <div class="fpm-tag">where it all began...</div>
-      </div>
-    </div>
   </div>
 </section>
 <!-- /FOUNDER / ABOUT -->
@@ -23067,5 +23098,77 @@ function _convOpenCSById(id) {
   document.addEventListener('keydown',e=>{if(e.key==='Escape')window.ogClosePanel();});
 })();
 </script>
+
+  /* ── OG Map zoom + pan ─────────────────────────────────── */
+  (function(){
+    var _scale = 1, _ox = 0, _oy = 0;
+    var _drag = false, _sx = 0, _sy = 0, _startOx = 0, _startOy = 0;
+
+    window.ogZoom = function(delta) {
+      var inner = document.getElementById('ogMapInner');
+      var scroll = document.getElementById('ogMapScroll');
+      if (\!inner || \!scroll) return;
+      if (delta === 0) { _scale = 1; _ox = 0; _oy = 0; }
+      else {
+        _scale = Math.min(4, Math.max(0.5, _scale + delta));
+      }
+      inner.style.transform = 'translate(' + _ox + 'px,' + _oy + 'px) scale(' + _scale + ')';
+    };
+
+    function applyTransform() {
+      var inner = document.getElementById('ogMapInner');
+      if (inner) inner.style.transform = 'translate(' + _ox + 'px,' + _oy + 'px) scale(' + _scale + ')';
+    }
+
+    document.addEventListener('wheel', function(e) {
+      var scroll = document.getElementById('ogMapScroll');
+      if (\!scroll || \!scroll.contains(e.target)) return;
+      e.preventDefault();
+      _scale = Math.min(4, Math.max(0.5, _scale - e.deltaY * 0.001));
+      applyTransform();
+    }, { passive: false });
+
+    document.addEventListener('mousedown', function(e) {
+      var scroll = document.getElementById('ogMapScroll');
+      if (\!scroll || \!scroll.contains(e.target)) return;
+      _drag = true; _sx = e.clientX; _sy = e.clientY;
+      _startOx = _ox; _startOy = _oy;
+    });
+    document.addEventListener('mousemove', function(e) {
+      if (\!_drag) return;
+      _ox = _startOx + (e.clientX - _sx);
+      _oy = _startOy + (e.clientY - _sy);
+      applyTransform();
+    });
+    document.addEventListener('mouseup', function() { _drag = false; });
+
+    var _ptA = null;
+    document.addEventListener('touchstart', function(e) {
+      var scroll = document.getElementById('ogMapScroll');
+      if (\!scroll || \!scroll.contains(e.target)) return;
+      if (e.touches.length === 1) {
+        _drag = true; _sx = e.touches[0].clientX; _sy = e.touches[0].clientY;
+        _startOx = _ox; _startOy = _oy;
+      } else if (e.touches.length === 2) {
+        _drag = false;
+        _ptA = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+      }
+    }, { passive: true });
+    document.addEventListener('touchmove', function(e) {
+      var scroll = document.getElementById('ogMapScroll');
+      if (\!scroll || \!scroll.contains(e.target)) return;
+      if (e.touches.length === 1 && _drag) {
+        _ox = _startOx + (e.touches[0].clientX - _sx);
+        _oy = _startOy + (e.touches[0].clientY - _sy);
+        applyTransform();
+      } else if (e.touches.length === 2 && _ptA) {
+        var dist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+        _scale = Math.min(4, Math.max(0.5, _scale * (dist / _ptA)));
+        _ptA = dist;
+        applyTransform();
+      }
+    }, { passive: true });
+    document.addEventListener('touchend', function() { _drag = false; _ptA = null; });
+  })();
 </body>
 </html>
