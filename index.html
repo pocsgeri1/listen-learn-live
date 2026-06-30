@@ -1198,12 +1198,11 @@
     .ep-iwtmt-link { order: 20; }
   }
 
-  /* ── Popover shell — shared by all intel types ── */
+  /* ── Popover shell — position:fixed to escape drawer overflow clipping ── */
   .ep-intel-popover {
-    position: absolute;
-    bottom: calc(100% + 10px); /* default: above pill */
-    left: 0;
-    z-index: 1000;
+    position: fixed;
+    top: 0; left: 0; /* overridden by JS via getBoundingClientRect */
+    z-index: 9500;
     background: #141414;
     border: 1px solid rgba(255,255,255,0.1);
     border-radius: 12px;
@@ -1217,11 +1216,6 @@
     pointer-events: none;
     transition: opacity 0.18s ease;
   }
-  .ep-intel-popover.pop-below {
-    bottom: auto;
-    top: calc(100% + 10px);
-    max-height: calc(80vh - 20px);
-  }
   [data-theme="light"] .ep-intel-popover {
     background: #faf8f4;
     border-color: rgba(0,0,0,0.09);
@@ -1229,12 +1223,12 @@
   }
   .ep-intel-popover.visible { opacity: 1; pointer-events: auto; }
 
-  /* IWTMT popover: wide enough for 2-col without scrolling */
+  /* IWTMT popover: ~30% wider than previous, 2-col summary+verdict */
   .ep-intel-popover.iwtmt-popover {
-    min-width: min(700px, 90vw);
-    max-width: min(860px, 95vw);
-    overflow-y: visible;
+    min-width: min(900px, 92vw);
+    max-width: min(1050px, 95vw);
     max-height: none;
+    overflow-y: visible;
   }
 
   /* Popover section label */
@@ -1357,17 +1351,17 @@
   .ep-intel-verdict-item.skip::before   { content: '✕'; position: absolute; left: 0; color: rgba(212,113,90,0.65); font-size: 0.6rem; }
   [data-theme="light"] .ep-intel-verdict-item { color: rgba(30,27,22,0.75); }
 
-  /* ── Vocab popover — 2-col grid, wide enough to not scroll ── */
+  /* ── Vocab popover — 3-col grid, wide enough to not scroll ── */
   .ep-intel-popover.vocab-popover {
-    min-width: min(560px, 90vw);
-    max-width: min(680px, 95vw);
+    min-width: min(800px, 92vw);
+    max-width: min(960px, 95vw);
     max-height: none;
     overflow-y: visible;
   }
   .ep-intel-vocab-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px 20px;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px 20px;
   }
   .ep-intel-vocab-row { margin-bottom: 0; }
   .ep-intel-vocab-row:last-child { margin-bottom: 0; }
@@ -8063,20 +8057,38 @@
   letter-spacing: 0.18em; color: var(--accent); opacity: 0.28;
   text-align: center; text-transform: uppercase;
 }
+/* OG panel cards — accordion style, collapsed by default */
 .og-card {
   background: var(--surface); border: 1px solid rgba(232,213,163,0.08);
-  border-radius: 6px; padding: 18px; transition: border-color 0.25s;
+  border-radius: 8px; overflow: hidden; transition: border-color 0.25s;
 }
-.og-card:hover { border-color: rgba(232,213,163,0.18); }
-.og-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
-.og-card-term { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 400; color: var(--text); line-height: 1.25; }
+.og-card:hover { border-color: rgba(232,213,163,0.2); }
+.og-card-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 16px; cursor: pointer; gap: 10px; user-select: none;
+}
+.og-card-header:hover { background: rgba(255,255,255,0.02); }
+.og-card-header-left { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
+.og-card-term { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 400; color: var(--text); line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .og-card-cat {
-  font-family: 'DM Mono', monospace; font-size: 7.5px; letter-spacing: 0.12em;
-  text-transform: uppercase; padding: 2px 7px; border-radius: 10px;
-  border: 1px solid; white-space: nowrap; flex-shrink: 0; margin-top: 2px; opacity: 0.65;
+  font-family: 'DM Mono', monospace; font-size: 7px; letter-spacing: 0.12em;
+  text-transform: uppercase; padding: 2px 6px; border-radius: 10px;
+  border: 1px solid; white-space: nowrap; flex-shrink: 0; opacity: 0.6;
 }
+.og-card-arrow {
+  width: 14px; height: 14px; flex-shrink: 0; opacity: 0.35;
+  transition: transform 0.25s cubic-bezier(0.4,0,0.2,1);
+}
+.og-card.open .og-card-arrow { transform: rotate(180deg); }
+.og-card-body {
+  display: grid; grid-template-rows: 0fr;
+  transition: grid-template-rows 0.28s cubic-bezier(0.4,0,0.2,1);
+}
+.og-card.open .og-card-body { grid-template-rows: 1fr; }
+.og-card-body-inner { min-height: 0; overflow: hidden; }
+.og-card-body-pad { padding: 0 16px 16px; }
 .og-card-hook { font-size: 12.5px; font-style: italic; color: var(--accent); opacity: 0.72; line-height: 1.5; margin-bottom: 8px; }
-.og-card-plain { font-size: 12.5px; line-height: 1.65; opacity: 0.6; margin-bottom: 12px; }
+.og-card-plain { font-size: 12.5px; line-height: 1.65; opacity: 0.6; margin-bottom: 10px; }
 .og-card-divider { height: 1px; background: rgba(232,213,163,0.08); margin-bottom: 10px; }
 .og-card-prompt-lbl { font-family: 'DM Mono', monospace; font-size: 7.5px; letter-spacing: 0.18em; text-transform: uppercase; opacity: 0.28; margin-bottom: 4px; }
 .og-card-prompt { font-size: 11.5px; line-height: 1.6; opacity: 0.52; font-style: italic; }
@@ -9705,18 +9717,23 @@ function _renderIntelRow(pillsEl, collectionId) {
       function showPopover() {
         pillsEl.querySelectorAll('.ep-intel-popover.visible').forEach(p => { if (p !== popover) p.classList.remove('visible'); });
         clearTimeout(_hideTimer);
+        // Make briefly visible off-screen to measure dimensions
+        popover.style.visibility = 'hidden';
+        popover.classList.add('visible');
         const pillRect = pill.getBoundingClientRect();
-        const rowRect = pillsEl.getBoundingClientRect();
-        let left = pillRect.left - rowRect.left;
-        const popWidth = popover.offsetWidth || 260;
-        const maxLeft = rowRect.width - popWidth - 4;
-        popover.style.left = Math.max(0, Math.min(left, maxLeft)) + 'px';
-        // Flip below if near top of viewport
-        if (pillRect.top < 220) {
-          popover.classList.add('pop-below');
-        } else {
-          popover.classList.remove('pop-below');
-        }
+        const popW = popover.offsetWidth || 300;
+        const popH = popover.offsetHeight || 200;
+        popover.classList.remove('visible');
+        popover.style.visibility = '';
+        // Position: above pill by default, flip below if not enough space
+        let top = pillRect.top - popH - 10;
+        if (top < 8) top = pillRect.bottom + 10;
+        // Clamp horizontal within viewport
+        let left = pillRect.left;
+        if (left + popW > window.innerWidth - 8) left = window.innerWidth - popW - 8;
+        if (left < 8) left = 8;
+        popover.style.top = top + 'px';
+        popover.style.left = left + 'px';
         popover.classList.add('visible');
       }
       function scheduleHide() {
@@ -9787,13 +9804,15 @@ function _renderIntelRow(pillsEl, collectionId) {
         grid.className = 'ep-intel-tension-vs';
         const a = document.createElement('div');
         a.className = 'ep-intel-tension-side';
-        a.textContent = parts[0] || '';
+        const rawA = (parts[0] || '').trim();
+        a.textContent = rawA.charAt(0).toLowerCase() + rawA.slice(1);
         const mid = document.createElement('div');
         mid.className = 'ep-intel-tension-vs-label';
         mid.textContent = 'vs';
         const b = document.createElement('div');
         b.className = 'ep-intel-tension-side';
-        b.textContent = parts.slice(1).join(' vs ') || '';
+        const rawB = (parts.slice(1).join(' vs ') || '').trim();
+        b.textContent = rawB.charAt(0).toLowerCase() + rawB.slice(1);
         grid.appendChild(a);
         grid.appendChild(mid);
         grid.appendChild(b);
@@ -9905,17 +9924,20 @@ function _renderIntelRow(pillsEl, collectionId) {
         function showIwtmt() {
           pillsEl.querySelectorAll('.ep-intel-popover.visible').forEach(p => p.classList.remove('visible'));
           clearTimeout(_iwtmtTimer);
+          iwtmtPop.style.visibility = 'hidden';
+          iwtmtPop.classList.add('visible');
           const linkRect = iwtmtLink.getBoundingClientRect();
-          const rowRect = pillsEl.getBoundingClientRect();
-          let left = linkRect.left - rowRect.left;
-          const popWidth = 520;
-          const maxLeft = rowRect.width - popWidth - 4;
-          iwtmtPop.style.left = Math.max(0, Math.min(left, maxLeft)) + 'px';
-          if (linkRect.top < 220) {
-            iwtmtPop.classList.add('pop-below');
-          } else {
-            iwtmtPop.classList.remove('pop-below');
-          }
+          const popW = iwtmtPop.offsetWidth || 900;
+          const popH = iwtmtPop.offsetHeight || 300;
+          iwtmtPop.classList.remove('visible');
+          iwtmtPop.style.visibility = '';
+          let top = linkRect.top - popH - 10;
+          if (top < 8) top = linkRect.bottom + 10;
+          let left = linkRect.left;
+          if (left + popW > window.innerWidth - 8) left = window.innerWidth - popW - 8;
+          if (left < 8) left = 8;
+          iwtmtPop.style.top = top + 'px';
+          iwtmtPop.style.left = left + 'px';
           iwtmtPop.classList.add('visible');
         }
         function hideIwtmt() {
@@ -23626,7 +23648,24 @@ function _convOpenCSById(id) {
   }
   function score(c,k){const n=N[k];if(!n||c.duplicate_of)return -99;let s=0;if(n.cats[0]===c.category)s+=4;else if(n.cats.includes(c.category))s+=2;const h=[c.term,c.hook,c.plain].join(' ').toLowerCase();n.kw.forEach(w=>{if(h.includes(w))s+=n.boost.some(b=>w.startsWith(b))?3:1;});if(c.editors_pick)s+=1;return s;}
   function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-  function card(c){const cat=(c.category||'thinking').toLowerCase().replace(/[^a-z-]/g,'');return`<div class="og-card"><div class="og-card-top"><div class="og-card-term">${esc(c.term)}</div><span class="og-card-cat og-cat-${cat}">${cat}</span></div>${c.hook?`<div class="og-card-hook">${esc(c.hook)}</div>`:''  }${c.plain?`<div class="og-card-plain">${esc(c.plain)}</div>`:''}${c.prompt?`<div class="og-card-divider"></div><div class="og-card-prompt-lbl">Try this</div><div class="og-card-prompt">${esc(c.prompt)}</div>`:''}</div>`;}
+  function card(c){
+    const cat=(c.category||'thinking').toLowerCase().replace(/[^a-z-]/g,'');
+    const id='ogc'+c.id;
+    const body=(c.hook?`<div class="og-card-hook">${esc(c.hook)}</div>`:'')+
+      (c.plain?`<div class="og-card-plain">${esc(c.plain)}</div>`:'')+
+      (c.prompt?`<div class="og-card-divider"></div><div class="og-card-prompt-lbl">Try this</div><div class="og-card-prompt">${esc(c.prompt)}</div>`:'');
+    return`<div class="og-card" id="${id}">
+      <div class="og-card-header" onclick="ogToggleCard('${id}')">
+        <div class="og-card-header-left">
+          <div class="og-card-term">${esc(c.term)}</div>
+          <span class="og-card-cat og-cat-${cat}">${cat}</span>
+        </div>
+        <svg class="og-card-arrow" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4"/></svg>
+      </div>
+      <div class="og-card-body"><div class="og-card-body-inner"><div class="og-card-body-pad">${body}</div></div></div>
+    </div>`;
+  }
+  window.ogToggleCard=function(id){const el=document.getElementById(id);if(el)el.classList.toggle('open');};
   function setRing(k){clearRing();const p=RP[k];if(!p)return;const svg=document.getElementById('ogImpossibleMap');if(!svg)return;const el=document.createElementNS('http://www.w3.org/2000/svg','circle');el.setAttribute('cx',p.cx);el.setAttribute('cy',p.cy);el.setAttribute('r',p.r);el.setAttribute('fill','none');el.setAttribute('stroke',RC[k]||'#e8d5a3');el.setAttribute('stroke-width','1.5');el.setAttribute('stroke-dasharray','6,4');el.classList.add('og-active-ring');svg.appendChild(el);_ar=el;}
   function clearRing(){if(_ar){_ar.remove();_ar=null;}}
   window.ogShowConcepts=async function(k){const n=N[k];if(!n)return;if(_an)clearRing();_an=k;setRing(k);document.getElementById('ogPanelTitle').textContent=n.label;const sub=document.getElementById('ogPanelSubtitle');sub.textContent=n.sub;sub.style.color=n.col;document.getElementById('ogPanelCards').innerHTML='<div class="og-panel-loading">Loading concepts…</div>';document.getElementById('ogPanelBackdrop').classList.add('visible');document.getElementById('ogConceptPanel').classList.add('open');const all=await load();const top=all.map(c=>({c,s:score(c,k)})).filter(x=>x.s>0).sort((a,b)=>b.s-a.s).slice(0,5).map(x=>x.c);document.getElementById('ogPanelCards').innerHTML=top.length?top.map(card).join(''):'<div class="og-panel-loading">No matches.</div>';};

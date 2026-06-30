@@ -65,10 +65,18 @@ Title:  v[X.Y] - [short imperative description]
 Body:   - one bullet per change, no prose
 ```
 - Example: `v2.9 - Corner: ding SFX, hero text restore, panel header layout`
-- Always combine add + commit in one bash call: `git add [files] && git commit -m "..."`  
-  **Never run `git add` and `git commit` as separate bash calls** — a failed add leaves index.lock held by the sandbox and blocks all subsequent commits
-- Stage only changed files — never `git add .`
-- Commits work from bash. Push is always done by Gergely in GitHub Desktop (one click → Vercel auto-deploys)
+
+**⚠️ NEVER commit from the Cowork sandbox bash tool.** The sandbox VM holds `index.lock` and can't remove it, causing every commit to fail.
+
+**The only commit workflow that works:**
+1. Claude edits files directly in the repo (Read/Edit/Write tools only — no git commands)
+2. Gergely runs from Mac Terminal: `cd ~/Documents/GitHub/listen-learn-live && ./ep-commit.sh "v2.XX - message"`
+3. Gergely clicks Push origin in GitHub Desktop
+
+`ep-commit.sh` lives in the repo root. It removes stale locks, stages all modified tracked files (`git add -u`), and commits. Claude never needs to touch git.
+
+- Stage only changed files — `ep-commit.sh` uses `git add -u` (modified tracked files only)
+- Push is always done by Gergely in GitHub Desktop (one click → Vercel auto-deploys)
 
 ---
 
