@@ -35,56 +35,77 @@ What's on my mind for v2.[the next number after the latest changelog / roadmap c
 
 ## Agentic / Cowork automation rules (appended — do not change above)
 
-### Session start — always do this first
-- Connect to the git repo folder: `/Users/gergelypocs/Documents/GitHub/listen-learn-live/`
-- Run `git pull origin main` before touching any file — prevents local/remote diverge and merge conflicts mid-session
-- Read `docs/changelog.md` (top 30 lines) to confirm current version
-- Read `docs/roadmap.md` (Next up section) to know what's queued
-- Read `docs/build-journal.md` (Standing Rules + latest entry) for workflow rules and recent lessons
-- State: files read + current version. One line. Then proceed.
+---
+
+### ⚠️ SESSION START CHECKLIST — do this before anything else
+
+**Tell Gergely to do (before Claude touches any file):**
+1. Quit GitHub Desktop (Cmd+Q) — reopen only to push at the end
+2. Make sure no editor (VS Code, Xcode, etc.) has the repo folder open — these hold index.lock
+
+**Claude does automatically:**
+1. Connect to both repos:
+   - `/Users/gergelypocs/Documents/GitHub/listen-learn-live/`
+   - `/Users/gergelypocs/Documents/GitHub/epistemic-tools/`
+2. Run `git pull origin main` in listen-learn-live (prevents mid-session diverge)
+3. Read in parallel: `docs/changelog.md` (top 30 lines), `docs/roadmap.md` (Next Up section), `docs/build-journal.md` (Standing Rules + latest entry)
+4. State: files read + current version. One line. Then present the action plan.
+
+---
 
 ### File editing rules
-- Edit files directly in `/Users/gergelypocs/Documents/GitHub/listen-learn-live/` (the live git repo)
-- Never edit in the knowledge source (read-only snapshot) or the outputs scratchpad
-- Claude Project Files folder (`/Users/gergelypocs/Downloads/1.1. Personal Stuff /1.2 - LEVELUP G/Epistemic./Claude Project Files/`) is a secondary copy — sync to it at session end, not during
+- Edit files directly in the live git repo folders — never in the knowledge source (read-only) or outputs scratchpad
+- Claude Project Files (`/Users/gergelypocs/Downloads/1.1. Personal Stuff /1.2 - LEVELUP G/Epistemic./Claude Project Files/`) — sync at session end only
 
-### Commit format (enforced every session)
+---
+
+### Commit rules
 ```
-Title:  v[X.Y] - [short imperative description, dash after version]
-Body:   - bullet per change, one line each
-        - no prose
+Title:  v[X.Y] - [short imperative description]
+Body:   - one bullet per change, no prose
 ```
 - Example: `v2.9 - Corner: ding SFX, hero text restore, panel header layout`
-- Always include version number first
+- Always combine add + commit in one bash call: `git add [files] && git commit -m "..."`  
+  **Never run `git add` and `git commit` as separate bash calls** — a failed add leaves index.lock held by the sandbox and blocks all subsequent commits
+- Stage only changed files — never `git add .`
+- Commits work from bash. Push is always done by Gergely in GitHub Desktop (one click → Vercel auto-deploys)
 
-### Git workflow (end of every session)
-1. Stage only the files that changed: `git add [specific files]` — never `git add .`
-2. Commit with proper message (see format above)
-3. Tell Gergely: **"Click Push origin in GitHub Desktop"** — one button, done
-4. Gergely clicks Push origin → Vercel auto-deploys
+---
 
-### Documentation updates (end of every build + doc session)
-Update all files that need it — targeted edits only, never full rewrites:
-- `docs/changelog.md` — new version entry at TOP
-- `docs/roadmap.md` — move completed items to Recently Completed, add new Next Up items
-- `docs/build-journal.md` — add lessons learned (Standing Rules block stays at top)
-- Any other doc touched this session (architecture, design-tokens, etc.)
+### Git lock issues — known causes and fixes
 
-Then sync updated docs to Claude Project Files:
+| Cause | Fix |
+|---|---|
+| GitHub Desktop open during bash commit | Quit Desktop before session (Cmd+Q). Reopen only to push. |
+| VS Code / Xcode / any editor has repo folder open | Close or remove the folder from the editor before session |
+| Cowork sandbox held a previous index.lock | Run in Mac Terminal: `rm -f ~/Documents/GitHub/listen-learn-live/.git/HEAD.lock ~/Documents/GitHub/listen-learn-live/.git/index.lock` |
+| `lsof` shows `com.apple.Virtualization.VirtualMachine` holding lock | Previous bash `git add` failed mid-op. Terminal rm is the only fix — sandbox cannot unlink its own locks |
+
+- `unable to unlink tmp_obj_*` warnings in bash output = harmless, sandbox filesystem artifact. Commits succeed despite them.
+- Diverged branch / merge conflict: caused by direct pushes to GitHub (e.g. concepts.json). `git pull origin main` at session start prevents it.
+
+---
+
+### Documentation — auto-update at end of every session
+
+Claude does this automatically without being asked. Targeted edits only — never full rewrites.
+
+**Files to update (as needed):**
+- `docs/changelog.md` — new version entry at TOP, full detail
+- `docs/roadmap.md` — move completed → Recently Completed; update Next Up
+- `docs/build-journal.md` — append new lessons at TOP of Entries (Standing Rules block stays fixed at top)
+- Any other doc touched this session (architecture.md, design-tokens.md, etc.)
+
+**Then copy updated docs to Claude Project Files:**
 ```bash
-cp /path/to/repo/docs/changelog.md "/path/to/Claude Project Files/changelog.md"
-cp /path/to/repo/docs/roadmap.md "/path/to/Claude Project Files/roadmap.md"
-cp /path/to/repo/docs/build-journal.md "/path/to/Claude Project Files/build-journal.md"
+REPO="/sessions/sweet-sharp-ptolemy/mnt/listen-learn-live"
+CPF="/sessions/sweet-sharp-ptolemy/mnt/[Claude Project Files mount path]"
+cp "$REPO/docs/changelog.md" "$CPF/changelog.md"
+cp "$REPO/docs/roadmap.md" "$CPF/roadmap.md"
+cp "$REPO/docs/build-journal.md" "$CPF/build-journal.md"
 # + any other updated docs
 ```
 
-### Known git issues and fixes
-- **Lock files** (`HEAD.lock`, `index.lock`): caused by GitHub Desktop running alongside bash commits. **Permanent fix: quit GitHub Desktop (Cmd+Q) at the start of every session. Reopen only to push.** This eliminates lock conflicts entirely. If locks appear mid-session, user runs in Terminal: `rm -f ~/Documents/GitHub/listen-learn-live/.git/HEAD.lock ~/Documents/GitHub/listen-learn-live/.git/index.lock`
-- **Bash sandbox cannot `unlink` lock files**: `rm -f` from inside the bash sandbox fails with "Operation not permitted" on mounted Mac paths. Only Terminal on the host Mac can remove them. Do not attempt workarounds.
-- **Diverged branches / merge conflict**: happens when GitHub has commits not in local (e.g. Gergely pushed concepts.json directly). Fix: run `git pull origin main` at session start. If already in conflict state, resolve then `git commit -m "Merge: ..."`.
-- **Cannot push from bash**: the sandbox has no GitHub credentials. Commits work. Push always done by Gergely in GitHub Desktop.
-- **Warnings `unable to unlink tmp_obj_*`**: harmless, sandbox filesystem permission artifact. Commits go through fine despite warnings.
+**Claude.ai project knowledge** — a manual snapshot. Re-sync in Claude.ai project settings every few sessions (10 seconds). Claude cannot trigger this sync.
 
-### Claude Project Files vs Claude.ai project knowledge
-- **Mac folder** (`Downloads/.../Claude Project Files/`) — updated automatically by Claude at session end via bash copy. Always current after each session.
-- **Claude.ai project knowledge** (what Claude reads at session start) — a snapshot, last synced manually. Re-sync it in Claude.ai project settings every few sessions (10 seconds). Claude cannot trigger this sync.
+**After docs are committed, tell Gergely:** "Click Push origin in GitHub Desktop."

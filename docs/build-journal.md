@@ -8,27 +8,38 @@
 
 ## Standing Rules — Cowork Workflow
 
-### Commit message format (enforced every session)
+### Before every session (Gergely does this)
+1. Quit GitHub Desktop (Cmd+Q) — reopen only to push at the end
+2. Close any editor (VS Code, Xcode, etc.) that has the repo folder open
+3. If lock errors appeared last session: `rm -f ~/Documents/GitHub/listen-learn-live/.git/HEAD.lock ~/Documents/GitHub/listen-learn-live/.git/index.lock`
+
+### Commit message format
 ```
 Title:  v[X.Y] - [short imperative description]
 Body:   - bullet 1
         - bullet 2
-        - bullet 3
 ```
-- Always start with version number first: `v2.9 - Corner: ding SFX, hero restore, panel header`
-- Title uses dash after version, not colon
-- Body bullets: one change per line, no prose
-- Claude writes the commit, Gergely clicks "Push origin" in GitHub Desktop
+- Version number first, dash after version (not colon)
+- Body: one change per line, no prose
 
 ### Git workflow (Cowork sessions)
 - Claude edits files directly in `/Users/gergelypocs/Documents/GitHub/listen-learn-live/`
-- Claude runs `git add [files] && git commit -m "..."` via bash at end of each session
-- Gergely clicks **Push origin** in GitHub Desktop — one click, done
-- Vercel auto-deploys on push
+- **Always combine add + commit in one bash call:** `git add [files] && git commit -m "..."` — never two separate calls (failed add leaves index.lock held by sandbox)
+- Gergely clicks **Push origin** in GitHub Desktop — one click, Vercel auto-deploys
+
+### Documentation (auto, end of every session — no reminder needed)
+Claude updates without being asked: changelog.md (new entry at TOP), roadmap.md (completed → Recently Completed), build-journal.md (new lessons at TOP of Entries). Then copies to Claude Project Files via bash.
 
 ---
 
 ## Entries
+
+### 2026-06-30 — v2.14: git lock root cause identified
+
+**Lesson 22 — index.lock is held by the Cowork sandbox VM itself, not GitHub Desktop.**
+`lsof` on a stuck index.lock showed `com.apple.Virtualization.VirtualMachine` (PID of the Cowork sandbox) as the holder. This happens when `git add` runs as a standalone bash call and fails or gets interrupted — the sandbox keeps the file open. GitHub Desktop being open makes it worse but is not the only cause. **Permanent fix: always run `git add [files] && git commit -m "..."` as a single combined bash call.** If it fails, nothing gets locked. If lock appears anyway, user must `rm -f` from Mac Terminal — sandbox cannot unlink its own locks.
+
+---
 
 ### 2026-06-30 — v2.13b/c/d: OG layout bug cascade + bash escaping
 
