@@ -6,6 +6,19 @@
 
 ---
 
+## v2.14 — 2026-06-30 — Intel pills live, map collapsible concepts, cursor off, zoom/light mode fixes
+
+### What shipped
+- **Intel pills wired**: Summary, Line, Tension, Verdict, Vocab all live with popovers. Greyed only when field is missing in episode_meta.json. Each pill type has bespoke popover layout (summary = paragraph text; line = italic Playfair quote; tension = plain phrase; verdict = listen-if/skip-if lists; vocab = word + definition rows). 15 episodes now have full intel.
+- **Map — related concepts**: flat pills replaced with per-concept collapsible cards (Corner accordion pattern, `grid-template-rows 0fr→1fr`, 0.28s cubic-bezier). Each card shows term + category dot by default; expand reveals plain + analogy + "Open on map →" button. Arrow rotates on expand/close.
+- **Map — zoom buttons**: now track last cursor position and zoom toward it instead of always viewport center. Scroll-wheel zoom-at-cursor was already correct.
+- **Map — reset animation**: blur-in (4px, 300ms) then blur-out (600ms) during reset zoom, smooth 0.6s transition total.
+- **Light mode text**: `og-expand-label` ("The map behind the machine") and `og-map-hint` ("tap any node…") get stronger color+opacity overrides in light mode — were barely visible.
+- **Custom cursor**: disabled — CSS `display:none` + `return;` in `initEpCursor()`. Code fully preserved.
+- **extract.html**: confirmed synced — all 4 style buttons (A/B/C/D) and regen buttons present.
+
+---
+
 ## v2.13b/c/d — 2026-06-30 — OG section: full-width layout, broken-div fix, zoom/pan map
 
 **Session scope:** Layout and functionality fixes for the v2.13 OG easter egg section across four patch commits.
