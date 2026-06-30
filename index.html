@@ -7658,11 +7658,26 @@
   grid-template-rows: 0fr;
   opacity: 0;
   transition: grid-template-rows 0.65s cubic-bezier(0.16,1,0.3,1), opacity 0.5s ease;
-  width: 100%;
+  /* escape the 560px founder-inner column — span full section width */
+  width: calc(100vw - 4rem);
+  max-width: 1300px;
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+  margin-left: calc(-1 * (min(100vw - 4rem, 1300px) - 560px - 4rem));
 }
 .og-section.open { grid-template-rows: 1fr; opacity: 1; }
 .og-section-inner { padding-top: 2.5rem; min-height: 0; overflow: hidden; }
-.og-story { max-width: 620px; }
+
+/* ── 2-col layout: story left | map right ────────────────── */
+.og-layout {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 3.5rem;
+  align-items: start;
+}
+.og-col-story { min-width: 0; }
+.og-col-map   { min-width: 0; }
+
 .og-story .og-divider {
   width: 32px; height: 1px; background: rgba(232,213,163,0.2); margin: 2rem 0;
 }
@@ -7676,7 +7691,7 @@
 .og-map-hint {
   font-family: 'DM Mono', monospace; font-size: 0.65rem;
   letter-spacing: 0.12em; color: var(--accent); opacity: 0.3;
-  text-align: center; margin: 2rem 0 0.75rem; text-transform: uppercase;
+  text-align: center; margin: 0 0 0.75rem; text-transform: uppercase;
 }
 .og-map-wrap {
   position: relative; width: 100%; background: #0a0a0a;
@@ -7780,6 +7795,17 @@
 .og-cat-creativity   { color:#d4a574; border-color:#d4a574; }
 .og-cat-society      { color:#7090a8; border-color:#7090a8; }
 .og-cat-tech-ai      { color:#b8a07a; border-color:#b8a07a; }
+@media (max-width: 900px) {
+  /* collapse og 2-col to single col on tablet/mobile */
+  .og-section {
+    width: 100%;
+    margin-left: 0;
+  }
+  .og-layout {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
 @media (max-width: 600px) {
   .og-concept-panel {
     top: auto; left: 0; right: 0; bottom: 0; width: 100%; height: 78vh;
@@ -8261,105 +8287,11 @@
     <div class="newsletter-message" id="newsletterMessage"></div>
     <div class="newsletter-trust">No credit card. No catch. No spam.</div>
   </div>
-</section>
-<!-- /NEWSLETTER CAPTURE -->
-
-<!-- FOUNDER / ABOUT — v2.5. Placed below the signup flow deliberately, so it
-     doesn't interrupt the primary browse→join conversion path; rewards people
-     who've scrolled this far with the human story behind the product. -->
-<section class="founder-section" id="founder">
-  <div class="founder-inner">
-    <div class="founder-photo-montage">
-      <div class="fpm-piece fpm-main" onclick="openFpmLightbox('/assets/founder-photo.jpg','Hi, that&#39;s me')">
-        <img
-          src="/assets/founder-photo.jpg"
-          alt="Gergely, founder of Epistemic"
-          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-        />
-        <div class="fpm-fallback"><span>G</span></div>
-        <div class="fpm-expand-hint">&#8599;</div>
-      </div>
-      <div class="fpm-notes-row">
-        <div class="fpm-piece fpm-notes" onclick="openFpmLightbox('/assets/notes-system.jpg','My &quot;smart&quot; Notion cheat sheet...')">
-          <img
-            src="/assets/notes-system.jpg"
-            alt="A screenshot of an old, failed note-taking system"
-            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-          />
-          <div class="fpm-fallback fpm-fallback-icon"><span>&#128221;</span></div>
-          <div class="fpm-expand-hint">&#8599;</div>
-        </div>
-        <div class="fpm-piece fpm-notes2" onclick="openFpmLightbox('/assets/notes-system2.jpg','...then I built a whole taxonomy')">
-          <img
-            src="/assets/notes-system2.jpg"
-            alt="Another screenshot of an old note-taking system"
-            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-          />
-          <div class="fpm-fallback fpm-fallback-icon"><span>&#128203;</span></div>
-          <div class="fpm-expand-hint">&#8599;</div>
-        </div>
-      </div>
-      <div class="fpm-piece fpm-gym" onclick="openFpmLightbox('/assets/gym-cast.jpg','Where it all began...')">
-        <img
-          src="/assets/gym-cast.jpg"
-          alt="Listening to a podcast at the gym"
-          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-        />
-        <div class="fpm-fallback fpm-fallback-icon"><span>&#127939;</span></div>
-        <div class="fpm-expand-hint">&#8599;</div>
-      </div>
-      <div class="fpm-tag fpm-tag-main">hi, that's me</div>
-      <div class="fpm-tag fpm-tag-notes">my "smart" Notion cheat sheet...</div>
-      <div class="fpm-tag fpm-tag-notes2">...then I built a whole taxonomy</div>
-      <div class="fpm-tag fpm-tag-gym">where it all began...</div>
-    </div>
-    <div class="founder-text" id="founderText">
-      <div class="founder-label founder-reveal">Why Epistemic Exists</div>
-      <h2 class="founder-heading founder-reveal">The <em>sentence</em> I kept losing.</h2>
-      <p class="founder-reveal">I used to confuse listening with learning. I'd hit the gym or commute with Modern Wisdom on, catch a sharp idea, and feel <em>smart</em> and <em>productive</em> instantly, like I owned it.</p>
-      <p class="founder-line-bold founder-reveal">By the next morning, 90% of it was gone. "Poof, see ya later..."</p>
-      <p class="founder-reveal">I hated being mid-conversation, going — <em>'it's like… there's actually a word for this, I heard it last week, basically… ugh, <span class="founder-accent">nevermind</span>.'</em></p>
-      <p class="founder-reveal">So, I tried to fix it:</p>
-      <ul class="founder-bullets founder-reveal">
-        <li><span class="founder-bullet-arrow">➣</span> <strong>Readwise highlights</strong> — never reopened.</li>
-        <li><span class="founder-bullet-arrow">➣</span> <strong>Podcast summaries</strong> — bullet points I'd forget.</li>
-        <li><span class="founder-bullet-arrow">➣</span> <strong>Notion dashboards</strong> — my little cheat sheet.</li>
-      </ul>
-      <div class="founder-mobile-notes founder-reveal">
-        <div class="fpm-piece fpm-notes" onclick="openFpmLightbox('/assets/notes-system.jpg','My &quot;smart&quot; Notion cheat sheet...')">
-          <img src="/assets/notes-system.jpg" alt="Notion cheat sheet" onerror="this.style.display='none';" />
-          <div class="fpm-fallback fpm-fallback-icon"><span>&#128221;</span></div>
-          <div class="fpm-expand-hint">&#8599;</div>
-        </div>
-        <div class="fpm-piece fpm-notes2" onclick="openFpmLightbox('/assets/notes-system2.jpg','...then I built a whole taxonomy')">
-          <img src="/assets/notes-system2.jpg" alt="Taxonomy system" onerror="this.style.display='none';" />
-          <div class="fpm-fallback fpm-fallback-icon"><span>&#128203;</span></div>
-          <div class="fpm-expand-hint">&#8599;</div>
-        </div>
-        <div class="founder-mobile-tags">
-          <div class="fpm-tag">my "smart" Notion cheat sheet...</div>
-          <div class="fpm-tag">...then I built a whole taxonomy</div>
-        </div>
-      </div>
-      <p class="founder-reveal">None of it stuck. I just had a better-organised version of the same problem.</p>
-      <p class="founder-line-bold founder-reveal">Passive listening is just mental masturbation... and a broken learning format.</p>
-      <p class="founder-reveal">But along the way, I realised other people — expats, non-native English speakers, podcast lovers — were stumbling on their words too.</p>
-      <p class="founder-line-bold founder-reveal">So I built the tool I wished existed.</p>
-      <p class="founder-italic-body founder-reveal"><span class="founder-accent">Epistemic</span> isn't trying to make you smarter. It's just trying to make sure what you already know doesn't die before it matters.</p>
-      <p class="founder-reveal">If you've ever gone '<em>nevermind</em>' mid-sentence — this is for you.</p>
-
-      <!-- v2.13: OG EXPAND TOGGLE -->
-      <div class="og-expand-row founder-reveal" id="ogExpandRow" onclick="toggleOgSection()">
-        <div class="og-expand-btn" id="ogExpandBtn">
-          <svg viewBox="0 0 12 12" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor"><path d="M2 4l4 4 4-4"/></svg>
-        </div>
-        <span class="og-expand-label">The map behind the machine</span>
-      </div>
-
-      <!-- v2.13: OG COLLAPSIBLE SECTION -->
       <div class="og-section" id="ogSection">
         <div class="og-section-inner">
-          <div class="og-story founder-text">
+          <div class="og-layout">
+            <div class="og-col-story">
+              <div class="og-story founder-text">
 
             <p class="og-kicker">For the real ones</p>
 
@@ -8399,7 +8331,10 @@
 
           </div>
 
-          <p class="og-map-hint">tap any node to explore the concepts behind this</p>
+            </div>
+            </div>
+            <div class="og-col-map">
+              <p class="og-map-hint">tap any node to explore the concepts behind this</p>
 
           <div class="og-map-wrap">
             <svg viewBox="0 0 2400 1500" xmlns="http://www.w3.org/2000/svg" role="img" id="ogImpossibleMap">
@@ -8661,8 +8596,106 @@
             </svg>
           </div>
 
+            </div><\!-- /og-col-map -->
+          </div><\!-- /og-layout -->
         </div>
       </div>
+</section>
+<!-- /NEWSLETTER CAPTURE -->
+
+<!-- FOUNDER / ABOUT — v2.5. Placed below the signup flow deliberately, so it
+     doesn't interrupt the primary browse→join conversion path; rewards people
+     who've scrolled this far with the human story behind the product. -->
+<section class="founder-section" id="founder">
+  <div class="founder-inner">
+    <div class="founder-photo-montage">
+      <div class="fpm-piece fpm-main" onclick="openFpmLightbox('/assets/founder-photo.jpg','Hi, that&#39;s me')">
+        <img
+          src="/assets/founder-photo.jpg"
+          alt="Gergely, founder of Epistemic"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+        />
+        <div class="fpm-fallback"><span>G</span></div>
+        <div class="fpm-expand-hint">&#8599;</div>
+      </div>
+      <div class="fpm-notes-row">
+        <div class="fpm-piece fpm-notes" onclick="openFpmLightbox('/assets/notes-system.jpg','My &quot;smart&quot; Notion cheat sheet...')">
+          <img
+            src="/assets/notes-system.jpg"
+            alt="A screenshot of an old, failed note-taking system"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+          <div class="fpm-fallback fpm-fallback-icon"><span>&#128221;</span></div>
+          <div class="fpm-expand-hint">&#8599;</div>
+        </div>
+        <div class="fpm-piece fpm-notes2" onclick="openFpmLightbox('/assets/notes-system2.jpg','...then I built a whole taxonomy')">
+          <img
+            src="/assets/notes-system2.jpg"
+            alt="Another screenshot of an old note-taking system"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+          <div class="fpm-fallback fpm-fallback-icon"><span>&#128203;</span></div>
+          <div class="fpm-expand-hint">&#8599;</div>
+        </div>
+      </div>
+      <div class="fpm-piece fpm-gym" onclick="openFpmLightbox('/assets/gym-cast.jpg','Where it all began...')">
+        <img
+          src="/assets/gym-cast.jpg"
+          alt="Listening to a podcast at the gym"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+        />
+        <div class="fpm-fallback fpm-fallback-icon"><span>&#127939;</span></div>
+        <div class="fpm-expand-hint">&#8599;</div>
+      </div>
+      <div class="fpm-tag fpm-tag-main">hi, that's me</div>
+      <div class="fpm-tag fpm-tag-notes">my "smart" Notion cheat sheet...</div>
+      <div class="fpm-tag fpm-tag-notes2">...then I built a whole taxonomy</div>
+      <div class="fpm-tag fpm-tag-gym">where it all began...</div>
+    </div>
+    <div class="founder-text" id="founderText">
+      <div class="founder-label founder-reveal">Why Epistemic Exists</div>
+      <h2 class="founder-heading founder-reveal">The <em>sentence</em> I kept losing.</h2>
+      <p class="founder-reveal">I used to confuse listening with learning. I'd hit the gym or commute with Modern Wisdom on, catch a sharp idea, and feel <em>smart</em> and <em>productive</em> instantly, like I owned it.</p>
+      <p class="founder-line-bold founder-reveal">By the next morning, 90% of it was gone. "Poof, see ya later..."</p>
+      <p class="founder-reveal">I hated being mid-conversation, going — <em>'it's like… there's actually a word for this, I heard it last week, basically… ugh, <span class="founder-accent">nevermind</span>.'</em></p>
+      <p class="founder-reveal">So, I tried to fix it:</p>
+      <ul class="founder-bullets founder-reveal">
+        <li><span class="founder-bullet-arrow">➣</span> <strong>Readwise highlights</strong> — never reopened.</li>
+        <li><span class="founder-bullet-arrow">➣</span> <strong>Podcast summaries</strong> — bullet points I'd forget.</li>
+        <li><span class="founder-bullet-arrow">➣</span> <strong>Notion dashboards</strong> — my little cheat sheet.</li>
+      </ul>
+      <div class="founder-mobile-notes founder-reveal">
+        <div class="fpm-piece fpm-notes" onclick="openFpmLightbox('/assets/notes-system.jpg','My &quot;smart&quot; Notion cheat sheet...')">
+          <img src="/assets/notes-system.jpg" alt="Notion cheat sheet" onerror="this.style.display='none';" />
+          <div class="fpm-fallback fpm-fallback-icon"><span>&#128221;</span></div>
+          <div class="fpm-expand-hint">&#8599;</div>
+        </div>
+        <div class="fpm-piece fpm-notes2" onclick="openFpmLightbox('/assets/notes-system2.jpg','...then I built a whole taxonomy')">
+          <img src="/assets/notes-system2.jpg" alt="Taxonomy system" onerror="this.style.display='none';" />
+          <div class="fpm-fallback fpm-fallback-icon"><span>&#128203;</span></div>
+          <div class="fpm-expand-hint">&#8599;</div>
+        </div>
+        <div class="founder-mobile-tags">
+          <div class="fpm-tag">my "smart" Notion cheat sheet...</div>
+          <div class="fpm-tag">...then I built a whole taxonomy</div>
+        </div>
+      </div>
+      <p class="founder-reveal">None of it stuck. I just had a better-organised version of the same problem.</p>
+      <p class="founder-line-bold founder-reveal">Passive listening is just mental masturbation... and a broken learning format.</p>
+      <p class="founder-reveal">But along the way, I realised other people — expats, non-native English speakers, podcast lovers — were stumbling on their words too.</p>
+      <p class="founder-line-bold founder-reveal">So I built the tool I wished existed.</p>
+      <p class="founder-italic-body founder-reveal"><span class="founder-accent">Epistemic</span> isn't trying to make you smarter. It's just trying to make sure what you already know doesn't die before it matters.</p>
+      <p class="founder-reveal">If you've ever gone '<em>nevermind</em>' mid-sentence — this is for you.</p>
+
+      <!-- v2.13: OG EXPAND TOGGLE -->
+      <div class="og-expand-row founder-reveal" id="ogExpandRow" onclick="toggleOgSection()">
+        <div class="og-expand-btn" id="ogExpandBtn">
+          <svg viewBox="0 0 12 12" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor"><path d="M2 4l4 4 4-4"/></svg>
+        </div>
+        <span class="og-expand-label">The map behind the machine</span>
+      </div>
+
+      <!-- v2.13: OG COLLAPSIBLE SECTION -->
 
       <!-- OG concept panel -->
       <div class="og-panel-backdrop" id="ogPanelBackdrop" onclick="ogClosePanel()"></div>
