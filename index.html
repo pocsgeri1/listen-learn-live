@@ -7662,19 +7662,6 @@
 }
 .og-section.open { grid-template-rows: 1fr; opacity: 1; }
 .og-section-inner { padding-top: 2.5rem; min-height: 0; overflow: hidden; }
-
-/* 2-col: story left | map right — expands across full founder-inner width */
-.og-layout {
-  display: grid;
-  grid-template-columns: 360px 1fr;
-  gap: 3.5rem;
-  align-items: start;
-  /* escape right column: pull left past the 560px photo col + 4rem gap */
-  width: calc(100% + 560px + 4rem);
-  margin-left: calc(-560px - 4rem);
-}
-.og-col-story { min-width: 0; }
-.og-col-map   { min-width: 0; }
 .og-story .og-divider {
   width: 32px; height: 1px; background: rgba(232,213,163,0.2); margin: 2rem 0;
 }
@@ -7691,9 +7678,16 @@
   text-align: center; margin: 2rem 0 0.75rem; text-transform: uppercase;
 }
 .og-map-wrap {
-  position: relative; width: 100%; background: #0a0a0a;
-  border: 1px solid rgba(232,213,163,0.1); border-radius: 6px;
-  overflow: hidden; margin-bottom: 1rem;
+  position: relative;
+  /* pull left to span full founder-section width (past the 560px photo col + 4rem gap) */
+  width: calc(100% + 560px + 4rem);
+  margin-left: calc(-560px - 4rem);
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  background: #0a0a0a;
+  border: 1px solid rgba(232,213,163,0.1);
+  border-radius: 6px;
+  overflow: hidden;
 }
 .og-map-wrap svg { width: 100%; height: auto; display: block; }
 
@@ -7792,12 +7786,11 @@
 .og-cat-creativity   { color:#d4a574; border-color:#d4a574; }
 .og-cat-society      { color:#7090a8; border-color:#7090a8; }
 .og-cat-tech-ai      { color:#b8a07a; border-color:#b8a07a; }
-@media (max-width: 960px) {
-  .og-layout {
-    grid-template-columns: 1fr;
+@media (max-width: 900px) {
+  /* on tablet/mobile, map can't escape column — just go full right-col width */
+  .og-map-wrap {
     width: 100%;
     margin-left: 0;
-    gap: 2rem;
   }
 }
 @media (max-width: 600px) {
@@ -8379,9 +8372,7 @@
       <!-- v2.13: OG COLLAPSIBLE SECTION -->
       <div class="og-section" id="ogSection">
         <div class="og-section-inner">
-          <div class="og-layout">
-            <div class="og-col-story">
-              <div class="og-story founder-text">
+          <div class="og-story founder-text">
 
             <p class="og-kicker">For the real ones</p>
 
@@ -8421,9 +8412,6 @@
 
           </div>
 
-            </div><!-- /og-story -->
-            </div><!-- /og-col-story -->
-            <div class="og-col-map">
               <p class="og-map-hint">tap any node to explore the concepts behind this</p>
 
           <div class="og-map-wrap">
