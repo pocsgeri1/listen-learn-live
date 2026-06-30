@@ -8,7 +8,6 @@
 ## Next up
 
 - **Identity docs v1 fine-tuning** — `epistemic-identity-private.md` and `epistemic-identity-public.md` created (2026-06-28). Private: 1,500-word manifesto (taste as product philosophy, moat framing, belonging machine thesis). Public: ~400-word about/one-pager. Both v1 — need Gergely's corrections before finalising.
-- **Founder section → expandable** — add "Read more ↓" arrow at bottom of founder section; expanded state reveals selected passages from identity docs + Moat framing. Design TBD.
 - **Episode Intelligence Layer — Phase 2 (in progress)** — Intel generated and locked for episodes 504, 515, 516, 11, 501. extract.html updated with intel panel (all 4 styles). Remaining: wire index.html pills live (Summary, Line, Tension, Verdict, Vocab popovers). Airtable schema + Make.com pipeline update pending (see pending-decisions.md). Theme drawer intel deferred until theme drawer overhaul.
 - **Theme drawer overhaul** — theme names need simplification (more like the 14 foundational categories). Full restructure session needed before wiring Episode Intel into theme drawer.
 - **Corner pre-programmed scenarios** — quick-access pills below Corner search bar (pre-written situations → instant pre-programmed results, no API call). Content and mechanic to be designed separately.

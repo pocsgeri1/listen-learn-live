@@ -30,6 +30,20 @@ Body:   - bullet 1
 
 ## Entries
 
+### 2026-06-30 — v2.13: OG easter egg, inline SVG, cross-session git safety
+
+**Lesson 15 — Never patch index.html from a cloned temp copy when live repo has uncommitted changes.**
+This session initially cloned from GitHub into /tmp/repo and built the patch there, unaware the other Cowork session had uncommitted changes sitting in the live repo. The patch was based on the last committed state, not the working tree. Fix: always connect the live repo folder first, pull, then edit in place. Clones are read-only references, never edit targets.
+
+**Lesson 16 — Inline SVG IDs are global, not scoped to the SVG element.**
+Reusing gradient/marker IDs (cg, dg, arr, etc.) from a second inline SVG on the same page silently breaks both. Fix: namespace all defs IDs with a feature prefix (og-cg, og-dg, og-arr) and update every url(#...) reference within that SVG. Takes 2 minutes and prevents invisible render bugs.
+
+**Lesson 17 — HEAD.lock always appears when GitHub Desktop is open alongside bash commits.**
+Established pattern: GitHub Desktop holds HEAD.lock during any background operation. Never attempt workarounds. Correct flow: tell user to run `rm -f .git/HEAD.lock` in Terminal, wait for confirmation, then proceed.
+
+---
+
+
 ### 2026-06-30 — v2.12: Episode Intel panel, Style D, git lock files
 
 **Lesson 12 — Git lock files always require Terminal; never try bash workarounds.**

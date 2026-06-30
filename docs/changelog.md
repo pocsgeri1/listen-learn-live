@@ -6,6 +6,24 @@
 
 ---
 
+## v2.13 — 2026-06-30 — OG easter egg: founder expandable section + Stalk the Impossible map
+
+**Session scope:** Hidden expandable section beneath founder closing line. Completes "Founder section → expandable" roadmap item.
+
+### What shipped
+- Expand toggle ("The map behind the machine" ↓ arrow) added directly after "If you've ever gone 'nevermind' mid-sentence — this is for you."
+- Collapsed by default; opens with smooth CSS transition
+- OG story text: fine-tuned blend of `epistemic-identity-private.md` + `epistemic-identity-public.md` — playlist-as-worldview, Hungarian fluency gap, belonging infrastructure framing, moat-is-taste argument
+- Inline interactive SVG map (Stalk the Impossible v9) — full V9 design, namespaced IDs (`og-*`) to prevent document conflicts
+- Clickable nodes: DRIVE, GOALS, GRIT, FLOW STATE, Intrinsic, Curiosity
+- Tap any node → slide-in concept panel pulls live from `/concepts.json`, scores top 5 by category + keyword match
+- CSS animations: pulsing neuro dots (staggered), breathing glow halos, active dashed ring on selected node
+- Mobile: concept panel slides up from bottom (78vh sheet)
+- Vanilla JS only, IIFE-scoped, zero framework deps
+
+---
+
+
 ## v2.12 — 2026-06-30 — Episode Intelligence Layer: intel locked (eps 504/515/516/11/501), Style D, extract.html intel panel
 
 **Session scope:** Episode Intelligence Layer Phase 2. All intel fields generated and locked for 5 episodes. Style D invented and documented. `extract.html` (epistemic-tools repo) updated with full Episode Intel panel. `pending-decisions.md` created.
