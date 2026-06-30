@@ -8346,7 +8346,7 @@
       <p class="founder-italic-body founder-reveal"><span class="founder-accent">Epistemic</span> isn't trying to make you smarter. It's just trying to make sure what you already know doesn't die before it matters.</p>
       <p class="founder-reveal">If you've ever gone '<em>nevermind</em>' mid-sentence — this is for you.</p>
 
-      <\!-- v2.13: OG EXPAND TOGGLE -->
+      <!-- v2.13: OG EXPAND TOGGLE -->
       <div class="og-expand-row founder-reveal" id="ogExpandRow" onclick="toggleOgSection()">
         <div class="og-expand-btn" id="ogExpandBtn">
           <svg viewBox="0 0 12 12" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor"><path d="M2 4l4 4 4-4"/></svg>
@@ -8354,7 +8354,7 @@
         <span class="og-expand-label">The map behind the machine</span>
       </div>
 
-      <\!-- v2.13: OG COLLAPSIBLE SECTION -->
+      <!-- v2.13: OG COLLAPSIBLE SECTION -->
       <div class="og-section" id="ogSection">
         <div class="og-section-inner">
           <div class="og-story founder-text">
@@ -8662,7 +8662,7 @@
         </div>
       </div>
 
-      <\!-- OG concept panel -->
+      <!-- OG concept panel -->
       <div class="og-panel-backdrop" id="ogPanelBackdrop" onclick="ogClosePanel()"></div>
       <div class="og-concept-panel" id="ogConceptPanel">
         <div class="og-panel-header">
@@ -23044,11 +23044,11 @@ function _convOpenCSById(id) {
   function score(c,k){const n=N[k];if(\!n||c.duplicate_of)return -99;let s=0;if(n.cats[0]===c.category)s+=4;else if(n.cats.includes(c.category))s+=2;const h=[c.term,c.hook,c.plain].join(' ').toLowerCase();n.kw.forEach(w=>{if(h.includes(w))s+=n.boost.some(b=>w.startsWith(b))?3:1;});if(c.editors_pick)s+=1;return s;}
   function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
   function card(c){const cat=(c.category||'thinking').toLowerCase().replace(/[^a-z-]/g,'');return`<div class="og-card"><div class="og-card-top"><div class="og-card-term">${esc(c.term)}</div><span class="og-card-cat og-cat-${cat}">${cat}</span></div>${c.hook?`<div class="og-card-hook">${esc(c.hook)}</div>`:''  }${c.plain?`<div class="og-card-plain">${esc(c.plain)}</div>`:''}${c.prompt?`<div class="og-card-divider"></div><div class="og-card-prompt-lbl">Try this</div><div class="og-card-prompt">${esc(c.prompt)}</div>`:''}</div>`;}
-  function setRing(k){clearRing();const p=RP[k];if(\!p)return;const svg=document.getElementById('ogImpossibleMap');if(\!svg)return;const el=document.createElementNS('http://www.w3.org/2000/svg','circle');el.setAttribute('cx',p.cx);el.setAttribute('cy',p.cy);el.setAttribute('r',p.r);el.setAttribute('fill','none');el.setAttribute('stroke',RC[k]||'#e8d5a3');el.setAttribute('stroke-width','1.5');el.setAttribute('stroke-dasharray','6,4');el.classList.add('og-active-ring');svg.appendChild(el);_ar=el;}
+  function setRing(k){clearRing();const p=RP[k];if(!p)return;const svg=document.getElementById('ogImpossibleMap');if(\!svg)return;const el=document.createElementNS('http://www.w3.org/2000/svg','circle');el.setAttribute('cx',p.cx);el.setAttribute('cy',p.cy);el.setAttribute('r',p.r);el.setAttribute('fill','none');el.setAttribute('stroke',RC[k]||'#e8d5a3');el.setAttribute('stroke-width','1.5');el.setAttribute('stroke-dasharray','6,4');el.classList.add('og-active-ring');svg.appendChild(el);_ar=el;}
   function clearRing(){if(_ar){_ar.remove();_ar=null;}}
   window.ogShowConcepts=async function(k){const n=N[k];if(\!n)return;if(_an)clearRing();_an=k;setRing(k);document.getElementById('ogPanelTitle').textContent=n.label;const sub=document.getElementById('ogPanelSubtitle');sub.textContent=n.sub;sub.style.color=n.col;document.getElementById('ogPanelCards').innerHTML='<div class="og-panel-loading">Loading concepts…</div>';document.getElementById('ogPanelBackdrop').classList.add('visible');document.getElementById('ogConceptPanel').classList.add('open');const all=await load();const top=all.map(c=>({c,s:score(c,k)})).filter(x=>x.s>0).sort((a,b)=>b.s-a.s).slice(0,5).map(x=>x.c);document.getElementById('ogPanelCards').innerHTML=top.length?top.map(card).join(''):'<div class="og-panel-loading">No matches.</div>';};
   window.ogClosePanel=function(){document.getElementById('ogConceptPanel').classList.remove('open');document.getElementById('ogPanelBackdrop').classList.remove('visible');clearRing();_an=null;};
-  window.toggleOgSection=function(){_open=\!_open;document.getElementById('ogSection').classList.toggle('open',_open);document.getElementById('ogExpandBtn').classList.toggle('open',_open);if(_open){load();setTimeout(()=>document.getElementById('ogExpandRow')?.scrollIntoView({behavior:'smooth',block:'start'}),80);}};
+  window.toggleOgSection=function(){_open=!_open;document.getElementById('ogSection').classList.toggle('open',_open);document.getElementById('ogExpandBtn').classList.toggle('open',_open);if(_open){load();setTimeout(()=>document.getElementById('ogExpandRow')?.scrollIntoView({behavior:'smooth',block:'start'}),80);}};
   document.addEventListener('keydown',e=>{if(e.key==='Escape')window.ogClosePanel();});
 })();
 </script>
