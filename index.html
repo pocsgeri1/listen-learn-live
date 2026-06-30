@@ -1198,10 +1198,11 @@
     .ep-iwtmt-link { order: 20; }
   }
 
-  /* ── Popover shell — position:fixed to escape drawer overflow clipping ── */
+  /* ── Popover shell — position:fixed escapes drawer overflow clipping ── */
   .ep-intel-popover {
     position: fixed;
-    top: 0; left: 0; /* overridden by JS via getBoundingClientRect */
+    bottom: 0; left: 0; /* overridden by JS — anchored above pill */
+    top: auto;
     z-index: 9500;
     background: #141414;
     border: 1px solid rgba(255,255,255,0.1);
@@ -1209,7 +1210,7 @@
     padding: 16px 18px;
     min-width: 300px;
     max-width: 420px;
-    max-height: calc(80vh - 20px);
+    max-height: calc(100vh - 76px); /* never goes above Chrome bar */
     overflow-y: auto;
     box-shadow: 0 12px 40px rgba(0,0,0,0.65), 0 2px 8px rgba(0,0,0,0.3);
     opacity: 0;
@@ -1223,12 +1224,12 @@
   }
   .ep-intel-popover.visible { opacity: 1; pointer-events: auto; }
 
-  /* IWTMT popover: ~30% wider than previous, 2-col summary+verdict */
+  /* IWTMT: 60/40, 15% wider than v2.14d */
   .ep-intel-popover.iwtmt-popover {
-    min-width: min(900px, 92vw);
-    max-width: min(1050px, 95vw);
-    max-height: none;
-    overflow-y: visible;
+    min-width: min(1020px, 92vw);
+    max-width: min(1150px, 95vw);
+    max-height: calc(100vh - 76px);
+    overflow-y: auto;
   }
 
   /* Popover section label */
@@ -1399,10 +1400,10 @@
   }
   [data-theme="light"] .ep-intel-vocab-def { color: rgba(30,27,22,0.72); }
 
-  /* ── IWTMT 2-col popover layout — 70/30 split ── */
+  /* ── IWTMT 2-col popover layout — 60/40 split ── */
   .ep-iwtmt-grid {
     display: grid;
-    grid-template-columns: 70% 30%;
+    grid-template-columns: 60% 40%;
     gap: 20px;
     align-items: start;
   }
@@ -1412,6 +1413,11 @@
     padding-left: 16px;
   }
   [data-theme="light"] .ep-iwtmt-col + .ep-iwtmt-col { border-color: rgba(0,0,0,0.07); }
+  /* Colored section labels inside IWTMT: Summary=gold, Verdict=soft green */
+  .ep-iwtmt-col:first-child .ep-intel-popover-label { color: rgba(232,213,163,0.65); }
+  .ep-iwtmt-col:first-child .ep-intel-popover-label::after { background: rgba(232,213,163,0.12); }
+  .ep-iwtmt-col:last-child .ep-intel-popover-label { color: rgba(122,175,138,0.65); }
+  .ep-iwtmt-col:last-child .ep-intel-popover-label::after { background: rgba(122,175,138,0.1); }
   .ep-iwtmt-col-label {
     font-family: 'DM Mono', monospace;
     font-size: 0.5rem;
@@ -1726,16 +1732,21 @@
     .ep-drawer-filter-row {
       flex-wrap: wrap;
     }
+    /* Sort row first (order:-1), aligned with pills row left edge */
+    .ep-drawer-sort-row {
+      order: -1;
+      border-left: none;
+      border-bottom: 1px solid var(--border);
+      padding: 6px 1.25rem;
+      width: 100%;
+      justify-content: flex-start;
+      gap: 6px;
+    }
     .ep-drawer-filter-row .ep-drawer-cat-filter {
+      order: 0;
       width: 100%;
       flex: 0 0 100%;
       border-bottom: 1px solid var(--border);
-    }
-    .ep-drawer-sort-row {
-      border-left: none;
-      padding: 0.4rem 1rem;
-      width: 100%;
-      border-top: none;
     }
   }
   .ep-drawer-view-btn {
@@ -1768,6 +1779,8 @@
   }
 
   /* ── DRAWER SCAN TILES (2-col centered) ─── */
+  /* Scan mode: hide category filter pills (only show for flip/all card views) */
+  .ep-drawer.drawer-scan-active .ep-drawer-cat-filter { display: none; }
   .ep-drawer-body.drawer-scan-mode .ep-drawer-grid { display: none; }
   .ep-drawer-scan-grid {
     display: none;
@@ -9717,22 +9730,16 @@ function _renderIntelRow(pillsEl, collectionId) {
       function showPopover() {
         pillsEl.querySelectorAll('.ep-intel-popover.visible').forEach(p => { if (p !== popover) p.classList.remove('visible'); });
         clearTimeout(_hideTimer);
-        // Make briefly visible off-screen to measure dimensions
-        popover.style.visibility = 'hidden';
-        popover.classList.add('visible');
         const pillRect = pill.getBoundingClientRect();
-        const popW = popover.offsetWidth || 300;
-        const popH = popover.offsetHeight || 200;
-        popover.classList.remove('visible');
-        popover.style.visibility = '';
-        // Position: above pill by default, flip below if not enough space
-        let top = pillRect.top - popH - 10;
-        if (top < 8) top = pillRect.bottom + 10;
+        // Anchor bottom of popover 10px above the pill (grows upward)
+        const bottomPx = window.innerHeight - pillRect.top + 10;
         // Clamp horizontal within viewport
+        const popW = popover.offsetWidth || 300;
         let left = pillRect.left;
         if (left + popW > window.innerWidth - 8) left = window.innerWidth - popW - 8;
         if (left < 8) left = 8;
-        popover.style.top = top + 'px';
+        popover.style.bottom = bottomPx + 'px';
+        popover.style.top = 'auto';
         popover.style.left = left + 'px';
         popover.classList.add('visible');
       }
@@ -9924,19 +9931,14 @@ function _renderIntelRow(pillsEl, collectionId) {
         function showIwtmt() {
           pillsEl.querySelectorAll('.ep-intel-popover.visible').forEach(p => p.classList.remove('visible'));
           clearTimeout(_iwtmtTimer);
-          iwtmtPop.style.visibility = 'hidden';
-          iwtmtPop.classList.add('visible');
           const linkRect = iwtmtLink.getBoundingClientRect();
-          const popW = iwtmtPop.offsetWidth || 900;
-          const popH = iwtmtPop.offsetHeight || 300;
-          iwtmtPop.classList.remove('visible');
-          iwtmtPop.style.visibility = '';
-          let top = linkRect.top - popH - 10;
-          if (top < 8) top = linkRect.bottom + 10;
+          const bottomPx = window.innerHeight - linkRect.top + 10;
+          const popW = iwtmtPop.offsetWidth || 1020;
           let left = linkRect.left;
           if (left + popW > window.innerWidth - 8) left = window.innerWidth - popW - 8;
           if (left < 8) left = 8;
-          iwtmtPop.style.top = top + 'px';
+          iwtmtPop.style.bottom = bottomPx + 'px';
+          iwtmtPop.style.top = 'auto';
           iwtmtPop.style.left = left + 'px';
           iwtmtPop.classList.add('visible');
         }
@@ -10965,10 +10967,10 @@ function openEpisodeDrawer(collectionId) {
   // Two rAFs = guaranteed paint between them.
   requestAnimationFrame(() => requestAnimationFrame(() => {
     _renderDrawerContent(col, collectionId);
-    // Mobile default: switch to grid (all-cards) view on small screens
+    // Mobile default: scan view (◫) on small screens
     if (window.innerWidth <= 768) {
-      const allBtn = document.getElementById('epViewBtnAll');
-      if (allBtn) setDrawerView('ep', 'all', allBtn);
+      const scanBtn = document.getElementById('epViewBtnScan');
+      if (scanBtn) setDrawerView('ep', 'scan', scanBtn);
     }
   }));
 }
@@ -11589,10 +11591,10 @@ function openThemeDrawer(id) {
 
   requestAnimationFrame(() => requestAnimationFrame(() => {
     _renderThemeDrawerContent(col, id);
-    // Mobile default: switch to grid (all-cards) view on small screens
+    // Mobile default: scan view (◫) on small screens
     if (window.innerWidth <= 768) {
-      const allBtn = document.getElementById('themeViewBtnAll');
-      if (allBtn) setDrawerView('theme', 'all', allBtn);
+      const scanBtn = document.getElementById('themeViewBtnScan');
+      if (scanBtn) setDrawerView('theme', 'scan', scanBtn);
     }
   }));
 }
@@ -12399,7 +12401,10 @@ function _resetDrawerScan(prefix) {
   const bodyEl = document.querySelector('#' + (prefix === 'ep' ? 'epDrawer' : 'themeDrawer') + ' .ep-drawer-body');
   const scanGrid = document.getElementById(prefix === 'ep' ? 'epDrawerScanGrid' : 'themeDrawerScanGrid');
   const allGrid = document.getElementById(prefix === 'ep' ? 'epDrawerAllGrid' : 'themeDrawerAllGrid');
+  const drawerIdR = prefix === 'ep' ? 'epDrawer' : 'themeDrawer';
+  const drawerElR = document.getElementById(drawerIdR);
   if (bodyEl) { bodyEl.classList.remove('drawer-scan-mode', 'drawer-all-mode'); }
+  if (drawerElR) drawerElR.classList.remove('drawer-scan-active');
   if (scanGrid) scanGrid.innerHTML = '';
   if (allGrid) allGrid.innerHTML = '';
   // Reset active button
@@ -12427,6 +12432,9 @@ function setDrawerView(prefix, view, btn) {
 
   // Clear modes
   bodyEl.classList.remove('drawer-scan-mode', 'drawer-all-mode');
+  // Toggle scan-active class on the drawer for cat-filter visibility
+  var drawerEl = document.getElementById(drawerId);
+  if (drawerEl) drawerEl.classList.toggle('drawer-scan-active', view === 'scan');
   spDismissPreview();
 
   var scanGrid = document.getElementById(scanGridId);
