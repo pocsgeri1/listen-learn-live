@@ -26,6 +26,9 @@
 
 ## Recently completed
 
+- v2.13 ✅ — 2026-06-30 — **OG easter egg: expandable founder section + Stalk the Impossible map.**
+  Expand toggle ("The map behind the machine") after founder closing line. OG story text (private+public identity blend). Inline interactive SVG map (V9, namespaced `og-*` IDs). Clickable nodes (DRIVE, GOALS, GRIT, FLOW STATE, Intrinsic, Curiosity) → slide-in concept panel, top-5 scored from concepts.json. Zoom/pan controls (+/−/↺, mouse wheel, drag, pinch). `og-section` is direct child of `founder-inner` with `grid-column: 1 / -1` for true full-width. Story text uses 2-col newspaper layout. OG text fine-tuning deferred to next session.
+
 - v2.12 ✅ — 2026-06-30 — **Episode intel locked (5 eps), Style D, extract.html intel panel.** Intel generated for episodes 504/515/516/11/501. Style D ("The Skeptic") designed and added to style guide, generate script, and extract.html. Episode Intel panel added to extract.html (epistemic-tools repo) with style picker, generate/regen buttons, and GitHub save. `pending-decisions.md` created for Make.com vs GitHub Actions decision.
 
 - v2.11 ✅ — 2026-06-28 — **episode_meta.json + index.html: Episode DNA pill row.** New `episode_meta.json` scaffolded (30 episodes, DNA populated from concepts.json). DNA pill + hover popover in episode and theme drawers. Future intel pills (Summary, Line, Tension, Verdict, Vocab) greyed out as placeholders. Full spec for Phase 2 complete (in-chat).

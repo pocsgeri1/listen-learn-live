@@ -30,6 +30,22 @@ Body:   - bullet 1
 
 ## Entries
 
+### 2026-06-30 — v2.13b/c/d: OG layout bug cascade + bash escaping
+
+**Lesson 18 — Bash heredocs escape `\!` even with single-quoted PYEOF delimiter in some shells.**
+Every bash heredoc (`<< 'PYEOF'`) caused `\!` → `\\!` inside Python string literals, corrupting JS logic (`if(\!n)` → `if(\\!n)`), HTML comments (`<\!--` → `<\\!--`), and ultimately rendering JS as page text when a `<script>` block contained `\!`. Fix: use `Write` tool to write Python scripts to disk (bypasses bash entirely), then execute with `python3 /path/to/script.py`. Never inject JS or HTML with `\!` characters via a bash heredoc.
+
+**Lesson 19 — `position: relative; width: calc(100% + Xpx); margin-left: calc(-Xpx)` clips when the parent has `overflow-x: hidden`.**
+Attempted to escape the right grid column by expanding `og-map-wrap` leftward with negative margin. The `founder-section` already had `overflow-x: hidden`, so the left half was invisibly clipped. Looked like a half-dark rectangle. Fix: move the element to a higher DOM position (`grid-column: 1 / -1` on a direct grid child) rather than trying to visually escape with negative margins inside an overflow-hidden ancestor.
+
+**Lesson 20 — Extra closing divs from failed intermediate edits silently break toggle sections.**
+Three leftover tags (`</div><\!-- /og-story -->`, `</div><\!-- /og-col-story -->`, `<div class="og-col-map">`) prematurely closed `og-section-inner` and `og-section`, leaving the SVG map as a DOM sibling of `og-section` rather than a child. The map was always visible; the story text was hidden inside the collapsed toggle; zoom buttons hit `null` elements. Lesson: after any multi-step DOM surgery, verify div balance with a depth counter before committing.
+
+**Lesson 21 — Quit GitHub Desktop before every bash session. No exceptions.**
+GitHub Desktop holds `HEAD.lock` and `index.lock` as long as it is open. Any `git add` from the bash sandbox creates a conflicting lock that persists and blocks all subsequent commits. The sandbox cannot `unlink` the host filesystem lock (Operation Not Permitted). Correct permanent workflow: (1) Quit GitHub Desktop at session start. (2) Do all work. (3) Claude commits. (4) Open GitHub Desktop just to push origin. Saves 5+ Terminal interruptions per session.
+
+---
+
 ### 2026-06-30 — v2.13: OG easter egg, inline SVG, cross-session git safety
 
 **Lesson 15 — Never patch index.html from a cloned temp copy when live repo has uncommitted changes.**

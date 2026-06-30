@@ -794,3 +794,22 @@ auto-generate vs. permanent manual trigger before promoting toward
 **Unaffected:** `_csRestoreOrLoad()`, session/localStorage caching,
 Stash, History, Stories tabs — all restore-from-cache logic is
 untouched. Only the *initial, uncached* generation trigger changed.
+## OG Easter Egg — founder expandable section (v2.13+)
+
+**Location in DOM:** `og-section` is a direct child of `founder-inner` (the 2-col CSS grid). It uses `grid-column: 1 / -1` to span both the photo montage column (560px) and the text column (1fr), giving true full-width layout.
+
+**Toggle:** `og-expand-row` div inside `founder-text` (right column). Calls `toggleOgSection()` → toggles `.open` class on `og-section`. CSS grid animation: `grid-template-rows: 0fr → 1fr` with `opacity: 0 → 1`. Smooth, no jumpiness.
+
+**Content structure:**
+- `og-story` — fine-tuned identity prose (private + public identity docs blend). 2-col CSS newspaper layout at full width.
+- `og-map-wrap` → `og-map-scroll` → `og-map-inner` → inline SVG (Stalk the Impossible V9, `viewBox="0 0 2400 1500"`)
+- All SVG defs namespaced with `og-` prefix (og-cg, og-dg, og-arr etc.) to prevent ID conflicts with other inline SVGs on the page.
+
+**Clickable nodes:** DRIVE, GOALS, GRIT, FLOW STATE, Intrinsic, Curiosity. Each calls `ogShowConcepts(key)`. Top-5 concepts scored from live `concepts.json` (category match +4/+2, keyword scan +3/+1, editors_pick +1, duplicate_of −99). Slide-in panel (`og-concept-panel`, `position: fixed`).
+
+**Zoom/pan:** `ogZoom(delta)` — delta=0 resets, ±0.25 increments. Mouse wheel zoom (passive:false listener). Click-drag pan. Touch pinch-to-zoom + single-finger drag. Scale bounded 0.5–4×. State: IIFE-scoped `scale`, `ox`, `oy` vars.
+
+**JS scoping:** All OG JS in two IIFEs — the main easter egg IIFE (v2.13, attached to the existing `</script>` block) and the zoom/pan IIFE in its own `<script>` tag before `</body>`. `ogShowConcepts`, `ogClosePanel`, `toggleOgSection`, `ogZoom` are attached to `window` for onclick handlers.
+
+**Known issue (deferred):** OG story text fine-tuning to be done in a separate session — prose is functional but not final.
+

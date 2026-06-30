@@ -6,6 +6,24 @@
 
 ---
 
+## v2.13b/c/d — 2026-06-30 — OG section: full-width layout, broken-div fix, zoom/pan map
+
+**Session scope:** Layout and functionality fixes for the v2.13 OG easter egg section across four patch commits.
+
+### What shipped
+- `og-section` moved outside `founder-text` column to direct child of `founder-inner`
+- `grid-column: 1 / -1` spans both photo + text columns for true full-width display
+- Removed all negative-margin hacks that caused left-side clipping and text disappearance
+- Fixed broken div structure: extra `</div><\!-- /og-story -->`, `</div><\!-- /og-col-story -->`, `<div class="og-col-map">` tags were premature-closing `og-section`, leaving SVG map outside the toggle entirely
+- Story text: `columns: 2; column-gap: 3rem` newspaper layout at full section width
+- Map: wrapped SVG in `og-map-scroll` + `og-map-inner` divs for zoom/pan
+- Zoom controls: `+` / `↺` / `−` buttons (`ogZoom(delta)`, reset at delta=0), mouse wheel zoom, click-drag pan, touch pinch-to-zoom + single-finger drag
+- Rogue JS block (injected outside `<script>` tag, rendering as visible page text) removed and reinserted correctly
+- All `\\!` bash-heredoc escape artifacts removed via binary byte scan (11 pairs fixed in final pass)
+- GitHub Desktop lock file workflow documented: quit Desktop before sessions, `rm -f .git/HEAD.lock .git/index.lock` in Terminal when needed
+
+---
+
 ## v2.13 — 2026-06-30 — OG easter egg: founder expandable section + Stalk the Impossible map
 
 **Session scope:** Hidden expandable section beneath founder closing line. Completes "Founder section → expandable" roadmap item.
