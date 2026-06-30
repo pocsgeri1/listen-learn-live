@@ -412,30 +412,132 @@
     background: var(--muted);
   }
 
-  /* ── RELATED CONCEPTS ── */
+  /* ── RELATED CONCEPTS — v2.14: per-concept collapsible cards ── */
   .panel-related-wrap {
     margin-bottom: 1.5rem;
   }
-  .panel-related-pills {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-top: 0.5rem;
+
+  /* Individual concept card — collapsed header */
+  .map-rc-card {
+    margin-top: 7px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    background: rgba(255,255,255,0.02);
+    transition: border-color 0.2s;
   }
-  .panel-related-pill {
+  .map-rc-card:first-child { margin-top: 0; }
+  .map-rc-card:hover { border-color: var(--border-hover); }
+  .map-rc-card.open { border-color: rgba(255,255,255,0.14); }
+
+  .map-rc-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 9px 13px;
+    cursor: pointer;
+    gap: 8px;
+    user-select: none;
+  }
+
+  .map-rc-header-left {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .map-rc-cat-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .map-rc-term {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .map-rc-cat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.54rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .map-rc-arrow {
+    font-size: 0.6rem;
+    color: var(--muted);
+    flex-shrink: 0;
+    transition: transform 0.28s cubic-bezier(0.4,0,0.2,1);
+    display: inline-block;
+  }
+  .map-rc-card.open .map-rc-arrow { transform: rotate(180deg); }
+
+  /* Collapsible body — grid trick same as Corner */
+  .map-rc-body {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.28s cubic-bezier(0.4,0,0.2,1);
+  }
+  .map-rc-card.open .map-rc-body { grid-template-rows: 1fr; }
+  .map-rc-body > div { min-height: 0; overflow: hidden; }
+
+  .map-rc-inner {
+    padding: 0 13px;
+    transition: padding 0.28s cubic-bezier(0.4,0,0.2,1);
+    border-top: 0px solid var(--border);
+  }
+  .map-rc-card.open .map-rc-inner {
+    padding: 10px 13px 13px;
+    border-top-width: 1px;
+  }
+
+  .map-rc-field-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.52rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 3px;
+    margin-top: 10px;
+  }
+  .map-rc-field-label:first-child { margin-top: 0; }
+
+  .map-rc-field-text {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 300;
+    line-height: 1.6;
+    color: var(--text);
+    opacity: 0.82;
+  }
+
+  .map-rc-nav-btn {
+    margin-top: 10px;
     font-family: 'DM Mono', monospace;
     font-size: 0.58rem;
-    letter-spacing: 0.07em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    padding: 4px 10px;
-    border-radius: 999px;
-    border: 1px solid;
+    color: var(--muted);
     background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 4px 10px;
     cursor: pointer;
-    transition: opacity 0.15s, background 0.15s;
-    line-height: 1.4;
+    transition: color 0.15s, border-color 0.15s;
   }
-  .panel-related-pill:hover { opacity: 0.75; }
+  .map-rc-nav-btn:hover { color: var(--text); border-color: var(--border-hover); }
   
   .panel-footer {
     padding: 1rem 1.5rem 1.5rem;
@@ -676,7 +778,7 @@
 
     <div class="panel-related-wrap" id="panelRelatedWrap" style="display:none">
       <div class="panel-section-label">Related concepts</div>
-      <div class="panel-related-pills" id="panelRelatedPills"></div>
+      <div id="panelRelatedCards"></div>
     </div>
   </div>
   <div class="panel-footer">
@@ -722,6 +824,8 @@ let highlightedIds = new Set(); // from search
 // Pan/zoom state
 let panX = 0, panY = 0, scale = 1;
 let isPanning = false, panStartX = 0, panStartY = 0, panOriginX = 0, panOriginY = 0;
+// Track last known cursor position over the map (for zoom-button target)
+let lastCursorX = null, lastCursorY = null;
 
 // SVG elements map
 function track(n, d) {
@@ -1131,7 +1235,17 @@ function panToCategory(cat) {
 }
 
 function resetView() {
-  animatePanZoom(0, 0, 1, 350);
+  // v2.14: blur during zoom-out, then clear
+  const root = document.getElementById('mapRoot');
+  if (root) {
+    root.style.transition = 'filter 0.55s ease';
+    root.style.filter = 'blur(4px)';
+    setTimeout(() => {
+      root.style.filter = 'blur(0px)';
+      setTimeout(() => { root.style.transition = ''; root.style.filter = ''; }, 600);
+    }, 300);
+  }
+  animatePanZoom(0, 0, 1, 600);
 }
 
 function animatePanZoom(tx, ty, ts, duration) {
@@ -1232,9 +1346,9 @@ function openConceptPanel(concept, color) {
     sourceWrap.innerHTML = '';
   }
 
-  // Related concepts
+  // Related concepts — v2.14: per-concept collapsible cards
   const relatedWrap = document.getElementById('panelRelatedWrap');
-  const relatedPills = document.getElementById('panelRelatedPills');
+  const relatedCards = document.getElementById('panelRelatedCards');
   const relatedIds = window.RELATED_INDEX && window.RELATED_INDEX[concept.id]
     ? Array.from(window.RELATED_INDEX[concept.id])
     : [];
@@ -1244,18 +1358,53 @@ function openConceptPanel(concept, color) {
     .slice(0, 6);
 
   if (relatedConcepts.length > 0) {
-    relatedPills.innerHTML = relatedConcepts.map(rc => {
-      const rc_color = CAT_COLOR[rc.category] || 'var(--muted)';
-      return `<button class="panel-related-pill"
-        style="color:${rc_color};border-color:${rc_color}22;"
-        onclick="navigateToRelated(${rc.id})"
-        title="${rc.hook || ''}"
-      >${rc.term}</button>`;
-    }).join('');
+    relatedCards.innerHTML = '';
+    relatedConcepts.forEach(rc => {
+      const rcColor = CAT_COLOR[rc.category] || '#e8d5a3';
+      const card = document.createElement('div');
+      card.className = 'map-rc-card';
+
+      // Header row (always visible)
+      const header = document.createElement('div');
+      header.className = 'map-rc-header';
+      header.innerHTML = `
+        <div class="map-rc-header-left">
+          <span class="map-rc-cat-dot" style="background:${rcColor}"></span>
+          <span class="map-rc-term">${rc.term}</span>
+          <span class="map-rc-cat-label">${rc.category}</span>
+        </div>
+        <span class="map-rc-arrow">▾</span>`;
+
+      // Collapsible body
+      const body = document.createElement('div');
+      body.className = 'map-rc-body';
+      const inner = document.createElement('div');
+      const innerContent = document.createElement('div');
+      innerContent.className = 'map-rc-inner';
+      innerContent.innerHTML = `
+        <div class="map-rc-field-label">What it means</div>
+        <div class="map-rc-field-text">${rc.plain || ''}</div>
+        <div class="map-rc-field-label">Think of it like this</div>
+        <div class="map-rc-field-text">${rc.analogy || ''}</div>
+        <button class="map-rc-nav-btn" onclick="navigateToRelated(${rc.id})">Open on map →</button>`;
+      inner.appendChild(innerContent);
+      body.appendChild(inner);
+
+      card.appendChild(header);
+      card.appendChild(body);
+
+      // Toggle open/close
+      header.addEventListener('click', () => {
+        const isOpen = card.classList.contains('open');
+        card.classList.toggle('open', !isOpen);
+      });
+
+      relatedCards.appendChild(card);
+    });
     relatedWrap.style.display = '';
   } else {
     relatedWrap.style.display = 'none';
-    relatedPills.innerHTML = '';
+    relatedCards.innerHTML = '';
   }
 
   const isMastered = mastered.has(String(concept.id)) || mastered.has(concept.id);
@@ -1488,14 +1637,25 @@ function setupInteractions() {
     }
   });
 
-  // Zoom buttons
+  // Track cursor over map for zoom-button targeting
+  wrap.addEventListener('mousemove', (e) => {
+    const rect = wrap.getBoundingClientRect();
+    lastCursorX = e.clientX - rect.left;
+    lastCursorY = e.clientY - rect.top;
+  }, { passive: true });
+
+  // Zoom buttons — zoom toward last known cursor position, fall back to center
   document.getElementById('zoomIn').addEventListener('click', () => {
     const { w, h } = getViewport();
-    zoomAt(w / 2, h / 2, 1.2);
+    const cx = lastCursorX !== null ? lastCursorX : w / 2;
+    const cy = lastCursorY !== null ? lastCursorY : h / 2;
+    zoomAt(cx, cy, 1.2);
   });
   document.getElementById('zoomOut').addEventListener('click', () => {
     const { w, h } = getViewport();
-    zoomAt(w / 2, h / 2, 0.83);
+    const cx = lastCursorX !== null ? lastCursorX : w / 2;
+    const cy = lastCursorY !== null ? lastCursorY : h / 2;
+    zoomAt(cx, cy, 0.83);
   });
   document.getElementById('zoomReset').addEventListener('click', () => {
     activeCat = null;

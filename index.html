@@ -213,7 +213,9 @@
      trailing the cursor — no circle, no fill, just two perpendicular lines
      like a film camera viewfinder. Grows on hover, tightens on click.
      Desktop only. Never replaces the native cursor. */
+  /* v2.14: cursor disabled (display:none) — code preserved below */
   #epCursor {
+    display: none;
     position: fixed;
     top: 0;
     left: 0;
@@ -1246,6 +1248,86 @@
   @media (max-width: 768px) {
     .ep-intel-popover { max-width: calc(100vw - 32px); }
   }
+  /* ── INTEL POPOVER CONTENT TYPES — v2.14 ────────────────────────────────── */
+  .ep-intel-popover-body {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 300;
+    line-height: 1.65;
+    color: rgba(240,237,232,0.82);
+  }
+  [data-theme="light"] .ep-intel-popover-body { color: rgba(30,27,22,0.82); }
+
+  /* Line pill — single sentence, displayed larger */
+  .ep-intel-line-text {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 0.92rem;
+    line-height: 1.55;
+    color: var(--accent);
+  }
+
+  /* Tension pill */
+  .ep-intel-tension-text {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 400;
+    line-height: 1.55;
+    color: rgba(240,237,232,0.82);
+  }
+  [data-theme="light"] .ep-intel-tension-text { color: rgba(30,27,22,0.82); }
+
+  /* Verdict pill — two columns: listen/skip */
+  .ep-intel-verdict-col-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.52rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(240,237,232,0.38);
+    margin-bottom: 5px;
+    margin-top: 10px;
+  }
+  .ep-intel-verdict-col-label:first-child { margin-top: 0; }
+  [data-theme="light"] .ep-intel-verdict-col-label { color: rgba(30,27,22,0.38); }
+  .ep-intel-verdict-item {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 300;
+    line-height: 1.5;
+    color: rgba(240,237,232,0.78);
+    padding-left: 0.85rem;
+    position: relative;
+    margin-bottom: 3px;
+  }
+  .ep-intel-verdict-item::before {
+    content: '–';
+    position: absolute;
+    left: 0;
+    color: rgba(240,237,232,0.35);
+  }
+  [data-theme="light"] .ep-intel-verdict-item { color: rgba(30,27,22,0.78); }
+  [data-theme="light"] .ep-intel-verdict-item::before { color: rgba(30,27,22,0.35); }
+
+  /* Vocab pill — word + definition rows */
+  .ep-intel-vocab-row {
+    margin-bottom: 10px;
+  }
+  .ep-intel-vocab-row:last-child { margin-bottom: 0; }
+  .ep-intel-vocab-word {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 0.82rem;
+    color: var(--accent);
+    margin-bottom: 2px;
+  }
+  .ep-intel-vocab-def {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 300;
+    line-height: 1.5;
+    color: rgba(240,237,232,0.72);
+  }
+  [data-theme="light"] .ep-intel-vocab-def { color: rgba(30,27,22,0.72); }
   /* ── END EPISODE INTEL ───────────────────────────────────────────────────── */
 
   .ep-drawer-pills {
@@ -7651,6 +7733,8 @@
   letter-spacing: 0.18em; text-transform: uppercase;
   color: var(--accent); opacity: 0.38; transition: opacity 0.25s;
 }
+[data-theme="light"] .og-expand-label { color: #7a6830; opacity: 0.72; }
+[data-theme="light"] .og-expand-row:hover .og-expand-label { opacity: 1; }
 
 /* ── OG collapsible section ─────────────────────────────── */
 .og-section {
@@ -7679,6 +7763,7 @@
   letter-spacing: 0.12em; color: var(--accent); opacity: 0.3;
   text-align: center; margin: 2rem 0 0.75rem; text-transform: uppercase;
 }
+[data-theme="light"] .og-map-hint { color: #7a6830; opacity: 0.65; }
 .og-map-wrap {
   position: relative;
   width: 100%;
@@ -9064,7 +9149,9 @@ let FUSE = null;
 // Footer — v2.2. CATEGORIES is static, so this can run immediately at parse time.
 // Founder photo montage lightbox — v2.5
 // Custom trailing-ring cursor — v2.3f. Desktop only, one RAF loop, purely decorative.
+// v2.14: disabled — return early. CSS also has display:none. Re-enable by removing both guards.
 (function initEpCursor() {
+  return; // v2.14 disabled
   if (!window.matchMedia || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
   const cursor = document.createElement('div');
   cursor.id = 'epCursor';
@@ -9329,86 +9416,172 @@ function _loadEpisodeMeta() {
 }
 
 function _renderIntelRow(pillsEl, collectionId) {
-  // Injects intel pills directly into the drawer pills row (ep-drawer-pills).
-  // Desktop: pills sit inline after date/listen. Mobile: wraps to next line.
+  // v2.14: all 6 intel pills wired live (DNA, Summary, Line, Tension, Verdict, Vocab).
+  // Greyed out (data-empty) only when the field is missing for this episode.
   if (!pillsEl) return;
   _loadEpisodeMeta().then(meta => {
     const entry = meta.episodes && meta.episodes[String(collectionId)];
-    const dna = entry && entry.dna && Object.keys(entry.dna).length > 0 ? entry.dna : null;
+    const dna      = entry && entry.dna && Object.keys(entry.dna).length > 0 ? entry.dna : null;
+    const summary  = entry && (entry.summary || '').trim()         ? entry.summary          : null;
+    const line     = entry && (entry.sharpest_line || '').trim()   ? entry.sharpest_line    : null;
+    const tension  = entry && (entry.tension || '').trim()         ? entry.tension           : null;
+    const verdictL = entry && Array.isArray(entry.verdict_listen) && entry.verdict_listen.length ? entry.verdict_listen : null;
+    const verdictS = entry && Array.isArray(entry.verdict_skip)   && entry.verdict_skip.length   ? entry.verdict_skip   : null;
+    const vocab    = entry && Array.isArray(entry.vocab_vault)     && entry.vocab_vault.length    ? entry.vocab_vault    : null;
 
-    // Thin separator between date/listen pills and intel pills
+    // Thin separator
     const sep = document.createElement('span');
     sep.className = 'ep-pills-intel-sep';
     pillsEl.appendChild(sep);
 
-    // DNA pill
-    const dnaPill = document.createElement('button');
-    dnaPill.className = 'ep-intel-pill';
-    dnaPill.textContent = 'DNA';
-    if (!dna) dnaPill.setAttribute('data-empty', '1');
-    pillsEl.appendChild(dnaPill);
-
-    // Future pills — greyed out until data exists
-    ['Summary','Line','Tension','Verdict','Vocab'].forEach(label => {
-      const p = document.createElement('button');
-      p.className = 'ep-intel-pill';
-      p.textContent = label;
-      p.setAttribute('data-empty', '1');
-      pillsEl.appendChild(p);
-    });
-
-    if (!dna) return;
-
-    // Build popover anchored to pillsEl
-    const popover = document.createElement('div');
-    popover.className = 'ep-intel-popover';
-    const labelEl = document.createElement('div');
-    labelEl.className = 'ep-intel-popover-label';
-    labelEl.textContent = 'Episode DNA';
-    popover.appendChild(labelEl);
-
-    Object.entries(dna).forEach(([cat, pct]) => {
-      const rowDiv = document.createElement('div');
-      rowDiv.className = 'ep-dna-row';
-      const catColor = CAT_COLOR[cat] || '#e8d5a3';
-      rowDiv.innerHTML = `
-        <div class="ep-dna-cat">${cat}</div>
-        <div class="ep-dna-bar-wrap"><div class="ep-dna-bar-fill" style="width:${pct}%;background:${catColor}"></div></div>
-        <div class="ep-dna-pct">${pct}%</div>`;
-      popover.appendChild(rowDiv);
-    });
-
     pillsEl.style.position = 'relative';
-    pillsEl.appendChild(popover);
 
-    // Hover bridge
-    let _hideTimer = null;
-    function showPopover() {
-      clearTimeout(_hideTimer);
-      const pillRect = dnaPill.getBoundingClientRect();
-      const rowRect = pillsEl.getBoundingClientRect();
-      popover.style.left = (pillRect.left - rowRect.left) + 'px';
-      popover.classList.add('visible');
-    }
-    function scheduleHide() {
-      _hideTimer = setTimeout(() => popover.classList.remove('visible'), 120);
-    }
-    dnaPill.addEventListener('mouseenter', showPopover);
-    dnaPill.addEventListener('mouseleave', scheduleHide);
-    popover.addEventListener('mouseenter', () => clearTimeout(_hideTimer));
-    popover.addEventListener('mouseleave', scheduleHide);
+    // Helper: build a pill + its popover, wire hover/click
+    function makePill(label, hasData, buildPopoverContent) {
+      const pill = document.createElement('button');
+      pill.className = 'ep-intel-pill';
+      pill.textContent = label;
+      if (!hasData) { pill.setAttribute('data-empty', '1'); pillsEl.appendChild(pill); return; }
 
-    // Mobile tap-toggle
-    dnaPill.addEventListener('click', function(e) {
-      if (window.matchMedia('(hover:none)').matches) {
+      pillsEl.appendChild(pill);
+
+      const popover = document.createElement('div');
+      popover.className = 'ep-intel-popover';
+
+      const lbl = document.createElement('div');
+      lbl.className = 'ep-intel-popover-label';
+      lbl.textContent = label;
+      popover.appendChild(lbl);
+
+      buildPopoverContent(popover);
+      pillsEl.appendChild(popover);
+
+      let _hideTimer = null;
+      function showPopover() {
+        // Close any other open popovers in this row
+        pillsEl.querySelectorAll('.ep-intel-popover.visible').forEach(p => { if (p !== popover) p.classList.remove('visible'); });
+        clearTimeout(_hideTimer);
+        const pillRect = pill.getBoundingClientRect();
+        const rowRect = pillsEl.getBoundingClientRect();
+        let left = pillRect.left - rowRect.left;
+        // Clamp so popover doesn't escape right edge
+        const maxLeft = rowRect.width - 240;
+        popover.style.left = Math.max(0, Math.min(left, maxLeft)) + 'px';
+        popover.classList.add('visible');
+      }
+      function scheduleHide() {
+        _hideTimer = setTimeout(() => popover.classList.remove('visible'), 150);
+      }
+      pill.addEventListener('mouseenter', showPopover);
+      pill.addEventListener('mouseleave', scheduleHide);
+      popover.addEventListener('mouseenter', () => clearTimeout(_hideTimer));
+      popover.addEventListener('mouseleave', scheduleHide);
+      pill.addEventListener('click', e => {
         e.stopPropagation();
         popover.classList.contains('visible') ? popover.classList.remove('visible') : showPopover();
+      });
+    }
+
+    // DNA pill
+    makePill('DNA', !!dna, pop => {
+      Object.entries(dna).forEach(([cat, pct]) => {
+        const row = document.createElement('div');
+        row.className = 'ep-dna-row';
+        const catColor = CAT_COLOR[cat] || '#e8d5a3';
+        row.innerHTML = `<div class="ep-dna-cat">${cat}</div><div class="ep-dna-bar-wrap"><div class="ep-dna-bar-fill" style="width:${pct}%;background:${catColor}"></div></div><div class="ep-dna-pct">${pct}%</div>`;
+        pop.appendChild(row);
+      });
+    });
+
+    // Summary pill
+    makePill('Summary', !!summary, pop => {
+      const body = document.createElement('div');
+      body.className = 'ep-intel-popover-body';
+      // summary may have paragraph breaks (\n\n)
+      body.style.cssText = 'max-width:300px;max-height:260px;overflow-y:auto;';
+      summary.split(/\n\n+/).forEach(para => {
+        const p = document.createElement('p');
+        p.className = 'ep-intel-popover-body';
+        p.style.marginBottom = '0.6rem';
+        p.textContent = para.trim();
+        body.appendChild(p);
+      });
+      pop.appendChild(body);
+    });
+
+    // Line pill (sharpest line)
+    makePill('Line', !!line, pop => {
+      const el = document.createElement('div');
+      el.className = 'ep-intel-line-text';
+      el.style.maxWidth = '280px';
+      el.textContent = '\u201C' + line + '\u201D';
+      pop.appendChild(el);
+    });
+
+    // Tension pill
+    makePill('Tension', !!tension, pop => {
+      const el = document.createElement('div');
+      el.className = 'ep-intel-tension-text';
+      el.style.maxWidth = '260px';
+      el.textContent = tension;
+      pop.appendChild(el);
+    });
+
+    // Verdict pill
+    const hasVerdict = !!(verdictL || verdictS);
+    makePill('Verdict', hasVerdict, pop => {
+      pop.style.minWidth = '240px';
+      if (verdictL && verdictL.length) {
+        const colLabel = document.createElement('div');
+        colLabel.className = 'ep-intel-verdict-col-label';
+        colLabel.textContent = 'Listen if…';
+        pop.appendChild(colLabel);
+        verdictL.forEach(item => {
+          const el = document.createElement('div');
+          el.className = 'ep-intel-verdict-item';
+          el.textContent = item;
+          pop.appendChild(el);
+        });
+      }
+      if (verdictS && verdictS.length) {
+        const colLabel = document.createElement('div');
+        colLabel.className = 'ep-intel-verdict-col-label';
+        colLabel.style.marginTop = verdictL ? '10px' : '0';
+        colLabel.textContent = 'Skip if…';
+        pop.appendChild(colLabel);
+        verdictS.forEach(item => {
+          const el = document.createElement('div');
+          el.className = 'ep-intel-verdict-item';
+          el.textContent = item;
+          pop.appendChild(el);
+        });
       }
     });
-    document.addEventListener('click', function _closeIntelPopover(e) {
+
+    // Vocab pill
+    makePill('Vocab', !!vocab, pop => {
+      pop.style.minWidth = '240px';
+      pop.style.maxHeight = '280px';
+      pop.style.overflowY = 'auto';
+      vocab.forEach(v => {
+        const row = document.createElement('div');
+        row.className = 'ep-intel-vocab-row';
+        const word = document.createElement('div');
+        word.className = 'ep-intel-vocab-word';
+        word.textContent = v.word || v.term || '';
+        const def = document.createElement('div');
+        def.className = 'ep-intel-vocab-def';
+        def.textContent = v.definition || '';
+        row.appendChild(word);
+        row.appendChild(def);
+        pop.appendChild(row);
+      });
+    });
+
+    // Global click-outside closes all intel popovers in this row
+    document.addEventListener('click', function _closeAll(e) {
       if (!pillsEl.contains(e.target)) {
-        popover.classList.remove('visible');
-        document.removeEventListener('click', _closeIntelPopover);
+        pillsEl.querySelectorAll('.ep-intel-popover.visible').forEach(p => p.classList.remove('visible'));
       }
     });
   });
