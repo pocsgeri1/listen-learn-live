@@ -1208,8 +1208,10 @@
     border: 1px solid rgba(255,255,255,0.1);
     border-radius: 12px;
     padding: 16px 18px;
-    min-width: 260px;
-    max-width: 380px;
+    min-width: 300px;
+    max-width: 420px;
+    max-height: calc(80vh - 20px);
+    overflow-y: auto;
     box-shadow: 0 12px 40px rgba(0,0,0,0.65), 0 2px 8px rgba(0,0,0,0.3);
     opacity: 0;
     pointer-events: none;
@@ -1218,6 +1220,7 @@
   .ep-intel-popover.pop-below {
     bottom: auto;
     top: calc(100% + 10px);
+    max-height: calc(80vh - 20px);
   }
   [data-theme="light"] .ep-intel-popover {
     background: #faf8f4;
@@ -1226,13 +1229,12 @@
   }
   .ep-intel-popover.visible { opacity: 1; pointer-events: auto; }
 
-  /* IWTMT popover is wider — 2-col layout */
+  /* IWTMT popover: wide enough for 2-col without scrolling */
   .ep-intel-popover.iwtmt-popover {
-    min-width: 460px;
-    max-width: 520px;
-  }
-  @media (max-width: 520px) {
-    .ep-intel-popover.iwtmt-popover { min-width: calc(100vw - 32px); }
+    min-width: min(700px, 90vw);
+    max-width: min(860px, 95vw);
+    overflow-y: visible;
+    max-height: none;
   }
 
   /* Popover section label */
@@ -1256,7 +1258,12 @@
   [data-theme="light"] .ep-intel-popover-label { color: rgba(30,27,22,0.32); }
   [data-theme="light"] .ep-intel-popover-label::after { background: rgba(0,0,0,0.07); }
 
-  /* ── DNA (unchanged design) ── */
+  /* ── DNA — wider to prevent top-overflow on large episode sets ── */
+  .ep-intel-popover.dna-popover {
+    min-width: min(360px, 90vw);
+    max-width: min(440px, 95vw);
+  }
+
   .ep-dna-row {
     display: grid;
     grid-template-columns: 80px 1fr 28px;
@@ -1350,8 +1357,19 @@
   .ep-intel-verdict-item.skip::before   { content: '✕'; position: absolute; left: 0; color: rgba(212,113,90,0.65); font-size: 0.6rem; }
   [data-theme="light"] .ep-intel-verdict-item { color: rgba(30,27,22,0.75); }
 
-  /* ── Vocab popover ── */
-  .ep-intel-vocab-row { margin-bottom: 12px; }
+  /* ── Vocab popover — 2-col grid, wide enough to not scroll ── */
+  .ep-intel-popover.vocab-popover {
+    min-width: min(560px, 90vw);
+    max-width: min(680px, 95vw);
+    max-height: none;
+    overflow-y: visible;
+  }
+  .ep-intel-vocab-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 20px;
+  }
+  .ep-intel-vocab-row { margin-bottom: 0; }
   .ep-intel-vocab-row:last-child { margin-bottom: 0; }
   .ep-intel-vocab-word {
     font-family: 'Playfair Display', serif;
@@ -1387,13 +1405,19 @@
   }
   [data-theme="light"] .ep-intel-vocab-def { color: rgba(30,27,22,0.72); }
 
-  /* ── IWTMT 2-col popover layout ── */
+  /* ── IWTMT 2-col popover layout — 70/30 split ── */
   .ep-iwtmt-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
+    grid-template-columns: 70% 30%;
+    gap: 20px;
+    align-items: start;
   }
   .ep-iwtmt-col {}
+  .ep-iwtmt-col + .ep-iwtmt-col {
+    border-left: 1px solid rgba(255,255,255,0.06);
+    padding-left: 16px;
+  }
+  [data-theme="light"] .ep-iwtmt-col + .ep-iwtmt-col { border-color: rgba(0,0,0,0.07); }
   .ep-iwtmt-col-label {
     font-family: 'DM Mono', monospace;
     font-size: 0.5rem;
@@ -1408,18 +1432,17 @@
   .ep-iwtmt-col-label::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.07); }
   [data-theme="light"] .ep-iwtmt-col-label { color: rgba(30,27,22,0.3); }
   [data-theme="light"] .ep-iwtmt-col-label::after { background: rgba(0,0,0,0.07); }
-  .ep-iwtmt-summary-text {
+  /* Summary text in IWTMT: DM Sans, body size, comfortable to read */
+  .ep-iwtmt-grid .ep-intel-popover-body {
     font-family: 'DM Sans', sans-serif;
-    font-size: 0.79rem;
+    font-size: 0.8rem;
     font-weight: 300;
-    line-height: 1.65;
-    color: rgba(240,237,232,0.8);
-    max-height: 200px;
-    overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255,255,255,0.1) transparent;
+    line-height: 1.7;
+    color: rgba(240,237,232,0.78);
+    margin-bottom: 0.6rem;
   }
-  [data-theme="light"] .ep-iwtmt-summary-text { color: rgba(30,27,22,0.8); }
+  .ep-iwtmt-grid .ep-intel-popover-body:last-child { margin-bottom: 0; }
+  [data-theme="light"] .ep-iwtmt-grid .ep-intel-popover-body { color: rgba(30,27,22,0.72); }
 
   /* ── Mobile bottom sheet (replaces positioned popovers on touch) ── */
   .ep-intel-sheet-backdrop {
@@ -1477,6 +1500,34 @@
   .ep-intel-sheet-close:hover { color: var(--text); }
   [data-theme="light"] .ep-intel-sheet-close { color: rgba(30,27,22,0.35); }
   .ep-intel-sheet-body { /* content injected by JS */ }
+  /* Mobile sheet: IWTMT summary matches verdict sizing, subtly different color */
+  .ep-intel-sheet .ep-intel-popover-body {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 300;
+    line-height: 1.7;
+    color: rgba(240,237,232,0.72);
+    margin-bottom: 0.55rem;
+  }
+  .ep-intel-sheet .ep-intel-popover-body:last-child { margin-bottom: 0; }
+  [data-theme="light"] .ep-intel-sheet .ep-intel-popover-body { color: rgba(30,27,22,0.68); }
+  /* Mobile sheet: IWTMT grid goes single-col for readability */
+  .ep-intel-sheet .ep-iwtmt-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .ep-intel-sheet .ep-iwtmt-col + .ep-iwtmt-col {
+    border-left: none;
+    padding-left: 0;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding-top: 16px;
+  }
+  [data-theme="light"] .ep-intel-sheet .ep-iwtmt-col + .ep-iwtmt-col { border-color: rgba(0,0,0,0.07); }
+  /* Mobile sheet: vocab grid goes single-col */
+  .ep-intel-sheet .ep-intel-vocab-grid {
+    grid-template-columns: 1fr;
+  }
 
   /* ── END EPISODE INTEL ───────────────────────────────────────────────────── */
 
@@ -9690,7 +9741,7 @@ function _renderIntelRow(pillsEl, collectionId) {
         row.innerHTML = `<div class="ep-dna-cat">${cat}</div><div class="ep-dna-bar-wrap"><div class="ep-dna-bar-fill" style="width:${pct}%;background:${catColor}"></div></div><div class="ep-dna-pct">${pct}%</div>`;
         pop.appendChild(row);
       });
-    });
+    }, 'dna-popover');
 
     // Line pill — large Playfair italic with decorative quote mark
     makePill('Line', !!line, pop => {
@@ -9704,8 +9755,10 @@ function _renderIntelRow(pillsEl, collectionId) {
       pop.appendChild(el);
     });
 
-    // Vocab pill — gold ◆ bullet + DM Mono def label
+    // Vocab pill — 2-col grid, gold ◆ bullet + DM Mono def label
     makePill('Vocab', !!vocab, pop => {
+      const grid = document.createElement('div');
+      grid.className = 'ep-intel-vocab-grid';
       vocab.forEach(v => {
         const row = document.createElement('div');
         row.className = 'ep-intel-vocab-row';
@@ -9721,9 +9774,10 @@ function _renderIntelRow(pillsEl, collectionId) {
         row.appendChild(word);
         row.appendChild(defLabel);
         row.appendChild(def);
-        pop.appendChild(row);
+        grid.appendChild(row);
       });
-    });
+      pop.appendChild(grid);
+    }, 'vocab-popover');
 
     // Tension pill — two-column vs. layout
     makePill('Tension', !!tension, pop => {
@@ -10889,6 +10943,11 @@ function openEpisodeDrawer(collectionId) {
   // Two rAFs = guaranteed paint between them.
   requestAnimationFrame(() => requestAnimationFrame(() => {
     _renderDrawerContent(col, collectionId);
+    // Mobile default: switch to grid (all-cards) view on small screens
+    if (window.innerWidth <= 768) {
+      const allBtn = document.getElementById('epViewBtnAll');
+      if (allBtn) setDrawerView('ep', 'all', allBtn);
+    }
   }));
 }
 
@@ -11508,6 +11567,11 @@ function openThemeDrawer(id) {
 
   requestAnimationFrame(() => requestAnimationFrame(() => {
     _renderThemeDrawerContent(col, id);
+    // Mobile default: switch to grid (all-cards) view on small screens
+    if (window.innerWidth <= 768) {
+      const allBtn = document.getElementById('themeViewBtnAll');
+      if (allBtn) setDrawerView('theme', 'all', allBtn);
+    }
   }));
 }
 
@@ -23572,7 +23636,7 @@ function _convOpenCSById(id) {
 })();
 </script>
 <script>
-/* v2.13d OG Map zoom + pan */
+/* v2.14c OG Map zoom toward cursor + pan */
 (function(){
   var scale=1,ox=0,oy=0,drag=false,sx=0,sy=0,sox=0,soy=0,ptA=null;
   function el(id){return document.getElementById(id);}
@@ -23580,17 +23644,29 @@ function _convOpenCSById(id) {
     var m=el("ogMapInner");
     if(m) m.style.transform="translate("+ox+"px,"+oy+"px) scale("+scale+")";
   }
-  window.ogZoom=function(d){
-    if(d===0){scale=1;ox=0;oy=0;}
-    else{scale=Math.min(4,Math.max(0.5,scale+d));}
+  function zoomToward(cx,cy,factor){
+    var ns=Math.min(4,Math.max(0.5,scale*factor));
+    var sc=ns/scale;
+    ox=cx-(cx-ox)*sc;
+    oy=cy-(cy-oy)*sc;
+    scale=ns;
     apply();
+  }
+  window.ogZoom=function(d){
+    var s=el("ogMapScroll");
+    if(d===0){scale=1;ox=0;oy=0;apply();return;}
+    var r=s?s.getBoundingClientRect():{left:0,top:0,width:0,height:0};
+    var cx=r.width/2, cy=r.height/2;
+    zoomToward(cx,cy,d>0?1.25:0.8);
   };
   document.addEventListener("wheel",function(e){
     var s=el("ogMapScroll");
     if(!s||!s.contains(e.target))return;
     e.preventDefault();
-    scale=Math.min(4,Math.max(0.5,scale-e.deltaY*0.001));
-    apply();
+    var r=s.getBoundingClientRect();
+    var cx=e.clientX-r.left, cy=e.clientY-r.top;
+    var factor=e.deltaY>0?0.92:1.09;
+    zoomToward(cx,cy,factor);
   },{passive:false});
   document.addEventListener("mousedown",function(e){
     var s=el("ogMapScroll");

@@ -1619,16 +1619,14 @@ function setupInteractions() {
 
   wrap.addEventListener('touchend', () => { isPanning = false; });
 
-  // Scroll to zoom — use getScreenCTM().inverse() for reliable cursor coords in SVG space
+  // Scroll to zoom
   wrap.addEventListener('wheel', (e) => {
     e.preventDefault();
     const delta = e.deltaY > 0 ? 0.9 : 1.1;
-    const svg = document.getElementById('mapCanvas');
-    const pt = svg.createSVGPoint();
-    pt.x = e.clientX;
-    pt.y = e.clientY;
-    const svgP = pt.matrixTransform(svg.getScreenCTM().inverse());
-    zoomAt(svgP.x, svgP.y, delta);
+    const rect = wrap.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    zoomAt(mouseX, mouseY, delta);
   }, { passive: false });
 
   // Click on empty → close panel + reset category (ignore if this was a drag)
