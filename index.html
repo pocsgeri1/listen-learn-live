@@ -1121,21 +1121,20 @@
     display: none;
   }
 
-  /* ── EPISODE INTEL PILLS — v2.11b ───────────────────────────────────────── */
-  /* Pills injected into ep-drawer-pills row. Desktop: inline. Mobile: wraps. */
+  /* ── EPISODE INTEL PILLS — v2.14b ───────────────────────────────────────── */
+
+  /* Separator between date/listen pills and intel pills */
   .ep-pills-intel-sep {
     display: inline-block;
-    width: 1px;
-    height: 12px;
+    width: 1px; height: 12px;
     background: rgba(255,255,255,0.12);
     margin: 0 2px;
     align-self: center;
     flex-shrink: 0;
   }
   [data-theme="light"] .ep-pills-intel-sep { background: rgba(0,0,0,0.12); }
-  @media (max-width: 768px) {
-    .ep-pills-intel-sep { width: 100%; height: 0; background: none; margin: 0; }
-  }
+
+  /* ── Intel pills (DNA / Line / Vocab / Tension) ── */
   .ep-intel-pill {
     font-family: 'DM Mono', monospace;
     font-size: 0.6rem;
@@ -1150,65 +1149,114 @@
     transition: color 0.15s, border-color 0.15s, background 0.15s;
     position: relative;
     white-space: nowrap;
+    flex-shrink: 0;
   }
-  [data-theme="light"] .ep-intel-pill {
-    border-color: rgba(0,0,0,0.12);
-    color: rgba(30,27,22,0.45);
-  }
-  .ep-intel-pill:hover,
-  .ep-intel-pill.active {
+  [data-theme="light"] .ep-intel-pill { border-color: rgba(0,0,0,0.12); color: rgba(30,27,22,0.45); }
+  .ep-intel-pill:hover, .ep-intel-pill.active {
     color: rgba(240,237,232,0.88);
     border-color: rgba(255,255,255,0.22);
     background: rgba(232,213,163,0.07);
   }
-  [data-theme="light"] .ep-intel-pill:hover,
-  [data-theme="light"] .ep-intel-pill.active {
-    color: rgba(30,27,22,0.88);
-    border-color: rgba(0,0,0,0.2);
-    background: rgba(232,213,163,0.12);
+  [data-theme="light"] .ep-intel-pill:hover, [data-theme="light"] .ep-intel-pill.active {
+    color: rgba(30,27,22,0.88); border-color: rgba(0,0,0,0.2); background: rgba(232,213,163,0.12);
   }
-  .ep-intel-pill[data-empty] {
-    opacity: 0.28;
-    cursor: default;
-    pointer-events: none;
+  .ep-intel-pill[data-empty] { opacity: 0.28; cursor: default; pointer-events: none; }
+
+  /* ── "Is it worth my time?" link ── */
+  .ep-iwtmt-link {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(240,237,232,0.42);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: rgba(232,213,163,0.25);
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: color 0.15s, text-decoration-color 0.15s;
+    background: none;
+    border: none;
+    padding: 0;
+    position: relative;
   }
-  /* DNA popover */
+  [data-theme="light"] .ep-iwtmt-link { color: rgba(30,27,22,0.45); text-decoration-color: rgba(100,80,20,0.3); }
+  .ep-iwtmt-link:hover { color: var(--accent); text-decoration-color: rgba(232,213,163,0.6); }
+  .ep-iwtmt-link[data-empty] { opacity: 0.3; cursor: default; pointer-events: none; }
+
+  /* Mobile ordering: IWTMT sits right of Listen; intel pills wrap to second row */
+  @media (max-width: 768px) {
+    .ep-pills-intel-sep { width: 100%; height: 0; background: none; margin: 0; order: 10; }
+    .ep-intel-pill { order: 11; font-size: 0.55rem; padding: 3px 7px; }
+    .ep-iwtmt-link { order: 3; margin-left: auto; }
+    .episode-datestamp { order: 1; }
+    .ep-drawer-listen { order: 2; }
+  }
+  @media (min-width: 769px) {
+    /* Desktop: IWTMT after Tension, inline */
+    .ep-iwtmt-link { order: 20; }
+  }
+
+  /* ── Popover shell — shared by all intel types ── */
   .ep-intel-popover {
     position: absolute;
-    bottom: calc(100% + 8px);
+    bottom: calc(100% + 10px); /* default: above pill */
     left: 0;
-    z-index: 999;
-    background: #161616;
+    z-index: 1000;
+    background: #141414;
     border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 10px;
-    padding: 13px 16px;
-    min-width: 220px;
-    max-width: 320px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.55);
+    border-radius: 12px;
+    padding: 16px 18px;
+    min-width: 260px;
+    max-width: 380px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.65), 0 2px 8px rgba(0,0,0,0.3);
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.15s ease;
+    transition: opacity 0.18s ease;
+  }
+  .ep-intel-popover.pop-below {
+    bottom: auto;
+    top: calc(100% + 10px);
   }
   [data-theme="light"] .ep-intel-popover {
-    background: #f0ede8;
-    border-color: rgba(0,0,0,0.1);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+    background: #faf8f4;
+    border-color: rgba(0,0,0,0.09);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.1), 0 2px 8px rgba(0,0,0,0.06);
   }
-  .ep-intel-popover.visible {
-    opacity: 1;
-    pointer-events: auto;
+  .ep-intel-popover.visible { opacity: 1; pointer-events: auto; }
+
+  /* IWTMT popover is wider — 2-col layout */
+  .ep-intel-popover.iwtmt-popover {
+    min-width: 460px;
+    max-width: 520px;
   }
+  @media (max-width: 520px) {
+    .ep-intel-popover.iwtmt-popover { min-width: calc(100vw - 32px); }
+  }
+
+  /* Popover section label */
   .ep-intel-popover-label {
     font-family: 'DM Mono', monospace;
-    font-size: 0.55rem;
+    font-size: 0.52rem;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: rgba(240,237,232,0.38);
+    letter-spacing: 0.12em;
+    color: rgba(240,237,232,0.32);
     margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
   }
-  [data-theme="light"] .ep-intel-popover-label {
-    color: rgba(30,27,22,0.38);
+  .ep-intel-popover-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(255,255,255,0.07);
   }
+  [data-theme="light"] .ep-intel-popover-label { color: rgba(30,27,22,0.32); }
+  [data-theme="light"] .ep-intel-popover-label::after { background: rgba(0,0,0,0.07); }
+
+  /* ── DNA (unchanged design) ── */
   .ep-dna-row {
     display: grid;
     grid-template-columns: 80px 1fr 28px;
@@ -1218,116 +1266,218 @@
   }
   .ep-dna-row:last-child { margin-bottom: 0; }
   .ep-dna-cat {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.58rem;
-    text-transform: capitalize;
-    color: rgba(240,237,232,0.65);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-family: 'DM Mono', monospace; font-size: 0.58rem;
+    text-transform: capitalize; white-space: nowrap;
+    overflow: hidden; text-overflow: ellipsis;
   }
-  [data-theme="light"] .ep-dna-cat { color: rgba(30,27,22,0.65); }
-  .ep-dna-bar-wrap {
-    height: 3px;
-    background: rgba(255,255,255,0.08);
-    border-radius: 2px;
-    overflow: hidden;
-  }
+  .ep-dna-bar-wrap { height: 3px; background: rgba(255,255,255,0.08); border-radius: 2px; overflow: hidden; }
   [data-theme="light"] .ep-dna-bar-wrap { background: rgba(0,0,0,0.08); }
-  .ep-dna-bar-fill {
-    height: 100%;
-    border-radius: 2px;
-  }
+  .ep-dna-bar-fill { height: 100%; border-radius: 2px; }
   .ep-dna-pct {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.58rem;
-    color: rgba(240,237,232,0.45);
-    text-align: right;
+    font-family: 'DM Mono', monospace; font-size: 0.58rem;
+    color: rgba(240,237,232,0.45); text-align: right;
   }
   [data-theme="light"] .ep-dna-pct { color: rgba(30,27,22,0.45); }
-  @media (max-width: 768px) {
-    .ep-intel-popover { max-width: calc(100vw - 32px); }
-  }
-  /* ── INTEL POPOVER CONTENT TYPES — v2.14 ────────────────────────────────── */
-  .ep-intel-popover-body {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.82rem;
-    font-weight: 300;
-    line-height: 1.65;
-    color: rgba(240,237,232,0.82);
-  }
-  [data-theme="light"] .ep-intel-popover-body { color: rgba(30,27,22,0.82); }
 
-  /* Line pill — single sentence, displayed larger */
+  /* ── Line popover ── */
+  .ep-intel-line-quote-mark {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.8rem;
+    line-height: 0.7;
+    color: var(--accent);
+    opacity: 0.35;
+    display: block;
+    margin-bottom: 6px;
+  }
   .ep-intel-line-text {
     font-family: 'Playfair Display', serif;
     font-style: italic;
-    font-size: 0.92rem;
-    line-height: 1.55;
+    font-size: 1rem;
+    line-height: 1.6;
     color: var(--accent);
+    display: block;
   }
 
-  /* Tension pill */
-  .ep-intel-tension-text {
+  /* ── Tension popover ── */
+  .ep-intel-tension-vs {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 10px;
+    align-items: center;
+  }
+  .ep-intel-tension-side {
     font-family: 'DM Sans', sans-serif;
-    font-size: 0.82rem;
+    font-size: 0.8rem;
     font-weight: 400;
-    line-height: 1.55;
+    line-height: 1.45;
     color: rgba(240,237,232,0.82);
+    padding: 8px 10px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.06);
+    text-align: center;
   }
-  [data-theme="light"] .ep-intel-tension-text { color: rgba(30,27,22,0.82); }
+  [data-theme="light"] .ep-intel-tension-side { color: rgba(30,27,22,0.82); background: rgba(0,0,0,0.03); border-color: rgba(0,0,0,0.06); }
+  .ep-intel-tension-vs-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    color: rgba(232,213,163,0.4);
+    text-align: center;
+  }
 
-  /* Verdict pill — two columns: listen/skip */
+  /* ── Verdict (inside IWTMT) ── */
   .ep-intel-verdict-col-label {
     font-family: 'DM Mono', monospace;
-    font-size: 0.52rem;
+    font-size: 0.5rem;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: rgba(240,237,232,0.38);
-    margin-bottom: 5px;
-    margin-top: 10px;
+    letter-spacing: 0.12em;
+    margin-bottom: 6px;
   }
-  .ep-intel-verdict-col-label:first-child { margin-top: 0; }
-  [data-theme="light"] .ep-intel-verdict-col-label { color: rgba(30,27,22,0.38); }
+  .ep-intel-verdict-col-label.listen { color: rgba(122,175,138,0.7); }
+  .ep-intel-verdict-col-label.skip   { color: rgba(212,113,90,0.7); }
   .ep-intel-verdict-item {
     font-family: 'DM Sans', sans-serif;
-    font-size: 0.78rem;
+    font-size: 0.77rem;
     font-weight: 300;
     line-height: 1.5;
-    color: rgba(240,237,232,0.78);
-    padding-left: 0.85rem;
+    color: rgba(240,237,232,0.75);
+    padding-left: 1rem;
     position: relative;
-    margin-bottom: 3px;
+    margin-bottom: 4px;
   }
-  .ep-intel-verdict-item::before {
-    content: '–';
-    position: absolute;
-    left: 0;
-    color: rgba(240,237,232,0.35);
-  }
-  [data-theme="light"] .ep-intel-verdict-item { color: rgba(30,27,22,0.78); }
-  [data-theme="light"] .ep-intel-verdict-item::before { color: rgba(30,27,22,0.35); }
+  .ep-intel-verdict-item.listen::before { content: '✓'; position: absolute; left: 0; color: rgba(122,175,138,0.65); font-size: 0.65rem; }
+  .ep-intel-verdict-item.skip::before   { content: '✕'; position: absolute; left: 0; color: rgba(212,113,90,0.65); font-size: 0.6rem; }
+  [data-theme="light"] .ep-intel-verdict-item { color: rgba(30,27,22,0.75); }
 
-  /* Vocab pill — word + definition rows */
-  .ep-intel-vocab-row {
-    margin-bottom: 10px;
-  }
+  /* ── Vocab popover ── */
+  .ep-intel-vocab-row { margin-bottom: 12px; }
   .ep-intel-vocab-row:last-child { margin-bottom: 0; }
   .ep-intel-vocab-word {
     font-family: 'Playfair Display', serif;
     font-weight: 700;
-    font-size: 0.82rem;
+    font-size: 0.88rem;
     color: var(--accent);
+    margin-bottom: 3px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .ep-intel-vocab-word::before {
+    content: '◆';
+    font-size: 0.35rem;
+    color: rgba(232,213,163,0.45);
+    flex-shrink: 0;
+  }
+  .ep-intel-vocab-def-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: rgba(240,237,232,0.3);
     margin-bottom: 2px;
   }
+  [data-theme="light"] .ep-intel-vocab-def-label { color: rgba(30,27,22,0.3); }
   .ep-intel-vocab-def {
     font-family: 'DM Sans', sans-serif;
     font-size: 0.78rem;
     font-weight: 300;
-    line-height: 1.5;
+    line-height: 1.55;
     color: rgba(240,237,232,0.72);
   }
   [data-theme="light"] .ep-intel-vocab-def { color: rgba(30,27,22,0.72); }
+
+  /* ── IWTMT 2-col popover layout ── */
+  .ep-iwtmt-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .ep-iwtmt-col {}
+  .ep-iwtmt-col-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: rgba(240,237,232,0.3);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .ep-iwtmt-col-label::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.07); }
+  [data-theme="light"] .ep-iwtmt-col-label { color: rgba(30,27,22,0.3); }
+  [data-theme="light"] .ep-iwtmt-col-label::after { background: rgba(0,0,0,0.07); }
+  .ep-iwtmt-summary-text {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.79rem;
+    font-weight: 300;
+    line-height: 1.65;
+    color: rgba(240,237,232,0.8);
+    max-height: 200px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,0.1) transparent;
+  }
+  [data-theme="light"] .ep-iwtmt-summary-text { color: rgba(30,27,22,0.8); }
+
+  /* ── Mobile bottom sheet (replaces positioned popovers on touch) ── */
+  .ep-intel-sheet-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    z-index: 1100;
+    backdrop-filter: blur(2px);
+  }
+  .ep-intel-sheet-backdrop.open { display: block; }
+  .ep-intel-sheet {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    z-index: 1101;
+    background: #161616;
+    border-radius: 16px 16px 0 0;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding: 0 20px 32px;
+    transform: translateY(100%);
+    transition: transform 0.32s cubic-bezier(0.4,0,0.2,1);
+    max-height: 75vh;
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
+  [data-theme="light"] .ep-intel-sheet { background: #faf8f4; border-color: rgba(0,0,0,0.08); }
+  .ep-intel-sheet.open { transform: translateY(0); }
+  .ep-intel-sheet-handle {
+    width: 36px; height: 4px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 2px;
+    margin: 12px auto 16px;
+  }
+  [data-theme="light"] .ep-intel-sheet-handle { background: rgba(0,0,0,0.12); }
+  .ep-intel-sheet-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .ep-intel-sheet-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: rgba(240,237,232,0.4);
+  }
+  [data-theme="light"] .ep-intel-sheet-title { color: rgba(30,27,22,0.4); }
+  .ep-intel-sheet-close {
+    background: none; border: none;
+    color: rgba(240,237,232,0.35);
+    font-size: 1rem; cursor: pointer; padding: 4px;
+    transition: color 0.15s;
+  }
+  .ep-intel-sheet-close:hover { color: var(--text); }
+  [data-theme="light"] .ep-intel-sheet-close { color: rgba(30,27,22,0.35); }
+  .ep-intel-sheet-body { /* content injected by JS */ }
+
   /* ── END EPISODE INTEL ───────────────────────────────────────────────────── */
 
   .ep-drawer-pills {
@@ -9416,8 +9566,8 @@ function _loadEpisodeMeta() {
 }
 
 function _renderIntelRow(pillsEl, collectionId) {
-  // v2.14: all 6 intel pills wired live (DNA, Summary, Line, Tension, Verdict, Vocab).
-  // Greyed out (data-empty) only when the field is missing for this episode.
+  // v2.14b: Pills order: DNA → Line → Vocab → Tension → IWTMT (link).
+  // Summary + Verdict removed as standalone pills; merged into IWTMT popover.
   if (!pillsEl) return;
   _loadEpisodeMeta().then(meta => {
     const entry = meta.episodes && meta.episodes[String(collectionId)];
@@ -9436,8 +9586,43 @@ function _renderIntelRow(pillsEl, collectionId) {
 
     pillsEl.style.position = 'relative';
 
-    // Helper: build a pill + its popover, wire hover/click
-    function makePill(label, hasData, buildPopoverContent) {
+    const isTouchDevice = window.matchMedia('(hover: none)').matches;
+
+    // Shared mobile bottom sheet (one instance per pillsEl)
+    let sheet = null, sheetBackdrop = null;
+    function getSheet() {
+      if (sheet) return { sheet, sheetBackdrop };
+      sheetBackdrop = document.createElement('div');
+      sheetBackdrop.className = 'ep-intel-sheet-backdrop';
+      document.body.appendChild(sheetBackdrop);
+      sheet = document.createElement('div');
+      sheet.className = 'ep-intel-sheet';
+      sheet.innerHTML = '<div class="ep-intel-sheet-handle"></div><div class="ep-intel-sheet-content"></div>';
+      document.body.appendChild(sheet);
+      function closeSheet() {
+        sheet.classList.remove('open');
+        sheetBackdrop.classList.remove('open');
+      }
+      sheetBackdrop.addEventListener('click', closeSheet);
+      sheet.querySelector('.ep-intel-sheet-handle').addEventListener('click', closeSheet);
+      return { sheet, sheetBackdrop };
+    }
+
+    function openSheet(label, buildContent) {
+      const { sheet, sheetBackdrop } = getSheet();
+      const content = sheet.querySelector('.ep-intel-sheet-content');
+      content.innerHTML = '';
+      const lbl = document.createElement('div');
+      lbl.className = 'ep-intel-popover-label';
+      lbl.textContent = label;
+      content.appendChild(lbl);
+      buildContent(content);
+      sheet.classList.add('open');
+      sheetBackdrop.classList.add('open');
+    }
+
+    // Helper: build a pill + its popover (desktop) or sheet (mobile)
+    function makePill(label, hasData, buildPopoverContent, extraPopClass) {
       const pill = document.createElement('button');
       pill.className = 'ep-intel-pill';
       pill.textContent = label;
@@ -9445,8 +9630,17 @@ function _renderIntelRow(pillsEl, collectionId) {
 
       pillsEl.appendChild(pill);
 
+      if (isTouchDevice) {
+        pill.addEventListener('click', e => {
+          e.stopPropagation();
+          openSheet(label, buildPopoverContent);
+        });
+        return;
+      }
+
+      // Desktop: positioned popover
       const popover = document.createElement('div');
-      popover.className = 'ep-intel-popover';
+      popover.className = 'ep-intel-popover' + (extraPopClass ? ' ' + extraPopClass : '');
 
       const lbl = document.createElement('div');
       lbl.className = 'ep-intel-popover-label';
@@ -9458,15 +9652,20 @@ function _renderIntelRow(pillsEl, collectionId) {
 
       let _hideTimer = null;
       function showPopover() {
-        // Close any other open popovers in this row
         pillsEl.querySelectorAll('.ep-intel-popover.visible').forEach(p => { if (p !== popover) p.classList.remove('visible'); });
         clearTimeout(_hideTimer);
         const pillRect = pill.getBoundingClientRect();
         const rowRect = pillsEl.getBoundingClientRect();
         let left = pillRect.left - rowRect.left;
-        // Clamp so popover doesn't escape right edge
-        const maxLeft = rowRect.width - 240;
+        const popWidth = popover.offsetWidth || 260;
+        const maxLeft = rowRect.width - popWidth - 4;
         popover.style.left = Math.max(0, Math.min(left, maxLeft)) + 'px';
+        // Flip below if near top of viewport
+        if (pillRect.top < 220) {
+          popover.classList.add('pop-below');
+        } else {
+          popover.classList.remove('pop-below');
+        }
         popover.classList.add('visible');
       }
       function scheduleHide() {
@@ -9493,90 +9692,191 @@ function _renderIntelRow(pillsEl, collectionId) {
       });
     });
 
-    // Summary pill
-    makePill('Summary', !!summary, pop => {
-      const body = document.createElement('div');
-      body.className = 'ep-intel-popover-body';
-      // summary may have paragraph breaks (\n\n)
-      body.style.cssText = 'max-width:300px;max-height:260px;overflow-y:auto;';
-      summary.split(/\n\n+/).forEach(para => {
-        const p = document.createElement('p');
-        p.className = 'ep-intel-popover-body';
-        p.style.marginBottom = '0.6rem';
-        p.textContent = para.trim();
-        body.appendChild(p);
-      });
-      pop.appendChild(body);
-    });
-
-    // Line pill (sharpest line)
+    // Line pill — large Playfair italic with decorative quote mark
     makePill('Line', !!line, pop => {
+      const mark = document.createElement('div');
+      mark.className = 'ep-intel-line-quote-mark';
+      mark.textContent = '\u201C';
+      pop.appendChild(mark);
       const el = document.createElement('div');
       el.className = 'ep-intel-line-text';
-      el.style.maxWidth = '280px';
-      el.textContent = '\u201C' + line + '\u201D';
+      el.textContent = line + '\u201D';
       pop.appendChild(el);
     });
 
-    // Tension pill
-    makePill('Tension', !!tension, pop => {
-      const el = document.createElement('div');
-      el.className = 'ep-intel-tension-text';
-      el.style.maxWidth = '260px';
-      el.textContent = tension;
-      pop.appendChild(el);
-    });
-
-    // Verdict pill
-    const hasVerdict = !!(verdictL || verdictS);
-    makePill('Verdict', hasVerdict, pop => {
-      pop.style.minWidth = '240px';
-      if (verdictL && verdictL.length) {
-        const colLabel = document.createElement('div');
-        colLabel.className = 'ep-intel-verdict-col-label';
-        colLabel.textContent = 'Listen if…';
-        pop.appendChild(colLabel);
-        verdictL.forEach(item => {
-          const el = document.createElement('div');
-          el.className = 'ep-intel-verdict-item';
-          el.textContent = item;
-          pop.appendChild(el);
-        });
-      }
-      if (verdictS && verdictS.length) {
-        const colLabel = document.createElement('div');
-        colLabel.className = 'ep-intel-verdict-col-label';
-        colLabel.style.marginTop = verdictL ? '10px' : '0';
-        colLabel.textContent = 'Skip if…';
-        pop.appendChild(colLabel);
-        verdictS.forEach(item => {
-          const el = document.createElement('div');
-          el.className = 'ep-intel-verdict-item';
-          el.textContent = item;
-          pop.appendChild(el);
-        });
-      }
-    });
-
-    // Vocab pill
+    // Vocab pill — gold ◆ bullet + DM Mono def label
     makePill('Vocab', !!vocab, pop => {
-      pop.style.minWidth = '240px';
-      pop.style.maxHeight = '280px';
-      pop.style.overflowY = 'auto';
       vocab.forEach(v => {
         const row = document.createElement('div');
         row.className = 'ep-intel-vocab-row';
         const word = document.createElement('div');
         word.className = 'ep-intel-vocab-word';
         word.textContent = v.word || v.term || '';
+        const defLabel = document.createElement('div');
+        defLabel.className = 'ep-intel-vocab-def-label';
+        defLabel.textContent = 'definition';
         const def = document.createElement('div');
         def.className = 'ep-intel-vocab-def';
         def.textContent = v.definition || '';
         row.appendChild(word);
+        row.appendChild(defLabel);
         row.appendChild(def);
         pop.appendChild(row);
       });
     });
+
+    // Tension pill — two-column vs. layout
+    makePill('Tension', !!tension, pop => {
+      if (tension.includes(' vs ') || tension.includes(' vs. ')) {
+        const parts = tension.split(/ vs\.? /i);
+        const grid = document.createElement('div');
+        grid.className = 'ep-intel-tension-vs';
+        const a = document.createElement('div');
+        a.className = 'ep-intel-tension-side';
+        a.textContent = parts[0] || '';
+        const mid = document.createElement('div');
+        mid.className = 'ep-intel-tension-vs-label';
+        mid.textContent = 'vs';
+        const b = document.createElement('div');
+        b.className = 'ep-intel-tension-side';
+        b.textContent = parts.slice(1).join(' vs ') || '';
+        grid.appendChild(a);
+        grid.appendChild(mid);
+        grid.appendChild(b);
+        pop.appendChild(grid);
+      } else {
+        const el = document.createElement('div');
+        el.className = 'ep-intel-tension-text';
+        el.textContent = tension;
+        pop.appendChild(el);
+      }
+    });
+
+    // IWTMT — "Is it worth my time?" link-style element
+    const hasIwtmt = !!(summary || verdictL || verdictS);
+    const iwtmtLink = document.createElement('button');
+    iwtmtLink.className = 'ep-iwtmt-link';
+    iwtmtLink.textContent = 'Is it worth my time?';
+    if (!hasIwtmt) iwtmtLink.setAttribute('data-empty', '1');
+    pillsEl.appendChild(iwtmtLink);
+
+    if (hasIwtmt) {
+      function buildIwtmtContent(container) {
+        const grid = document.createElement('div');
+        grid.className = 'ep-iwtmt-grid';
+
+        // Left col: Summary
+        const leftCol = document.createElement('div');
+        leftCol.className = 'ep-iwtmt-col';
+        const sumLabel = document.createElement('div');
+        sumLabel.className = 'ep-intel-popover-label';
+        sumLabel.textContent = 'Summary';
+        leftCol.appendChild(sumLabel);
+        if (summary) {
+          summary.split(/\n\n+/).forEach(para => {
+            const p = document.createElement('p');
+            p.className = 'ep-intel-popover-body';
+            p.textContent = para.trim();
+            leftCol.appendChild(p);
+          });
+        } else {
+          const na = document.createElement('p');
+          na.className = 'ep-intel-popover-body';
+          na.style.opacity = '0.4';
+          na.textContent = 'No summary available.';
+          leftCol.appendChild(na);
+        }
+
+        // Right col: Verdict
+        const rightCol = document.createElement('div');
+        rightCol.className = 'ep-iwtmt-col';
+        const verdLabel = document.createElement('div');
+        verdLabel.className = 'ep-intel-popover-label';
+        verdLabel.textContent = 'Verdict';
+        rightCol.appendChild(verdLabel);
+        if (verdictL && verdictL.length) {
+          const listenHd = document.createElement('div');
+          listenHd.className = 'ep-intel-verdict-col-label';
+          listenHd.textContent = 'Listen if…';
+          rightCol.appendChild(listenHd);
+          verdictL.forEach(item => {
+            const el = document.createElement('div');
+            el.className = 'ep-intel-verdict-item listen';
+            el.textContent = item;
+            rightCol.appendChild(el);
+          });
+        }
+        if (verdictS && verdictS.length) {
+          const skipHd = document.createElement('div');
+          skipHd.className = 'ep-intel-verdict-col-label';
+          if (verdictL) skipHd.style.marginTop = '10px';
+          skipHd.textContent = 'Skip if…';
+          rightCol.appendChild(skipHd);
+          verdictS.forEach(item => {
+            const el = document.createElement('div');
+            el.className = 'ep-intel-verdict-item skip';
+            el.textContent = item;
+            rightCol.appendChild(el);
+          });
+        }
+        if (!verdictL && !verdictS) {
+          const na = document.createElement('p');
+          na.className = 'ep-intel-popover-body';
+          na.style.opacity = '0.4';
+          na.textContent = 'No verdict available.';
+          rightCol.appendChild(na);
+        }
+
+        grid.appendChild(leftCol);
+        grid.appendChild(rightCol);
+        container.appendChild(grid);
+      }
+
+      if (isTouchDevice) {
+        iwtmtLink.addEventListener('click', e => {
+          e.stopPropagation();
+          openSheet('Is it worth my time?', buildIwtmtContent);
+        });
+      } else {
+        const iwtmtPop = document.createElement('div');
+        iwtmtPop.className = 'ep-intel-popover iwtmt-popover';
+        const iwtmtLbl = document.createElement('div');
+        iwtmtLbl.className = 'ep-intel-popover-label';
+        iwtmtLbl.textContent = 'Is it worth my time?';
+        iwtmtPop.appendChild(iwtmtLbl);
+        buildIwtmtContent(iwtmtPop);
+        pillsEl.appendChild(iwtmtPop);
+
+        let _iwtmtTimer = null;
+        function showIwtmt() {
+          pillsEl.querySelectorAll('.ep-intel-popover.visible').forEach(p => p.classList.remove('visible'));
+          clearTimeout(_iwtmtTimer);
+          const linkRect = iwtmtLink.getBoundingClientRect();
+          const rowRect = pillsEl.getBoundingClientRect();
+          let left = linkRect.left - rowRect.left;
+          const popWidth = 520;
+          const maxLeft = rowRect.width - popWidth - 4;
+          iwtmtPop.style.left = Math.max(0, Math.min(left, maxLeft)) + 'px';
+          if (linkRect.top < 220) {
+            iwtmtPop.classList.add('pop-below');
+          } else {
+            iwtmtPop.classList.remove('pop-below');
+          }
+          iwtmtPop.classList.add('visible');
+        }
+        function hideIwtmt() {
+          _iwtmtTimer = setTimeout(() => iwtmtPop.classList.remove('visible'), 150);
+        }
+        iwtmtLink.addEventListener('mouseenter', showIwtmt);
+        iwtmtLink.addEventListener('mouseleave', hideIwtmt);
+        iwtmtPop.addEventListener('mouseenter', () => clearTimeout(_iwtmtTimer));
+        iwtmtPop.addEventListener('mouseleave', hideIwtmt);
+        iwtmtLink.addEventListener('click', e => {
+          e.stopPropagation();
+          iwtmtPop.classList.contains('visible') ? iwtmtPop.classList.remove('visible') : showIwtmt();
+        });
+      }
+    }
 
     // Global click-outside closes all intel popovers in this row
     document.addEventListener('click', function _closeAll(e) {
