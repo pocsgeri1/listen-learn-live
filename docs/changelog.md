@@ -6,6 +6,31 @@
 
 ---
 
+## v2.12 — 2026-06-30 — Episode Intelligence Layer: intel locked (eps 504/515/516/11/501), Style D, extract.html intel panel
+
+**Session scope:** Episode Intelligence Layer Phase 2. All intel fields generated and locked for 5 episodes. Style D invented and documented. `extract.html` (epistemic-tools repo) updated with full Episode Intel panel. `pending-decisions.md` created.
+
+### episodes locked
+- 504 (Style C), 515 (Style C), 516 (Style C), 11 (Style A), 501 (Style C — rewritten from A to remove banned "not X but Y" pattern and 2-colon violation)
+
+### New style: Style D — "The Skeptic"
+- Added to `docs/summary-style-guide.md` (v1.1 → v1.2): when to use, full spec, worked example (Ep 519 Arthur Brooks)
+- Added to `tools/generate-episode-intel.js` SYSTEM_PROMPT with all 4 worked examples
+- UI label: "Surprise Me" — "Style B" renamed to "One Premise" on buttons
+- Style picker in prompt updated: "Styles A and B are most common. Do not default to C."
+
+### extract.html — Episode Intel panel (epistemic-tools repo)
+- Style picker row: Auto / A — Opinionated Friend / B — One Premise / C — The Long Zoom / D — Surprise Me
+- Generate, Regenerate, Save to episode_meta.json buttons
+- `INTEL_SYSTEM_PROMPT` constant with full 4-style guide + worked examples
+- `generateIntel()`, `renderIntelFields()`, `saveIntelToGitHub()`, `showIntelSection()` functions
+- Panel auto-reveals after successful Airtable send (`sendAllToAirtable`)
+
+### New files
+- `docs/pending-decisions.md` — Make.com vs GitHub Actions decision with context, pros/cons, recommended next steps
+
+---
+
 ## v2.11 — 2026-06-28 — Episode Intelligence Layer: DNA + style guide + extraction prompt v1.9
 
 **Session scope:** Episode Intelligence Layer Phase 1. New `episode_meta.json`. DNA pill live. Summary style guide locked. Extraction prompt v1.9 written.

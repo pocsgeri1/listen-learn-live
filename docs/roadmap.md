@@ -9,7 +9,7 @@
 
 - **Identity docs v1 fine-tuning** — `epistemic-identity-private.md` and `epistemic-identity-public.md` created (2026-06-28). Private: 1,500-word manifesto (taste as product philosophy, moat framing, belonging machine thesis). Public: ~400-word about/one-pager. Both v1 — need Gergely's corrections before finalising.
 - **Founder section → expandable** — add "Read more ↓" arrow at bottom of founder section; expanded state reveals selected passages from identity docs + Moat framing. Design TBD.
-- **Episode Intelligence Layer — Phase 2** — full intelligence block (Summary, Sharpest Line, Tension, Verdict, Vocab Vault). All 6 pills live with popovers. Requires style guide session (in-chat) + extraction prompt extension. yt-dlp recovery script for existing episodes. Theme drawer intel block deferred until theme drawer overhaul.
+- **Episode Intelligence Layer — Phase 2 (in progress)** — Intel generated and locked for episodes 504, 515, 516, 11, 501. extract.html updated with intel panel (all 4 styles). Remaining: wire index.html pills live (Summary, Line, Tension, Verdict, Vocab popovers). Airtable schema + Make.com pipeline update pending (see pending-decisions.md). Theme drawer intel deferred until theme drawer overhaul.
 - **Theme drawer overhaul** — theme names need simplification (more like the 14 foundational categories). Full restructure session needed before wiring Episode Intel into theme drawer.
 - **Corner pre-programmed scenarios** — quick-access pills below Corner search bar (pre-written situations → instant pre-programmed results, no API call). Content and mechanic to be designed separately.
 - **Fluency Fingerprint (v2.9):** Pure localStorage. Track every Sparked/stashed concept. Derive: strongest category, blind spot, stash-vs-sparked ratio. Surface in Stash tab as 3–4 lines. Zero API cost.
@@ -26,6 +26,8 @@
 - **Admin editorial picks tool** — `admin-picks.html` at `tools.epistemic.live`.
 
 ## Recently completed
+
+- v2.12 ✅ — 2026-06-30 — **Episode intel locked (5 eps), Style D, extract.html intel panel.** Intel generated for episodes 504/515/516/11/501. Style D ("The Skeptic") designed and added to style guide, generate script, and extract.html. Episode Intel panel added to extract.html (epistemic-tools repo) with style picker, generate/regen buttons, and GitHub save. `pending-decisions.md` created for Make.com vs GitHub Actions decision.
 
 - v2.11 ✅ — 2026-06-28 — **episode_meta.json + index.html: Episode DNA pill row.** New `episode_meta.json` scaffolded (30 episodes, DNA populated from concepts.json). DNA pill + hover popover in episode and theme drawers. Future intel pills (Summary, Line, Tension, Verdict, Vocab) greyed out as placeholders. Full spec for Phase 2 complete (in-chat).
 

@@ -30,6 +30,19 @@ Body:   - bullet 1
 
 ## Entries
 
+### 2026-06-30 — v2.12: Episode Intel panel, Style D, git lock files
+
+**Lesson 12 — Git lock files always require Terminal; never try bash workarounds.**
+`index.lock`, `HEAD.lock`, and `objects/maintenance.lock` all appeared across this session — caused by GitHub Desktop running alongside bash sandbox commits. The only correct fix: give the user a single `rm -f` command for Terminal and wait. Bash sandbox `rm` clears the sandboxed mount copy, not the real Mac path. No shortcuts, no alternative git invocations.
+
+**Lesson 13 — extract.html lives in a separate protected repo (epistemic-tools), not listen-learn-live.**
+The file is Cloudflare-protected and cannot be fetched or pushed from the bash sandbox. Correct flow: user copies file to listen-learn-live in Finder → Claude edits there → user copies back to epistemic-tools and commits from GitHub Desktop. Never rebuild extract.html from scratch; always start from the live copy.
+
+**Lesson 14 — Style D "The Skeptic" design principle: honest movement, not conversion.**
+The style is distinct because P1 makes a skeptical reader feel seen (not dismissed), P2 uses ONE specific thing that actually cracked the objection (not a full argument), and P3 lands at genuine shift — not converted, not fully rejected. The power is in not overselling. P3 must always have exactly 2 sentences. If the episode can't produce a real crack in a real objection, use Style A or B instead.
+
+---
+
 ### 2026-06-28 — v2.11: git disaster + standing rule
 
 **Lesson 11 — NEVER use GIT_INDEX_FILE workaround. Ever.**

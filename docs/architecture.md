@@ -252,6 +252,33 @@ fire in immediate succession with another (e.g. category pill → theme tile
 
 
 
+## Episode Intelligence Layer — episode_meta.json
+
+Stored in `episode_meta.json` at repo root. One entry per episode-type collection, keyed by `collection_id` (string).
+
+**Fields per episode:**
+- `collection_id` — integer, mirrors the key
+- `dna` — object, category % distribution computed from concepts.json at build time (computed v2.11)
+- `summary_style` — `"A"` / `"B"` / `"C"` / `"D"` — which style was used (set v2.12)
+- `summary` — 110–125 word editorial summary, 3 paragraphs (null until generated)
+- `sharpest_line` — single most quotable sentence from the episode
+- `tension` — `"[Force A] vs. [Force B]"`, max 15 words
+- `verdict_listen` — array of 2–3 "you've ever..." / "you work in..." fragments
+- `verdict_skip` — array of 1–2 honest skip reasons
+- `vocab_vault` — array of `{ word, definition, timestamp_seconds }` (5–7 entries)
+
+**Summary styles (v2.12):**
+- **A — Opinionated Friend:** guest personality or debate drives. P3 = exactly 3 sentences.
+- **B — One Premise:** one counterintuitive premise the whole episode orbits. P3 = exactly 2 sentences.
+- **C — The Long Zoom:** real subject is larger/stranger than stated; wry zoom-out. P3 = exactly 2 sentences.
+- **D — The Skeptic ("Surprise Me"):** strongest objection P1, one crack in it P2, where skeptic lands P3. P3 = exactly 2 sentences.
+
+**Generation:** `tools/generate-episode-intel.js` — calls `claude-haiku-4-5-20251001`, writes to `episode_meta.json` after each episode (crash-safe). `extract.html` (epistemic-tools repo) has a browser-side intel panel for per-episode generation with style override.
+
+**Universal rules:** no em dashes, no "not X but Y" variants, no triads, max 1 colon per summary, 110–125 words total, first names only after first mention, never start with guest/host name, never "In this episode..."
+
+---
+
 ## Files of record
 
 | File              | Owns                                              |
