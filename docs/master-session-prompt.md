@@ -79,7 +79,8 @@ cp /path/to/repo/docs/build-journal.md "/path/to/Claude Project Files/build-jour
 ```
 
 ### Known git issues and fixes
-- **Lock files** (`HEAD.lock`, `index.lock`, `maintenance.lock`): caused by bash sandbox and GitHub Desktop running simultaneously. Fix: user runs in Terminal: `rm -f ~/Documents/GitHub/listen-learn-live/.git/HEAD.lock ~/Documents/GitHub/listen-learn-live/.git/index.lock ~/Documents/GitHub/listen-learn-live/.git/objects/maintenance.lock`
+- **Lock files** (`HEAD.lock`, `index.lock`): caused by GitHub Desktop running alongside bash commits. **Permanent fix: quit GitHub Desktop (Cmd+Q) at the start of every session. Reopen only to push.** This eliminates lock conflicts entirely. If locks appear mid-session, user runs in Terminal: `rm -f ~/Documents/GitHub/listen-learn-live/.git/HEAD.lock ~/Documents/GitHub/listen-learn-live/.git/index.lock`
+- **Bash sandbox cannot `unlink` lock files**: `rm -f` from inside the bash sandbox fails with "Operation not permitted" on mounted Mac paths. Only Terminal on the host Mac can remove them. Do not attempt workarounds.
 - **Diverged branches / merge conflict**: happens when GitHub has commits not in local (e.g. Gergely pushed concepts.json directly). Fix: run `git pull origin main` at session start. If already in conflict state, resolve then `git commit -m "Merge: ..."`.
 - **Cannot push from bash**: the sandbox has no GitHub credentials. Commits work. Push always done by Gergely in GitHub Desktop.
 - **Warnings `unable to unlink tmp_obj_*`**: harmless, sandbox filesystem permission artifact. Commits go through fine despite warnings.
