@@ -9999,18 +9999,15 @@ function _renderIntelRow(pillsEl, collectionId) {
           clearTimeout(_iwtmtTimer);
           const linkRect = iwtmtLink.getBoundingClientRect();
           const bottomPx = window.innerHeight - linkRect.top + 10;
-          const popW = iwtmtPop.offsetWidth || 1108;
-          const left = linkRect.left;
+          const popW = iwtmtPop.offsetWidth || 1355;
           iwtmtPop.style.bottom = bottomPx + 'px';
           iwtmtPop.style.top = 'auto';
-          if (left + popW > window.innerWidth - 8) {
-            // would overflow right — anchor to right edge, expand toward left
-            iwtmtPop.style.left = 'auto';
-            iwtmtPop.style.right = (window.innerWidth - linkRect.right) + 'px';
-          } else {
-            iwtmtPop.style.right = 'auto';
-            iwtmtPop.style.left = Math.max(8, left) + 'px';
-          }
+          // Always try to left-align with the pill; clamp so it never overflows right
+          let left = linkRect.left;
+          if (left + popW > window.innerWidth - 8) left = window.innerWidth - popW - 8;
+          if (left < 8) left = 8;
+          iwtmtPop.style.right = 'auto';
+          iwtmtPop.style.left = left + 'px';
           iwtmtPop.classList.add('visible');
         }
         function hideIwtmt() {
