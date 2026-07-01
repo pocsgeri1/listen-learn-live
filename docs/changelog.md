@@ -6,6 +6,21 @@
 
 ---
 
+## v2.15b — 2026-07-01 — Copy tweaks + desktop drawer cat-filter bug fix
+
+### What shipped
+- **Founder Copy line-wrap:** dropped the forced `<br>` — desktop fits the full line naturally, no break. Mobile-only: `.fc-mast-line` font-size drops to 0.9rem so "Passive listening is just mental masturbation" still lands on row 1 without forcing a break.
+- **`og-bullets`:** new list style for the OG text's 3 bullets (podcasts/Corner/Spark) — plain stacked lines (`display: block`) instead of the flex/baseline layout that was reading like a table.
+- **Bullet copy updated:** "Key ideas per podcast — concept cards, vocabulary that matters, and a verdict on whether it's worth three hours of your time." / Corner / Spark, wording tightened per Gergely's edit.
+- **`Listen〱Read〱Write〱Speak〱Grow`** now bold+italic (same font-size) for emphasis.
+- **Map hint line rewritten:** "tap any node..." → "If you've ever read 'The Art of Impossible' you'll find this familiar | Tap any node to explore the concepts behind this."
+- **"epistemic" in the Small Confession paragraph** now wrapped in `founder-accent` (on-brand gold).
+- **Header weight:** `.og-expand-label` and `.og-story p.og-kicker` both bumped to `font-weight: 600` (were unset/inherited) so they read with equal visual weight.
+- **Bug fix — desktop drawer "grid" (scan) view:** `.ep-drawer.drawer-scan-active .ep-drawer-cat-filter { display:none }` had no media-query guard, so switching to scan view on **desktop** hid the category pills entirely and left the 3 view buttons flush-left (they'd lost their flex:1 sibling). Wrapped that rule in `@media (max-width: 700px)` — it's a mobile-only affordance (mobile has a single cycling view button instead). Desktop cat pills now stay visible/usable in every view.
+- **Bug fix — desktop drawer "All cards" view:** cat-filter pills were `pointer-events: none; opacity: 0.4` in `drawer-all-mode`, even though they're wired to scroll-to-category inside the flattened all-cards grid — so the feature was unreachable. Added a `@media (min-width: 701px)` override restoring `pointer-events: auto; opacity: 1`. Mobile behavior untouched.
+
+---
+
 ## v2.15 — 2026-07-01 — index.html: OG text rewrite (Shazam angle) + Founder Copy line-wrap fix
 
 ### What shipped

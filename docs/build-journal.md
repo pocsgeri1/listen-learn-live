@@ -34,6 +34,14 @@ Claude updates without being asked: changelog.md (new entry at TOP), roadmap.md 
 
 ## Entries
 
+### 2026-07-01 — v2.15b: unguarded mobile-only CSS rules leaking into desktop
+
+**Lesson 32 — A `.state-class { display: none }` rule with no `@media` guard applies everywhere, even if the state was only ever meant to be reachable on mobile.**
+`.ep-drawer.drawer-scan-active .ep-drawer-cat-filter { display: none !important; }` was written for the mobile single-cycle-button UX (v2.14 era) but had no `max-width` wrapper. Since `setDrawerView()` sets `drawer-scan-active` from any device when the scan view is selected, desktop users hit the same "hide the cat filter" behavior — and because cat-filter had `flex:1` and was the thing pushing the view-button group to the right edge of the row, removing it also visually left-aligned the buttons. Lesson: whenever a CSS rule exists specifically to support a mobile-only interaction pattern, wrap it in the media query at write-time — don't rely on "well, the JS that triggers this class only runs on mobile" as the guarantee, because view-toggle classes are usually shared across breakpoints.
+
+**Lesson 33 — `pointer-events: none` on a dimmed element silently kills features wired to it, not just visually deprioritizes it.**
+`.ep-drawer-body.drawer-all-mode .ep-drawer-cat-filter { pointer-events: none; opacity: 0.4; }` was presumably meant as "these don't do anything meaningful in All-cards view, so dim them" — but a later feature (scroll-to-category-section in the flattened grid) was wired to click events on those same pills, making it permanently unreachable in that view. When adding a "disabled-looking" state to an element, grep for existing click handlers on it first — dimming and disabling are two different decisions that shouldn't be bundled by default.
+
 ### 2026-07-01 — v2.15a: line-wrap via forced `<br>`, and the fullscreen map revert
 
 **Lesson 30 — Don't trust `&nbsp;` alone to control where a line breaks.**

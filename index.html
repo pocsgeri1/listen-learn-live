@@ -1845,9 +1845,13 @@
   }
 
   /* ── DRAWER SCAN TILES (2-col centered) ─── */
-  /* Scan mode: hide category filter pills (only show for flip/all card views) */
-  .ep-drawer.drawer-scan-active .ep-drawer-cat-filter { display: none !important; }
-  .ep-drawer.drawer-scan-active .ep-drawer-filter-row { min-height: 0; border-bottom: none; }
+  /* v2.15b: scan-mode cat-filter hiding is a MOBILE-ONLY affordance (single cycling
+     view button replaces the 3-button row there). On desktop the 3 view buttons stay
+     put and category tabs must stay visible/usable in every view. */
+  @media (max-width: 700px) {
+    .ep-drawer.drawer-scan-active .ep-drawer-cat-filter { display: none !important; }
+    .ep-drawer.drawer-scan-active .ep-drawer-filter-row { min-height: 0; border-bottom: none; }
+  }
   .ep-drawer-body.drawer-scan-mode .ep-drawer-grid { display: none; }
   .ep-drawer-scan-grid {
     display: none;
@@ -1906,6 +1910,11 @@
   /* ── DRAWER ALL-CARDS VIEW ───────────────────────────────── */
   .ep-drawer-body.drawer-all-mode .ep-cat-column { display: none !important; }
   .ep-drawer-body.drawer-all-mode .ep-drawer-cat-filter { pointer-events: none; opacity: 0.4; }
+  /* v2.15b: desktop keeps cat pills live in All-cards view — they're wired to
+     scroll-to-category inside the flattened grid, so disabling them breaks that. Mobile untouched. */
+  @media (min-width: 701px) {
+    .ep-drawer-body.drawer-all-mode .ep-drawer-cat-filter { pointer-events: auto; opacity: 1; }
+  }
   .ep-drawer-all-grid {
     display: none;
     flex-direction: column;
@@ -5559,6 +5568,8 @@
     .founder-text p { font-size: 0.88rem; }
     .founder-text p.founder-line-emphasis { font-size: 0.98rem; }
     .founder-text p.founder-line-bold { font-size: 0.98rem; }
+    /* v2.15b: slightly smaller so "masturbation" naturally stays on row 1 without a forced break */
+    .founder-text p.founder-line-bold.fc-mast-line { font-size: 0.9rem; }
     .founder-bullets li { font-size: 0.82rem; }
     /* Mobile: switch from flex to inline flow so the arrow, bold label and
        description all sit in one continuous text run. No more 2-col grid effect. */
@@ -8004,7 +8015,7 @@
 }
 .og-expand-btn.open svg { transform: rotate(180deg); }
 .og-expand-label {
-  font-family: 'DM Mono', monospace; font-size: 0.68rem;
+  font-family: 'DM Mono', monospace; font-size: 0.68rem; font-weight: 600;
   letter-spacing: 0.18em; text-transform: uppercase;
   color: var(--accent); opacity: 0.38; transition: opacity 0.25s;
 }
@@ -8027,13 +8038,27 @@
   width: 32px; height: 1px; background: rgba(232,213,163,0.2); margin: 2rem 0;
 }
 .og-story p.og-kicker {
-  font-family: 'DM Mono', monospace; font-size: 0.67rem;
+  font-family: 'DM Mono', monospace; font-size: 0.67rem; font-weight: 600;
   letter-spacing: 0.2em; text-transform: uppercase;
   color: var(--accent); opacity: 0.38; margin-bottom: 0.6rem; margin-top: 0;
 }
 @media (max-width: 700px) {
   /* OG text flows single-column on mobile instead of squeezing into 2 narrow columns */
   .og-story { columns: 1; }
+}
+
+/* v2.15b: OG bullets — plain lines, not the flex/baseline "table" look of .founder-bullets */
+.og-bullets {
+  list-style: none; padding: 0; margin: 0.6rem 0 1.1rem;
+}
+.og-bullets li {
+  font-size: 0.95rem; color: var(--muted2); line-height: 1.75;
+  font-weight: 300; display: block; margin-bottom: 0.55rem;
+}
+.og-bullets li:last-child { margin-bottom: 0; }
+.og-bullets li strong { color: var(--text); font-weight: 500; }
+.og-bullets .founder-bullet-arrow {
+  color: var(--accent); font-size: 0.8rem; opacity: 0.85; margin-right: 0.4rem;
 }
 
 /* ── Map ─────────────────────────────────────────────────── */
@@ -8760,7 +8785,7 @@
         </div>
       </div>
       <p class="founder-reveal">None of it stuck. I just had a better-organised version of the same problem.</p>
-      <p class="founder-line-bold founder-reveal">Passive listening is just mental masturbation<br>...&nbsp;and a broken learning format.</p>
+      <p class="founder-line-bold founder-reveal fc-mast-line">Passive listening is just mental masturbation ...&nbsp;and a broken learning format.</p>
       <p class="founder-reveal">But along the way, I realised other people — expats, non-native English speakers, podcast lovers — were stumbling on their words too.</p>
       <p class="founder-line-bold founder-reveal">So I built the tool I wished existed.</p>
       <p class="founder-italic-body founder-reveal"><span class="founder-accent">Epistemic</span> isn't trying to make you smarter. It's just trying to make sure what you already know doesn't die before it matters.</p>
@@ -8811,7 +8836,7 @@
 
             <p class="og-kicker">A Small Confession</p>
 
-            <p>I didn't know what "epistemic" meant either. Heard it in a podcast, thought it sounded smart, filed it away, moved on with my life. Eventually I googled it, mid-episode, like a criminal. Turns out it just means relating to knowledge: how we actually know what we know.</p>
+            <p>I didn't know what "<span class="founder-accent">epistemic</span>" meant either. Heard it in a podcast, thought it sounded smart, filed it away, moved on with my life. Eventually I googled it, mid-episode, like a criminal. Turns out it just means relating to knowledge: how we actually know what we know.</p>
 
             <p>Which is a fancy way of admitting <em>I know less than I think I do, constantly.</em> If you've ever googled a word so you didn't feel behind in your own conversation, congratulations. This is for you.</p>
 
@@ -8835,19 +8860,19 @@
 
             <p>Right now, that's:</p>
 
-            <ul class="founder-bullets">
-              <li><span class="founder-bullet-arrow">➣</span> <strong>Podcasts turned into key ideas</strong> — the vocabulary that matters, and a verdict on whether it's worth three hours of your time.</li>
+            <ul class="og-bullets">
+              <li><span class="founder-bullet-arrow">➣</span> <strong>Key ideas per podcast</strong> — concept cards, vocabulary that matters, and a verdict on whether it's worth three hours of your time.</li>
               <li><span class="founder-bullet-arrow">➣</span> <strong>Corner</strong> — builds you a scenario around whatever situation you're actually walking into, based on your own input.</li>
               <li><span class="founder-bullet-arrow">➣</span> <strong>Spark</strong> — makes sure you actually say the idea out loud instead of just nodding along to it.</li>
             </ul>
 
-            <p>Next up: we'll wire it all together — <em>Listen〱Read〱Write〱Speak〱Grow.</em> Each one gets a new room in the house, but all interconnected, rooted in the ideas worth saying out loud.</p>
+            <p>Next up: we'll wire it all together — <strong><em>Listen〱Read〱Write〱Speak〱Grow.</em></strong> Each one gets a new room in the house, but all interconnected, rooted in the ideas worth saying out loud.</p>
 
             <p class="founder-line-bold">Stay tuned. The next version of Epistemic, and you, is already loading. It's gonna be <span class="founder-accent">Epic</span>.</p>
 
           </div>
 
-              <p class="og-map-hint">tap any node to explore the concepts behind this</p>
+              <p class="og-map-hint">If you've ever read "The Art of Impossible" you'll find this familiar&nbsp;&nbsp;|&nbsp;&nbsp;Tap any node to explore the concepts behind this</p>
 
           <div class="og-map-wrap">
             <div class="og-zoom-bar">
