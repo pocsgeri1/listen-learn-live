@@ -34,6 +34,22 @@ Claude updates without being asked: changelog.md (new entry at TOP), roadmap.md 
 
 ## Entries
 
+### 2026-07-01 — v2.14b–j: Intel pill popover debugging lessons
+
+**Lesson 23 — `50% 50%` grid columns overflow when there's a gap.**
+`grid-template-columns: 50% 50%` with `gap: 20px` = 100% + 20px → horizontal scroll appears. Always use `1fr 1fr` for equal columns — `1fr` divides available space *after* the gap is subtracted. Visually identical, no overflow.
+
+**Lesson 24 — JS inline styles beat CSS rules; use `!important` to override.**
+When JS sets `element.style.gridTemplateColumns = 'repeat(3, 1fr)'`, that inline style wins over any `.class { grid-template-columns: 1fr }` rule in the stylesheet, regardless of specificity. Fix: add `!important` to the CSS override. Applies anywhere JS writes to `.style` directly.
+
+**Lesson 25 — "Expand left" right-anchor logic breaks when the popover is very wide.**
+Added a branch: "if popover overflows right edge, anchor to right side instead." With a 1355px wide popover and a typical 1440px viewport, it almost always overflowed, so it almost always right-anchored — placing the box far left. Simple fix: always left-anchor from the pill's left edge, clamp so `left + popW ≤ viewport - 8`. No branching needed.
+
+**Lesson 26 — Fixed height on a popover is fragile; prefer max-height only.**
+Setting `height: calc(81vh - 76px)` forced the box to always be that tall regardless of content. If the inner content didn't fill it, the box looked broken; if it was too tall, nothing scrolled because `overflow-y: auto` at the outer level conflicted with `overflow: visible` from a subclass. Cleaner: just set `max-height` and let the box auto-size to content. Only use fixed height if you explicitly want a rigid frame.
+
+---
+
 ### 2026-06-30 — v2.14: git lock root cause identified
 
 **Lesson 22 — index.lock is held by the Cowork sandbox VM itself, not GitHub Desktop.**

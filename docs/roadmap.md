@@ -27,6 +27,8 @@
 
 ## Recently completed
 
+- v2.14b–j ✅ — 2026-07-01 — **Intel pill UI polish.** IWTMT popover: `1fr 1fr` grid (not `50% 50%` — gap overflows), +10% width, left-anchor with right clamp, `max-height` auto-sizes to content. Vocab: "definition" sublabel removed, mobile `1fr !important` override. Mobile: scan default on drawer open, cat pills hidden in scan, single cycle view button, podcast pills one scrollable row, intel pills spread with `flex: 1`, dashed divider between rows.
+
 - v2.13 ✅ — 2026-06-30 — **OG easter egg: expandable founder section + Stalk the Impossible map.**
   Expand toggle ("The map behind the machine") after founder closing line. OG story text (private+public identity blend). Inline interactive SVG map (V9, namespaced `og-*` IDs). Clickable nodes (DRIVE, GOALS, GRIT, FLOW STATE, Intrinsic, Curiosity) → slide-in concept panel, top-5 scored from concepts.json. Zoom/pan controls (+/−/↺, mouse wheel, drag, pinch). `og-section` is direct child of `founder-inner` with `grid-column: 1 / -1` for true full-width. Story text uses 2-col newspaper layout. OG text fine-tuning deferred to next session.
 

@@ -6,6 +6,23 @@
 
 ---
 
+## v2.14b–j — 2026-07-01 — Intel pill UI polish: IWTMT popover, Vocab grid, mobile scan defaults
+
+### What shipped
+- **IWTMT popover redesign**: 50/50 two-column layout (`1fr 1fr` grid — not `50% 50%` which overflows with gap). Width +10% over v2.14g baseline (`min-width: min(1355px, 93vw)`). `max-height: calc(90vh - 76px)` — auto-sizes to content, no fixed height. Left-anchors from pill position, clamps to screen so never overflows right edge.
+- **IWTMT positioning fix**: reverted "expand left" right-anchor branch — with a 1355px wide box it almost always triggered, placing the box on the wrong side. Now always left-anchors with right clamp (simple + correct).
+- **Vocab "definition" sublabel removed**: `ep-intel-vocab-def-label` element removed from JS render entirely. Word + definition only, no header.
+- **Vocab mobile**: `grid-template-columns: 1fr !important` on `.ep-intel-sheet .ep-intel-vocab-grid` — `!important` needed because JS sets inline `gridTemplateColumns` which beats any CSS rule without it.
+- **Mobile scan default**: `drawer-scan-active` class applied immediately in `openEpisodeDrawer()` before rAF (fixes cat filter visibility race).
+- **Cat filter pills hidden in scan**: `.ep-drawer.drawer-scan-active .ep-drawer-cat-filter { display: none !important }` — `!important` required to beat specificity of existing category filter rules.
+- **Podcast pills**: one scrollable row on mobile (`flex-wrap: nowrap; overflow-x: auto`).
+- **Intel pills spread**: `flex: 1` on pills so they fill the row evenly.
+- **Dashed divider**: `.ep-pills-intel-sep` fixed — must be `display: block; height: 1px; border-top: 1px dashed` (not `border` on an inline element).
+- **Cycle view button**: single `◫`/`⊟`/`⊞` cycling button injected into pills row on mobile, replacing 3 separate view buttons.
+- **IWTMT popover overflow fix**: `position: fixed` popovers escape `overflow-y: auto` drawer clipping — use `bottom = window.innerHeight - pillRect.top + 10` to anchor above pill.
+
+---
+
 ## v2.14 — 2026-06-30 — Intel pills live, map collapsible concepts, cursor off, zoom/light mode fixes
 
 ### What shipped
