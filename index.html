@@ -1251,11 +1251,12 @@
   }
   .ep-intel-popover.visible { opacity: 1; pointer-events: auto; }
 
-  /* IWTMT: 50/50, 10% wider than v2.14f, overflow visible, no scroll */
+  /* IWTMT: 50/50, width -10%, fixed height -10%, expand left if overflow */
   .ep-intel-popover.iwtmt-popover {
-    min-width: min(1232px, 93vw);
-    max-width: min(1380px, 96vw);
-    max-height: calc(90vh - 76px);
+    min-width: min(1108px, 84vw);
+    max-width: min(1242px, 88vw);
+    height: calc(81vh - 76px);
+    max-height: calc(81vh - 76px);
     overflow: visible;
   }
 
@@ -1427,24 +1428,12 @@
   }
   [data-theme="light"] .ep-intel-vocab-def { color: rgba(30,27,22,0.72); }
 
-  /* ── IWTMT layout — flex, auto-sizes each column to its content ── */
+  /* ── IWTMT layout — 50/50 grid ── */
   .ep-iwtmt-grid {
-    display: flex;
-    flex-wrap: nowrap;
+    display: grid;
+    grid-template-columns: 50% 50%;
     gap: 20px;
     align-items: start;
-  }
-  /* Summary col: grows to fill space, min 38%, max 68% */
-  .ep-iwtmt-col:first-child {
-    flex: 1 1 auto;
-    min-width: 38%;
-    max-width: 68%;
-  }
-  /* Verdict col: shrinks to its content, min 28% */
-  .ep-iwtmt-col:last-child {
-    flex: 0 1 auto;
-    min-width: 28%;
-    max-width: 58%;
   }
   .ep-iwtmt-col + .ep-iwtmt-col {
     border-left: 1px solid rgba(255,255,255,0.06);
@@ -9872,14 +9861,10 @@ function _renderIntelRow(pillsEl, collectionId) {
         const word = document.createElement('div');
         word.className = 'ep-intel-vocab-word';
         word.textContent = v.word || v.term || '';
-        const defLabel = document.createElement('div');
-        defLabel.className = 'ep-intel-vocab-def-label';
-        defLabel.textContent = 'definition';
         const def = document.createElement('div');
         def.className = 'ep-intel-vocab-def';
         def.textContent = v.definition || '';
         row.appendChild(word);
-        row.appendChild(defLabel);
         row.appendChild(def);
         grid.appendChild(row);
       });
@@ -10016,13 +10001,18 @@ function _renderIntelRow(pillsEl, collectionId) {
           clearTimeout(_iwtmtTimer);
           const linkRect = iwtmtLink.getBoundingClientRect();
           const bottomPx = window.innerHeight - linkRect.top + 10;
-          const popW = iwtmtPop.offsetWidth || 1020;
-          let left = linkRect.left;
-          if (left + popW > window.innerWidth - 8) left = window.innerWidth - popW - 8;
-          if (left < 8) left = 8;
+          const popW = iwtmtPop.offsetWidth || 1108;
+          const left = linkRect.left;
           iwtmtPop.style.bottom = bottomPx + 'px';
           iwtmtPop.style.top = 'auto';
-          iwtmtPop.style.left = left + 'px';
+          if (left + popW > window.innerWidth - 8) {
+            // would overflow right — anchor to right edge, expand toward left
+            iwtmtPop.style.left = 'auto';
+            iwtmtPop.style.right = (window.innerWidth - linkRect.right) + 'px';
+          } else {
+            iwtmtPop.style.right = 'auto';
+            iwtmtPop.style.left = Math.max(8, left) + 'px';
+          }
           iwtmtPop.classList.add('visible');
         }
         function hideIwtmt() {
