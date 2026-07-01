@@ -34,6 +34,12 @@ Claude updates without being asked: changelog.md (new entry at TOP), roadmap.md 
 
 ## Entries
 
+### 2026-07-01 — v2.15d: layering a desktop-only override on top of a universal fix
+
+**Lesson 36 — A "fix on both breakpoints" instruction and a "desktop only, on top of that" instruction can target the same sentence without conflicting.** The impostor-syndrome line needed "almost" dropped and the second bracket italicized everywhere, then desktop needed further changes (convo swap, bold+italic brackets) layered on that same already-unified base. Handled by editing the shared wording in both `.fc-desktop-only`/`.fc-mobile-only` paragraphs identically first, then applying the extra desktop-only emphasis only to that paragraph — no separate fork was needed since the structure already existed from v2.15c.
+
+**Lesson 37 — Reuse a working light-mode override's exact values instead of inventing new ones.** `.og-expand-label` already had a proven light-mode fix (`#7a6830` @ 0.72 opacity) for low-contrast accent-color text. Applying the identical values to `.og-story p.og-kicker` fixed the same contrast problem there with zero guesswork.
+
 ### 2026-07-01 — v2.15c: when copy needs to genuinely fork, don't fight one string
 
 **Lesson 34 — Font-size shrinking to force a natural wrap point is fragile; a real per-breakpoint content fork is more robust.**

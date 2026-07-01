@@ -6,6 +6,16 @@
 
 ---
 
+## v2.15d — 2026-07-01 — Impostor-syndrome line unified, light-mode kicker fix, $0
+
+### What shipped
+- **OG impostor-syndrome line — "almost" dropped and second bracket italicized on both breakpoints now** (previously desktop-only in v2.15c; mobile now matches). Base text is otherwise identical on mobile and desktop.
+- **Desktop-only, on top of that:** "conversation" → "convo", and both parenthetical asides ("you follow the convo" / "you can't quite lead it") are now bold+italic, not just italic. Mobile brackets stay italic-only.
+- **Light mode fix:** `.og-story p.og-kicker` (the section headlines — "The Podcasts Aren't Random" etc.) now uses the same light-mode color treatment as `.og-expand-label` ("The map behind the machine"): `#7a6830` at 0.72 opacity, instead of the low-contrast default accent/0.38 opacity. Dark mode unchanged.
+- **Desktop-only closing line:** "Sign up for free" → "Sign up $0."
+
+---
+
 ## v2.15c — 2026-07-01 — Desktop/mobile copy forking (Founder + OG text)
 
 ### What shipped
