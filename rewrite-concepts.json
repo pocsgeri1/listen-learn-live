@@ -1,77 +1,46 @@
 {
   "_note": "Running patch doc — editorial rewrites, approved 1-by-1. Each entry lists ONLY changed fields + id. Merge into concepts.json by id once batch of 10 is approved.",
-  "batch": 2,
+  "batch": 3,
   "history": [
     {
       "batch": 1,
       "status": "patched into concepts.json and committed",
       "ids": [281, 485, 180, 335, 489, 177, 178, 181, 336, 491]
+    },
+    {
+      "batch": 2,
+      "status": "patched into concepts.json, committed (9cef09d), pushed to origin/main",
+      "ids": [179, 337, 339, 207, 468, 201, 224, 226, 334, 196]
     }
   ],
   "approved": [
     {
-      "id": 179,
-      "fields_changed": ["term", "plain", "analogy"],
-      "term": "The Five Triggers",
-      "plain": "Almost everything you see gets filtered out instantly, unless it hits one of five triggers: scary, strange, sexy, unexpectedly free, or familiar through repetition. Most marketing and personal branding fails because it doesn't trigger any of the five.",
-      "analogy": "On a crowded Oxford Street, only the guy in the hot dog costume actually registers among the three thousand faces you pass."
-    },
-    {
-      "id": 337,
-      "fields_changed": ["plain", "analogy"],
-      "plain": "People are drawn to individuals who love something with unfiltered intensity. It's not the thing itself that's compelling; it's the depth of their commitment. When someone stops apologizing for what excites them, it gives others permission to do the same.",
-      "analogy": "Rally fans stand for hours in freezing Scottish rain, drenched and grinning, just to watch cars flash past for thirty seconds."
-    },
-    {
-      "id": 339,
-      "fields_changed": ["term", "hook", "analogy"],
-      "term": "Choose Your Discomfort",
-      "hook": "Conform and resent yourself, or stand out and unsettle everyone else.",
-      "analogy": "At Thanksgiving dinner, you announce you're quitting law school, and your father's fork stops halfway to his mouth."
-    },
-    {
-      "id": 207,
-      "fields_changed": ["term", "plain", "analogy"],
-      "term": "The \"But...\" Trap",
-      "plain": "A real apology names exactly what you did, admits the impact, and stops there, no 'because you...' clause attached. Add one, and the whole thing falls apart.",
-      "analogy": "You say, 'I shouldn't have snapped at you, and I know it stung' instead of 'I only snapped because you pushed me first.'"
-    },
-    {
-      "id": 468,
-      "fields_changed": ["analogy"],
-      "analogy": "A thermostat reads the room, compares it to your target, and fires the heater the instant the gap widens."
-    },
-    {
-      "id": 201,
-      "fields_changed": ["plain", "analogy"],
-      "plain": "Accusations of change usually mean you stopped fitting the position someone else assigned you. That's not malice, it's that they've rarely watched anyone grow, so they don't really know how to find the right words to respond with.",
-      "analogy": "You order a soda water at the party, and your old friend says, 'Since when are you no fun?'"
-    },
-    {
-      "id": 224,
-      "fields_changed": ["hook", "analogy"],
-      "hook": "Nice guys chase being liked, good men chase being worthy.",
-      "analogy": "When a friend forgets to repay $200, the nice guy laughs it off, and the good man just asks for it back."
-    },
-    {
-      "id": 226,
-      "fields_changed": ["term", "plain", "analogy"],
-      "term": "20-Minute Reset Rule",
-      "plain": "A quick break doesn't do much, your body is still full of stress hormones and can't think straight yet. What actually works is stepping fully away from whatever set you off and waiting until that passes before you try to talk again.",
-      "analogy": "Your partner says 'give me a minute,' then storms back ninety seconds later, still red-faced and ready to keep fighting."
-    },
-    {
-      "id": 334,
-      "fields_changed": ["plain", "analogy"],
-      "plain": "Most companies in an industry just copy whatever's already working elsewhere instead of testing new ideas themselves. If you're the only one running real experiments and learning from what fails, you build a lead competitors can't just copy by watching you from outside.",
-      "analogy": "Every two weeks, Gym Launch dropped $50K testing sales tactics so licensees could skip straight to the 30% that worked."
-    },
-    {
-      "id": 196,
+      "id": 518,
       "fields_changed": ["hook", "plain", "analogy"],
-      "hook": "A tech-enabled team built for one goal: an eight-to-nine-figure exit.",
-      "plain": "This kind of business runs about thirty people, with real IP and a repeatable go-to-market engine that a strategic buyer or private equity firm will actually pay for. You're tracking LTV, CAC, and growth metrics constantly, because the goal is a liquidity event, not just steady annual profit.",
-      "analogy": "A 34-person SaaS company hits ten million in recurring revenue, then sells to a public company for fifty million, seven years after it started."
+      "hook": "Once you know what something's for, you stop seeing what else it could be.",
+      "plain": "This happens because your brain stores objects by their assigned job, not their physical properties. Once something gets filed as a 'toy' or 'decoration,' your brain stops checking it against problems filed under a different job.",
+      "analogy": "You dig through drawers for a screwdriver to pry open a paint can, ignoring the quarter sitting right there in the dish."
+    },
+    {
+      "id": 338,
+      "fields_changed": ["plain", "analogy"],
+      "plain": "Every time you pick appearance over what actually feels true, like wearing clothes that feel wrong or laughing at something that isn't funny, you're rebelling against yourself in a small way. Enough of those add up to a life that looks good from outside but is hollow to actually live.",
+      "analogy": "At the office dinner, he laughs on cue at his boss's unfunny joke, and something in him quietly checks out."
+    },
+    {
+      "id": 473,
+      "fields_changed": ["hook", "plain", "analogy", "prompt"],
+      "hook": "Transformation begins in disgust and ends in obsession, with some confusion in between.",
+      "plain": "Real identity change moves through three stages: you get disgusted enough with your old life to leave it, then drift for a while with no idea what's next, then finally land on something and grow faster than you thought possible. Most people quit in the middle, mistaking the drifting for failure.",
+      "analogy": "You quit your job with no plan, spend four miserable months adrift, then stumble into freelance design and go fully booked within six months.",
+      "prompt": "Which phase are you in right now? If you're in the confusing middle, what are two small bets you could place this month to help you land on what's next?"
+    },
+    {
+      "id": 490,
+      "fields_changed": ["term", "hook", "analogy"],
+      "term": "Actions Over Words",
+      "hook": "Words reveal intention, actions reveal priority.",
+      "analogy": "He's said 'I need to quit this job' every week for three years, résumé still untouched on his desktop."
     }
   ]
 }
