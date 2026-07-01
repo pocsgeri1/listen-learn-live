@@ -29,6 +29,9 @@ Never change fields you weren't asked to change.
 
 ### TERM
 - 2-5 words, Title Case. No punctuation except natural hyphens. No em-dashes.
+- Exception: scare-quotes around a single word/short phrase are allowed when naming
+  the exact loaded word the concept revolves around (e.g. "The 'But...' Trap,"
+  "The 'Zoom' Problem"). Use sparingly, not as a default flourish.
 - Named/coined terms (Dunning-Kruger, Motte and Bailey) are EXEMPT — never rewrite.
 - Real exotic vocabulary preserved (e.g. Hormesis). Feynman test never applies to term.
 - No overlap with hook — don't repeat 2+ content words from hook.

@@ -104,6 +104,7 @@ When reviewing any automated first-pass rewrite of terms, these are the recurrin
 - 2–5 words, hard range
 - Title case
 - No punctuation except hyphens where natural (em-dashes never)
+- Exception: scare-quotes around a single word/short phrase are allowed when the quotes are doing real emphasis work — naming the exact loaded word the concept revolves around (e.g. "The 'But...' Trap," "The 'Zoom' Problem"). Use sparingly; don't reach for quotes as a default flourish.
 - Avoid starting with "The" unless it's doing real work (e.g. "The Pretty Privilege" earns it; "The Compound Effect" could just be "Compound Effect")
 
 ---
