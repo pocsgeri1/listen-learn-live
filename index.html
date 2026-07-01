@@ -1251,13 +1251,11 @@
   }
   .ep-intel-popover.visible { opacity: 1; pointer-events: auto; }
 
-  /* IWTMT: 50/50, width -10%, fixed height -10%, expand left if overflow */
+  /* IWTMT: wider, 50/50 grid, max-height only (auto-sizes to content) */
   .ep-intel-popover.iwtmt-popover {
-    min-width: min(1108px, 84vw);
-    max-width: min(1242px, 88vw);
-    height: calc(81vh - 76px);
-    max-height: calc(81vh - 76px);
-    overflow-y: auto;
+    min-width: min(1355px, 93vw);
+    max-width: min(1518px, 96vw);
+    max-height: calc(90vh - 76px);
   }
 
   /* Popover section label */
@@ -1428,10 +1426,10 @@
   }
   [data-theme="light"] .ep-intel-vocab-def { color: rgba(30,27,22,0.72); }
 
-  /* ── IWTMT layout — 50/50 grid ── */
+  /* ── IWTMT layout — equal 2-col grid (1fr 1fr avoids gap overflow) ── */
   .ep-iwtmt-grid {
     display: grid;
-    grid-template-columns: 50% 50%;
+    grid-template-columns: 1fr 1fr;
     gap: 20px;
     align-items: start;
   }
