@@ -1,0 +1,87 @@
+{
+  "_note": "Running patch doc — editorial rewrites, approved 1-by-1. Each entry lists ONLY changed fields + id. Merge into concepts.json by id once batch of 10 is approved.",
+  "batch": 1,
+  "approved": [
+    {
+      "id": 281,
+      "term": "Simp-Shaming",
+      "fields_changed": ["hook", "plain", "analogy", "prompt"],
+      "hook": "Free dinners and cash without sex wreck every man's dating leverage.",
+      "plain": "Men who provide time, money, or attention without getting sex in return get mocked, because it raises what every other man has to match. If OnlyFans subscribers and orbiting admirers give that away free, a woman has less reason to date someone asking for reciprocity.",
+      "analogy": "A coworker volunteering to work unpaid tanks everyone else's raise negotiation in the office.",
+      "prompt": "Someone you know keeps giving without getting anything back. What are they too afraid to ask for?"
+    },
+    {
+      "id": 485,
+      "term": "Minimum Viable Vision",
+      "fields_changed": ["plain", "analogy"],
+      "plain": "Waiting for a perfect, fully detailed vision before acting is procrastination. Start with a rough version that gives enough clarity for the next few steps, then refine it as you move.",
+      "analogy": "A founder ships a rough app with three screens, watches users struggle, then builds the fourth screen."
+    },
+    {
+      "id": 180,
+      "term": "Productize the Demo",
+      "fields_changed": ["hook", "plain", "analogy"],
+      "hook": "A pitch deck can replace 10,000 units of inventory.",
+      "plain": "Instead of building a product and hoping customers show up, you sell a demo of it first, presenting the idea and the research to see if people would actually buy it. That validates demand and refines your pitch before you spend a cent making anything.",
+      "analogy": "A libido-boosting coffee brand pitches retailers with a 30-minute deck (science + research + customer survey) before ordering a single bean."
+    },
+    {
+      "id": 335,
+      "term": "The Subway Test",
+      "fields_changed": ["plain", "analogy"],
+      "plain": "If people would hide your product or brand rather than show it off in public, something about it embarrasses them, and that quietly caps growth. Word of mouth requires pride, not just usefulness.",
+      "analogy": "A book titled 'Stop Your Erectile Dysfunction NOW' never gets read face-up on a crowded subway car."
+    },
+    {
+      "id": 489,
+      "term": "Goals Inside Goals",
+      "fields_changed": ["hook", "plain", "analogy", "editors_pick"],
+      "hook": "Your goals should nest like Russian dolls.",
+      "plain": "Each goal should point at a bigger one above it: today's task backs this week's project, and that project backs where you want to be by year's end. Skip a link and you stay busy without moving anywhere real.",
+      "analogy": "A push-up today builds a stronger back this month, which one day carries you into the marathon you dreamed about.",
+      "editors_pick": true
+    },
+    {
+      "id": 177,
+      "term": "7-11-4 Rule",
+      "fields_changed": ["plain", "analogy", "editors_pick"],
+      "plain": "A relationship that actually sticks needs about 7 hours of combined interaction, 11 separate touchpoints, and contact across 4 different platforms or contexts. Meeting someone once and calling it networking almost never works.",
+      "analogy": "A conference colleague you met once blurs into a stranger, while someone you've had coffee with twice and follow on Instagram feels like a friend.",
+      "editors_pick": true
+    },
+    {
+      "id": 178,
+      "term": "Parasocial Relationships",
+      "fields_changed": ["plain", "analogy", "prompt", "editors_pick"],
+      "plain": "Someone can feel like they know you personally after enough hours with your videos, podcast, or writing, even though you've never actually met. That one-sided closeness is what makes an audience trust a stranger's recommendation instantly.",
+      "analogy": "You'd wave hello to George Clooney at a coffee shop like an old friend, though he's never once seen you.",
+      "prompt": "Name one person you want to feel like they already know you before you ever meet. What video, post, or episode would get them there fastest?",
+      "editors_pick": true
+    },
+    {
+      "id": 181,
+      "term": "Name \u2192 Same \u2192 Fame \u2192 Aim \u2192 Game",
+      "fields_changed": ["hook", "plain", "analogy", "editors_pick"],
+      "hook": "A five-part script gets your whole story across in 30 seconds.",
+      "plain": "Name is who you are, Same is the familiar thing you do, Fame is your proof (clients, awards, numbers), Aim is your next 90 days, and Game is your 3 to 6 year vision. Nail all five in under 30 seconds and people remember exactly who you are.",
+      "analogy": "Sarah's 30-second pitch: 'I'm Sarah, I run consulting for startups, we've worked with three unicorns, and we're building sales AI right now.'",
+      "editors_pick": true
+    },
+    {
+      "id": 336,
+      "term": "100 Days of Rejection",
+      "fields_changed": ["plain", "analogy", "editors_pick"],
+      "plain": "You deliberately get rejected once a day for 100 days straight, making odd requests in public until 'what will they think' stops meaning anything. By the end you're still alive, nothing catastrophic happened, and the fear turns out to have been fake the whole time.",
+      "analogy": "You ask a Starbucks barista for free coffee, flush with embarrassment, and by day 100 you're pitching investors without flinching.",
+      "editors_pick": true
+    },
+    {
+      "id": 491,
+      "term": "Gamification of Life",
+      "fields_changed": ["plain", "analogy"],
+      "plain": "Video games hook people through clear goals, instant feedback, and stakes that escalate as you go, and your day-to-day can run on that same structure. Give your life a clear target, quick feedback on whether you're winning, and something real to lose, and focus stops being a struggle.",
+      "analogy": "A road trip works because the GPS shows exactly where you're headed and the fuel gauge shows exactly what happens if you don't refuel."
+    }
+  ]
+}

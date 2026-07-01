@@ -1,0 +1,1233 @@
+{
+  "generated_from": "concepts.json",
+  "excludes_done_ids": [
+    180,
+    281,
+    335,
+    485
+  ],
+  "sort": "length_score desc, then em_dash desc",
+  "candidates": [
+    {
+      "id": 489,
+      "term": "Goals Inside Goals",
+      "length_score": 23,
+      "em_dash": 0,
+      "hw": 12,
+      "pw": 42,
+      "aw": 48,
+      "flags": [
+        "analogy 48w"
+      ]
+    },
+    {
+      "id": 177,
+      "term": "7-11-4 Rule",
+      "length_score": 22,
+      "em_dash": 0,
+      "hw": 12,
+      "pw": 55,
+      "aw": 47,
+      "flags": [
+        "analogy 47w"
+      ]
+    },
+    {
+      "id": 178,
+      "term": "Parasocial Relationships",
+      "length_score": 22,
+      "em_dash": 0,
+      "hw": 12,
+      "pw": 41,
+      "aw": 47,
+      "flags": [
+        "analogy 47w"
+      ]
+    },
+    {
+      "id": 181,
+      "term": "Name → Same → Fame → Aim → Game",
+      "length_score": 21,
+      "em_dash": 0,
+      "hw": 10,
+      "pw": 55,
+      "aw": 46,
+      "flags": [
+        "analogy 46w"
+      ]
+    },
+    {
+      "id": 336,
+      "term": "100 Days of Rejection",
+      "length_score": 21,
+      "em_dash": 0,
+      "hw": 10,
+      "pw": 54,
+      "aw": 46,
+      "flags": [
+        "analogy 46w"
+      ]
+    },
+    {
+      "id": 491,
+      "term": "Gamification of Life",
+      "length_score": 21,
+      "em_dash": 0,
+      "hw": 12,
+      "pw": 47,
+      "aw": 46,
+      "flags": [
+        "analogy 46w"
+      ]
+    },
+    {
+      "id": 179,
+      "term": "Five Standout Rules",
+      "length_score": 20,
+      "em_dash": 0,
+      "hw": 11,
+      "pw": 49,
+      "aw": 45,
+      "flags": [
+        "analogy 45w"
+      ]
+    },
+    {
+      "id": 337,
+      "term": "Unapologetic Passion",
+      "length_score": 19,
+      "em_dash": 0,
+      "hw": 8,
+      "pw": 40,
+      "aw": 44,
+      "flags": [
+        "analogy 44w"
+      ]
+    },
+    {
+      "id": 339,
+      "term": "Internal Conflict Vs. External Conflict",
+      "length_score": 19,
+      "em_dash": 0,
+      "hw": 12,
+      "pw": 47,
+      "aw": 44,
+      "flags": [
+        "analogy 44w"
+      ]
+    },
+    {
+      "id": 207,
+      "term": "Repair Requires Ownership",
+      "length_score": 18,
+      "em_dash": 0,
+      "hw": 11,
+      "pw": 35,
+      "aw": 43,
+      "flags": [
+        "analogy 43w"
+      ]
+    },
+    {
+      "id": 468,
+      "term": "Cybernetic Feedback Loop",
+      "length_score": 18,
+      "em_dash": 0,
+      "hw": 10,
+      "pw": 51,
+      "aw": 43,
+      "flags": [
+        "analogy 43w"
+      ]
+    },
+    {
+      "id": 201,
+      "term": "You've Changed / You've Grown",
+      "length_score": 17,
+      "em_dash": 1,
+      "hw": 11,
+      "pw": 51,
+      "aw": 42,
+      "flags": [
+        "em-dash x1",
+        "analogy 42w"
+      ]
+    },
+    {
+      "id": 224,
+      "term": "Nice Guy vs Good Man",
+      "length_score": 17,
+      "em_dash": 0,
+      "hw": 12,
+      "pw": 38,
+      "aw": 42,
+      "flags": [
+        "analogy 42w"
+      ]
+    },
+    {
+      "id": 226,
+      "term": "20-minute Reset Rule",
+      "length_score": 17,
+      "em_dash": 0,
+      "hw": 11,
+      "pw": 47,
+      "aw": 42,
+      "flags": [
+        "analogy 42w"
+      ]
+    },
+    {
+      "id": 334,
+      "term": "The R&D Edge",
+      "length_score": 17,
+      "em_dash": 0,
+      "hw": 11,
+      "pw": 52,
+      "aw": 42,
+      "flags": [
+        "analogy 42w"
+      ]
+    },
+    {
+      "id": 196,
+      "term": "Performance Business",
+      "length_score": 16,
+      "em_dash": 0,
+      "hw": 12,
+      "pw": 52,
+      "aw": 41,
+      "flags": [
+        "analogy 41w"
+      ]
+    },
+    {
+      "id": 338,
+      "term": "Micro Rebellion Against Yourself",
+      "length_score": 16,
+      "em_dash": 0,
+      "hw": 10,
+      "pw": 45,
+      "aw": 41,
+      "flags": [
+        "analogy 41w"
+      ]
+    },
+    {
+      "id": 473,
+      "term": "Dissonance ➜ Uncertainty ➜ Discovery",
+      "length_score": 16,
+      "em_dash": 0,
+      "hw": 8,
+      "pw": 49,
+      "aw": 41,
+      "flags": [
+        "analogy 41w"
+      ]
+    },
+    {
+      "id": 490,
+      "term": "Actions, Not Words",
+      "length_score": 16,
+      "em_dash": 0,
+      "hw": 6,
+      "pw": 46,
+      "aw": 41,
+      "flags": [
+        "analogy 41w"
+      ]
+    },
+    {
+      "id": 518,
+      "term": "Functional Fixedness",
+      "length_score": 16,
+      "em_dash": 0,
+      "hw": 15,
+      "pw": 42,
+      "aw": 40,
+      "flags": [
+        "hook 15w",
+        "analogy 40w"
+      ]
+    },
+    {
+      "id": 182,
+      "term": "Side Hustle Doctrine",
+      "length_score": 15,
+      "em_dash": 0,
+      "hw": 11,
+      "pw": 52,
+      "aw": 40,
+      "flags": [
+        "analogy 40w"
+      ]
+    },
+    {
+      "id": 185,
+      "term": "Demand Vs. Supply Thinking",
+      "length_score": 15,
+      "em_dash": 0,
+      "hw": 11,
+      "pw": 46,
+      "aw": 40,
+      "flags": [
+        "analogy 40w"
+      ]
+    },
+    {
+      "id": 225,
+      "term": "Liars Fear Calm",
+      "length_score": 15,
+      "em_dash": 0,
+      "hw": 8,
+      "pw": 45,
+      "aw": 40,
+      "flags": [
+        "analogy 40w"
+      ]
+    },
+    {
+      "id": 227,
+      "term": "Assertiveness Respects Both",
+      "length_score": 15,
+      "em_dash": 0,
+      "hw": 9,
+      "pw": 40,
+      "aw": 40,
+      "flags": [
+        "analogy 40w"
+      ]
+    },
+    {
+      "id": 593,
+      "term": "Reward Prediction Error",
+      "length_score": 15,
+      "em_dash": 0,
+      "hw": 12,
+      "pw": 46,
+      "aw": 40,
+      "flags": [
+        "analogy 40w"
+      ]
+    },
+    {
+      "id": 609,
+      "term": "Director of Trivia",
+      "length_score": 15,
+      "em_dash": 0,
+      "hw": 10,
+      "pw": 43,
+      "aw": 40,
+      "flags": [
+        "analogy 40w"
+      ]
+    },
+    {
+      "id": 210,
+      "term": "Perspective Seeking",
+      "length_score": 14,
+      "em_dash": 0,
+      "hw": 10,
+      "pw": 31,
+      "aw": 39,
+      "flags": [
+        "analogy 39w"
+      ]
+    },
+    {
+      "id": 310,
+      "term": "Meta-invention",
+      "length_score": 14,
+      "em_dash": 0,
+      "hw": 13,
+      "pw": 40,
+      "aw": 39,
+      "flags": [
+        "analogy 39w"
+      ]
+    },
+    {
+      "id": 317,
+      "term": "Singularity Event Horizon",
+      "length_score": 14,
+      "em_dash": 0,
+      "hw": 13,
+      "pw": 51,
+      "aw": 39,
+      "flags": [
+        "analogy 39w"
+      ]
+    },
+    {
+      "id": 403,
+      "term": "Reminder Systems for Personal Growth",
+      "length_score": 14,
+      "em_dash": 0,
+      "hw": 13,
+      "pw": 35,
+      "aw": 39,
+      "flags": [
+        "analogy 39w"
+      ]
+    },
+    {
+      "id": 483,
+      "term": "The Known Path Fallacy",
+      "length_score": 14,
+      "em_dash": 0,
+      "hw": 11,
+      "pw": 44,
+      "aw": 39,
+      "flags": [
+        "analogy 39w"
+      ]
+    },
+    {
+      "id": 486,
+      "term": "Construct-Aware Stage",
+      "length_score": 14,
+      "em_dash": 0,
+      "hw": 12,
+      "pw": 44,
+      "aw": 39,
+      "flags": [
+        "analogy 39w"
+      ]
+    },
+    {
+      "id": 599,
+      "term": "Famous Orders",
+      "length_score": 13,
+      "em_dash": 1,
+      "hw": 8,
+      "pw": 46,
+      "aw": 38,
+      "flags": [
+        "em-dash x1",
+        "analogy 38w"
+      ]
+    },
+    {
+      "id": 625,
+      "term": "Founder-Led Premium",
+      "length_score": 13,
+      "em_dash": 1,
+      "hw": 6,
+      "pw": 40,
+      "aw": 38,
+      "flags": [
+        "em-dash x1",
+        "analogy 38w"
+      ]
+    },
+    {
+      "id": 184,
+      "term": "Situational Model",
+      "length_score": 13,
+      "em_dash": 0,
+      "hw": 10,
+      "pw": 52,
+      "aw": 38,
+      "flags": [
+        "analogy 38w"
+      ]
+    },
+    {
+      "id": 190,
+      "term": "Friction Creates Value",
+      "length_score": 13,
+      "em_dash": 0,
+      "hw": 14,
+      "pw": 38,
+      "aw": 38,
+      "flags": [
+        "analogy 38w"
+      ]
+    },
+    {
+      "id": 222,
+      "term": "Breath as the First Word",
+      "length_score": 13,
+      "em_dash": 0,
+      "hw": 10,
+      "pw": 46,
+      "aw": 38,
+      "flags": [
+        "analogy 38w"
+      ]
+    },
+    {
+      "id": 477,
+      "term": "Goal as Lens",
+      "length_score": 13,
+      "em_dash": 0,
+      "hw": 11,
+      "pw": 40,
+      "aw": 38,
+      "flags": [
+        "analogy 38w"
+      ]
+    },
+    {
+      "id": 605,
+      "term": "Missed Call Leverage",
+      "length_score": 13,
+      "em_dash": 0,
+      "hw": 12,
+      "pw": 39,
+      "aw": 38,
+      "flags": [
+        "analogy 38w"
+      ]
+    },
+    {
+      "id": 607,
+      "term": "Doorman Fallacy",
+      "length_score": 13,
+      "em_dash": 0,
+      "hw": 8,
+      "pw": 48,
+      "aw": 38,
+      "flags": [
+        "analogy 38w"
+      ]
+    },
+    {
+      "id": 638,
+      "term": "Relationship Paranoia",
+      "length_score": 13,
+      "em_dash": 0,
+      "hw": 15,
+      "pw": 49,
+      "aw": 37,
+      "flags": [
+        "hook 15w",
+        "analogy 37w"
+      ]
+    },
+    {
+      "id": 623,
+      "term": "Commercial Innovation",
+      "length_score": 12,
+      "em_dash": 1,
+      "hw": 8,
+      "pw": 51,
+      "aw": 37,
+      "flags": [
+        "em-dash x1",
+        "analogy 37w"
+      ]
+    },
+    {
+      "id": 194,
+      "term": "Innovation Creates Wealth",
+      "length_score": 12,
+      "em_dash": 0,
+      "hw": 11,
+      "pw": 35,
+      "aw": 37,
+      "flags": [
+        "analogy 37w"
+      ]
+    },
+    {
+      "id": 212,
+      "term": "Modeling Vs. Teaching",
+      "length_score": 12,
+      "em_dash": 0,
+      "hw": 13,
+      "pw": 40,
+      "aw": 37,
+      "flags": [
+        "analogy 37w"
+      ]
+    },
+    {
+      "id": 223,
+      "term": "Something Else Is Coming Up",
+      "length_score": 12,
+      "em_dash": 0,
+      "hw": 8,
+      "pw": 48,
+      "aw": 37,
+      "flags": [
+        "analogy 37w"
+      ]
+    },
+    {
+      "id": 280,
+      "term": "Vulnerability Signaling",
+      "length_score": 12,
+      "em_dash": 0,
+      "hw": 13,
+      "pw": 58,
+      "aw": 34,
+      "flags": [
+        "plain 58w",
+        "analogy 34w"
+      ]
+    },
+    {
+      "id": 284,
+      "term": "Intersectional Neurosis",
+      "length_score": 12,
+      "em_dash": 0,
+      "hw": 11,
+      "pw": 49,
+      "aw": 37,
+      "flags": [
+        "analogy 37w"
+      ]
+    },
+    {
+      "id": 311,
+      "term": "Bullsh*t Job Layer",
+      "length_score": 12,
+      "em_dash": 0,
+      "hw": 8,
+      "pw": 28,
+      "aw": 37,
+      "flags": [
+        "analogy 37w"
+      ]
+    },
+    {
+      "id": 315,
+      "term": "Unpredictability Barrier",
+      "length_score": 12,
+      "em_dash": 0,
+      "hw": 15,
+      "pw": 51,
+      "aw": 36,
+      "flags": [
+        "hook 15w",
+        "analogy 36w"
+      ]
+    },
+    {
+      "id": 385,
+      "term": "Borrowed Self-Worth",
+      "length_score": 12,
+      "em_dash": 0,
+      "hw": 12,
+      "pw": 57,
+      "aw": 35,
+      "flags": [
+        "plain 57w",
+        "analogy 35w"
+      ]
+    },
+    {
+      "id": 467,
+      "term": "Identity-First Change",
+      "length_score": 12,
+      "em_dash": 0,
+      "hw": 12,
+      "pw": 51,
+      "aw": 37,
+      "flags": [
+        "analogy 37w"
+      ]
+    },
+    {
+      "id": 472,
+      "term": "Failing Forward, Faster",
+      "length_score": 12,
+      "em_dash": 0,
+      "hw": 12,
+      "pw": 46,
+      "aw": 37,
+      "flags": [
+        "analogy 37w"
+      ]
+    },
+    {
+      "id": 604,
+      "term": "Outgrowing the Playbook",
+      "length_score": 12,
+      "em_dash": 0,
+      "hw": 8,
+      "pw": 44,
+      "aw": 37,
+      "flags": [
+        "analogy 37w"
+      ]
+    },
+    {
+      "id": 618,
+      "term": "Go Watch It Get Made",
+      "length_score": 12,
+      "em_dash": 0,
+      "hw": 12,
+      "pw": 53,
+      "aw": 37,
+      "flags": [
+        "analogy 37w"
+      ]
+    },
+    {
+      "id": 635,
+      "term": "Copycat Buying",
+      "length_score": 12,
+      "em_dash": 0,
+      "hw": 13,
+      "pw": 57,
+      "aw": 35,
+      "flags": [
+        "plain 57w",
+        "analogy 35w"
+      ]
+    },
+    {
+      "id": 229,
+      "term": "Type One Vs. Type Two Empathy",
+      "length_score": 11,
+      "em_dash": 2,
+      "hw": 13,
+      "pw": 52,
+      "aw": 36,
+      "flags": [
+        "em-dash x2",
+        "analogy 36w"
+      ]
+    },
+    {
+      "id": 535,
+      "term": "Regression to the Mean",
+      "length_score": 11,
+      "em_dash": 1,
+      "hw": 12,
+      "pw": 38,
+      "aw": 36,
+      "flags": [
+        "em-dash x1",
+        "analogy 36w"
+      ]
+    },
+    {
+      "id": 600,
+      "term": "Choice Paralysis",
+      "length_score": 11,
+      "em_dash": 1,
+      "hw": 8,
+      "pw": 49,
+      "aw": 36,
+      "flags": [
+        "em-dash x1",
+        "analogy 36w"
+      ]
+    },
+    {
+      "id": 161,
+      "term": "Limbic Capitalism",
+      "length_score": 11,
+      "em_dash": 0,
+      "hw": 9,
+      "pw": 26,
+      "aw": 36,
+      "flags": [
+        "analogy 36w"
+      ]
+    },
+    {
+      "id": 168,
+      "term": "Performance Vs. Excitement Matrix",
+      "length_score": 11,
+      "em_dash": 0,
+      "hw": 14,
+      "pw": 51,
+      "aw": 36,
+      "flags": [
+        "analogy 36w"
+      ]
+    },
+    {
+      "id": 192,
+      "term": "Entrepreneur Sweet Spot",
+      "length_score": 11,
+      "em_dash": 0,
+      "hw": 11,
+      "pw": 50,
+      "aw": 36,
+      "flags": [
+        "analogy 36w"
+      ]
+    },
+    {
+      "id": 314,
+      "term": "Your Irreplaceable Edge",
+      "length_score": 11,
+      "em_dash": 0,
+      "hw": 14,
+      "pw": 52,
+      "aw": 36,
+      "flags": [
+        "analogy 36w"
+      ]
+    },
+    {
+      "id": 381,
+      "term": "Mental Adaptability",
+      "length_score": 11,
+      "em_dash": 0,
+      "hw": 10,
+      "pw": 43,
+      "aw": 36,
+      "flags": [
+        "analogy 36w"
+      ]
+    },
+    {
+      "id": 397,
+      "term": "The Effort Filter",
+      "length_score": 11,
+      "em_dash": 0,
+      "hw": 5,
+      "pw": 31,
+      "aw": 36,
+      "flags": [
+        "analogy 36w"
+      ]
+    },
+    {
+      "id": 406,
+      "term": "The Blame Trade",
+      "length_score": 11,
+      "em_dash": 0,
+      "hw": 7,
+      "pw": 34,
+      "aw": 36,
+      "flags": [
+        "analogy 36w"
+      ]
+    },
+    {
+      "id": 487,
+      "term": "Identity Protection",
+      "length_score": 11,
+      "em_dash": 0,
+      "hw": 10,
+      "pw": 48,
+      "aw": 36,
+      "flags": [
+        "analogy 36w"
+      ]
+    },
+    {
+      "id": 519,
+      "term": "Divergent Thinking",
+      "length_score": 11,
+      "em_dash": 0,
+      "hw": 8,
+      "pw": 33,
+      "aw": 36,
+      "flags": [
+        "analogy 36w"
+      ]
+    },
+    {
+      "id": 612,
+      "term": "Belief Changes the Taste",
+      "length_score": 11,
+      "em_dash": 0,
+      "hw": 13,
+      "pw": 49,
+      "aw": 36,
+      "flags": [
+        "analogy 36w"
+      ]
+    },
+    {
+      "id": 616,
+      "term": "Slow, Slow, Then All at Once",
+      "length_score": 11,
+      "em_dash": 0,
+      "hw": 13,
+      "pw": 44,
+      "aw": 36,
+      "flags": [
+        "analogy 36w"
+      ]
+    },
+    {
+      "id": 627,
+      "term": "Loss Aversion",
+      "length_score": 11,
+      "em_dash": 0,
+      "hw": 12,
+      "pw": 47,
+      "aw": 36,
+      "flags": [
+        "analogy 36w"
+      ]
+    },
+    {
+      "id": 630,
+      "term": "The Logical 15%",
+      "length_score": 11,
+      "em_dash": 0,
+      "hw": 13,
+      "pw": 47,
+      "aw": 36,
+      "flags": [
+        "analogy 36w"
+      ]
+    },
+    {
+      "id": 240,
+      "term": "Anticipation of Audience",
+      "length_score": 10,
+      "em_dash": 2,
+      "hw": 9,
+      "pw": 45,
+      "aw": 35,
+      "flags": [
+        "em-dash x2",
+        "analogy 35w"
+      ]
+    },
+    {
+      "id": 242,
+      "term": "Right but Early",
+      "length_score": 10,
+      "em_dash": 2,
+      "hw": 12,
+      "pw": 49,
+      "aw": 35,
+      "flags": [
+        "em-dash x2",
+        "analogy 35w"
+      ]
+    },
+    {
+      "id": 377,
+      "term": "Peak Experience Trap",
+      "length_score": 10,
+      "em_dash": 2,
+      "hw": 12,
+      "pw": 35,
+      "aw": 35,
+      "flags": [
+        "em-dash x2",
+        "analogy 35w"
+      ]
+    },
+    {
+      "id": 110,
+      "term": "Grand Slam Offer",
+      "length_score": 10,
+      "em_dash": 0,
+      "hw": 8,
+      "pw": 21,
+      "aw": 35,
+      "flags": [
+        "analogy 35w"
+      ]
+    },
+    {
+      "id": 292,
+      "term": "The Pretty Privilege",
+      "length_score": 10,
+      "em_dash": 0,
+      "hw": 14,
+      "pw": 41,
+      "aw": 35,
+      "flags": [
+        "analogy 35w"
+      ]
+    },
+    {
+      "id": 307,
+      "term": "Deceptive Mating Strategy",
+      "length_score": 10,
+      "em_dash": 0,
+      "hw": 11,
+      "pw": 42,
+      "aw": 35,
+      "flags": [
+        "analogy 35w"
+      ]
+    },
+    {
+      "id": 319,
+      "term": "Perpetual Safety Paradox",
+      "length_score": 10,
+      "em_dash": 0,
+      "hw": 10,
+      "pw": 48,
+      "aw": 35,
+      "flags": [
+        "analogy 35w"
+      ]
+    },
+    {
+      "id": 328,
+      "term": "Minimum Wage as Admission",
+      "length_score": 10,
+      "em_dash": 0,
+      "hw": 14,
+      "pw": 42,
+      "aw": 35,
+      "flags": [
+        "analogy 35w"
+      ]
+    },
+    {
+      "id": 330,
+      "term": "Black Box Intelligence",
+      "length_score": 10,
+      "em_dash": 0,
+      "hw": 13,
+      "pw": 47,
+      "aw": 35,
+      "flags": [
+        "analogy 35w"
+      ]
+    },
+    {
+      "id": 476,
+      "term": "Anti-Vision",
+      "length_score": 10,
+      "em_dash": 0,
+      "hw": 13,
+      "pw": 49,
+      "aw": 35,
+      "flags": [
+        "analogy 35w"
+      ]
+    },
+    {
+      "id": 615,
+      "term": "Function vs Feeling",
+      "length_score": 10,
+      "em_dash": 0,
+      "hw": 13,
+      "pw": 42,
+      "aw": 35,
+      "flags": [
+        "analogy 35w"
+      ]
+    },
+    {
+      "id": 633,
+      "term": "Attribution Illusion",
+      "length_score": 10,
+      "em_dash": 0,
+      "hw": 12,
+      "pw": 56,
+      "aw": 34,
+      "flags": [
+        "plain 56w",
+        "analogy 34w"
+      ]
+    },
+    {
+      "id": 411,
+      "term": "Serial Obsessive",
+      "length_score": 9,
+      "em_dash": 1,
+      "hw": 13,
+      "pw": 38,
+      "aw": 34,
+      "flags": [
+        "em-dash x1",
+        "analogy 34w"
+      ]
+    },
+    {
+      "id": 528,
+      "term": "Taste Gap",
+      "length_score": 9,
+      "em_dash": 1,
+      "hw": 15,
+      "pw": 35,
+      "aw": 33,
+      "flags": [
+        "em-dash x1",
+        "hook 15w",
+        "analogy 33w"
+      ]
+    },
+    {
+      "id": 23,
+      "term": "Asymmetric Risk",
+      "length_score": 9,
+      "em_dash": 0,
+      "hw": 9,
+      "pw": 25,
+      "aw": 34,
+      "flags": [
+        "analogy 34w"
+      ]
+    },
+    {
+      "id": 93,
+      "term": "Luck Surface Area",
+      "length_score": 9,
+      "em_dash": 0,
+      "hw": 9,
+      "pw": 32,
+      "aw": 34,
+      "flags": [
+        "analogy 34w"
+      ]
+    },
+    {
+      "id": 121,
+      "term": "First Mover Edge",
+      "length_score": 9,
+      "em_dash": 0,
+      "hw": 11,
+      "pw": 25,
+      "aw": 34,
+      "flags": [
+        "analogy 34w"
+      ]
+    },
+    {
+      "id": 162,
+      "term": "Thin Slice Jealousy",
+      "length_score": 9,
+      "em_dash": 0,
+      "hw": 10,
+      "pw": 56,
+      "aw": 33,
+      "flags": [
+        "plain 56w",
+        "analogy 33w"
+      ]
+    },
+    {
+      "id": 188,
+      "term": "Entrepreneurial Pyramid",
+      "length_score": 9,
+      "em_dash": 0,
+      "hw": 10,
+      "pw": 51,
+      "aw": 34,
+      "flags": [
+        "analogy 34w"
+      ]
+    },
+    {
+      "id": 193,
+      "term": "Geography Arbitrage",
+      "length_score": 9,
+      "em_dash": 0,
+      "hw": 12,
+      "pw": 55,
+      "aw": 34,
+      "flags": [
+        "analogy 34w"
+      ]
+    },
+    {
+      "id": 205,
+      "term": "Space Holding",
+      "length_score": 9,
+      "em_dash": 0,
+      "hw": 11,
+      "pw": 38,
+      "aw": 34,
+      "flags": [
+        "analogy 34w"
+      ]
+    },
+    {
+      "id": 211,
+      "term": "Your Emotions Aren't Too Big for Me",
+      "length_score": 9,
+      "em_dash": 0,
+      "hw": 12,
+      "pw": 42,
+      "aw": 34,
+      "flags": [
+        "analogy 34w"
+      ]
+    },
+    {
+      "id": 216,
+      "term": "Labeling the Difficult Conversation",
+      "length_score": 9,
+      "em_dash": 0,
+      "hw": 9,
+      "pw": 38,
+      "aw": 34,
+      "flags": [
+        "analogy 34w"
+      ]
+    },
+    {
+      "id": 218,
+      "term": "Tell Me What I'm Missing",
+      "length_score": 9,
+      "em_dash": 0,
+      "hw": 9,
+      "pw": 33,
+      "aw": 34,
+      "flags": [
+        "analogy 34w"
+      ]
+    },
+    {
+      "id": 220,
+      "term": "Hidden Metrics",
+      "length_score": 9,
+      "em_dash": 0,
+      "hw": 12,
+      "pw": 44,
+      "aw": 34,
+      "flags": [
+        "analogy 34w"
+      ]
+    },
+    {
+      "id": 285,
+      "term": "Loyalty Tax",
+      "length_score": 9,
+      "em_dash": 0,
+      "hw": 11,
+      "pw": 49,
+      "aw": 34,
+      "flags": [
+        "analogy 34w"
+      ]
+    },
+    {
+      "id": 298,
+      "term": "Pick Me Policing",
+      "length_score": 9,
+      "em_dash": 0,
+      "hw": 11,
+      "pw": 48,
+      "aw": 34,
+      "flags": [
+        "analogy 34w"
+      ]
+    },
+    {
+      "id": 382,
+      "term": "AI = Race to Mediocrity",
+      "length_score": 9,
+      "em_dash": 0,
+      "hw": 9,
+      "pw": 49,
+      "aw": 34,
+      "flags": [
+        "analogy 34w"
+      ]
+    },
+    {
+      "id": 629,
+      "term": "Easter Egg Thinking",
+      "length_score": 9,
+      "em_dash": 0,
+      "hw": 8,
+      "pw": 48,
+      "aw": 34,
+      "flags": [
+        "analogy 34w"
+      ]
+    }
+  ]
+}
