@@ -6,6 +6,21 @@
 
 ---
 
+## v2.15c — 2026-07-01 — Desktop/mobile copy forking (Founder + OG text)
+
+### What shipped
+New utility classes `.fc-desktop-only` / `.fc-mobile-only` (plus `.founder-bullets li` / `.og-bullets li` variants) let specific lines carry genuinely different wording or line-breaks per breakpoint, instead of one string trying to serve both. `fc-mast-line`'s font-shrink hack from v2.15b is removed — superseded by this.
+
+- **Founder Copy masturbation line** now forks: desktop — "masturbation... and a broken learning format." (ellipsis glued to "masturbation", fits on one line, no break). Mobile — "masturbation" (forced `<br>`) "...and a broken learning format." (ellipsis glued to "and").
+- **Founder bullet 2** forks: desktop — "Podcast summaries — bullet points I'd skim once, forget instantly." Mobile — unchanged ("...I'd forget.").
+- **OG impostor-syndrome line** forks: desktop drops "almost" and italicizes the second parenthetical (`you can't quite lead it`) so the whole sentence fits inside the left column without spilling "it)." onto the top of the right column. Mobile keeps "almost" and the non-italic second bracket (single-column layout doesn't have the column-break problem).
+- **OG Spark bullet** forks: desktop drops the trailing "to it." Mobile keeps it.
+- **"epistemic"** (Small Confession paragraph) now bold + italic on top of the existing accent color, on both breakpoints.
+- **"Next up" separator symbols** fork: desktop keeps `〱`, mobile switches to `<` (Listen &lt; Read &lt; Write &lt; Speak &lt; Grow) since `〱` wasn't rendering on mobile. Both bold+italic.
+- **Closing lines redesigned and forked:** desktop — 3 separate rows ("Stay tuned. Sign up for free. Share your feedback. (good or bad, it's helpful 🙏)" / "The next version of Epistemic, and you, is already loading." / "It's gonna be Epic."). Mobile — 2 rows (first two ideas combined into one paragraph, "It's gonna be Epic." broken out alone).
+
+---
+
 ## v2.15b — 2026-07-01 — Copy tweaks + desktop drawer cat-filter bug fix
 
 ### What shipped

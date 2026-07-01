@@ -5464,6 +5464,19 @@
     flex-shrink: 0;
     opacity: 0.85;
   } /* v2.3f: italic only, no gold — gold reserved for the standalone emphasis lines */
+
+  /* v2.15c: desktop/mobile alternate-copy toggle (same idea text, different wording/breaks per breakpoint) */
+  .fc-mobile-only { display: none; }
+  .founder-bullets li.fc-mobile-only,
+  .og-bullets li.fc-mobile-only { display: none; }
+  @media (max-width: 700px) {
+    .fc-desktop-only { display: none; }
+    .fc-mobile-only { display: block; }
+    .founder-bullets li.fc-desktop-only,
+    .og-bullets li.fc-desktop-only { display: none; }
+    .founder-bullets li.fc-mobile-only,
+    .og-bullets li.fc-mobile-only { display: block; }
+  }
   .founder-text p.founder-line-emphasis {
     color: var(--text);
     font-size: 1.08rem;
@@ -5568,8 +5581,6 @@
     .founder-text p { font-size: 0.88rem; }
     .founder-text p.founder-line-emphasis { font-size: 0.98rem; }
     .founder-text p.founder-line-bold { font-size: 0.98rem; }
-    /* v2.15b: slightly smaller so "masturbation" naturally stays on row 1 without a forced break */
-    .founder-text p.founder-line-bold.fc-mast-line { font-size: 0.9rem; }
     .founder-bullets li { font-size: 0.82rem; }
     /* Mobile: switch from flex to inline flow so the arrow, bold label and
        description all sit in one continuous text run. No more 2-col grid effect. */
@@ -8765,7 +8776,8 @@
       <p class="founder-reveal">So, I tried to fix it:</p>
       <ul class="founder-bullets founder-reveal">
         <li><span class="founder-bullet-arrow">➣</span> <strong>Readwise highlights</strong> — never reopened.</li>
-        <li><span class="founder-bullet-arrow">➣</span> <strong>Podcast summaries</strong> — bullet points I'd forget.</li>
+        <li class="fc-desktop-only"><span class="founder-bullet-arrow">➣</span> <strong>Podcast summaries</strong> — bullet points I'd skim once, forget instantly.</li>
+        <li class="fc-mobile-only"><span class="founder-bullet-arrow">➣</span> <strong>Podcast summaries</strong> — bullet points I'd forget.</li>
         <li><span class="founder-bullet-arrow">➣</span> <strong>Notion dashboards</strong> — my little cheat sheet.</li>
       </ul>
       <div class="founder-mobile-notes founder-reveal">
@@ -8785,7 +8797,8 @@
         </div>
       </div>
       <p class="founder-reveal">None of it stuck. I just had a better-organised version of the same problem.</p>
-      <p class="founder-line-bold founder-reveal fc-mast-line">Passive listening is just mental masturbation ...&nbsp;and a broken learning format.</p>
+      <p class="founder-line-bold founder-reveal fc-desktop-only">Passive listening is just mental masturbation... and a broken learning format.</p>
+      <p class="founder-line-bold founder-reveal fc-mobile-only">Passive listening is just mental masturbation<br>...&nbsp;and a broken learning format.</p>
       <p class="founder-reveal">But along the way, I realised other people — expats, non-native English speakers, podcast lovers — were stumbling on their words too.</p>
       <p class="founder-line-bold founder-reveal">So I built the tool I wished existed.</p>
       <p class="founder-italic-body founder-reveal"><span class="founder-accent">Epistemic</span> isn't trying to make you smarter. It's just trying to make sure what you already know doesn't die before it matters.</p>
@@ -8836,7 +8849,7 @@
 
             <p class="og-kicker">A Small Confession</p>
 
-            <p>I didn't know what "<span class="founder-accent">epistemic</span>" meant either. Heard it in a podcast, thought it sounded smart, filed it away, moved on with my life. Eventually I googled it, mid-episode, like a criminal. Turns out it just means relating to knowledge: how we actually know what we know.</p>
+            <p>I didn't know what "<strong><em><span class="founder-accent">epistemic</span></em></strong>" meant either. Heard it in a podcast, thought it sounded smart, filed it away, moved on with my life. Eventually I googled it, mid-episode, like a criminal. Turns out it just means relating to knowledge: how we actually know what we know.</p>
 
             <p>Which is a fancy way of admitting <em>I know less than I think I do, constantly.</em> If you've ever googled a word so you didn't feel behind in your own conversation, congratulations. This is for you.</p>
 
@@ -8846,7 +8859,8 @@
 
             <p>You know that Shazam moment? Song comes on, you know every word, could sing the whole thing in the shower, someone asks who sings it and you've got nothing. That's basically my brain around good ideas. I can hum the concept. I just can't tell you its name in a meeting.</p>
 
-            <p>There's a specific kind of impostor syndrome that almost never gets named. It <strong><em>looks</em></strong> like intelligence (<em>you follow the conversation</em>), but <strong><em>feels</em></strong> like inadequacy (you can't quite lead it).</p>
+            <p class="fc-desktop-only">There's a specific kind of impostor syndrome that never gets named. It <strong><em>looks</em></strong> like intelligence (<em>you follow the conversation</em>), but <strong><em>feels</em></strong> like inadequacy (<em>you can't quite lead it</em>).</p>
+            <p class="fc-mobile-only">There's a specific kind of impostor syndrome that almost never gets named. It <strong><em>looks</em></strong> like intelligence (<em>you follow the conversation</em>), but <strong><em>feels</em></strong> like inadequacy (you can't quite lead it).</p>
 
             <p class="founder-line-bold">Fifty hours of Steven Bartlett in your ears and you still wouldn't drop "second-order thinking" into a pitch without flinching.</p>
 
@@ -8863,12 +8877,19 @@
             <ul class="og-bullets">
               <li><span class="founder-bullet-arrow">➣</span> <strong>Key ideas per podcast</strong> — concept cards, vocabulary that matters, and a verdict on whether it's worth three hours of your time.</li>
               <li><span class="founder-bullet-arrow">➣</span> <strong>Corner</strong> — builds you a scenario around whatever situation you're actually walking into, based on your own input.</li>
-              <li><span class="founder-bullet-arrow">➣</span> <strong>Spark</strong> — makes sure you actually say the idea out loud instead of just nodding along to it.</li>
+              <li class="fc-desktop-only"><span class="founder-bullet-arrow">➣</span> <strong>Spark</strong> — makes sure you actually say the idea out loud instead of just nodding along.</li>
+              <li class="fc-mobile-only"><span class="founder-bullet-arrow">➣</span> <strong>Spark</strong> — makes sure you actually say the idea out loud instead of just nodding along to it.</li>
             </ul>
 
-            <p>Next up: we'll wire it all together — <strong><em>Listen〱Read〱Write〱Speak〱Grow.</em></strong> Each one gets a new room in the house, but all interconnected, rooted in the ideas worth saying out loud.</p>
+            <p class="fc-desktop-only">Next up: we'll wire it all together — <strong><em>Listen〱Read〱Write〱Speak〱Grow.</em></strong> Each one gets a new room in the house, but all interconnected, rooted in the ideas worth saying out loud.</p>
+            <p class="fc-mobile-only">Next up: we'll wire it all together — <strong><em>Listen &lt; Read &lt; Write &lt; Speak &lt; Grow.</em></strong> Each one gets a new room in the house, but all interconnected, rooted in the ideas worth saying out loud.</p>
 
-            <p class="founder-line-bold">Stay tuned. The next version of Epistemic, and you, is already loading. It's gonna be <span class="founder-accent">Epic</span>.</p>
+            <p class="founder-line-bold fc-desktop-only">Stay tuned. Sign up for free. Share your feedback. (good or bad, it's helpful 🙏)</p>
+            <p class="founder-line-bold fc-desktop-only">The next version of Epistemic, and you, is already loading.</p>
+            <p class="founder-line-bold fc-desktop-only">It's gonna be <span class="founder-accent">Epic</span>.</p>
+
+            <p class="founder-line-bold fc-mobile-only">Stay tuned. Sign up for free. Share your feedback (good or bad, it's helpful 🙏). The next version of Epistemic, and you, is already loading.</p>
+            <p class="founder-line-bold fc-mobile-only">It's gonna be <span class="founder-accent">Epic</span>.</p>
 
           </div>
 

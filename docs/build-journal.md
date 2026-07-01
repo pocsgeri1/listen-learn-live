@@ -34,6 +34,14 @@ Claude updates without being asked: changelog.md (new entry at TOP), roadmap.md 
 
 ## Entries
 
+### 2026-07-01 — v2.15c: when copy needs to genuinely fork, don't fight one string
+
+**Lesson 34 — Font-size shrinking to force a natural wrap point is fragile; a real per-breakpoint content fork is more robust.**
+v2.15b tried to keep "masturbation" on row 1 on mobile by shrinking `fc-mast-line`'s font-size and hoping the narrower text naturally wrapped in the right place. It worked, but it's brittle — any future font, padding, or copy change could shift the wrap point again. v2.15c replaced it with two full `<p>` elements (`.fc-desktop-only` / `.fc-mobile-only`) with different text and an explicit `<br>` on mobile. More markup, but the line-break is guaranteed rather than hoped-for.
+
+**Lesson 35 — Reusable "show this version at this breakpoint" utility classes are worth having early.**
+By v2.15c, four separate lines needed different wording or structure on desktop vs mobile (not just different sizing). Built one small utility pair — `.fc-desktop-only` / `.fc-mobile-only`, plus `.founder-bullets li` / `.og-bullets li` variants for list items whose base display differs by context — instead of one-off inline styles per line. Compound selectors (e.g. `.og-bullets li.fc-mobile-only`) were needed to beat the specificity of the existing base rules.
+
 ### 2026-07-01 — v2.15b: unguarded mobile-only CSS rules leaking into desktop
 
 **Lesson 32 — A `.state-class { display: none }` rule with no `@media` guard applies everywhere, even if the state was only ever meant to be reachable on mobile.**
