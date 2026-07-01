@@ -34,6 +34,14 @@ Claude updates without being asked: changelog.md (new entry at TOP), roadmap.md 
 
 ## Entries
 
+### 2026-07-01 — v2.15a: line-wrap via forced `<br>`, and the fullscreen map revert
+
+**Lesson 30 — Don't trust `&nbsp;` alone to control where a line breaks.**
+Gluing two words together with `&nbsp;` only stops *those two* from splitting — it doesn't control where the line breaks upstream of them. On a different viewport width the wrap point can land somewhere else in the sentence entirely, e.g. "masturbation" itself getting orphaned onto line 2. If a specific word must always end/start a line regardless of screen width, use a forced `<br>` at that exact point instead of relying on natural reflow + `&nbsp;`.
+
+**Lesson 31 — Ship-fast CSS tricks (like the rotate-fullscreen map) still need real-device testing before they're "done."**
+The v2.15 fullscreen-rotate map worked in theory (CSS-only, no orientation API) but "didn't work out well" in practice on the user's actual phone — reverted in v2.15a. Lesson: anything involving `position: fixed` + transform rotation + touch/drag interaction on mobile is high-risk for feeling broken (pan direction, scroll-lock edge cases, safe-area insets) and should be flagged as "needs on-device testing before we call it done," not shipped as final in the same session it's built.
+
 ### 2026-07-01 — v2.15: OG text rewrite, mobile column bug, fullscreen map rotate trick
 
 **Lesson 27 — `columns: N` needs an explicit mobile override.**

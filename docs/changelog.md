@@ -20,6 +20,19 @@
 
 ---
 
+## v2.15a — 2026-07-01 — Founder/OG copy polish + OG Map fullscreen reverted
+
+### What shipped
+- **Founder Copy line-wrap:** replaced the `&nbsp;`-only approach with a forced `<br>` — "Passive listening is just mental masturbation" now always closes line 1, "...and a broken learning format." always opens line 2, regardless of screen width.
+- **Removed line:** "If you've ever gone 'nevermind' mid-sentence — this is for you." cut from Founder Copy.
+- **Impostor syndrome line emphasis:** "looks" and "feels" now bold+italic, "you follow the conversation" now italic.
+- **"Right now" paragraph converted to 3 bullets** (`➣`, matching Founder bullet style): podcasts → key ideas/vocabulary/verdict, Corner, Spark. Dropped internal "intelligence pills" terminology from user-facing copy.
+- **"Next up" line rewritten:** "we'll wire it all together — Listen〱Read〱Write〱Speak〱Grow. Each one gets a new room in the house, but all interconnected, rooted in the ideas worth saying out loud."
+- **"Stay tuned" closing line** switched from italic-only to bold+italic (`founder-line-bold`) for emphasis.
+- **OG Map fullscreen feature fully reverted** — expand button, `.og-map-fs-hint`, all fullscreen/rotate CSS, and the `ogToggleFullscreen()` script block removed. Map is back to zoom/pan/reset only, desktop and mobile. (Shipped in v2.15, didn't hold up in testing.)
+
+---
+
 ## v2.14b–j — 2026-07-01 — Intel pill UI polish: IWTMT popover, Vocab grid, mobile scan defaults
 
 ### What shipped
