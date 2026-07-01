@@ -1257,7 +1257,7 @@
     max-width: min(1242px, 88vw);
     height: calc(81vh - 76px);
     max-height: calc(81vh - 76px);
-    overflow: visible;
+    overflow-y: auto;
   }
 
   /* Popover section label */
@@ -1551,9 +1551,9 @@
     padding-top: 16px;
   }
   [data-theme="light"] .ep-intel-sheet .ep-iwtmt-col + .ep-iwtmt-col { border-color: rgba(0,0,0,0.07); }
-  /* Mobile sheet: vocab grid goes single-col */
+  /* Mobile sheet: vocab goes single-col — !important to override JS inline style */
   .ep-intel-sheet .ep-intel-vocab-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
   }
 
   /* ── END EPISODE INTEL ───────────────────────────────────────────────────── */
