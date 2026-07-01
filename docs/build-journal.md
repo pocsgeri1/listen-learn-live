@@ -34,6 +34,17 @@ Claude updates without being asked: changelog.md (new entry at TOP), roadmap.md 
 
 ## Entries
 
+### 2026-07-01 — v2.15: OG text rewrite, mobile column bug, fullscreen map rotate trick
+
+**Lesson 27 — `columns: N` needs an explicit mobile override.**
+`.og-story { columns: 2; column-gap: 3rem; }` had no `@media` breakpoint, so it silently squeezed into 2 narrow columns on phones too. CSS multi-column doesn't auto-collapse like flex/grid can with `flex-wrap` — always pair a `columns` rule with a `max-width` override that sets `columns: 1`.
+
+**Lesson 28 — Fullscreen "rotate the phone" without the orientation API.**
+To force a rotated fullscreen view that works regardless of the OS rotation lock: `position: fixed; inset: 0`, swap `width`/`height` to `100dvh`/`100dvw` (dimensions transposed), then `transform: translate(-50%,-50%) rotate(90deg)` from `top/left: 50%`. No JS orientation listener needed — pure CSS, works even if the device is locked to portrait. Caveat: existing drag-pan math (mouse/touch deltas) doesn't know about the rotation, so panning direction will likely feel inverted in the rotated view — pinch-zoom is unaffected since it's distance-based, not axis-based.
+
+**Lesson 29 — `&nbsp;` glues two words across a manual line-break risk.**
+To stop punctuation/a word pair from splitting awkwardly at a CSS reflow point (e.g. "masturbation... and" wrapping mid-ellipsis), move the ellipsis off the risky word and glue it to the next word with `&nbsp;` (`masturbation ...&nbsp;and`) instead of fighting it with `white-space: nowrap` on a whole sentence.
+
 ### 2026-07-01 — v2.14b–j: Intel pill popover debugging lessons
 
 **Lesson 23 — `50% 50%` grid columns overflow when there's a gap.**

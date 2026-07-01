@@ -8031,6 +8031,10 @@
   letter-spacing: 0.2em; text-transform: uppercase;
   color: var(--accent); opacity: 0.38; margin-bottom: 0.6rem; margin-top: 0;
 }
+@media (max-width: 700px) {
+  /* OG text flows single-column on mobile instead of squeezing into 2 narrow columns */
+  .og-story { columns: 1; }
+}
 
 /* ── Map ─────────────────────────────────────────────────── */
 .og-map-hint {
@@ -8072,6 +8076,36 @@
   line-height: 0;
 }
 .og-map-wrap svg { width: 100%; height: auto; display: block; }
+
+/* ── Map fullscreen (mobile: rotated 90° so user turns the phone) ──────── */
+.og-map-expand-btn svg { width: 11px; height: 11px; }
+.og-map-fs-hint {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+  font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--accent); background: rgba(10,10,10,0.85);
+  padding: 10px 16px; border-radius: 20px; border: 1px solid rgba(232,213,163,0.25);
+  z-index: 20; opacity: 0; visibility: hidden; pointer-events: none;
+  transition: opacity 0.4s ease; white-space: nowrap;
+}
+body.og-map-fs-lock { overflow: hidden; height: 100%; }
+.og-map-wrap.og-map-fs {
+  position: fixed; inset: 0; z-index: 9900;
+  margin: 0; border-radius: 0; width: 100vw; height: 100dvh;
+}
+.og-map-wrap.og-map-fs .og-map-scroll { width: 100%; height: 100%; }
+.og-map-wrap.og-map-fs .og-map-inner,
+.og-map-wrap.og-map-fs svg { height: 100%; }
+@media (max-width: 700px) {
+  .og-map-wrap.og-map-fs .og-map-fs-hint { visibility: visible; opacity: 1; }
+  .og-map-wrap.og-map-fs .og-map-fs-hint.og-map-fs-hint-hide { opacity: 0; }
+  .og-map-wrap.og-map-fs {
+    /* rotated 90° full-bleed: dimensions swapped so it reads correctly once the phone is turned sideways */
+    width: 100dvh; height: 100dvw;
+    top: 50%; left: 50%; right: auto; bottom: auto;
+    transform: translate(-50%, -50%) rotate(90deg);
+    transform-origin: center center;
+  }
+}
 
 /* ── Neuro pulse animations ─────────────────────────────── */
 @keyframes og-pulse-lg {
@@ -8756,7 +8790,7 @@
         </div>
       </div>
       <p class="founder-reveal">None of it stuck. I just had a better-organised version of the same problem.</p>
-      <p class="founder-line-bold founder-reveal">Passive listening is just mental masturbation... and a broken learning format.</p>
+      <p class="founder-line-bold founder-reveal">Passive listening is just mental masturbation ...&nbsp;and a broken learning format.</p>
       <p class="founder-reveal">But along the way, I realised other people — expats, non-native English speakers, podcast lovers — were stumbling on their words too.</p>
       <p class="founder-line-bold founder-reveal">So I built the tool I wished existed.</p>
       <p class="founder-italic-body founder-reveal"><span class="founder-accent">Epistemic</span> isn't trying to make you smarter. It's just trying to make sure what you already know doesn't die before it matters.</p>
@@ -8799,52 +8833,58 @@
         <div class="og-section-inner">
           <div class="og-story founder-text">
 
-            <p class="og-kicker">For the real ones</p>
+            <p class="og-kicker">The Podcasts Aren't Random</p>
 
-            <p>The podcasts I chose aren't random. Modern Wisdom. Diary of a CEO. Lex Fridman. Dan Koe. None of them are academics. All of them are rigorous. All obsessed with the mechanism <em>underneath</em> the behaviour — why people do what they do, not just that they do it.</p>
+            <p>I have a genuinely embarrassing number of podcast hours logged: Modern Wisdom, Diary of a CEO, The Koe Cast, most of it on 1.5x speed like a maniac. None of the hosts have a PhD. A couple didn't even finish school. Doesn't matter, they're the closest thing my generation's got to philosophers.</p>
 
-            <p class="founder-line-bold">I don't curate podcasts. I curate lenses.</p>
-
-            <p>The through-line is identical across every source: <em>ideas that change behaviour, not just beliefs.</em> Different angles — evolutionary, emotional, philosophical, existential — same obsession with the human underneath the idea.</p>
+            <p class="founder-line-bold">All obsessed with the same question: why do people actually do the things they do.</p>
 
             <div class="og-divider"></div>
 
-            <p>I'm Hungarian. I think in one language and operate in another. I've been in rooms — boardrooms, dinner parties, conversations — where someone drops a concept I half-know, I nod, I process it later, and two days later I have the articulate response I needed in the moment. Two days too late.</p>
+            <p class="og-kicker">A Small Confession</p>
 
-            <p>That's not a comprehension problem. It's a <span class="founder-accent">fluency problem</span>. The gap between understanding an idea and owning it. Being able to deploy it in real time in the conversation you're actually in.</p>
+            <p>I didn't know what "epistemic" meant either. Heard it in a podcast, thought it sounded smart, filed it away, moved on with my life. Eventually I googled it, mid-episode, like a criminal. Turns out it just means relating to knowledge: how we actually know what we know.</p>
 
-            <p>Every ambitious non-native English speaker knows this. Almost none would admit it.</p>
-
-            <p class="founder-line-bold">I built Epistemic for myself. The market just turned out to be enormous.</p>
+            <p>Which is a fancy way of admitting <em>I know less than I think I do, constantly.</em> If you've ever googled a word so you didn't feel behind in your own conversation, congratulations. This is for you.</p>
 
             <div class="og-divider"></div>
 
-            <p>There's a specific kind of impostor syndrome that almost never gets named. It <em>looks</em> like intelligence — you follow the conversation — but it <em>feels</em> like inadequacy — you can't quite lead it. You've listened to fifty hours of Chris Williamson but you wouldn't say "Dunning-Kruger" in a pitch without second-guessing yourself.</p>
+            <p class="og-kicker">Shazam for Ideas</p>
 
-            <p>On the surface: concept cards. Plain language. Memorable analogies.</p>
+            <p>You know that Shazam moment? Song comes on, you know every word, could sing the whole thing in the shower, someone asks who sings it and you've got nothing. That's basically my brain around good ideas. I can hum the concept. I just can't tell you its name in a meeting.</p>
 
-            <p>Under the surface: <span class="founder-accent">belonging infrastructure.</span> A very quiet, very confident, very dignified identity app. Epistemic isn't trying to make you smarter — it's trying to make sure what you already know doesn't die before it matters.</p>
+            <p>There's a specific kind of impostor syndrome that almost never gets named. It looks like intelligence (you follow the conversation), but it feels like inadequacy (you can't quite lead it).</p>
+
+            <p class="founder-line-bold">Fifty hours of Steven Bartlett in your ears and you still wouldn't drop "second-order thinking" into a pitch without flinching.</p>
 
             <div class="og-divider"></div>
 
-            <p class="og-kicker">The moat</p>
+            <p class="og-kicker">The Curation Is the Product</p>
 
-            <p>The moat isn't the technology. Any platform could build this tomorrow. What they can't replicate is the editorial judgement — knowing which ideas are actually useful versus which ones just sound impressive. Which concepts survive contact with a real conversation in a second language.</p>
+            <p>Every card in here got picked by an actual human, still me, still waving 👋, not a recommendation engine. I sit with the transcript, decide if the idea's worth your ten seconds, and if it's not, it's gone.</p>
 
-            <p class="founder-italic-body">That takes years. And it's almost impossible to fake.</p>
+            <p class="founder-line-bold">So in short: The curation is the product. Everything else is just the container.</p>
 
-            <p>Every concept in this library has passed a single test: can a sharp 25-year-old walk away able to use this idea today? If not, it doesn't make the cut. The curation <em>is</em> the product.</p>
+            <p>Right now, that's podcasts turned into cards, each one scored across five intelligence pills so you know exactly how rare and useful the vocabulary is, boiled down to a four-sentence summary, plus an honest verdict: worth your time, or skip it. Corner builds you a scenario around whatever you're actually walking into, in under a minute. Spark makes sure you actually say the idea out loud instead of just nodding along to it.</p>
+
+            <p>Next up: <em>Listen. Read. Write. Speak. Grow.</em> Each one a new room in the house, all wired together, still built by hand (and boosted by AI).</p>
+
+            <p class="founder-italic-body">Stay tuned. The next version of Epistemic, and you, is already loading. It's gonna be <span class="founder-accent">Epic</span>.</p>
 
           </div>
 
               <p class="og-map-hint">tap any node to explore the concepts behind this</p>
 
-          <div class="og-map-wrap">
+          <div class="og-map-wrap" id="ogMapWrap">
             <div class="og-zoom-bar">
               <button class="og-zoom-btn" onclick="ogZoom(-0.25)" title="Zoom out">&#8722;</button>
               <button class="og-zoom-btn" onclick="ogZoom(0)" title="Reset">&#8635;</button>
               <button class="og-zoom-btn" onclick="ogZoom(0.25)" title="Zoom in">&#43;</button>
+              <button class="og-zoom-btn og-map-expand-btn" id="ogMapExpandBtn" onclick="ogToggleFullscreen()" title="Fullscreen">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M21 16v3a2 2 0 0 1-2 2h-3M8 21H5a2 2 0 0 1-2-2v-3"/></svg>
+              </button>
             </div>
+            <div class="og-map-fs-hint" id="ogMapFsHint">turn your phone to explore the full map</div>
             <div class="og-map-scroll" id="ogMapScroll">
               <div class="og-map-inner" id="ogMapInner">
             <svg viewBox="0 0 2400 1500" xmlns="http://www.w3.org/2000/svg" role="img" id="ogImpossibleMap">
@@ -23840,6 +23880,38 @@ function _convOpenCSById(id) {
     else if(e.touches.length===2&&ptA){var d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);scale=Math.min(4,Math.max(0.5,scale*(d/ptA)));ptA=d;apply();}
   },{passive:true});
   document.addEventListener("touchend",function(){drag=false;ptA=null;});
+})();
+</script>
+<script>
+/* v2.15 OG Map fullscreen (mobile: rotated 90°, user turns the phone) */
+(function(){
+  var fsOpen=false, hintTimer=null;
+  function el(id){return document.getElementById(id);}
+  function setIcon(open){
+    var btn=el("ogMapExpandBtn");
+    if(!btn)return;
+    btn.title=open?"Exit fullscreen":"Fullscreen";
+    btn.innerHTML=open
+      ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3v3a2 2 0 0 1-2 2H4M15 3v3a2 2 0 0 0 2 2h3M9 21v-3a2 2 0 0 0-2-2H4M15 21v-3a2 2 0 0 1 2-2h3"/></svg>'
+      : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M21 16v3a2 2 0 0 1-2 2h-3M8 21H5a2 2 0 0 1-2-2v-3"/></svg>';
+  }
+  window.ogToggleFullscreen=function(){
+    var wrap=el("ogMapWrap"), hint=el("ogMapFsHint");
+    if(!wrap)return;
+    fsOpen=!fsOpen;
+    wrap.classList.toggle("og-map-fs",fsOpen);
+    document.body.classList.toggle("og-map-fs-lock",fsOpen);
+    setIcon(fsOpen);
+    if(hintTimer){clearTimeout(hintTimer);hintTimer=null;}
+    if(fsOpen&&hint){
+      hint.classList.remove("og-map-fs-hint-hide");
+      hintTimer=setTimeout(function(){hint.classList.add("og-map-fs-hint-hide");},3200);
+    }
+    if(window.ogZoom)window.ogZoom(0);
+  };
+  document.addEventListener("keydown",function(e){
+    if(e.key==="Escape"&&fsOpen)window.ogToggleFullscreen();
+  });
 })();
 </script>
 </body>

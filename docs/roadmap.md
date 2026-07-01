@@ -9,7 +9,6 @@
 
 - **Identity docs v1 fine-tuning** — `epistemic-identity-private.md` and `epistemic-identity-public.md` created (2026-06-28). Private: 1,500-word manifesto (taste as product philosophy, moat framing, belonging machine thesis). Public: ~400-word about/one-pager. Both v1 — need Gergely's corrections before finalising.
 - **Episode Intelligence Layer — Phase 3** — Pills live (v2.14). Remaining: Airtable schema + Make.com pipeline update (see pending-decisions.md). Theme drawer intel deferred until theme drawer overhaul.
-- **OG text fine-tune** — hybrid rewrite drafted in session (v2.14). Waiting on Gergely approval before writing into code. Target: ~220 words, no section headers, no arrogance.
 - **Theme drawer overhaul** — theme names need simplification (more like the 14 foundational categories). Full restructure session needed before wiring Episode Intel into theme drawer.
 - **Corner pre-programmed scenarios** — quick-access pills below Corner search bar (pre-written situations → instant pre-programmed results, no API call). Content and mechanic to be designed separately.
 - **Fluency Fingerprint (v2.9):** Pure localStorage. Track every Sparked/stashed concept. Derive: strongest category, blind spot, stash-vs-sparked ratio. Surface in Stash tab as 3–4 lines. Zero API cost.
@@ -26,6 +25,8 @@
 - **Admin editorial picks tool** — `admin-picks.html` at `tools.epistemic.live`.
 
 ## Recently completed
+
+- v2.15 ✅ — 2026-07-01 — **OG text rewrite (Shazam angle) + Founder Copy line-wrap fix + OG Map fullscreen.** `.og-story` fully rewritten across 4 sections (Podcasts Aren't Random / A Small Confession / Shazam for Ideas / Curation Is the Product) — dropped Lex Fridman, Dunning-Kruger, the Hungarian/boardroom paragraph, and the "very quiet, very confident, very dignified" triad. Added a new "Right now" paragraph covering the 5 intelligence pills, 4-sentence summary, verdict, Corner, and Spark. Note: final version uses section-kicker headers (`og-kicker`), a deliberate departure from the earlier "no section headers" target — approved in-session. Founder Copy ellipsis line-wrap fixed with `&nbsp;`. `.og-story` mobile column bug fixed (was 2-col cramped on phones, now 1-col ≤700px). New: OG Map expand-to-fullscreen button, rotated 90° on mobile so the user turns their phone to view it full-bleed (CSS-only rotation trick, no orientation API).
 
 - v2.14b–j ✅ — 2026-07-01 — **Intel pill UI polish.** IWTMT popover: `1fr 1fr` grid (not `50% 50%` — gap overflows), +10% width, left-anchor with right clamp, `max-height` auto-sizes to content. Vocab: "definition" sublabel removed, mobile `1fr !important` override. Mobile: scan default on drawer open, cat pills hidden in scan, single cycle view button, podcast pills one scrollable row, intel pills spread with `flex: 1`, dashed divider between rows.
 

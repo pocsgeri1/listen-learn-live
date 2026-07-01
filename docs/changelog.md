@@ -6,6 +6,20 @@
 
 ---
 
+## v2.15 — 2026-07-01 — index.html: OG text rewrite (Shazam angle) + Founder Copy line-wrap fix
+
+### What shipped
+- **`.og-story` block fully rewritten** — new 4-section structure: "The Podcasts Aren't Random" / "A Small Confession" / "Shazam for Ideas" / "The Curation Is the Product." Replaces the old "For the real ones" / Hungarian-boardroom / "moat" version.
+- **Cut:** Lex Fridman mention, Dunning-Kruger example, Hungarian/boardroom/dinner-party paragraph, "on the surface / under the surface... very quiet, very confident, very dignified" triad.
+- **Swapped:** Chris Williamson → Steven Bartlett in the pitch-line example.
+- **Impostor syndrome line reformatted** from em-dash asides to parentheses: "It looks like intelligence (you follow the conversation), but it feels like inadequacy (you can't quite lead it)." "Second-Order Thinking" lowercased to "second-order thinking."
+- **New value paragraph added** to "Right now" beat: 5 intelligence pills, 4-sentence summary, honest verdict, Corner, and Spark all named and explained in one punchy paragraph, before the "Listen, Read, Write, Speak, Grow" roadmap line.
+- **Founder Copy fix:** "Passive listening is just mental masturbation... and a broken learning format." → ellipsis moved off "masturbation" and glued to "and" with `&nbsp;` so it can't wrap mid-word or dangle alone at the start of the next line.
+- **`.og-story` mobile fix:** `columns: 2` had no mobile override, so the new OG text was rendering as a cramped 2-column layout on phones. Added `@media (max-width: 700px) { .og-story { columns: 1; } }`.
+- **OG Map fullscreen (mobile rotate):** new expand button in `.og-zoom-bar` opens the impossible map fullscreen. On mobile (≤700px) it's rotated 90° via CSS transform with dimensions swapped (`100dvh`/`100dvw`) so the user has to turn their phone sideways to see it full-bleed — no device-orientation API needed, works even with rotation lock on. Includes a fading "turn your phone" hint, body scroll-lock, Escape-to-close, and icon swap on toggle (`ogToggleFullscreen()`).
+
+---
+
 ## v2.14b–j — 2026-07-01 — Intel pill UI polish: IWTMT popover, Vocab grid, mobile scan defaults
 
 ### What shipped
