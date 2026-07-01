@@ -706,10 +706,20 @@
   [data-theme="light"] .ep-search-inline input { color: var(--text); }
   [data-theme="light"] .ep-search-inline input::placeholder { color: var(--muted); }
 
-  @media (max-width: 600px) {
-    .ep-podcast-pills-row { flex-direction: column; align-items: flex-start; }
-    .ep-search-inline { width: 100%; box-sizing: border-box; }
-    .ep-search-inline input { width: 100%; }
+  @media (max-width: 768px) {
+    /* Mobile: pills in one scrollable row, search hidden by default */
+    .ep-podcast-pills-row {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding-bottom: 4px;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .ep-podcast-pills-row::-webkit-scrollbar { display: none; }
+    .ep-podcast-pills { flex-wrap: nowrap; }
+    .ep-search-inline { display: none; } /* hidden by default on mobile */
   }
   .ep-podcast-pill {
     font-family: 'DM Mono', monospace;
@@ -1194,16 +1204,18 @@
     /* Row 1: datestamp | Listen | IWTMT — Row 2: DNA | LINE | VOCAB | TENSION | ◫ */
     .ep-pills-intel-sep {
       order: 10;
+      display: block;
       width: 100%;
-      height: 0;
+      height: 1px;
       background: none;
-      margin: 0;
-      /* Dashed on-brand divider between rows */
-      border-top: 1px dashed rgba(232,213,163,0.18);
-      margin-top: 2px;
-      margin-bottom: 2px;
+      /* Dashed on-brand divider between row 1 (date/Listen/IWTMT) and row 2 (pills) */
+      border: none;
+      border-top: 1px dashed rgba(232,213,163,0.22);
+      margin: 3px 0;
     }
-    .ep-intel-pill { order: 11; font-size: 0.55rem; padding: 3px 7px; }
+    /* Intel pills row: spread evenly across the full width */
+    .ep-intel-pill { order: 11; font-size: 0.55rem; padding: 3px 7px; flex: 1; text-align: center; }
+    .ep-view-cycle-btn { flex: 0; }
     .ep-iwtmt-link { order: 3; margin-left: auto; }
     .episode-datestamp { order: 1; }
     .ep-drawer-listen { order: 2; }
@@ -1239,11 +1251,11 @@
   }
   .ep-intel-popover.visible { opacity: 1; pointer-events: auto; }
 
-  /* IWTMT: 55/45, 10% wider than v2.14e, no scroll */
+  /* IWTMT: 50/50, 10% wider than v2.14f, overflow visible, no scroll */
   .ep-intel-popover.iwtmt-popover {
-    min-width: min(1120px, 92vw);
-    max-width: min(1260px, 95vw);
-    max-height: none;
+    min-width: min(1232px, 93vw);
+    max-width: min(1380px, 96vw);
+    max-height: calc(90vh - 76px);
     overflow: visible;
   }
 
@@ -1367,10 +1379,10 @@
   .ep-intel-verdict-item.skip::before   { content: '✕'; position: absolute; left: 0; color: rgba(212,113,90,0.65); font-size: 0.6rem; }
   [data-theme="light"] .ep-intel-verdict-item { color: rgba(30,27,22,0.75); }
 
-  /* ── Vocab popover — 3-col (≤6 words) or 2-col (>6 words), no scroll ── */
+  /* ── Vocab popover — 3-col (≤6 words) or 4-col (7+ words), always 2 rows, no scroll ── */
   .ep-intel-popover.vocab-popover {
     min-width: min(780px, 92vw);
-    max-width: min(940px, 95vw);
+    max-width: min(1040px, 95vw); /* wider for 4-col */
     max-height: none;
     overflow: visible;
   }
@@ -1415,10 +1427,10 @@
   }
   [data-theme="light"] .ep-intel-vocab-def { color: rgba(30,27,22,0.72); }
 
-  /* ── IWTMT 2-col popover layout — 55/45 split ── */
+  /* ── IWTMT 2-col popover layout — 50/50 split ── */
   .ep-iwtmt-grid {
     display: grid;
-    grid-template-columns: 55% 45%;
+    grid-template-columns: 50% 50%;
     gap: 20px;
     align-items: start;
   }
@@ -1829,7 +1841,8 @@
 
   /* ── DRAWER SCAN TILES (2-col centered) ─── */
   /* Scan mode: hide category filter pills (only show for flip/all card views) */
-  .ep-drawer.drawer-scan-active .ep-drawer-cat-filter { display: none; }
+  .ep-drawer.drawer-scan-active .ep-drawer-cat-filter { display: none !important; }
+  .ep-drawer.drawer-scan-active .ep-drawer-filter-row { min-height: 0; border-bottom: none; }
   .ep-drawer-body.drawer-scan-mode .ep-drawer-grid { display: none; }
   .ep-drawer-scan-grid {
     display: none;
@@ -9829,11 +9842,12 @@ function _renderIntelRow(pillsEl, collectionId) {
       pop.appendChild(el);
     });
 
-    // Vocab pill — dynamic grid: ≤6 words = 3-col; >6 = 2-col (2 rows of ceil(n/2))
+    // Vocab pill — always 2 rows: ≤6 words = 3-col (2×3); 7+ words = 4-col (2×4)
     makePill('Vocab', !!vocab, pop => {
       const grid = document.createElement('div');
       grid.className = 'ep-intel-vocab-grid';
-      if (vocab.length > 6) grid.style.gridTemplateColumns = '1fr 1fr';
+      const cols = vocab.length > 6 ? 4 : 3;
+      grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
       vocab.forEach(v => {
         const row = document.createElement('div');
         row.className = 'ep-intel-vocab-row';
@@ -11037,7 +11051,11 @@ function openEpisodeDrawer(collectionId) {
   document.getElementById('epDrawerCatFilter').innerHTML = '';
   document.getElementById('epDrawerGrid').innerHTML = _emptyStateHtml('loading', 'Loading concepts…');
   document.getElementById('epBackdrop').classList.add('open');
-  document.getElementById('epDrawer').classList.add('open');
+  const _epDrawerEl = document.getElementById('epDrawer');
+  _epDrawerEl.classList.add('open');
+  // Mobile: pre-apply scan-active so cat filter is hidden from the start
+  if (window.innerWidth <= 768) _epDrawerEl.classList.add('drawer-scan-active');
+  else _epDrawerEl.classList.remove('drawer-scan-active');
   document.body.style.overflow = 'hidden';
   document.body.classList.add('drawer-open');
 
@@ -11663,7 +11681,10 @@ function openThemeDrawer(id) {
   testImg.onerror = () => { heroBg.style.display = 'none'; };
   testImg.src = `/images/themes/theme-${id}.jpg`;
   document.getElementById('themeBackdrop').classList.add('open');
-  document.getElementById('themeDrawer').classList.add('open');
+  const _themeDrawerEl = document.getElementById('themeDrawer');
+  _themeDrawerEl.classList.add('open');
+  if (window.innerWidth <= 768) _themeDrawerEl.classList.add('drawer-scan-active');
+  else _themeDrawerEl.classList.remove('drawer-scan-active');
   document.body.style.overflow = 'hidden';
   document.body.classList.add('drawer-open');
 
