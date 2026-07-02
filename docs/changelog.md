@@ -6,6 +6,28 @@
 
 ---
 
+## v2.21 — 2026-07-02 — DNA auto-populate fix + Vocab panel polish
+
+### What shipped
+- **DNA pill now auto-populates for every episode/theme going forward, no backfill required.** Root cause: DNA used to always show because it was originally computed live from the drawer's actual concept cards (the same category tally the (currently hidden) mix bar still computes) — not from `episode_meta.json`. A later backfill script started writing a precomputed `dna` object into that JSON for older episodes, but brand-new episodes (e.g. collection 520) get `dna: {}` until someone runs the backfill, so their DNA pill sat empty. Fix: `_renderIntelRow()` now accepts a live-computed fallback tally (`{category: pct}`, same math as the mix bar) from both `_renderDrawerContent` (episode) and `_renderThemeDrawerContent` (theme), and uses it whenever the backfilled `entry.dna` is missing/empty. Backfilled data still wins when present — zero behavior change for already-backfilled episodes.
+- **Vocab "+N more" button restyled** — was stretching to fill the entire empty 8th grid cell (full height + width), reading as one big colored box. Now a small pill-shaped chip, vertically centered in the cell and sized to its own text.
+- **Vocab inline drawer panel now spans the full drawer width.** It was inheriting a `max-width: 1040px` left over from the old floating-popover sizing, so on a wide desktop drawer it only ever filled the left portion (looked like it was capped to the category-filter-row's width, starting from the left edge). Removed the cap; the panel's word grid also switched from a fixed 4-column split to CSS `auto-fill` columns so it adapts to the drawer's actual width instead of stretching 4 columns unnaturally wide.
+
+### Notes
+- Flagged by Gergely after testing v2.20 on collection 520 (new episode, DNA showed empty) and the new Vocab panel (button too big, panel not full-width).
+
+## v2.20 — 2026-07-02 — DNA popover off-screen fix + Vocab redesign (in-grid button + inline drawer panel)
+
+### What shipped
+- **DNA pill fixed on desktop, episode/theme drawers.** It was invisible only in the drawer context, only for episodes with many DNA categories (e.g. collections 518/519) — root cause: `showPopover()` always anchored the popover's bottom edge just above the pill with no vertical-space check, so tall DNA content computed a top edge above the viewport. Fixed by measuring the popover's real height against the space available above/below the pill and flipping it to open downward (or clamping to the viewport top) only when it doesn't fit — a no-op for Line/Tension/Vocab, whose content is always short enough to fit above.
+- **Vocab "+N more" moved into the preview grid itself** — now sits in the grid's naturally-empty 8th cell (row 2, col 4) as a small button, instead of a separate full-width row below the grid.
+- **Vocab "+N more" now expands an inline panel inside the drawer's own document flow** (`#epDrawerVocabPanel` / `#themeDrawerVocabPanel`, between the pills row and the category filter row) instead of growing inside the small floating hover popover — opening it visibly pushes the category filter pills and card grid down, revealing all 20-25 words. Touch devices keep the simpler behavior: the rest of the words append inline into the same grid.
+- **`related_ids` empty-fetch bug fixed** (`extract.html` / `epistemic.live`) — root cause was CORS blocking the cross-origin fetch to `concepts.json`; fixed via a `vercel.json` CORS header, plus a visible warning in `extract.html` if the fetch fails for any other reason so it's never silently empty again.
+- **`saveIntelToGitHub()` button feedback fixed** to match the established Airtable "sent" pattern — turns green/muted and stays disabled on a successful save (was ambiguous before), resets to clickable if intel is regenerated.
+
+### Notes
+- Didn't catch the DNA-auto-populate gap in this pass — DNA content itself (not just its positioning) was still empty for brand-new, non-backfilled episodes. Fixed in v2.21.
+
 ## v2.19 — 2026-07-02 — Theme grid legacy filter + doc accuracy fixes
 
 ### What shipped

@@ -1467,28 +1467,33 @@
   }
   [data-theme="light"] .ep-intel-vocab-expand-wrap.open .ep-intel-vocab-expand-inner { border-top-color: rgba(150,120,40,0.25); }
 
-  /* ── Vocab "+N more" — lives inside the preview grid's empty 8th cell ── */
+  /* ── Vocab "+N more" — lives inside the preview grid's empty 8th cell ──
+     v2.21: sized to its own content (not stretched to fill the cell) and
+     vertically centered within the taller row, pill-shaped for a lighter,
+     "chip" feel instead of a boxy full-height button. ── */
   .ep-intel-vocab-more-cell {
-    display: flex;
+    align-self: center;
+    justify-self: start;
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
-    min-height: 100%;
+    gap: 3px;
     font-family: 'DM Mono', monospace;
-    font-size: 0.6rem;
+    font-size: 0.55rem;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.05em;
     color: rgba(232,213,163,0.75);
     background: rgba(232,213,163,0.08);
-    border: 1px solid rgba(232,213,163,0.25);
-    border-radius: 8px;
-    padding: 6px 10px;
+    border: 1px solid rgba(232,213,163,0.28);
+    border-radius: 20px;
+    padding: 4px 10px;
     cursor: pointer;
-    transition: background 0.15s, border-color 0.15s, color 0.15s;
+    transition: background 0.15s, border-color 0.15s, color 0.15s, transform 0.15s;
   }
   .ep-intel-vocab-more-cell:hover {
-    background: rgba(232,213,163,0.16);
-    border-color: rgba(232,213,163,0.45);
+    background: rgba(232,213,163,0.18);
+    border-color: rgba(232,213,163,0.5);
     color: rgba(232,213,163,0.95);
+    transform: translateY(-1px);
   }
   [data-theme="light"] .ep-intel-vocab-more-cell {
     color: rgba(150,120,40,0.8);
@@ -1516,7 +1521,10 @@
   .ep-drawer-vocab-panel-inner {
     overflow: hidden;
     min-height: 0;
-    max-width: 1040px;
+    /* v2.21: was capped at max-width:1040px (a leftover from the floating
+       popover's width, which only ever covers the left portion of a wide
+       drawer). Decoupled from the popover sizing — this panel now spans the
+       full drawer width, matching the pills row/filter row/card grid below it. */
     padding: 0 2rem;
   }
   .ep-drawer-vocab-panel.open .ep-drawer-vocab-panel-inner {
@@ -1526,6 +1534,13 @@
   }
   [data-theme="light"] .ep-drawer-vocab-panel.open .ep-drawer-vocab-panel-inner {
     border-color: rgba(150,120,40,0.25);
+  }
+  /* v2.21: the full-word-list grid inside the panel uses auto-fill instead of
+     a hardcoded 4-column split, so column count adapts to the drawer's real
+     (much wider than the old popover's) width instead of stretching 4 fixed
+     columns into oversized, sparse cells. */
+  .ep-intel-vocab-grid.panel-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   }
   .ep-drawer-vocab-panel-header {
     display: flex;
@@ -9896,13 +9911,22 @@ function _loadEpisodeMeta() {
   return _episodeMetaPromise;
 }
 
-function _renderIntelRow(pillsEl, collectionId) {
+function _renderIntelRow(pillsEl, collectionId, liveDna) {
   // v2.14b: Pills order: DNA → Line → Vocab → Tension → IWTMT (link).
   // Summary + Verdict removed as standalone pills; merged into IWTMT popover.
   if (!pillsEl) return;
   _loadEpisodeMeta().then(meta => {
     const entry = meta.episodes && meta.episodes[String(collectionId)];
-    const dna      = entry && entry.dna && Object.keys(entry.dna).length > 0 ? entry.dna : null;
+    // v2.21: DNA used to always be populated because it was originally
+    // computed live from the episode's actual concept cards (same tally the
+    // mix bar does) — not from this backfilled JSON. That backfill step
+    // covers older episodes, but leaves brand-new ones (e.g. collection 520)
+    // with an empty dna:{} until someone runs it. Falling back to the caller-
+    // supplied live tally means DNA is always populated going forward, no
+    // backfill dependency. Backfilled data still wins when present (unchanged
+    // for every already-backfilled episode).
+    const backfilledDna = entry && entry.dna && Object.keys(entry.dna).length > 0 ? entry.dna : null;
+    const dna      = backfilledDna || (liveDna && Object.keys(liveDna).length > 0 ? liveDna : null);
     const summary  = entry && (entry.summary || '').trim()         ? entry.summary          : null;
     const line     = entry && (entry.sharpest_line || '').trim()   ? entry.sharpest_line    : null;
     const tension  = entry && (entry.tension || '').trim()         ? entry.tension           : null;
@@ -9910,7 +9934,7 @@ function _renderIntelRow(pillsEl, collectionId) {
     const verdictS = entry && Array.isArray(entry.verdict_skip)   && entry.verdict_skip.length   ? entry.verdict_skip   : null;
     const vocab    = entry && Array.isArray(entry.vocab_vault)     && entry.vocab_vault.length    ? entry.vocab_vault    : null;
 
-    // v2.17: Vocab's desktop "+N more" expands an inline panel that lives in
+    // v2.20: Vocab's desktop "+N more" expands an inline panel that lives in
     // the drawer's own document flow (between the pills row and the category
     // filter row), so opening it visibly pushes the filter pills + card grid
     // down. One panel element per drawer type — always reset closed/empty
@@ -9933,11 +9957,17 @@ function _renderIntelRow(pillsEl, collectionId) {
       return row;
     }
 
-    function buildVocabGrid(list) {
+    // v2.21: panelMode=true builds the inline drawer-panel grid (full drawer
+    // width, auto-fill columns via CSS — see .ep-intel-vocab-grid.panel-grid)
+    // instead of the popover preview's fixed 3/4-column split. Preview grid
+    // behavior is unchanged.
+    function buildVocabGrid(list, panelMode) {
       const grid = document.createElement('div');
-      grid.className = 'ep-intel-vocab-grid';
-      const cols = list.length > 6 ? 4 : 3;
-      grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+      grid.className = 'ep-intel-vocab-grid' + (panelMode ? ' panel-grid' : '');
+      if (!panelMode) {
+        const cols = list.length > 6 ? 4 : 3;
+        grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+      }
       list.forEach(v => grid.appendChild(buildVocabCell(v)));
       return grid;
     }
@@ -9963,7 +9993,7 @@ function _renderIntelRow(pillsEl, collectionId) {
       header.appendChild(lbl);
       header.appendChild(closeBtn);
       inner.appendChild(header);
-      inner.appendChild(buildVocabGrid(list));
+      inner.appendChild(buildVocabGrid(list, true));
       vocabPanel.appendChild(inner);
       vocabPanel.classList.add('open');
     }
@@ -10108,7 +10138,7 @@ function _renderIntelRow(pillsEl, collectionId) {
     });
 
     // Vocab pill — preview stays exactly as before (≤7 words, 2 rows, 3/4-col).
-    // v2.17: the "+N more" control now lives inside the preview grid itself
+    // v2.20: the "+N more" control now lives inside the preview grid itself
     // (its empty 8th cell — row 2, col 4) as a small on-brand button, instead
     // of a full-width row below the grid. Clicking it on desktop closes this
     // hover popover and opens the inline drawer panel (openVocabPanel, defined
@@ -11384,8 +11414,15 @@ function _renderDrawerContent(col, collectionId) {
   // painterly AI images used for theme drawers.
   _setEpisodeHeroBg(col, sortedCats);
 
+  // v2.21: live DNA fallback — same category tally the mix bar above already
+  // computes from this episode's actual concept cards. Passed into
+  // _renderIntelRow so the DNA pill has real data even before/without a
+  // backfilled episode_meta.json entry (e.g. brand-new episodes like 520).
+  const liveDna = {};
+  sortedCats.forEach(([cat, n]) => { liveDna[cat] = Math.round(n / epConcepts.length * 100); });
+
   // Episode intel pills — v2.11b (injected into pills row)
-  _renderIntelRow(document.getElementById('epDrawerPills'), collectionId);
+  _renderIntelRow(document.getElementById('epDrawerPills'), collectionId, epConcepts.length > 0 ? liveDna : null);
 
   // Concept cards — grouped by category, one column per category
   const grid = document.getElementById('epDrawerGrid');
@@ -11995,8 +12032,13 @@ function _renderThemeDrawerContent(col, id) {
       }).join('')
     : '';
 
+  // v2.21: live DNA fallback (see _renderDrawerContent for the episode-drawer
+  // twin of this) — computed from this theme's actual matching concepts.
+  const liveDna = {};
+  sortedCats.forEach(([cat, n]) => { liveDna[cat] = Math.round(n / matches.length * 100); });
+
   // Theme intel pills — v2.11b (injected into pills row)
-  _renderIntelRow(document.getElementById('themeDrawerPills'), id);
+  _renderIntelRow(document.getElementById('themeDrawerPills'), id, matches.length > 0 ? liveDna : null);
 
   const grid = document.getElementById('themeDrawerGrid');
   if (!matches.length) {

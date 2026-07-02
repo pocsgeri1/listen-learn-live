@@ -28,6 +28,10 @@
 
 ## Recently completed
 
+- v2.21 ✅ — 2026-07-02 — **DNA auto-populate fix + Vocab panel polish.** DNA pill now falls back to a live category tally (computed from the drawer's actual concept cards, same math as the hidden mix bar) whenever `episode_meta.json`'s backfilled `dna` is empty — fixes brand-new episodes like 520 and removes the backfill dependency going forward. Vocab "+N more" restyled to a small pill-shaped chip (was stretching to fill its whole grid cell). Vocab inline drawer panel decoupled from the old popover's `max-width: 1040px` — now spans the full drawer width with auto-fill columns.
+
+- v2.20 ✅ — 2026-07-02 — **DNA popover off-screen fix + Vocab redesign.** DNA pill's hover popover now flips below the pill (or clamps to viewport top) when it doesn't fit above — fixes invisible DNA on desktop for episodes with many categories. Vocab "+N more" moved into the preview grid's empty 8th cell as a button; clicking it now opens an inline panel in the drawer's own layout (pushing the filter row + card grid down) instead of the small floating popover. Also: fixed empty `related_ids` (CORS on `concepts.json`) and `saveIntelToGitHub()`'s ambiguous save-state feedback.
+
 - v2.19 ✅ — 2026-07-02 — **Theme grid legacy filter + doc accuracy fixes.** `renderThemesGrid()` now excludes `status: 'legacy'` collections so only the 6 live 201-206 themes render (drawer/preview were already correct). `architecture.md` updated: concept count, `curated_collection_ids` description, missing 201-206 image assets noted. Confirmed other collections.json-reading files have no theme-grid logic to fix.
 
 - v2.18 ✅ — 2026-07-02 — **Migrated all 625 concepts from the retired 101-116 theme system to the new 201-206 system**, via `tools/migrate-themes.js`. Grandfather rule applied for legacy concepts with no composite score (theme by category alone, no quality gate). 100% coverage, 0 losses, 333 concepts gained a theme for the first time.
