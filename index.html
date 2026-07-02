@@ -11584,7 +11584,10 @@ function renderThemesGrid(animate) {
   const showAllBtn = document.getElementById('themesShowAllBtn');
   if (!grid) return;
 
-  let thematic = Object.values(COLLECTIONS_BY_ID).filter(c => c && c.type === 'thematic');
+  // status: 'legacy' marks the retired 101-116 themes (superseded by the
+  // 201-206 set, migrated 2026-07-02) — kept in collections.json for
+  // historical concept references, never rendered in the live grid.
+  let thematic = Object.values(COLLECTIONS_BY_ID).filter(c => c && c.type === 'thematic' && c.status !== 'legacy');
   thematic.sort((a, b) => a.id - b.id);
 
   if (_themeActiveFilterCat) {

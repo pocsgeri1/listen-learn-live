@@ -5,14 +5,18 @@
 ### Layer 1 — Concepts (the unit)
 - Stored in `concepts.json` on GitHub, served from Vercel as `./concepts.json`
 - Each concept has the 10-field schema (see quality-rules.md). 10th field `timestamp` (integer seconds, nullable) added v1.34 — drives the deep-link "↗ Listen" button on the live site with an 8-second pre-roll buffer.
-- **Live count: ~669 records as of v2.10 (2026-06-28). Do not cite a fixed number in docs or code — query `max(id)` from `concepts.json` instead.**
+- **Live count: 625 records as of v2.18 (2026-07-02). Do not cite a fixed number in docs or code — query `max(id)` from `concepts.json` instead.**
 - Belongs to **one** category (of 14) and optionally **one** legacy
   `collection_id` (episode/curated-pack collection, may be `null`)
-- **`curated_collection_ids` (added v1.78):** array of 0–2 ids pointing into
-  the 16 themed collections (101–116, defined in `collections-row-spec.md`).
-  Assigned via strict AI curation pass — distinct from `collection_id`
+- **`curated_collection_ids` (added v1.78, re-scoped v2.18):** array of ids
+  pointing into the themed collections. Originally AI-assigned into a 16-theme
+  set (101–116, `status: "legacy"` in `collections.json`, no longer rendered).
+  As of v2.18, computed **deterministically** from category (+ a composite
+  score gate for newer concepts) into the current 6-theme set (201–206, see
+  `THEME_CATEGORY_MAP` in `api/publish-batch.js` and `tools/migrate-themes.js`
+  for the legacy grandfather-rule migration). Distinct from `collection_id`
   (Layer 2 episode/pack collections below). Powers the Themes grid
-  (`spark.html`, v1.79–v1.88 — see "Themes feature" section below).
+  (`index.html` — see "Themes feature" section below).
 
 ### Layer 2 — Collections (the container)
 - Stored in `collections.json` on GitHub
@@ -588,7 +592,10 @@ first switch, then renders via `_animateThemesEntrance()` (one-time,
 breakpoints), each followed by its own `.theme-preview-zone` (v1.86 — see
 build-journal 2026-06-13 #2 for why per-row, not one shared grid). Each card:
 - Loads `/images/themes/theme-{id}.jpg` (1024×1024 AI-generated,
-  surreal/retro-poster style, v1.80)
+  surreal/retro-poster style, v1.80). **The 6 new themes (201–206) have no
+  image asset yet as of v2.18** — falls back to emoji cleanly, but
+  `theme-201.jpg`…`theme-206.jpg` still need to be generated for visual parity
+  with the old set.
 - `onerror` fallback → emoji (`col.symbol`) on radial-gradient
   background — site never shows broken images even if an asset is
   missing/renamed
@@ -596,7 +603,12 @@ build-journal 2026-06-13 #2 for why per-row, not one shared grid). Each card:
 - **"Explore →" button** (v1.86): bottom-right, hover-reveal (always
   visible on touch via `(hover: none)`), opens `#themeDrawer` directly
 
-**Category filter pills (`.theme-filter-pill`):** filter the 16 themes
+**Grid renders only `status !== "legacy"` themes (v2.18)** — `renderThemesGrid()`
+filters `COLLECTIONS_BY_ID` to `type === 'thematic' && status !== 'legacy'`,
+so the retired 101–116 set stays in `collections.json` for historical
+reference but never appears in the live grid or drawer.
+
+**Category filter pills (`.theme-filter-pill`):** filter the 6 live themes
 by `collections.json` `categories[]` overlap with the selected
 category (`CATEGORIES` array, same 14 categories as concepts). Magnetic
 cursor effect via `initMagneticPillsFor('#themesFilterRow', '.theme-
