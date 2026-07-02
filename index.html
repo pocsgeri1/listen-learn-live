@@ -1467,6 +1467,92 @@
   }
   [data-theme="light"] .ep-intel-vocab-expand-wrap.open .ep-intel-vocab-expand-inner { border-top-color: rgba(150,120,40,0.25); }
 
+  /* ── Vocab "+N more" — lives inside the preview grid's empty 8th cell ── */
+  .ep-intel-vocab-more-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100%;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: rgba(232,213,163,0.75);
+    background: rgba(232,213,163,0.08);
+    border: 1px solid rgba(232,213,163,0.25);
+    border-radius: 8px;
+    padding: 6px 10px;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+  }
+  .ep-intel-vocab-more-cell:hover {
+    background: rgba(232,213,163,0.16);
+    border-color: rgba(232,213,163,0.45);
+    color: rgba(232,213,163,0.95);
+  }
+  [data-theme="light"] .ep-intel-vocab-more-cell {
+    color: rgba(150,120,40,0.8);
+    background: rgba(150,120,40,0.08);
+    border-color: rgba(150,120,40,0.25);
+  }
+  [data-theme="light"] .ep-intel-vocab-more-cell:hover {
+    background: rgba(150,120,40,0.15);
+    border-color: rgba(150,120,40,0.4);
+    color: rgba(150,120,40,0.95);
+  }
+
+  /* ── Vocab inline drawer panel — expands in normal doc flow so it pushes
+     the category filter row + card grid down, instead of floating above
+     everything like the hover popover does. Reuses the 0fr→1fr grid-rows
+     trick from .ep-intel-vocab-expand-wrap for a smooth height animation
+     that works even though the true content height is unknown ahead of time. ── */
+  .ep-drawer-vocab-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    flex-shrink: 0;
+    transition: grid-template-rows 0.45s cubic-bezier(0.4,0,0.2,1);
+  }
+  .ep-drawer-vocab-panel.open { grid-template-rows: 1fr; }
+  .ep-drawer-vocab-panel-inner {
+    overflow: hidden;
+    min-height: 0;
+    max-width: 1040px;
+    padding: 0 2rem;
+  }
+  .ep-drawer-vocab-panel.open .ep-drawer-vocab-panel-inner {
+    padding: 1.1rem 2rem 1.4rem;
+    border-top: 1px dashed rgba(232,213,163,0.22);
+    border-bottom: 1px dashed rgba(232,213,163,0.22);
+  }
+  [data-theme="light"] .ep-drawer-vocab-panel.open .ep-drawer-vocab-panel-inner {
+    border-color: rgba(150,120,40,0.25);
+  }
+  .ep-drawer-vocab-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .ep-drawer-vocab-panel-header .ep-intel-popover-label { margin-bottom: 0; flex: 1; }
+  .ep-drawer-vocab-panel-close {
+    background: none;
+    border: none;
+    color: rgba(240,237,232,0.4);
+    font-size: 0.8rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 3px 6px;
+    flex-shrink: 0;
+    transition: color 0.15s;
+  }
+  .ep-drawer-vocab-panel-close:hover { color: rgba(240,237,232,0.9); }
+  [data-theme="light"] .ep-drawer-vocab-panel-close { color: rgba(30,27,22,0.4); }
+  [data-theme="light"] .ep-drawer-vocab-panel-close:hover { color: rgba(30,27,22,0.9); }
+  @media (max-width: 700px) {
+    .ep-drawer-vocab-panel { display: none !important; } /* mobile uses the bottom sheet instead */
+  }
+
   /* ── IWTMT layout — equal 2-col grid (1fr 1fr avoids gap overflow) ── */
   .ep-iwtmt-grid {
     display: grid;
@@ -8683,6 +8769,7 @@
   </div>
   <div class="ep-drawer-pills" id="epDrawerPills"></div>
   <div class="ep-drawer-mix" id="epDrawerMix"></div>
+  <div class="ep-drawer-vocab-panel" id="epDrawerVocabPanel"></div>
   <div class="ep-drawer-filter-row">
     <div class="ep-drawer-cat-filter" id="epDrawerCatFilter"></div>
     <div class="ep-drawer-sort-row" id="epDrawerSortRow" style="display:none">
@@ -8713,6 +8800,7 @@
   </div>
   <div class="ep-drawer-pills" id="themeDrawerPills"></div>
   <div class="ep-drawer-mix" id="themeDrawerMix"></div>
+  <div class="ep-drawer-vocab-panel" id="themeDrawerVocabPanel"></div>
   <div class="ep-drawer-filter-row">
     <div class="ep-drawer-cat-filter" id="themeDrawerCatFilter"></div>
     <div class="ep-drawer-sort-row" id="themeDrawerSortRow" style="display:none">
@@ -9822,6 +9910,64 @@ function _renderIntelRow(pillsEl, collectionId) {
     const verdictS = entry && Array.isArray(entry.verdict_skip)   && entry.verdict_skip.length   ? entry.verdict_skip   : null;
     const vocab    = entry && Array.isArray(entry.vocab_vault)     && entry.vocab_vault.length    ? entry.vocab_vault    : null;
 
+    // v2.17: Vocab's desktop "+N more" expands an inline panel that lives in
+    // the drawer's own document flow (between the pills row and the category
+    // filter row), so opening it visibly pushes the filter pills + card grid
+    // down. One panel element per drawer type — always reset closed/empty
+    // here since this function reruns for every episode/theme opened.
+    const drawerPrefix = pillsEl.id === 'epDrawerPills' ? 'ep' : 'theme';
+    const vocabPanel = document.getElementById(drawerPrefix + 'DrawerVocabPanel');
+    if (vocabPanel) { vocabPanel.classList.remove('open'); vocabPanel.innerHTML = ''; }
+
+    function buildVocabCell(v) {
+      const row = document.createElement('div');
+      row.className = 'ep-intel-vocab-row';
+      const word = document.createElement('div');
+      word.className = 'ep-intel-vocab-word';
+      word.textContent = v.word || v.term || '';
+      const def = document.createElement('div');
+      def.className = 'ep-intel-vocab-def';
+      def.textContent = v.definition || '';
+      row.appendChild(word);
+      row.appendChild(def);
+      return row;
+    }
+
+    function buildVocabGrid(list) {
+      const grid = document.createElement('div');
+      grid.className = 'ep-intel-vocab-grid';
+      const cols = list.length > 6 ? 4 : 3;
+      grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+      list.forEach(v => grid.appendChild(buildVocabCell(v)));
+      return grid;
+    }
+
+    function openVocabPanel(list) {
+      if (!vocabPanel) return;
+      vocabPanel.innerHTML = '';
+      const inner = document.createElement('div');
+      inner.className = 'ep-drawer-vocab-panel-inner';
+      const header = document.createElement('div');
+      header.className = 'ep-drawer-vocab-panel-header';
+      const lbl = document.createElement('div');
+      lbl.className = 'ep-intel-popover-label';
+      lbl.textContent = 'Vocab \u00B7 ' + list.length + ' words';
+      const closeBtn = document.createElement('button');
+      closeBtn.type = 'button';
+      closeBtn.className = 'ep-drawer-vocab-panel-close';
+      closeBtn.textContent = '\u2715';
+      closeBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        vocabPanel.classList.remove('open');
+      });
+      header.appendChild(lbl);
+      header.appendChild(closeBtn);
+      inner.appendChild(header);
+      inner.appendChild(buildVocabGrid(list));
+      vocabPanel.appendChild(inner);
+      vocabPanel.classList.add('open');
+    }
+
     // Thin separator
     const sep = document.createElement('span');
     sep.className = 'ep-pills-intel-sep';
@@ -9898,16 +10044,31 @@ function _renderIntelRow(pillsEl, collectionId) {
         pillsEl.querySelectorAll('.ep-intel-popover.visible').forEach(p => { if (p !== popover) p.classList.remove('visible'); });
         clearTimeout(_hideTimer);
         const pillRect = pill.getBoundingClientRect();
-        // Anchor bottom of popover 10px above the pill (grows upward)
-        const bottomPx = window.innerHeight - pillRect.top + 10;
         // Clamp horizontal within viewport
         const popW = popover.offsetWidth || 300;
         let left = pillRect.left;
         if (left + popW > window.innerWidth - 8) left = window.innerWidth - popW - 8;
         if (left < 8) left = 8;
-        popover.style.bottom = bottomPx + 'px';
-        popover.style.top = 'auto';
         popover.style.left = left + 'px';
+        // Default: anchor bottom of popover 10px above the pill (grows upward).
+        // Vertical-space-aware flip: if the popover is too tall to fit in the
+        // space above the pill (e.g. DNA with many categories), flip it to
+        // open below the pill instead — or clamp to the viewport top if
+        // there isn't enough room on either side. No-op for short content
+        // (Line/Tension/Vocab preview), which always has room above.
+        const popH = popover.offsetHeight || 0;
+        const spaceAbove = pillRect.top - 10;
+        const spaceBelow = window.innerHeight - pillRect.bottom - 18;
+        if (popH > spaceAbove && spaceBelow >= popH) {
+          popover.style.top = (pillRect.bottom + 10) + 'px';
+          popover.style.bottom = 'auto';
+        } else if (popH > spaceAbove) {
+          popover.style.top = '8px';
+          popover.style.bottom = 'auto';
+        } else {
+          popover.style.bottom = (window.innerHeight - pillRect.top + 10) + 'px';
+          popover.style.top = 'auto';
+        }
         popover.classList.add('visible');
       }
       function scheduleHide() {
@@ -9947,58 +10108,38 @@ function _renderIntelRow(pillsEl, collectionId) {
     });
 
     // Vocab pill — preview stays exactly as before (≤7 words, 2 rows, 3/4-col).
-    // v2.16: full vocab_vault can now hold 20-25 words; anything past the
-    // preview slice sits behind a "+N more" toggle that expands in place.
+    // v2.17: the "+N more" control now lives inside the preview grid itself
+    // (its empty 8th cell — row 2, col 4) as a small on-brand button, instead
+    // of a full-width row below the grid. Clicking it on desktop closes this
+    // hover popover and opens the inline drawer panel (openVocabPanel, defined
+    // above) so the full 20-25 word list expands in the drawer's real layout
+    // and pushes the category filter row + card grid down. On touch devices
+    // it just appends the rest of the words into this same grid in place.
     makePill('Vocab', !!vocab, pop => {
       const VOCAB_PREVIEW_COUNT = 7;
       const preview = vocab.slice(0, VOCAB_PREVIEW_COUNT);
       const rest = vocab.slice(VOCAB_PREVIEW_COUNT);
 
-      function buildVocabGrid(list) {
-        const grid = document.createElement('div');
-        grid.className = 'ep-intel-vocab-grid';
-        const cols = list.length > 6 ? 4 : 3;
-        grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
-        list.forEach(v => {
-          const row = document.createElement('div');
-          row.className = 'ep-intel-vocab-row';
-          const word = document.createElement('div');
-          word.className = 'ep-intel-vocab-word';
-          word.textContent = v.word || v.term || '';
-          const def = document.createElement('div');
-          def.className = 'ep-intel-vocab-def';
-          def.textContent = v.definition || '';
-          row.appendChild(word);
-          row.appendChild(def);
-          grid.appendChild(row);
-        });
-        return grid;
-      }
-
-      pop.appendChild(buildVocabGrid(preview));
+      const grid = buildVocabGrid(preview);
+      pop.appendChild(grid);
 
       if (rest.length > 0) {
-        const expandWrap = document.createElement('div');
-        expandWrap.className = 'ep-intel-vocab-expand-wrap';
-        const expandInner = document.createElement('div');
-        expandInner.className = 'ep-intel-vocab-expand-inner';
-        expandInner.appendChild(buildVocabGrid(rest));
-        expandWrap.appendChild(expandInner);
+        const moreBtn = document.createElement('button');
+        moreBtn.type = 'button';
+        moreBtn.className = 'ep-intel-vocab-more-cell';
+        moreBtn.textContent = '+' + rest.length + ' more';
+        grid.appendChild(moreBtn); // falls into the grid's next open cell (row2/col4 when preview=7)
 
-        const toggle = document.createElement('button');
-        toggle.type = 'button';
-        toggle.className = 'ep-intel-vocab-toggle';
-        const labelMore = '+ ' + rest.length + ' more \u25BE';
-        const labelLess = 'Show less \u25B4';
-        toggle.textContent = labelMore;
-        toggle.addEventListener('click', e => {
+        moreBtn.addEventListener('click', e => {
           e.stopPropagation();
-          const open = expandWrap.classList.toggle('open');
-          toggle.textContent = open ? labelLess : labelMore;
+          if (isTouchDevice) {
+            rest.forEach(v => grid.appendChild(buildVocabCell(v)));
+            moreBtn.remove();
+          } else {
+            pop.classList.remove('visible');
+            openVocabPanel(vocab);
+          }
         });
-
-        pop.appendChild(toggle);
-        pop.appendChild(expandWrap);
       }
     }, 'vocab-popover');
 
