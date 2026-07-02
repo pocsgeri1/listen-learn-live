@@ -6,6 +6,17 @@
 
 ---
 
+## v2.22 — 2026-07-02 — GitHub Actions publish pipeline live (Make.com → GitHub Actions migration, publish step)
+
+### What shipped
+- **The "APPROVED → publish" step of the pipeline now runs through GitHub Actions instead of Make.com.** New `tools/publish-approved.js` + `.github/workflows/publish-approved.yml` (manual `workflow_dispatch` trigger — same one-click UX as the old Make.com scenario): fetches Airtable rows with `Status = APPROVED`, builds the batch payload, POSTs to the existing `/api/publish-batch` endpoint on Vercel (unchanged), writes results back to Airtable. Orchestration logic that used to live in Make.com's visual scenario (IML) now lives in a ~small, readable Node script — new Airtable fields (scores, intel data, etc.) can be added without touching Make.com at all.
+- **Confirmed working end-to-end in production** on a live test episode: Airtable Status flipped to APPROVED → GitHub Action run → `/api/publish-batch` → commit to GitHub → site live → Airtable row flipped to PUBLISHED. Gergely: "Fantastic, it all worked now."
+- **Fixed a 403 `INVALID_PERMISSIONS_OR_MODEL_NOT_FOUND` error from Airtable during rollout** — the `AIRTABLE_API_KEY` GitHub secret's Personal Access Token had correct scopes and base access but still 403'd for no diagnosable reason. Fix: generated a brand-new Airtable PAT and rotated only the `AIRTABLE_API_KEY` GitHub secret to it (no code or scope changes). This is a known recurring Airtable failure mode — see build-journal.md.
+
+### Notes
+- The old Make.com "APPROVED → publish" scenario should be paused (not deleted) now that the GitHub Action replacement is confirmed working, to avoid double-triggering a publish. See `docs/pending-decisions.md`.
+- This migration covers ONLY the publish step. The separate, still-inactive Make.com "Intake → `api/extract-concepts.js`" automated-extraction scenario is unrelated, was never Gergely's actual workflow (he always uses `extract.html` directly), and is untouched by this change. The Episode Intel (summary/vocab/tension) → Airtable wiring is also unrelated and remains undecided — see `docs/pending-decisions.md`.
+
 ## v2.21 — 2026-07-02 — DNA auto-populate fix + Vocab panel polish
 
 ### What shipped

@@ -1,6 +1,6 @@
 # Roadmap — Epistemic.
 
-**Last updated:** June 2026
+**Last updated:** 2026-07-02
 **Purpose:** Phased build plan so every decision and feature fits into the bigger picture. Claude references this to avoid building things that will conflict with future phases.
 
 ---
@@ -9,7 +9,7 @@
 
 - **Guru/thinker collections on top of the 6 themes** — Gergely's concern (2026-07-02): the 6 live themes (201-206) are now catch-alls (every concept has exactly one, gated only by category + optional composite score) — not curated, high-signal groupings. Idea: layer a second tier of tightly curated `type: 'curated'` collections built around specific thinkers/philosophies (e.g. "Dan Koe's philosophy," "Daniel Priestley's teachings," "Naval's best ideas") — hand-picked best-of, not a category dump. Needs a selection rule before building (composite score floor? manual pick list per person? tag by source/person field?). Not started.
 - **Identity docs v1 fine-tuning** — `epistemic-identity-private.md` and `epistemic-identity-public.md` created (2026-06-28). Private: 1,500-word manifesto (taste as product philosophy, moat framing, belonging machine thesis). Public: ~400-word about/one-pager. Both v1 — need Gergely's corrections before finalising.
-- **Episode Intelligence Layer — Phase 3** — Pills live (v2.14). Remaining: Airtable schema + Make.com pipeline update (see pending-decisions.md). Decision pending: GitHub Action vs. Make.com (leaning GitHub Action — free for this volume, version-controlled). Theme drawer intel deferred until theme drawer overhaul.
+- **Episode Intelligence Layer — Phase 3** — Pills live (v2.14), DNA now auto-populates via live fallback (v2.21). Remaining: wiring `generate-episode-intel.js`'s output (summary/vocab/tension/verdict) to Airtable so it's reviewable there like concepts are — schema + pipeline choice both still undecided (see pending-decisions.md). Note: this is a *separate* decision from the "APPROVED → publish" step, which was already resolved and confirmed working via GitHub Action on 2026-07-02 (see pending-decisions.md and changelog v2.22). Theme drawer intel deferred until theme drawer overhaul.
 - **Theme drawer overhaul** — theme names need simplification (more like the 14 foundational categories). Full restructure session needed before wiring Episode Intel into theme drawer. Deliberately deferred: Corner's universal/coined-term/wildcard card-selection logic and the Sparring button behavior review both depend on category/theme semantics being settled first — revisit alongside this overhaul.
 - **Mobile hero search — full-screen sheet redesign** — v2.16 fixed the iOS auto-zoom-on-focus bug (font-size <16px). Strong future candidate flagged by Gergely: replace the positioned dropdown with a full-screen mobile sheet (same pattern already used for the mobile preview modal at `window.innerWidth <= 1024`), sidestepping on-screen-keyboard layout-shift issues entirely.
 - **Corner pre-programmed scenarios** — quick-access pills below Corner search bar (pre-written situations → instant pre-programmed results, no API call). Content and mechanic to be designed separately.
@@ -27,6 +27,8 @@
 - **Admin editorial picks tool** — `admin-picks.html` at `tools.epistemic.live`.
 
 ## Recently completed
+
+- v2.22 ✅ — 2026-07-02 — **Make.com → GitHub Actions migration, publish step: live and confirmed.** `tools/publish-approved.js` + `.github/workflows/publish-approved.yml` (manually-triggered GitHub Action) replaces Make.com's "APPROVED → publish" scenario — fetches Airtable APPROVED rows, POSTs to `/api/publish-batch.js`, writes results back. Confirmed working end-to-end on a live test episode. Hit and fixed a recurring Airtable 403 (`INVALID_PERMISSIONS_OR_MODEL_NOT_FOUND`) by rotating the `AIRTABLE_API_KEY` GitHub secret to a fresh PAT — see build-journal Lesson 48. `architecture.md` and `pending-decisions.md` updated to match; old Make.com scenario to be paused now that this is confirmed.
 
 - v2.21 ✅ — 2026-07-02 — **DNA auto-populate fix + Vocab panel polish.** DNA pill now falls back to a live category tally (computed from the drawer's actual concept cards, same math as the hidden mix bar) whenever `episode_meta.json`'s backfilled `dna` is empty — fixes brand-new episodes like 520 and removes the backfill dependency going forward. Vocab "+N more" restyled to a small pill-shaped chip (was stretching to fill its whole grid cell). Vocab inline drawer panel decoupled from the old popover's `max-width: 1040px` — now spans the full drawer width with auto-fill columns.
 

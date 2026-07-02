@@ -50,6 +50,12 @@
 
 ## Data flow
 
+**Note (2026-07-02):** the diagram below describes the original Make.com-driven design. The Intake→extract half (steps through `/api/extract-concepts.js`) was never actually adopted — Gergely always uses `extract.html` directly instead (see Path A/B below and `docs/pending-decisions.md`). The APPROVED→publish half (the last two steps) is accurate in shape, but as of 2026-07-02 the trigger is a manually-run GitHub Action (`tools/publish-approved.js` + `.github/workflows/publish-approved.yml`), not Make.com — confirmed working end-to-end in production. The actual current flow is:
+
+`extract.html` (browser, manual paste of transcript + episode info) → review/edit → "send all to Airtable" (direct browser→Airtable write) → human review in Airtable, Status PENDING→APPROVED → GitHub Action (`publish-approved.yml`, manually triggered) → `/api/publish-batch.js` → commit to `concepts.json`/`collections.json` on GitHub → Vercel auto-deploy → live site → Airtable row flipped to PUBLISHED.
+
+Original (largely inactive) design, kept for reference:
+
 Podcast URL 
 ↓ (Airtable Intake form: episode title, host, URL, people, transcript) 
 Intake row created (Status=NEW) 
@@ -64,9 +70,9 @@ Intake row created (Status=NEW)
   5. Updates Intake row → DONE (or FAILED with error detail) 
 ↓ (Human reviewer in Airtable: edit, approve, reject) 
 Concept row: Status=APPROVED 
-↓ (Make.com polls Concepts for APPROVED → POST to publish function) 
-/api/publish-concept.js: 
-  1. Validates the 9-field shape 
+↓ (GitHub Action `publish-approved.yml`, manually triggered — replaced Make.com here 2026-07-02 → POST to publish function) 
+/api/publish-concept.js or /api/publish-batch.js: 
+  1. Validates the field shape 
   2. Computes next concept id = max(existing) + 1 
   3. Appends to concepts.json on GitHub 
 ↓ (Vercel auto-deploy) 
@@ -300,9 +306,11 @@ Stored in `episode_meta.json` at repo root. One entry per episode-type collectio
 | **index.html**    | **The live site (v2.4+). spark.html promoted to index.html 2026-06-24. spark.html retired. Old index.html archived as index-legacy.html. Both JSON fetches cache-busted with `?v=Date.now()` (added v2.10).** |
 | index-legacy.html | Archived legacy UI (v172 base, pre-spark, ~10k lines). Not served in production. Safe to delete after 2026-07-24. |
 | airtable          | Editorial workflow + APPROVED gating              |
-| make.com          | Glue between Airtable and the GitHub publish API  |
-| /api/extract-concepts.js | Claude API → candidate concepts. **Live Automation 1 endpoint** — the actual prompt Make.com triggers, distinct from the reference `extraction-prompt-v1_X.txt` files. Confirm changes land here, not just in the reference doc. Active prompt: v1.8.1 (2026-06-28). |
-| /api/publish-concept.js  | Approved concept → committed to GitHub     |
+| make.com          | **Legacy.** Originally glue between Airtable and the GitHub publish API for both the Intake→extract scenario and the APPROVED→publish scenario. As of 2026-07-02 the APPROVED→publish half has moved to a GitHub Action (see `tools/publish-approved.js` row below); that Make.com scenario should be paused once confirmed (confirmed 2026-07-02 — see `docs/pending-decisions.md`). The Intake→extract scenario was never Gergely's actual workflow and has been inactive throughout. |
+| /api/extract-concepts.js | Claude API → candidate concepts. **NOT part of the active workflow (confirmed with Gergely, 2026-07-02)** — Gergely always pastes transcripts into `extract.html` directly instead (see Path A/B below). Kept in place, untouched, in case the automated Airtable-Intake path is revived; do not build on top of it without checking first. Prompt content (v1.8.1, 2026-06-28) still kept in sync with the reference `extraction-prompt-v1_X.txt` files as a matter of hygiene, even though the endpoint isn't live-triggered today. See `docs/pending-decisions.md`. |
+| /api/publish-concept.js  | Approved concept → committed to GitHub (per-concept fallback; see `/api/publish-batch.js` for the batch path) |
+| /api/publish-batch.js | Approved concepts (array) → committed to GitHub in one PUT. The actual publish mechanism triggered by the GitHub Action below (unchanged by the 2026-07-02 migration — only who calls it changed). |
+| tools/publish-approved.js + .github/workflows/publish-approved.yml | **Current live "APPROVED → publish" trigger (added 2026-07-02, replaces that half of Make.com).** Manually-triggered GitHub Action: fetches Airtable rows with Status=APPROVED, builds the batch payload, POSTs to `/api/publish-batch.js`, writes results back to Airtable. Same one-click UX as the old Make.com scenario. See `docs/pending-decisions.md`. |
 | /api/subscribe.js | Newsletter signup (Brevo)                       |
 | hook-style-guide.md / term-style-guide.md / plain-style-guide.md / analogy-style-guide.md / prompt-style-guide.md | Canonical editorial rule sets for all 5 concept fields. Kept in sync across `extract-concepts.js`, `extract.html`'s 3 prompt strings (EXTRACTION_PROMPT, SHORT_EXTRACTION_PROMPT, REGEN_SYSTEM_PROMPT), and `extraction-prompt-v1_X.txt` — when one changes, update all four locations. `analogy-style-guide.md` and `prompt-style-guide.md` added v2.10. |
 | plain-batch.js / plain-batch.html | Plain-field batch rewrite tool (v2.1). Built but not yet proven at scale — see build-journal 2026-06-20/21 entry before relying on it for a large pass. |
@@ -442,18 +450,18 @@ State machine designed: Entry (4 pills) → Loading → Story (typewriter + inli
 
 As of v1.33 there are two ways concepts enter the pipeline:
 
-**Path A — Intake form (legacy, short transcripts only)**
+**Path A — Intake form (inactive, confirmed 2026-07-02)**
 Airtable Intake form → Make.com → `/api/extract-concepts` (Claude API) → creates collection + writes PENDING concepts to Airtable Concepts table.
 - Limit: ~95k chars before Airtable Long-text breaks.
-- Status: still works, will be retired once Path B is proven.
+- Status: code still works and is kept in place, but **Gergely confirmed (2026-07-02) he never uses this path** — always uses Path B instead. Not part of the active workflow; don't build on top of it without checking first. See `docs/pending-decisions.md`.
 
-**Path B — `extract.html` (current, all transcript lengths)**
+**Path B — `extract.html` (current, all transcript lengths, the only path actually used)**
 Local browser tool → Claude API direct → GitHub commit (collections.json) → Airtable POST per concept.
 - No length limit.
 - Same security model as `upload.html` (private file, keys in browser inputs/localStorage, never committed).
 - Use for everything going forward.
 
-Both paths land concepts in Airtable as PENDING with the same shape. Approval and publish flow is identical from there: Status flip to APPROVED → Make watch → `/api/publish-concept` → commit to `concepts.json` → Vercel deploy.
+Both paths land concepts in Airtable as PENDING with the same shape. Approval and publish flow is identical from there: Status flip to APPROVED → **GitHub Action `publish-approved.yml`, manually triggered (replaced the Make.com watch step, 2026-07-02, confirmed working)** → `/api/publish-concept.js` or `/api/publish-batch.js` → commit to `concepts.json` → Vercel deploy.
 
 ## Source code attribution (v1.33+)
 
