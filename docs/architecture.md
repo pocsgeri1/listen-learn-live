@@ -301,7 +301,7 @@ Stored in `episode_meta.json` at repo root. One entry per episode-type collectio
 
 | File              | Owns                                              |
 |-------------------|---------------------------------------------------|
-| concepts.json     | The concept entities (the source of truth) — 669 concepts as of 2026-06-28 (was 594; 31 new concepts IDs 639–669 added, collection 519). Do not cite a fixed number in docs or code. |
+| concepts.json     | The concept entities (the source of truth) — 625 concepts as of 2026-06-28 (corrected from an earlier 669 figure — see changelog v2.19). Do not cite a fixed number in docs or code; it changes with every batch publish. |
 | collections.json  | The collection entities (curated packs + episodes) — includes collection 519 (Something Is Very Wrong With Modern Life, Modern Wisdom) as of 2026-06-28 |
 | **index.html**    | **The live site (v2.4+). spark.html promoted to index.html 2026-06-24. spark.html retired. Old index.html archived as index-legacy.html. Both JSON fetches cache-busted with `?v=Date.now()` (added v2.10).** |
 | index-legacy.html | Archived legacy UI (v172 base, pre-spark, ~10k lines). Not served in production. Safe to delete after 2026-07-24. |
@@ -473,7 +473,7 @@ The `Source` field in Airtable is a Single Select; `typecast: true` on the POST 
 
 `/api/publish-concept.js` and `/api/publish-batch.js` write the full 11-field schema to `concepts.json`: id, term, category, source, hook, plain, analogy, prompt, collection_id, timestamp, editors_pick.
 
-Make.com posts 10 fields per concept (the 7 content fields + collection_id + timestamp + editors_pick). The publish function generates `id` server-side as `max(existing id) + 1`, then appends the complete 11-field object.
+The caller posts 10 fields per concept (the 7 content fields + collection_id + timestamp + editors_pick). As of 2026-07-02 that caller is the `publish-approved.yml` GitHub Action (`tools/publish-approved.js`), not Make.com — see Path A/B section above. The publish function generates `id` server-side as `max(existing id) + 1`, then appends the complete 11-field object.
 
 `editors_pick` is boolean. Default false. Read directly off the incoming payload using `raw['editors_pick'] ?? raw["Editor's Pick"] ?? raw['Editors Pick']` — the `readField` helper cannot be used because it filters out booleans. Any of `true`, `"true"`, `1`, `"1"` coerce to true; anything else (including `false`, `null`, missing, `0`) becomes false. Live-site rendering checks `c.editors_pick === true` so older concepts without the field render as not-picked.
 
@@ -488,7 +488,7 @@ Make.com posts 10 fields per concept (the 7 content fields + collection_id + tim
 
 Schema compliance: as of v1.43 the publish path matches the 11-field schema. The Editor's Pick infrastructure (Group D? Group E? — unlabeled in roadmap) is complete end-to-end.
 
-**Batch publish path (v1.35+):** `/api/publish-batch.js` accepts an array of concepts and commits them in a single GitHub PUT. Each concept can use either lowercase keys (`term`, `hook`, `collection_id`) or Airtable-aggregator-cased keys (`Term`, `Hook`, `Collection ID`) — the function tries both. Output is `{ success, published_count, failed_count, results: [{airtable_id, term, concept_id, success, error}] }`. Per-concept results let Make.com flip Status to PUBLISHED on success or write an error message on failure, all in one scenario run. The per-concept `publish-concept.js` endpoint remains live as a fallback for one-off publishes.
+**Batch publish path (v1.35+):** `/api/publish-batch.js` accepts an array of concepts and commits them in a single GitHub PUT. Each concept can use either lowercase keys (`term`, `hook`, `collection_id`) or Airtable-aggregator-cased keys (`Term`, `Hook`, `Collection ID`) — the function tries both. Output is `{ success, published_count, failed_count, results: [{airtable_id, term, concept_id, success, error}] }`. Per-concept results let the caller (as of 2026-07-02, `tools/publish-approved.js` via the GitHub Action; previously Make.com) flip Status to PUBLISHED on success or write an error message on failure, all in one run. The per-concept `publish-concept.js` endpoint remains live as a fallback for one-off publishes.
 
 
 ---
