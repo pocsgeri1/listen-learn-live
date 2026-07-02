@@ -34,6 +34,16 @@ Claude updates without being asked: changelog.md (new entry at TOP), roadmap.md 
 
 ## Entries
 
+### 2026-07-02 — v2.18/v2.19: legacy theme migration + grid filter
+
+**Lesson 46 — Before applying a quality gate retroactively, check whether the data needed to evaluate it actually exists.** `publish-batch.js`'s `computeCuratedCollectionIds()` gates new concepts on `scores.composite >= 8.0`. Naively reusing that same function to migrate the 625 legacy concepts (101-116 → 201-206) would have silently zeroed out every one of them — 0 of 625 legacy concepts have a `scores.composite` value at all, since that field only exists on the newer scored extraction pipeline's output. Caught this by inspecting the data before writing the migration, not after. Fix (approved by Gergely): grandfather rule — concepts with no composite score get a theme by category alone, no gate; concepts with a real score still go through the normal gate. Documented inline in `tools/migrate-themes.js` since the logic now has two hand-synced copies (there vs. `publish-batch.js`).
+
+**Lesson 47 — Migrating a field doesn't mean deleting the old data.** The 16 retired theme collections (101-116) stayed in `collections.json`, just flagged `status: 'legacy'`, so old concept references to them remain resolvable for historical purposes. This meant `renderThemesGrid()` needed an explicit `status !== 'legacy'` filter — it was pulling in all `type: 'thematic'` collections regardless of status, so the grid would have shown 22 themes (16 dead + 6 live) instead of 6. The drawer-content and preview functions were unaffected since they'd always filtered by `curated_collection_ids` membership rather than iterating all thematic collections.
+
+**Lesson 48 — Always verify a bulk-write migration against a pre-migration backup, field by field, not just spot-checks.** Backed up `concepts.json` before running `tools/migrate-themes.js --apply`, then diffed old vs. new post-migration confirming only `curated_collection_ids` changed across all 625 concepts (no accidental touch to scores, text fields, etc.) before committing.
+
+**Sandbox note:** the sandbox's virtiofs mount blocks `rm`/`mv`/`os.remove` on `.git/*.lock` files with "Operation not permitted" even though permissions look fine. Fix is the `allow_cowork_file_delete` tool (grants one-time deletion for that path), then `rm -f` works immediately. Hit this twice this session, once per repo.
+
 ### 2026-07-02 — extraction prompt reconciliation + quality-drift guardrails
 
 **Lesson 43 — Reconciling a prompt against a style guide isn't done once you've ported the rule text over; check where it sits structurally too.** `concept-rewrite-prompt.md`'s cross-field image check and full-field anti-slop scope were missing from the live `extract.html` / `extract-concepts.js` prompts. Separately, the EPISODE INTEL block sat mid-prompt, between the concept field rules and the scoring rubric, diluting the concept rules with unrelated intel instructions right when the model needed them most. Fixed both: ported the two missing rules into the self-check (now 7 checks in extract.html, 6 in extract-concepts.js which has no intel section), and moved EPISODE INTEL to the very end, right before the self-check.

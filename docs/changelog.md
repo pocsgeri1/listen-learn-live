@@ -6,6 +6,21 @@
 
 ---
 
+## v2.19 — 2026-07-02 — Theme grid legacy filter + doc accuracy fixes
+
+### What shipped
+- **`renderThemesGrid()` in `index.html` now filters out `status: 'legacy'` collections.** After the v2.18 migration, all 16 retired 101-116 theme entries stayed in `collections.json` for historical reference but were still `type: 'thematic'`, so the grid was pulling in all 22 thematic collections (16 legacy + 6 live) instead of just the 6 live ones. Drawer content and preview rendering already filtered correctly by `curated_collection_ids`, so no change needed there.
+- **`architecture.md` accuracy pass:** concept count corrected (669 → 625 as of v2.18), `curated_collection_ids` description rewritten for the 201-206 system, noted the new themes have no image assets yet (emoji fallback), documented the legacy grid filter, "16 themes" references updated to "6 live themes."
+- Confirmed the other files that read `collections.json` (`v170index.html`, `v172.html`, `index-legacy.html`, `index-netflix-test.html`, `map.html`) have no theme-grid rendering logic, so they're unaffected either way.
+
+## v2.18 — 2026-07-02 — Migrate legacy concepts from 101-116 themes to 201-206
+
+### What shipped
+- **All 625 concepts migrated from the retired 16-theme system (101-116, LLM-assigned) to the new 6-theme system (201-206, deterministic by category).** Ran via new `tools/migrate-themes.js` (dry-run by default, `--apply` to write).
+- **Grandfather rule** (decided with Gergely after discovering 0 of 625 legacy concepts have a `scores.composite` value): concepts with no composite score get a theme by category alone, no quality gate. Concepts with a real composite score still require ≥ 8.0, matching `publish-batch.js`'s `computeCuratedCollectionIds()`.
+- Result: 100% coverage, 0 losses, 333 concepts gained a theme for the first time (previously had none under the old system). Distribution: Money & Power 136, Mind & Meaning 238, Self & Signal 63, Connection 90, Body & Evidence 35, Making & Building 63.
+- Verified via backup + post-migration diff: only `curated_collection_ids` changed, no other fields touched.
+
 ## v2.17 — 2026-07-02 — Extraction prompt reconciliation + quality-drift guardrails
 
 ### What shipped
