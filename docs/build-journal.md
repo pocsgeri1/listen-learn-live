@@ -23,9 +23,9 @@ Body:   - bullet 1
 - Body: one change per line, no prose
 
 ### Git workflow (Cowork sessions)
-- Claude edits files directly in `/Users/gergelypocs/Documents/GitHub/listen-learn-live/`
-- **Always combine add + commit in one bash call:** `git add [files] && git commit -m "..."` — never two separate calls (failed add leaves index.lock held by sandbox)
-- Gergely clicks **Push origin** in GitHub Desktop — one click, Vercel auto-deploys
+- Claude edits files directly in `/Users/gergelypocs/Documents/GitHub/listen-learn-live/` — Read/Edit/Write only, no git commands from this session (sandbox bash cannot reliably release `index.lock`; see cowork-default-instructions.md "Git lock issues" — full detail lives there, not duplicated here).
+- Gergely runs `./ep-commit.sh "v[X.Y] - message"` from Mac Terminal, then clicks **Push origin** in GitHub Desktop — one click, Vercel auto-deploys.
+- (Corrected 2026-07-02 — this section previously said to `git add && git commit` from the sandbox bash tool directly, which contradicts master-session-prompt.md and was the source of repeated lock failures.)
 
 ### Documentation (auto, end of every session — no reminder needed)
 Claude updates without being asked: changelog.md (new entry at TOP), roadmap.md (completed → Recently Completed), build-journal.md (new lessons at TOP of Entries). Then copies to Claude Project Files via bash.
@@ -33,6 +33,14 @@ Claude updates without being asked: changelog.md (new entry at TOP), roadmap.md 
 ---
 
 ## Entries
+
+### 2026-07-02 — Cowork protocol consolidation + autonomous batch rewrite mode designed
+
+**Lesson 50 — Three docs restating the same session rules will eventually contradict each other; consolidate to one canonical file instead of syncing copies by hand.** `master-session-prompt.md`, this file's Standing Rules, and `concept-rewrite-prompt.md`'s git notes had drifted: two of them still told Claude to commit/push directly from the Cowork sandbox, contradicting the documented `index.lock` limitation. Fixed by creating `docs/cowork-default-instructions.md` as the single canonical session-protocol doc; `master-session-prompt.md` is now a one-line pointer to it, and Standing Rules above points here too. Future protocol edits go in `cowork-default-instructions.md` only.
+
+**Lesson 51 — A "top candidates" file needs to exclude in-flight work, not just finished work, or it resurfaces ids mid-batch.** `rewrite-candidates.json` excluded ids in `rewrite-concepts.json`'s `history` but not its `approved` array, so batch 3's in-progress ids (518, 338, 473, 490) sat back at the top of the queue while still being worked on. Fixed in the new `tools/scan-rewrite-candidates.js` (excludes both) and in `concept-rewrite-prompt.md`'s "next" step. Caught before anything was rewritten twice.
+
+**Designed and merged autonomous batch rewrite mode into `concept-rewrite-prompt.md`** (`## Autonomous Batch Mode` section) — opt-in via "run autonomous batches," runs diagnose → rewrite → self-check → cross-batch-repetition-check → log unattended for 10 concepts at a time, writes a diff report per batch before patching, escalates anything that fails self-correction 3x to `needs_human` instead of forcing it through. Still requires Gergely for git commit/push (sandbox limitation) and for reviewing each batch's diff report. Not yet run live — first run will be supervised in a normal chat before it's ever scheduled unattended.
 
 ### 2026-07-02 — v2.22: Airtable 403 during GitHub Actions rollout — same failure as 2026-05-18, recognize it faster next time
 
