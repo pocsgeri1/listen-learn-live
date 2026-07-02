@@ -4,6 +4,17 @@
 // row to the Concepts table per extracted concept.
 //
 // Triggered by Make.com after polling the Intake table for Status=NEW rows.
+//
+// STATUS (confirmed with Gergely, 2026-07-02): this automated intake path is
+// NOT part of the active workflow. Gergely always pastes transcripts into
+// extract.html directly (browser -> Claude -> Airtable, bypasses Airtable's
+// 100k-char Long Text cap and this endpoint entirely). This file is kept,
+// untouched and not deleted, in case the automated Airtable-Intake path is
+// revived later — but do not assume it runs today, and do not build on top
+// of it without checking with Gergely first. See docs/pending-decisions.md.
+// The GitHub Actions migration (2026-07-02) only replaces the OTHER
+// Make.com scenario — Airtable APPROVED -> GitHub publish — see
+// tools/publish-approved.js.
 
 export const config = {
   maxDuration: 300, // Hobby plan allows up to 300s; Claude API can be slow on long transcripts

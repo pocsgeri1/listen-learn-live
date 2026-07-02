@@ -1,0 +1,28 @@
+name: Publish approved concepts
+
+# Manual trigger only — go to the Actions tab, select this workflow, click
+# "Run workflow". Replaces the manual "hit run scenario" step in Make.com's
+# retired "LLL — APPROVED → Batch Publish → Live" scenario. See
+# tools/publish-approved.js for what it actually does.
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Publish approved concepts from Airtable
+        env:
+          AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
+          AIRTABLE_BASE_ID: ${{ secrets.AIRTABLE_BASE_ID }}
+          PUBLISH_SECRET: ${{ secrets.PUBLISH_SECRET }}
+        run: node tools/publish-approved.js
