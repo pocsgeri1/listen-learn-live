@@ -8,8 +8,9 @@
 ## Next up
 
 - **Identity docs v1 fine-tuning** — `epistemic-identity-private.md` and `epistemic-identity-public.md` created (2026-06-28). Private: 1,500-word manifesto (taste as product philosophy, moat framing, belonging machine thesis). Public: ~400-word about/one-pager. Both v1 — need Gergely's corrections before finalising.
-- **Episode Intelligence Layer — Phase 3** — Pills live (v2.14). Remaining: Airtable schema + Make.com pipeline update (see pending-decisions.md). Theme drawer intel deferred until theme drawer overhaul.
-- **Theme drawer overhaul** — theme names need simplification (more like the 14 foundational categories). Full restructure session needed before wiring Episode Intel into theme drawer.
+- **Episode Intelligence Layer — Phase 3** — Pills live (v2.14). Remaining: Airtable schema + Make.com pipeline update (see pending-decisions.md). Decision pending: GitHub Action vs. Make.com (leaning GitHub Action — free for this volume, version-controlled). Theme drawer intel deferred until theme drawer overhaul.
+- **Theme drawer overhaul** — theme names need simplification (more like the 14 foundational categories). Full restructure session needed before wiring Episode Intel into theme drawer. Deliberately deferred: Corner's universal/coined-term/wildcard card-selection logic and the Sparring button behavior review both depend on category/theme semantics being settled first — revisit alongside this overhaul.
+- **Mobile hero search — full-screen sheet redesign** — v2.16 fixed the iOS auto-zoom-on-focus bug (font-size <16px). Strong future candidate flagged by Gergely: replace the positioned dropdown with a full-screen mobile sheet (same pattern already used for the mobile preview modal at `window.innerWidth <= 1024`), sidestepping on-screen-keyboard layout-shift issues entirely.
 - **Corner pre-programmed scenarios** — quick-access pills below Corner search bar (pre-written situations → instant pre-programmed results, no API call). Content and mechanic to be designed separately.
 - **Fluency Fingerprint (v2.9):** Pure localStorage. Track every Sparked/stashed concept. Derive: strongest category, blind spot, stash-vs-sparked ratio. Surface in Stash tab as 3–4 lines. Zero API cost.
 - **Lightweight user ID system (v2.9):** UUID in localStorage → `lll_user_id`. Every Spark/stash action pings a lightweight endpoint that writes `{user_id, concept_id, action, ts}` to Airtable. Unlocks cross-device and Weekly Push email.
@@ -25,6 +26,8 @@
 - **Admin editorial picks tool** — `admin-picks.html` at `tools.epistemic.live`.
 
 ## Recently completed
+
+- v2.16 ✅ — 2026-07-01 — **Vocab Vault expansion (20-25 words) + click-to-expand UI, mobile search-bar auto-zoom fix, Corner rate-bar bug fix.** `generate-episode-intel.js` and `extract.html` both raised from 5-7 to 20-25 vocab words per episode. Drawer preview unchanged (still top 7, same layout) — a new "+N more" toggle reveals the rest in a smooth grid-row expand animation, same visual styling as the preview, in both desktop popover and mobile bottom sheet. All site search inputs (hero, Corner, Spark, conversation, shorts, episodes) forced to 16px on mobile — kills iOS Safari's auto-zoom-on-focus for inputs under 16px. Corner fit-score bar fixed: was only ever set for card 1 (`#cornerCard0` hardcoded); now animates for all 3 cards immediately on panel open.
 
 - v2.15d ✅ — 2026-07-01 — **Impostor-syndrome line unified, light-mode kicker fix, $0.** OG impostor-syndrome line now matches on mobile and desktop: "almost" dropped, second bracket italicized on both. Desktop layers on top: "conversation" → "convo", both brackets bold+italic (not just italic). Light mode: `.og-story p.og-kicker` (section headlines) now uses the same `#7a6830`/0.72-opacity treatment as `.og-expand-label` for visibility — dark mode untouched. Desktop-only closing line: "Sign up for free" → "Sign up $0."
 

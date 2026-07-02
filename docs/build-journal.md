@@ -34,6 +34,18 @@ Claude updates without being asked: changelog.md (new entry at TOP), roadmap.md 
 
 ## Entries
 
+### 2026-07-01 — v2.16: episode intel pipeline audit, vocab expand UI, mobile zoom root cause
+
+**Lesson 38 — "Summary/Vocab/Tension are generated at extraction time" was a wrong assumption worth checking before building on it.** Episode extraction (`api/extract-concepts.js`, the Make.com-triggered script) only ever produced concept-card fields. Summary/Vocab/Sharpest Line/Tension are generated later, by a completely separate tool (`tools/generate-episode-intel.js` / the Episode Intel panel in `extract.html`), off `concepts.json`, writing straight to `episode_meta.json` — never touching Airtable or Make.com at all. Worth a direct file read before assuming a pipeline is wired end-to-end just because the UI shows the data.
+
+**Lesson 39 — DNA was NOT a "populate later" placeholder — it shipped in v2.11 and works today.** It's a simple % rollup of a concept's own categories, computed at build time from `concepts.json`. No dependency to design; it already exists.
+
+**Lesson 40 — Two copies of the same LLM prompt drift if you only edit one.** `generate-episode-intel.js` and `extract.html` each carry an independent, hand-copied version of the intel-generation prompt (extract.html's is the browser-based manual tool; the .js is presumably the future automated path). Any prompt change — like raising the Vocab Vault word count — has to land in both or the two tools silently disagree. Worth a follow-up: extract one shared source of truth if this becomes a Node/GitHub Action pipeline.
+
+**Lesson 41 — A "not visible on 2 of 3 cards" bug is almost never 3 separate bugs.** The Corner rate bar was invisible on cards 2 and 3 because the width-set code only ever targeted `#cornerCard0` by hardcoded ID on initial render — the accordion-expand fallback that should have caught the other cards queried the wrong DOM subtree (`detail.querySelector` when the bar actually lives in the sibling `summary` row) and silently no-op'd. Fix was to stop gating the bar animation on accordion state at all — the bar sits in the always-visible summary row, so it should animate for every card immediately on panel open, no expand required.
+
+**Lesson 42 — "Seems unfixable" is often just an unidentified root cause, not an actually-hard problem.** The mobile hero search zoom-on-focus bug had been through prior fix attempts (see v1.99k/l entries below) that solved a *different* zoom bug (page zooming out on load from a `flex-wrap` overflow) — not this one. The actual cause (input font-size at 15.2px, under iOS Safari's 16px auto-zoom-on-focus threshold) had never been targeted directly. Grep the actual computed font-size before assuming a "we already tried to fix this" bug is structurally hard.
+
 ### 2026-07-01 — v2.15d: layering a desktop-only override on top of a universal fix
 
 **Lesson 36 — A "fix on both breakpoints" instruction and a "desktop only, on top of that" instruction can target the same sentence without conflicting.** The impostor-syndrome line needed "almost" dropped and the second bracket italicized everywhere, then desktop needed further changes (convo swap, bold+italic brackets) layered on that same already-unified base. Handled by editing the shared wording in both `.fc-desktop-only`/`.fc-mobile-only` paragraphs identically first, then applying the extra desktop-only emphasis only to that paragraph — no separate fork was needed since the structure already existed from v2.15c.

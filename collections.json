@@ -337,6 +337,7 @@
   {
     "id": 101,
     "type": "thematic",
+    "status": "legacy",
     "title": "Self & Signal",
     "symbol": "🪞",
     "tagline": "how you come across vs. who you are",
@@ -349,6 +350,7 @@
   {
     "id": 102,
     "type": "thematic",
+    "status": "legacy",
     "title": "Risk & Ruin",
     "symbol": "⚖️",
     "tagline": "decision-making under uncertainty",
@@ -360,6 +362,7 @@
   {
     "id": 103,
     "type": "thematic",
+    "status": "legacy",
     "title": "Crowds & Contrarians",
     "symbol": "🐑",
     "tagline": "why groups get things wrong",
@@ -372,6 +375,7 @@
   {
     "id": 104,
     "type": "thematic",
+    "status": "legacy",
     "title": "Body of Evidence",
     "symbol": "🧪",
     "tagline": "what the research actually says about how you live",
@@ -383,6 +387,7 @@
   {
     "id": 105,
     "type": "thematic",
+    "status": "legacy",
     "title": "Persuasion Lab",
     "symbol": "🎯",
     "tagline": "the mechanics of changing minds",
@@ -395,6 +400,7 @@
   {
     "id": 106,
     "type": "thematic",
+    "status": "legacy",
     "title": "The Long Game",
     "symbol": "♟️",
     "tagline": "patience, compounding, delayed payoff",
@@ -407,6 +413,7 @@
   {
     "id": 107,
     "type": "thematic",
+    "status": "legacy",
     "title": "Attention Economics",
     "symbol": "🧠",
     "tagline": "what your focus is actually worth",
@@ -419,6 +426,7 @@
   {
     "id": 108,
     "type": "thematic",
+    "status": "legacy",
     "title": "Status Games",
     "symbol": "👑",
     "tagline": "the unwritten rules everyone plays by",
@@ -431,6 +439,7 @@
   {
     "id": 109,
     "type": "thematic",
+    "status": "legacy",
     "title": "Making Things",
     "symbol": "🛠️",
     "tagline": "what it actually takes to build something",
@@ -442,6 +451,7 @@
   {
     "id": 110,
     "type": "thematic",
+    "status": "legacy",
     "title": "The Relationship Stack",
     "symbol": "🤝",
     "tagline": "how connection actually works",
@@ -453,6 +463,7 @@
   {
     "id": 111,
     "type": "thematic",
+    "status": "legacy",
     "title": "Hard Conversations",
     "symbol": "💬",
     "tagline": "saying the thing no one wants to say",
@@ -465,6 +476,7 @@
   {
     "id": 112,
     "type": "thematic",
+    "status": "legacy",
     "title": "Unknown Unknowns",
     "symbol": "❓",
     "tagline": "what you don't know you don't know",
@@ -477,6 +489,7 @@
   {
     "id": 113,
     "type": "thematic",
+    "status": "legacy",
     "title": "Money as a Mirror",
     "symbol": "💰",
     "tagline": "what spending reveals about values",
@@ -489,6 +502,7 @@
   {
     "id": 114,
     "type": "thematic",
+    "status": "legacy",
     "title": "The Credibility Gap",
     "symbol": "🗣️",
     "tagline": "why smart people aren't believed",
@@ -501,6 +515,7 @@
   {
     "id": 115,
     "type": "thematic",
+    "status": "legacy",
     "title": "Systems & Chaos",
     "symbol": "🌀",
     "tagline": "why things break the way they do",
@@ -513,6 +528,7 @@
   {
     "id": 116,
     "type": "thematic",
+    "status": "legacy",
     "title": "Sovereign Mind",
     "symbol": "🧭",
     "tagline": "thinking for yourself when everyone's being told what to think",
@@ -520,6 +536,74 @@
       "philosophy",
       "identity",
       "thinking"
+    ]
+  },
+  {
+    "id": 201,
+    "type": "thematic",
+    "title": "Money & Power",
+    "symbol": "💰",
+    "tagline": "leverage, resources, and how they compound",
+    "categories": [
+      "finance",
+      "power",
+      "business"
+    ]
+  },
+  {
+    "id": 202,
+    "type": "thematic",
+    "title": "Mind & Meaning",
+    "symbol": "🧠",
+    "tagline": "how you think, decide, and make sense of it",
+    "categories": [
+      "thinking",
+      "psychology",
+      "philosophy"
+    ]
+  },
+  {
+    "id": 203,
+    "type": "thematic",
+    "title": "Self & Signal",
+    "symbol": "🪞",
+    "tagline": "how you come across vs. who you are",
+    "categories": [
+      "identity",
+      "language"
+    ]
+  },
+  {
+    "id": 204,
+    "type": "thematic",
+    "title": "Connection",
+    "symbol": "🤝",
+    "tagline": "trust, conflict, and how people actually relate",
+    "categories": [
+      "relationships",
+      "society"
+    ]
+  },
+  {
+    "id": 205,
+    "type": "thematic",
+    "title": "Body & Evidence",
+    "symbol": "🧪",
+    "tagline": "what the research says about how you live",
+    "categories": [
+      "health",
+      "science"
+    ]
+  },
+  {
+    "id": 206,
+    "type": "thematic",
+    "title": "Making & Building",
+    "symbol": "🛠️",
+    "tagline": "what it takes to create something real",
+    "categories": [
+      "creativity",
+      "tech-ai"
     ]
   },
   {

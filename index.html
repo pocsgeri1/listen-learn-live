@@ -1427,6 +1427,46 @@
   }
   [data-theme="light"] .ep-intel-vocab-def { color: rgba(30,27,22,0.72); }
 
+  /* ── Vocab "show more" toggle + expand panel (v2.16) ── */
+  .ep-intel-vocab-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(232,213,163,0.6);
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: color 0.15s;
+  }
+  .ep-intel-vocab-toggle:hover { color: rgba(232,213,163,0.95); }
+  [data-theme="light"] .ep-intel-vocab-toggle { color: rgba(150,120,40,0.65); }
+  [data-theme="light"] .ep-intel-vocab-toggle:hover { color: rgba(150,120,40,0.95); }
+  .ep-intel-vocab-expand-wrap {
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    transition: grid-template-rows 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease;
+  }
+  .ep-intel-vocab-expand-wrap.open { grid-template-rows: 1fr; opacity: 1; }
+  .ep-intel-vocab-expand-inner {
+    overflow: hidden;
+    overflow-y: auto;
+    min-height: 0;
+    max-height: 320px;
+  }
+  .ep-intel-vocab-expand-wrap.open .ep-intel-vocab-expand-inner {
+    padding-top: 12px;
+    margin-top: 2px;
+    border-top: 1px dashed rgba(232,213,163,0.22);
+  }
+  [data-theme="light"] .ep-intel-vocab-expand-wrap.open .ep-intel-vocab-expand-inner { border-top-color: rgba(150,120,40,0.25); }
+
   /* ── IWTMT layout — equal 2-col grid (1fr 1fr avoids gap overflow) ── */
   .ep-iwtmt-grid {
     display: grid;
@@ -9906,26 +9946,60 @@ function _renderIntelRow(pillsEl, collectionId) {
       pop.appendChild(el);
     });
 
-    // Vocab pill — always 2 rows: ≤6 words = 3-col (2×3); 7+ words = 4-col (2×4)
+    // Vocab pill — preview stays exactly as before (≤7 words, 2 rows, 3/4-col).
+    // v2.16: full vocab_vault can now hold 20-25 words; anything past the
+    // preview slice sits behind a "+N more" toggle that expands in place.
     makePill('Vocab', !!vocab, pop => {
-      const grid = document.createElement('div');
-      grid.className = 'ep-intel-vocab-grid';
-      const cols = vocab.length > 6 ? 4 : 3;
-      grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
-      vocab.forEach(v => {
-        const row = document.createElement('div');
-        row.className = 'ep-intel-vocab-row';
-        const word = document.createElement('div');
-        word.className = 'ep-intel-vocab-word';
-        word.textContent = v.word || v.term || '';
-        const def = document.createElement('div');
-        def.className = 'ep-intel-vocab-def';
-        def.textContent = v.definition || '';
-        row.appendChild(word);
-        row.appendChild(def);
-        grid.appendChild(row);
-      });
-      pop.appendChild(grid);
+      const VOCAB_PREVIEW_COUNT = 7;
+      const preview = vocab.slice(0, VOCAB_PREVIEW_COUNT);
+      const rest = vocab.slice(VOCAB_PREVIEW_COUNT);
+
+      function buildVocabGrid(list) {
+        const grid = document.createElement('div');
+        grid.className = 'ep-intel-vocab-grid';
+        const cols = list.length > 6 ? 4 : 3;
+        grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+        list.forEach(v => {
+          const row = document.createElement('div');
+          row.className = 'ep-intel-vocab-row';
+          const word = document.createElement('div');
+          word.className = 'ep-intel-vocab-word';
+          word.textContent = v.word || v.term || '';
+          const def = document.createElement('div');
+          def.className = 'ep-intel-vocab-def';
+          def.textContent = v.definition || '';
+          row.appendChild(word);
+          row.appendChild(def);
+          grid.appendChild(row);
+        });
+        return grid;
+      }
+
+      pop.appendChild(buildVocabGrid(preview));
+
+      if (rest.length > 0) {
+        const expandWrap = document.createElement('div');
+        expandWrap.className = 'ep-intel-vocab-expand-wrap';
+        const expandInner = document.createElement('div');
+        expandInner.className = 'ep-intel-vocab-expand-inner';
+        expandInner.appendChild(buildVocabGrid(rest));
+        expandWrap.appendChild(expandInner);
+
+        const toggle = document.createElement('button');
+        toggle.type = 'button';
+        toggle.className = 'ep-intel-vocab-toggle';
+        const labelMore = '+ ' + rest.length + ' more \u25BE';
+        const labelLess = 'Show less \u25B4';
+        toggle.textContent = labelMore;
+        toggle.addEventListener('click', e => {
+          e.stopPropagation();
+          const open = expandWrap.classList.toggle('open');
+          toggle.textContent = open ? labelLess : labelMore;
+        });
+
+        pop.appendChild(toggle);
+        pop.appendChild(expandWrap);
+      }
     }, 'vocab-popover');
 
     // Tension pill — two-column vs. layout
@@ -14731,17 +14805,16 @@ function _cornerOpenPanel(userInput, result) {
     if (body) body.classList.add('cp-visible');
   }, 600);
 
-  // Animate fit bars for ALL cards (first card is pre-expanded, others on accordion open)
+  // Animate fit bars for ALL cards immediately — the bar lives in the summary
+  // row, which is always visible (collapsed or not), so it shouldn't wait on
+  // accordion expand. Bug fix v2.16: previously only #cornerCard0's bar was
+  // ever set, so cards 2/3 showed the score number but no bar.
   setTimeout(function() {
-    // Animate first card's fit bar immediately
-    var firstCard = panel.querySelector('#cornerCard0');
-    if (firstCard) {
-      var fill = firstCard.querySelector('.corner-fit-bar-fill');
-      if (fill) {
-        var score = parseInt(fill.dataset.score || '0', 10);
-        setTimeout(function() { fill.style.width = score + '%'; }, 80);
-      }
-    }
+    var fills = panel.querySelectorAll('.corner-fit-bar-fill');
+    fills.forEach(function(fill, idx) {
+      var score = parseInt(fill.dataset.score || '0', 10);
+      setTimeout(function() { fill.style.width = score + '%'; }, 80 + idx * 70);
+    });
     // Fade in collapsed cards (2nd, 3rd) with stagger
     var cards = panel.querySelectorAll('.corner-brief-card--accordion:not(#cornerCard0)');
     cards.forEach(function(card, i) {
@@ -20760,6 +20833,18 @@ function playStreakMilestoneSFX() {
   color: var(--text);
   padding: 14px 0;
   min-width: 0;
+}
+
+/* v2.16 — force 16px on every search input on mobile: iOS Safari auto-zooms
+   on focus for any input under 16px. Applies site-wide, not just hero search. */
+@media (max-width: 768px) {
+  .sp-search-input,
+  .spark-search-input,
+  .conv-search-input,
+  #shortsSearch,
+  #episodeSearch {
+    font-size: 16px !important;
+  }
 }
 .sp-search-input::placeholder { color: var(--muted); }
 .sp-search-clear {

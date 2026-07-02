@@ -156,7 +156,7 @@ VERDICT:
 verdict_listen: JSON array of 2-3 strings, each MUST start with "you've ever..." / "you work in..." / "you're the kind of person who..."
 verdict_skip: JSON array of 1-2 strings, honest enough to be believed.
 
-VOCAB VAULT: 5-7 words or short phrases worth owning, especially for non-native speakers. NOT concept card titles. Raw vocabulary only: Latin phrases, academic terms, expressions that compress a complex idea. definition: plain English, max 15 words. timestamp_seconds: always null.`;
+VOCAB VAULT: 20-25 words or short phrases worth owning, especially for non-native speakers. NOT concept card titles. Raw vocabulary only: Latin phrases, academic terms, expressions that compress a complex idea. definition: plain English, max 15 words. timestamp_seconds: always null. Draw from across the FULL episode, not just the opening minutes.`;
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 

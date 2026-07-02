@@ -6,6 +6,20 @@
 
 ---
 
+## v2.16 — 2026-07-01 — Vocab Vault expansion + expand UI, mobile search zoom fix, Corner rate-bar bug
+
+### What shipped
+- **Vocab Vault raised from 5-7 to 20-25 words per episode.** Updated the extraction prompt in both `tools/generate-episode-intel.js` and `epistemic-tools/extract.html` (they carry separate copies of the same prompt) — added a note to draw vocab from across the full episode, not just the opening minutes.
+- **Vocab drawer UI: click-to-expand for the full list.** The hover preview is untouched — still shows the first 7 words in the existing 2-row grid, same styling, same behavior as before. New: if there are more than 7 words, a "+N more" toggle appears below the preview. Clicking it smoothly expands (grid-row + opacity animation, ~0.4s) to reveal the rest in an identically-styled grid, with a dashed divider and an internal scroll cap (320px) so a 25-word list can't blow out the popover. Works in both the desktop hover popover and the mobile bottom sheet — same code path renders both.
+- **Mobile search-bar auto-zoom fixed, site-wide.** Root cause: `.sp-search-input` (hero + Corner search) rendered at 15.2px, below the 16px threshold that makes iOS Safari auto-zoom on focus. Added a `@media (max-width: 768px)` rule forcing `font-size: 16px !important` on every search input on the site: hero, Corner, Spark, conversation, shorts, and episode search — several of which (`#shortsSearch`, `#episodeSearch`) had no explicit font-size at all and were relying on the browser default.
+- **Corner rate bar bug fixed.** The score number ("NN/100") was always visible on all 3 result cards, but the visual bar next to it only ever animated in on card 1 — the code explicitly queried `#cornerCard0` and nothing else on panel open, and the accordion-expand fallback for the other cards queried the wrong DOM subtree (a dead code path). Now all 3 cards' bars animate in immediately when the panel opens, staggered slightly for a cascading reveal.
+
+### Notes
+- Vocab Vault regeneration for the 15 episodes that already have intel (currently capped at 5-7 words) is deferred until the Themes/foundational/shorts rethink is done — those categories are being restructured separately and re-running intel now would be wasted API spend if the schema shifts again.
+- Corner's "universal / non-universal / wildcard" card-selection logic and a review of the Sparring button's behavior are deferred to the same future session as the theme drawer overhaul (see roadmap "Next up").
+
+---
+
 ## v2.15d — 2026-07-01 — Impostor-syndrome line unified, light-mode kicker fix, $0
 
 ### What shipped

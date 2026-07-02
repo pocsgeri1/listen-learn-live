@@ -48,6 +48,27 @@ export default async function handler(req, res) {
     'science', 'tech-ai',
   ];
 
+  // The 6 living themes (collections.json ids 201-206). Each category belongs
+  // to exactly one theme (no overlap), so a concept qualifies for at most one.
+  const THEME_CATEGORY_MAP = {
+    201: ['finance', 'power', 'business'],           // Money & Power
+    202: ['thinking', 'psychology', 'philosophy'],   // Mind & Meaning
+    203: ['identity', 'language'],                   // Self & Signal
+    204: ['relationships', 'society'],                // Connection
+    205: ['health', 'science'],                       // Body & Evidence
+    206: ['creativity', 'tech-ai'],                   // Making & Building
+  };
+  const COMPOSITE_THEME_THRESHOLD = 8.0;
+
+  function computeCuratedCollectionIds(category, composite) {
+    if (composite === null || composite < COMPOSITE_THEME_THRESHOLD) return [];
+    const ids = [];
+    for (const [id, cats] of Object.entries(THEME_CATEGORY_MAP)) {
+      if (cats.includes(category)) ids.push(Number(id));
+    }
+    return ids;
+  }
+
   // GitHub config
   const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
   const REPO_OWNER = 'pocsgeri1';
@@ -98,6 +119,17 @@ export default async function handler(req, res) {
     return null;
   }
 
+  // Helper: read a score field (float, 1-10 scale) from either casing.
+  function readFloatOrNull(obj, ...keys) {
+    for (const k of keys) {
+      const v = obj[k];
+      if (v === undefined || v === null || v === '') continue;
+      const parsed = parseFloat(v);
+      if (Number.isFinite(parsed)) return parsed;
+    }
+    return null;
+  }
+
   // Normalize each incoming concept into the canonical shape, OR record a validation error.
   // We do this BEFORE fetching GitHub so we fail fast if the whole batch is bad.
   const normalized = [];
@@ -130,6 +162,18 @@ export default async function handler(req, res) {
       : typeof relatedIdsRaw === 'string' && relatedIdsRaw.trim()
         ? relatedIdsRaw.split(',').map(v => parseInt(v.trim(), 10)).filter(n => Number.isInteger(n) && n > 0)
         : [];
+
+    // Scores: read the 4 raw sub-scores Airtable already has, compute composite
+    // ourselves (Airtable has no Composite column). Only trust composite if
+    // all 4 sub-scores are present.
+    const universality = readFloatOrNull(raw, 'universality', 'Universality Score');
+    const actionability = readFloatOrNull(raw, 'actionability', 'Actionability Score');
+    const novelty = readFloatOrNull(raw, 'novelty', 'Novelty Score');
+    const conversation_value = readFloatOrNull(raw, 'conversation_value', 'Conversation Value Score');
+    const scoreParts = [universality, actionability, novelty, conversation_value];
+    const composite = scoreParts.every(v => v !== null)
+      ? Math.round((scoreParts.reduce((a, b) => a + b, 0) / 4) * 10) / 10
+      : null;
 
     const missing = [];
     if (!term) missing.push('term');
@@ -182,6 +226,8 @@ export default async function handler(req, res) {
       timestamp,
       editors_pick,
       related_ids,
+      scores: { universality, actionability, novelty, conversation_value, composite },
+      curated_collection_ids: computeCuratedCollectionIds(category, composite),
     });
   }
 
@@ -260,6 +306,7 @@ export default async function handler(req, res) {
     // concept still appears in its episode drawer. Same-term-twice within a
     // single batch is still rejected (that's an extraction mistake).
     const toAppend = [];
+    const publishedAt = new Date().toISOString();
     for (const n of normalized) {
       const termLower = n.term.toLowerCase();
 
@@ -296,6 +343,10 @@ export default async function handler(req, res) {
         editors_pick: n.editors_pick === true,
         related_ids: n.related_ids || [],
         duplicate_of: duplicateOf,
+        scores: n.scores,
+        curated_collection_ids: n.curated_collection_ids,
+        airtable_id: n.airtable_id,
+        published_at: publishedAt,
       };
 
       toAppend.push(newConcept);
