@@ -12916,5 +12916,731 @@
     "curated_collection_ids": [
       202
     ]
+  },
+  {
+    "id": 670,
+    "term": "Wage Slavery",
+    "category": "identity",
+    "source": "dk",
+    "hook": "Doing grind work you didn't choose just to survive is slavery with extra steps.",
+    "plain": "When you can't stop showing up to work without catastrophe, and you have no skills to create alternatives, you meet the definition. The force isn't physical anymore, it's financial. Most people don't realize they're trapped because they've identified with the role.",
+    "analogy": "A bird born in a cage thinks flying is a mental illness.",
+    "prompt": "If your job disappeared tomorrow, what would you actually do to survive? Be specific.",
+    "collection_id": 520,
+    "timestamp": 146,
+    "editors_pick": true,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 7,
+      "novelty": 8,
+      "conversation_value": 9,
+      "composite": 8
+    },
+    "curated_collection_ids": [
+      203
+    ],
+    "airtable_id": "rec01McLV38qkIhm4",
+    "published_at": "2026-07-02T11:53:05.604Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 671,
+    "term": "Vibe Coding",
+    "category": "tech-ai",
+    "source": "dk",
+    "hook": "You're building an app by arguing with a chatbot until it stops breaking.",
+    "plain": "You describe what you want, AI writes the code, you test it, tell it what broke, it fixes it. Repeat until you have something that works. Gatekeepers call it cheap. Builders call it leverage. The question isn't how you made it, it's whether people pay for it.",
+    "analogy": "A 12-year-old with a tractor plows faster than a man with a shovel. The field doesn't care about technique.",
+    "prompt": "What's one tool or feature you wish existed? Ask Claude how to start building it, even crudely.",
+    "collection_id": 520,
+    "timestamp": 1617,
+    "editors_pick": true,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 7,
+      "actionability": 9,
+      "novelty": 9,
+      "conversation_value": 8,
+      "composite": 8.3
+    },
+    "curated_collection_ids": [
+      206
+    ],
+    "airtable_id": "rec4BlV3E4Tfr8ADp",
+    "published_at": "2026-07-02T11:53:05.604Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 672,
+    "term": "Flow State Trigger",
+    "category": "psychology",
+    "source": "core",
+    "hook": "Enjoyment comes from tasks slightly harder than your current skill level.",
+    "plain": "Not so hard you get anxious, not so easy you get bored. Video games exploit this naturally. Jobs kill it because after training, the challenge plateaus. You clock in, do the tasks, clock out exhausted despite doing nothing difficult. Your attention drifts to what else you could be doing.",
+    "analogy": "A level 1 character fighting level 100 enemies quits immediately. Fighting level 2 enemies all day feels pointless.",
+    "prompt": "What's the last task that felt perfectly challenging, not crushing or boring, just engaging?",
+    "collection_id": 520,
+    "timestamp": 192,
+    "editors_pick": false,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 9,
+      "actionability": 8,
+      "novelty": 7,
+      "conversation_value": 8,
+      "composite": 8
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "rec5ZAhZVgxa1Pm3A",
+    "published_at": "2026-07-02T11:53:05.604Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 673,
+    "term": "Low Agency Signaling",
+    "category": "psychology",
+    "source": "dk",
+    "hook": "Copying advice about high agency proves you don't have it.",
+    "plain": "Tech people all post about becoming high agency because it goes viral. The act of repeating the exact same message without initiating anything original is the opposite of agency. They're doing what everyone else does and calling it independent action.",
+    "analogy": "A hundred people yelling 'be yourself' in unison at a rally.",
+    "prompt": "What's one thing you started entirely on your own, not because you saw someone else succeed at it first?",
+    "collection_id": 520,
+    "timestamp": 721,
+    "editors_pick": false,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 7,
+      "novelty": 9,
+      "conversation_value": 9,
+      "composite": 8.3
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "recA5cISCgFIMI0dy",
+    "published_at": "2026-07-02T11:53:05.604Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 674,
+    "term": "The Hot Stove Test",
+    "category": "philosophy",
+    "source": "dk",
+    "hook": "Reality is the only teacher that never lies to you.",
+    "plain": "When something doesn't work, reality gives you feedback instantly. No ideology, no guru, no handbook can replace actually trying and seeing what happens. People avoid this process because it means accepting they'll fail constantly, but failure is just the mechanism of learning.",
+    "analogy": "Touching a hot stove once teaches more than reading ten books about heat.",
+    "prompt": "What's one belief about your work you've never tested by actually trying it in the real world?",
+    "collection_id": 520,
+    "timestamp": 1387,
+    "editors_pick": false,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 9,
+      "actionability": 9,
+      "novelty": 8,
+      "conversation_value": 8,
+      "composite": 8.5
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "recC1WKzh2EILW4jH",
+    "published_at": "2026-07-02T11:53:05.604Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 675,
+    "term": "Content > Code for Longevity",
+    "category": "business",
+    "source": "dk",
+    "hook": "Code has right answers, but content doesn't. That's why the skill cap stays high.",
+    "plain": "If code works, it works. Objective result. Content is subjective: every reader interprets differently. No single right way to get results. AI can write functional code easily. Writing content that makes people care requires taste, distribution, iteration. The skill ceiling keeps rising.",
+    "analogy": "A calculator solves math. Convincing someone to change their mind can't be automated.",
+    "prompt": "Write one sentence explaining your work that makes someone who doesn't know you want to learn more. Try it.",
+    "collection_id": 520,
+    "timestamp": 1686,
+    "editors_pick": true,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 8,
+      "novelty": 9,
+      "conversation_value": 9,
+      "composite": 8.5
+    },
+    "curated_collection_ids": [
+      201
+    ],
+    "airtable_id": "recCW9LKUtlKAL8hI",
+    "published_at": "2026-07-02T11:53:05.604Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 676,
+    "term": "Contrarian Spine",
+    "category": "thinking",
+    "source": "dk",
+    "hook": "You've been serving reheated TED Talks and wondering why nobody's listening.",
+    "plain": "Nobody needs another person repackaging common sense. Your perspective has to come from spotting what experts pretend not to see or what advice actively made your life worse. That disagreement is the foundation of content people remember.",
+    "analogy": "Every chef uses salt. The Michelin star chef knows when not to.",
+    "prompt": "What mainstream advice in your field did you try and regret? What did you replace it with?",
+    "collection_id": 520,
+    "timestamp": 2196,
+    "editors_pick": true,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 9,
+      "novelty": 9,
+      "conversation_value": 10,
+      "composite": 9
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "recDUgjvSeWLUbqpJ",
+    "published_at": "2026-07-02T11:53:05.604Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 677,
+    "term": "Pyramid Scheme of Employment",
+    "category": "society",
+    "source": "dk",
+    "hook": "One boss needs ten workers, but ten workers don't need ten bosses.",
+    "plain": "Civilization was built by tribes enslaving other tribes. That dynamic abstracted into employment, law, culture. One boss, multiple employees. The employees depend on the boss for survival. It's a pyramid where climbing is possible for some but structurally impossible for most.",
+    "analogy": "A lottery where one ticket wins. Buying more tickets doesn't change that only one person can win.",
+    "prompt": "Who controls your income right now? What would happen if they decided you're no longer needed tomorrow?",
+    "collection_id": 520,
+    "timestamp": 337,
+    "editors_pick": false,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 9,
+      "actionability": 7,
+      "novelty": 8,
+      "conversation_value": 9,
+      "composite": 8.3
+    },
+    "curated_collection_ids": [
+      204
+    ],
+    "airtable_id": "recFbaGfEbRNTSlsJ",
+    "published_at": "2026-07-02T11:53:05.604Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 678,
+    "term": "Excavating Raw Material",
+    "category": "creativity",
+    "source": "dk",
+    "hook": "Your most valuable ideas are buried under years of being told to specialize.",
+    "plain": "What do you know too much about for it to be an accident? What problem did you solve that you assumed everyone else figured out? What got you in trouble as a kid that was actually early taste? The content you should make already exists in your accumulated experience.",
+    "analogy": "Gold miners don't create gold. They dig where others walked past.",
+    "prompt": "Answer one: what did you research across dozens of sources for years without being paid to?",
+    "collection_id": 520,
+    "timestamp": 2107,
+    "editors_pick": true,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 9,
+      "actionability": 10,
+      "novelty": 8,
+      "conversation_value": 8,
+      "composite": 8.8
+    },
+    "curated_collection_ids": [
+      206
+    ],
+    "airtable_id": "recGgFCPC22NXZ6L9",
+    "published_at": "2026-07-02T11:53:05.604Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 679,
+    "term": "The One-third Problem",
+    "category": "society",
+    "source": "dk",
+    "hook": "One-third asleep, one-third working, one-third too exhausted to matter. 40 years.",
+    "plain": "Most people spend a third of life doing work they didn't choose, a third mentally drained to do anything worthwhile, and a third unconscious. That's the structure for four decades. The math alone should make you angry enough to change something.",
+    "analogy": "You get 24 hours daily. Only 8 are yours, and you're too tired to use them.",
+    "prompt": "Calculate honestly: how many hours this week were fully yours, not spent recovering from work or sleeping?",
+    "collection_id": 520,
+    "timestamp": 173,
+    "editors_pick": false,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 10,
+      "actionability": 7,
+      "novelty": 7,
+      "conversation_value": 8,
+      "composite": 8
+    },
+    "curated_collection_ids": [
+      204
+    ],
+    "airtable_id": "recJ9vnoTGiRrRDW4",
+    "published_at": "2026-07-02T11:53:05.604Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 680,
+    "term": "Permissionless Leverage",
+    "category": "business",
+    "source": "core",
+    "hook": "Code and media work for you while you sleep. Nobody can stop you from using them.",
+    "plain": "Naval's insight: software and content are the tools behind the newly rich. You create once, it distributes infinitely. No boss approves it. No institution gates access. The power you have as one person with a laptop is unprecedented in history.",
+    "analogy": "A printing press in 1500 gave one person the reach of a thousand scribes.",
+    "prompt": "What's one idea you could turn into a piece of content or a small tool this week without asking anyone's permission?",
+    "collection_id": 520,
+    "timestamp": 1540,
+    "editors_pick": true,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 9,
+      "actionability": 8,
+      "novelty": 7,
+      "conversation_value": 9,
+      "composite": 8.3
+    },
+    "curated_collection_ids": [
+      201
+    ],
+    "airtable_id": "recKHy9XYWqV7BTHI",
+    "published_at": "2026-07-02T11:53:05.604Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 681,
+    "term": "Stress Narrows the Mind",
+    "category": "psychology",
+    "source": "core",
+    "hook": "Financial stress makes imagining alternatives biologically harder.",
+    "plain": "When you're stuck in survival mode, stress literally narrows your thinking. You can't fathom building your own thing because your brain is in a chaotic loop. The idea doesn't even cross your mind. It's not laziness, it's a stress response blocking broader vision.",
+    "analogy": "A rabbit being chased doesn't plan a garden. It just runs.",
+    "prompt": "When was the last time you had a genuinely new idea about your career, not a complaint?",
+    "collection_id": 520,
+    "timestamp": 514,
+    "editors_pick": true,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 10,
+      "actionability": 7,
+      "novelty": 8,
+      "conversation_value": 8,
+      "composite": 8.3
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "recPIhdlmapAlxEUg",
+    "published_at": "2026-07-02T11:53:05.604Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 682,
+    "term": "Spotting What's Almost Right",
+    "category": "creativity",
+    "source": "dk",
+    "hook": "Taste is seeing the one thing that's off when everyone else calls it done.",
+    "plain": "People think taste means identifying quality. Actually, it's the ability to see the chink in the armor and not being able to look away. You notice what's almost right but slightly wrong, and you know how to make it better. That obsession separates competent from excellent.",
+    "analogy": "A normal person hears music. A producer hears the one frequency that's muddying the mix.",
+    "prompt": "Look at something you use daily. What's the one thing that bothers you about it that most people ignore?",
+    "collection_id": 520,
+    "timestamp": 2217,
+    "editors_pick": true,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 9,
+      "actionability": 8,
+      "novelty": 9,
+      "conversation_value": 9,
+      "composite": 8.8
+    },
+    "curated_collection_ids": [
+      206
+    ],
+    "airtable_id": "recSYozyGzzOhrwdS",
+    "published_at": "2026-07-02T11:53:05.604Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 683,
+    "term": "Feedback Drift",
+    "category": "thinking",
+    "source": "dk",
+    "hook": "The most dangerous lifestyle is one removed from continuous trial and error.",
+    "plain": "When you're not forced to test your ideas against reality constantly, you drift. Jobs normalize challenge levels after training. You're told what to do instead of discovering it. No discovery means no growth, no fulfillment. Entrepreneurship forces error correction daily. That proximity to feedback is the difference.",
+    "analogy": "A pilot with instruments fails when the instruments break. A pilot who learned without them adapts.",
+    "prompt": "When's the last time reality proved you wrong about something and you had to adjust immediately?",
+    "collection_id": 520,
+    "timestamp": 1384,
+    "editors_pick": false,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 9,
+      "actionability": 8,
+      "novelty": 9,
+      "conversation_value": 9,
+      "composite": 8.8
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "recSwztG6QvE6Mjlp",
+    "published_at": "2026-07-02T11:53:05.604Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 684,
+    "term": "Barrier to Entry ≠ Barrier to Success",
+    "category": "business",
+    "source": "dk",
+    "hook": "Anyone can build an app now. Almost nobody can make one people actually use.",
+    "plain": "Tools like AI let anyone create products overnight, but usage stays flat even as releases spike. The hard part was never making the thing. It's knowing what's worth building, getting people to care, and iterating on feedback until it works. Most quit after the first version flops.",
+    "analogy": "A thousand new restaurants open, but only three have lines out the door.",
+    "prompt": "Name one thing you built or started that nobody used. What would you change if you rebuilt it today?",
+    "collection_id": 520,
+    "timestamp": 793,
+    "editors_pick": true,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 9,
+      "actionability": 8,
+      "novelty": 9,
+      "conversation_value": 9,
+      "composite": 8.8
+    },
+    "curated_collection_ids": [
+      201
+    ],
+    "airtable_id": "recXqUeupw32QlzPd",
+    "published_at": "2026-07-02T11:53:05.604Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 685,
+    "term": "First Iteration Will Suck",
+    "category": "creativity",
+    "source": "core",
+    "hook": "You can't improve what doesn't exist. Perfection is a procrastination costume.",
+    "plain": "Your first post, first product, first anything won't be good. Accepting that is the price of entry. Most people never post because they're waiting for the perfect version. But iteration requires a starting point. The feedback only comes after you ship something mediocre.",
+    "analogy": "You don't learn to cook by reading recipes. You burn the first five dishes.",
+    "prompt": "What's one thing you've been planning for months that you could ship in a rough version today?",
+    "collection_id": 520,
+    "timestamp": 2311,
+    "editors_pick": false,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 10,
+      "actionability": 10,
+      "novelty": 7,
+      "conversation_value": 8,
+      "composite": 8.8
+    },
+    "curated_collection_ids": [
+      206
+    ],
+    "airtable_id": "recZjbLdwC2Tv4Ioa",
+    "published_at": "2026-07-02T11:53:05.604Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 686,
+    "term": "Error Correction = Intelligence",
+    "category": "thinking",
+    "source": "core",
+    "hook": "Smart systems don't avoid failure. They course-correct based on what breaks.",
+    "plain": "An intelligent system adjusts direction according to feedback. It has a goal like a lighthouse and doesn't quit when blown off course. Stupid systems either ignore feedback or collapse when things go wrong. The successful people fail constantly and treat it as necessary data.",
+    "analogy": "A ship that sinks after one storm wasn't seaworthy. A ship that adjusts its route after storms reaches port.",
+    "prompt": "What failed in the last month that you just abandoned instead of adjusting and trying again?",
+    "collection_id": 520,
+    "timestamp": 1478,
+    "editors_pick": true,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 10,
+      "actionability": 9,
+      "novelty": 8,
+      "conversation_value": 9,
+      "composite": 9
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "recfz9Hf43rLB5vnO",
+    "published_at": "2026-07-02T11:53:05.604Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 687,
+    "term": "Environment Reconditioning",
+    "category": "psychology",
+    "source": "dk",
+    "hook": "Change your life by ripping yourself out of every familiar input overnight.",
+    "plain": "Different alarm time, different food, different people, different content. Everything. Your identity formed through years of conditioning from family, school, media. To become someone else, flood yourself with new stimuli. Most people change one thing and expect transformation.",
+    "analogy": "A plant dying in shade doesn't need encouragement. It needs a different window.",
+    "prompt": "Tomorrow, wake up 90 minutes earlier or later than usual. Plan exactly what you'll do differently before sleeping tonight.",
+    "collection_id": 520,
+    "timestamp": 1289,
+    "editors_pick": true,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 9,
+      "actionability": 10,
+      "novelty": 8,
+      "conversation_value": 8,
+      "composite": 8.8
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "rechGTIodtZfq2Fsz",
+    "published_at": "2026-07-02T11:53:05.604Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 688,
+    "term": "Life's Work vs Personal Brand",
+    "category": "identity",
+    "source": "dk",
+    "hook": "Peterson and Huberman don't have brands. They have missions with brands attached.",
+    "plain": "A personal brand is just the vessel. Your life's work is what you're actually building: the problem you solve, the vision you chase, the thing you'd do even if social media disappeared. The brand is how you reach people, not the reason you're reaching them.",
+    "analogy": "A surgeon's reputation spreads. But the reputation isn't why they operate.",
+    "prompt": "If all social platforms shut down tomorrow, what work would you still want to be doing in five years?",
+    "collection_id": 520,
+    "timestamp": 1866,
+    "editors_pick": false,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 8,
+      "novelty": 9,
+      "conversation_value": 9,
+      "composite": 8.5
+    },
+    "curated_collection_ids": [
+      203
+    ],
+    "airtable_id": "reci2Iwmf5KfcWr1i",
+    "published_at": "2026-07-02T11:53:05.604Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 689,
+    "term": "Slaves Don't Know They're Slaves",
+    "category": "psychology",
+    "source": "core",
+    "hook": "The strongest chains are the ones you can't see or feel.",
+    "plain": "Most slavery is ideology and belief systems, not physical force. Wage slavery is financial: if you can't stop showing up without catastrophe and have no skills to create alternatives, you're a slave no matter what your feelings say. Worse, if you've identified with the job, you'll defend it.",
+    "analogy": "A dog on an invisible fence believes the yard is the whole world.",
+    "prompt": "If your job ended tomorrow with no severance, how many weeks until your life collapses? Count honestly.",
+    "collection_id": 520,
+    "timestamp": 555,
+    "editors_pick": true,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 9,
+      "actionability": 7,
+      "novelty": 8,
+      "conversation_value": 10,
+      "composite": 8.5
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "recjonK8gmoHPsiIn",
+    "published_at": "2026-07-02T11:53:05.604Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 690,
+    "term": "Learning by Copying",
+    "category": "psychology",
+    "source": "core",
+    "hook": "You picked up that sarcastic laugh from your college roommate without meaning to.",
+    "plain": "People who claim they don't copy anyone are lying or delusional. You learned to walk, talk, think by imitating others. Conditioning isn't bad, it's necessary. It becomes bad only when your behavior doesn't match the life your core self wants. Authenticity without imitation is walking on four legs.",
+    "analogy": "A child learns language by mimicking sounds before creating original sentences.",
+    "prompt": "Who's one person you've imitated unconsciously in how you work, speak, or think?",
+    "collection_id": 520,
+    "timestamp": 1259,
+    "editors_pick": true,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 10,
+      "actionability": 7,
+      "novelty": 8,
+      "conversation_value": 8,
+      "composite": 8.3
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "recml5U3RrDzPar4J",
+    "published_at": "2026-07-02T11:53:05.604Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 691,
+    "term": "Behavior Change → Identity Change",
+    "category": "psychology",
+    "source": "core",
+    "hook": "Diets fail because you're still the person who doesn't value health.",
+    "plain": "Losing 30 pounds means nothing if you aren't someone who enjoys being healthy. Without changing who you are, the old behaviors return. You feel like you're running uphill because you adopted new actions without adopting the values that make those actions natural.",
+    "analogy": "Wearing a suit to work doesn't make you professional. Becoming someone who shows up prepared does.",
+    "prompt": "What habit have you tried and failed at three times? What values would need to change to make it stick?",
+    "collection_id": 520,
+    "timestamp": 1158,
+    "editors_pick": true,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 10,
+      "actionability": 9,
+      "novelty": 7,
+      "conversation_value": 9,
+      "composite": 8.8
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "recoEaRZ5FAvMdQhH",
+    "published_at": "2026-07-02T11:53:05.604Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 692,
+    "term": "Industrial Standards Conditioning",
+    "category": "society",
+    "source": "dk",
+    "hook": "Become a specialist. Study one domain. Get a high-paying job your parents can brag about.",
+    "plain": "Most people were raised with these standards: narrow focus, high credential, make parents proud. You stayed blind to the system that paid you. You learned one skill but never understood how to build your own thing. All you know is filling a role in someone else's vision.",
+    "analogy": "A factory worker masters one button on the assembly line, never learns what the machine builds.",
+    "prompt": "What skill did you learn for a job that you'd never choose to learn if starting from scratch today?",
+    "collection_id": 520,
+    "timestamp": 454,
+    "editors_pick": false,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 9,
+      "actionability": 7,
+      "novelty": 7,
+      "conversation_value": 8,
+      "composite": 7.8
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recoXizomiel5x19E",
+    "published_at": "2026-07-02T11:53:05.604Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 693,
+    "term": "Becoming Unemployable",
+    "category": "identity",
+    "source": "dk",
+    "hook": "The first dollar you earn yourself makes accepting a job feel impossible afterward.",
+    "plain": "Dan's first $300 client wasn't life-changing money. It was proof he could repeat the process. That checkpoint formed a conviction: never accept depending on someone else for survival again. The money was just the milestone that made the identity shift real.",
+    "analogy": "Tasting freedom for one day makes prison unbearable even if the cell is comfortable.",
+    "prompt": "What's the smallest amount of money you could earn this month entirely on your own, no employer involved?",
+    "collection_id": 520,
+    "timestamp": 1039,
+    "editors_pick": true,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 9,
+      "novelty": 8,
+      "conversation_value": 8,
+      "composite": 8.3
+    },
+    "curated_collection_ids": [
+      203
+    ],
+    "airtable_id": "recqKt31oL2vxeWb2",
+    "published_at": "2026-07-02T11:53:05.604Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 694,
+    "term": "The Five Ingredients",
+    "category": "thinking",
+    "source": "dk",
+    "hook": "Future-proof work requires five things most jobs never teach you.",
+    "plain": "1) Agency: doing things without permission. \n2) Taste: knowing what's worth making. \n3) Persuasion: getting people to care. \n4) Persistence: understanding failure doesn't equal death. \n5) Iteration: error-correcting toward a goal based on feedback. \nCombined, they become the ability to figure things out and know what needs doing.",
+    "analogy": "Five spices make the dish. Miss one and it tastes like something's wrong even if you can't name it.",
+    "prompt": "Which of the five do you actually practice weekly: agency, taste, persuasion, persistence, or iteration?",
+    "collection_id": 520,
+    "timestamp": 663,
+    "editors_pick": true,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 9,
+      "actionability": 9,
+      "novelty": 8,
+      "conversation_value": 9,
+      "composite": 8.8
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "recsH1dMN4zMFVYFf",
+    "published_at": "2026-07-02T11:53:05.604Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 695,
+    "term": "Distribution Over Creation",
+    "category": "business",
+    "source": "dk",
+    "hook": "Building things is easy now. Getting people to care is still nearly impossible.",
+    "plain": "AI lets anyone create software or content. The bottleneck shifted to distribution: getting your work in front of people and making them care enough to use or buy it. Without that skill, your product sits unused no matter how good it is.",
+    "analogy": "A thousand musicians upload songs daily. Three get heard because they know how to build an audience first.",
+    "prompt": "Think of something you made that nobody saw. What would you do differently to get it in front of 100 people?",
+    "collection_id": 520,
+    "timestamp": 1753,
+    "editors_pick": false,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 9,
+      "actionability": 9,
+      "novelty": 8,
+      "conversation_value": 9,
+      "composite": 8.8
+    },
+    "curated_collection_ids": [
+      201
+    ],
+    "airtable_id": "recvQr5yK2atBIkwn",
+    "published_at": "2026-07-02T11:53:05.604Z",
+    "extraction_prompt_version": null
   }
 ]
