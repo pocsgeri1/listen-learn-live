@@ -148,6 +148,7 @@ export default async function handler(req, res) {
     const prompt = readField(raw, 'prompt', 'Prompt');
     const collection_id = readIntOrNull(raw, 'collection_id', 'Collection ID');
     const timestamp = readTimestampOrNull(raw, 'timestamp', 'Timestamp');
+    const extraction_prompt_version = readField(raw, 'extraction_prompt_version', 'Extraction Prompt Version') || null;
     // Read editors_pick directly — readField above only handles strings/numbers
     // and would silently coerce boolean true → '' (= false).
     const editorsPickRaw = raw['editors_pick'] ?? raw["Editor's Pick"] ?? raw['Editors Pick'];
@@ -228,6 +229,7 @@ export default async function handler(req, res) {
       related_ids,
       scores: { universality, actionability, novelty, conversation_value, composite },
       curated_collection_ids: computeCuratedCollectionIds(category, composite),
+      extraction_prompt_version,
     });
   }
 
@@ -347,6 +349,7 @@ export default async function handler(req, res) {
         curated_collection_ids: n.curated_collection_ids,
         airtable_id: n.airtable_id,
         published_at: publishedAt,
+        extraction_prompt_version: n.extraction_prompt_version,
       };
 
       toAppend.push(newConcept);

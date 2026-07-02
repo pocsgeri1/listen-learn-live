@@ -6,6 +6,20 @@
 
 ---
 
+## v2.17 — 2026-07-02 — Extraction prompt reconciliation + quality-drift guardrails
+
+### What shipped
+- **`concept-rewrite-prompt.md` rules ported into the live extraction prompts.** Cross-field image check and full-field anti-slop scope (was hook/plain only) added to the self-check in `extract.html`'s `EXTRACTION_PROMPT` and `REGEN_SYSTEM_PROMPT`, and in `api/extract-concepts.js`. Two new TERM rules added everywhere (prefer mechanism over category label; sparing scare-quotes on a single loaded word).
+- **EPISODE INTEL section moved from mid-prompt to just before the self-check** in `extract.html`'s `EXTRACTION_PROMPT` — it was sitting between the concept field rules and the scoring rubric, diluting the concept rules right when the model needed them most.
+- **`curated_collection_ids` LLM instruction removed from `api/extract-concepts.js`.** It was still telling the model to hand-pick from a 101-116 list; that's computed deterministically by the publish pipeline now, same as `extract.html` already does.
+- **Quality-drift guardrails, in response to a direct risk review:** self-check reframed from "run before returning output" to "apply while drafting each concept" (continuous, not end-of-batch) in both `extract.html` and `extract-concepts.js`; added an explicit "quality over quantity" line (40 concepts is a ceiling, not a target); enabled extended thinking (`budget_tokens: 12000`, `max_tokens` 20000→32000) on `extract.html`'s main extraction call so the model has real scratch space to self-check 20-40 concepts + intel before committing final JSON — confirmed safe since response parsing already isolates the `text` content block.
+- **`EXTRACTION_PROMPT_VERSION` bumped 2.1 → 2.2** with an inline changelog comment.
+
+### Notes
+- `upload.html` and `SHORT_EXTRACTION_PROMPT` deliberately left untouched (not currently in use).
+- `api/extract-concepts.js`'s long-term role is still undecided (see `pending-decisions.md`, Make.com vs GitHub Actions) — got the same consistency fixes but no architectural change.
+- vocab_vault: stores 20-25 entries per episode, UI still previews 5-7 by default. The 15 episodes with intel generated before the July expansion still need a rerun to backfill the larger list (see `architecture.md`).
+
 ## v2.16 — 2026-07-01 — Vocab Vault expansion + expand UI, mobile search zoom fix, Corner rate-bar bug
 
 ### What shipped

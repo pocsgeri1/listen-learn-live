@@ -265,7 +265,15 @@ Stored in `episode_meta.json` at repo root. One entry per episode-type collectio
 - `tension` — `"[Force A] vs. [Force B]"`, max 15 words
 - `verdict_listen` — array of 2–3 "you've ever..." / "you work in..." fragments
 - `verdict_skip` — array of 1–2 honest skip reasons
-- `vocab_vault` — array of `{ word, definition, timestamp_seconds }` (5–7 entries)
+- `vocab_vault` — array of `{ word, definition, timestamp_seconds }`. Extraction
+  now stores 20–25 entries per episode (extended from 5–7 in a prior session,
+  July 2026), but the product UI still only *previews* the 5–7 best by
+  default, with an option for the user to expand and see the rest. Storing
+  more than we preview means we don't have to re-run extraction later if the
+  preview count changes. **Backfill needed:** the 15 episodes that already
+  had intel generated before this change only have 5–7 vocab_vault entries
+  stored — rerun `tools/generate-episode-intel.js` (or the extract.html intel
+  panel) on those 15 to backfill the full 20–25 list.
 
 **Summary styles (v2.12):**
 - **A — Opinionated Friend:** guest personality or debate drives. P3 = exactly 3 sentences.
