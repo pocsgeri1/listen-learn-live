@@ -651,7 +651,7 @@
     },
     "501": {
       "collection_id": 501,
-      "summary_style": "C",
+      "summary_style": "A",
       "summary": "The historical contract between men and women expired around the time women stopped needing male income to survive. Both sides are still arguing about the terms, which is why none of the arguments go anywhere.\n\nCostello's sharpest observation is about simp shaming. Men evolved to compete for female attention by providing resources and protection. Women say they want a man who does exactly that. Men now shame each other for offering it too eagerly, because in a world where provision is optional, doing so signals low status rather than high investment. The signal evolved to attract. The same signal now repels. Neither side designed this.\n\nYou can call it a culture war if you want. The market doesn't care what you call it.",
       "sharpest_line": "When self-actualization is the highest goal, relationships become obstacles instead of where meaning happens.",
       "tension": "Female economic independence vs. male identity built on providing resources",
@@ -709,8 +709,7 @@
         "power": 10,
         "science": 3,
         "thinking": 3
-      },
-      "summary_style": "A"
+      }
     },
     "502": {
       "collection_id": 502,
@@ -1333,6 +1332,150 @@
         "creativity": 3
       },
       "summary_style": "B"
+    },
+    "520": {
+      "collection_id": 520,
+      "dna": {},
+      "summary_style": "B",
+      "summary": "Most people will use AI to build faster and still wonder why nobody cares. Dan Koe's point is that jobs trained you to execute someone else's ideas, and AI just gave you a better tool for doing exactly that.\n\nKoe shows one graph. App releases spiked after AI tools arrived. Usage did not. More things exist now, and fewer of them get attention. His argument is that jobs removed the one skill that determines which side of that gap you land on: knowing what's worth making before you make it. That was always the ceiling. AI just lowered the floor.\n\nYou already know what you'd build if you didn't need permission. The question is whether you'll start before someone else does.",
+      "sharpest_line": "The first dollar you earn yourself makes accepting a job feel impossible afterward.",
+      "tension": "Dependence on others vs. owning your survival",
+      "verdict_listen": [
+        "you've ever felt exhausted despite doing nothing difficult all day at work",
+        "you work in a role you're good at but don't care about and wonder if there's more",
+        "you're the kind of person who sees others building online and thinks it's possible but don't know where to start"
+      ],
+      "verdict_skip": [
+        "you genuinely love your job and aren't interested in building anything independently",
+        "abstract talk about identity change and reconditioning feels like vague self-help to you"
+      ],
+      "vocab_vault": [
+        {
+          "word": "wage slavery",
+          "definition": "financial dependence on an employer where stopping work means catastrophe",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "high agency",
+          "definition": "the ability to initiate action without needing permission or guidance",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "permissionless leverage",
+          "definition": "tools like code or media that let you create value without gatekeepers",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "flow state",
+          "definition": "deep focus from working at the edge of your abilities, not too hard or easy",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "iteration",
+          "definition": "the process of improving something through repeated cycles of testing and feedback",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "error correction",
+          "definition": "adjusting course based on feedback when something doesn't work",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "contrarian spine",
+          "definition": "the core belief you hold that mainstream advice gets wrong",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "vibe coding",
+          "definition": "building software by describing what you want to AI instead of writing code traditionally",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "distribution",
+          "definition": "the ability to get your work in front of people who care about it",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "reconditioning",
+          "definition": "deliberately changing your environment and inputs to reshape your identity",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "trial and error",
+          "definition": "learning by testing ideas in reality and adjusting based on what happens",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "taste",
+          "definition": "the ability to recognize what's worth making or what's slightly wrong",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "raw material",
+          "definition": "the experiences and knowledge you already have that form the basis of valuable work",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "excavate",
+          "definition": "to dig out and uncover something buried or hidden, like forgotten experiences",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "life's work",
+          "definition": "the meaningful problem you solve or mission you pursue, separate from the brand",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "checkpoint",
+          "definition": "a milestone that proves a process is repeatable, like earning your first dollar",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "unemployable",
+          "definition": "unable to accept working for someone else after proving you can survive independently",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "stress loop",
+          "definition": "a cycle of financial pressure that narrows thinking and blocks new solutions",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "plateau",
+          "definition": "when challenge or growth levels off and stops increasing",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "pyramid scheme",
+          "definition": "a hierarchical structure where most people must stay at the bottom for it to function",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "spaghetti code",
+          "definition": "messy, hard-to-read code that still works but isn't elegant or maintainable",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "barrier to entry",
+          "definition": "how hard it is to start doing something, like building an app",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "barrier to success",
+          "definition": "how hard it is to make something people actually use and pay for",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "skill cap",
+          "definition": "the highest level of ability possible in a skill, the ceiling of mastery",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "imitation",
+          "definition": "learning by copying others, necessary for all human development",
+          "timestamp_seconds": null
+        }
+      ]
     }
   }
 }
