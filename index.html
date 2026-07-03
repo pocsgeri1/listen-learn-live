@@ -1618,7 +1618,10 @@
     inset: 0;
     background: rgba(0,0,0,0.55);
     z-index: 1100;
-    backdrop-filter: blur(2px);
+    /* v2.24: was blur(2px) — dropped, the solid 0.55 alpha overlay already
+       obscures content behind it; the extra GPU compositing pass wasn't
+       buying a noticeable visual difference. */
+    backdrop-filter: blur(0.5px);
   }
   .ep-intel-sheet-backdrop.open { display: block; }
   .ep-intel-sheet {
@@ -2098,7 +2101,12 @@
   .ep-drawer-all-cards-wrap .concept-card .card-inner {
     position: relative; width: 100%; height: 100%;
     transform-style: preserve-3d;
-    transition: transform 0.62s cubic-bezier(0.4,0.2,0.2,1);
+    /* v2.24: was 0.62s — noticeably slow/laggy per feedback. 0.4s + a
+       snappier curve keeps the 3D flip feel but tightens it up. transform
+       is already the only property animating here (cheap, GPU-composited)
+       so the fix is duration/easing only, not the mechanism. */
+    transition: transform 0.4s cubic-bezier(0.3,0.1,0.2,1);
+    will-change: transform;
   }
   .ep-drawer-all-cards-wrap .concept-card:not(.open):hover .card-inner { transform: translateY(-4px); }
   .ep-drawer-all-cards-wrap .concept-card.open .card-inner { transform: rotateY(180deg); }
@@ -2116,7 +2124,12 @@
     box-shadow: 0 4px 12px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.04);
     transition: border-color 0.2s, box-shadow 0.2s;
   }
-  .ep-drawer-all-cards-wrap .concept-card:hover .card-front {
+  /* v2.24: was .concept-card:hover .card-front — fired during the flip too,
+     so a box-shadow repaint (expensive) ran at the same time as the
+     transform animation (cheap), compounding the jank. :not(.open) scopes
+     the hover shadow to the resting/front-facing state only; it's already
+     hidden via backface-visibility once flipped, so no visual change. */
+  .ep-drawer-all-cards-wrap .concept-card:not(.open):hover .card-front {
     border-color: rgba(255,255,255,0.13);
     box-shadow: 0 6px 16px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.06);
   }
@@ -10068,13 +10081,23 @@ function _renderIntelRow(pillsEl, collectionId, liveDna) {
       buildPopoverContent(popover);
       pillsEl.appendChild(popover);
 
+      // v2.24: popover width/height used to be read via offsetWidth/offsetHeight
+      // inside showPopover() on every single hover — a forced synchronous
+      // layout reflow each time, added in v2.20's vertical-space-aware flip
+      // fix. Content is built once above and never changes afterward, so its
+      // size doesn't either — measure once here instead and reuse on every
+      // hover. Cuts hover latency back to pre-v2.20 levels with identical
+      // positioning behavior.
+      const _popW = popover.offsetWidth || 300;
+      const _popH = popover.offsetHeight || 0;
+
       let _hideTimer = null;
       function showPopover() {
         pillsEl.querySelectorAll('.ep-intel-popover.visible').forEach(p => { if (p !== popover) p.classList.remove('visible'); });
         clearTimeout(_hideTimer);
         const pillRect = pill.getBoundingClientRect();
         // Clamp horizontal within viewport
-        const popW = popover.offsetWidth || 300;
+        const popW = _popW;
         let left = pillRect.left;
         if (left + popW > window.innerWidth - 8) left = window.innerWidth - popW - 8;
         if (left < 8) left = 8;
@@ -10085,7 +10108,7 @@ function _renderIntelRow(pillsEl, collectionId, liveDna) {
         // open below the pill instead — or clamp to the viewport top if
         // there isn't enough room on either side. No-op for short content
         // (Line/Tension/Vocab preview), which always has room above.
-        const popH = popover.offsetHeight || 0;
+        const popH = _popH;
         const spaceAbove = pillRect.top - 10;
         const spaceBelow = window.innerHeight - pillRect.bottom - 18;
         if (popH > spaceAbove && spaceBelow >= popH) {
@@ -11427,6 +11450,7 @@ function _renderDrawerContent(col, collectionId) {
   const grid = document.getElementById('epDrawerGrid');
   if (!epConcepts.length) {
     grid.innerHTML = _emptyStateHtml('empty', 'No concepts yet in this episode');
+    _finishEpDrawerRender(null, null);
   } else {
     // Group by category, preserve order
     const catGroups = {};
@@ -11437,60 +11461,94 @@ function _renderDrawerContent(col, collectionId) {
     // Sort category groups: most concepts first
     const sortedCatKeys = Object.keys(catGroups).sort((a, b) => catGroups[b].length - catGroups[a].length);
 
-    grid.innerHTML = sortedCatKeys.map(catKey => {
-      const catInfo = CATEGORIES.find(x => x.id === catKey) || { name: catKey, color: '#e8d5a3' };
-      const catColor = CAT_COLOR[catKey] || '#e8d5a3';
-      const cards = catGroups[catKey].map(c => {
-        const isMastered = mastered.has(c.id);
-        return `
-        <div class="concept-card${isMastered?' mastered':''}${c.editors_pick===true?' editors-pick':''}" id="epcc${c.id}" style="--cat-color:${catColor}" onclick="toggleEpCard(${c.id})">
-          <div class="card-inner">
-            <div class="card-front">
-              <div class="card-meta">
-                <span class="card-num">#${String(c.id).padStart(3,'0')}</span>
-                ${c.editors_pick===true ? '<span class="pick-badge"><span class="pick-star">★</span>PICK</span>' : ''}
-                
-              </div>
-              <div class="card-term">${c.term}</div>
-              <div class="card-hook">${c.hook}</div>
-              <div class="card-flip-hint"><div class="card-flip-hint-dot${!openedToday.has(c.id) ? ' pulse' : ''}"></div>tap to explore</div>
-            </div>
-            <div class="card-back">
-              <div class="card-actions card-actions-top">
-                <button class="btn-icon btn-share" onclick="event.stopPropagation();shareCard(event,${c.id})" title="Share">🔗</button>
-                <button class="btn-icon btn-master${mastered.has(c.id)?' mastered-active':''}" onclick="event.stopPropagation();toggleMaster(event,${c.id})" id="btnMasterEp${c.id}" title="Save to Mastered">★</button>
-                <button class="btn-icon btn-chat${_csIsSaved(c.id)?' saved':''}" onclick="event.stopPropagation();toggleChatSave(${c.id})" id="btnChatEp${c.id}" title="Save to Conversations">💬</button>
-                ${(() => {
-                  if (typeof c.timestamp !== 'number' || !col || !col.episode_url) return '';
-                  const url = buildTimestampedUrl(col.episode_url, c.timestamp);
-                  if (!url) return '';
-                  return `<a class="btn-icon btn-listen" href="${url}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="Listen">🎧</a>`;
-                })()}
-              </div>
-              <div class="card-actions-divider"></div>
-              <div class="back-section-label">What it means</div>
-              <div class="back-text">${c.plain}</div>
-              <div class="back-section-label">Analogy</div>
-              <div class="back-analogy">${c.analogy}</div>
-              <div class="back-section-label">Reflect &amp; use it</div>
-              <div class="back-prompt">
-                <div class="prompt-icon">💬</div>
-                <p>${c.prompt}</p>
-              </div>
-            </div>
+    // v2.24: was one synchronous grid.innerHTML = [...every column, every
+    // card...] call — on episodes with many concepts this built the whole
+    // card grid (front+back markup for every card, in every category
+    // column) in a single blocking pass, the main contributor to the
+    // measured 288-350ms INP on drawer open. Same final markup, same DOM —
+    // now built one category column per animation frame instead of all at
+    // once, so the browser can paint/respond between columns. Filter-row
+    // build and the parallax/sort-row/scan-reset tail steps (previously
+    // synchronous right after the innerHTML assignment) now run once via
+    // _finishEpDrawerRender after the last column, identical to before.
+    grid.innerHTML = '';
+    let _colIdx = 0;
+    function renderNextEpColumn() {
+      if (_colIdx >= sortedCatKeys.length) {
+        _finishEpDrawerRender(sortedCatKeys, catGroups);
+        return;
+      }
+      grid.insertAdjacentHTML('beforeend', _buildEpColumnHtml(sortedCatKeys[_colIdx], catGroups[sortedCatKeys[_colIdx]], col));
+      _colIdx++;
+      requestAnimationFrame(renderNextEpColumn);
+    }
+    requestAnimationFrame(renderNextEpColumn);
+  }
+}
+
+// v2.24 — extracted from _renderDrawerContent so a single category column's
+// markup can be built and inserted one frame at a time (see chunking note
+// above). Same exact card template as before, unchanged.
+function _buildEpColumnHtml(catKey, catConcepts, col) {
+  const catInfo = CATEGORIES.find(x => x.id === catKey) || { name: catKey, color: '#e8d5a3' };
+  const catColor = CAT_COLOR[catKey] || '#e8d5a3';
+  const cards = catConcepts.map(c => {
+    const isMastered = mastered.has(c.id);
+    return `
+    <div class="concept-card${isMastered?' mastered':''}${c.editors_pick===true?' editors-pick':''}" id="epcc${c.id}" style="--cat-color:${catColor}" onclick="toggleEpCard(${c.id})">
+      <div class="card-inner">
+        <div class="card-front">
+          <div class="card-meta">
+            <span class="card-num">#${String(c.id).padStart(3,'0')}</span>
+            ${c.editors_pick===true ? '<span class="pick-badge"><span class="pick-star">★</span>PICK</span>' : ''}
+
           </div>
-        </div>`;
-      }).join('');
-
-      return `<div class="ep-cat-column" data-cat="${catKey}">
-        <div class="ep-cat-column-header" style="--col-color:${catColor}">
-          <span class="ep-cat-column-label">${catInfo.name}</span>
-          <span class="ep-cat-column-count">${catGroups[catKey].length}</span>
+          <div class="card-term">${c.term}</div>
+          <div class="card-hook">${c.hook}</div>
+          <div class="card-flip-hint"><div class="card-flip-hint-dot${!openedToday.has(c.id) ? ' pulse' : ''}"></div>tap to explore</div>
         </div>
-        ${cards}
-      </div>`;
-    }).join('');
+        <div class="card-back">
+          <div class="card-actions card-actions-top">
+            <button class="btn-icon btn-share" onclick="event.stopPropagation();shareCard(event,${c.id})" title="Share">🔗</button>
+            <button class="btn-icon btn-master${mastered.has(c.id)?' mastered-active':''}" onclick="event.stopPropagation();toggleMaster(event,${c.id})" id="btnMasterEp${c.id}" title="Save to Mastered">★</button>
+            <button class="btn-icon btn-chat${_csIsSaved(c.id)?' saved':''}" onclick="event.stopPropagation();toggleChatSave(${c.id})" id="btnChatEp${c.id}" title="Save to Conversations">💬</button>
+            ${(() => {
+              if (typeof c.timestamp !== 'number' || !col || !col.episode_url) return '';
+              const url = buildTimestampedUrl(col.episode_url, c.timestamp);
+              if (!url) return '';
+              return `<a class="btn-icon btn-listen" href="${url}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="Listen">🎧</a>`;
+            })()}
+          </div>
+          <div class="card-actions-divider"></div>
+          <div class="back-section-label">What it means</div>
+          <div class="back-text">${c.plain}</div>
+          <div class="back-section-label">Analogy</div>
+          <div class="back-analogy">${c.analogy}</div>
+          <div class="back-section-label">Reflect &amp; use it</div>
+          <div class="back-prompt">
+            <div class="prompt-icon">💬</div>
+            <p>${c.prompt}</p>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
 
+  return `<div class="ep-cat-column" data-cat="${catKey}">
+    <div class="ep-cat-column-header" style="--col-color:${catColor}">
+      <span class="ep-cat-column-label">${catInfo.name}</span>
+      <span class="ep-cat-column-count">${catConcepts.length}</span>
+    </div>
+    ${cards}
+  </div>`;
+}
+
+// v2.24 — extracted tail of _renderDrawerContent (filter-row build + parallax
+// init + sort-row show + scan reset). Runs once after all columns are in the
+// DOM (chunked case) or immediately for the empty-state case, matching the
+// exact original execution order and conditions.
+function _finishEpDrawerRender(sortedCatKeys, catGroups) {
+  if (sortedCatKeys) {
     const filterRow = document.getElementById('epDrawerCatFilter');
     if (sortedCatKeys.length > 1) {
       filterRow.style.display = '';
@@ -14791,11 +14849,16 @@ function _cornerStartConstellation() {
   // Spread across FULL width, occupying lower 60% of screen
   // Hub is centered horizontally, 68% down
   var cx = W / 2;
-  var topBound = H * 0.36; // nothing above here (keeps clear of text)
-  var cy = H * 0.64;       // hub well below search bar
+  // v2.24: topBound 0.36→0.46, cy 0.64→0.74 — was overflowing into the
+  // placeholder text / search bar / submit button above it per feedback.
+  // Shifted the whole constellation further down the page.
+  var topBound = H * 0.46; // nothing above here (keeps clear of text)
+  var cy = H * 0.74;       // hub well below search bar
 
   // Rings scale to fill the screen width
-  var maxR = Math.min(W * 0.44, H * 0.52, 380);
+  // v2.24: H-based cap tightened 0.52→0.38 (max radius shrunk 380→340) to
+  // match the smaller vertical band now available below the raised topBound.
+  var maxR = Math.min(W * 0.42, H * 0.38, 340);
   var r1r = maxR * 0.28;
   var r2r = maxR * 0.56;
   var r3r = maxR * 0.82;
@@ -14832,6 +14895,13 @@ function _cornerStartConstellation() {
   var r4 = makeRing(22, r4r, 1.3, 0.8);
 
   var start = performance.now();
+  // v2.24: this canvas loop was running uncapped (as fast as the display
+  // refresh — 120fps on ProMotion Macs), for a purely decorative background
+  // animation. Throttled to ~30fps; the drift is slow/ambient so the
+  // difference isn't visually perceptible, but it roughly halves-to-quarters
+  // the GPU/CPU work this loop costs every second.
+  var _lastDrawTs = 0;
+  var FRAME_INTERVAL = 1000 / 30;
 
   function drawEdge(x1, y1, x2, y2, alpha, lw) {
     ctx2d.beginPath();
@@ -14844,6 +14914,11 @@ function _cornerStartConstellation() {
 
   function draw(ts) {
     if (!_cornerCanvas) return;
+    if (ts - _lastDrawTs < FRAME_INTERVAL) {
+      _cornerCanvasRAF = requestAnimationFrame(draw);
+      return;
+    }
+    _lastDrawTs = ts;
     var t = (ts - start) / 1000;
     ctx2d.clearRect(0, 0, W, H);
 
@@ -20128,7 +20203,15 @@ function playStreakMilestoneSFX() {
   background: rgba(90,191,175,0.28) !important;
   border-color: #5abfaf !important;
 }
-/* v1.71 — epic standalone pill fades in on nav hover */
+/* v1.71 — epic standalone pill fades in on nav hover.
+   v2.24: was animating max-width 0→160px + padding, which pushed
+   #themeToggle sideways on every nav hover (measured CLS score 0.2483,
+   the single largest layout-shift contributor on the site). Now the
+   button keeps its full padding/width at all times (space is always
+   reserved) and only opacity + a small scale animate — both compositor-
+   only properties, so nothing else in the nav ever moves. Tradeoff:
+   a small fixed gap sits between nav-island and the theme toggle even
+   when this button is invisible. */
 .nav-epic-standalone {
   font-family: 'DM Mono', monospace;
   font-size: 0.68rem;
@@ -20144,11 +20227,8 @@ function playStreakMilestoneSFX() {
   white-space: nowrap;
   opacity: 0;
   pointer-events: none;
-  max-width: 0;
-  overflow: hidden;
-  padding-left: 0;
-  padding-right: 0;
-  transition: opacity 0.2s, max-width 0.25s, padding 0.25s, border-color 0.2s;
+  transform: scale(0.9);
+  transition: opacity 0.2s ease, transform 0.2s ease, border-color 0.2s;
 }
 /* Hide on mobile — lives in hamburger menu instead — v1.73b */
 @media (max-width: 768px) {
@@ -20157,9 +20237,7 @@ function playStreakMilestoneSFX() {
 #mainNav:hover .nav-epic-standalone {
   opacity: 1;
   pointer-events: all;
-  max-width: 160px;
-  padding-left: 14px;
-  padding-right: 14px;
+  transform: scale(1);
 }
 .nav-epic-standalone:hover { border-color: rgba(232,213,163,0.6); }
 /* v1.71 — hover emojis for Spark / Browse / Stash — span-based for alignment */
@@ -21707,8 +21785,12 @@ function playStreakMilestoneSFX() {
   justify-content: center;
   padding: 20px 16px;
   background: rgba(13,13,13,0.55);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  /* v2.24: was blur(6px) — backdrop-filter is one of the more expensive
+     compositing operations, especially on Retina displays. 3px reads almost
+     identically (this backdrop sits behind a solid card, not text) at
+     meaningfully lower GPU cost. */
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
   opacity: 0;
   transition: opacity 0.22s ease;
   perspective: 1000px; /* for the card's flip-reveal entrance */

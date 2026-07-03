@@ -30,6 +30,8 @@ everything else points to it instead of copying it.
   auto-injected every session in this Project. Never needs pasting.
 - **How Claude should work this session** (protocol, risk-gating, commit
   workflow, git lock fixes) → this file. Single copy.
+- **Default performance rules for new UI/animation work** → Step 2a in this
+  file. Single copy — don't duplicate into build-journal.md or elsewhere.
 - **Lessons from past sessions** (bugs, gotchas, non-obvious fixes) →
   build-journal.md's `## Entries` section only. Its "Standing Rules" block
   is now just a two-line pointer back here — don't re-expand it.
@@ -111,6 +113,40 @@ read — don't read both branches' docs "just in case."
   approach and flag it rather than asking.
 - Flag design/architecture risk before touching anything, not after.
 - Match existing branding/patterns exactly unless told otherwise.
+- Any new animation, hover effect, or bulk-render feature must default to
+  the Performance Standing Rules below — don't wait for a future audit to
+  catch it.
+
+## Step 2a — performance standing rules (build sessions, every new feature)
+
+Added v2.24, after a full site performance audit (CLS ~0.42, 288-350ms
+drawer-open INP, laggy card-flips, laggy pill hovers) traced every issue
+back to variations of the same handful of patterns. Default to these for
+any new UI work unless there's a specific, stated reason not to:
+
+- Animate `transform`/`opacity` only. Never animate `max-width`, `width`,
+  `height`, `padding`, or `margin` — even a small change pushes sibling
+  elements and shows up as CLS.
+- Reserve space instead of animating it in. If something needs to
+  appear/disappear, keep its box present at all times and fade
+  opacity/scale — don't grow it from 0.
+- Never read layout (`offsetWidth`, `offsetHeight`,
+  `getBoundingClientRect`) inside a hot path — hover handlers, scroll
+  handlers, anything that fires repeatedly. Measure once when the element
+  is built, cache it, reuse on every subsequent trigger.
+- Chunk large synchronous DOM builds. Anything rendering more than about
+  one screen's worth of cards/rows in a single `innerHTML` assignment
+  should build incrementally — one group per `requestAnimationFrame` —
+  instead of blocking in one pass.
+- Use `backdrop-filter` sparingly, and keep the blur radius small (≤3px)
+  when used. It's one of the more expensive compositing operations,
+  worse on Retina/high-DPI displays.
+- Cap any continuous animation loop (canvas `requestAnimationFrame`,
+  decorative background effects) to ~30fps via timestamp throttling —
+  don't let ambient/decorative loops run at uncapped display refresh
+  rate.
+- Card-flip/expand-style transitions: 0.3-0.45s with a snappy easing
+  curve. Slower reads as laggy even when it's technically smooth.
 
 ## Step 3 — execute
 

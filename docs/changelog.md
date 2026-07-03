@@ -6,6 +6,27 @@
 
 ---
 
+## v2.24 — 2026-07-03 — Performance overhaul: CLS/INP fixes, card-flip + pill-hover latency, backdrop-filter/constellation tuning
+
+### What shipped
+- **`#themeToggle` nav CLS fix (was the single largest layout-shift contributor, CLS 0.2483).** `.nav-epic-standalone` was animating `max-width: 0→160px` + `padding` on nav hover, pushing the theme toggle sideways every time. Now the button keeps full padding/width always reserved and only animates `opacity` + `transform: scale()` (compositor-only) — nothing else in the nav moves. Tradeoff: a small fixed gap sits between nav-island and the theme toggle even when this button is invisible (accepted).
+- **Episode drawer render chunked to fix 288-350ms INP on drawer open.** `_renderDrawerContent` built the entire card grid (every card, every category column) in one synchronous `innerHTML` pass. Extracted `_buildEpColumnHtml()` + `_finishEpDrawerRender()` and now render one category column per `requestAnimationFrame` instead of all at once. Identical final markup/behavior — filter-row build, parallax init, sort-row show, and scan reset now run once after the last column via the shared completion helper.
+- **Intel-pill hover popovers were re-measuring their own size (forced layout reflow) on every single hover**, a regression from v2.20's vertical-space-aware flip fix. Now measured once at popover build time (`_popW`/`_popH` cached), reused on every hover — restores pre-v2.20 hover latency with identical flip-positioning behavior.
+- **Card-flip animation sped up and de-janked.** Duration 0.62s → 0.4s with a snappier easing curve. Also decoupled the `.card-front` hover box-shadow (expensive repaint) from firing during the flip itself — hover shadow now scoped to `:not(.open)` only, since the front is already hidden via `backface-visibility` once flipped.
+- **Reduced `backdrop-filter` blur cost** on two overlays: `.sp-mobile-preview-backdrop` blur(6px)→blur(3px), `.ep-intel-sheet-backdrop` blur(2px)→blur(0.5px) (already backed by a solid 0.55-alpha overlay, so the extra blur wasn't buying much).
+- **Corner constellation (canvas background animation): capped to ~30fps** (was uncapped, running at full display refresh — 120fps on ProMotion Macs) via timestamp throttling, and **repositioned lower** (`topBound` 0.36→0.46, `cy` 0.64→0.74, `maxR` cap 380→340) — was overflowing into the placeholder text / search bar / submit button above it.
+- **New standing rule set added**: `docs/cowork-default-instructions.md` Step 2a — default performance rules (transform/opacity-only animation, no forced-reflow reads in hot paths, chunk large DOM builds, minimal backdrop-filter, capped rAF loops, 0.3-0.45s flip transitions) for all future build sessions.
+
+### Investigated, confirmed NOT an issue (light scan)
+- **Podcast thumbnails do not render invisibly during drawer open** — the episode drawer's concept-card template has zero `<img>` tags. Episode hero background is a pure CSS radial-gradient (deterministic, seed-based, zero image requests). Theme drawer hero background does use an image but is already gated behind a preload (`new Image()`) before being applied — not a hidden cost.
+- `_renderIntelRow` runs inside an async `.then()`, non-blocking relative to the main card-grid render — ruled out as an INP contributor.
+
+### Not done this session (flagged for later, out of current scope)
+- `_renderThemeDrawerContent` likely has the same synchronous-render pattern as the episode drawer and would benefit from the same chunking treatment — not touched this round to keep the diff contained.
+- `.theme-card-img` (homepage theme grid) has no `loading="lazy"` — minor, free-ish win, not applied.
+- Nav-island hover/emoji animations, nav height/scroll-shrink behavior, and `.nav-pill` were explicitly left untouched per Gergely's request.
+- `setInterval` usage (Phase 5 item #10) explicitly left alone per Gergely's request.
+
 ## v2.23 — 2026-07-03 — OG Map nav fix, extract.html editorial tooling (counters/history/sticky rules), Spark feedback-row bug, Corner mobile fixes
 
 ### What shipped
