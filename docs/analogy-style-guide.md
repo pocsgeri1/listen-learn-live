@@ -16,12 +16,12 @@ The analogy is the only field allowed to use metaphor and image. If you find you
 ## Hard rules
 
 **Length**
-- Target: 10-18 words. Hard ceiling: 25 words. Count before moving on.
+- Target: 10-18 words. Hard ceiling: 20 words. Count before moving on.
 - Landing near the ceiling every time is a smell, not a pass — it usually
   means the image is doing more explaining than showing. The best analogies
   in this range are one tight sentence, not the longest sentence that still
-  fits under 25.
-- Strong preference: 1 sentence. Land the whole thing in one clear image.
+  fits under 20.
+- One clear sentence strongly preferred. Land the whole thing in one clear image.
 - 2 sentences allowed only if the second genuinely adds a new angle — never if it explains the first.
 
 **Opener**
@@ -78,7 +78,7 @@ The best analogies share three qualities:
 
 ## Self-check before finalising
 
-1. Is it under 25 words? Is it closer to 10-18 than to the ceiling?
+1. Is it under 20 words? Is it closer to 10-18 than to the ceiling?
 2. Does it open with "It's like," "Think of," or "Imagine"? If yes — rewrite.
 3. Is there a sentence after the image that explains it? If yes — cut it.
 4. Can you picture it? If no — find a more concrete scene.

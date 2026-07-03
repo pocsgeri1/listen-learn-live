@@ -14,9 +14,14 @@ file access to the repo `pocsgeri1/listen-learn-live` (Cowork working folder).
 1. `rewrite-concepts.json` — running patch log (`batch`, `history`, `approved`).
 2. `rewrite-candidates.json` — ranked candidate queue. Cross-check every
    "next" pull against `approved` too — it doesn't auto-exclude mid-batch ids.
-3. All 5 style guides in `docs/`: term, hook, plain, analogy, prompt.
-   (Full detail lives there — the quick reference below is a summary, not
-   a replacement. If the two ever disagree, the style guide wins.)
+3. The "Field rules — quick reference" section below. This is the working
+   rule set for normal sessions — don't also read the 5 full style guides
+   in `docs/` (term, hook, plain, analogy, prompt) by default, that's pure
+   token cost. Pull a specific guide only when a field's judgment call is
+   genuinely ambiguous and the quick reference doesn't resolve it, or when
+   a rule is being changed (then read that one guide, not all 5). If the
+   two ever disagree, the full style guide wins — update the quick
+   reference to match when that happens.
 
 State in one line: active batch #, approved-so-far count, unprocessed
 candidates remaining.
@@ -40,10 +45,10 @@ separately, on every field, even ones you didn't rewrite.**
 - Needs a rewrite? Offer 2-3 distinct angle options, not one guess.
 
 ### HOOK
-- 8-12 words target, 14 hard ceiling. ONE sentence, ONE idea.
+- 8-12 words target, 14 hard ceiling. ONE sentence, ONE idea. No exceptions —
+  never two sentences, even if clause 2 reframes/inverts/punches. Use a
+  comma/colon/semicolon internally if two ideas need to connect.
 - Front-load the trigger word — specific/surprising noun in the first 3 words.
-- Two clauses only if clause 2 reframes/inverts/punches — never if it just
-  continues clause 1.
 - No overlap with plain.
 - Banned: "You're not X, you're Y" / "It's not X, it's Y"; "Most people
   don't realize…"; "Here's the thing:"; bare -ing opener with no subject;
@@ -66,7 +71,7 @@ separately, on every field, even ones you didn't rewrite.**
 - Over the limit? Cut the single weakest sentence whole. Never rewrite vaguer.
 
 ### ANALOGY
-- Target 10-18 words, hard ceiling 25. One sentence strongly preferred.
+- Target 10-18 words, hard ceiling 20. One clear sentence strongly preferred.
 - Never open "It's like…" / "Think of it as…" / "Imagine…" / "Picture…".
 - Vary the opener across a session — no two analogies open the same way.
 - No explanation after the image — cut "which means," "just like," "this
@@ -86,10 +91,19 @@ separately, on every field, even ones you didn't rewrite.**
 
 ## Self-check — run all 6 on every field you rewrote
 
+**Compute, don't hand-count.** Run `node tools/check-fields.js` against the
+drafted fields (JSON array of `{id, term, hook, plain, analogy, prompt}`,
+piped via stdin or a temp file) before presenting anything. It reports word/
+char/sentence counts and flags hard-rule violations (HARD FAIL) separately
+from soft target misses (warn — fine if within ceiling, just not ideal).
+This replaces manual word-counting — the #1 time sink in past batches. It
+does NOT replace the cross-field image check (point 6) or subjective quality
+judgment — those still need a human/model eye.
+
 1. Em-dash scan: zero "—" anywhere.
-2. Hook under 14 words, one idea.
+2. Hook under 14 words, one sentence, one idea.
 3. Plain under 55 words, no metaphor, no "refers to/is when" opener.
-4. Analogy under 25 words (aiming 10-18), no "It's like" opener, no
+4. Analogy under 20 words (aiming 10-18), no "It's like" opener, no
    explanation sentence after the image.
 5. Anti-slop, all fields: no "not X you're Y", no "most people don't
    realize", no bare -ing opener, no triad of exactly three (a 3-item list

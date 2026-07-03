@@ -1,6 +1,16 @@
 # Cowork Default Instructions — Epistemic
-# v1.0 — live, 2026-07-02. Supersedes docs/master-session-prompt.md (now a
+# v1.1 — live, 2026-07-03. Supersedes docs/master-session-prompt.md (now a
 # pointer to this file). Canonical session-protocol doc — edit here only.
+# v1.1 change: session-type branch moved before the doc-read step. Editorial
+# sessions no longer read the 5 style guides or the build-tracking docs
+# (changelog/roadmap/build-journal) by default — those were pure token cost
+# with no effect on editorial output, since concept-rewrite-prompt.md's
+# quick-reference is the actual working rule set and build docs track
+# site features, not concept content. Kept ONE file rather than splitting
+# into build/editorial variants — see "Why this exists" below; a split
+# would recreate the exact drift problem this file was built to kill,
+# since git-lock fixes, commit format, and communication style are
+# identical for both session types.
 
 ## Why this exists
 
@@ -37,7 +47,10 @@ live repo's `docs/`. Claude should read the live repo copy when a folder
 is connected; the Project Knowledge copy is a fallback only, and may be
 stale (see "Project Knowledge staleness" below).
 
-## Step 0 — preconditions, every session, before touching anything
+## Step 0 — shared preconditions, every session, before touching anything
+
+Cheap checks only. No doc content reads here — those are branch-specific,
+see Step 1.
 
 1. Confirm Cowork folder access is connected for `~/Documents/GitHub/`
    (covers both `listen-learn-live` and `epistemic-tools`). If not
@@ -57,33 +70,38 @@ stale (see "Project Knowledge staleness" below).
 4. `git pull origin main` (via bash, read-only op, safe) in
    `listen-learn-live` — prevents mid-session divergence from direct
    pushes made outside this session.
-5. Read in parallel: `docs/changelog.md` (top 30 lines), `docs/roadmap.md`
-   (Next Up section), `docs/build-journal.md` (Entries — latest one only).
-   For an editorial session, also read, in full:
-   - `docs/concept-rewrite-prompt.md` — the actual rules, not just a pointer
-   - all 5 style guides it references (`term-style-guide.md`,
-     `hook-style-guide.md`, `plain-style-guide.md`, `analogy-style-guide.md`,
-     `prompt-style-guide.md`)
-   - `rewrite-concepts.json` and `rewrite-candidates.json` (state files)
-   Skipping the rules doc and style guides and reading only the two JSON
-   state files is not enough to run an editorial session correctly — the
-   JSON files are state, not rules.
-   `docs/autonomous-batch-mode.md` is NOT part of this default read — it's
-   opt-in only, pulled in the moment Gergely actually says "run autonomous
-   batches," not before.
-6. State in one line: files read + current version + (if editorial)
-   active batch number and unprocessed candidate count. No more than
-   one line — don't restate what was read in prose.
 
-## Step 1 — session type
+## Step 1 — session type (decide this BEFORE reading any content docs)
 
-Ask, or infer from the first real request:
-- **Build session** → feature/bug work on the live site. Proceed to
-  Step 2.
-- **Editorial session** → concept rewrites. Hand off to
-  concept-rewrite-prompt.md (interactive, the default), or to
-  autonomous-batch-mode.md if Gergely explicitly says "run autonomous
-  batches" — both inherit Steps 0, 5-7 from here rather than restating them.
+Ask, or infer from the first real request. This determines which docs get
+read — don't read both branches' docs "just in case."
+
+- **Build session** → feature/bug work on the live site.
+  Read in parallel: `docs/changelog.md` (top 30 lines), `docs/roadmap.md`
+  (Next Up section), `docs/build-journal.md` (Entries — latest one only).
+  State in one line: files read + current version. Proceed to Step 2.
+
+- **Editorial session** → concept rewrites. Read ONLY:
+  - `docs/concept-rewrite-prompt.md` in full — its "Field rules — quick
+    reference" section IS the working rule set, not a summary of one.
+    Don't also read the 5 style guides (`term-style-guide.md`,
+    `hook-style-guide.md`, `plain-style-guide.md`, `analogy-style-guide.md`,
+    `prompt-style-guide.md`) by default — they're deep-reference docs for
+    when a specific field's judgment call is genuinely ambiguous, or when
+    Gergely is changing a rule, not a per-session read. Pulling all 5 every
+    time was pure token cost with no observed effect on rewrite quality.
+  - `rewrite-concepts.json` and `rewrite-candidates.json` (state files).
+  - Do NOT read `changelog.md`, `roadmap.md`, or `build-journal.md` —
+    those track site features and versions, not concept content, and
+    contribute nothing to an editorial session.
+  `docs/autonomous-batch-mode.md` is NOT part of this default read either —
+  it's opt-in only, pulled the moment Gergely says "run autonomous
+  batches," not before.
+  State in one line: active batch # + approved-so-far count + unprocessed
+  candidates remaining. Then hand off entirely to concept-rewrite-prompt.md
+  (interactive default) or autonomous-batch-mode.md (if invoked) — both
+  inherit Step 0 and Steps 4/6 from here rather than restating them. Skip
+  Step 2/3/5 below, they're build-session-only.
 
 ## Step 2 — action plan (build sessions)
 
@@ -127,7 +145,12 @@ Body:   - one bullet per change, no prose
 - `unable to unlink tmp_obj_*` in bash output = harmless sandbox
   artifact, not a failure signal.
 
-## Step 5 — end of session, automatic, no reminder needed
+## Step 5 — end of session (build sessions only)
+
+Editorial sessions do NOT do this step — concept-rewrite-prompt.md and
+autonomous-batch-mode.md have their own end-of-batch bookkeeping
+(rewrite-concepts.json history, rewrite-reports diffs, rewrite-style-log.json)
+and don't touch changelog/roadmap/build-journal or Claude Project Files.
 
 - Update `changelog.md` (new entry at top), `roadmap.md` (move completed
   → Recently Completed, update Next Up), `build-journal.md` (new lesson
@@ -136,8 +159,7 @@ Body:   - one bullet per change, no prose
 - Copy updated docs to Claude Project Files
   (`/Users/gergelypocs/Downloads/.../Epistemic./Claude Project Files/`)
   if that folder is connected this session.
-- Tell Gergely: "Click Push origin in GitHub Desktop" (build sessions) or
-  the equivalent commit instruction (editorial sessions).
+- Tell Gergely: "Click Push origin in GitHub Desktop."
 
 ## Communication style — applies to every response, every session
 

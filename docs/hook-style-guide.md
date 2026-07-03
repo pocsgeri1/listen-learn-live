@@ -1,6 +1,6 @@
-# Epistemic Hook Style Guide — v2.0
+# Epistemic Hook Style Guide — v2.1
 **Scope:** Hook field rewrites and generation for all concepts
-**Last updated:** June 2026 — v2.0 added craft layer from direct-response/viral-hook mechanics. Extraction prompt updated to v1.8 (June 2026): hook rules compressed to 8 max per field, em-dash ban moved to field header (❌ at write time, not self-check), generation sequence and pattern menu removed from active prompt (too many constraints for reliable output). This guide remains the full editorial reference for human review.
+**Last updated:** July 2026 — v2.1 made single-sentence a hard requirement (was "preferred by default"); removed the two-clause exception entirely. NOTE: several examples below in "What actually got approved" and elsewhere predate this change and show two-sentence hooks — they're kept for voice/lever reference only, not format. Where an old example conflicts with the one-sentence rule, the rule wins. v2.0 added craft layer from direct-response/viral-hook mechanics. Extraction prompt updated to v1.8 (June 2026): hook rules compressed to 8 max per field, em-dash ban moved to field header (❌ at write time, not self-check), generation sequence and pattern menu removed from active prompt (too many constraints for reliable output). This guide remains the full editorial reference for human review.
 **Companion doc:** term-style-guide.md (terms), plain-style-guide.md (plain)
 
 ---
@@ -29,8 +29,7 @@ The category voice seasoning rules from feynman-batch.js still apply — they ma
 ## Format — hard rules
 
 - **Target: 8–12 words. Hard ceiling: 14.** A handful of approved exceptions ran 15-16 words across 149 reviewed concepts — only when every word in the second clause earned its place. Treat 14 as the real ceiling when generating fresh hooks; don't lean on the exception.
-- **Two clauses allowed** only when the second reframes, inverts, or lands a punchline the first clause didn't promise. Never when clause two just continues or restates clause one.
-- **One sentence preferred** by default.
+- **One sentence only.** No exceptions. A hook is a single sentence — use a comma, colon, or semicolon internally if two ideas need to connect, but never two separate sentences (no period until the end).
 
 ---
 

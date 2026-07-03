@@ -32,7 +32,7 @@ const LIMIT = limitArgIdx !== -1 ? parseInt(process.argv[limitArgIdx + 1], 10) :
 
 const HOOK_CEILING = 14;
 const PLAIN_CEILING = 55;
-const ANALOGY_CEILING = 25;
+const ANALOGY_CEILING = 20; // v2.1 (July 2026): was 25
 
 const JARGON = ['utilize', 'facilitate', 'paradigm', 'cognitive', 'heuristic',
   'leverage', 'framework', 'delineate', 'modality', 'nuanced', 'salient',
@@ -44,6 +44,14 @@ const HOOK_BANNED = ["you're not", "it's not", "most people don't realize", "her
 
 function wordCount(s) {
   return s ? s.trim().split(/\s+/).filter(Boolean).length : 0;
+}
+
+function sentenceCount(s) {
+  if (!s) return 0;
+  const trimmed = s.trim().replace(/["']$/, '').replace(/["']/g, '');
+  // Count sentence-ending punctuation that isn't the very last char run.
+  const matches = trimmed.match(/[.!?]+(?=\s|$)/g) || [];
+  return Math.max(matches.length, 1);
 }
 
 function stopwordStrip(s) {
@@ -75,6 +83,10 @@ function scanConcept(c) {
   if (hw > HOOK_CEILING) flags.push(`hook ${hw}w`);
   if (pw > PLAIN_CEILING) flags.push(`plain ${pw}w`);
   if (aw > ANALOGY_CEILING) flags.push(`analogy ${aw}w`);
+
+  // v2.1 (July 2026): hooks must be exactly 1 sentence, no exceptions.
+  const hookSentences = sentenceCount(hook);
+  if (hookSentences > 1) flags.push(`hook ${hookSentences} sentences (must be 1)`);
 
   const hl = hook.toLowerCase();
   for (const b of HOOK_BANNED) {

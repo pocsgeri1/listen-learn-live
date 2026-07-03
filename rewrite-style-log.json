@@ -1,0 +1,15 @@
+{
+  "_note": "Rolling log of the last 50 approved concepts' analogy openers and core images, for the cross-batch repetition check in autonomous-batch-mode.md. Trim to last 50 as new entries are appended.",
+  "log": [
+    { "id": 184, "batch": 4, "opener": "A gym ad", "image": "gym ad copy skipping the objection, tired parent" },
+    { "id": 210, "batch": 4, "opener": "Your coworker", "image": "coworker explaining her reasoning on a merger call" },
+    { "id": 310, "batch": 4, "opener": "Edison", "image": "Edison / self-improving light bulb machine" },
+    { "id": 317, "batch": 4, "opener": "Blink,", "image": "phone in hand already outdated after a blink" },
+    { "id": 403, "batch": 4, "opener": "Dentists", "image": "dentist reminder postcard every six months, forgot to floss" },
+    { "id": 483, "batch": 4, "opener": "Three generations", "image": "three generations taking the same disliked accounting job" },
+    { "id": 486, "batch": 4, "opener": "Meryl Streep", "image": "actress plays a killer on stage, walks the dog after" },
+    { "id": 638, "batch": 4, "opener": "The agency", "image": "million-dollar pricing fix buried in a slide deck" },
+    { "id": 599, "batch": 4, "opener": "Tap", "image": "app button with a rapper's face, dinner pre-decided" },
+    { "id": 625, "batch": 4, "opener": "Willie Walsh", "image": "Willie Walsh, ex-pilot now running British Airways' parent company" }
+  ]
+}

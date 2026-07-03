@@ -7,158 +7,44 @@
     180,
     181,
     182,
+    184,
     185,
     196,
     201,
     207,
+    210,
     224,
     225,
     226,
     227,
     281,
+    310,
+    317,
     334,
     335,
     336,
     337,
     338,
     339,
+    403,
     468,
     473,
+    483,
     485,
+    486,
     489,
     490,
     491,
     518,
     593,
-    609
+    599,
+    609,
+    625,
+    638
   ],
   "excludes_in_flight_ids": [],
   "sort": "length_score desc, then em_dash desc",
   "candidates": [
-    {
-      "id": 210,
-      "term": "Perspective Seeking",
-      "length_score": 8.4,
-      "em_dash": 0,
-      "hw": 10,
-      "pw": 31,
-      "aw": 39,
-      "flags": [
-        "analogy 39w"
-      ]
-    },
-    {
-      "id": 310,
-      "term": "Meta-invention",
-      "length_score": 8.4,
-      "em_dash": 0,
-      "hw": 13,
-      "pw": 40,
-      "aw": 39,
-      "flags": [
-        "analogy 39w"
-      ]
-    },
-    {
-      "id": 317,
-      "term": "Singularity Event Horizon",
-      "length_score": 8.4,
-      "em_dash": 0,
-      "hw": 13,
-      "pw": 51,
-      "aw": 39,
-      "flags": [
-        "analogy 39w"
-      ]
-    },
-    {
-      "id": 403,
-      "term": "Reminder Systems for Personal Growth",
-      "length_score": 8.4,
-      "em_dash": 0,
-      "hw": 13,
-      "pw": 35,
-      "aw": 39,
-      "flags": [
-        "analogy 39w"
-      ]
-    },
-    {
-      "id": 483,
-      "term": "The Known Path Fallacy",
-      "length_score": 8.4,
-      "em_dash": 0,
-      "hw": 11,
-      "pw": 44,
-      "aw": 39,
-      "flags": [
-        "analogy 39w",
-        "term/hook overlap: known, path"
-      ]
-    },
-    {
-      "id": 486,
-      "term": "Construct-Aware Stage",
-      "length_score": 8.4,
-      "em_dash": 0,
-      "hw": 12,
-      "pw": 44,
-      "aw": 39,
-      "flags": [
-        "analogy 39w"
-      ]
-    },
-    {
-      "id": 638,
-      "term": "Relationship Paranoia",
-      "length_score": 8.2,
-      "em_dash": 0,
-      "hw": 15,
-      "pw": 49,
-      "aw": 37,
-      "flags": [
-        "hook 15w",
-        "analogy 37w"
-      ]
-    },
-    {
-      "id": 599,
-      "term": "Famous Orders",
-      "length_score": 7.8,
-      "em_dash": 1,
-      "hw": 8,
-      "pw": 46,
-      "aw": 38,
-      "flags": [
-        "em-dash x1",
-        "analogy 38w"
-      ]
-    },
-    {
-      "id": 625,
-      "term": "Founder-Led Premium",
-      "length_score": 7.8,
-      "em_dash": 1,
-      "hw": 6,
-      "pw": 40,
-      "aw": 38,
-      "flags": [
-        "em-dash x1",
-        "analogy 38w"
-      ]
-    },
-    {
-      "id": 184,
-      "term": "Situational Model",
-      "length_score": 7.8,
-      "em_dash": 0,
-      "hw": 10,
-      "pw": 52,
-      "aw": 38,
-      "flags": [
-        "analogy 38w"
-      ]
-    },
     {
       "id": 190,
       "term": "Friction Creates Value",
@@ -1271,6 +1157,135 @@
       "flags": [
         "hook 15w",
         "analogy 31w"
+      ]
+    },
+    {
+      "id": 592,
+      "term": "Horsepower as Marketing Metric",
+      "length_score": 4.6,
+      "em_dash": 0,
+      "hw": 15,
+      "pw": 46,
+      "aw": 31,
+      "flags": [
+        "hook 15w",
+        "analogy 31w",
+        "term/hook overlap: horsepower, metric"
+      ]
+    },
+    {
+      "id": 231,
+      "term": "Reputation Management",
+      "length_score": 4.2,
+      "em_dash": 2,
+      "hw": 8,
+      "pw": 41,
+      "aw": 32,
+      "flags": [
+        "em-dash x2",
+        "analogy 32w"
+      ]
+    },
+    {
+      "id": 48,
+      "term": "Reversion to the Mean",
+      "length_score": 4.2,
+      "em_dash": 1,
+      "hw": 8,
+      "pw": 29,
+      "aw": 32,
+      "flags": [
+        "em-dash x1",
+        "analogy 32w"
+      ]
+    },
+    {
+      "id": 237,
+      "term": "Trapped in the Story",
+      "length_score": 4.2,
+      "em_dash": 1,
+      "hw": 13,
+      "pw": 48,
+      "aw": 32,
+      "flags": [
+        "em-dash x1",
+        "analogy 32w"
+      ]
+    },
+    {
+      "id": 238,
+      "term": "Radicalization Through Empathy",
+      "length_score": 4.2,
+      "em_dash": 1,
+      "hw": 10,
+      "pw": 47,
+      "aw": 32,
+      "flags": [
+        "em-dash x1",
+        "analogy 32w"
+      ]
+    },
+    {
+      "id": 396,
+      "term": "Worst-Case Is a Safe Place",
+      "length_score": 4.2,
+      "em_dash": 1,
+      "hw": 9,
+      "pw": 35,
+      "aw": 32,
+      "flags": [
+        "em-dash x1",
+        "analogy 32w"
+      ]
+    },
+    {
+      "id": 516,
+      "term": "Minimum Viable Offer",
+      "length_score": 4.2,
+      "em_dash": 1,
+      "hw": 9,
+      "pw": 48,
+      "aw": 32,
+      "flags": [
+        "em-dash x1",
+        "analogy 32w"
+      ]
+    },
+    {
+      "id": 28,
+      "term": "Moral Hazard",
+      "length_score": 4.2,
+      "em_dash": 0,
+      "hw": 9,
+      "pw": 28,
+      "aw": 32,
+      "flags": [
+        "analogy 32w"
+      ]
+    },
+    {
+      "id": 46,
+      "term": "Narrative Control",
+      "length_score": 4.2,
+      "em_dash": 0,
+      "hw": 9,
+      "pw": 32,
+      "aw": 32,
+      "flags": [
+        "analogy 32w"
+      ]
+    },
+    {
+      "id": 127,
+      "term": "Self-Actualize → Self-Monetize → Self-Transcend",
+      "length_score": 4.2,
+      "em_dash": 0,
+      "hw": 14,
+      "pw": 27,
+      "aw": 32,
+      "flags": [
+        "analogy 32w",
+        "plain jargon: framework"
       ]
     }
   ]
