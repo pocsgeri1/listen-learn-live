@@ -6,6 +6,23 @@
 
 ---
 
+## v2.23 — 2026-07-03 — OG Map nav fix, extract.html editorial tooling (counters/history/sticky rules), Spark feedback-row bug, Corner mobile fixes
+
+### What shipped
+- **OG Map panel no longer covers the site nav.** `.og-concept-panel` had a hardcoded `top:0;bottom:0` that fully overlapped the fixed nav (nav z-index 100 < panel z-index 9801). `ogShowConcepts()` now measures `nav.offsetHeight` live at panel-open time and sets `top`/`bottom:auto`/`height` inline, so it always sits correctly below the nav at whatever height it currently has (handles the 76px→62px scroll-triggered shrink).
+- **`extract.html` (epistemic-tools repo): word/char counters on every editable field**, including Summary and Vocab Vault in Episode Intel. Pure rule-based JS, zero extra API tokens — three-tier status (ok/warn/over) using the existing green/amber/red CSS vars.
+- **`extract.html`: version history is now real back/forward, not a one-way stack.** Replaced the old LIFO pop-only rollback with a pointer-based `{versions, pointer}` structure (Back/Forward/Restore original), so stepping back and then regenerating correctly truncates the abandoned forward branch instead of silently losing it.
+- **`extract.html`: Episode Intel divider strengthened** (2px dashed, higher-contrast) — this tool's own editorial display only, does not touch the live-site drawer's dashed divider.
+- **`extract.html`: new sticky rules sidebar.** Fixed-position column, sibling of `.page` (never touches the 880px content layout), only shown ≥1440px viewport. Cross-fades between the concept-editing field rules (from `concept-rewrite-prompt.md`) and the Episode Intel summary rules (from `generate-episode-intel.js`'s embedded prompt) based on scroll position, gated to only appear once results exist.
+- **Spark "Did it land?" feedback row no longer appears instantly.** Root cause: `.cs-feedback-row` had an unconditional `animation: fadeIn 0.4s ease both`, which (via fill-mode `both`) overrode the `.cs-hidden` class's `opacity:0` almost immediately — so the row visually appeared ~0.4s after render regardless of the JS-driven 8-second reveal timer. Removed the redundant animation entirely; `.cs-post-prompt`'s existing `transition: opacity 0.3s ease` + the JS-toggled `cs-hidden`/`cs-visible` classes (already firing at the correct 8000ms mark) now solely control the reveal.
+- **Corner submit button shrinks to the 🥊 emoji only on mobile (≤700px)**, fixing the "Corner me →" label overflowing/cramping the search bar on narrow screens. Implemented as `font-size:0` + `::after { content: '🥊' }` rather than a markup swap, because `cornerSubmit()`/`exitCornerMode()` set `submit.textContent` directly in multiple places (default label + "Finding your frame…" loading label) — a markup-based fix would get silently overwritten by that JS. Desktop (>700px) completely untouched.
+- **Corner Sparring results now persist.** New `CORNER_SPARRING_KEY` localStorage store, global and keyed by concept ID (not per-save) — enforces "only 1x Sparring per term" and means Situations tab's "Revisit" automatically restores prior Sparring state for free, since `_cornerReplayHistory` → `_cornerOpenPanel` → `_cornerBuildCards` is the same render path used for fresh submissions.
+
+### Notes
+- Chronological ordering was scoped this session but explicitly deferred — see roadmap.md "Next up."
+- OG Map light mode and theme thumbnails were scoped and explicitly skipped this session (low value / self-handled).
+- OG Map content/schema (node inventory, sub-node structure) discussed in chat only this session — no code changed, see build-journal for the discussion summary.
+
 ## v2.22 — 2026-07-02 — GitHub Actions publish pipeline live (Make.com → GitHub Actions migration, publish step)
 
 ### What shipped

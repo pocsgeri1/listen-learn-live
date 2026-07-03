@@ -4912,9 +4912,8 @@
   .cs-fb-btn.voted-down { border-color: #c47a7a !important; box-shadow: 0 0 0 2px rgba(196,122,122,0.25); }
   .cs-feedback-row {
     display: flex; align-items: center; gap: 14px;
-    margin-bottom: 1.4rem; animation: fadeIn 0.4s ease both;
+    margin-bottom: 1.4rem;
   }
-  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
   .cs-feedback-label {
     font-family: 'DM Mono', monospace; font-size: 0.65rem;
     letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
@@ -15041,6 +15040,37 @@ function _cornerSwitchTab(tab) {
 var _cornerLastResult = null;
 var CORNER_SAVES_KEY = 'lll_corner_saves_v1';
 
+// ---- Sparring persistence — keyed by concept ID, global (one result per term) ----
+var CORNER_SPARRING_KEY = 'lll_corner_sparring_v1';
+function _cornerLoadSparringStore() {
+  try { return JSON.parse(localStorage.getItem(CORNER_SPARRING_KEY) || '{}'); } catch(e) { return {}; }
+}
+function _cornerGetSparring(conceptId) {
+  var store = _cornerLoadSparringStore();
+  return store[conceptId] || null;
+}
+function _cornerSetSparring(conceptId, data) {
+  try {
+    var store = _cornerLoadSparringStore();
+    store[conceptId] = { anotherAngle: data.anotherAngle || '', counterPerspective: data.counterPerspective || '', oneLiner: data.oneLiner || '', ts: new Date().toISOString() };
+    localStorage.setItem(CORNER_SPARRING_KEY, JSON.stringify(store));
+  } catch(e) {}
+}
+function _cornerSparBlocksHtml(data) {
+  return '<div class="corner-spar-block">' +
+      '<div class="corner-block-label">Another angle</div>' +
+      '<div class="corner-block-text">' + _escHtml(data.anotherAngle || '') + '</div>' +
+    '</div>' +
+    '<div class="corner-spar-block">' +
+      '<div class="corner-block-label">What the other person might be thinking</div>' +
+      '<div class="corner-block-text">' + _escHtml(data.counterPerspective || '') + '</div>' +
+    '</div>' +
+    '<div class="corner-spar-block corner-spar-highlight">' +
+      '<div class="corner-block-label">One real thing to say</div>' +
+      '<div class="corner-block-text">' + _escHtml(data.oneLiner || '') + '</div>' +
+    '</div>';
+}
+
 // Auto-save every result (no manual click needed)
 function _cornerAutoSave(userInput, result) {
   _cornerLastResult = { userInput: userInput, result: result, ts: new Date().toISOString() };
@@ -15145,13 +15175,17 @@ function _cornerBuildCards(concepts, userInput) {
       '</div>' +
     '</div>';
 
-    // Detail body
+    // Detail body — pre-populate Sparring if already done for this concept (1x per term, keyed by concept ID)
+    var savedSpar = _cornerGetSparring(concept.id);
+    var sparBtnLabel = savedSpar ? '⚡ Sparring ✓' : '⚡ Sparring';
+    var sparResultAttrs = savedSpar ? ' data-loaded="1" style="display:none"' : '';
+    var sparResultHtml = savedSpar ? _cornerSparBlocksHtml(savedSpar) : '';
     var detail = '<div class="corner-brief-card-detail" id="cornerDetail' + i + '" style="display:' + (isFirst ? 'flex' : 'none') + ';flex-direction:column;gap:12px;">' +
       '<div class="corner-curated-chip">' + cMsg + '</div>' +
       '<div class="corner-term" onmouseenter="' + hoverIn + '" onmouseleave="' + hoverOut + '">' + _escHtml(concept.term) + '</div>' +
       _cornerBlocksHtml(c) +
-      '<button class="corner-sparring-btn" id="cornerSparBtn' + i + '" onclick="_cornerSparring(' + concept.id + ',' + i + ')">⚡ Sparring</button>' +
-      '<div class="corner-sparring-result" id="cornerSparResult' + i + '"></div>' +
+      '<button class="corner-sparring-btn" id="cornerSparBtn' + i + '" onclick="_cornerSparring(' + concept.id + ',' + i + ')">' + sparBtnLabel + '</button>' +
+      '<div class="corner-sparring-result" id="cornerSparResult' + i + '"' + sparResultAttrs + '>' + sparResultHtml + '</div>' +
     '</div>';
 
     // All cards are accordion; first is pre-expanded
@@ -15266,21 +15300,10 @@ function _cornerSparring(conceptId, cardIdx) {
     }),
   }).then(function(r) { return r.json(); }).then(function(data) {
     btn.disabled = false;
-    btn.textContent = '⚡ Sparring';
+    btn.textContent = '⚡ Sparring ✓';
     resultEl.dataset.loaded = '1';
-    resultEl.innerHTML =
-      '<div class="corner-spar-block">' +
-        '<div class="corner-block-label">Another angle</div>' +
-        '<div class="corner-block-text">' + _escHtml(data.anotherAngle || '') + '</div>' +
-      '</div>' +
-      '<div class="corner-spar-block">' +
-        '<div class="corner-block-label">What the other person might be thinking</div>' +
-        '<div class="corner-block-text">' + _escHtml(data.counterPerspective || '') + '</div>' +
-      '</div>' +
-      '<div class="corner-spar-block corner-spar-highlight">' +
-        '<div class="corner-block-label">One real thing to say</div>' +
-        '<div class="corner-block-text">' + _escHtml(data.oneLiner || '') + '</div>' +
-      '</div>';
+    resultEl.innerHTML = _cornerSparBlocksHtml(data);
+    _cornerSetSparring(conceptId, data); // persist — 1x per term, restored on revisit
   }).catch(function() {
     btn.disabled = false;
     btn.textContent = '⚡ Sparring';
@@ -22059,6 +22082,27 @@ body.corner-mode #spCornerSearchWrap {
   transform: none;
 }
 
+/* Phase 12: mobile-only emoji-only shrink. Uses font-size:0 + ::after instead
+   of swapping markup, because cornerSubmit()/exitCornerMode() JS sets
+   submit.textContent directly (both the default label and the "Finding your
+   frame…" loading label) — a markup swap would get overwritten by that JS.
+   font-size:0 collapses whatever text is currently set to zero width without
+   touching JS; ::after supplies the glove regardless of button state.
+   Desktop (>700px) is completely untouched. */
+@media (max-width: 700px) {
+  .sp-corner-submit {
+    font-size: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 12px;
+  }
+  .sp-corner-submit::after {
+    content: '🥊';
+    font-size: 1rem;
+  }
+}
+
 /* ---- Corner loading line ---- */
 .sp-corner-loading {
   min-height: 0;
@@ -24108,7 +24152,7 @@ function _convOpenCSById(id) {
   window.ogToggleCard=function(id){const el=document.getElementById(id);if(el)el.classList.toggle('open');};
   function setRing(k){clearRing();const p=RP[k];if(!p)return;const svg=document.getElementById('ogImpossibleMap');if(!svg)return;const el=document.createElementNS('http://www.w3.org/2000/svg','circle');el.setAttribute('cx',p.cx);el.setAttribute('cy',p.cy);el.setAttribute('r',p.r);el.setAttribute('fill','none');el.setAttribute('stroke',RC[k]||'#e8d5a3');el.setAttribute('stroke-width','1.5');el.setAttribute('stroke-dasharray','6,4');el.classList.add('og-active-ring');svg.appendChild(el);_ar=el;}
   function clearRing(){if(_ar){_ar.remove();_ar=null;}}
-  window.ogShowConcepts=async function(k){const n=N[k];if(!n)return;if(_an)clearRing();_an=k;setRing(k);document.getElementById('ogPanelTitle').textContent=n.label;const sub=document.getElementById('ogPanelSubtitle');sub.textContent=n.sub;sub.style.color=n.col;document.getElementById('ogPanelCards').innerHTML='<div class="og-panel-loading">Loading concepts…</div>';document.getElementById('ogPanelBackdrop').classList.add('visible');document.getElementById('ogConceptPanel').classList.add('open');const all=await load();const top=all.map(c=>({c,s:score(c,k)})).filter(x=>x.s>0).sort((a,b)=>b.s-a.s).slice(0,5).map(x=>x.c);document.getElementById('ogPanelCards').innerHTML=top.length?top.map(card).join(''):'<div class="og-panel-loading">No matches.</div>';};
+  window.ogShowConcepts=async function(k){const n=N[k];if(!n)return;if(_an)clearRing();_an=k;setRing(k);document.getElementById('ogPanelTitle').textContent=n.label;const sub=document.getElementById('ogPanelSubtitle');sub.textContent=n.sub;sub.style.color=n.col;document.getElementById('ogPanelCards').innerHTML='<div class="og-panel-loading">Loading concepts…</div>';document.getElementById('ogPanelBackdrop').classList.add('visible');const panelEl=document.getElementById('ogConceptPanel');const navEl=document.querySelector('nav');const navH=navEl?navEl.offsetHeight:76;panelEl.style.top=navH+'px';panelEl.style.bottom='auto';panelEl.style.height='calc(100vh - '+navH+'px)';panelEl.classList.add('open');const all=await load();const top=all.map(c=>({c,s:score(c,k)})).filter(x=>x.s>0).sort((a,b)=>b.s-a.s).slice(0,5).map(x=>x.c);document.getElementById('ogPanelCards').innerHTML=top.length?top.map(card).join(''):'<div class="og-panel-loading">No matches.</div>';};
   window.ogClosePanel=function(){document.getElementById('ogConceptPanel').classList.remove('open');document.getElementById('ogPanelBackdrop').classList.remove('visible');clearRing();_an=null;};
   window.toggleOgSection=function(){_open=!_open;document.getElementById('ogSection').classList.toggle('open',_open);document.getElementById('ogExpandBtn').classList.toggle('open',_open);if(_open){load();setTimeout(()=>document.getElementById('ogExpandRow')?.scrollIntoView({behavior:'smooth',block:'start'}),80);}};
   document.addEventListener('keydown',e=>{if(e.key==='Escape')window.ogClosePanel();});

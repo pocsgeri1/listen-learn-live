@@ -9,16 +9,22 @@
     182,
     184,
     185,
+    190,
+    194,
     196,
     201,
     207,
     210,
+    212,
+    222,
+    223,
     224,
     225,
     226,
     227,
     281,
     310,
+    315,
     317,
     334,
     335,
@@ -29,6 +35,7 @@
     403,
     468,
     473,
+    477,
     483,
     485,
     486,
@@ -38,136 +45,16 @@
     518,
     593,
     599,
+    605,
+    607,
     609,
+    623,
     625,
     638
   ],
   "excludes_in_flight_ids": [],
   "sort": "length_score desc, then em_dash desc",
   "candidates": [
-    {
-      "id": 190,
-      "term": "Friction Creates Value",
-      "length_score": 7.8,
-      "em_dash": 0,
-      "hw": 14,
-      "pw": 38,
-      "aw": 38,
-      "flags": [
-        "analogy 38w"
-      ]
-    },
-    {
-      "id": 222,
-      "term": "Breath as the First Word",
-      "length_score": 7.8,
-      "em_dash": 0,
-      "hw": 10,
-      "pw": 46,
-      "aw": 38,
-      "flags": [
-        "analogy 38w"
-      ]
-    },
-    {
-      "id": 477,
-      "term": "Goal as Lens",
-      "length_score": 7.8,
-      "em_dash": 0,
-      "hw": 11,
-      "pw": 40,
-      "aw": 38,
-      "flags": [
-        "analogy 38w"
-      ]
-    },
-    {
-      "id": 605,
-      "term": "Missed Call Leverage",
-      "length_score": 7.8,
-      "em_dash": 0,
-      "hw": 12,
-      "pw": 39,
-      "aw": 38,
-      "flags": [
-        "analogy 38w",
-        "term/hook overlap: missed, call"
-      ]
-    },
-    {
-      "id": 607,
-      "term": "Doorman Fallacy",
-      "length_score": 7.8,
-      "em_dash": 0,
-      "hw": 8,
-      "pw": 48,
-      "aw": 38,
-      "flags": [
-        "analogy 38w"
-      ]
-    },
-    {
-      "id": 315,
-      "term": "Unpredictability Barrier",
-      "length_score": 7.6,
-      "em_dash": 0,
-      "hw": 15,
-      "pw": 51,
-      "aw": 36,
-      "flags": [
-        "hook 15w",
-        "analogy 36w"
-      ]
-    },
-    {
-      "id": 623,
-      "term": "Commercial Innovation",
-      "length_score": 7.2,
-      "em_dash": 1,
-      "hw": 8,
-      "pw": 51,
-      "aw": 37,
-      "flags": [
-        "em-dash x1",
-        "analogy 37w"
-      ]
-    },
-    {
-      "id": 194,
-      "term": "Innovation Creates Wealth",
-      "length_score": 7.2,
-      "em_dash": 0,
-      "hw": 11,
-      "pw": 35,
-      "aw": 37,
-      "flags": [
-        "analogy 37w"
-      ]
-    },
-    {
-      "id": 212,
-      "term": "Modeling Vs. Teaching",
-      "length_score": 7.2,
-      "em_dash": 0,
-      "hw": 13,
-      "pw": 40,
-      "aw": 37,
-      "flags": [
-        "analogy 37w"
-      ]
-    },
-    {
-      "id": 223,
-      "term": "Something Else Is Coming Up",
-      "length_score": 7.2,
-      "em_dash": 0,
-      "hw": 8,
-      "pw": 48,
-      "aw": 37,
-      "flags": [
-        "analogy 37w"
-      ]
-    },
     {
       "id": 284,
       "term": "Intersectional Neurosis",
