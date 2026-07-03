@@ -1,31 +1,102 @@
 {
   "_note": "Running patch doc — editorial rewrites, approved 1-by-1. Each entry lists ONLY changed fields + id. Merge into concepts.json by id once batch of 10 is approved.",
-  "batch": 6,
+  "batch": 7,
   "history": [
     {
       "batch": 1,
       "status": "patched into concepts.json and committed",
-      "ids": [281, 485, 180, 335, 489, 177, 178, 181, 336, 491]
+      "ids": [
+        281,
+        485,
+        180,
+        335,
+        489,
+        177,
+        178,
+        181,
+        336,
+        491
+      ]
     },
     {
       "batch": 2,
       "status": "patched into concepts.json, committed (9cef09d), pushed to origin/main",
-      "ids": [179, 337, 339, 207, 468, 201, 224, 226, 334, 196]
+      "ids": [
+        179,
+        337,
+        339,
+        207,
+        468,
+        201,
+        224,
+        226,
+        334,
+        196
+      ]
     },
     {
       "batch": 3,
       "status": "patched_locally",
-      "ids": [518, 338, 473, 490, 182, 185, 225, 227, 593, 609]
+      "ids": [
+        518,
+        338,
+        473,
+        490,
+        182,
+        185,
+        225,
+        227,
+        593,
+        609
+      ]
     },
     {
       "batch": 4,
       "status": "patched_locally, reviewed and revised by Gergely (638 term reverted, 310 plain edited, analogy ceiling 25->20 + hook 1-sentence rule applied retroactively, 486 jargon fix), verified with tools/check-fields.js, 0 hard-rule failures — ready to push. See rewrite-reports/batch-4-diff.md",
-      "ids": [184, 210, 310, 317, 403, 483, 486, 638, 599, 625]
+      "ids": [
+        184,
+        210,
+        310,
+        317,
+        403,
+        483,
+        486,
+        638,
+        599,
+        625
+      ]
     },
     {
       "batch": 5,
       "status": "patched_locally, autonomous batch, verified with tools/check-fields.js, 0 hard-rule failures, 0 needs_human. See rewrite-reports/batch-5-diff.md",
-      "ids": [190, 222, 477, 605, 607, 315, 623, 194, 212, 223]
+      "ids": [
+        190,
+        222,
+        477,
+        605,
+        607,
+        315,
+        623,
+        194,
+        212,
+        223
+      ]
+    },
+    {
+      "batch": 6,
+      "status": "patched_locally, autonomous batch, verified with tools/check-fields.js, 0 hard-rule failures, 0 needs_human. See rewrite-reports/batch-6-diff.md",
+      "ids": [
+        284,
+        311,
+        467,
+        472,
+        604,
+        618,
+        385,
+        635,
+        229,
+        535
+      ]
     }
   ],
   "approved": []

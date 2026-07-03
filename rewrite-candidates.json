@@ -22,8 +22,11 @@
     225,
     226,
     227,
+    229,
     281,
+    284,
     310,
+    311,
     315,
     317,
     334,
@@ -32,8 +35,11 @@
     337,
     338,
     339,
+    385,
     403,
+    467,
     468,
+    472,
     473,
     477,
     483,
@@ -43,145 +49,22 @@
     490,
     491,
     518,
+    535,
     593,
     599,
+    604,
     605,
     607,
     609,
+    618,
     623,
     625,
+    635,
     638
   ],
   "excludes_in_flight_ids": [],
   "sort": "length_score desc, then em_dash desc",
   "candidates": [
-    {
-      "id": 284,
-      "term": "Intersectional Neurosis",
-      "length_score": 7.2,
-      "em_dash": 0,
-      "hw": 11,
-      "pw": 49,
-      "aw": 37,
-      "flags": [
-        "analogy 37w",
-        "plain jargon: framework"
-      ]
-    },
-    {
-      "id": 311,
-      "term": "Bullsh*t Job Layer",
-      "length_score": 7.2,
-      "em_dash": 0,
-      "hw": 8,
-      "pw": 28,
-      "aw": 37,
-      "flags": [
-        "analogy 37w"
-      ]
-    },
-    {
-      "id": 467,
-      "term": "Identity-First Change",
-      "length_score": 7.2,
-      "em_dash": 0,
-      "hw": 12,
-      "pw": 51,
-      "aw": 37,
-      "flags": [
-        "analogy 37w"
-      ]
-    },
-    {
-      "id": 472,
-      "term": "Failing Forward, Faster",
-      "length_score": 7.2,
-      "em_dash": 0,
-      "hw": 12,
-      "pw": 46,
-      "aw": 37,
-      "flags": [
-        "analogy 37w",
-        "term/hook overlap: failing, forward"
-      ]
-    },
-    {
-      "id": 604,
-      "term": "Outgrowing the Playbook",
-      "length_score": 7.2,
-      "em_dash": 0,
-      "hw": 8,
-      "pw": 44,
-      "aw": 37,
-      "flags": [
-        "analogy 37w"
-      ]
-    },
-    {
-      "id": 618,
-      "term": "Go Watch It Get Made",
-      "length_score": 7.2,
-      "em_dash": 0,
-      "hw": 12,
-      "pw": 53,
-      "aw": 37,
-      "flags": [
-        "analogy 37w"
-      ]
-    },
-    {
-      "id": 385,
-      "term": "Borrowed Self-Worth",
-      "length_score": 6.8,
-      "em_dash": 0,
-      "hw": 12,
-      "pw": 57,
-      "aw": 35,
-      "flags": [
-        "plain 57w",
-        "analogy 35w"
-      ]
-    },
-    {
-      "id": 635,
-      "term": "Copycat Buying",
-      "length_score": 6.8,
-      "em_dash": 0,
-      "hw": 13,
-      "pw": 57,
-      "aw": 35,
-      "flags": [
-        "plain 57w",
-        "analogy 35w"
-      ]
-    },
-    {
-      "id": 229,
-      "term": "Type One Vs. Type Two Empathy",
-      "length_score": 6.6,
-      "em_dash": 2,
-      "hw": 13,
-      "pw": 52,
-      "aw": 36,
-      "flags": [
-        "em-dash x2",
-        "analogy 36w",
-        "plain jargon: cognitive"
-      ]
-    },
-    {
-      "id": 535,
-      "term": "Regression to the Mean",
-      "length_score": 6.6,
-      "em_dash": 1,
-      "hw": 12,
-      "pw": 38,
-      "aw": 36,
-      "flags": [
-        "em-dash x1",
-        "analogy 36w"
-      ]
-    },
     {
       "id": 600,
       "term": "Choice Paralysis",
