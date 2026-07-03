@@ -122,15 +122,6 @@ For scientific or academic-sounding concept names, replace the mechanism with an
 - **Sarcasm/wit as the default register (new in v2.0).** Sarcasm pattern #2 in the approved list above stays available as one option in rotation, never the default lever. It's the hardest register for a fluent non-native reader to parse under any cognitive load, and it's garnish, not the engine — the point must survive with the sarcasm removed.
 - **Negativity/threat as the default lever (new in v2.0).** Loss aversion and cost-of-inaction (Hormozi lane) stay in the voice blend, but they're one lever among several, not the default. If every hook in a batch is running fear, status anxiety, or "you're doing this wrong," the batch has collapsed into one register — rotate levers per the category seasoning table below.
 
-## Analogy hard bans (v1.8 — extracted from extraction prompt)
-
-- Em-dashes (—) anywhere
-- Opening with "It's like…" — vary the opener on every analogy, without exception
-- Abstract comparisons ("like the difference between X and Y" without a specific picturable scene)
-- "Do NOT use: 'It's like a machine that…', 'Think of it as a process…', 'Imagine a system where…'"
-
----
-
 ## The no-overlap rule (critical)
 
 The hook must approach the concept from a **different angle** than `plain`. Not a restatement, not a compressed version.

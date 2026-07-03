@@ -68,6 +68,9 @@ stale (see "Project Knowledge staleness" below).
    Skipping the rules doc and style guides and reading only the two JSON
    state files is not enough to run an editorial session correctly — the
    JSON files are state, not rules.
+   `docs/autonomous-batch-mode.md` is NOT part of this default read — it's
+   opt-in only, pulled in the moment Gergely actually says "run autonomous
+   batches," not before.
 6. State in one line: files read + current version + (if editorial)
    active batch number and unprocessed candidate count. No more than
    one line — don't restate what was read in prose.
@@ -78,9 +81,9 @@ Ask, or infer from the first real request:
 - **Build session** → feature/bug work on the live site. Proceed to
   Step 2.
 - **Editorial session** → concept rewrites. Hand off to
-  concept-rewrite-prompt.md (interactive by default, or its autonomous
-  batch mode if explicitly requested) — both inherit Steps 0, 5-7 from
-  here rather than restating them.
+  concept-rewrite-prompt.md (interactive, the default), or to
+  autonomous-batch-mode.md if Gergely explicitly says "run autonomous
+  batches" — both inherit Steps 0, 5-7 from here rather than restating them.
 
 ## Step 2 — action plan (build sessions)
 

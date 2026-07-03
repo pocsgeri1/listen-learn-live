@@ -1,108 +1,40 @@
 {
-  "generated_from": "concepts.json (651 total concepts, scanned 2026-07-02)",
+  "generated_from": "concepts.json (651 total concepts, scanned 2026-07-03)",
   "excludes_done_ids": [
     177,
     178,
     179,
     180,
     181,
+    182,
+    185,
     196,
     201,
     207,
     224,
+    225,
     226,
+    227,
     281,
     334,
     335,
     336,
     337,
+    338,
     339,
     468,
+    473,
     485,
     489,
-    491
-  ],
-  "excludes_in_flight_ids": [
-    338,
-    473,
     490,
-    518
+    491,
+    518,
+    593,
+    609
   ],
+  "excludes_in_flight_ids": [],
   "sort": "length_score desc, then em_dash desc",
   "candidates": [
-    {
-      "id": 182,
-      "term": "Side Hustle Doctrine",
-      "length_score": 9,
-      "em_dash": 0,
-      "hw": 11,
-      "pw": 52,
-      "aw": 40,
-      "flags": [
-        "analogy 40w"
-      ]
-    },
-    {
-      "id": 185,
-      "term": "Demand Vs. Supply Thinking",
-      "length_score": 9,
-      "em_dash": 0,
-      "hw": 11,
-      "pw": 46,
-      "aw": 40,
-      "flags": [
-        "analogy 40w"
-      ]
-    },
-    {
-      "id": 225,
-      "term": "Liars Fear Calm",
-      "length_score": 9,
-      "em_dash": 0,
-      "hw": 8,
-      "pw": 45,
-      "aw": 40,
-      "flags": [
-        "analogy 40w"
-      ]
-    },
-    {
-      "id": 227,
-      "term": "Assertiveness Respects Both",
-      "length_score": 9,
-      "em_dash": 0,
-      "hw": 9,
-      "pw": 40,
-      "aw": 40,
-      "flags": [
-        "analogy 40w"
-      ]
-    },
-    {
-      "id": 593,
-      "term": "Reward Prediction Error",
-      "length_score": 9,
-      "em_dash": 0,
-      "hw": 12,
-      "pw": 46,
-      "aw": 40,
-      "flags": [
-        "analogy 40w",
-        "term/hook overlap: reward, prediction"
-      ]
-    },
-    {
-      "id": 609,
-      "term": "Director of Trivia",
-      "length_score": 9,
-      "em_dash": 0,
-      "hw": 10,
-      "pw": 43,
-      "aw": 40,
-      "flags": [
-        "analogy 40w"
-      ]
-    },
     {
       "id": 210,
       "term": "Perspective Seeking",
@@ -1261,6 +1193,84 @@
       "aw": 33,
       "flags": [
         "analogy 33w"
+      ]
+    },
+    {
+      "id": 527,
+      "term": "Your Old Work Is a Quarry",
+      "length_score": 4.8,
+      "em_dash": 0,
+      "hw": 10,
+      "pw": 45,
+      "aw": 33,
+      "flags": [
+        "analogy 33w",
+        "term/hook overlap: old, work"
+      ]
+    },
+    {
+      "id": 603,
+      "term": "Expectation Gap",
+      "length_score": 4.8,
+      "em_dash": 0,
+      "hw": 8,
+      "pw": 49,
+      "aw": 33,
+      "flags": [
+        "analogy 33w"
+      ]
+    },
+    {
+      "id": 608,
+      "term": "Explore vs Exploit",
+      "length_score": 4.8,
+      "em_dash": 0,
+      "hw": 8,
+      "pw": 43,
+      "aw": 33,
+      "flags": [
+        "analogy 33w"
+      ]
+    },
+    {
+      "id": 138,
+      "term": "Minimum Viable Offer",
+      "length_score": 4.6,
+      "em_dash": 2,
+      "hw": 15,
+      "pw": 22,
+      "aw": 31,
+      "flags": [
+        "em-dash x2",
+        "hook 15w",
+        "analogy 31w"
+      ]
+    },
+    {
+      "id": 235,
+      "term": "Anxiously Attached to Experts",
+      "length_score": 4.6,
+      "em_dash": 1,
+      "hw": 10,
+      "pw": 56,
+      "aw": 32,
+      "flags": [
+        "em-dash x1",
+        "plain 56w",
+        "analogy 32w"
+      ]
+    },
+    {
+      "id": 321,
+      "term": "Retroactive Simulation Commitment",
+      "length_score": 4.6,
+      "em_dash": 0,
+      "hw": 15,
+      "pw": 44,
+      "aw": 31,
+      "flags": [
+        "hook 15w",
+        "analogy 31w"
       ]
     }
   ]

@@ -40,7 +40,7 @@ v2.0's "no specific real-world claims" rule only served job 2, and actively work
 ## Length — hard rules
 
 - **Ceiling: 350 characters / ~55 words.** This is the standard target for every plain, not a rare exception — aim for it by default.
-- **No fixed sentence count.** 2-4 sentences is normal, depending on how much specific content the source material needs to land the mechanism.
+- **2 sentences default, 3 only if the mechanism genuinely needs it.** Don't reach for a 3rd sentence out of habit — try to land the mechanism in 2 first.
 - **Plain may run shorter** than the ceiling when it already fully explains the mechanism and passes the repeat-back test — don't pad a short, complete answer just to fill space.
 
 ### When a draft runs over 350 characters: TRIM, DON'T ABSTRACT

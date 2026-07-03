@@ -1,6 +1,6 @@
 {
   "_note": "Running patch doc — editorial rewrites, approved 1-by-1. Each entry lists ONLY changed fields + id. Merge into concepts.json by id once batch of 10 is approved.",
-  "batch": 3,
+  "batch": 4,
   "history": [
     {
       "batch": 1,
@@ -11,36 +11,12 @@
       "batch": 2,
       "status": "patched into concepts.json, committed (9cef09d), pushed to origin/main",
       "ids": [179, 337, 339, 207, 468, 201, 224, 226, 334, 196]
+    },
+    {
+      "batch": 3,
+      "status": "patched_locally",
+      "ids": [518, 338, 473, 490, 182, 185, 225, 227, 593, 609]
     }
   ],
-  "approved": [
-    {
-      "id": 518,
-      "fields_changed": ["hook", "plain", "analogy"],
-      "hook": "Once you know what something's for, you stop seeing what else it could be.",
-      "plain": "This happens because your brain stores objects by their assigned job, not their physical properties. Once something gets filed as a 'toy' or 'decoration,' your brain stops checking it against problems filed under a different job.",
-      "analogy": "You dig through drawers for a screwdriver to pry open a paint can, ignoring the quarter sitting right there in the dish."
-    },
-    {
-      "id": 338,
-      "fields_changed": ["plain", "analogy"],
-      "plain": "Every time you pick appearance over what actually feels true, like wearing clothes that feel wrong or laughing at something that isn't funny, you're rebelling against yourself in a small way. Enough of those add up to a life that looks good from outside but is hollow to actually live.",
-      "analogy": "At the office dinner, he laughs on cue at his boss's unfunny joke, and something in him quietly checks out."
-    },
-    {
-      "id": 473,
-      "fields_changed": ["hook", "plain", "analogy", "prompt"],
-      "hook": "Transformation begins in disgust and ends in obsession, with some confusion in between.",
-      "plain": "Real identity change moves through three stages: you get disgusted enough with your old life to leave it, then drift for a while with no idea what's next, then finally land on something and grow faster than you thought possible. Most people quit in the middle, mistaking the drifting for failure.",
-      "analogy": "You quit your job with no plan, spend four miserable months adrift, then stumble into freelance design and go fully booked within six months.",
-      "prompt": "Which phase are you in right now? If you're in the confusing middle, what are two small bets you could place this month to help you land on what's next?"
-    },
-    {
-      "id": 490,
-      "fields_changed": ["term", "hook", "analogy"],
-      "term": "Actions Over Words",
-      "hook": "Words reveal intention, actions reveal priority.",
-      "analogy": "He's said 'I need to quit this job' every week for three years, résumé still untouched on his desktop."
-    }
-  ]
+  "approved": []
 }
