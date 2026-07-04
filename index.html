@@ -8399,30 +8399,58 @@
   .og-concept-panel.open { transform: translateY(0); }
 }
 
-/* ── v2.25 — OG Map hyper-zoom content cards + related pills ─── */
-.og-content-fo { overflow: visible; }
-.og-content-host {
-  width: 100%; height: 100%; box-sizing: border-box;
-  background: #0f0f0fee; border: 1px solid rgba(232,213,163,0.16);
-  border-radius: 14px; padding: 26px 28px 22px;
+/* ── v2.25a — OG Map spotlight modal + related pills ────────────
+   v2.25 rendered this card as an SVG <foreignObject> living inside
+   #ogMapInner, the element the pan/zoom system applies a CSS
+   scale() transform to. That caused three bugs caught on first live
+   test: (1) bleed-through — decorative map text scales to 2-4x and
+   ghosts through the card's translucent background; (2) fuzzy text
+   — HTML inside a scaled SVG ancestor is laid out at normal size
+   then raster-stretched; (3) cut-off text — the foreignObject's
+   fixed height ran out of room for stacked paragraphs. Fix: the
+   card is now a position:fixed overlay (#ogSpotlight, markup lives
+   right after the founder section) fully decoupled from the map's
+   transform and overflow. The zoom-toward-node animation still
+   plays as the "diving in" cue; once it settles, the map dims under
+   a blurred scrim and this solid, undistorted card fades in. */
+.og-spotlight {
+  position: fixed; inset: 0; z-index: 400;
+  display: flex; align-items: center; justify-content: center;
+  padding: 4vh 2rem;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.og-spotlight.active { opacity: 1; pointer-events: all; }
+.og-spotlight-scrim {
+  position: absolute; inset: 0;
+  background: rgba(6,6,8,0.8);
+  backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);
+}
+.og-spotlight-card {
+  position: relative;
+  width: 100%; max-width: 720px; max-height: 82vh;
+  overflow-y: auto; overflow-x: hidden;
+  background: #101010; border: 1px solid rgba(232,213,163,0.18);
+  border-radius: 16px; padding: 32px 36px 26px;
   font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-  overflow-y: auto; opacity: 0; transition: opacity 0.35s ease;
-  box-shadow: 0 0 60px -10px var(--og-accent, #e8d5a3);
-  pointer-events: none;
+  box-shadow: 0 24px 80px -20px rgba(0,0,0,0.6), 0 0 60px -18px var(--og-accent, #e8d5a3);
+  transform: translateY(16px) scale(0.97); opacity: 0;
+  transition: transform 0.32s cubic-bezier(0.22,1,0.36,1), opacity 0.28s ease;
 }
-.og-content-host.og-visible { opacity: 1; pointer-events: all; }
-.og-zoom-back-btn {
-  display: inline-flex; align-items: center; gap: 6px;
-  background: none; border: 1px solid rgba(232,213,163,0.2); border-radius: 999px;
-  color: var(--accent); font-family: 'DM Mono', monospace; font-size: 9.5px;
-  letter-spacing: 0.1em; text-transform: uppercase; padding: 6px 14px;
+.og-spotlight.active .og-spotlight-card { transform: translateY(0) scale(1); opacity: 1; }
+.og-spotlight-close {
+  position: absolute; top: 14px; right: 14px; z-index: 2;
+  width: 30px; height: 30px; border-radius: 50%;
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(232,213,163,0.18);
+  color: var(--og-accent, #e8d5a3); font-size: 13px; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
   cursor: pointer; opacity: 0.7; transition: opacity 0.2s, border-color 0.2s;
-  margin-bottom: 14px;
 }
-.og-zoom-back-btn:hover { opacity: 1; border-color: rgba(232,213,163,0.5); }
+.og-spotlight-close:hover { opacity: 1; border-color: rgba(232,213,163,0.5); }
 .og-uc-title {
   font-family: 'Playfair Display', serif; font-style: italic; font-size: 22px;
   color: var(--og-accent, #e8d5a3); margin-bottom: 4px; line-height: 1.15;
+  padding-right: 34px;
 }
 .og-uc-source {
   font-family: 'DM Mono', monospace; font-size: 8px; letter-spacing: 0.08em;
@@ -8439,18 +8467,35 @@
   text-transform: uppercase; color: var(--og-accent, #e8d5a3); opacity: 0.65;
   margin-bottom: 10px;
 }
-.og-uc-insight, .og-uc-protocol {
-  font-size: 13px; line-height: 1.6; color: var(--text); margin-bottom: 10px;
+.og-uc-sublabel {
+  font-family: 'DM Mono', monospace; font-size: 8px; letter-spacing: 0.16em;
+  text-transform: uppercase; opacity: 0.45; margin: 12px 0 6px;
 }
-.og-uc-why, .og-uc-ifthen {
-  font-size: 12px; line-height: 1.6; opacity: 0.62; margin-bottom: 10px;
+.og-uc-card-label + .og-uc-sublabel { margin-top: 0; }
+.og-uc-lead {
+  font-size: 13px; line-height: 1.6; color: var(--text); margin-bottom: 6px;
+}
+.og-uc-bullets { margin: 0 0 4px; padding-left: 17px; }
+.og-uc-bullets li {
+  font-size: 12.5px; line-height: 1.55; opacity: 0.8; margin-bottom: 6px;
+}
+.og-uc-bullets li::marker { color: var(--og-accent, #e8d5a3); }
+.og-uc-callout {
+  background: rgba(232,213,163,0.05); border-left: 2px solid var(--og-accent, #e8d5a3);
+  border-radius: 0 6px 6px 0; padding: 10px 14px; margin: 10px 0 12px;
+  font-size: 12px; line-height: 1.55; opacity: 0.85;
+}
+.og-uc-callout-label {
+  font-family: 'DM Mono', monospace; font-size: 7.5px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--og-accent, #e8d5a3); opacity: 0.7;
+  display: block; margin-bottom: 5px;
 }
 .og-uc-reflect {
   font-size: 12px; line-height: 1.55; opacity: 0.6; font-style: italic;
 }
 .og-uc-neuro {
   font-family: 'DM Mono', monospace; font-size: 10.5px; opacity: 0.75;
-  color: var(--og-accent, #e8d5a3); margin-top: 2px;
+  color: var(--og-accent, #e8d5a3); margin-top: 8px;
 }
 .og-pill-section { margin-top: 18px; padding-top: 16px; border-top: 1px solid rgba(232,213,163,0.08); }
 .og-pill-section-label {
@@ -8478,7 +8523,13 @@
 .og-related-expand.open { grid-template-rows: 1fr; }
 .og-pill-expand-inner { overflow: hidden; padding: 10px 4px 4px; }
 @media (max-width: 600px) {
-  .og-content-host { padding: 18px 18px 16px; }
+  .og-spotlight { padding: 0; }
+  .og-spotlight-card {
+    max-width: 100%; width: 100%; height: 100%; max-height: 100%;
+    border-radius: 0; border: none; padding: 24px 20px 28px;
+    transform: translateY(100%);
+  }
+  .og-spotlight.active .og-spotlight-card { transform: translateY(0); }
   .og-uc-title { font-size: 18px; }
   .og-uc-cards { flex-direction: column; }
 }
@@ -9467,7 +9518,6 @@
               <line x1="500" y1="1458" x2="1900" y2="1458" stroke="#e8d5a3" stroke-width="0.2" stroke-opacity="0.12"/>
               <text x="1200" y="1476" text-anchor="middle" fill="#e8d5a3" font-size="10.5" font-family="Georgia,serif" font-style="italic" opacity="0.45">"Flow is evolution's gift for stalking the impossible." — Steven Kotler</text>
               <text x="2080" y="1494" text-anchor="end" fill="#e8d5a3" font-size="6" font-family="'DM Mono',monospace" opacity="0.18" font-style="italic">After Steven Kotler — The Art of Impossible</text>
-              <g id="ogContentLayer"></g>
             </svg>
               </div>
             </div>
@@ -9478,6 +9528,19 @@
   </div>
 </section>
 <!-- /FOUNDER / ABOUT -->
+
+<!-- OG MAP SPOTLIGHT — v2.25a. Deliberately placed here, outside .og-map-wrap
+     (which has overflow-x:hidden — overflow clips fixed descendants by DOM
+     ancestry, not containing-block) and outside #ogMapInner (which the pan/
+     zoom system applies a CSS transform to, creating a containing block that
+     would break position:fixed). This keeps the card a true viewport-fixed
+     overlay: undistorted by the map's zoom transform, unclipped by the map's
+     overflow, and immune to bleed-through from the map's own decorative text. -->
+<div class="og-spotlight" id="ogSpotlight">
+  <div class="og-spotlight-scrim" onclick="window.ogDeactivateContent()"></div>
+  <div class="og-spotlight-card" id="ogSpotlightCard" role="dialog" aria-modal="true"></div>
+</div>
+<!-- /OG MAP SPOTLIGHT -->
 
 <!-- Photo lightbox — v2.5, used by the founder photo montage -->
 <div class="fpm-lightbox" id="fpmLightbox" onclick="if(event.target===this) closeFpmLightbox()">
@@ -24414,19 +24477,44 @@ function _convOpenCSById(id) {
   }
   function ogGet(data,path){let n=data;for(const p of path){if(!n)return null;n=n[p];}return n;}
   function ogAccentFor(id){const root=id.split('_')[0];return OG_COL[root]||'#e8d5a3';}
+  /* v2.25a — intro+bullets content restructuring. Splits a field on
+     sentence boundaries (period/!/? + space): the first sentence
+     becomes a lead line, any remaining sentences become bullets.
+     Chosen over an em-dash-based split after finding em-dashes used
+     inconsistently across ogmap.json entries (sometimes a lead/detail
+     separator, sometimes a parenthetical insertion) — sentence
+     boundaries are consistent across all entries. */
+  function ogSplitSentences(text){
+    if(!text)return[];
+    /* allow an optional closing quote/apostrophe right after the terminator —
+       without it, a mid-sentence quoted question ("ask '...this?' → do X.")
+       fails to match at the inner "?" (not followed by whitespace) and the
+       regex silently drops that whole leading chunk of text. Caught via a
+       length round-trip check against 2 real ogmap.json entries. */
+    const parts=text.match(/[^.!?]+[.!?]+['"\u2019\u201d]?(?:\s+|$)/g);
+    if(!parts)return[text.trim()].filter(Boolean);
+    return parts.map(s=>s.trim()).filter(Boolean);
+  }
+  function ogLeadBullets(text){
+    const sents=ogSplitSentences(text);
+    if(!sents.length)return'';
+    const lead=`<div class="og-uc-lead">${esc(sents[0])}</div>`;
+    if(sents.length===1)return lead;
+    return lead+`<ul class="og-uc-bullets">${sents.slice(1).map(s=>`<li>${esc(s)}</li>`).join('')}</ul>`;
+  }
   function buildOgCardHTML(id,entry){
     const u=entry.understand||{},a=entry.activate||{};
-    let html=`<button class="og-zoom-back-btn" onclick="window.ogDeactivateContent()">← Back to map</button>`+
+    let html=`<button class="og-spotlight-close" onclick="window.ogDeactivateContent()" aria-label="Close">✕</button>`+
       `<div class="og-uc-title">${esc(entry.label||'')}</div>`+
       `<div class="og-uc-cards">`+
         `<div class="og-uc-card"><div class="og-uc-card-label">Understand</div>`+
-          (u.insight?`<div class="og-uc-insight">${esc(u.insight)}</div>`:'')+
-          (u.why?`<div class="og-uc-why"><strong>Why it matters —</strong> ${esc(u.why)}</div>`:'')+
+          (u.insight?ogLeadBullets(u.insight):'')+
+          (u.why?`<div class="og-uc-sublabel">Why it matters</div>${ogLeadBullets(u.why)}`:'')+
           (u.neuro?`<div class="og-uc-neuro">● ${esc(u.neuro)}</div>`:'')+
         `</div>`+
         `<div class="og-uc-card"><div class="og-uc-card-label">Activate</div>`+
-          (a.protocol?`<div class="og-uc-protocol"><strong>Try this —</strong> ${esc(a.protocol)}</div>`:'')+
-          (a.if_then?`<div class="og-uc-ifthen">${esc(a.if_then)}</div>`:'')+
+          (a.protocol?`<div class="og-uc-sublabel">Try this</div>${ogLeadBullets(a.protocol)}`:'')+
+          (a.if_then?`<div class="og-uc-callout"><span class="og-uc-callout-label">If / Then</span>${esc(a.if_then)}</div>`:'')+
           (a.reflection?`<div class="og-uc-reflect">${esc(a.reflection)}</div>`:'')+
         `</div>`+
       `</div>`+
@@ -24469,60 +24557,41 @@ function _convOpenCSById(id) {
       });
     });
   }
-  function ogContentLayer(){return document.getElementById('ogContentLayer');}
-  function ogClampBox(cx,cy,w,h){
-    const margin=20,W=2400,H=1500;
-    const x=Math.min(Math.max(cx-w/2,margin),W-w-margin);
-    const y=Math.min(Math.max(cy-h/2,margin),H-h-margin);
-    return{x,y};
-  }
+  /* v2.25a — spotlight modal lives outside the SVG entirely (see #ogSpotlight
+     markup after the founder section), so activating a node just populates
+     #ogSpotlightCard and toggles #ogSpotlight.active — no foreignObject, no
+     SVG-coordinate box math needed. The zoom-toward-node animation still
+     plays first as the "diving in" cue. */
   window.ogDeactivateContent=function(){
     if(!_ogOpenId)return;
-    const host=document.getElementById('ogHost_'+_ogOpenId);
-    if(host)host.classList.remove('og-visible');
-    window.ogZoomReset(650,()=>{const layer=ogContentLayer();if(layer)layer.innerHTML='';});
+    const spot=document.getElementById('ogSpotlight');
+    if(spot)spot.classList.remove('active');
+    window.ogZoomReset(650);
     _ogOpenId=null;
   };
   window.ogActivate=async function(id,cx,cy){
     if(_ogOpenId===id)return;
-    if(_ogOpenId){const prevHost=document.getElementById('ogHost_'+_ogOpenId);if(prevHost)prevHost.classList.remove('og-visible');}
     const path=OG_PATH[id];if(!path)return;
     const data=await loadOg();if(!data)return;
     const entry=ogGet(data,path);if(!entry)return;
+    const spot=document.getElementById('ogSpotlight');
+    const card=document.getElementById('ogSpotlightCard');
+    if(!spot||!card)return;
     _ogOpenId=id;
+    card.style.setProperty('--og-accent',ogAccentFor(id));
+    card.innerHTML=buildOgCardHTML(id,entry);
+    card.scrollTop=0;
     const isMain=path[path.length-1]==='main'||id==='hub';
-    const w=isMain?680:580, h=isMain?(OG_PILLS_KEY[id]?600:460):460;
-    const box=ogClampBox(cx,cy,w,h);
-    const layer=ogContentLayer();
-    if(!layer)return;
-    layer.innerHTML='';
-    const fo=document.createElementNS('http://www.w3.org/2000/svg','foreignObject');
-    fo.setAttribute('class','og-content-fo');
-    fo.setAttribute('x',box.x);fo.setAttribute('y',box.y);
-    fo.setAttribute('width',w);fo.setAttribute('height',h);
-    const hostDiv=document.createElement('div');
-    hostDiv.setAttribute('xmlns','http://www.w3.org/1999/xhtml');
-    hostDiv.className='og-content-host';
-    hostDiv.id='ogHost_'+id;
-    hostDiv.style.setProperty('--og-accent',ogAccentFor(id));
-    hostDiv.innerHTML=buildOgCardHTML(id,entry);
-    fo.appendChild(hostDiv);
-    layer.appendChild(fo);
-    const targetScale=Math.min(3.6,Math.max(2.2,0.85*2400/w));
+    const targetScale=isMain?1.8:2.6;
     window.ogZoomToNode(cx,cy,targetScale,850,()=>{
-      hostDiv.classList.add('og-visible');
+      spot.classList.add('active');
       if(OG_PILLS_KEY[id]){
-        const pillHost=hostDiv.querySelector('.og-pill-list');
+        const pillHost=card.querySelector('.og-pill-list');
         if(pillHost)buildOgPills(pillHost,OG_PILLS_KEY[id]);
       }
     });
   };
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&_ogOpenId)window.ogDeactivateContent();});
-  document.addEventListener('click',e=>{
-    if(!_ogOpenId)return;
-    if(e.target.closest('.og-node')||e.target.closest('.og-content-fo'))return;
-    if(e.target.closest('#ogMapScroll'))window.ogDeactivateContent();
-  });
 })();
 </script>
 <script>
