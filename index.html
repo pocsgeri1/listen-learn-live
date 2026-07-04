@@ -8398,6 +8398,90 @@
   }
   .og-concept-panel.open { transform: translateY(0); }
 }
+
+/* ── v2.25 — OG Map hyper-zoom content cards + related pills ─── */
+.og-content-fo { overflow: visible; }
+.og-content-host {
+  width: 100%; height: 100%; box-sizing: border-box;
+  background: #0f0f0fee; border: 1px solid rgba(232,213,163,0.16);
+  border-radius: 14px; padding: 26px 28px 22px;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  overflow-y: auto; opacity: 0; transition: opacity 0.35s ease;
+  box-shadow: 0 0 60px -10px var(--og-accent, #e8d5a3);
+  pointer-events: none;
+}
+.og-content-host.og-visible { opacity: 1; pointer-events: all; }
+.og-zoom-back-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: none; border: 1px solid rgba(232,213,163,0.2); border-radius: 999px;
+  color: var(--accent); font-family: 'DM Mono', monospace; font-size: 9.5px;
+  letter-spacing: 0.1em; text-transform: uppercase; padding: 6px 14px;
+  cursor: pointer; opacity: 0.7; transition: opacity 0.2s, border-color 0.2s;
+  margin-bottom: 14px;
+}
+.og-zoom-back-btn:hover { opacity: 1; border-color: rgba(232,213,163,0.5); }
+.og-uc-title {
+  font-family: 'Playfair Display', serif; font-style: italic; font-size: 22px;
+  color: var(--og-accent, #e8d5a3); margin-bottom: 4px; line-height: 1.15;
+}
+.og-uc-source {
+  font-family: 'DM Mono', monospace; font-size: 8px; letter-spacing: 0.08em;
+  opacity: 0.32; margin-top: 14px; text-transform: uppercase;
+}
+.og-uc-cards { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 14px; }
+.og-uc-card {
+  flex: 1 1 260px; min-width: 220px;
+  background: rgba(255,255,255,0.02); border: 1px solid rgba(232,213,163,0.08);
+  border-radius: 10px; padding: 16px 18px;
+}
+.og-uc-card-label {
+  font-family: 'DM Mono', monospace; font-size: 8px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--og-accent, #e8d5a3); opacity: 0.65;
+  margin-bottom: 10px;
+}
+.og-uc-insight, .og-uc-protocol {
+  font-size: 13px; line-height: 1.6; color: var(--text); margin-bottom: 10px;
+}
+.og-uc-why, .og-uc-ifthen {
+  font-size: 12px; line-height: 1.6; opacity: 0.62; margin-bottom: 10px;
+}
+.og-uc-reflect {
+  font-size: 12px; line-height: 1.55; opacity: 0.6; font-style: italic;
+}
+.og-uc-neuro {
+  font-family: 'DM Mono', monospace; font-size: 10.5px; opacity: 0.75;
+  color: var(--og-accent, #e8d5a3); margin-top: 2px;
+}
+.og-pill-section { margin-top: 18px; padding-top: 16px; border-top: 1px solid rgba(232,213,163,0.08); }
+.og-pill-section-label {
+  font-family: 'DM Mono', monospace; font-size: 8px; letter-spacing: 0.18em;
+  text-transform: uppercase; opacity: 0.32; margin-bottom: 10px;
+}
+.og-related-wrap { width: 100%; margin-bottom: 6px; }
+.og-related-pill-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: 'DM Mono', monospace; font-size: 0.63rem;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 999px; padding: 5px 12px 5px 14px;
+  color: var(--muted2); cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+.og-related-pill-btn:hover { border-color: var(--og-accent, var(--accent)); color: var(--og-accent, var(--accent)); }
+.og-related-pill-btn.expanded { border-color: var(--og-accent, var(--accent)); color: var(--og-accent, var(--accent)); }
+.og-pill-arrow { font-size: 0.55rem; transition: transform 0.2s; display: inline-block; }
+.og-related-pill-btn.expanded .og-pill-arrow { transform: rotate(180deg); }
+.og-related-expand {
+  display: grid; grid-template-rows: 0fr;
+  transition: grid-template-rows 0.28s cubic-bezier(0.4,0,0.2,1);
+}
+.og-related-expand.open { grid-template-rows: 1fr; }
+.og-pill-expand-inner { overflow: hidden; padding: 10px 4px 4px; }
+@media (max-width: 600px) {
+  .og-content-host { padding: 18px 18px 16px; }
+  .og-uc-title { font-size: 18px; }
+  .og-uc-cards { flex-direction: column; }
+}
 </style>
 
 <!-- HOW IT WORKS MODAL -->
@@ -9123,15 +9207,18 @@
               <circle cx="352" cy="1068" r="3" fill="#7aaf8a" class="og-np-sm3"/>
               <circle cx="900" cy="1025" r="3" fill="#a08fd4" class="og-np-sm4"/>
               <circle cx="1500" cy="1025" r="3" fill="#c47a9f" class="og-np-sm1"/>
+              <g class="og-node" onclick="ogActivate('hub',1200,640)">
               <circle cx="1200" cy="640" r="230" fill="url(#og-cg)" class="og-glow-aura"/>
+              <circle cx="1200" cy="640" r="90" fill="transparent"/>
               <circle cx="1200" cy="640" r="150" fill="none" stroke="#e8d5a3" stroke-width="0.3" stroke-opacity="0.13"/>
               <circle cx="1200" cy="640" r="98" fill="none" stroke="#e8d5a3" stroke-width="0.3" stroke-opacity="0.15"/>
               <circle cx="1200" cy="640" r="74" fill="#111" stroke="#e8d5a3" stroke-width="0.95"/>
               <circle cx="1200" cy="640" r="67" fill="none" stroke="#e8d5a3" stroke-width="0.3" stroke-opacity="0.28"/>
               <circle cx="1200" cy="640" r="1" fill="#e8d5a3"/>
-              <text x="1200" y="627" text-anchor="middle" fill="#e8d5a3" font-size="9.5" font-family="'DM Mono',monospace" letter-spacing="5" opacity="0.48">STALK THE</text>
-              <text x="1200" y="654" text-anchor="middle" fill="#e8d5a3" font-size="25" font-family="Georgia,serif" font-style="italic" letter-spacing="1">Impossible</text>
-              <g class="og-node" onclick="ogShowConcepts('drive')">
+              <text x="1200" y="627" text-anchor="middle" fill="#e8d5a3" font-size="9.5" font-family="'DM Mono',monospace" letter-spacing="5" opacity="0.48" style="pointer-events:none">STALK THE</text>
+              <text x="1200" y="654" text-anchor="middle" fill="#e8d5a3" font-size="25" font-family="Georgia,serif" font-style="italic" letter-spacing="1" style="pointer-events:none">Impossible</text>
+              </g>
+              <g class="og-node" onclick="ogActivate('drive',600,888)">
                 <circle cx="600" cy="888" r="152" fill="url(#og-dg)" class="og-glow-aura"/>
                 <circle cx="600" cy="888" r="90" fill="transparent"/>
                 <circle cx="600" cy="888" r="55" fill="#111" stroke="#e8a060" stroke-width="1"/>
@@ -9139,15 +9226,18 @@
                 <text x="600" y="882" text-anchor="middle" fill="#e8a060" font-size="17" font-family="Georgia,serif" letter-spacing="1" style="pointer-events:none">DRIVE</text>
                 <text x="600" y="900" text-anchor="middle" fill="#e8a060" font-size="7.5" font-family="'DM Mono',monospace" letter-spacing="2" opacity="0.52" style="pointer-events:none">THE FUEL</text>
               </g>
-              <circle cx="445" cy="778" r="36" fill="#111" stroke="#e8a060" stroke-width="0.6" stroke-opacity="0.62"/>
-              <text x="445" y="773" text-anchor="middle" fill="#e8a060" font-size="9.5" font-family="Georgia,serif">Extrinsic</text>
-              <text x="445" y="787" text-anchor="middle" fill="#e8a060" font-size="6.5" font-family="'DM Mono',monospace" opacity="0.48">Scaffolding</text>
+              <g class="og-node" onclick="ogActivate('drive_extrinsic',445,778)">
+                <circle cx="445" cy="778" r="45" fill="transparent"/>
+                <circle cx="445" cy="778" r="36" fill="#111" stroke="#e8a060" stroke-width="0.6" stroke-opacity="0.62"/>
+                <text x="445" y="773" text-anchor="middle" fill="#e8a060" font-size="9.5" font-family="Georgia,serif" style="pointer-events:none">Extrinsic</text>
+                <text x="445" y="787" text-anchor="middle" fill="#e8a060" font-size="6.5" font-family="'DM Mono',monospace" opacity="0.48" style="pointer-events:none">Scaffolding</text>
+              </g>
               <g transform="rotate(15,402,755)">
                 <text x="402" y="747" text-anchor="end" fill="#e8d5a3" font-size="7.5" font-family="'DM Mono',monospace" opacity="0.58">Money · Status · Approval · Fear</text>
                 <text x="402" y="760" text-anchor="end" fill="#e8d5a3" font-size="7" font-family="'DM Mono',monospace" opacity="0.42">Bootstraps early action — depletes fast</text>
                 <text x="402" y="773" text-anchor="end" fill="#d4715a" font-size="7" font-family="'DM Mono',monospace" opacity="0.7">● Adrenaline spike → Cortisol</text>
               </g>
-              <g class="og-node" onclick="ogShowConcepts('intrinsic')">
+              <g class="og-node" onclick="ogActivate('drive_intrinsic',425,1018)">
                 <circle cx="425" cy="1018" r="200" fill="url(#og-ig)" class="og-glow-aura"/>
                 <circle cx="425" cy="1018" r="80" fill="transparent"/>
                 <circle cx="425" cy="1018" r="52" fill="#111" stroke="#e8a060" stroke-width="1.1"/>
@@ -9156,7 +9246,7 @@
                 <text x="425" y="1011" text-anchor="middle" fill="#e8a060" font-size="13" font-family="Georgia,serif" style="pointer-events:none">Intrinsic</text>
                 <text x="425" y="1029" text-anchor="middle" fill="#e8a060" font-size="7" font-family="'DM Mono',monospace" letter-spacing="2" opacity="0.52" style="pointer-events:none">DURABLE FUEL</text>
               </g>
-              <g class="og-node" onclick="ogShowConcepts('curiosity')">
+              <g class="og-node" onclick="ogActivate('drive_curiosity',278,938)">
                 <circle cx="278" cy="938" r="40" fill="transparent"/>
                 <circle cx="278" cy="938" r="29" fill="#111" stroke="#e8a060" stroke-width="0.55" stroke-opacity="0.62"/>
                 <text x="278" y="942" text-anchor="middle" fill="#e8d5a3" font-size="9.5" font-family="Georgia,serif" font-style="italic" style="pointer-events:none">Curiosity</text>
@@ -9166,32 +9256,44 @@
                 <text x="237" y="921" text-anchor="end" fill="#e8d5a3" font-size="7" font-family="'DM Mono',monospace" opacity="0.42">Can't stop asking why</text>
                 <text x="237" y="934" text-anchor="end" fill="#a08fd4" font-size="7" font-family="'DM Mono',monospace" opacity="0.72">● Dopamine (novelty signal)</text>
               </g>
-              <circle cx="265" cy="1018" r="29" fill="#111" stroke="#e8a060" stroke-width="0.55" stroke-opacity="0.62"/>
-              <text x="265" y="1022" text-anchor="middle" fill="#e8d5a3" font-size="9.5" font-family="Georgia,serif" font-style="italic">Passion</text>
+              <g class="og-node" onclick="ogActivate('drive_passion',265,1018)">
+                <circle cx="265" cy="1018" r="38" fill="transparent"/>
+                <circle cx="265" cy="1018" r="29" fill="#111" stroke="#e8a060" stroke-width="0.55" stroke-opacity="0.62"/>
+                <text x="265" y="1022" text-anchor="middle" fill="#e8d5a3" font-size="9.5" font-family="Georgia,serif" font-style="italic" style="pointer-events:none">Passion</text>
+              </g>
               <text x="228" y="1009" text-anchor="end" fill="#e8d5a3" font-size="7.5" font-family="'DM Mono',monospace" opacity="0.58">Where 3+ curiosities intersect</text>
               <text x="228" y="1022" text-anchor="end" fill="#e8d5a3" font-size="7" font-family="'DM Mono',monospace" opacity="0.42">Not found — built by stacking</text>
               <text x="228" y="1035" text-anchor="end" fill="#a08fd4" font-size="7" font-family="'DM Mono',monospace" opacity="0.72">● Dopamine + Norepinephrine</text>
-              <circle cx="278" cy="1118" r="29" fill="#111" stroke="#e8a060" stroke-width="0.55" stroke-opacity="0.62"/>
-              <text x="278" y="1122" text-anchor="middle" fill="#e8d5a3" font-size="9.5" font-family="Georgia,serif" font-style="italic">Purpose</text>
+              <g class="og-node" onclick="ogActivate('drive_purpose',278,1118)">
+                <circle cx="278" cy="1118" r="38" fill="transparent"/>
+                <circle cx="278" cy="1118" r="29" fill="#111" stroke="#e8a060" stroke-width="0.55" stroke-opacity="0.62"/>
+                <text x="278" y="1122" text-anchor="middle" fill="#e8d5a3" font-size="9.5" font-family="Georgia,serif" font-style="italic" style="pointer-events:none">Purpose</text>
+              </g>
               <g transform="rotate(-25,238,1148)">
                 <text x="238" y="1140" text-anchor="end" fill="#e8d5a3" font-size="7.5" font-family="'DM Mono',monospace" opacity="0.58">Passion applied beyond yourself</text>
                 <text x="238" y="1153" text-anchor="end" fill="#e8d5a3" font-size="7" font-family="'DM Mono',monospace" opacity="0.42">Amplifies grit — reduces burnout</text>
                 <text x="238" y="1166" text-anchor="end" fill="#7aaf8a" font-size="7" font-family="'DM Mono',monospace" opacity="0.72">● Oxytocin + Serotonin</text>
               </g>
-              <circle cx="425" cy="1183" r="29" fill="#111" stroke="#e8a060" stroke-width="0.55" stroke-opacity="0.62"/>
-              <text x="425" y="1187" text-anchor="middle" fill="#e8d5a3" font-size="9.5" font-family="Georgia,serif" font-style="italic">Autonomy</text>
+              <g class="og-node" onclick="ogActivate('drive_autonomy',425,1183)">
+                <circle cx="425" cy="1183" r="38" fill="transparent"/>
+                <circle cx="425" cy="1183" r="29" fill="#111" stroke="#e8a060" stroke-width="0.55" stroke-opacity="0.62"/>
+                <text x="425" y="1187" text-anchor="middle" fill="#e8d5a3" font-size="9.5" font-family="Georgia,serif" font-style="italic" style="pointer-events:none">Autonomy</text>
+              </g>
               <g transform="rotate(27,460,1218)">
                 <text x="460" y="1210" text-anchor="start" fill="#e8d5a3" font-size="7.5" font-family="'DM Mono',monospace" opacity="0.58">Control over HOW you pursue</text>
                 <text x="460" y="1223" text-anchor="start" fill="#a08fd4" font-size="7" font-family="'DM Mono',monospace" opacity="0.72">● Dopamine (perceived agency)</text>
               </g>
-              <circle cx="580" cy="1158" r="29" fill="#111" stroke="#e8a060" stroke-width="0.55" stroke-opacity="0.62"/>
-              <text x="580" y="1162" text-anchor="middle" fill="#e8d5a3" font-size="9.5" font-family="Georgia,serif" font-style="italic">Mastery</text>
+              <g class="og-node" onclick="ogActivate('drive_mastery',580,1158)">
+                <circle cx="580" cy="1158" r="38" fill="transparent"/>
+                <circle cx="580" cy="1158" r="29" fill="#111" stroke="#e8a060" stroke-width="0.55" stroke-opacity="0.62"/>
+                <text x="580" y="1162" text-anchor="middle" fill="#e8d5a3" font-size="9.5" font-family="Georgia,serif" font-style="italic" style="pointer-events:none">Mastery</text>
+              </g>
               <g transform="rotate(30,614,1188)">
                 <text x="614" y="1180" text-anchor="start" fill="#e8d5a3" font-size="7.5" font-family="'DM Mono',monospace" opacity="0.58">Compounding skill loop</text>
                 <text x="614" y="1193" text-anchor="start" fill="#e8d5a3" font-size="7" font-family="'DM Mono',monospace" opacity="0.42">Flow = its neurochemical payoff</text>
                 <text x="614" y="1206" text-anchor="start" fill="#c47a9f" font-size="7" font-family="'DM Mono',monospace" opacity="0.72">● Endorphins + Dopamine</text>
               </g>
-              <g class="og-node" onclick="ogShowConcepts('goals')">
+              <g class="og-node" onclick="ogActivate('goals',1200,185)">
                 <circle cx="1200" cy="185" r="148" fill="url(#og-gg)" class="og-glow-aura"/>
                 <circle cx="1200" cy="185" r="90" fill="transparent"/>
                 <circle cx="1200" cy="185" r="55" fill="#111" stroke="#6b9fc4" stroke-width="1"/>
@@ -9200,25 +9302,34 @@
                 <text x="1200" y="197" text-anchor="middle" fill="#6b9fc4" font-size="7.5" font-family="'DM Mono',monospace" letter-spacing="2" opacity="0.52" style="pointer-events:none">THE MAP</text>
               </g>
               <text x="1200" y="265" text-anchor="middle" fill="#6b9fc4" font-size="7.5" font-family="'DM Mono',monospace" opacity="0.55">MTP → High Hard Goals → Clear Goals = the impossible compressed into daily action</text>
-              <circle cx="954" cy="138" r="36" fill="#111" stroke="#6b9fc4" stroke-width="0.6" stroke-opacity="0.62"/>
-              <text x="954" y="133" text-anchor="middle" fill="#6b9fc4" font-size="10" font-family="Georgia,serif">MTP</text>
-              <text x="954" y="149" text-anchor="middle" fill="#6b9fc4" font-size="7" font-family="'DM Mono',monospace" opacity="0.75">North Star</text>
+              <g class="og-node" onclick="ogActivate('goals_mtp',954,138)">
+                <circle cx="954" cy="138" r="45" fill="transparent"/>
+                <circle cx="954" cy="138" r="36" fill="#111" stroke="#6b9fc4" stroke-width="0.6" stroke-opacity="0.62"/>
+                <text x="954" y="133" text-anchor="middle" fill="#6b9fc4" font-size="10" font-family="Georgia,serif" style="pointer-events:none">MTP</text>
+                <text x="954" y="149" text-anchor="middle" fill="#6b9fc4" font-size="7" font-family="'DM Mono',monospace" opacity="0.75" style="pointer-events:none">North Star</text>
+              </g>
               <text x="910" y="126" text-anchor="end" fill="#e8d5a3" font-size="7.5" font-family="'DM Mono',monospace" opacity="0.58">Massive Transformative Purpose</text>
               <text x="910" y="139" text-anchor="end" fill="#e8d5a3" font-size="7" font-family="'DM Mono',monospace" opacity="0.42">Personal — not corporate. Anchors direction.</text>
               <text x="910" y="152" text-anchor="end" fill="#6b9fc4" font-size="7" font-family="'DM Mono',monospace" opacity="0.72">● Sustained Norepinephrine</text>
-              <circle cx="1200" cy="62" r="34" fill="#111" stroke="#6b9fc4" stroke-width="0.6" stroke-opacity="0.62"/>
-              <text x="1200" y="56" text-anchor="middle" fill="#6b9fc4" font-size="8.5" font-family="Georgia,serif">High Hard</text>
-              <text x="1200" y="70" text-anchor="middle" fill="#6b9fc4" font-size="8.5" font-family="Georgia,serif">Goals</text>
+              <g class="og-node" onclick="ogActivate('goals_hhg',1200,62)">
+                <circle cx="1200" cy="62" r="43" fill="transparent"/>
+                <circle cx="1200" cy="62" r="34" fill="#111" stroke="#6b9fc4" stroke-width="0.6" stroke-opacity="0.62"/>
+                <text x="1200" y="56" text-anchor="middle" fill="#6b9fc4" font-size="8.5" font-family="Georgia,serif" style="pointer-events:none">High Hard</text>
+                <text x="1200" y="70" text-anchor="middle" fill="#6b9fc4" font-size="8.5" font-family="Georgia,serif" style="pointer-events:none">Goals</text>
+              </g>
               <text x="1238" y="52" text-anchor="start" fill="#e8d5a3" font-size="7.5" font-family="'DM Mono',monospace" opacity="0.58">1–5 yr horizon — edge of ability</text>
               <text x="1238" y="65" text-anchor="start" fill="#e8d5a3" font-size="7" font-family="'DM Mono',monospace" opacity="0.42">Challenge vs. skill = flow entry</text>
               <text x="1238" y="78" text-anchor="start" fill="#a08fd4" font-size="7" font-family="'DM Mono',monospace" opacity="0.72">● Dopamine anticipation</text>
-              <circle cx="1446" cy="138" r="36" fill="#111" stroke="#6b9fc4" stroke-width="0.6" stroke-opacity="0.62"/>
-              <text x="1446" y="133" text-anchor="middle" fill="#6b9fc4" font-size="9.5" font-family="Georgia,serif">Clear Goals</text>
-              <text x="1446" y="149" text-anchor="middle" fill="#6b9fc4" font-size="7" font-family="'DM Mono',monospace" opacity="0.75">Daily Layer</text>
+              <g class="og-node" onclick="ogActivate('goals_clear',1446,138)">
+                <circle cx="1446" cy="138" r="45" fill="transparent"/>
+                <circle cx="1446" cy="138" r="36" fill="#111" stroke="#6b9fc4" stroke-width="0.6" stroke-opacity="0.62"/>
+                <text x="1446" y="133" text-anchor="middle" fill="#6b9fc4" font-size="9.5" font-family="Georgia,serif" style="pointer-events:none">Clear Goals</text>
+                <text x="1446" y="149" text-anchor="middle" fill="#6b9fc4" font-size="7" font-family="'DM Mono',monospace" opacity="0.75" style="pointer-events:none">Daily Layer</text>
+              </g>
               <text x="1490" y="126" text-anchor="start" fill="#e8d5a3" font-size="7.5" font-family="'DM Mono',monospace" opacity="0.58">Specific enough for a to-do list</text>
               <text x="1490" y="139" text-anchor="start" fill="#e8d5a3" font-size="7" font-family="'DM Mono',monospace" opacity="0.42">Daily/weekly execution layer</text>
               <text x="1490" y="152" text-anchor="start" fill="#a08fd4" font-size="7" font-family="'DM Mono',monospace" opacity="0.72">● Dopamine on completion</text>
-              <g class="og-node" onclick="ogShowConcepts('grit')">
+              <g class="og-node" onclick="ogActivate('grit',1800,888)">
                 <circle cx="1800" cy="888" r="152" fill="url(#og-rg)" class="og-glow-aura"/>
                 <circle cx="1800" cy="888" r="90" fill="transparent"/>
                 <circle cx="1800" cy="888" r="55" fill="#111" stroke="#d4715a" stroke-width="1"/>
@@ -9226,46 +9337,64 @@
                 <text x="1800" y="882" text-anchor="middle" fill="#d4715a" font-size="17" font-family="Georgia,serif" letter-spacing="1" style="pointer-events:none">GRIT</text>
                 <text x="1800" y="900" text-anchor="middle" fill="#d4715a" font-size="7.5" font-family="'DM Mono',monospace" letter-spacing="2" opacity="0.52" style="pointer-events:none">THE GEAR</text>
               </g>
-              <circle cx="1919" cy="746" r="32" fill="#111" stroke="#d4715a" stroke-width="0.55" stroke-opacity="0.62"/>
-              <text x="1919" y="741" text-anchor="middle" fill="#e8d5a3" font-size="8.5" font-family="Georgia,serif" font-style="italic">Perseverance</text>
-              <text x="1919" y="754" text-anchor="middle" fill="#e8d5a3" font-size="7" font-family="'DM Mono',monospace" opacity="0.48">of Effort</text>
+              <g class="og-node" onclick="ogActivate('grit_perseverance',1919,746)">
+                <circle cx="1919" cy="746" r="35" fill="transparent"/>
+                <circle cx="1919" cy="746" r="32" fill="#111" stroke="#d4715a" stroke-width="0.55" stroke-opacity="0.62"/>
+                <text x="1919" y="741" text-anchor="middle" fill="#e8d5a3" font-size="8.5" font-family="Georgia,serif" font-style="italic" style="pointer-events:none">Perseverance</text>
+                <text x="1919" y="754" text-anchor="middle" fill="#e8d5a3" font-size="7" font-family="'DM Mono',monospace" opacity="0.48" style="pointer-events:none">of Effort</text>
+              </g>
               <g transform="rotate(-35,1962,726)">
                 <text x="1962" y="718" text-anchor="start" fill="#e8d5a3" font-size="7.5" font-family="'DM Mono',monospace" opacity="0.56">Raw continued action despite difficulty</text>
                 <text x="1962" y="731" text-anchor="start" fill="#c47a9f" font-size="7" font-family="'DM Mono',monospace" opacity="0.72">● Endorphins buffer pain · NE focus</text>
               </g>
-              <circle cx="1964" cy="819" r="32" fill="#111" stroke="#d4715a" stroke-width="0.55" stroke-opacity="0.62"/>
-              <text x="1964" y="814" text-anchor="middle" fill="#e8d5a3" font-size="8.5" font-family="Georgia,serif" font-style="italic">Consistency</text>
-              <text x="1964" y="827" text-anchor="middle" fill="#e8d5a3" font-size="7" font-family="'DM Mono',monospace" opacity="0.48">of Interest</text>
+              <g class="og-node" onclick="ogActivate('grit_consistency',1964,819)">
+                <circle cx="1964" cy="819" r="35" fill="transparent"/>
+                <circle cx="1964" cy="819" r="32" fill="#111" stroke="#d4715a" stroke-width="0.55" stroke-opacity="0.62"/>
+                <text x="1964" y="814" text-anchor="middle" fill="#e8d5a3" font-size="8.5" font-family="Georgia,serif" font-style="italic" style="pointer-events:none">Consistency</text>
+                <text x="1964" y="827" text-anchor="middle" fill="#e8d5a3" font-size="7" font-family="'DM Mono',monospace" opacity="0.48" style="pointer-events:none">of Interest</text>
+              </g>
               <g transform="rotate(-18,2010,819)">
                 <text x="2010" y="812" text-anchor="start" fill="#e8d5a3" font-size="7.5" font-family="'DM Mono',monospace" opacity="0.56">Staying in love with the problem</text>
                 <text x="2010" y="825" text-anchor="start" fill="#a08fd4" font-size="7" font-family="'DM Mono',monospace" opacity="0.72">● Dopamine curiosity-loop alive</text>
               </g>
-              <circle cx="1983" cy="914" r="32" fill="#111" stroke="#d4715a" stroke-width="0.55" stroke-opacity="0.62"/>
-              <text x="1983" y="918" text-anchor="middle" fill="#e8d5a3" font-size="8.5" font-family="Georgia,serif" font-style="italic">Resilience</text>
+              <g class="og-node" onclick="ogActivate('grit_resilience',1983,914)">
+                <circle cx="1983" cy="914" r="35" fill="transparent"/>
+                <circle cx="1983" cy="914" r="32" fill="#111" stroke="#d4715a" stroke-width="0.55" stroke-opacity="0.62"/>
+                <text x="1983" y="918" text-anchor="middle" fill="#e8d5a3" font-size="8.5" font-family="Georgia,serif" font-style="italic" style="pointer-events:none">Resilience</text>
+              </g>
               <text x="2026" y="907" text-anchor="start" fill="#e8d5a3" font-size="7.5" font-family="'DM Mono',monospace" opacity="0.56">Bounce from failure — no identity collapse</text>
               <text x="2026" y="920" text-anchor="start" fill="#7aaf8a" font-size="7" font-family="'DM Mono',monospace" opacity="0.72">● Cortisol regulation · Oxytocin</text>
-              <circle cx="1952" cy="994" r="32" fill="#111" stroke="#d4715a" stroke-width="0.55" stroke-opacity="0.62"/>
-              <text x="1952" y="988" text-anchor="middle" fill="#e8d5a3" font-size="8.5" font-family="Georgia,serif" font-style="italic">Emotional</text>
-              <text x="1952" y="1001" text-anchor="middle" fill="#e8d5a3" font-size="8.5" font-family="Georgia,serif" font-style="italic">Regulation</text>
+              <g class="og-node" onclick="ogActivate('grit_emoreg',1952,994)">
+                <circle cx="1952" cy="994" r="35" fill="transparent"/>
+                <circle cx="1952" cy="994" r="32" fill="#111" stroke="#d4715a" stroke-width="0.55" stroke-opacity="0.62"/>
+                <text x="1952" y="988" text-anchor="middle" fill="#e8d5a3" font-size="8.5" font-family="Georgia,serif" font-style="italic" style="pointer-events:none">Emotional</text>
+                <text x="1952" y="1001" text-anchor="middle" fill="#e8d5a3" font-size="8.5" font-family="Georgia,serif" font-style="italic" style="pointer-events:none">Regulation</text>
+              </g>
               <g transform="rotate(30,1952,994)">
                 <text x="1995" y="988" text-anchor="start" fill="#e8d5a3" font-size="7.5" font-family="'DM Mono',monospace" opacity="0.56">Channel emotions — don't suppress</text>
                 <text x="1995" y="1001" text-anchor="start" fill="#7aaf8a" font-size="7" font-family="'DM Mono',monospace" opacity="0.72">● Serotonin + GABA</text>
               </g>
-              <circle cx="1898" cy="1045" r="32" fill="#111" stroke="#d4715a" stroke-width="0.55" stroke-opacity="0.62"/>
-              <text x="1898" y="1039" text-anchor="middle" fill="#e8d5a3" font-size="8.5" font-family="Georgia,serif" font-style="italic">Long-term</text>
-              <text x="1898" y="1052" text-anchor="middle" fill="#e8d5a3" font-size="8.5" font-family="Georgia,serif" font-style="italic">Thinking</text>
+              <g class="og-node" onclick="ogActivate('grit_ltt',1898,1045)">
+                <circle cx="1898" cy="1045" r="35" fill="transparent"/>
+                <circle cx="1898" cy="1045" r="32" fill="#111" stroke="#d4715a" stroke-width="0.55" stroke-opacity="0.62"/>
+                <text x="1898" y="1039" text-anchor="middle" fill="#e8d5a3" font-size="8.5" font-family="Georgia,serif" font-style="italic" style="pointer-events:none">Long-term</text>
+                <text x="1898" y="1052" text-anchor="middle" fill="#e8d5a3" font-size="8.5" font-family="Georgia,serif" font-style="italic" style="pointer-events:none">Thinking</text>
+              </g>
               <g transform="rotate(38,1898,1045)">
                 <text x="1941" y="1039" text-anchor="start" fill="#e8d5a3" font-size="7.5" font-family="'DM Mono',monospace" opacity="0.56">Delayed gratification at scale</text>
                 <text x="1941" y="1052" text-anchor="start" fill="#a08fd4" font-size="7" font-family="'DM Mono',monospace" opacity="0.72">● Prefrontal Dopamine</text>
               </g>
-              <circle cx="1826" cy="1071" r="32" fill="#111" stroke="#d4715a" stroke-width="0.55" stroke-opacity="0.62"/>
-              <text x="1826" y="1065" text-anchor="middle" fill="#e8d5a3" font-size="8.5" font-family="Georgia,serif" font-style="italic">Growth</text>
-              <text x="1826" y="1078" text-anchor="middle" fill="#e8d5a3" font-size="8.5" font-family="Georgia,serif" font-style="italic">Mindset</text>
+              <g class="og-node" onclick="ogActivate('grit_growth',1826,1071)">
+                <circle cx="1826" cy="1071" r="35" fill="transparent"/>
+                <circle cx="1826" cy="1071" r="32" fill="#111" stroke="#d4715a" stroke-width="0.55" stroke-opacity="0.62"/>
+                <text x="1826" y="1065" text-anchor="middle" fill="#e8d5a3" font-size="8.5" font-family="Georgia,serif" font-style="italic" style="pointer-events:none">Growth</text>
+                <text x="1826" y="1078" text-anchor="middle" fill="#e8d5a3" font-size="8.5" font-family="Georgia,serif" font-style="italic" style="pointer-events:none">Mindset</text>
+              </g>
               <g transform="rotate(42,1826,1071)">
                 <text x="1869" y="1065" text-anchor="start" fill="#e8d5a3" font-size="7.5" font-family="'DM Mono',monospace" opacity="0.56">Skills are trainable — Dweck layer</text>
                 <text x="1869" y="1078" text-anchor="start" fill="#6b9fc4" font-size="7" font-family="'DM Mono',monospace" opacity="0.72">● BDNF — literal neuroplasticity</text>
               </g>
-              <g class="og-node" onclick="ogShowConcepts('flow')">
+              <g class="og-node" onclick="ogActivate('flow',1200,1110)">
                 <circle cx="1200" cy="1110" r="118" fill="url(#og-fg)" class="og-glow-aura"/>
                 <circle cx="1200" cy="1110" r="78" fill="none" stroke="#e8d5a3" stroke-width="0.3" stroke-opacity="0.1"/>
                 <circle cx="1200" cy="1110" r="57" fill="none" stroke="#e8d5a3" stroke-width="0.3" stroke-opacity="0.17"/>
@@ -9279,6 +9408,27 @@
               <text x="1200" y="1170" text-anchor="middle" fill="#e8d5a3" font-size="8" font-family="'DM Mono',monospace" opacity="0.62">Peak performance zone — DRIVE meets GRIT</text>
               <text x="1200" y="1184" text-anchor="middle" fill="#e8d5a3" font-size="7.5" font-family="'DM Mono',monospace" opacity="0.52">Challenge skill ratio balanced · full neurochemical cocktail</text>
               <text x="1200" y="1198" text-anchor="middle" fill="#a08fd4" font-size="7.5" font-family="'DM Mono',monospace" opacity="0.72">● Dopamine · NE · Endorphins · Anandamide · Serotonin</text>
+              <path d="M 1200,1150 Q 1080,1190 1030,1250" fill="none" stroke="#e8d5a3" stroke-width="0.5" stroke-dasharray="3,4" stroke-opacity="0.3"/>
+              <g class="og-node" onclick="ogActivate('flow_challenge',1030,1250)">
+                <circle cx="1030" cy="1250" r="40" fill="transparent"/>
+                <circle cx="1030" cy="1250" r="32" fill="#111" stroke="#e8d5a3" stroke-width="0.55" stroke-opacity="0.62"/>
+                <text x="1030" y="1244" text-anchor="middle" fill="#e8d5a3" font-size="8" font-family="Georgia,serif" font-style="italic" style="pointer-events:none">Challenge/Skill</text>
+                <text x="1030" y="1258" text-anchor="middle" fill="#e8d5a3" font-size="7" font-family="'DM Mono',monospace" opacity="0.48" style="pointer-events:none">Balance</text>
+              </g>
+              <path d="M 1200,1154 Q 1200,1230 1200,1300" fill="none" stroke="#e8d5a3" stroke-width="0.5" stroke-dasharray="3,4" stroke-opacity="0.3"/>
+              <g class="og-node" onclick="ogActivate('flow_feedback',1200,1300)">
+                <circle cx="1200" cy="1300" r="40" fill="transparent"/>
+                <circle cx="1200" cy="1300" r="32" fill="#111" stroke="#e8d5a3" stroke-width="0.55" stroke-opacity="0.62"/>
+                <text x="1200" y="1294" text-anchor="middle" fill="#e8d5a3" font-size="8.5" font-family="Georgia,serif" font-style="italic" style="pointer-events:none">Clear Goals</text>
+                <text x="1200" y="1308" text-anchor="middle" fill="#e8d5a3" font-size="7" font-family="'DM Mono',monospace" opacity="0.48" style="pointer-events:none">+ Feedback</text>
+              </g>
+              <path d="M 1200,1150 Q 1320,1190 1370,1250" fill="none" stroke="#e8d5a3" stroke-width="0.5" stroke-dasharray="3,4" stroke-opacity="0.3"/>
+              <g class="og-node" onclick="ogActivate('flow_richenv',1370,1250)">
+                <circle cx="1370" cy="1250" r="40" fill="transparent"/>
+                <circle cx="1370" cy="1250" r="32" fill="#111" stroke="#e8d5a3" stroke-width="0.55" stroke-opacity="0.62"/>
+                <text x="1370" y="1244" text-anchor="middle" fill="#e8d5a3" font-size="8.5" font-family="Georgia,serif" font-style="italic" style="pointer-events:none">Rich</text>
+                <text x="1370" y="1258" text-anchor="middle" fill="#e8d5a3" font-size="8.5" font-family="Georgia,serif" font-style="italic" style="pointer-events:none">Environment</text>
+              </g>
               <line x1="1200" y1="714" x2="1200" y2="800" stroke="#e8d5a3" stroke-width="0.5" stroke-dasharray="2,3" stroke-opacity="0.26"/>
               <rect x="1025" y="800" width="380" height="188" rx="5" fill="#0d0d0d" stroke="#e8d5a3" stroke-width="0.5" stroke-opacity="0.3"/>
               <rect x="1025" y="800" width="380" height="188" rx="5" fill="#e8d5a3" fill-opacity="0.018"/>
@@ -9317,6 +9467,7 @@
               <line x1="500" y1="1458" x2="1900" y2="1458" stroke="#e8d5a3" stroke-width="0.2" stroke-opacity="0.12"/>
               <text x="1200" y="1476" text-anchor="middle" fill="#e8d5a3" font-size="10.5" font-family="Georgia,serif" font-style="italic" opacity="0.45">"Flow is evolution's gift for stalking the impossible." — Steven Kotler</text>
               <text x="2080" y="1494" text-anchor="end" fill="#e8d5a3" font-size="6" font-family="'DM Mono',monospace" opacity="0.18" font-style="italic">After Steven Kotler — The Art of Impossible</text>
+              <g id="ogContentLayer"></g>
             </svg>
               </div>
             </div>
@@ -24238,6 +24389,140 @@ function _convOpenCSById(id) {
   window.ogClosePanel=function(){document.getElementById('ogConceptPanel').classList.remove('open');document.getElementById('ogPanelBackdrop').classList.remove('visible');clearRing();_an=null;};
   window.toggleOgSection=function(){_open=!_open;document.getElementById('ogSection').classList.toggle('open',_open);document.getElementById('ogExpandBtn').classList.toggle('open',_open);if(_open){load();setTimeout(()=>document.getElementById('ogExpandRow')?.scrollIntoView({behavior:'smooth',block:'start'}),80);}};
   document.addEventListener('keydown',e=>{if(e.key==='Escape')window.ogClosePanel();});
+
+  /* v2.25 — hyper-zoom content: cards live inside each node, revealed on zoom instead of the side panel */
+  const OG_PATH={
+    hub:['hub','stalk_the_impossible'],
+    drive:['drive','main'], drive_extrinsic:['drive','sub','extrinsic'], drive_intrinsic:['drive','sub','intrinsic'],
+    drive_curiosity:['drive','sub','curiosity'], drive_passion:['drive','sub','passion'], drive_purpose:['drive','sub','purpose'],
+    drive_autonomy:['drive','sub','autonomy'], drive_mastery:['drive','sub','mastery'],
+    goals:['goals','main'], goals_mtp:['goals','sub','mtp'], goals_hhg:['goals','sub','high_hard_goals'], goals_clear:['goals','sub','clear_goals'],
+    grit:['grit','main'], grit_perseverance:['grit','sub','perseverance'], grit_consistency:['grit','sub','consistency'],
+    grit_resilience:['grit','sub','resilience'], grit_emoreg:['grit','sub','emotional_regulation'],
+    grit_ltt:['grit','sub','long_term_thinking'], grit_growth:['grit','sub','growth_mindset'],
+    flow:['flow','main'], flow_challenge:['flow','sub','challenge_skill_balance'],
+    flow_feedback:['flow','sub','clear_goals_feedback'], flow_richenv:['flow','sub','rich_environment']
+  };
+  const OG_PILLS_KEY={drive:'drive',drive_intrinsic:'intrinsic',drive_curiosity:'curiosity',goals:'goals',grit:'grit',flow:'flow'};
+  const OG_COL={hub:'#e8d5a3',drive:'#e8a060',goals:'#6b9fc4',grit:'#d4715a',flow:'#e8d5a3'};
+  let _og=null,_ogOpenId=null;
+  async function loadOg(){
+    if(_og)return _og;
+    try{const r=await fetch('/ogmap.json?v='+Date.now());_og=await r.json();}
+    catch(e){try{const r=await fetch('https://raw.githubusercontent.com/pocsgeri1/listen-learn-live/main/ogmap.json');_og=await r.json();}catch(e2){_og=null;}}
+    return _og;
+  }
+  function ogGet(data,path){let n=data;for(const p of path){if(!n)return null;n=n[p];}return n;}
+  function ogAccentFor(id){const root=id.split('_')[0];return OG_COL[root]||'#e8d5a3';}
+  function buildOgCardHTML(id,entry){
+    const u=entry.understand||{},a=entry.activate||{};
+    let html=`<button class="og-zoom-back-btn" onclick="window.ogDeactivateContent()">← Back to map</button>`+
+      `<div class="og-uc-title">${esc(entry.label||'')}</div>`+
+      `<div class="og-uc-cards">`+
+        `<div class="og-uc-card"><div class="og-uc-card-label">Understand</div>`+
+          (u.insight?`<div class="og-uc-insight">${esc(u.insight)}</div>`:'')+
+          (u.why?`<div class="og-uc-why"><strong>Why it matters —</strong> ${esc(u.why)}</div>`:'')+
+          (u.neuro?`<div class="og-uc-neuro">● ${esc(u.neuro)}</div>`:'')+
+        `</div>`+
+        `<div class="og-uc-card"><div class="og-uc-card-label">Activate</div>`+
+          (a.protocol?`<div class="og-uc-protocol"><strong>Try this —</strong> ${esc(a.protocol)}</div>`:'')+
+          (a.if_then?`<div class="og-uc-ifthen">${esc(a.if_then)}</div>`:'')+
+          (a.reflection?`<div class="og-uc-reflect">${esc(a.reflection)}</div>`:'')+
+        `</div>`+
+      `</div>`+
+      (entry.source?`<div class="og-uc-source">${esc(entry.source)}</div>`:'');
+    if(OG_PILLS_KEY[id]){
+      html+=`<div class="og-pill-section" id="ogPillHost_${id}"><div class="og-pill-section-label">Related concepts</div><div class="og-pill-list"></div></div>`;
+    }
+    return html;
+  }
+  function buildOgPills(container,pillsKey){
+    load().then(all=>{
+      const top=all.map(c=>({c,s:score(c,pillsKey)})).filter(x=>x.s>0).sort((a,b)=>b.s-a.s).slice(0,5).map(x=>x.c);
+      container.innerHTML='';
+      let openId=null;
+      top.forEach(c=>{
+        const wrap=document.createElement('div');wrap.className='og-related-wrap';
+        const btn=document.createElement('button');btn.className='og-related-pill-btn';
+        btn.innerHTML=esc(c.term)+' <span class="og-pill-arrow">▾</span>';
+        const exp=document.createElement('div');exp.className='og-related-expand';
+        exp.innerHTML=`<div class="og-pill-expand-inner">`+
+          (c.hook?`<div class="og-card-hook">${esc(c.hook)}</div>`:'')+
+          (c.plain?`<div class="og-card-plain">${esc(c.plain)}</div>`:'')+
+          (c.prompt?`<div class="og-card-divider"></div><div class="og-card-prompt-lbl">Try this</div><div class="og-card-prompt">${esc(c.prompt)}</div>`:'')+
+          `</div>`;
+        btn.addEventListener('click',()=>{
+          const isOpen=exp.classList.contains('open');
+          if(openId&&openId!==c.id){
+            const prevBtn=container.querySelector('.og-related-pill-btn.expanded');
+            const prevExp=container.querySelector('.og-related-expand.open');
+            if(prevBtn)prevBtn.classList.remove('expanded');
+            if(prevExp)prevExp.classList.remove('open');
+          }
+          const opening=!isOpen;
+          exp.classList.toggle('open',opening);
+          btn.classList.toggle('expanded',opening);
+          openId=opening?c.id:null;
+        });
+        wrap.appendChild(btn);wrap.appendChild(exp);
+        container.appendChild(wrap);
+      });
+    });
+  }
+  function ogContentLayer(){return document.getElementById('ogContentLayer');}
+  function ogClampBox(cx,cy,w,h){
+    const margin=20,W=2400,H=1500;
+    const x=Math.min(Math.max(cx-w/2,margin),W-w-margin);
+    const y=Math.min(Math.max(cy-h/2,margin),H-h-margin);
+    return{x,y};
+  }
+  window.ogDeactivateContent=function(){
+    if(!_ogOpenId)return;
+    const host=document.getElementById('ogHost_'+_ogOpenId);
+    if(host)host.classList.remove('og-visible');
+    window.ogZoomReset(650,()=>{const layer=ogContentLayer();if(layer)layer.innerHTML='';});
+    _ogOpenId=null;
+  };
+  window.ogActivate=async function(id,cx,cy){
+    if(_ogOpenId===id)return;
+    if(_ogOpenId){const prevHost=document.getElementById('ogHost_'+_ogOpenId);if(prevHost)prevHost.classList.remove('og-visible');}
+    const path=OG_PATH[id];if(!path)return;
+    const data=await loadOg();if(!data)return;
+    const entry=ogGet(data,path);if(!entry)return;
+    _ogOpenId=id;
+    const isMain=path[path.length-1]==='main'||id==='hub';
+    const w=isMain?680:580, h=isMain?(OG_PILLS_KEY[id]?600:460):460;
+    const box=ogClampBox(cx,cy,w,h);
+    const layer=ogContentLayer();
+    if(!layer)return;
+    layer.innerHTML='';
+    const fo=document.createElementNS('http://www.w3.org/2000/svg','foreignObject');
+    fo.setAttribute('class','og-content-fo');
+    fo.setAttribute('x',box.x);fo.setAttribute('y',box.y);
+    fo.setAttribute('width',w);fo.setAttribute('height',h);
+    const hostDiv=document.createElement('div');
+    hostDiv.setAttribute('xmlns','http://www.w3.org/1999/xhtml');
+    hostDiv.className='og-content-host';
+    hostDiv.id='ogHost_'+id;
+    hostDiv.style.setProperty('--og-accent',ogAccentFor(id));
+    hostDiv.innerHTML=buildOgCardHTML(id,entry);
+    fo.appendChild(hostDiv);
+    layer.appendChild(fo);
+    const targetScale=Math.min(3.6,Math.max(2.2,0.85*2400/w));
+    window.ogZoomToNode(cx,cy,targetScale,850,()=>{
+      hostDiv.classList.add('og-visible');
+      if(OG_PILLS_KEY[id]){
+        const pillHost=hostDiv.querySelector('.og-pill-list');
+        if(pillHost)buildOgPills(pillHost,OG_PILLS_KEY[id]);
+      }
+    });
+  };
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&_ogOpenId)window.ogDeactivateContent();});
+  document.addEventListener('click',e=>{
+    if(!_ogOpenId)return;
+    if(e.target.closest('.og-node')||e.target.closest('.og-content-fo'))return;
+    if(e.target.closest('#ogMapScroll'))window.ogDeactivateContent();
+  });
 })();
 </script>
 <script>
@@ -24296,6 +24581,31 @@ function _convOpenCSById(id) {
     else if(e.touches.length===2&&ptA){var d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);scale=Math.min(4,Math.max(0.5,scale*(d/ptA)));ptA=d;apply();}
   },{passive:true});
   document.addEventListener("touchend",function(){drag=false;ptA=null;});
+
+  /* v2.25 — hyper-zoom to a node's SVG coordinates, reusing the same transform/scale/ox/oy this closure already drives */
+  function animateTransform(targetScale,tox,toy,duration,cb){
+    var inner=el("ogMapInner");
+    if(!inner){if(cb)cb();return;}
+    inner.style.transition="transform "+duration+"ms cubic-bezier(0.65,0,0.35,1)";
+    scale=targetScale;ox=tox;oy=toy;apply();
+    var done=false;
+    function fin(){if(done)return;done=true;inner.removeEventListener("transitionend",fin);inner.style.transition="";if(cb)cb();}
+    inner.addEventListener("transitionend",fin);
+    setTimeout(fin,duration+120);
+  }
+  window.ogZoomToNode=function(svgCx,svgCy,targetScale,duration,cb){
+    var s=el("ogMapScroll"),inner=el("ogMapInner"),svgEl=document.getElementById("ogImpossibleMap");
+    if(!s||!inner||!svgEl){if(cb)cb();return;}
+    var vb=svgEl.viewBox.baseVal;
+    var baseW=inner.clientWidth||1,baseH=inner.clientHeight||1;
+    var vw=s.clientWidth||1,vh=s.clientHeight||1;
+    var lx=svgCx*(baseW/vb.width),ly=svgCy*(baseH/vb.height);
+    var tox=vw/2-lx*targetScale,toy=vh/2-ly*targetScale;
+    animateTransform(targetScale,tox,toy,duration,cb);
+  };
+  window.ogZoomReset=function(duration,cb){
+    animateTransform(1,0,0,duration,cb);
+  };
 })();
 </script>
 </body>

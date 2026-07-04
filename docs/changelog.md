@@ -6,6 +6,22 @@
 
 ---
 
+## v2.25 — 2026-07-04 — OG Map hyper-zoom: "Stalk the Impossible" easter egg rebuilt as a full click-to-zoom experience
+
+### What shipped
+- **All 24 OG Map nodes are now individually clickable** (was 6): the central "Stalk the Impossible" hub, all 3 pillar nodes (Drive/Goals/Grit) plus Flow, and every sub-concept — Drive's Extrinsic/Intrinsic/Curiosity/Passion/Purpose/Autonomy/Mastery, Goals' MTP/High-Hard-Goals/Clear-Goals, Grit's Perseverance/Consistency/Resilience/Emotional-Regulation/Long-term-Thinking/Growth-Mindset, and 3 brand-new Flow sub-nodes (Challenge/Skill Balance, Clear Goals + Feedback, Rich Environment) drawn fresh since they didn't exist as visual elements before.
+- **New hyper-zoom interaction**: clicking any node smoothly zooms the map in on that node and fades in a content card in-place — no side panel. Built by reusing the existing v2.14c pan/zoom transform system (the same `scale`/`ox`/`oy`/`apply()` closure that already powers wheel-zoom and drag-pan) rather than adding a second, redundant animation system — lower risk, one code path, nothing new to keep in sync.
+- **New content model**: `ogmap.json` (new file, 25 entries) gives every node an "Understand" card (insight / why it matters / neurochemistry) and an "Activate" card (a concrete protocol, an if-then plan, a reflection prompt) — written for the power-user reader who clicks past the surface-level map, not the casual visitor.
+- **Crown-jewel content**: the central hub ("Stalk the Impossible") and Flow's main node both got dedicated deeper content — the hub explains that the Drive→Goals→Grit→Flow loop doesn't end at Flow, it resets and re-runs with a bigger goal; Flow's card explains the 4-phase Struggle→Release→Flow→Recovery cycle and why skipping Recovery is the top burnout cause for ambitious people.
+- **Related concept pills**, but only on the 6 nodes that map onto the site's existing concept-scoring categories (Drive, Goals, Grit, Flow, Intrinsic, Curiosity) — reuses the existing top-5 concept-matching + scoring logic untouched, restyled to match Corner's existing related-pill pattern (single-open-at-a-time expand, same visual language).
+- Content cards render into a single `<g id="ogContentLayer">` mount point via JS-built `<foreignObject>`, clamped to always stay within the 2400×1500 map canvas regardless of which node (including edge nodes) is activated.
+- Escape key, click-outside, and a "← Back to map" button all close the active card and zoom back out.
+
+### Notes / what to verify live
+- Old side-panel concept system (`ogShowConcepts`, `#ogConceptPanel`) deliberately left in place, unused — lower-risk than removing it, no visible difference to the user.
+- Zoom-target scale values (2.2×–3.6×, formula-derived) and Grit's tightly-packed sub-node hit-circle sizing (kept small, +3px over the visible circle) are first-pass choices made without a live browser preview — worth a quick visual pass after this deploys to confirm nothing feels off or clips awkwardly on mobile.
+- Verified before shipping: both new JS blocks pass `node --check` (no syntax errors), the full OG Map SVG parses as well-formed XML, all 24 click targets have no duplicate IDs and resolve to a complete `ogmap.json` entry, and the mobile (`≤600px`) responsive rules for the new content cards are in place.
+
 ## v2.24 — 2026-07-03 — Performance overhaul: CLS/INP fixes, card-flip + pill-hover latency, backdrop-filter/constellation tuning
 
 ### What shipped
