@@ -45,9 +45,12 @@ separately, on every field, even ones you didn't rewrite.**
 - Needs a rewrite? Offer 2-3 distinct angle options, not one guess.
 
 ### HOOK
-- 8-12 words target, 14 hard ceiling. ONE sentence, ONE idea. No exceptions —
-  never two sentences, even if clause 2 reframes/inverts/punches. Use a
-  comma/colon/semicolon internally if two ideas need to connect.
+- 8-12 words target, 14 hard ceiling. ONE sentence, ONE idea by default.
+- Two-sentence exception (rare — cap 1 per batch of 10): only if clause 2
+  mirrors clause 1's grammar and inverts/reframes/answers it — chiasmus
+  shape, e.g. "X with no Y is A. Y with no X is B." Never if clause 2 just
+  adds detail, explains, or restates (that's still one-sentence-only).
+  Otherwise use a comma/colon/semicolon internally if two ideas connect.
 - Front-load the trigger word — specific/surprising noun in the first 3 words.
 - No overlap with plain.
 - Banned: "You're not X, you're Y" / "It's not X, it's Y"; "Most people
@@ -101,7 +104,8 @@ does NOT replace the cross-field image check (point 6) or subjective quality
 judgment — those still need a human/model eye.
 
 1. Em-dash scan: zero "—" anywhere.
-2. Hook under 14 words, one sentence, one idea.
+2. Hook under 14 words, one sentence, one idea — or the mirror-inversion
+   two-sentence exception (max 1 per batch); flag any 2nd occurrence.
 3. Plain under 55 words, no metaphor, no "refers to/is when" opener.
 4. Analogy under 20 words (aiming 10-18), no "It's like" opener, no
    explanation sentence after the image.

@@ -1,6 +1,6 @@
-# Epistemic Hook Style Guide — v2.1
+# Epistemic Hook Style Guide — v2.2
 **Scope:** Hook field rewrites and generation for all concepts
-**Last updated:** July 2026 — v2.1 made single-sentence a hard requirement (was "preferred by default"); removed the two-clause exception entirely. NOTE: several examples below in "What actually got approved" and elsewhere predate this change and show two-sentence hooks — they're kept for voice/lever reference only, not format. Where an old example conflicts with the one-sentence rule, the rule wins. v2.0 added craft layer from direct-response/viral-hook mechanics. Extraction prompt updated to v1.8 (June 2026): hook rules compressed to 8 max per field, em-dash ban moved to field header (❌ at write time, not self-check), generation sequence and pattern menu removed from active prompt (too many constraints for reliable output). This guide remains the full editorial reference for human review.
+**Last updated:** July 2026 — v2.2 reintroduced a narrow two-clause exception (see Format below): mirror-inversion/chiasmus only, capped at 1 per batch of 10, never a general two-sentence license. v2.1 had made single-sentence a hard requirement with no exceptions; that overcorrected — pattern #5 below ("Reversals / frame flips") depends on the two-clause structure v2.1 banned. v2.0 added craft layer from direct-response/viral-hook mechanics. Extraction prompt updated to v1.8 (June 2026): hook rules compressed to 8 max per field, em-dash ban moved to field header (❌ at write time, not self-check), generation sequence and pattern menu removed from active prompt (too many constraints for reliable output). This guide remains the full editorial reference for human review.
 **Companion doc:** term-style-guide.md (terms), plain-style-guide.md (plain)
 
 ---
@@ -29,7 +29,8 @@ The category voice seasoning rules from feynman-batch.js still apply — they ma
 ## Format — hard rules
 
 - **Target: 8–12 words. Hard ceiling: 14.** A handful of approved exceptions ran 15-16 words across 149 reviewed concepts — only when every word in the second clause earned its place. Treat 14 as the real ceiling when generating fresh hooks; don't lean on the exception.
-- **One sentence only.** No exceptions. A hook is a single sentence — use a comma, colon, or semicolon internally if two ideas need to connect, but never two separate sentences (no period until the end).
+- **One sentence only, by default.** Use a comma, colon, or semicolon internally if two ideas need to connect, not a period.
+- **Two-clause exception (rare — max 1 per batch of 10):** permitted only when clause 2 mirrors clause 1's grammatical structure and inverts, reframes, or answers it — chiasmus shape, e.g. "Passion with no audience is a diary. Audience with no passion is a trap." (id 168). Never when clause 2 just adds detail, explains, or restates clause 1 — that's still a one-sentence job. Quick test: if clause 1 and clause 2 could be joined with "and"/"because"/"so" without losing anything, it's continuation, not inversion — merge to one sentence.
 
 ---
 
@@ -94,7 +95,7 @@ Short, declarative, no hedging.
 - *"He's attractive so he's probably smart too. Your brain just decided that."*
 
 **5. Reversals / frame flips**
-Take the assumed direction of a claim and invert it.
+Take the assumed direction of a claim and invert it. This is the pattern behind the two-clause exception in Format above — same mirror-inversion test applies.
 - *"The question was never 'did you steal it.' It's 'did you steal from the right people.'"*
 - *"Every 'obvious truth' was once heresy. And vice versa."*
 
@@ -108,7 +109,7 @@ For scientific or academic-sounding concept names, replace the mechanism with an
 ## Hard bans — confirmed by repeated rejection
 
 - Em-dashes (—) anywhere
-- "You're not X, you're Y" / "It's not X, it's Y" — banned even when it sounds good. If a draft naturally falls into this shape, rewrite the clause structure entirely, don't just swap words.
+- "You're not X, you're Y" / "It's not X, it's Y" — banned even when it sounds good, and NOT covered by the two-clause exception above (that's contrastive filler, not mirror-inversion). If a draft naturally falls into this shape, rewrite the clause structure entirely, don't just swap words.
 - "Most people don't realize…"
 - "Here's the thing:"
 - "Game-changing", "a new era of", "everything shifted"

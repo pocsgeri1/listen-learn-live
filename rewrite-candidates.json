@@ -1,6 +1,8 @@
 {
   "generated_from": "concepts.json (651 total concepts, scanned 2026-07-03)",
   "excludes_done_ids": [
+    161,
+    168,
     177,
     178,
     179,
@@ -10,6 +12,7 @@
     184,
     185,
     190,
+    192,
     194,
     196,
     201,
@@ -23,10 +26,12 @@
     226,
     227,
     229,
+    280,
     281,
     284,
     310,
     311,
+    314,
     315,
     317,
     334,
@@ -35,8 +40,11 @@
     337,
     338,
     339,
+    381,
     385,
+    397,
     403,
+    406,
     467,
     468,
     472,
@@ -45,6 +53,7 @@
     483,
     485,
     486,
+    487,
     489,
     490,
     491,
@@ -52,6 +61,7 @@
     535,
     593,
     599,
+    600,
     604,
     605,
     607,
@@ -65,128 +75,6 @@
   "excludes_in_flight_ids": [],
   "sort": "length_score desc, then em_dash desc",
   "candidates": [
-    {
-      "id": 600,
-      "term": "Choice Paralysis",
-      "length_score": 6.6,
-      "em_dash": 1,
-      "hw": 8,
-      "pw": 49,
-      "aw": 36,
-      "flags": [
-        "em-dash x1",
-        "analogy 36w"
-      ]
-    },
-    {
-      "id": 161,
-      "term": "Limbic Capitalism",
-      "length_score": 6.6,
-      "em_dash": 0,
-      "hw": 9,
-      "pw": 26,
-      "aw": 36,
-      "flags": [
-        "analogy 36w"
-      ]
-    },
-    {
-      "id": 168,
-      "term": "Performance Vs. Excitement Matrix",
-      "length_score": 6.6,
-      "em_dash": 0,
-      "hw": 14,
-      "pw": 51,
-      "aw": 36,
-      "flags": [
-        "analogy 36w"
-      ]
-    },
-    {
-      "id": 192,
-      "term": "Entrepreneur Sweet Spot",
-      "length_score": 6.6,
-      "em_dash": 0,
-      "hw": 11,
-      "pw": 50,
-      "aw": 36,
-      "flags": [
-        "analogy 36w"
-      ]
-    },
-    {
-      "id": 280,
-      "term": "Vulnerability Signaling",
-      "length_score": 6.6,
-      "em_dash": 0,
-      "hw": 13,
-      "pw": 58,
-      "aw": 34,
-      "flags": [
-        "plain 58w",
-        "analogy 34w"
-      ]
-    },
-    {
-      "id": 314,
-      "term": "Your Irreplaceable Edge",
-      "length_score": 6.6,
-      "em_dash": 0,
-      "hw": 14,
-      "pw": 52,
-      "aw": 36,
-      "flags": [
-        "analogy 36w"
-      ]
-    },
-    {
-      "id": 381,
-      "term": "Mental Adaptability",
-      "length_score": 6.6,
-      "em_dash": 0,
-      "hw": 10,
-      "pw": 43,
-      "aw": 36,
-      "flags": [
-        "analogy 36w"
-      ]
-    },
-    {
-      "id": 397,
-      "term": "The Effort Filter",
-      "length_score": 6.6,
-      "em_dash": 0,
-      "hw": 5,
-      "pw": 31,
-      "aw": 36,
-      "flags": [
-        "analogy 36w"
-      ]
-    },
-    {
-      "id": 406,
-      "term": "The Blame Trade",
-      "length_score": 6.6,
-      "em_dash": 0,
-      "hw": 7,
-      "pw": 34,
-      "aw": 36,
-      "flags": [
-        "analogy 36w"
-      ]
-    },
-    {
-      "id": 487,
-      "term": "Identity Protection",
-      "length_score": 6.6,
-      "em_dash": 0,
-      "hw": 10,
-      "pw": 48,
-      "aw": 36,
-      "flags": [
-        "analogy 36w"
-      ]
-    },
     {
       "id": 519,
       "term": "Divergent Thinking",
