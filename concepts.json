@@ -13642,5 +13642,985 @@
     "airtable_id": "recvQr5yK2atBIkwn",
     "published_at": "2026-07-02T11:53:05.604Z",
     "extraction_prompt_version": null
+  },
+  {
+    "id": 696,
+    "term": "The Buy Nothing Challenge",
+    "category": "finance",
+    "source": "ah",
+    "hook": "Spend zero for 30 days. You'll realize how little you actually need.",
+    "plain": "For 30 days, buy nothing except food, rent, gas, and insurance. No wallet when you leave the house. The point isn't deprivation, it's realizing your survival floor is way lower than you think. Once you know you can live on almost nothing, every risk becomes smaller. Most people don't take big bets because they don't know their actual downside.",
+    "analogy": "Finding out your parachute works before you need to jump.",
+    "prompt": "What would change about the risks you're willing to take if you knew you could survive on $500 a month?",
+    "collection_id": 521,
+    "timestamp": 8690,
+    "editors_pick": true,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 7,
+      "actionability": 10,
+      "novelty": 8,
+      "conversation_value": 8,
+      "composite": 8.3
+    },
+    "curated_collection_ids": [
+      201
+    ],
+    "airtable_id": "rec1mve1bhPuE3Rg3",
+    "published_at": "2026-07-06T05:14:15.500Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 697,
+    "term": "Risk Mispricing",
+    "category": "thinking",
+    "source": "ah",
+    "hook": "The downside of trying is nothing. Your brain just thinks it's everything.",
+    "plain": "Most people wildly overestimate the cost of failure. In developed countries, the actual downside of going all-in on a goal is sleeping on a friend's couch. That's it. But our brains evolved when one mistake meant death, so we treat every risk like it's fatal. Elon knows something about risk the rest of us don't: the downside is almost always nothing.",
+    "analogy": "Your nervous system treats a scary email the same way it treats a bear attack.",
+    "prompt": "Write down in detail what actually happens if you fail at the thing you're avoiding. Then read it.",
+    "collection_id": 521,
+    "timestamp": 2646,
+    "editors_pick": true,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 9,
+      "actionability": 9,
+      "novelty": 8,
+      "conversation_value": 9,
+      "composite": 8.8
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "rec3oGn2ViIFyYHAQ",
+    "published_at": "2026-07-06T05:14:15.500Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 698,
+    "term": "Local vs Global Maxima",
+    "category": "thinking",
+    "source": "core",
+    "hook": "The peak you're on blocks the view of taller mountains.",
+    "plain": "A local maximum is the highest point you can see from where you stand. A global maximum is the actual highest point that exists. Most people optimize their life to the top of the hill they're on, never realizing there are bigger mountains beyond it. Getting to a global max means descending from your local max first. That valley is the lonely chapter.",
+    "analogy": "Standing on a foothill thinking you've climbed Everest because you can't see past the clouds.",
+    "prompt": "What achievement are you optimizing that might just be the tallest hill near you, not the tallest mountain available?",
+    "collection_id": 521,
+    "timestamp": 1862,
+    "editors_pick": false,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 7,
+      "novelty": 8,
+      "conversation_value": 9,
+      "composite": 8
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "rec43KzQykjjZKyq9",
+    "published_at": "2026-07-06T05:14:15.500Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 699,
+    "term": "Extinction Curve",
+    "category": "psychology",
+    "source": "core",
+    "hook": "How long you tolerate bad behavior depends on the history of good behavior.",
+    "plain": "Extinction curve is how long you're willing to hope the good thing comes back. Friends you've known for decades get more forgiveness than new acquaintances because the reinforcement history is longer. You've been rewarded many times for keeping them, so you tolerate more blips. Someone new does one bad thing and you cut them. Different curves, same mechanism.",
+    "analogy": "A restaurant you've loved for years gets one bad meal forgiven. A new place gets one chance.",
+    "prompt": "Who are you giving too much leeway to because of ancient history that's no longer relevant?",
+    "collection_id": 521,
+    "timestamp": 2661,
+    "editors_pick": false,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 8,
+      "novelty": 8,
+      "conversation_value": 9,
+      "composite": 8.3
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "rec4jXzufDvt0YclJ",
+    "published_at": "2026-07-06T05:14:15.500Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 700,
+    "term": "Fading Affect Bias (fab)",
+    "category": "psychology",
+    "source": "core",
+    "hook": "Bad memories fade. Good ones stick. That's the trap.",
+    "plain": "Across species, negative consequences fade faster than positive rewards. This is why you forget how crazy your ex was but remember the good times. Why you swear you'll never drink again but do it seven days later. The pain of effort fades, making past versions of your life look easier than they were. Nostalgia is a biological lie.",
+    "analogy": "Childbirth hurts enough that women say never again, then have another kid two years later.",
+    "prompt": "What hard decision are you romanticizing because you've forgotten the actual cost?",
+    "collection_id": 521,
+    "timestamp": 3537,
+    "editors_pick": true,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 10,
+      "actionability": 7,
+      "novelty": 8,
+      "conversation_value": 8,
+      "composite": 8.3
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "rec5BE9WFxtzLaT7S",
+    "published_at": "2026-07-06T05:14:15.500Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 701,
+    "term": "Environment Change = Behavior Change",
+    "category": "psychology",
+    "source": "core",
+    "hook": "Your current environment created your current loops. Change it.",
+    "plain": "Trying to change behavior while keeping your environment identical is like trying to think different thoughts in the same room. Your routines, friends, and places have trained your habits. Vietnam vets had an 8x better heroin recovery rate than rehab patients because they changed everything at once. New city, new gym, new coffee shop. The cues disappear.",
+    "analogy": "Asking a fish to swim differently without changing the water it's swimming in.",
+    "prompt": "What environment change would make your desired behavior the path of least resistance?",
+    "collection_id": 521,
+    "timestamp": 13925,
+    "editors_pick": false,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 9,
+      "actionability": 9,
+      "novelty": 7,
+      "conversation_value": 8,
+      "composite": 8.3
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "rec84X82e9aqZ1H2c",
+    "published_at": "2026-07-06T05:14:15.500Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 702,
+    "term": "Domain Specificity",
+    "category": "psychology",
+    "source": "ah",
+    "hook": "Running marathons won't help you talk to your wife.",
+    "plain": "Skills don't transfer between domains unless you consciously link them through identity. Doing hard things physically (ice baths, marathons) doesn't automatically make you capable of hard emotional conversations. The connection only works if you label yourself as someone who does hard things, then apply that label everywhere.",
+    "analogy": "A surgeon with steady hands in the OR still shakes when asking someone on a date.",
+    "prompt": "Name the last physical challenge you crushed but emotional conversation you avoided. What stopped you?",
+    "collection_id": 521,
+    "timestamp": 33,
+    "editors_pick": true,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 9,
+      "actionability": 7,
+      "novelty": 8,
+      "conversation_value": 8,
+      "composite": 8
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "recCHK3qBsqXhTbC9",
+    "published_at": "2026-07-06T05:14:15.500Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 703,
+    "term": "Tilting at Windmills",
+    "category": "society",
+    "source": "core",
+    "hook": "Online strangers attack a version of you that exists only in their head.",
+    "plain": "When someone online attacks you, they're attacking their imagination of you built from 30 seconds of content. It's not personal because they don't know you. They know a phantom. All they have is vibes and projection. Taking it personally is like getting mad at someone for punching a scarecrow that looks vaguely like you. Irrelevant.",
+    "analogy": "Shadow boxing with someone who's not even in the room.",
+    "prompt": "What criticism have you been taking personally from someone who doesn't actually know you?",
+    "collection_id": 521,
+    "timestamp": 9113,
+    "editors_pick": true,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 9,
+      "actionability": 7,
+      "novelty": 8,
+      "conversation_value": 9,
+      "composite": 8.3
+    },
+    "curated_collection_ids": [
+      204
+    ],
+    "airtable_id": "recFt4w5T7lTzgbZB",
+    "published_at": "2026-07-06T05:14:15.500Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 704,
+    "term": "Commitment as Elimination",
+    "category": "philosophy",
+    "source": "ah",
+    "hook": "Commitment doesn't mean choosing one thing. It means killing the rest.",
+    "plain": "The Latin root of decision is to cut off. Commitment is the elimination of alternatives. You don't get strong by wanting multiple outcomes, you get strong by sacrificing everything that isn't the one thing. People struggle not because they don't know what they want, but because they won't let go of what they also want.",
+    "analogy": "A chess player who won't sacrifice pieces never wins. Protecting everything means gaining nothing.",
+    "prompt": "What are you refusing to eliminate that's preventing you from committing to what you actually want?",
+    "collection_id": 521,
+    "timestamp": 783,
+    "editors_pick": true,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 9,
+      "actionability": 8,
+      "novelty": 7,
+      "conversation_value": 9,
+      "composite": 8.3
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "recGghWhwEV8Wv9k8",
+    "published_at": "2026-07-06T05:14:15.500Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 705,
+    "term": "Unspoken Expectations = Premeditated Resentments",
+    "category": "relationships",
+    "source": "core",
+    "hook": "Expecting people to guess your preferences guarantees you'll resent them.",
+    "plain": "You can't get mad at someone for crossing a line you never drew. If you never tell people what you want or how you want to be treated, then punish them for not doing it, that's on you. Unspoken expectations are just setups for disappointment. Say the thing. People aren't mind readers. Resentment is the tax you pay for unclear communication.",
+    "analogy": "Getting angry that someone sat in your favorite chair when you never told them it was yours.",
+    "prompt": "What standard are you holding someone to that you've never actually articulated to them?",
+    "collection_id": 521,
+    "timestamp": 2198,
+    "editors_pick": false,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 10,
+      "actionability": 9,
+      "novelty": 7,
+      "conversation_value": 10,
+      "composite": 9
+    },
+    "curated_collection_ids": [
+      204
+    ],
+    "airtable_id": "recI0N2g6xoFsMUOP",
+    "published_at": "2026-07-06T05:14:15.500Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 706,
+    "term": "Half Measures = Null Outcomes",
+    "category": "business",
+    "source": "ah",
+    "hook": "Learning Spanish, guitar, coding, and painting on weekends gets you nowhere in any.",
+    "plain": "Half effort doesn't give you half results. It gives you zero. Pursuing four projects at 25% capacity each yields worse outcomes than one project at 100%. The math isn't linear. Depth compounds. Surface-level work across multiple domains just means you never breakthrough anywhere. Most people stay stuck because they won't commit fully to anything.",
+    "analogy": "Digging four shallow holes never hits water. One deep hole does.",
+    "prompt": "Which of your current projects would you kill to 10x the one that matters most?",
+    "collection_id": 521,
+    "timestamp": 1623,
+    "editors_pick": true,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 9,
+      "actionability": 9,
+      "novelty": 7,
+      "conversation_value": 8,
+      "composite": 8.3
+    },
+    "curated_collection_ids": [
+      201
+    ],
+    "airtable_id": "recIfTSeW9DFhaoBv",
+    "published_at": "2026-07-06T05:14:15.500Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 707,
+    "term": "Fluid vs Crystallized Intelligence",
+    "category": "psychology",
+    "source": "core",
+    "hook": "Raw processing speed peaks at 40. Wisdom keeps climbing.",
+    "plain": "Fluid intelligence is problem-solving speed and mental horsepower. It peaks around 40 then declines. Crystallized intelligence is accumulated knowledge and judgment. It keeps improving. The trap is successful people optimize their entire life around fluid intelligence, then feel useless when it starts fading. Make the jump to crystallized before you have to.",
+    "analogy": "A sprinter trying to stay competitive at 50 instead of becoming a coach.",
+    "prompt": "What skill are you relying on that's tied to youth that you should be transitioning away from?",
+    "collection_id": 521,
+    "timestamp": 6187,
+    "editors_pick": true,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 7,
+      "novelty": 8,
+      "conversation_value": 9,
+      "composite": 8
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "recJq89byDNjMH7Xb",
+    "published_at": "2026-07-06T05:14:15.500Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 708,
+    "term": "Borrowed Authority (from Past Self)",
+    "category": "thinking",
+    "source": "ah",
+    "hook": "Write down why you made a decision so future-you can't forget.",
+    "plain": "When you make a big decision, document your reasoning in detail. Your brain will later forget the pain that drove the choice and you'll second-guess yourself. Writing it down lets you borrow authority from a past version of you who had full context. Especially useful for breakups, job changes, and any decision where fading affect bias will betray you.",
+    "analogy": "A letter from yesterday's surgeon reminding today's surgeon why the patient needed the amputation.",
+    "prompt": "What decision are you reconsidering that you need to write a memo to yourself about?",
+    "collection_id": 521,
+    "timestamp": 13336,
+    "editors_pick": false,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 10,
+      "novelty": 9,
+      "conversation_value": 8,
+      "composite": 8.8
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "recKg9JKWzcaBJpjU",
+    "published_at": "2026-07-06T05:14:15.500Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 709,
+    "term": "Known Cost, Delayed Benefit",
+    "category": "psychology",
+    "source": "ah",
+    "hook": "Courage is accepting certain pain for uncertain payoff.",
+    "plain": "Starting a business, changing careers, or taking any big risk means paying a guaranteed short-term cost for an uncertain, delayed benefit. People think courage is not being afraid. It's not. Courage is accepting that you'll definitely suffer mockery, exhaustion, and sacrifice, and the reward might never come. The cost is known. The payoff isn't. You jump anyway.",
+    "analogy": "Betting your car on a coin flip where you only get the prize in ten years if you win.",
+    "prompt": "What delayed, uncertain reward are you willing to suffer guaranteed short-term pain for?",
+    "collection_id": 521,
+    "timestamp": 1261,
+    "editors_pick": false,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 9,
+      "actionability": 7,
+      "novelty": 8,
+      "conversation_value": 9,
+      "composite": 8.3
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "recL820S1wqTfWDBy",
+    "published_at": "2026-07-06T05:14:15.500Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 710,
+    "term": "Malicious Benefit",
+    "category": "thinking",
+    "source": "ah",
+    "hook": "Your haters work for you for free if they're incompetent.",
+    "plain": "People who intend to harm you but lack skill end up helping you instead. Someone makes a hit piece about you, drives traffic to your content, increases your relevance. The inverse matters too: people with good intentions but no competence cause damage. Judge people by outputs, not intentions.",
+    "analogy": "The assassin who can't shoot straight ends up scaring off your actual enemies.",
+    "prompt": "Who in your life means well but consistently makes things worse? What would change if you stopped weighing their intentions?",
+    "collection_id": 521,
+    "timestamp": 2313,
+    "editors_pick": true,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 9,
+      "novelty": 9,
+      "conversation_value": 9,
+      "composite": 8.8
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "recOzdjr7gOKG38DJ",
+    "published_at": "2026-07-06T05:14:15.500Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 711,
+    "term": "Mastering the Middle",
+    "category": "psychology",
+    "source": "ah",
+    "hook": "Marathons are won in the boring miles between the start and finish.",
+    "plain": "Everyone gets excited at the start when there's music and balloons. Everyone shows up at the end when there's glory. The 26 miles in between are silent, painful, and unending. That's where the race is won. The middle is where most people quit because motivation is gone and the outcome still feels far away. Master the middle, win the game.",
+    "analogy": "A book's first chapter hooks you, the last chapter satisfies you, but the middle 200 pages are where the story is actually told.",
+    "prompt": "What project are you in the middle of where the excitement has worn off but the finish line isn't visible yet?",
+    "collection_id": 521,
+    "timestamp": 11288,
+    "editors_pick": false,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 10,
+      "actionability": 7,
+      "novelty": 7,
+      "conversation_value": 8,
+      "composite": 8
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "recPVDBrCh0IpT7JO",
+    "published_at": "2026-07-06T05:14:15.500Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 712,
+    "term": "Sacrifice for the Group",
+    "category": "power",
+    "source": "ah",
+    "hook": "Respect comes from visibly bearing a cost that benefits everyone else.",
+    "plain": "The fastest way to earn respect in any group is to sacrifice yourself in a way that helps the whole. Volunteer for the hard thing nobody wants. Take the punishment that was coming for someone else. The micro-sacrifice signals that you value the group over yourself. People remember who stepped up. This is the first step in the respect operation.",
+    "analogy": "The soldier who covers the grenade earns more respect than the one who talks about covering grenades.",
+    "prompt": "What visible sacrifice could you make for your team this week that would benefit everyone?",
+    "collection_id": 521,
+    "timestamp": 13629,
+    "editors_pick": false,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 9,
+      "novelty": 7,
+      "conversation_value": 9,
+      "composite": 8.3
+    },
+    "curated_collection_ids": [
+      201
+    ],
+    "airtable_id": "recQ2we4lHMzpslVa",
+    "published_at": "2026-07-06T05:14:15.500Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 713,
+    "term": "Enforcement of Standards",
+    "category": "power",
+    "source": "ah",
+    "hook": "If you don't enforce your boundaries, you teach people to gamble with you.",
+    "plain": "Respect requires enforcement. When someone crosses a stated line, there must be a consistent, immediate, escalating consequence. If you let it slide, you turn respect into a lottery. Variable reinforcement trains people to test you. First offense: warning. Second: removal from situation. Third: out. The consistency matters more than the severity.",
+    "analogy": "A fence with no gate and no consequences for climbing it isn't a boundary, it's a suggestion.",
+    "prompt": "What boundary have you stated but failed to enforce consistently?",
+    "collection_id": 521,
+    "timestamp": 13956,
+    "editors_pick": false,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 9,
+      "actionability": 9,
+      "novelty": 7,
+      "conversation_value": 9,
+      "composite": 8.5
+    },
+    "curated_collection_ids": [
+      201
+    ],
+    "airtable_id": "recTCVcbA40Ydqcua",
+    "published_at": "2026-07-06T05:14:15.500Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 714,
+    "term": "Description vs Explanation",
+    "category": "thinking",
+    "source": "ah",
+    "hook": "Calling someone dishonest explains nothing about why they stole.",
+    "plain": "Most people use labels that describe behavior, not explain it. Saying someone is lazy or dishonest is circular. They're lazy because they do lazy things. The real explanation is reinforcement: they were rewarded for that behavior before. Understanding the why beneath the label is how you predict and change outcomes. Staying at description keeps you confused.",
+    "analogy": "Saying the car won't start because it's broken doesn't tell you to check the battery.",
+    "prompt": "What label are you using to explain someone's behavior that actually explains nothing?",
+    "collection_id": 521,
+    "timestamp": 1913,
+    "editors_pick": true,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 9,
+      "novelty": 9,
+      "conversation_value": 9,
+      "composite": 8.8
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "recVlwEyJj5rwlsPT",
+    "published_at": "2026-07-06T05:14:15.500Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 715,
+    "term": "Misaligned Risk Appetite",
+    "category": "business",
+    "source": "ah",
+    "hook": "Your business grew but your guts didn't.",
+    "plain": "Most entrepreneurs scale their revenue but not their risk tolerance. You go from $4 million to $44 million in profit but still treat a $50,000 investment like it's life-or-death. If you're making $12 million a year, a $3 million bet on growth is reasonable. Clinging to small-business risk aversion is how you plateau.",
+    "analogy": "Playing poker with 10x the chips but still betting like you have $100.",
+    "prompt": "What investment feels too scary that's actually proportional to your current position?",
+    "collection_id": 521,
+    "timestamp": 8627,
+    "editors_pick": false,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 7,
+      "actionability": 9,
+      "novelty": 9,
+      "conversation_value": 8,
+      "composite": 8.3
+    },
+    "curated_collection_ids": [
+      201
+    ],
+    "airtable_id": "recXDd4zE6i1UbpBX",
+    "published_at": "2026-07-06T05:14:15.500Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 716,
+    "term": "The 20-hour Competence Rule",
+    "category": "thinking",
+    "source": "core",
+    "hook": "You can get competent at nearly anything in 20 focused hours.",
+    "plain": "From zero to functional competence in most skills takes about 20 hours of focused practice. Not mastery, but competent. You can build a website, learn basic guitar, understand accounting fundamentals. The first 20 hours are the steepest part of the learning curve. Stringing together hundreds of these 20-hour sprints makes you dangerously multi-disciplinary. Most people delay the first 20 hours for decades.",
+    "analogy": "Learning to ride a bike takes a weekend, not a year. Most skills are bikes, not Everest.",
+    "prompt": "What skill would change your life if you just spent 20 hours learning it this month?",
+    "collection_id": 521,
+    "timestamp": 8338,
+    "editors_pick": true,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 9,
+      "actionability": 10,
+      "novelty": 8,
+      "conversation_value": 9,
+      "composite": 9
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "recXozLbz8IZuQsub",
+    "published_at": "2026-07-06T05:14:15.500Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 717,
+    "term": "Desensitization Through Volume",
+    "category": "psychology",
+    "source": "ah",
+    "hook": "Do it so many times you become bored of being nervous.",
+    "plain": "Anxiety about performance disappears when you've practiced enough to be sick of the presentation. Run your pitch 100 times before the meeting. Practice the speech until you know the next slide before it appears. Volume creates immunity to nerves. Most people practice until they're comfortable. You need to practice until you're bored.",
+    "analogy": "The first time you drive, your hands sweat. The thousandth time, you're drinking coffee and changing the radio.",
+    "prompt": "What are you nervous about that you've only practiced a handful of times?",
+    "collection_id": 521,
+    "timestamp": 6643,
+    "editors_pick": true,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 9,
+      "actionability": 10,
+      "novelty": 7,
+      "conversation_value": 8,
+      "composite": 8.5
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "recZyTz4OjXTRTeF6",
+    "published_at": "2026-07-06T05:14:15.500Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 718,
+    "term": "Tragedy + Time = Comedy",
+    "category": "psychology",
+    "source": "core",
+    "hook": "It'll be funny later. Why not make it funny now?",
+    "plain": "Every humiliating failure becomes a great story given enough time. The formula is reliable: tragedy plus distance equals comedy. So if you know it'll be hilarious in five years, you might as well laugh about it today. Compressing the timeline turns disasters into fuel. This is why soldiers use dark humor in combat.",
+    "analogy": "Your dad retelling the story of totaling his first car at Thanksgiving dinner.",
+    "prompt": "What recent disaster can you describe as if it happened to someone else ten years ago?",
+    "collection_id": 521,
+    "timestamp": 13867,
+    "editors_pick": true,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 10,
+      "actionability": 8,
+      "novelty": 7,
+      "conversation_value": 9,
+      "composite": 8.5
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "recccZ3NsFYti3jvH",
+    "published_at": "2026-07-06T05:14:15.500Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 719,
+    "term": "Options Without Action Are Worthless",
+    "category": "thinking",
+    "source": "ah",
+    "hook": "Maximizing choices is how you guarantee choosing nothing.",
+    "plain": "Keeping all doors open feels smart until you realize open doors don't move you forward. Options have value only when exercised. Most people spend their 20s building optionality, then their 30s paralyzed by it. The transition from maximizing potential to realizing potential requires eliminating alternatives, which is commitment.",
+    "analogy": "A wallet full of gift cards you never spend is just expensive paper.",
+    "prompt": "What option are you keeping open that's actually keeping you stuck?",
+    "collection_id": 521,
+    "timestamp": 786,
+    "editors_pick": false,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 9,
+      "actionability": 8,
+      "novelty": 8,
+      "conversation_value": 9,
+      "composite": 8.5
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "recdbfNH5PZj01oaf",
+    "published_at": "2026-07-06T05:14:15.500Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 720,
+    "term": "Simplicity vs Complexity",
+    "category": "psychology",
+    "source": "core",
+    "hook": "Your system handles hard well. It breaks under messy.",
+    "plain": "Difficulty doesn't overwhelm people. Complexity does. You can push hard on one thing for years. But managing five competing priorities, even if none are individually hard, will destroy you. The number of things matters more than the difficulty of any single thing. Reduce the bucket count, not the intensity per bucket.",
+    "analogy": "Deadlifting 500 pounds is hard but manageable. Deadlifting five different 100-pound bars simultaneously is impossible.",
+    "prompt": "List everything currently demanding your attention. Which three can you eliminate entirely, not just postpone?",
+    "collection_id": 521,
+    "timestamp": 7237,
+    "editors_pick": false,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 10,
+      "actionability": 9,
+      "novelty": 8,
+      "conversation_value": 8,
+      "composite": 8.8
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "rece4ecQaiwLtEKjG",
+    "published_at": "2026-07-06T05:14:15.500Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 721,
+    "term": "The Lonely Chapter",
+    "category": "identity",
+    "source": "ah",
+    "hook": "Success requires isolation nobody warns you about.",
+    "plain": "Pursuing exceptional goals means a period where nobody around you understands what you're doing. Friends mock your choices, family questions your decisions, and you have no proof it will work. The gap between local maxima is always lonely. Most people turn back here, not because the work is hard, but because the doubt is unbearable.",
+    "analogy": "Climbing between peaks means descending into a valley where neither summit is visible.",
+    "prompt": "What goal are you postponing because you'd have to explain it to people who won't get it?",
+    "collection_id": 521,
+    "timestamp": 1739,
+    "editors_pick": true,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 9,
+      "actionability": 7,
+      "novelty": 7,
+      "conversation_value": 9,
+      "composite": 8
+    },
+    "curated_collection_ids": [
+      203
+    ],
+    "airtable_id": "rechqGyYmm0BpJcOb",
+    "published_at": "2026-07-06T05:14:15.500Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 722,
+    "term": "No One is Coming to Save You",
+    "category": "identity",
+    "source": "ah",
+    "hook": "Waiting for rescue is giving someone else control of your outcomes.",
+    "plain": "You can own everything about your situation and still hope someone fixes it for you. But relying on external salvation means your condition only changes when someone else decides to act. You can have 100% responsibility and 0% agency. No one is coming. You are the only variable you control. Act accordingly.",
+    "analogy": "A chess player waiting for their opponent to make the winning move for them.",
+    "prompt": "What outcome are you waiting for someone else to deliver that you could start working toward yourself today?",
+    "collection_id": 521,
+    "timestamp": 676,
+    "editors_pick": false,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 10,
+      "actionability": 8,
+      "novelty": 6,
+      "conversation_value": 9,
+      "composite": 8.3
+    },
+    "curated_collection_ids": [
+      203
+    ],
+    "airtable_id": "recjGPpW3wVah546S",
+    "published_at": "2026-07-06T05:14:15.500Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 723,
+    "term": "The 'You With a Mustache' Test",
+    "category": "thinking",
+    "source": "ah",
+    "hook": "Imagine a version of you trying to beat you. Do what they'd do.",
+    "plain": "If you competed against yourself but with zero emotional baggage or self-doubt, what would that version do? They know all your weaknesses and fears but aren't held back by them. Whatever ruthless, decisive actions that person would take to beat you is exactly what you should be doing. Removes emotion. Clarifies action. Most useful when you're stuck.",
+    "analogy": "Chess players analyzing their own game from the opponent's perspective to find mistakes.",
+    "prompt": "If a version of you with no emotional attachment to your current life wanted to beat you, what's the first thing they'd do?",
+    "collection_id": 521,
+    "timestamp": 4658,
+    "editors_pick": true,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 10,
+      "novelty": 9,
+      "conversation_value": 9,
+      "composite": 9
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "recllgK2I4lJiIfLj",
+    "published_at": "2026-07-06T05:14:15.500Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 724,
+    "term": "Inversion for Decision-making",
+    "category": "thinking",
+    "source": "core",
+    "hook": "List every way you could fail, then do the opposite.",
+    "plain": "Humans are wired to spot threats better than opportunities. Use this. Instead of asking how to succeed, ask how to guarantee failure, then avoid those things. Munger's trick. The list of what not to do is easier to create and more reliable than the list of what to do. Negative space defines the path.",
+    "analogy": "Knowing where all the landmines are is more useful than having a perfect map.",
+    "prompt": "If you wanted to guarantee you failed at your current goal, what five things would you do?",
+    "collection_id": 521,
+    "timestamp": 4026,
+    "editors_pick": false,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 9,
+      "actionability": 10,
+      "novelty": 7,
+      "conversation_value": 9,
+      "composite": 8.8
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "recmuSg8kW3vnxfsU",
+    "published_at": "2026-07-06T05:14:15.500Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 725,
+    "term": "Proximity to Death",
+    "category": "philosophy",
+    "source": "core",
+    "hook": "Old people stop competing because they've seen everyone die the same.",
+    "plain": "The closer you get to death, the less you care about status games. Old people watched the winners and losers both die. Same outcome. This creates humility and presence. Seeing people disappear and everyone move on teaches you that nothing you're stressing about matters as much as you think. Death is the ultimate equalizer and perspective-giver.",
+    "analogy": "Watching every passenger on the Titanic drown makes you care less about who had first-class tickets.",
+    "prompt": "If you knew you had five years left, which competition would you immediately stop caring about?",
+    "collection_id": 521,
+    "timestamp": 4882,
+    "editors_pick": false,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 9,
+      "actionability": 7,
+      "novelty": 7,
+      "conversation_value": 10,
+      "composite": 8.3
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "recrOBc53BZFAuMc6",
+    "published_at": "2026-07-06T05:14:15.500Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 726,
+    "term": "Respect Operation",
+    "category": "power",
+    "source": "ah",
+    "hook": "Respect is letting someone's word change you when they can't force you.",
+    "plain": "True respect means someone's opinion changes your behavior even when they have no power over you. Different from compliance or fear. If they can fire you, that's not respect, that's incentives. Respect is what remains when all external leverage disappears. The opposite of respect isn't hate, it's indifference to what someone thinks or says.",
+    "analogy": "A coach whose advice you follow even after you've gone pro and don't need them anymore.",
+    "prompt": "Whose word still changes your behavior even though they have zero power over you? Why them?",
+    "collection_id": 521,
+    "timestamp": 12787,
+    "editors_pick": true,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 9,
+      "actionability": 7,
+      "novelty": 9,
+      "conversation_value": 10,
+      "composite": 8.8
+    },
+    "curated_collection_ids": [
+      201
+    ],
+    "airtable_id": "rectZrrpTFzN2kHES",
+    "published_at": "2026-07-06T05:14:15.500Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 727,
+    "term": "Cost of Switching Desires",
+    "category": "psychology",
+    "source": "ah",
+    "hook": "Changing what you want wastes more time than bad execution.",
+    "plain": "People talk about switching costs between tasks. But the real cost is switching wants. Flip-flopping between goals, yearning for the path you didn't take, reopening decisions you already made. That cognitive load is enormous. Write down why you chose something, then stop rehearsing the counterfactual. Indecision after the decision is the killer.",
+    "analogy": "Driving to the beach but spending the whole trip wondering if the mountains would've been better.",
+    "prompt": "What decision have you already made that you keep relitigating in your head?",
+    "collection_id": 521,
+    "timestamp": 13618,
+    "editors_pick": true,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 9,
+      "actionability": 8,
+      "novelty": 9,
+      "conversation_value": 8,
+      "composite": 8.5
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "recu6eI7qcMBl8bM6",
+    "published_at": "2026-07-06T05:14:15.500Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 728,
+    "term": "Indecision as Investment",
+    "category": "thinking",
+    "source": "ah",
+    "hook": "Every time you delay choosing, you practice being indecisive.",
+    "plain": "Indecision isn't neutral. It's practice. Every time you avoid making a call, you reinforce the habit of avoidance. You're training yourself to be the person who can't decide. The skill you drill is the skill you get. If decisiveness matters to you, treat every small decision as training for the big ones. Speed matters more than perfect information.",
+    "analogy": "A basketball player who practices passing instead of shooting doesn't suddenly become a scorer in the finals.",
+    "prompt": "What small decision have you been delaying that you could make in the next 60 seconds?",
+    "collection_id": 521,
+    "timestamp": 4997,
+    "editors_pick": false,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 9,
+      "novelty": 9,
+      "conversation_value": 8,
+      "composite": 8.5
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "recujihoBm37xVFVt",
+    "published_at": "2026-07-06T05:14:15.500Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 729,
+    "term": "Volume Negates Luck",
+    "category": "business",
+    "source": "ah",
+    "hook": "Do so much work it becomes unreasonable that you fail.",
+    "plain": "Skill looks like luck to people who didn't experienced volume. The fastest way to derisk any outcome is to do vastly more work than seems necessary. Practice your presentation 100 times. Apply to 1,000 jobs. Make 10,000 calls. At sufficient volume, randomness averages out and competence becomes inevitable. Most people do 10% of the reps then blame luck.",
+    "analogy": "Flipping a coin twice might land tails twice. Flipping it 10,000 times gets you 50/50.",
+    "prompt": "What outcome are you hoping for that you've only attempted a handful of times?",
+    "collection_id": 521,
+    "timestamp": 2585,
+    "editors_pick": true,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 9,
+      "actionability": 10,
+      "novelty": 7,
+      "conversation_value": 9,
+      "composite": 8.8
+    },
+    "curated_collection_ids": [
+      201
+    ],
+    "airtable_id": "recv4qGGT0KaER6q1",
+    "published_at": "2026-07-06T05:14:15.500Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 730,
+    "term": "Anti-Fragile Setup",
+    "category": "business",
+    "source": "ah",
+    "hook": "Build four different ways to win so one failure doesn't kill you.",
+    "plain": "Don't create a plan where everything needs to go right. Create redundancy. Have three or four paths to the same outcome, each with 80% odds. That way even if two fail, you still win. The book launch had multiple independent success mechanisms. Any one of them breaking the record was enough. Stacking probabilities beats single points of failure.",
+    "analogy": "A stool with four legs doesn't fall over when one breaks.",
+    "prompt": "What goal are you pursuing where one thing going wrong ruins everything? How could you add redundancy?",
+    "collection_id": 521,
+    "timestamp": 11395,
+    "editors_pick": false,
+    "related_ids": [],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 9,
+      "novelty": 8,
+      "conversation_value": 8,
+      "composite": 8.3
+    },
+    "curated_collection_ids": [
+      201
+    ],
+    "airtable_id": "recxyqlrLkvAjIv9W",
+    "published_at": "2026-07-06T05:14:15.500Z",
+    "extraction_prompt_version": null
   }
 ]
