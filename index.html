@@ -8269,27 +8269,18 @@
 }
 .og-map-wrap svg { width: 100%; height: auto; display: block; }
 
-/* ── Neuro pulse animations ─────────────────────────────── */
-@keyframes og-pulse-lg {
-  0%,100% { r:4; opacity:.88; } 50% { r:6.5; opacity:.38; }
-}
-@keyframes og-pulse-sm {
-  0%,100% { r:3; opacity:.68; } 50% { r:5; opacity:.25; }
-}
-.og-np-lg  { animation: og-pulse-lg 2.8s ease-in-out infinite; }
-.og-np-sm1 { animation: og-pulse-sm 3.2s ease-in-out infinite; }
-.og-np-sm2 { animation: og-pulse-sm 3.8s ease-in-out infinite 0.6s; }
-.og-np-sm3 { animation: og-pulse-sm 2.4s ease-in-out infinite 1.1s; }
-.og-np-sm4 { animation: og-pulse-sm 4.1s ease-in-out infinite 0.3s; }
-@keyframes og-breathe {
-  0%,100% { opacity:.18; } 50% { opacity:.3; }
-}
-.og-glow-aura { animation: og-breathe 3s ease-in-out infinite; }
-@keyframes og-ring-pulse {
-  0%,100% { stroke-opacity:.35; } 50% { stroke-opacity:.75; }
-}
-.og-active-ring { animation: og-ring-pulse 1.5s ease-in-out infinite; }
-.og-node { cursor: pointer; }
+/* ── OG node static styles (v2.26b: all infinite pulse animations removed —
+   were running composited loops on every node at idle, measurable INP cost) */
+.og-np-lg  { opacity:.72; }
+.og-np-sm1 { opacity:.55; }
+.og-np-sm2 { opacity:.48; }
+.og-np-sm3 { opacity:.52; }
+.og-np-sm4 { opacity:.45; }
+.og-glow-aura  { opacity:.22; }
+.og-active-ring { stroke-opacity:.5; }
+/* Hover glow: compositor filter only, fires on interaction not at idle */
+.og-node { cursor: pointer; transition: filter 0.18s ease; }
+.og-node:hover { filter: brightness(1.4) drop-shadow(0 0 5px rgba(232,213,163,0.6)); }
 
 /* ── Concept panel ──────────────────────────────────────── */
 .og-panel-backdrop {
@@ -8502,7 +8493,10 @@
   font-family: 'DM Mono', monospace; font-size: 8px; letter-spacing: 0.18em;
   text-transform: uppercase; opacity: 0.32; margin-bottom: 10px;
 }
-.og-related-wrap { width: 100%; margin-bottom: 6px; }
+/* v2.26b: pills flow inline; expand takes full width when open */
+.og-pill-list { display: flex; flex-wrap: wrap; gap: 8px; align-items: flex-start; }
+.og-related-wrap { display: flex; flex-direction: column; }
+.og-related-wrap.has-open { width: 100%; }
 .og-related-pill-btn {
   display: inline-flex; align-items: center; gap: 6px;
   font-family: 'DM Mono', monospace; font-size: 0.63rem;
@@ -24564,12 +24558,15 @@ function _convOpenCSById(id) {
           if(openId&&openId!==c.id){
             const prevBtn=container.querySelector('.og-related-pill-btn.expanded');
             const prevExp=container.querySelector('.og-related-expand.open');
+            const prevWrap=container.querySelector('.og-related-wrap.has-open');
             if(prevBtn)prevBtn.classList.remove('expanded');
             if(prevExp)prevExp.classList.remove('open');
+            if(prevWrap)prevWrap.classList.remove('has-open');
           }
           const opening=!isOpen;
           exp.classList.toggle('open',opening);
           btn.classList.toggle('expanded',opening);
+          wrap.classList.toggle('has-open',opening);
           openId=opening?c.id:null;
         });
         wrap.appendChild(btn);wrap.appendChild(exp);
@@ -24586,7 +24583,7 @@ function _convOpenCSById(id) {
     if(!_ogOpenId)return;
     const spot=document.getElementById('ogSpotlight');
     if(spot)spot.classList.remove('active');
-    window.ogZoomReset(650);
+    /* v2.26b: removed ogZoomReset — panel closes but map stays zoomed in */
     _ogOpenId=null;
   };
   window.ogActivate=async function(id,cx,cy){
