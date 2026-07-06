@@ -10,13 +10,13 @@
       "label": "Stalk the Impossible",
       "coords": { "cx": 1200, "cy": 640, "r": 74 },
       "understand": {
-        "insight": "The four pillars don't end at Flow State: Flow resets your baseline. What felt impossible before this cycle becomes your new normal after it, which means the real practice is running the loop again with a bigger goal, not declaring victory and stopping.",
+        "insight": "The four pillars don't end at Flow State; Flow resets your baseline. What felt impossible before this cycle becomes your new normal after it, which means the real practice is running the loop again with a bigger goal, not declaring victory and stopping.",
         "why": "Most people treat a hard goal as a finish line. This model treats it as a ratchet: each pass through Drive → Goals → Grit → Flow raises what 'possible' means for you, so stopping at one win under-uses the system you just built.",
-        "neuro": "Every neurochemical on this map: dopamine, norepinephrine, endorphins, oxytocin, serotonin, BDNF: resets toward baseline after a Flow cycle completes, which is exactly why the next goal needs to be bigger, or the system has nothing left to respond to."
+        "neuro": "Every neurochemical on this map (dopamine, norepinephrine, endorphins, oxytocin, serotonin, BDNF) resets toward baseline after a Flow cycle completes, which is exactly why the next goal needs to be bigger, or the system has nothing left to respond to."
       },
       "activate": {
         "protocol": "After your next real win, before celebration settles into complacency, write down the next goal that would have sounded impossible before this one.",
-        "if_then": "If I just completed a goal that once felt impossible, then I name the next one it unlocked: I don't wait.",
+        "if_then": "If I just completed a goal that once felt impossible, then I name the next one it unlocked; I don't wait.",
         "reflection": "What did you think was impossible a year ago that's now just Tuesday? What's the next one?"
       },
       "source": "After Steven Kotler: The Art of Impossible"
@@ -28,9 +28,9 @@
       "label": "Flow State",
       "coords": { "cx": 1200, "cy": 1110, "r": 44 },
       "understand": {
-        "insight": "Flow isn't a switch you flip: it's the third phase of a 4-phase cycle: Struggle (skill-building, frustration, effort) → Release (stepping away, letting go) → Flow (the payoff) → Recovery (rebuilding what you just spent). Most people chase phase 3 and skip phase 4 entirely.",
-        "why": "Skipping recovery is the single most common way ambitious people burn out: they treat Flow as free and unlimited, then wonder why it stops coming.",
-        "neuro": "Flow's cocktail: dopamine, norepinephrine, endorphins, anandamide, serotonin: is metabolically expensive to produce. Recovery is the phase where the system rebuilds the raw material for the next struggle-release-flow pass."
+        "insight": "Flow isn't a switch you flip; it's the third phase of a 4-phase cycle: Struggle (skill-building, frustration, effort) → Release (stepping away, letting go) → Flow (the payoff) → Recovery (rebuilding what you just spent). Most people chase phase 3 and skip phase 4 entirely.",
+        "why": "Skipping recovery is the single most common way ambitious people burn out; they treat Flow as free and unlimited, then wonder why it stops coming.",
+        "neuro": "Flow's cocktail (dopamine, norepinephrine, endorphins, anandamide, serotonin) is metabolically expensive to produce. Recovery is the phase where the system rebuilds the raw material for the next struggle-release-flow pass."
       },
       "activate": {
         "protocol": "Schedule recovery the same way you schedule the work: a fixed block after any high-output push, not 'whenever I get around to it.'",
@@ -43,14 +43,14 @@
       "challenge_skill_balance": {
         "label": "Challenge / Skill Balance",
         "understand": {
-          "insight": "Flow only shows up when the challenge sits just above your current skill level: too easy and you get bored, too hard and you get anxious. The target zone is roughly 4% harder than what's comfortable.",
-          "why": "This is the most reliable lever you control directly: you can't force flow, but you can engineer the challenge-skill ratio that makes it likely.",
+          "insight": "Flow only shows up when the challenge sits just above your current skill level; too easy and you get bored, too hard and you get anxious. The target zone is roughly 4% harder than what's comfortable.",
+          "why": "This is the most reliable lever you control directly; you can't force flow, but you can engineer the challenge-skill ratio that makes it likely.",
           "neuro": "Dopamine rewards operating at the edge of ability: anticipation of a just-reachable challenge triggers the seeking system, not the challenge itself."
         },
         "activate": {
           "protocol": "Rate the task 1-10 on difficulty relative to your skill before starting. Below 6, add a constraint. Above 8, break it down.",
           "if_then": "If a task feels boring, then I raise the difficulty. If it feels overwhelming, then I shrink the scope.",
-          "reflection": "Is today's task actually at your edge, or is it comfortable: or too much?"
+          "reflection": "Is today's task actually at your edge, or is it comfortable, or too much?"
         }
       },
       "clear_goals_feedback": {
@@ -58,7 +58,7 @@
         "understand": {
           "insight": "Flow needs to know, moment to moment, whether it's working: that requires both a clear target and immediate feedback on progress toward it.",
           "why": "Ambiguous goals ('do better') can't produce flow because there's nothing to get real-time feedback against.",
-          "neuro": "Each micro-confirmation that you're on track delivers a small dopamine hit: this is what keeps you locked into the task instead of checking out."
+          "neuro": "Each micro-confirmation that you're on track delivers a small dopamine hit; this is what keeps you locked into the task instead of checking out."
         },
         "activate": {
           "protocol": "Define what 'done' looks like for the next 20 minutes before you start, so you can feel yourself hitting or missing it in real time.",
@@ -69,9 +69,9 @@
       "rich_environment": {
         "label": "Rich Environment",
         "understand": {
-          "insight": "Flow favors environments with novelty, unpredictability, and complexity: the brain pays more attention when it can't fully predict what's next.",
+          "insight": "Flow favors environments with novelty, unpredictability, and complexity; the brain pays more attention when it can't fully predict what's next.",
           "why": "A stale, fully-predictable environment starves the system of the input it needs to stay engaged, even if the challenge-skill ratio is right.",
-          "neuro": "Novelty and unpredictability keep norepinephrine and dopamine engaged: predictability lets attention drift."
+          "neuro": "Novelty and unpredictability keep norepinephrine and dopamine engaged; predictability lets attention drift."
         },
         "activate": {
           "protocol": "Change one environmental variable before your next deep-work block: location, tool, or constraint, even a small one.",
@@ -87,12 +87,12 @@
       "label": "Drive",
       "coords": { "cx": 600, "cy": 888, "r": 55 },
       "understand": {
-        "insight": "Drive is the engine: but not all fuel burns the same. Extrinsic fuel (money, status, fear) gets you moving fast and burns out fast. Intrinsic fuel (curiosity, passion, purpose, autonomy, mastery) is slower to build but doesn't run out.",
-        "why": "Most people start on extrinsic fuel because it's available immediately: the work is noticing when it's time to switch tanks.",
+        "insight": "Drive is the engine, but not all fuel burns the same. Extrinsic fuel (money, status, fear) gets you moving fast and burns out fast. Intrinsic fuel (curiosity, passion, purpose, autonomy, mastery) is slower to build but doesn't run out.",
+        "why": "Most people start on extrinsic fuel because it's available immediately; the work is noticing when it's time to switch tanks.",
         "neuro": "Extrinsic fuel runs on an adrenaline-then-cortisol spike-and-crash pattern; intrinsic fuel runs on a steadier dopamine-curiosity loop that can sustain years, not weeks."
       },
       "activate": {
-        "protocol": "Ask what's currently fueling this pursuit: if the honest answer is fear, status, or money, that's fine to start, but plan the switch to something durable.",
+        "protocol": "Ask what's currently fueling this pursuit. If the honest answer is fear, status, or money, that's fine to start, but plan the switch to something durable.",
         "if_then": "If I notice I'm only pushing forward because of fear or approval, then I look for the curiosity or purpose underneath it.",
         "reflection": "If the extrinsic reward disappeared tomorrow, would you still do this?"
       }
@@ -102,9 +102,9 @@
         "label": "Extrinsic",
         "coords": { "cx": 445, "cy": 778, "r": 36 },
         "understand": {
-          "insight": "External rewards: money, status, approval, fear of failure: are scaffolding, not fuel. They get early action started when nothing else will.",
+          "insight": "External rewards (money, status, approval, fear of failure) are scaffolding, not fuel. They get early action started when nothing else will.",
           "why": "Extrinsic motivation works fast but depletes fast: useful to bootstrap a new pursuit, dangerous as a permanent foundation.",
-          "neuro": "Extrinsic pressure triggers an adrenaline spike that resolves into cortisol: a stress-response pattern, not a sustainable reward loop."
+          "neuro": "Extrinsic pressure triggers an adrenaline spike that resolves into cortisol, a stress-response pattern, not a sustainable reward loop."
         },
         "activate": {
           "protocol": "Use extrinsic motivators deliberately for the first 2-4 weeks of anything new, then actively look for what's replacing them.",
@@ -117,7 +117,7 @@
         "label": "Intrinsic",
         "coords": { "cx": 425, "cy": 1018, "r": 52 },
         "understand": {
-          "insight": "Intrinsic motivation comes from three levers: autonomy (control), competence (getting better), relatedness (connection): when all three are present, motivation sustains itself without external reward.",
+          "insight": "Intrinsic motivation comes from three levers: autonomy (control), competence (getting better), relatedness (connection); when all three are present, motivation sustains itself without external reward.",
           "why": "This is the fuel that doesn't run out, because the reward is built into doing the thing, not into what happens after.",
           "neuro": "Intrinsic pursuit runs on a steady dopamine-driven curiosity loop rather than the spike-crash pattern of extrinsic reward."
         },
@@ -133,8 +133,8 @@
         "coords": { "cx": 278, "cy": 938, "r": 29 },
         "understand": {
           "insight": "Curiosity is the gateway: an information gap between what you know and what you want to know, and that gap itself is uncomfortable enough to demand closing.",
-          "why": "You don't have to manufacture interest: you have to notice which gaps are already grabbing you and follow them instead of talking yourself out of them.",
-          "neuro": "The itch to close a knowledge gap is a dopamine-driven novelty signal: the same circuit that rewards exploration in general."
+          "why": "You don't have to manufacture interest; you have to notice which gaps are already grabbing you and follow them instead of talking yourself out of them.",
+          "neuro": "The itch to close a knowledge gap is a dopamine-driven novelty signal, the same circuit that rewards exploration in general."
         },
         "activate": {
           "protocol": "Keep a running list of the questions you can't stop asking, unprompted: that list is your curiosity map.",
@@ -147,8 +147,8 @@
         "label": "Passion",
         "coords": { "cx": 265, "cy": 1018, "r": 29 },
         "understand": {
-          "insight": "Passion is not a starting point: it's what curiosity becomes once you stack 3+ interests that intersect. It's a product of curiosity, not a cause of it.",
-          "why": "Most people wait to 'find their passion': this model says you build it by chasing curiosities until they overlap.",
+          "insight": "Passion is not a starting point; it's what curiosity becomes once you stack 3+ interests that intersect. It's a product of curiosity, not a cause of it.",
+          "why": "Most people wait to 'find their passion'; this model says you build it by chasing curiosities until they overlap.",
           "neuro": "Dopamine + Norepinephrine: novelty stacking keeps the seeking system engaged long enough for overlap to happen."
         },
         "activate": {
@@ -161,7 +161,7 @@
         "label": "Purpose",
         "coords": { "cx": 278, "cy": 1118, "r": 29 },
         "understand": {
-          "insight": "Purpose is passion applied to something bigger than yourself. It doesn't replace passion: it redirects it outward, which is what makes grit sustainable instead of burning out.",
+          "insight": "Purpose is passion applied to something bigger than yourself. It doesn't replace passion; it redirects it outward, which is what makes grit sustainable instead of burning out.",
           "why": "Passion alone fuels you; purpose fuels you AND makes the effort feel worth it to others, which lowers burnout risk.",
           "neuro": "Oxytocin + Serotonin: social/meaning reward chemicals, a different circuit than the dopamine hit of pure passion."
         },
@@ -175,7 +175,7 @@
         "label": "Autonomy",
         "coords": { "cx": 425, "cy": 1183, "r": 29 },
         "understand": {
-          "insight": "Autonomy is control over HOW you pursue the goal, not whether you pursue it: one of the psychological preconditions for entering flow at all.",
+          "insight": "Autonomy is control over HOW you pursue the goal, not whether you pursue it, one of the psychological preconditions for entering flow at all.",
           "why": "Micromanaged effort rarely produces flow, even toward a goal you actually care about.",
           "neuro": "Dopamine: driven by perceived agency, not just outcome."
         },
@@ -190,7 +190,7 @@
         "coords": { "cx": 580, "cy": 1158, "r": 29 },
         "understand": {
           "insight": "Mastery is the compounding skill loop: each rep raises the ceiling for the next flow state.",
-          "why": "Without mastery growth, the same activity stops producing flow: you get bored at the exact skill ceiling where you used to feel challenged.",
+          "why": "Without mastery growth, the same activity stops producing flow; you get bored at the exact skill ceiling where you used to feel challenged.",
           "neuro": "Endorphins + Dopamine: effort-buffering plus anticipation, the same combo that shows up at Flow State itself."
         },
         "activate": {
@@ -208,11 +208,11 @@
       "coords": { "cx": 1200, "cy": 185, "r": 55 },
       "understand": {
         "insight": "The goals cascade compresses an impossible ambition into daily action: MTP (why) → High Hard Goals (what, 1-5 years) → Clear Goals (today's to-do list).",
-        "why": "A goal with no cascade stays abstract forever: this structure is what turns 'someday' into something you can act on this week.",
+        "why": "A goal with no cascade stays abstract forever; this structure is what turns 'someday' into something you can act on this week.",
         "neuro": "Norepinephrine sustains direction from the MTP; dopamine anticipation kicks in at the High Hard Goal level; dopamine-on-completion rewards each Clear Goal."
       },
       "activate": {
-        "protocol": "Check that you can trace today's task back up the chain to your MTP in under 3 sentences: if you can't, the task may not belong.",
+        "protocol": "Check that you can trace today's task back up the chain to your MTP in under 3 sentences. If you can't, the task may not belong.",
         "if_then": "If a daily task doesn't connect to a high hard goal or MTP, then I question whether it belongs on today's list.",
         "reflection": "Can you draw a straight line from what you're doing today to your actual North Star?"
       }
@@ -227,7 +227,7 @@
           "neuro": "Sustained norepinephrine keeps long-horizon direction alive even when daily tasks feel disconnected from it."
         },
         "activate": {
-          "protocol": "Write your MTP as one sentence you'd still believe in 10 years: test it by imagining explaining it to a stranger.",
+          "protocol": "Write your MTP as one sentence you'd still believe in 10 years; test it by imagining explaining it to a stranger.",
           "if_then": "If a goal doesn't serve your MTP, then it's optional, not urgent.",
           "reflection": "Is your MTP actually yours, or borrowed from what you think you should want?"
         }
@@ -236,13 +236,13 @@
         "label": "High Hard Goals",
         "coords": { "cx": 1200, "cy": 62, "r": 34 },
         "understand": {
-          "insight": "The 1-5 year horizon goal, set at the edge of current ability: hard enough that success isn't guaranteed.",
+          "insight": "The 1-5 year horizon goal, set at the edge of current ability, hard enough that success isn't guaranteed.",
           "why": "This is where the challenge-skill ratio for flow gets set at the macro level, not just the daily-task level.",
-          "neuro": "Dopamine anticipation is highest when the outcome is uncertain but achievable: too safe a goal produces none of this."
+          "neuro": "Dopamine anticipation is highest when the outcome is uncertain but achievable; too safe a goal produces none of this."
         },
         "activate": {
-          "protocol": "Set the goal at the point where you'd estimate less than 50% odds of success with your current skill: then commit anyway.",
-          "if_then": "If a goal feels certain, then it's not a High Hard Goal: recalibrate up.",
+          "protocol": "Set the goal at the point where you'd estimate less than 50% odds of success with your current skill, then commit anyway.",
+          "if_then": "If a goal feels certain, then it's not a High Hard Goal; recalibrate up.",
           "reflection": "Are you actually uncertain you can hit this goal, or just uncomfortable saying it out loud?"
         }
       },
@@ -251,12 +251,12 @@
         "coords": { "cx": 1446, "cy": 138, "r": 36 },
         "understand": {
           "insight": "Specific enough to put on a to-do list today: the execution layer, using implementation intentions ('if X, then Y') to remove decision friction.",
-          "why": "Vague daily intentions ('work on the project') don't survive contact with a busy day: pre-deciding the trigger and action does.",
-          "neuro": "Dopamine rewards each completion: this is the layer that generates the most frequent, immediate reinforcement in the whole cascade."
+          "why": "Vague daily intentions ('work on the project') don't survive contact with a busy day; pre-deciding the trigger and action does.",
+          "neuro": "Dopamine rewards each completion; this is the layer that generates the most frequent, immediate reinforcement in the whole cascade."
         },
         "activate": {
-          "protocol": "Write today's goal as an if-then: 'If it's 9am, then I open the draft and write for 25 minutes': not just 'work on X.'",
-          "if_then": "If a goal doesn't specify a trigger and an action, then it's not a Clear Goal yet: rewrite it.",
+          "protocol": "Write today's goal as an if-then: 'If it's 9am, then I open the draft and write for 25 minutes,' not just 'work on X.'",
+          "if_then": "If a goal doesn't specify a trigger and an action, then it's not a Clear Goal yet; rewrite it.",
           "reflection": "Does today's goal have a specific trigger, or is it just a hope?"
         },
         "source": "Implementation Intentions (Gollwitzer)"
@@ -274,9 +274,9 @@
         "neuro": "Grit draws on nearly every stress-and-reward system at once: endorphins to buffer pain, cortisol regulation to recover from setbacks, BDNF to physically rewire skill."
       },
       "activate": {
-        "protocol": "When you want to quit, name which specific gear is slipping: effort, interest, setback, emotion, horizon, or belief: before deciding what to do about it.",
+        "protocol": "When you want to quit, name which specific gear is slipping (effort, interest, setback, emotion, horizon, or belief) before deciding what to do about it.",
         "if_then": "If I want to quit, then I first identify which of the six grit mechanisms is actually failing, not just 'I'm not gritty enough.'",
-        "reflection": "Which of the six: effort, interest, resilience, emotion, patience, or belief in growth: is the one actually wearing thin right now?"
+        "reflection": "Which of the six (effort, interest, resilience, emotion, patience, or belief in growth) is the one actually wearing thin right now?"
       },
       "source": "Angela Duckworth's Grit + Anders Ericsson's Deliberate Practice"
     },
@@ -286,11 +286,11 @@
         "coords": { "cx": 1919, "cy": 746, "r": 32 },
         "understand": {
           "insight": "Raw continued action despite difficulty: showing up when it's hard, not just when it's fun.",
-          "why": "Duckworth's grit formula treats effort as counting twice (talent × effort = skill; skill × effort = achievement): effort isn't a tiebreaker, it's the multiplier.",
+          "why": "Duckworth's grit formula treats effort as counting twice (talent × effort = skill; skill × effort = achievement); effort isn't a tiebreaker, it's the multiplier.",
           "neuro": "Endorphins buffer the pain of continued effort; norepinephrine keeps focus locked on the task instead of the discomfort."
         },
         "activate": {
-          "protocol": "When you hit the urge to quit, commit to 10 more minutes only: don't decide about tomorrow, just the next 10 minutes.",
+          "protocol": "When you hit the urge to quit, commit to 10 more minutes only; don't decide about tomorrow, just the next 10 minutes.",
           "if_then": "If I want to quit mid-task, then I do 10 more minutes before deciding anything.",
           "reflection": "Is this 'I can't' or 'I don't want to right now'?"
         }
@@ -304,7 +304,7 @@
           "neuro": "A live curiosity-dopamine loop is what keeps the problem interesting enough to return to, rather than fading."
         },
         "activate": {
-          "protocol": "Revisit why this problem grabbed you in the first place once a month: if the answer feels dead, that's a signal, not a failure.",
+          "protocol": "Revisit why this problem grabbed you in the first place once a month; if the answer feels dead, that's a signal, not a failure.",
           "if_then": "If interest is fading, then I go back to the original curiosity, not just push harder on effort.",
           "reflection": "Do you still find this problem interesting, or are you only still doing it out of momentum?"
         }
@@ -327,14 +327,14 @@
         "label": "Emotional Regulation",
         "coords": { "cx": 1952, "cy": 994, "r": 32 },
         "understand": {
-          "insight": "Channeling emotions productively instead of suppressing them: grit isn't emotional numbness, it's feeling frustration or doubt and still choosing the next right action.",
+          "insight": "Channeling emotions productively instead of suppressing them; grit isn't emotional numbness, it's feeling frustration or doubt and still choosing the next right action.",
           "why": "Suppressed emotion resurfaces as burnout or avoidance later; regulated emotion becomes usable fuel now.",
           "neuro": "Serotonin + GABA: mood stability and anxiety-dampening, what keeps a hard emotion from hijacking the whole system."
         },
         "activate": {
-          "protocol": "Name the emotion out loud or in writing before reacting to it ('I'm frustrated because X'): labeling drops its intensity.",
+          "protocol": "Name the emotion out loud or in writing before reacting to it ('I'm frustrated because X'); labeling drops its intensity.",
           "if_then": "If I feel a strong negative emotion mid-task, then I name it in one sentence before I do anything else.",
-          "reflection": "What emotion keeps showing up right before you want to quit: and what is it actually telling you?"
+          "reflection": "What emotion keeps showing up right before you want to quit, and what is it actually telling you?"
         }
       },
       "long_term_thinking": {
@@ -346,7 +346,7 @@
           "neuro": "Prefrontal Dopamine: the 'cooler' future-oriented circuit, distinct from the immediate-reward dopamine spike."
         },
         "activate": {
-          "protocol": "Before quitting or pivoting, ask 'how will I feel about this decision in 5 years?': write the answer down.",
+          "protocol": "Before quitting or pivoting, ask 'how will I feel about this decision in 5 years?'; write the answer down.",
           "if_then": "If I'm tempted by a short-term easier path, then I check it against my 5-year version of this goal first.",
           "reflection": "Is today's discomfort actually evidence against the goal, or just evidence that it's hard?"
         }
@@ -357,10 +357,10 @@
         "understand": {
           "insight": "Skills are trainable, not fixed: the belief underneath grit that effort actually changes capability.",
           "why": "Without this belief, setbacks read as proof of a ceiling instead of a normal part of building skill.",
-          "neuro": "BDNF is the literal neuroplasticity signal: practice physically changes the brain's capacity, the biological backing for the mindset."
+          "neuro": "BDNF is the literal neuroplasticity signal; practice physically changes the brain's capacity, the biological backing for the mindset."
         },
         "activate": {
-          "protocol": "Replace 'I'm not good at this' with 'I'm not good at this yet': out loud, every time you notice the fixed version.",
+          "protocol": "Replace 'I'm not good at this' with 'I'm not good at this yet,' out loud, every time you notice the fixed version.",
           "if_then": "If I think 'I can't do this,' then I add 'yet' before deciding it's true.",
           "reflection": "What's one skill you assumed was fixed that you've never actually tried to train?"
         },
