@@ -6,6 +6,34 @@
 
 ---
 
+## v2.26 — 2026-07-06 — OG Map perf fix (blur removed), deeper zoom, nav counter animation, extract.html CORS+data-wipe fixes, episode_meta 521, ogmap.json anti-slop
+
+### Changes
+
+**index.html — OG Map performance**
+- `.og-spotlight-scrim`: removed `backdrop-filter: blur(3px)` and `-webkit-backdrop-filter` (was causing ~720ms INP on node click due to GPU compositing on every repaint). Replaced with `will-change: opacity` (compositor-layer promotion, near-zero paint cost). Background opacity bumped slightly from 0.80 to 0.85 to compensate for lost blur depth. Card border-radius and colored glow box-shadow are the visual anchor — no perceptible regression.
+- `ogActivate`: zoom scale doubled — main/hub nodes `1.8 → 3.6`, sub-nodes `2.6 → 5.2`. Node fills the viewport on click instead of stopping at halfway.
+
+**index.html — Nav concept counter**
+- `updateHeaderCounts`: replaced instant `textContent` assignment with a two-phase count-up animation. Phase 1: ease-out cubic from 0 to `total − 5` over 1000ms (fast sweep). Phase 2: one tick per 500ms for the final 5 numbers (slow, satisfying landing). Fires on every page load/refresh.
+
+**epistemic-tools/extract.html — bug fixes**
+- `generateIntel()`: added missing `'anthropic-dangerous-direct-browser-access': 'true'` header to the Anthropic API fetch. All other API calls in the file already had it; this one was the only exception, causing a CORS preflight rejection on `tools.epistemic.live`.
+- `generateIntel()` catch block: on regen failure, if `currentIntelResult` is populated (prior intel exists), the UI now restores `intelFields` and `intelSaveRow` visibility instead of leaving them hidden. Previous intel is preserved and still saveable after a failed regen.
+- Library fetch for `related_ids`: switched URL from `https://epistemic.live/concepts.json` to `https://raw.githubusercontent.com/pocsgeri1/listen-learn-live/main/concepts.json`. GitHub raw is CORS-free and more reliably reachable from `tools.epistemic.live` without depending on Vercel CORS headers or CDN state.
+
+**episode_meta.json**
+- Added collection 521 (Alex Hormozi × Chris Williamson, Modern Wisdom). All six intel fields written: `summary_style: D`, Style D summary at 116 words, sharpest_line, tension, verdict_listen (3), verdict_skip (2), vocab_vault (24 terms). Data recovered from the UI state that was wiped by the CORS bug above.
+
+**ogmap.json — anti-slop pass**
+- Replaced all 94 em-dashes with colons. JSON validity confirmed post-edit. Affects `sources`, `insight`, `why`, `protocol`, `if_then`, `reflection`, and `neuro` fields throughout.
+
+**docs/skills/** (new, not deployed — local reference files)
+- `anti-slop/SKILL.md`: editorial rules for no-em-dash, banned words, banned patterns (not-X-but-Y, motivational-poster cadence, passive voice). Trigger: "apply anti-slop".
+- `epistemic-session/SKILL.md`: working rules for Epistemic build sessions (response format, token discipline, stack constraints). Trigger: "epistemic mode".
+
+---
+
 ## v2.25a — 2026-07-04 — OG Map content card rebuilt as a spotlight modal, decoupled from the SVG; intro+bullets content restructuring
 
 ### Why

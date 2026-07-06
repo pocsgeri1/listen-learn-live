@@ -1476,6 +1476,145 @@
           "timestamp_seconds": null
         }
       ]
+    },
+    "521": {
+      "collection_id": 521,
+      "summary_style": "D",
+      "summary": "The question a smart person brings into this is whether Hormozi's library still has unexplored territory. Four hours suggests either new material or a man who repeats himself.\n\nWhat shifts that calculation is the half-measure argument. His argument is about structure: partial commitment yields nothing, the same way four shallow holes do not combine into one deep enough to reach water no matter how many you dig. The loneliness chapter earns the weight because the claim would be motivational noise if he were not describing his own specific rug, his own months of pacing the same decision.\n\nYou do not leave convinced he is right about everything. You leave less sure he is wrong about this.",
+      "sharpest_line": "Half measures don't give you half results, they give you nothing. You can't dig four shallow holes and expect to hit water.",
+      "tension": "Maximizing potential vs realizing potential",
+      "verdict_listen": [
+        "you've ever built optionality for years then realized the options themselves became the prison",
+        "you work in a leadership role and people comply with you but don't actually respect you",
+        "you're the kind of person who practices being indecisive by delaying every small choice"
+      ],
+      "verdict_skip": [
+        "behavioral psychology feels like overthinking when common sense would do",
+        "you're looking for motivation, not mechanisms"
+      ],
+      "vocab_vault": [
+        {
+          "word": "monomaniacal",
+          "definition": "obsessively focused on one thing to the exclusion of everything else",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "decadere",
+          "definition": "Latin root of decision meaning to cut off",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "malicious benefit",
+          "definition": "someone intends harm but lacks skill so helps you instead",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "well-intentioned harm",
+          "definition": "someone means well but lacks competence and causes damage",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "extinction curve",
+          "definition": "how long you tolerate bad behavior based on history of good behavior",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "fading affect bias",
+          "definition": "negative memories fade faster than positive ones across species",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "domain specificity",
+          "definition": "skills in one area don't transfer to another without conscious linking",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "local maxima",
+          "definition": "highest point visible from where you stand, not the actual peak",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "global maxima",
+          "definition": "the actual highest point available, often invisible from local peaks",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "fluid intelligence",
+          "definition": "raw problem-solving speed that peaks around age 40",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "crystallized intelligence",
+          "definition": "accumulated wisdom and judgment that keeps growing with age",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "motivating operation",
+          "definition": "any event that changes the value of a consequence and affects behavior",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "variable reinforcer",
+          "definition": "unpredictable rewards that train people to gamble with boundaries",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "global reinforcer",
+          "definition": "broad identity label that influences behavior across many situations",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "tilting at windmills",
+          "definition": "attacking an imagined enemy that doesn't match reality",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "anti-fragile",
+          "definition": "systems that gain from disorder and have multiple paths to success",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "inversion",
+          "definition": "thinking backward by listing ways to fail then avoiding them",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "hormesis",
+          "definition": "beneficial stress that makes systems stronger through controlled exposure",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "desensitization",
+          "definition": "reducing emotional reaction through repeated exposure to stimulus",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "recency bias",
+          "definition": "overweighting recent events when evaluating patterns or relationships",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "TTRO",
+          "definition": "temporary restraining order filed to prevent an action",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "Gallow's humor",
+          "definition": "dark comedy used to cope with traumatic or dangerous situations",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "status game",
+          "definition": "competition for relative position and social standing",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "enforcement",
+          "definition": "consistent consequences for crossing stated boundaries",
+          "timestamp_seconds": null
+        }
+      ],
+      "dna": {}
     }
   }
 }

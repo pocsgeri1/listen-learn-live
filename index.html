@@ -8423,8 +8423,8 @@
 .og-spotlight.active { opacity: 1; pointer-events: all; }
 .og-spotlight-scrim {
   position: absolute; inset: 0;
-  background: rgba(6,6,8,0.8);
-  backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);
+  background: rgba(6,6,8,0.85);
+  will-change: opacity;
 }
 .og-spotlight-card {
   position: relative;
@@ -11399,9 +11399,29 @@ function updateHeaderCounts() {
     col => col && (col.type === 'episode' || col.type === 'short')
   ).length;
 
-  // Nav count: instant (small, in the corner — animation would feel jittery)
+  // Nav count: two-phase count-up — fast to (total-5) in 1s, then 500ms per tick for last 5
   const navEl = document.getElementById('navConceptCount');
-  if (navEl) navEl.textContent = conceptCount;
+  if (navEl && conceptCount > 0) {
+    const last5Start = Math.max(0, conceptCount - 5);
+    const phase1Duration = 1000;
+    const phase1Start = performance.now();
+    (function phase1(now) {
+      const elapsed = now - phase1Start;
+      const progress = Math.min(elapsed / phase1Duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+      navEl.textContent = Math.round(last5Start * eased);
+      if (progress < 1) { requestAnimationFrame(phase1); return; }
+      // Phase 2: tick last 5, one per 500ms
+      let cur = last5Start;
+      (function tick() {
+        cur++;
+        navEl.textContent = cur;
+        if (cur < conceptCount) setTimeout(tick, 500);
+      })();
+    })(performance.now());
+  } else if (navEl) {
+    navEl.textContent = conceptCount;
+  }
 
   // Hero stats: animated count-up — eye-catching on the landing
 
@@ -24582,7 +24602,7 @@ function _convOpenCSById(id) {
     card.innerHTML=buildOgCardHTML(id,entry);
     card.scrollTop=0;
     const isMain=path[path.length-1]==='main'||id==='hub';
-    const targetScale=isMain?1.8:2.6;
+    const targetScale=isMain?3.6:5.2;
     window.ogZoomToNode(cx,cy,targetScale,850,()=>{
       spot.classList.add('active');
       if(OG_PILLS_KEY[id]){
