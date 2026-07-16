@@ -1912,7 +1912,6 @@
     .ep-drawer-filter-row .ep-drawer-cat-filter {
       width: 100%;
       flex: 0 0 100%;
-      border-bottom: 1px solid var(--border);
     }
   }
   /* Single cycling view button — lives in pills row on mobile */
@@ -10565,15 +10564,16 @@ function _renderIntelRow(pillsEl, collectionId, liveDna) {
       if (!pillsEl.querySelector('.ep-view-cycle-btn')) {
         const views = ['scan', 'flip', 'all'];
         const icons = { scan: '◫', flip: '⊟', all: '⊞' };
-        let currentIdx = 0; // start at scan (default)
         const cycleBtn = document.createElement('button');
         cycleBtn.className = 'ep-view-cycle-btn active';
         cycleBtn.title = 'Switch view';
-        cycleBtn.textContent = icons[views[currentIdx]];
+        cycleBtn.dataset.viewIdx = '0'; // track in DOM so it can be reset externally
+        cycleBtn.textContent = icons[views[0]];
         cycleBtn.addEventListener('click', e => {
           e.stopPropagation();
-          currentIdx = (currentIdx + 1) % views.length;
-          const nextView = views[currentIdx];
+          const nextIdx = (parseInt(cycleBtn.dataset.viewIdx || '0', 10) + 1) % views.length;
+          cycleBtn.dataset.viewIdx = String(nextIdx);
+          const nextView = views[nextIdx];
           cycleBtn.textContent = icons[nextView];
           const btn = document.getElementById(prefix + 'ViewBtn' + nextView.charAt(0).toUpperCase() + nextView.slice(1));
           setDrawerView(prefix, nextView, btn || cycleBtn);
@@ -11611,29 +11611,17 @@ function openEpisodeDrawer(collectionId) {
   const _epDrawerEl = document.getElementById('epDrawer');
   _epDrawerEl.classList.add('open');
   // Mobile: pre-apply scan-active so cat filter is hidden from the start
-  if (window.innerWidth <= 768) {
-    _epDrawerEl.classList.add('drawer-scan-active');
-    // Pre-set scan button active state to avoid flip→scan flash
-    const _epBodyEl = document.querySelector('#epDrawer .ep-drawer-body');
-    if (_epBodyEl) _epBodyEl.classList.add('drawer-scan-mode');
-    const _epFlipBtn = document.getElementById('epViewBtnFlip');
-    const _epScanBtn = document.getElementById('epViewBtnScan');
-    if (_epFlipBtn) _epFlipBtn.classList.remove('active');
-    if (_epScanBtn) _epScanBtn.classList.add('active');
-  }
+  if (window.innerWidth <= 768) _epDrawerEl.classList.add('drawer-scan-active');
   else _epDrawerEl.classList.remove('drawer-scan-active');
   document.body.style.overflow = 'hidden';
   document.body.classList.add('drawer-open');
 
   // Render the actual content after the browser has painted the slide-up frame.
   // Two rAFs = guaranteed paint between them.
+  // NOTE: mobile scan default is applied inside _finishEpDrawerRender, after all
+  // columns are in the DOM (ep drawer renders columns async, one per rAF).
   requestAnimationFrame(() => requestAnimationFrame(() => {
     _renderDrawerContent(col, collectionId);
-    // Mobile default: scan view (◫) on small screens
-    if (window.innerWidth <= 768) {
-      const scanBtn = document.getElementById('epViewBtnScan');
-      if (scanBtn) setDrawerView('ep', 'scan', scanBtn);
-    }
   }));
 }
 
@@ -11808,7 +11796,15 @@ function _finishEpDrawerRender(sortedCatKeys, catGroups) {
   // Show sort-row (sibling of cat-filter; CSS makes them share one row)
   const _epSortRow = document.getElementById('epDrawerSortRow');
   if (_epSortRow) _epSortRow.style.display = '';
-  _resetDrawerScan('ep');
+  // Mobile: default to scan view now that all columns are in the DOM
+  if (window.innerWidth <= 768) {
+    const _epScanBtn = document.getElementById('epViewBtnScan');
+    setDrawerView('ep', 'scan', _epScanBtn);
+    const _epCycleBtn = document.querySelector('#epDrawerPills .ep-view-cycle-btn');
+    if (_epCycleBtn) { _epCycleBtn.textContent = '◫'; _epCycleBtn.dataset.viewIdx = '0'; }
+  } else {
+    _resetDrawerScan('ep');
+  }
 }
 
 function filterDrawerCat(catKey, silent) {
@@ -12294,27 +12290,14 @@ function openThemeDrawer(id) {
   document.getElementById('themeBackdrop').classList.add('open');
   const _themeDrawerEl = document.getElementById('themeDrawer');
   _themeDrawerEl.classList.add('open');
-  if (window.innerWidth <= 768) {
-    _themeDrawerEl.classList.add('drawer-scan-active');
-    // Pre-set scan button active state to avoid flip→scan flash
-    const _thBodyEl = document.querySelector('#themeDrawer .ep-drawer-body');
-    if (_thBodyEl) _thBodyEl.classList.add('drawer-scan-mode');
-    const _thFlipBtn = document.getElementById('themeViewBtnFlip');
-    const _thScanBtn = document.getElementById('themeViewBtnScan');
-    if (_thFlipBtn) _thFlipBtn.classList.remove('active');
-    if (_thScanBtn) _thScanBtn.classList.add('active');
-  }
+  if (window.innerWidth <= 768) _themeDrawerEl.classList.add('drawer-scan-active');
   else _themeDrawerEl.classList.remove('drawer-scan-active');
   document.body.style.overflow = 'hidden';
   document.body.classList.add('drawer-open');
 
+  // NOTE: mobile scan default is applied inside _renderThemeDrawerContent after render.
   requestAnimationFrame(() => requestAnimationFrame(() => {
     _renderThemeDrawerContent(col, id);
-    // Mobile default: scan view (◫) on small screens
-    if (window.innerWidth <= 768) {
-      const scanBtn = document.getElementById('themeViewBtnScan');
-      if (scanBtn) setDrawerView('theme', 'scan', scanBtn);
-    }
   }));
 }
 
@@ -12391,7 +12374,15 @@ function _renderThemeDrawerContent(col, id) {
   // Show sort-row (sibling of cat-filter; CSS makes them share one row)
   const _themeSortRow = document.getElementById('themeDrawerSortRow');
   if (_themeSortRow) _themeSortRow.style.display = '';
-  _resetDrawerScan('theme');
+  // Mobile: default to scan view now that all content is in the DOM
+  if (window.innerWidth <= 768) {
+    const _thScanBtn = document.getElementById('themeViewBtnScan');
+    setDrawerView('theme', 'scan', _thScanBtn);
+    const _thCycleBtn = document.querySelector('#themeDrawerPills .ep-view-cycle-btn');
+    if (_thCycleBtn) { _thCycleBtn.textContent = '◫'; _thCycleBtn.dataset.viewIdx = '0'; }
+  } else {
+    _resetDrawerScan('theme');
+  }
 }
 
 function filterThemeDrawerCat(catKey, silent) {
@@ -14915,7 +14906,13 @@ function exitCornerMode() {
 
   // Reset corner tagline transition-delay so it doesn't trap the fade-out
   var ctag = document.getElementById('spCornerTagline');
-  if (ctag) { ctag.style.transitionDelay = ''; }
+  if (ctag) {
+    ctag.style.transitionDelay = '';
+    // Clear text after fade-out so it takes no layout space (prevents dead space below h1)
+    setTimeout(function() {
+      if (!document.body.classList.contains('corner-mode')) ctag.textContent = '';
+    }, 380);
+  }
 
   // Toggle pill states
   var pe = document.getElementById('spModeExplore');
@@ -21313,7 +21310,7 @@ function playStreakMilestoneSFX() {
 @media (max-width: 768px) {
   .sp-hero {
     min-height: 100svh;
-    padding: 80px 1.5rem 3rem;
+    padding: 80px 1.5rem 5rem;
     box-sizing: border-box;
   }
 }
