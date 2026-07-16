@@ -11611,7 +11611,16 @@ function openEpisodeDrawer(collectionId) {
   const _epDrawerEl = document.getElementById('epDrawer');
   _epDrawerEl.classList.add('open');
   // Mobile: pre-apply scan-active so cat filter is hidden from the start
-  if (window.innerWidth <= 768) _epDrawerEl.classList.add('drawer-scan-active');
+  if (window.innerWidth <= 768) {
+    _epDrawerEl.classList.add('drawer-scan-active');
+    // Pre-set scan button active state to avoid flip→scan flash
+    const _epBodyEl = document.querySelector('#epDrawer .ep-drawer-body');
+    if (_epBodyEl) _epBodyEl.classList.add('drawer-scan-mode');
+    const _epFlipBtn = document.getElementById('epViewBtnFlip');
+    const _epScanBtn = document.getElementById('epViewBtnScan');
+    if (_epFlipBtn) _epFlipBtn.classList.remove('active');
+    if (_epScanBtn) _epScanBtn.classList.add('active');
+  }
   else _epDrawerEl.classList.remove('drawer-scan-active');
   document.body.style.overflow = 'hidden';
   document.body.classList.add('drawer-open');
@@ -12285,7 +12294,16 @@ function openThemeDrawer(id) {
   document.getElementById('themeBackdrop').classList.add('open');
   const _themeDrawerEl = document.getElementById('themeDrawer');
   _themeDrawerEl.classList.add('open');
-  if (window.innerWidth <= 768) _themeDrawerEl.classList.add('drawer-scan-active');
+  if (window.innerWidth <= 768) {
+    _themeDrawerEl.classList.add('drawer-scan-active');
+    // Pre-set scan button active state to avoid flip→scan flash
+    const _thBodyEl = document.querySelector('#themeDrawer .ep-drawer-body');
+    if (_thBodyEl) _thBodyEl.classList.add('drawer-scan-mode');
+    const _thFlipBtn = document.getElementById('themeViewBtnFlip');
+    const _thScanBtn = document.getElementById('themeViewBtnScan');
+    if (_thFlipBtn) _thFlipBtn.classList.remove('active');
+    if (_thScanBtn) _thScanBtn.classList.add('active');
+  }
   else _themeDrawerEl.classList.remove('drawer-scan-active');
   document.body.style.overflow = 'hidden';
   document.body.classList.add('drawer-open');
@@ -21291,6 +21309,13 @@ function playStreakMilestoneSFX() {
 }
 @media (max-width: 600px) {
   .sp-sub { white-space: normal; }
+}
+@media (max-width: 768px) {
+  .sp-hero {
+    min-height: 100svh;
+    padding: 80px 1.5rem 3rem;
+    box-sizing: border-box;
+  }
 }
 
 /* --- Search bar --- */
