@@ -34,6 +34,14 @@ Claude updates without being asked: changelog.md (new entry at TOP), roadmap.md 
 
 ## Entries
 
+### 2026-07-27 — v2.36: Lexicon
+
+**Lesson 66 — `_lexVocabShimmerIdx` must be reset inside `_renderIntelRow`'s `.then()` callback, not as a module-level variable.** Because `buildVocabCell` is defined as a closure inside the `.then()` callback, the shimmer index counter (declared with `var` inside the same closure) resets to 0 on each drawer open. This is intentional — stagger resets per-episode, which is the right behavior. Do not move it to module scope.
+
+**Lesson 67 — `buildVocabCell` is shared by the popover, panel, and mobile sheet.** All three contexts call the same function. Adding interactive features (like "→ Use it") to `buildVocabCell` means they appear in all three contexts. This is correct for Lexicon — users should be able to tap "→ Use it" wherever they see a vocab word. Don't break this sharing by context-forking the function.
+
+**Lesson 68 — `panelSwitchTab` array + sections object must be extended together.** When adding a new panel tab, both the tab-button-ID array (`['spark','stash','history','lexicon']`) and the sections map (`{ lexicon: 'panelSectionLexicon' }`) must be updated in the same edit. Forgetting either causes silent bugs where buttons don't highlight or sections don't show.
+
 ### 2026-07-27 — v2.29: Animation polish batch 1
 
 **Lesson 65 — Claude ran git commands from sandbox and wrote a wrong version number.** Both violate cowork-default-instructions.md. Root cause: Claude did not read `cowork-default-instructions.md` or `engineering-standards.md` at session start. `ep-commit.sh` must be run by Gergely from Mac Terminal only. Version must always be `max(changelog.md version) + 0.01`. Fix: stronger STOP block added to cowork-default-instructions.md invocation.

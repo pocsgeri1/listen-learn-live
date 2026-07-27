@@ -1574,6 +1574,343 @@
     .ep-drawer-vocab-panel { display: none !important; } /* mobile uses the bottom sheet instead */
   }
 
+  /* ── LEXICON — shimmer, chip UI, sentence blocks, panel ── */
+  @keyframes lexiconShimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+  @keyframes lexSkelPulse {
+    0%, 100% { opacity: 0.4; }
+    50%       { opacity: 0.8; }
+  }
+  .lexicon-word {
+    position: relative;
+    display: inline;
+    color: var(--accent);
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    text-decoration: underline dotted var(--accent);
+    text-underline-offset: 3px;
+  }
+  .lexicon-word::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(105deg, transparent 30%, rgba(232,213,163,0.35) 50%, transparent 70%);
+    background-size: 200% 100%;
+    animation: lexiconShimmer 4s ease-in-out infinite;
+    animation-delay: calc(var(--shimmer-index, 0) * 0.6s);
+    pointer-events: none;
+  }
+  [data-theme="light"] .lexicon-word::after {
+    background: linear-gradient(105deg, transparent 30%, rgba(184,134,11,0.25) 50%, transparent 70%);
+    background-size: 200% 100%;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .lexicon-word::after { display: none; }
+  }
+  .lex-use-btn {
+    display: inline-flex;
+    align-items: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.56rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: rgba(232,213,163,0.5);
+    background: none;
+    border: none;
+    padding: 4px 0;
+    cursor: pointer;
+    transition: color 0.15s ease;
+    min-height: 44px;
+    line-height: 1;
+  }
+  .lex-use-btn:hover { color: var(--accent); }
+  .lex-use-btn:disabled { opacity: 0.4; cursor: default; }
+  .lex-use-btn.saved { color: var(--accent); }
+  [data-theme="light"] .lex-use-btn { color: rgba(150,120,40,0.5); }
+  [data-theme="light"] .lex-use-btn:hover,
+  [data-theme="light"] .lex-use-btn.saved { color: var(--accent); }
+  .lex-sentence-wrap {
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    overflow: hidden;
+    transition: grid-template-rows 0.22s cubic-bezier(0.22,1,0.36,1), opacity 0.22s ease;
+    margin-top: 2px;
+  }
+  .lex-sentence-wrap.open { grid-template-rows: 1fr; opacity: 1; }
+  .lex-sentence-wrap-inner { overflow: hidden; }
+  .lex-skeleton {
+    height: 11px;
+    background: var(--surface2);
+    border-radius: 3px;
+    margin-bottom: 7px;
+    animation: lexSkelPulse 1.2s ease-in-out infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .lex-skeleton { animation: none; opacity: 0.6; }
+  }
+  .lex-sentence-block {
+    margin-bottom: 10px;
+    opacity: 0;
+    transition: opacity 0.22s ease;
+  }
+  .lex-sentence-block.visible { opacity: 1; }
+  .lex-sentence-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .lex-sentence-text {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 0.88rem;
+    color: var(--text);
+    line-height: 1.55;
+    border-left: 2px solid var(--accent);
+    padding-left: 10px;
+  }
+  .lex-save-btn {
+    display: inline-flex;
+    align-items: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.54rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted2);
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 4px 10px;
+    margin-top: 8px;
+    cursor: pointer;
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+  .lex-save-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .lex-save-btn.saved { color: var(--accent); border-color: var(--accent); }
+  .lex-error-msg {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem;
+    color: var(--muted);
+    cursor: pointer;
+    padding: 6px 0;
+  }
+  .lex-error-msg:hover { color: var(--muted2); }
+  /* Toast */
+  .lex-toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(calc(100% + 24px));
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.08em;
+    color: var(--muted2);
+    padding: 8px 20px;
+    z-index: 2000;
+    transition: transform 0.25s ease;
+    pointer-events: none;
+  }
+  .lex-toast.visible { transform: translateX(-50%) translateY(0); }
+  @media (prefers-reduced-motion: reduce) {
+    .lex-sentence-wrap { transition: none; }
+    .lex-sentence-block { transition: none; }
+    .lex-toast { transition: none; }
+  }
+  /* Lexicon Panel */
+  .lex-panel-header { padding: 20px 20px 0; }
+  .lex-panel-title {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.35rem;
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 3px;
+  }
+  .lex-panel-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.56rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+  }
+  .lex-panel-subtabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+    margin: 14px 0 0;
+    padding: 0 20px;
+  }
+  .lex-subtab {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    padding: 8px 14px 8px 0;
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s;
+    margin-bottom: -1px;
+  }
+  .lex-subtab.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .lex-subtab:hover { color: var(--muted2); }
+  .lex-group { margin-bottom: 28px; }
+  .lex-group-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.56rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    margin-bottom: 14px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+  .lex-saved-card { padding: 14px 0; border-bottom: 1px solid var(--border); }
+  .lex-saved-card:last-child { border-bottom: none; }
+  .lex-saved-word-row { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 3px; }
+  .lex-saved-word {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--accent);
+    text-decoration: underline dotted var(--accent);
+    text-underline-offset: 3px;
+    position: relative;
+    display: inline-block;
+  }
+  .lex-saved-word::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(105deg, transparent 30%, rgba(232,213,163,0.35) 50%, transparent 70%);
+    background-size: 200% 100%;
+    animation: lexiconShimmer 4s ease-in-out infinite;
+    pointer-events: none;
+  }
+  [data-theme="light"] .lex-saved-word::after {
+    background: linear-gradient(105deg, transparent 30%, rgba(184,134,11,0.25) 50%, transparent 70%);
+    background-size: 200% 100%;
+  }
+  @media (prefers-reduced-motion: reduce) { .lex-saved-word::after { display: none; } }
+  .lex-ep-chip {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.54rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .lex-card-divider { height: 1px; background: var(--border); margin: 10px 0; }
+  .lex-saved-def {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--muted2);
+    margin-bottom: 10px;
+    line-height: 1.5;
+  }
+  .lex-remove-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.54rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+    transition: color 0.15s;
+  }
+  .lex-remove-btn:hover { color: var(--red); }
+  .lex-empty {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    color: var(--muted);
+    text-align: center;
+    padding: 48px 20px;
+    line-height: 1.6;
+  }
+  .lex-search-wrap {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .lex-search-input {
+    flex: 1;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px; /* min 16px prevents iOS Safari zoom */
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .lex-search-input:focus { border-color: var(--accent); }
+  .lex-search-input::placeholder { color: var(--muted); }
+  .lex-search-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.9rem;
+    color: var(--muted2);
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s;
+    min-height: 44px;
+    min-width: 44px;
+  }
+  .lex-search-btn:hover { color: var(--accent); border-color: var(--accent); }
+  /* Nav Lexicon button */
+  .nav-lexicon-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: rgba(232,213,163,0.06);
+    border: 0.5px solid rgba(232,213,163,0.28);
+    border-radius: 999px;
+    padding: 6px 13px;
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s, background 0.2s;
+    white-space: nowrap;
+  }
+  .nav-lexicon-btn:hover {
+    background: rgba(232,213,163,0.12);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  [data-theme="light"] .nav-lexicon-btn {
+    background: rgba(184,134,11,0.07);
+    border-color: rgba(184,134,11,0.3);
+  }
+  [data-theme="light"] .nav-lexicon-btn:hover {
+    background: rgba(184,134,11,0.14);
+    border-color: var(--accent);
+  }
+  .nav-lexicon-emoji { margin-right: 5px; font-style: normal; }
+  /* Mobile: safe-area bottom padding for Lexicon scroll sections */
+  @media (max-width: 700px) {
+    #lexSavedSection  { padding-bottom: calc(40px + env(safe-area-inset-bottom)); touch-action: pan-y; }
+    #lexSearchSection { padding-bottom: calc(40px + env(safe-area-inset-bottom)); touch-action: pan-y; }
+  }
+
   /* ── IWTMT layout — equal 2-col grid (1fr 1fr avoids gap overflow) ── */
   .ep-iwtmt-grid {
     display: grid;
@@ -8099,6 +8436,7 @@
     <a class="nav-link nav-spark-btn" onclick="openSparkPanel();playNavSFX()"><span class="nav-spark-emoji">💬</span>Spark</a>
     <a class="nav-link nav-story-btn" onclick="openStoriesPanel();playNavSFX()" style="display:none"><span class="nav-story-emoji">📖</span>Story</a>
     <a class="nav-link nav-corner-nav-btn" onclick="openCornerHistory();playNavSFX()"><span class="nav-corner-emoji">🥊</span>Corner</a>
+    <a class="nav-link nav-lexicon-btn" onclick="openLexiconPanel();playNavSFX()"><span class="nav-lexicon-emoji">Aa</span>Lexicon</a>
   </div>
   <!-- v1.71: epic button is now inside nav-right -->
 
@@ -8125,6 +8463,7 @@
   <button class="nav-mobile-link nav-mobile-cs" onclick="playNavSFX();openSparkPanel();closeMobileNav()">💬 Spark</button>
   <button class="nav-mobile-link nav-mobile-no-border" onclick="playNavSFX();openStoriesPanel();closeMobileNav()" style="display:none">📖 Story</button>
   <button class="nav-mobile-link nav-mobile-no-border" onclick="playNavSFX();openCornerHistory();closeMobileNav()">🥊 Corner</button>
+  <button class="nav-mobile-link nav-mobile-no-border" onclick="playNavSFX();openLexiconPanel();closeMobileNav()">Aa Lexicon</button>
   <div class="nav-mobile-divider"></div>
   <button class="nav-mobile-link nav-mobile-signup" onclick="playNavSFX();scrollToSection('signup');closeMobileNav()">◉ Sign Up 🎁 — Free Founding Access</button>
 </div>
@@ -10219,17 +10558,51 @@ function _renderIntelRow(pillsEl, collectionId, liveDna) {
     const vocabPanel = document.getElementById(drawerPrefix + 'DrawerVocabPanel');
     if (vocabPanel) { vocabPanel.classList.remove('open'); vocabPanel.innerHTML = ''; }
 
+    var _lexVocabShimmerIdx = 0;
     function buildVocabCell(v) {
       const row = document.createElement('div');
       row.className = 'ep-intel-vocab-row';
+      const wordText = v.word || v.term || '';
+      const defText  = v.definition || '';
+      row.dataset.lexWord  = wordText;
+      row.dataset.lexDef   = defText;
+      row.dataset.lexColId = collectionId != null ? String(collectionId) : '';
+
+      // Check if already saved
+      const alreadySaved = !!_lexiconGetSaved(wordText);
+      if (alreadySaved) row.dataset.lexState = 'SAVED';
+
       const word = document.createElement('div');
       word.className = 'ep-intel-vocab-word';
-      word.textContent = v.word || v.term || '';
+      const wordSpan = document.createElement('span');
+      wordSpan.className = 'lexicon-word';
+      wordSpan.style.setProperty('--shimmer-index', _lexVocabShimmerIdx++);
+      wordSpan.textContent = wordText;
+      word.appendChild(wordSpan);
+
       const def = document.createElement('div');
       def.className = 'ep-intel-vocab-def';
-      def.textContent = v.definition || '';
+      def.textContent = defText;
+
+      const useBtn = document.createElement('button');
+      useBtn.type = 'button';
+      useBtn.className = 'lex-use-btn' + (alreadySaved ? ' saved' : '');
+      useBtn.textContent = alreadySaved ? '\u2713 Saved' : '\u2192 Use it';
+      useBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        _lexiconGenerate(wordText, defText, collectionId, row);
+      });
+
+      const sentenceWrap = document.createElement('div');
+      sentenceWrap.className = 'lex-sentence-wrap';
+      const sentenceInner = document.createElement('div');
+      sentenceInner.className = 'lex-sentence-wrap-inner';
+      sentenceWrap.appendChild(sentenceInner);
+
       row.appendChild(word);
       row.appendChild(def);
+      row.appendChild(useBtn);
+      row.appendChild(sentenceWrap);
       return row;
     }
 
@@ -23887,6 +24260,7 @@ body.corner-panel-open .stories-panel {
         <button class="conv-panel-tab active" id="panelTabSpark" onclick="panelSwitchTab('spark')"><span class="conv-panel-tab-emoji">💬</span>Spark</button>
         <button class="conv-panel-tab" id="panelTabStash" onclick="panelSwitchTab('stash')"><span class="conv-panel-tab-emoji">🔖</span>Stash</button>
         <button class="conv-panel-tab" id="panelTabHistory" onclick="panelSwitchTab('history')"><span class="conv-panel-tab-emoji">📖</span>History</button>
+        <button class="conv-panel-tab" id="panelTabLexicon" onclick="panelSwitchTab('lexicon')"><span class="conv-panel-tab-emoji" style="font-family:'DM Mono',monospace;font-style:normal">Aa</span>Lexicon</button>
       </div>
       <button class="conv-close" id="convClose" aria-label="Close">✕</button>
     </div>
@@ -23942,6 +24316,28 @@ body.corner-panel-open .stories-panel {
       <!-- rendered by _convRenderStories() when active -->
     </div>
 
+    <!-- LEXICON TAB -->
+    <div class="conv-tab-section" id="panelSectionLexicon" style="display:none;flex:1;overflow:hidden;flex-direction:column;">
+      <div class="lex-panel-header">
+        <div class="lex-panel-title">Say it.</div>
+        <div class="lex-panel-sub">Words from what you've heard.</div>
+      </div>
+      <div class="lex-panel-subtabs" id="lexSubtabBar">
+        <button class="lex-subtab active" id="lexSubtabSaved" onclick="_lexiconSubtab('saved')">✦ Lexicon</button>
+        <button class="lex-subtab" id="lexSubtabSearch" onclick="_lexiconSubtab('search')">◈ Search</button>
+      </div>
+      <!-- SAVED section -->
+      <div id="lexSavedSection" style="flex:1;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:16px 20px 40px;"></div>
+      <!-- SEARCH section -->
+      <div id="lexSearchSection" style="display:none;flex:1;overflow-y:auto;padding:16px 20px 40px;">
+        <div class="lex-search-wrap">
+          <input id="lexSearchInput" type="text" class="lex-search-input" placeholder="Type any word…" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          <button class="lex-search-btn" onclick="_lexiconFreeSearch()" aria-label="Search">→</button>
+        </div>
+        <div id="lexSearchResults"></div>
+      </div>
+    </div>
+
   </div>
 </div>
 <!-- /CONVERSATIONS OVERLAY -->
@@ -23972,11 +24368,11 @@ function _mountCSInPanel() {
 // Switch between Spark / Stash / History tabs
 function panelSwitchTab(tab, skipRender) {
   _panelTab = tab;
-  ['spark','stash','history'].forEach(t => {
+  ['spark','stash','history','lexicon'].forEach(t => {
     const btn = document.getElementById('panelTab' + t.charAt(0).toUpperCase() + t.slice(1));
     if (btn) btn.classList.toggle('active', t === tab);
   });
-  const sections = { spark: 'panelSectionSpark', stash: 'panelSectionStash', history: 'panelSectionHistory' };
+  const sections = { spark: 'panelSectionSpark', stash: 'panelSectionStash', history: 'panelSectionHistory', lexicon: 'panelSectionLexicon' };
   Object.keys(sections).forEach(t => {
     const el = document.getElementById(sections[t]);
     if (!el) return;
@@ -23984,7 +24380,7 @@ function panelSwitchTab(tab, skipRender) {
       el.style.display = 'flex';
       el.style.flexDirection = 'column';
       el.style.flex = '1';
-      el.style.overflow = (t === 'spark') ? 'hidden' : 'auto';
+      el.style.overflow = (t === 'spark' || t === 'lexicon') ? 'hidden' : 'auto';
       el.style.opacity = '0';
       el.style.transform = 'translateY(10px)';
       el.style.transition = 'opacity 0.45s ease, transform 0.45s ease';
@@ -24012,6 +24408,9 @@ function panelSwitchTab(tab, skipRender) {
   } else if (tab === 'history' && !skipRender) {
     const histSection = document.getElementById('panelSectionHistory');
     if (histSection) _convRenderHistoryInto(histSection);
+  } else if (tab === 'lexicon' && !skipRender) {
+    _lexiconRenderSaved();
+    _lexiconWireSearch();
   }
 }
 let _convTab = 'saved'; // kept for legacy convSwitchTab compat
@@ -24170,6 +24569,477 @@ function closeConversations() {
 
 function _convEscHandler(e) {
   if (e.key === 'Escape') closeConversations();
+}
+
+// ============================================================
+// LEXICON — v2.36
+// Vocabulary practice panel: "→ Use it" on episode vocab words
+// generates two natural usage sentences via Claude Haiku.
+// ============================================================
+
+var LX_STORE_KEY = 'lll_lexicon_v1';
+var LX_MAX       = 100;
+
+// ── Open / close ────────────────────────────────────────────
+function openLexiconPanel() {
+  _mountCSInPanel();
+  var overlay = document.getElementById('convOverlay');
+  if (overlay) overlay.classList.add('active');
+  document.body.classList.add('cs-panel-open');
+  panelSwitchTab('lexicon');
+  var closeBtn = document.getElementById('convClose');
+  if (closeBtn) closeBtn.onclick = closeLexiconPanel;
+  document.addEventListener('keydown', _convEscHandler);
+  setTimeout(function() {
+    document.addEventListener('click', _convOutsideClickHandler, { capture: true });
+  }, 50);
+}
+
+function closeLexiconPanel() {
+  var overlay = document.getElementById('convOverlay');
+  if (overlay) overlay.classList.remove('active');
+  document.body.classList.remove('cs-panel-open');
+  document.removeEventListener('keydown', _convEscHandler);
+  document.removeEventListener('click', _convOutsideClickHandler, { capture: true });
+}
+
+// ── Sub-tabs (Saved / Search) ────────────────────────────────
+function _lexiconSubtab(tab) {
+  var saved  = document.getElementById('lexSavedSection');
+  var search = document.getElementById('lexSearchSection');
+  var btnS   = document.getElementById('lexSubtabSaved');
+  var btnSr  = document.getElementById('lexSubtabSearch');
+  if (!saved || !search) return;
+  if (tab === 'saved') {
+    saved.style.display  = '';
+    search.style.display = 'none';
+    if (btnS)  btnS.classList.add('active');
+    if (btnSr) btnSr.classList.remove('active');
+    _lexiconRenderSaved();
+  } else {
+    saved.style.display  = 'none';
+    search.style.display = '';
+    if (btnS)  btnS.classList.remove('active');
+    if (btnSr) btnSr.classList.add('active');
+    var inp = document.getElementById('lexSearchInput');
+    if (inp) inp.focus();
+  }
+}
+
+// ── Saved-words panel renderer ───────────────────────────────
+function _lexiconRenderSaved() {
+  var section = document.getElementById('lexSavedSection');
+  if (!section) return;
+  var arr = _lexiconLoadStore();
+  section.innerHTML = '';
+
+  if (!arr.length) {
+    var empty = document.createElement('div');
+    empty.className = 'lex-empty';
+    empty.textContent = 'Nothing saved yet. Open an episode and tap \u2192 Use it on any word.';
+    section.appendChild(empty);
+    return;
+  }
+
+  // Group by episode title (null → "Free search")
+  var groups = {};
+  var order  = [];
+  arr.forEach(function(entry) {
+    var key = entry.episodeTitle || '__free__';
+    if (!groups[key]) { groups[key] = []; order.push(key); }
+    groups[key].push(entry);
+  });
+
+  order.forEach(function(key) {
+    var groupLabel = key === '__free__' ? 'Free search' : key;
+    var groupEl = document.createElement('div');
+    groupEl.className = 'lex-group';
+    var labelEl = document.createElement('div');
+    labelEl.className = 'lex-group-label';
+    labelEl.textContent = groupLabel;
+    groupEl.appendChild(labelEl);
+    groups[key].forEach(function(entry) {
+      groupEl.appendChild(_lexiconBuildSavedCard(entry, section));
+    });
+    section.appendChild(groupEl);
+  });
+}
+
+function _lexiconBuildSavedCard(entry, section) {
+  var card = document.createElement('div');
+  card.className = 'lex-saved-card';
+
+  // Word row
+  var wordRow = document.createElement('div');
+  wordRow.className = 'lex-saved-word-row';
+  var wordEl = document.createElement('span');
+  wordEl.className = 'lex-saved-word';
+  wordEl.textContent = entry.word;
+  var removeBtn = document.createElement('button');
+  removeBtn.type = 'button';
+  removeBtn.className = 'lex-remove-btn';
+  removeBtn.textContent = '\u00D7 Remove';
+  removeBtn.addEventListener('click', function() {
+    _lexiconRemove(entry.word);
+    card.remove();
+    // Re-render if group now empty
+    if (section && !section.querySelector('.lex-saved-card')) _lexiconRenderSaved();
+  });
+  wordRow.appendChild(wordEl);
+  wordRow.appendChild(removeBtn);
+
+  var epChip = document.createElement('div');
+  epChip.className = 'lex-ep-chip';
+  epChip.textContent = entry.episodeTitle || 'Free search';
+
+  var divider = document.createElement('div');
+  divider.className = 'lex-card-divider';
+
+  var defEl = document.createElement('div');
+  defEl.className = 'lex-saved-def';
+  defEl.textContent = entry.definition || '';
+
+  card.appendChild(wordRow);
+  card.appendChild(epChip);
+  card.appendChild(divider);
+  if (entry.definition) card.appendChild(defEl);
+
+  (entry.sentences || []).forEach(function(s) {
+    var sDiv = document.createElement('div');
+    sDiv.className = 'lex-sentence-block visible';
+    var lblEl = document.createElement('div');
+    lblEl.className = 'lex-sentence-label';
+    lblEl.textContent = (s.label || '').toUpperCase();
+    var txtEl = document.createElement('div');
+    txtEl.className = 'lex-sentence-text';
+    txtEl.textContent = s.text || '';
+    sDiv.appendChild(lblEl);
+    sDiv.appendChild(txtEl);
+    card.appendChild(sDiv);
+  });
+
+  return card;
+}
+
+// ── Free-form word search ────────────────────────────────────
+function _lexiconFreeSearch() {
+  var input = document.getElementById('lexSearchInput');
+  if (!input) return;
+  var word = (input.value || '').trim();
+  if (!word) return;
+
+  var resultsEl = document.getElementById('lexSearchResults');
+  if (!resultsEl) return;
+
+  // Already saved?
+  var saved = _lexiconGetSaved(word);
+  if (saved) {
+    resultsEl.innerHTML = '';
+    resultsEl.appendChild(_lexiconBuildSavedCard(saved, resultsEl));
+    return;
+  }
+
+  // Session cache?
+  var wordKey  = word.toLowerCase().replace(/\s+/g, '');
+  var cacheKey = 'lll_lexicon_session_' + wordKey;
+  var cached   = null;
+  try { cached = JSON.parse(sessionStorage.getItem(cacheKey) || 'null'); } catch(e) {}
+  if (cached && Array.isArray(cached.sentences)) {
+    _lexiconShowSearchResult(resultsEl, word, '', cached.sentences);
+    return;
+  }
+
+  // Loading
+  resultsEl.innerHTML = '<div class="lex-sentence-wrap-inner"><div class="lex-skeleton" style="width:80%;margin-bottom:8px"></div><div class="lex-skeleton" style="width:60%"></div></div>';
+
+  var ctrl  = typeof AbortController !== 'undefined' ? new AbortController() : null;
+  var timer = setTimeout(function() { if (ctrl) ctrl.abort(); }, 8000);
+
+  fetch('/api/cs-generate', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ mode: 'lexicon', word: word, definition: '', context: word }),
+    signal: ctrl ? ctrl.signal : undefined
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    clearTimeout(timer);
+    if (!data || !Array.isArray(data.sentences) || !data.sentences.length) throw new Error('malformed');
+    sessionStorage.setItem(cacheKey, JSON.stringify({ sentences: data.sentences }));
+    _lexiconShowSearchResult(resultsEl, word, '', data.sentences);
+  })
+  .catch(function() {
+    clearTimeout(timer);
+    resultsEl.innerHTML = '<div class="lex-error-msg" onclick="_lexiconFreeSearch()">Couldn\u2019t generate \u2014 tap to retry</div>';
+  });
+}
+
+function _lexiconShowSearchResult(resultsEl, word, definition, sentences) {
+  resultsEl.innerHTML = '';
+  var entry = { word: word, definition: definition, episodeTitle: null, collectionId: null, sentences: sentences };
+  var card = _lexiconBuildSavedCard(entry, resultsEl);
+  // Add save button
+  var saveBtn = document.createElement('button');
+  saveBtn.type = 'button';
+  saveBtn.className = 'lex-save-btn';
+  saveBtn.textContent = 'Save';
+  saveBtn.addEventListener('click', function() {
+    _lexiconSave(word, definition, null, sentences, document.createElement('div'));
+    saveBtn.textContent = '\u2713 Saved';
+    saveBtn.classList.add('saved');
+    saveBtn.disabled = true;
+  });
+  card.appendChild(saveBtn);
+  resultsEl.appendChild(card);
+}
+
+// ── Core generate function (called from vocab chip "→ Use it") ──
+function _lexiconGenerate(word, definition, collectionId, rowEl) {
+  if (!rowEl) return;
+  var state  = rowEl.dataset.lexState || 'IDLE';
+
+  // REVEALED → collapse toggle
+  if (state === 'REVEALED') {
+    var wrap = rowEl.querySelector('.lex-sentence-wrap');
+    if (wrap) wrap.classList.remove('open');
+    rowEl.dataset.lexState = 'IDLE';
+    var btn = rowEl.querySelector('.lex-use-btn');
+    if (btn) { btn.textContent = '\u2192 Use it'; btn.classList.remove('saved'); btn.disabled = false; }
+    return;
+  }
+
+  // SAVED → re-open from localStorage
+  if (state === 'SAVED') {
+    var savedEntry = _lexiconGetSaved(word);
+    if (savedEntry && Array.isArray(savedEntry.sentences)) {
+      _lexiconReveal(rowEl, savedEntry.sentences, true);
+      return;
+    }
+  }
+
+  // Session cache?
+  var wordKey  = word.toLowerCase().replace(/\s+/g, '');
+  var cacheKey = 'lll_lexicon_session_' + wordKey;
+  var cachedRaw = null;
+  try { cachedRaw = JSON.parse(sessionStorage.getItem(cacheKey) || 'null'); } catch(e) {}
+  if (cachedRaw && Array.isArray(cachedRaw.sentences)) {
+    // Already saved in localStorage?
+    var alreadySaved = !!_lexiconGetSaved(word);
+    _lexiconReveal(rowEl, cachedRaw.sentences, alreadySaved);
+    rowEl.dataset.lexState = alreadySaved ? 'SAVED' : 'REVEALED';
+    return;
+  }
+
+  // → LOADING
+  _lexiconSetLoading(rowEl);
+  rowEl.dataset.lexState = 'LOADING';
+
+  // Get concept context from CONCEPTS array
+  var context = word;
+  var colIdInt = collectionId != null ? parseInt(collectionId) : null;
+  if (colIdInt && typeof CONCEPTS !== 'undefined' && Array.isArray(CONCEPTS)) {
+    var colConcept = null;
+    for (var i = 0; i < CONCEPTS.length; i++) {
+      if (CONCEPTS[i].collection_id === colIdInt && CONCEPTS[i].plain) {
+        colConcept = CONCEPTS[i];
+        break;
+      }
+    }
+    if (colConcept) {
+      context = colConcept.plain;
+    } else if (typeof COLLECTIONS_BY_ID !== 'undefined' && COLLECTIONS_BY_ID[colIdInt] && COLLECTIONS_BY_ID[colIdInt].title) {
+      context = COLLECTIONS_BY_ID[colIdInt].title;
+    }
+  }
+
+  var ctrl  = typeof AbortController !== 'undefined' ? new AbortController() : null;
+  var timer = setTimeout(function() { if (ctrl) ctrl.abort(); }, 8000);
+
+  fetch('/api/cs-generate', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ mode: 'lexicon', word: word, definition: definition, context: context }),
+    signal: ctrl ? ctrl.signal : undefined
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    clearTimeout(timer);
+    if (!data || !Array.isArray(data.sentences) || !data.sentences.length) throw new Error('malformed');
+    try { sessionStorage.setItem(cacheKey, JSON.stringify({ sentences: data.sentences })); } catch(e) {}
+    _lexiconReveal(rowEl, data.sentences, false);
+    rowEl.dataset.lexState = 'REVEALED';
+  })
+  .catch(function(err) {
+    clearTimeout(timer);
+    _lexiconSetError(rowEl, word, definition, collectionId);
+    rowEl.dataset.lexState = 'ERROR';
+  });
+}
+
+function _lexiconSetLoading(rowEl) {
+  var wrap  = rowEl.querySelector('.lex-sentence-wrap');
+  var inner = rowEl.querySelector('.lex-sentence-wrap-inner');
+  var btn   = rowEl.querySelector('.lex-use-btn');
+  if (btn) btn.disabled = true;
+  if (!inner) return;
+  inner.innerHTML = '<div class="lex-skeleton" style="width:80%"></div><div class="lex-skeleton" style="width:65%"></div>';
+  if (wrap) wrap.classList.add('open');
+}
+
+function _lexiconReveal(rowEl, sentences, isSaved) {
+  var wrap  = rowEl.querySelector('.lex-sentence-wrap');
+  var inner = rowEl.querySelector('.lex-sentence-wrap-inner');
+  var btn   = rowEl.querySelector('.lex-use-btn');
+  if (!inner) return;
+
+  inner.innerHTML = '';
+  sentences.forEach(function(s, i) {
+    var block = document.createElement('div');
+    block.className = 'lex-sentence-block';
+    block.style.transitionDelay = (i * 80) + 'ms';
+    var lbl = document.createElement('div');
+    lbl.className = 'lex-sentence-label';
+    lbl.textContent = (s.label || '').toUpperCase();
+    var txt = document.createElement('div');
+    txt.className = 'lex-sentence-text';
+    txt.textContent = s.text || '';
+    block.appendChild(lbl);
+    block.appendChild(txt);
+    inner.appendChild(block);
+  });
+
+  // Save button
+  var word       = rowEl.dataset.lexWord || '';
+  var definition = rowEl.dataset.lexDef  || '';
+  var colId      = rowEl.dataset.lexColId ? parseInt(rowEl.dataset.lexColId) : null;
+
+  var saveBtn = document.createElement('button');
+  saveBtn.type = 'button';
+  saveBtn.className = 'lex-save-btn' + (isSaved ? ' saved' : '');
+  saveBtn.textContent = isSaved ? '\u2713 Saved' : 'Save';
+  saveBtn.style.opacity = '0';
+  saveBtn.addEventListener('click', function() {
+    _lexiconSave(word, definition, colId, sentences, rowEl);
+  });
+  inner.appendChild(saveBtn);
+
+  if (wrap) wrap.classList.add('open');
+
+  // Animate sentences in
+  requestAnimationFrame(function() {
+    inner.querySelectorAll('.lex-sentence-block').forEach(function(b) { b.classList.add('visible'); });
+    setTimeout(function() {
+      saveBtn.style.transition = 'opacity 0.1s ease';
+      saveBtn.style.opacity = '1';
+    }, sentences.length * 80 + 100);
+  });
+
+  if (btn) {
+    btn.textContent = isSaved ? '\u2713 Saved' : '\u2192 Use it';
+    btn.classList.toggle('saved', isSaved);
+    btn.disabled = false;
+  }
+}
+
+function _lexiconSetError(rowEl, word, definition, collectionId) {
+  var wrap  = rowEl.querySelector('.lex-sentence-wrap');
+  var inner = rowEl.querySelector('.lex-sentence-wrap-inner');
+  var btn   = rowEl.querySelector('.lex-use-btn');
+  if (!inner) return;
+  inner.innerHTML = '';
+  var errEl = document.createElement('div');
+  errEl.className = 'lex-error-msg';
+  errEl.textContent = 'Couldn\u2019t generate \u2014 tap to retry';
+  errEl.addEventListener('click', function() {
+    rowEl.dataset.lexState = 'IDLE';
+    _lexiconGenerate(word, definition, collectionId, rowEl);
+  });
+  inner.appendChild(errEl);
+  if (wrap) wrap.classList.add('open');
+  if (btn) { btn.textContent = '\u2192 Use it'; btn.disabled = false; }
+}
+
+function _lexiconSave(word, definition, collectionId, sentences, rowEl) {
+  var arr = _lexiconLoadStore();
+
+  // Get episode title
+  var episodeTitle = null;
+  var colIdInt = collectionId != null ? parseInt(collectionId) : null;
+  if (colIdInt && typeof COLLECTIONS_BY_ID !== 'undefined' && COLLECTIONS_BY_ID[colIdInt]) {
+    episodeTitle = COLLECTIONS_BY_ID[colIdInt].title || null;
+  }
+
+  // Upsert: remove existing entry for this word
+  arr = arr.filter(function(e) { return e.word.toLowerCase() !== word.toLowerCase(); });
+
+  var entry = {
+    word: word, definition: definition,
+    collectionId: colIdInt, episodeTitle: episodeTitle,
+    sentences: sentences, savedAt: Date.now()
+  };
+  arr.unshift(entry);
+
+  var toasted = false;
+  if (arr.length > LX_MAX) { arr = arr.slice(0, LX_MAX); toasted = true; }
+  _lexiconSaveStore(arr);
+  if (toasted) _lexiconShowToast('Oldest word removed to make room.');
+
+  // Update chip state
+  rowEl.dataset.lexState = 'SAVED';
+  var saveBtn = rowEl.querySelector('.lex-save-btn');
+  if (saveBtn) { saveBtn.textContent = '\u2713 Saved'; saveBtn.classList.add('saved'); saveBtn.disabled = true; }
+  var useBtn = rowEl.querySelector('.lex-use-btn');
+  if (useBtn) { useBtn.textContent = '\u2713 Saved'; useBtn.classList.add('saved'); }
+}
+
+function _lexiconGetSaved(word) {
+  var arr = _lexiconLoadStore();
+  var wl  = word.toLowerCase();
+  for (var i = 0; i < arr.length; i++) {
+    if (arr[i].word.toLowerCase() === wl) return arr[i];
+  }
+  return null;
+}
+
+function _lexiconRemove(word) {
+  var arr = _lexiconLoadStore();
+  arr = arr.filter(function(e) { return e.word.toLowerCase() !== word.toLowerCase(); });
+  _lexiconSaveStore(arr);
+}
+
+function _lexiconLoadStore() {
+  try { return JSON.parse(localStorage.getItem(LX_STORE_KEY) || '[]'); } catch(e) { return []; }
+}
+
+function _lexiconSaveStore(arr) {
+  try { localStorage.setItem(LX_STORE_KEY, JSON.stringify(arr)); } catch(e) {}
+}
+
+function _lexiconShowToast(msg) {
+  var toast = document.getElementById('lexiconToast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'lexiconToast';
+    toast.className = 'lex-toast';
+    document.body.appendChild(toast);
+  }
+  toast.textContent = msg;
+  toast.classList.add('visible');
+  setTimeout(function() { toast.classList.remove('visible'); }, 3000);
+}
+
+// Wire Enter key on lexicon search input (runs after DOM ready)
+document.addEventListener('DOMContentLoaded', function() {
+  var inp = document.getElementById('lexSearchInput');
+  if (inp) inp.addEventListener('keydown', function(e) { if (e.key === 'Enter') _lexiconFreeSearch(); });
+});
+// Also wire after panel first-open in case DOMContentLoaded already fired
+function _lexiconWireSearch() {
+  var inp = document.getElementById('lexSearchInput');
+  if (inp && !inp._lexWired) {
+    inp._lexWired = true;
+    inp.addEventListener('keydown', function(e) { if (e.key === 'Enter') _lexiconFreeSearch(); });
+  }
 }
 
 function convSwitchTab(tab) {

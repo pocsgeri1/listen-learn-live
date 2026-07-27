@@ -559,7 +559,7 @@ The modal operates as a 4-state machine:
 
 **sessionStorage keys added in v2.7:** `corner_situation` — written by `_cornerSparkSituation()` before opening Spark. Not currently used (Sparring replaced Corner Spark).
 
-**localStorage keys — full list (as of v2.8f):**
+**localStorage keys — full list (as of v2.36):**
 | Key | Purpose |
 |-----|---------|
 | `lll_cs_saved_v1` | Spark stash. Entry: `{ id, term, category, savedAt, aiData }`. |
@@ -570,6 +570,12 @@ The modal operates as a 4-state machine:
 | `lll_stories_v1` | Story Mode saves (max 20). Entry: `{ scenario, date, preview, fullHtml, eyebrow, conceptIds }`. Dormant — Story Mode hidden. |
 | `lll_streak_v1` | Reading streak tracker. |
 | `lll_theme` | Dark/light mode preference. |
+| `lll_lexicon_v1` | **Lexicon saves (v2.36).** Array, max 100 entries, ring buffer (oldest dropped when cap hit). Entry: `{ word, definition, collectionId, episodeTitle, sentences: [{label, text}], savedAt }`. Written by `_lexiconSave()`. Read by `_lexiconGetSaved()` and Lexicon panel renderer. `collectionId` and `episodeTitle` are null for free-search entries. |
+
+**sessionStorage keys — Lexicon (v2.36):**
+| Key | Purpose |
+|-----|---------|
+| `lll_lexicon_session_<wordkey>` | Per-word API response cache for the current tab session. Key = `word.toLowerCase().replace(/\s+/g,'')`. Shape: `{ sentences: [{label, text}] }`. Written on first successful API call; read before firing API on any subsequent tap of the same word. Cleared on tab close (sessionStorage, not localStorage). |
 
 **`_csRestoreOrLoad` v1.74c behaviour:** Loads ALL ctxs from session cache + saved storage in one pass (merged). Never drops to fresh generate if *any* ctx has data — only generates fresh if the concept has zero cached data anywhere. `_csUpdateScenarioBadges()` called after every restore.
 

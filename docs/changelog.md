@@ -6,6 +6,23 @@
 
 ---
 
+## v2.36 — 2026-07-27 · Lexicon: vocabulary practice tool
+
+### index.html
+- **Lexicon chip UI:** `buildVocabCell` now renders each vocab word as a `.lexicon-word` span (Playfair, accent, animated shimmer sweep via `::after` + `lexiconShimmer` keyframe, staggered per `--shimmer-index`). "→ Use it" button added below definition.
+- **State machine:** each word chip cycles IDLE → LOADING (skeleton shimmer) → REVEALED (staggered sentence accordion) → SAVED / ERROR. Re-tap on REVEALED collapses; re-tap on SAVED re-opens from localStorage. Multiple chips independent.
+- **Session cache:** `sessionStorage` key `lll_lexicon_session_<wordkey>` prevents redundant API calls within a tab session.
+- **Lexicon panel:** new tab "Aa Lexicon" added to `conv-panel`. Two sub-tabs: ✦ Lexicon (saved words grouped by episode) and ◈ Search (free-form word search). `panelSwitchTab` extended to include `'lexicon'`.
+- **Nav button:** "Aa Lexicon" added to desktop nav island and mobile nav menu.
+- **localStorage:** `lll_lexicon_v1` — ring buffer, max 100 entries. Entry shape: `{ word, definition, collectionId, episodeTitle, sentences, savedAt }`.
+- **Toast:** overflow toast slides up from bottom when ring buffer drops oldest entry.
+- **Light mode:** full `[data-theme="light"]` overrides for every new surface.
+- **Reduced motion:** all new animations (`lexiconShimmer`, `lexSkelPulse`, transitions) disabled/instant.
+- **Mobile:** safe-area-inset-bottom on scroll sections; touch-action: pan-y; 44px tap targets on all buttons.
+
+### api/cs-generate.js
+- **Lexicon mode branch:** new `mode: 'lexicon'` path — model `claude-haiku-4-5-20251001`, max_tokens 180, system prompt generates two natural usage sentences (casual + professional). Returns `{ sentences: [{label, text}] }`. JSON parse guarded with try/catch.
+
 ## v2.35 — 2026-07-27 — Pull quote shifted 40px more left (right: 7rem)
 
 ### index.html

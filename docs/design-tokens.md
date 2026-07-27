@@ -196,6 +196,40 @@ Use consistent spacing values. Stick to this scale — don't introduce arbitrary
 
 ## Component Patterns
 
+### Lexicon word shimmer (`.lexicon-word`, `.lex-saved-word`) — added v2.36
+
+A light sweep animation across vocab word text. GPU-composited via `::after` pseudo-element — safe for 20+ simultaneous instances.
+
+```css
+.lexicon-word {
+  position: relative;
+  display: inline;          /* inline-block for .lex-saved-word (standalone) */
+  color: var(--accent);
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  text-decoration: underline dotted var(--accent);
+  text-underline-offset: 3px;
+}
+.lexicon-word::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(105deg, transparent 30%, rgba(232,213,163,0.35) 50%, transparent 70%);
+  background-size: 200% 100%;
+  animation: lexiconShimmer 4s ease-in-out infinite;
+  animation-delay: calc(var(--shimmer-index, 0) * 0.6s);  /* stagger set by JS */
+  pointer-events: none;
+}
+/* Light mode: softer sweep */
+[data-theme="light"] .lexicon-word::after { background: linear-gradient(105deg, transparent 30%, rgba(184,134,11,0.25) 50%, transparent 70%); background-size: 200% 100%; }
+@media (prefers-reduced-motion: reduce) { .lexicon-word::after { display: none; } }
+```
+
+**Rules:**
+- `background-position` animation on `::after` — GPU-composited, does not trigger paint or layout.
+- Never use `backdrop-filter`, `filter: brightness()`, or `box-shadow` on the word. Shimmer is purely the `::after` sweep.
+- JS sets `--shimmer-index` inline on each word span so they don't sweep in sync.
+- Stagger delay: `calc(var(--shimmer-index) * 0.6s)`.
+
 ### Flip card pattern (`.nf-row .concept-card`)
 - Parent needs explicit `height` in px — never `auto`. Current: 370px desktop, 360px mobile.
 - `perspective` goes on the row container (`.nf-row`), not the card.

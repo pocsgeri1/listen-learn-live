@@ -143,6 +143,107 @@ Respond ONLY with valid JSON:
   }
   // ── END SPARRING MODE ──────────────────────────────────────────────────────
 
+  // ── LEXICON MODE ───────────────────────────────────────────────────────────
+  if (mode === 'lexicon') {
+    const lexWord       = req.body.word       || '';
+    const lexDefinition = req.body.definition || '';
+    const lexContext    = req.body.context    || lexWord;
+
+    if (!lexWord) {
+      return res.status(400).json({ error: 'word required for lexicon mode.' });
+    }
+
+    const lexSystemPrompt = `You write like a Rolling Stones journalist who reads psychology.
+Sharp. Specific. Never academic. Never therapeutic.
+A non-native English speaker just heard this word in a podcast. They
+understand it but have never confidently said it out loud. Give them
+two short sentences they could say TODAY — one to a close friend or
+partner, one at work or in a meeting.
+Word: ${lexWord}
+Definition: ${lexDefinition}
+Context from the concept it came from: ${lexContext}
+OUTPUT RULES — non-negotiable:
+1. Each sentence: 8–15 words. Count them before returning.
+2. The word must appear inside the sentence, not as its subject or topic
+3. Do not start either sentence with the vocab word
+4. First or second person only: "I", "you", "we", "my", "your"
+5. Name a specific setting: a kitchen, a Sunday, a Slack message, a 1:1, a dinner, a walk
+VARIETY — the two sentences must feel and sound structurally different:
+6. Different grammatical mood: one declarative, one interrogative or imperative
+7. Different perspective: one about yourself doing it, one about noticing it in someone else — or one giving advice, one describing a moment
+8. Different emotional register: one can be dry or wry, the other direct
+9. If both sentences have the same rhythm or clause structure, rewrite one
+ANTI-SLOP:
+10. No em-dashes. No colons mid-sentence to introduce a clause.
+11. No triads ("X, Y, and Z" three-part lists)
+12. No "not X but Y" constructions
+13. No: demonstrate, utilize, approach (as noun), implement, showcase, synergy, impactful
+14. No therapy-speak: unpack, sit with, hold space, toxic, trauma response
+15. No corporate-speak: circle back, bandwidth, alignment, move the needle
+16. No sentence should make sense without the vocab word — do not pad around it
+17. No awakening language: changed everything, realized, transformed, suddenly
+18. The casual sentence must sound like an opinionated friend making a point — not explaining a concept
+19. The work sentence must land a clear idea in one go — no hedging
+20. Compound words or phrases must appear intact — never split across a clause break
+EDGE CASES:
+21. If the word is abstract, ground it in a human moment: a specific decision, a conversation, a feeling — not a theory
+22. If the word has multiple meanings, use the one closest to the definition given
+23. If the word is rarely used casually, the casual sentence can be slightly dry or witty rather than forced-informal
+24. If no definition is given, infer the most common meaning
+Return only valid JSON. No explanation, no markdown:
+{ "with a friend": "...", "in a meeting": "..." }`;
+
+    try {
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': ANTHROPIC_API_KEY,
+          'anthropic-version': '2023-06-01',
+        },
+        body: JSON.stringify({
+          model: 'claude-haiku-4-5-20251001',
+          max_tokens: 180,
+          messages: [{ role: 'user', content: lexSystemPrompt }],
+        }),
+      });
+
+      if (!response.ok) {
+        const err = await response.text();
+        console.error('Anthropic API error (lexicon):', err);
+        return res.status(502).json({ error: 'Upstream API error.' });
+      }
+
+      const data = await response.json();
+      const raw  = data?.content?.[0]?.text || '';
+      const clean = raw.replace(/```json|```/g, '').trim();
+      let parsed;
+      try {
+        parsed = JSON.parse(clean);
+      } catch (parseErr) {
+        console.error('Lexicon JSON parse error:', parseErr, raw);
+        return res.status(502).json({ error: 'Malformed lexicon API response.' });
+      }
+
+      // Normalise to sentences array
+      const sentences = [
+        { label: 'with a friend', text: parsed['with a friend'] || '' },
+        { label: 'in a meeting',  text: parsed['in a meeting']  || '' },
+      ].filter(s => s.text);
+
+      if (!sentences.length) {
+        return res.status(502).json({ error: 'Malformed lexicon API response.' });
+      }
+
+      return res.status(200).json({ sentences });
+
+    } catch (e) {
+      console.error('cs-generate lexicon error:', e);
+      return res.status(500).json({ error: 'Internal server error.' });
+    }
+  }
+  // ── END LEXICON MODE ───────────────────────────────────────────────────────
+
   if (!concept || !concept.term) {
     return res.status(400).json({ error: 'concept object with term is required.' });
   }
