@@ -382,9 +382,10 @@
   [data-theme="light"] .nf-row .concept-card .card-front {
     box-shadow: 0 4px 12px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.6);
   }
-  [data-theme="light"] .nf-row .concept-card:hover .card-front {
-    box-shadow: 0 6px 16px rgba(0,0,0,0.16), inset 0 1px 0 rgba(255,255,255,0.6);
+  [data-theme="light"] .nf-row .concept-card:not(.open):hover .card-front {
     border-color: rgba(0,0,0,0.2);
+    outline: 1px solid rgba(0,0,0,0.12);
+    outline-offset: 0px;
   }
 
   /* Card back shadow in light */
@@ -880,6 +881,7 @@
   }
   .episode-card:hover {
     border-color: var(--border-hover);
+    transform: translateY(-2px);
   }
   .episode-card.ep-active {
     border-color: var(--accent);
@@ -2733,14 +2735,32 @@
     padding: 5px 14px;
     cursor: pointer;
     position: relative;
-    transition: background 0.2s, color 0.2s, transform 0.2s;
+    overflow: hidden;
+    transition: background 0.2s, color 0.2s, transform 0.15s ease;
     white-space: nowrap;
     box-shadow: 0 0 10px rgba(232,213,163,0.35);
+  }
+  /* Shimmer sweep — diagonal light streak on hover, GPU-cheap (transform only) */
+  .nav-signup-btn::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 55%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.45) 50%, transparent 100%);
+    transform: translateX(-140%) skewX(-15deg);
+    transition: transform 0.55s ease-in-out;
+    pointer-events: none;
   }
   .nav-signup-btn:hover {
     background: #f0e0b0;
     border-color: #f0e0b0;
+    transform: translateY(-1px);
   }
+  .nav-signup-btn:hover::before {
+    transform: translateX(240%) skewX(-15deg);
+  }
+  .nav-signup-btn:active { transform: translateY(0); }
   .nav-signup-btn::after {
     content: '';
     position: absolute;
@@ -2846,6 +2866,13 @@
     min-height: 100vh;
     overflow-x: hidden;
   }
+  /* Theme-switch transition — only active after initial paint to prevent FOUC.
+     Gated on .theme-ready class added after ep-preload guard lifts. */
+  @media (prefers-reduced-motion: no-preference) {
+    body.theme-ready {
+      transition: background-color 150ms ease-in-out;
+    }
+  }
 
   /* NAV */
   nav {
@@ -2907,13 +2934,14 @@
     text-decoration: none;
     padding: 7px 15px;
     border-radius: 999px;
-    transition: color 0.2s, background 0.2s;
+    transition: color 0.2s, background 0.2s, transform 0.15s ease;
     white-space: nowrap;
     cursor: pointer;
     background: none;
     border: none;
   }
-  .nav-link:hover { color: var(--text); background: rgba(255,255,255,0.06); }
+  .nav-link:hover { color: var(--text); background: rgba(255,255,255,0.06); transform: translateY(-1px); }
+  .nav-link:active { transform: translateY(0); }
 .nav-link.nav-link--active { color: var(--accent); }
 
 .nav-divider {
@@ -6546,18 +6574,19 @@
     flex-direction: column;
     /* No box-shadow here — shadow during 3D flip paints as black rectangle behind card */
     /* visibility flips at the 0.25s edge-on point (halfway through the 0.5s rotation), same both directions */
-    transition: border-color 0.2s, box-shadow 0.2s, visibility 0s linear 0.25s;
+    transition: border-color 0.2s, outline-color 0.2s, visibility 0s linear 0.25s;
     visibility: visible;
   }
   /* Hide front face once flipped so its GPU layer stops painting — delayed until rotation finishes */
   .nf-row .concept-card.open .card-front {
     visibility: hidden;
-    transition: border-color 0.2s, box-shadow 0.2s, visibility 0s linear 0.25s;
+    transition: border-color 0.2s, outline-color 0.2s, visibility 0s linear 0.25s;
   }
-  /* Shadow only on hover — GPU compositing doesn't cause frame when not rotating */
+  /* Outline on hover — GPU-composited, zero repaint cost vs box-shadow */
   .nf-row .concept-card:not(.open):hover .card-front {
     border-color: rgba(255,255,255,0.13);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+    outline: 1px solid rgba(255,255,255,0.12);
+    outline-offset: 0px;
   }
   /* Editor's pick: golden border only — no shadow ring */
   .nf-row .concept-card.editors-pick .card-front {
@@ -6785,7 +6814,8 @@
     transition: border-color 0.2s, box-shadow 0.2s;
   }
   .ep-cat-column .concept-card:hover .card-front {
-    box-shadow: 0 4px 12px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.04);
+    outline: 1px solid rgba(255,255,255,0.12);
+    outline-offset: 0px;
   }
   .ep-cat-column .concept-card.editors-pick .card-front {
     border-color: rgba(232,213,163,0.4);
@@ -7208,6 +7238,19 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
+  /* Master/vault button spring-pop on save — fires on save only, not remove */
+  @keyframes masterPop {
+    0%   { transform: scale(0.82); }
+    55%  { transform: scale(1.18); }
+    80%  { transform: scale(0.96); }
+    100% { transform: scale(1); }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .btn-master.master-pop {
+      animation: masterPop 0.38s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+  }
+
   /* fadeUp animation removed — it re-fires on every concept card when
      sections come back from display:none after drawer close, which felt
      like a "page reload" flash. Removing it costs nothing visible because
@@ -7420,7 +7463,7 @@
     font-weight: 400;
     color: var(--muted2);
     cursor: pointer;
-    transition: border-color 0.18s, color 0.18s, background 0.18s;
+    transition: border-color 0.18s, color 0.18s, background 0.18s, transform 0.15s ease;
     text-align: left;
     line-height: 1.4;
   }
@@ -7428,7 +7471,9 @@
   .quiz-option:hover:not(:disabled) {
     border-color: var(--border-hover);
     color: var(--text);
+    transform: translateY(-1px);
   }
+  .quiz-option:active:not(:disabled) { transform: translateY(0); }
 
   .quiz-option.correct {
     border-color: var(--green);
@@ -10089,6 +10134,8 @@ async function loadConcepts() {
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         document.documentElement.classList.remove('ep-preload');
+        // Enable theme-switch transition only after initial paint — prevents FOUC
+        document.body.classList.add('theme-ready');
       });
     });
     // #1 Init reading progress observer after first grid render — v1.92
@@ -11095,6 +11142,13 @@ function toggleMaster(e, id) {
   if (clickedBtn && clickedBtn.classList.contains('btn-master')) {
     clickedBtn.classList.toggle('mastered-active', isSaved);
     clickedBtn.title = isSaved ? 'Saved ✓' : 'Save to Mastered';
+    // Spring-pop on save only (not remove) — rewards the vault action
+    if (isMastering) {
+      clickedBtn.classList.remove('master-pop');
+      void clickedBtn.offsetWidth; // force reflow to restart animation
+      clickedBtn.classList.add('master-pop');
+      setTimeout(() => clickedBtn.classList.remove('master-pop'), 420);
+    }
   }
   // Update all other ★ master buttons for this concept
   ['', 'Ep', 'Th', 'Fl', 'All'].forEach(suffix => {
@@ -21233,18 +21287,20 @@ function playStreakMilestoneSFX() {
 /* Undo toast */
 .conv-undo-toast {
   position: absolute; bottom: 20px; left: 50%;
-  transform: translateX(-50%) translateY(60px);
+  transform: translateX(-50%) translateY(24px);
   background: var(--surface2); border: 1px solid var(--border);
   border-radius: 8px; padding: 10px 16px;
   display: flex; align-items: center; gap: 12px;
   font-family: 'DM Mono', monospace; font-size: 0.62rem;
   letter-spacing: 0.1em; text-transform: uppercase;
   color: var(--muted2); white-space: nowrap;
-  transition: transform 0.25s ease; z-index: 10;
+  transition: transform 0.28s cubic-bezier(0.34, 1.4, 0.64, 1), opacity 0.2s ease; z-index: 10;
+  opacity: 0;
   pointer-events: none;
 }
 .conv-undo-toast.visible {
   transform: translateX(-50%) translateY(0);
+  opacity: 1;
   pointer-events: auto;
 }
 .conv-undo-btn {
