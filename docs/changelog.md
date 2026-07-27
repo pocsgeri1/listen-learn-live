@@ -6,6 +6,15 @@
 
 ---
 
+## v2.33 — 2026-07-27 — Pull quote right margin on hairline, dead space removed
+
+### index.html
+- **Pull quote repositioned:** Moved to `.browse-section-outer` wrapper (sibling of browse-toggle-wrap), `position:absolute; right:2rem; bottom:0` — bottom edge lands exactly on the hairline divider. Border-right accent bar aligns with hairline edge.
+- **3-line format:** `94%` (1.8rem Playfair) on line 1; `of podcast ideas are` / `forgotten in 48 hours.` as small italic (0.68rem) below via `.sp-pull-body`.
+- **Dead space removed:** Removed `margin-top: 5rem` desktop rule from `.browse-toggle-wrap`.
+
+---
+
 ## v2.32 — 2026-07-27 — Pull quote to browse-toggle row, word swap 1.5s
 
 ### index.html

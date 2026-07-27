@@ -2313,9 +2313,6 @@
     box-sizing: border-box;
     position: relative;
   }
-  @media (min-width: 769px) {
-    .browse-toggle-wrap { margin-top: 5rem; }
-  }
   @media (max-width: 600px) {
     .browse-toggle-wrap { margin-top: 1.5rem; gap: 1.1rem; }
   }
@@ -8882,11 +8879,13 @@
 </section>
 <!-- /ZONE 1 -->
 
-<!-- BROWSE TOGGLE — v1.93: left-aligned, styled like "The Library" header (Playfair italic + divider) -->
-<div class="browse-toggle-wrap" id="browseToggleWrap">
-  <button class="browse-toggle active" id="browseToggleEpisodes" onclick="browseSwitch('episodes')">Episodes</button>
-  <button class="browse-toggle" id="browseToggleThemes" onclick="browseSwitch('themes')">Themes</button>
-  <p class="sp-pull-quote" aria-hidden="true"><strong>94%</strong><span class="sp-pull-body"> of podcast ideas are forgotten in 48 hours.</span></p>
+<!-- BROWSE TOGGLE — wrapper gives position:relative context for the pull quote -->
+<div class="browse-section-outer">
+  <div class="browse-toggle-wrap" id="browseToggleWrap">
+    <button class="browse-toggle active" id="browseToggleEpisodes" onclick="browseSwitch('episodes')">Episodes</button>
+    <button class="browse-toggle" id="browseToggleThemes" onclick="browseSwitch('themes')">Themes</button>
+  </div>
+  <p class="sp-pull-quote" aria-hidden="true"><strong>94%</strong><span class="sp-pull-body">of podcast ideas are<br>forgotten in 48 hours.</span></p>
 </div>
 
 <!-- EPISODES SECTION -->
@@ -21429,9 +21428,14 @@ function playStreakMilestoneSFX() {
 }
 body.corner-mode .sp-eyebrow-kicker { opacity: 0; pointer-events: none; transition: opacity 0.25s ease; }
 
-/* ── Pull quote — sits inside browse-toggle-wrap, right side, bar on the hairline ── */
+/* ── Browse section outer — position context for the pull quote ── */
+.browse-section-outer {
+  position: relative;
+}
+
+/* ── Pull quote — absolute, right margin, bottom aligned to the hairline ── */
 .sp-pull-quote {
-  display: none; /* hidden on mobile */
+  display: none;
   pointer-events: none;
   margin: 0;
 }
@@ -21441,15 +21445,15 @@ body.corner-mode .sp-eyebrow-kicker { opacity: 0; pointer-events: none; transiti
     flex-direction: column;
     align-items: flex-end;
     text-align: right;
-    margin-left: auto; /* push to far right of flex row */
-    padding-right: 0;
-    padding-bottom: 6px; /* match browse-toggle padding-bottom so baseline aligns */
-    border-right: 2px solid var(--accent);
+    position: absolute;
+    right: 2rem;
+    bottom: 0; /* bottom edge sits on the hairline */
     padding-right: 1rem;
+    border-right: 2px solid var(--accent);
     opacity: 0.45;
-    line-height: 1.25;
+    padding-bottom: 8px; /* lifts text slightly above hairline */
   }
-  /* 94% — same size as Episodes/Themes buttons */
+  /* 94% — large, matching Episodes/Themes scale */
   .sp-pull-quote strong {
     font-family: 'Playfair Display', serif;
     font-size: 1.8rem;
@@ -21458,16 +21462,17 @@ body.corner-mode .sp-eyebrow-kicker { opacity: 0; pointer-events: none; transiti
     color: var(--accent);
     letter-spacing: -0.01em;
     line-height: 1;
+    display: block;
   }
-  /* "of podcast ideas are forgotten in 48 hours." — smaller */
+  /* "of podcast ideas are / forgotten in 48 hours." — small italic below */
   .sp-pull-body {
+    display: block;
     font-family: 'Playfair Display', serif;
     font-style: italic;
-    font-size: 0.72rem;
+    font-size: 0.68rem;
     color: var(--text);
-    line-height: 1.4;
-    max-width: 180px;
-    margin-top: 0.2rem;
+    line-height: 1.45;
+    margin-top: 0.25rem;
   }
 }
 body.corner-mode .sp-pull-quote { opacity: 0; transition: opacity 0.3s ease; }
