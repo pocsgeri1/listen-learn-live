@@ -106,33 +106,103 @@
       ],
       "vocab_vault": [
         {
-          "word": "idea density",
-          "definition": "The ratio of genuinely useful insights to total words in a piece of content.",
+          "word": "autodidact",
+          "definition": "a person who is entirely self-taught without formal instruction",
           "timestamp_seconds": null
         },
         {
-          "word": "mechanical living",
-          "definition": "Performing repetitive work that requires no judgment; erodes independent thinking over time.",
+          "word": "polymathic",
+          "definition": "having knowledge and expertise across many different fields",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "intellectual arbitrage",
+          "definition": "profiting from knowledge gaps that others haven't noticed yet",
           "timestamp_seconds": null
         },
         {
           "word": "hyperspecific",
-          "definition": "So narrowly tailored to one person's exact problem that it feels custom-built.",
+          "definition": "narrowly focused on one extremely detailed niche or topic",
           "timestamp_seconds": null
         },
         {
-          "word": "learning in public",
-          "definition": "Sharing your self-education process as content, collapsing the gap between student and teacher.",
+          "word": "opinionated",
+          "definition": "willing to express strong views that many might disagree with",
           "timestamp_seconds": null
         },
         {
-          "word": "performance-excitement matrix",
-          "definition": "The overlap between what audiences want and what you're genuinely motivated to make.",
+          "word": "esoteric",
+          "definition": "understood only by a small group with specialized knowledge",
           "timestamp_seconds": null
         },
         {
-          "word": "sovereign individual",
-          "definition": "Someone who directs their own learning, income, and judgment without institutional dependency.",
+          "word": "solopreneur",
+          "definition": "a person who builds and runs a business entirely alone",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "monetize",
+          "definition": "to turn an activity, skill, or asset into a source of income",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "synthesis",
+          "definition": "combining separate ideas into a new, coherent whole",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "curation",
+          "definition": "careful selection of the best items from a large collection",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "leverage",
+          "definition": "using a small input to produce a disproportionately large output",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "signal vs noise",
+          "definition": "useful information versus irrelevant distraction in any stream of data",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "idiosyncratic",
+          "definition": "unusual in a way that is unique to one individual",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "meta-learning",
+          "definition": "learning how to learn more effectively rather than just absorbing content",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "compounding",
+          "definition": "growth that accelerates over time because each gain builds on previous ones",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "asymmetric",
+          "definition": "where inputs are small and outputs are large or unpredictably different",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "positioning",
+          "definition": "how you define your unique place in a crowded market or field",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "obsolescence",
+          "definition": "the state of no longer being useful due to newer alternatives",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "epistemic",
+          "definition": "relating to knowledge and how we know what we know",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "proliferate",
+          "definition": "to rapidly increase in number or spread widely",
           "timestamp_seconds": null
         }
       ],
@@ -161,33 +231,103 @@
       ],
       "vocab_vault": [
         {
-          "word": "parasocial relationship",
-          "definition": "A one-sided connection where someone feels they know you despite never having met.",
+          "word": "parasocial",
+          "definition": "a one-sided relationship where one person feels close to a public figure",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "productize",
+          "definition": "to turn a service or skill into a repeatable, scalable product",
           "timestamp_seconds": null
         },
         {
           "word": "power law distribution",
-          "definition": "A system where top performers earn multiples of the median rather than clustering near average.",
+          "definition": "a pattern where a small number of players capture most of the value",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "arbitrage",
+          "definition": "profiting from a price or knowledge gap between two markets or systems",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "boutique",
+          "definition": "small, specialized, and high-quality rather than mass-market",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "frictionless",
+          "definition": "removing obstacles that make a transaction or decision harder",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "scarcity",
+          "definition": "limited availability that drives up perceived value",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "scalable",
+          "definition": "able to grow in output without proportional growth in effort or cost",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "inimitable",
+          "definition": "impossible to accurately copy or imitate",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "apprenticeship",
+          "definition": "learning by working under an expert rather than in a classroom",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "situational",
+          "definition": "determined by specific circumstances rather than fixed rules",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "proprietary",
+          "definition": "owned exclusively by one person or company, not freely available",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "recurring revenue",
+          "definition": "income that repeats automatically without needing to re-sell each time",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "optionality",
+          "definition": "keeping future choices open rather than locking into one path early",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "digital asset",
+          "definition": "something valuable that exists only in digital form",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "commoditize",
+          "definition": "to become interchangeable with competitors and lose pricing power",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "demand-led",
+          "definition": "building what the market is already asking for, not what you want to sell",
           "timestamp_seconds": null
         },
         {
           "word": "leverage",
-          "definition": "A multiplier (fame, capital, tech, distribution) that lets the same input produce exponentially more output.",
+          "definition": "using a small input to produce a disproportionately large output",
           "timestamp_seconds": null
         },
         {
-          "word": "productizing",
-          "definition": "Packaging a skill or knowledge into a repeatable sellable format rather than delivering it custom each time.",
+          "word": "status symbol",
+          "definition": "an object or achievement that signals social rank to others",
           "timestamp_seconds": null
         },
         {
-          "word": "intellectual property",
-          "definition": "Formalized knowledge (frameworks, books, courses) that earns money without more hours worked.",
-          "timestamp_seconds": null
-        },
-        {
-          "word": "demand validation",
-          "definition": "Testing whether people will buy before building anything, to avoid wasting time on the wrong product.",
+          "word": "entrepreneur sweet spot",
+          "definition": "the intersection of skills, market demand, and personal interest that makes a business viable",
           "timestamp_seconds": null
         }
       ],
@@ -219,33 +359,103 @@
       ],
       "vocab_vault": [
         {
-          "word": "vagal authority",
-          "definition": "The power that comes from staying regulated when others spiral around you.",
+          "word": "vagal",
+          "definition": "relating to the vagus nerve, which regulates calm and emotional state",
           "timestamp_seconds": null
         },
         {
-          "word": "hedging language",
-          "definition": "Qualifiers like \"I think\" or \"I could be wrong\" that erode credibility before you make your point.",
-          "timestamp_seconds": null
-        },
-        {
-          "word": "Zeigarnik effect",
-          "definition": "The brain's tendency to fixate on unresolved information until it gets closure.",
-          "timestamp_seconds": null
-        },
-        {
-          "word": "cognitive empathy",
-          "definition": "Understanding how someone arrived at their perspective without necessarily sharing their emotion.",
+          "word": "labeling",
+          "definition": "naming what you observe in someone's emotion to reduce its intensity",
           "timestamp_seconds": null
         },
         {
           "word": "assertiveness",
-          "definition": "The middle ground between passive (sacrificing your needs) and aggressive (ignoring theirs).",
+          "definition": "expressing your needs clearly without aggression or passive withdrawal",
           "timestamp_seconds": null
         },
         {
-          "word": "cortisol flooding",
-          "definition": "The stress hormone surge during conflict that makes calm rational response physiologically harder.",
+          "word": "hedging language",
+          "definition": "softening statements to avoid directness or full commitment",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "de-escalation",
+          "definition": "reducing tension or conflict through deliberate action or language",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "open loop",
+          "definition": "an unresolved concern that keeps someone mentally preoccupied",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "validation",
+          "definition": "acknowledging that someone's feelings are real and understandable",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "contempt",
+          "definition": "treating someone as inferior or fundamentally unworthy of respect",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "preemptive",
+          "definition": "acting in anticipation of a problem before it arises",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "metacommunication",
+          "definition": "talking about how you're having the conversation, not just its content",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "rapport",
+          "definition": "a comfortable, trusting connection between two people",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "congruence",
+          "definition": "alignment between what you say, feel, and actually do",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "rumination",
+          "definition": "repeatedly going over the same worries without moving toward resolution",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "reciprocity",
+          "definition": "the tendency to respond in kind to what others give or show you",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "attunement",
+          "definition": "matching your emotional state to another person's to build connection",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "somatic",
+          "definition": "relating to physical sensations in the body, not just mental thoughts",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "framing",
+          "definition": "choosing which angle or context to present information from",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "deflection",
+          "definition": "redirecting a conversation or question away from the real issue",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "perspective-seeking",
+          "definition": "actively trying to understand how another person sees a situation",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "physiological",
+          "definition": "relating to the physical functions and processes of the body",
           "timestamp_seconds": null
         }
       ],
@@ -274,33 +484,103 @@
       ],
       "vocab_vault": [
         {
-          "word": "situationship",
-          "definition": "An emotionally invested relationship with no formal commitment and no exit date.",
+          "word": "intersectional",
+          "definition": "examining how multiple identities overlap and interact to shape experience",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "radicalization",
+          "definition": "gradual adoption of increasingly extreme views through repeated exposure",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "pathologize",
+          "definition": "to treat a normal behavior or feeling as a medical disorder",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "coalitional",
+          "definition": "forming alliances based on shared identity or group interest",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "hypergamy",
+          "definition": "the preference for a mate of equal or higher social status",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "performative",
+          "definition": "done for appearance or effect rather than genuine feeling or belief",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "narcissism",
+          "definition": "excessive self-focus and need for admiration, often at others' expense",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "grievance",
+          "definition": "a sense of injustice or resentment, real or perceived",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "polarization",
+          "definition": "the division of opinion into opposing extremes with no middle ground",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "simulacrum",
+          "definition": "a copy or representation that replaces the original rather than reflecting it",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "tribalism",
+          "definition": "strong loyalty to one's group at the expense of accurate thinking",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "recursive",
+          "definition": "a pattern that feeds back into itself and keeps repeating",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "incentive structure",
+          "definition": "the set of rewards and penalties that shape a person's behavior",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "reification",
+          "definition": "treating an abstract concept as if it were a fixed, concrete thing",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "discordant",
+          "definition": "in conflict or inconsistency with something else",
           "timestamp_seconds": null
         },
         {
           "word": "parasocial",
-          "definition": "A one-sided relationship with a public figure that mimics intimacy without reciprocity.",
+          "definition": "a one-sided relationship where one person feels close to a public figure",
           "timestamp_seconds": null
         },
         {
-          "word": "simulation substitution",
-          "definition": "A digital facsimile of a human need just satisfying enough to prevent you seeking the real thing.",
+          "word": "optimized",
+          "definition": "fine-tuned for one specific outcome, often at cost to other outcomes",
           "timestamp_seconds": null
         },
         {
-          "word": "performative vulnerability",
-          "definition": "Sharing private struggles publicly for engagement rather than healing.",
+          "word": "situationism",
+          "definition": "the idea that behavior is shaped more by context than personal character",
           "timestamp_seconds": null
         },
         {
-          "word": "wound-sharing economy",
-          "definition": "Online communities that reward deeper immersion in a problem, not recovery from it.",
+          "word": "vanity",
+          "definition": "excessive pride in appearance or achievement with little substance behind it",
           "timestamp_seconds": null
         },
         {
-          "word": "recursive radicalization",
-          "definition": "The algorithmic process of showing increasingly extreme content until the fringe feels normal.",
+          "word": "anticipatory",
+          "definition": "thinking about or preparing for what an audience or other person expects",
           "timestamp_seconds": null
         }
       ],
@@ -331,38 +611,103 @@
       ],
       "vocab_vault": [
         {
-          "word": "Meiosis",
-          "definition": "The process that shuffles genes during reproduction; turning it off creates identical offspring and faster crop improvement.",
+          "word": "epigenetics",
+          "definition": "how environment and behavior can switch genes on or off without changing DNA",
           "timestamp_seconds": null
         },
         {
-          "word": "Mitophagy",
-          "definition": "Your body's natural process for clearing out damaged mitochondria and replacing them with healthy ones.",
+          "word": "longevity escape velocity",
+          "definition": "living long enough that each year adds more than one year of life expectancy",
           "timestamp_seconds": null
         },
         {
-          "word": "Longevity escape velocity",
-          "definition": "The point where medical advances extend your lifespan faster than time passes, pushing aging indefinitely forward.",
+          "word": "fusion energy",
+          "definition": "power generated by combining atomic nuclei, as the sun does",
           "timestamp_seconds": null
         },
         {
-          "word": "Luxury belief",
-          "definition": "A position that sounds moral but costs the holder nothing while harming the people it claims to help.",
+          "word": "mitochondria",
+          "definition": "the cell's energy-producing structures, essential for metabolism and aging",
           "timestamp_seconds": null
         },
         {
-          "word": "Existential threat bias",
-          "definition": "The human tendency to scan constantly for apocalyptic threats even when conditions improve and crises are solved.",
+          "word": "Haber-Bosch process",
+          "definition": "the industrial method for synthesizing fertilizer that feeds roughly half of humanity",
           "timestamp_seconds": null
         },
         {
-          "word": "Technology diffusion",
-          "definition": "The process where new technologies start centralized and expensive, then become cheap and widely distributed, breaking early monopolies.",
+          "word": "embryo selection",
+          "definition": "choosing which embryo to implant based on genetic screening for traits or disease",
           "timestamp_seconds": null
         },
         {
-          "word": "Agency crisis",
-          "definition": "The gap emerging when automation breaks the old conveyor belt and most people lack the self-direction skills to navigate open futures.",
+          "word": "CAR-T therapy",
+          "definition": "engineered immune cells programmed to seek and destroy specific cancer cells",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "Yamanaka factors",
+          "definition": "proteins that can reprogram adult cells back to a stem-cell-like state",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "mass driver",
+          "definition": "an electromagnetic launcher that accelerates objects using magnetic fields, proposed for space",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "edge AI",
+          "definition": "AI processing done locally on a device rather than in a distant data center",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "singularity",
+          "definition": "the hypothetical point where AI surpasses human intelligence and becomes self-improving",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "technology diffusion",
+          "definition": "the spread of a new technology through a population over time",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "neuroplasticity",
+          "definition": "the brain's ability to rewire itself in response to experience or learning",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "biomarker",
+          "definition": "a measurable indicator of a biological state, disease, or aging process",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "autonomous agent",
+          "definition": "an AI that can set and pursue goals without human instruction",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "compounding",
+          "definition": "growth that accelerates because each gain builds on the previous one",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "meiosis",
+          "definition": "the cell division process that creates eggs and sperm, central to reproduction",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "existential threat",
+          "definition": "a risk capable of ending human civilization or humanity itself",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "luxury belief",
+          "definition": "an idea that signals status for the holder but imposes costs on others",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "promise inflation",
+          "definition": "the tendency for technology forecasts to overpromise in the short term",
           "timestamp_seconds": null
         }
       ],
@@ -666,38 +1011,103 @@
       ],
       "vocab_vault": [
         {
-          "word": "Vulnerability signaling",
-          "definition": "Communicating distress or need to trigger protective response and resource allocation.",
+          "word": "benevolent sexism",
+          "definition": "positive but patronizing attitudes toward women that reinforce gender roles",
           "timestamp_seconds": null
         },
         {
-          "word": "Niche construction",
-          "definition": "Reshaping your environment and its rules to favor your own adaptations and survival advantages.",
+          "word": "hypergamy",
+          "definition": "the evolved preference for a mate of equal or higher social status",
           "timestamp_seconds": null
         },
         {
-          "word": "Error management theory",
-          "definition": "Evolutionary bias toward predictable mistakes when costs are asymmetric; missing a threat was deadlier than seeing one.",
+          "word": "coalitional",
+          "definition": "relating to forming alliances based on shared identity or group interest",
           "timestamp_seconds": null
         },
         {
-          "word": "Supernormal stimuli",
-          "definition": "Exaggerated artificial triggers that outcompete natural ones by hijacking instinct beyond its original purpose.",
+          "word": "supernormal stimuli",
+          "definition": "an exaggerated version of a natural signal that triggers stronger responses than the real thing",
           "timestamp_seconds": null
         },
         {
-          "word": "Mate copying",
-          "definition": "Finding someone more attractive because others already desire them; outsourcing mate evaluation to social proof.",
+          "word": "pathologize",
+          "definition": "to treat a normal behavior or feeling as a medical or psychological disorder",
           "timestamp_seconds": null
         },
         {
-          "word": "The ick",
-          "definition": "Instant visceral loss of attraction, possibly triggered by behavior signaling low mate value or status.",
+          "word": "mate copying",
+          "definition": "choosing a partner partly because others have chosen them, signaling desirability",
           "timestamp_seconds": null
         },
         {
-          "word": "Coalitional value",
-          "definition": "Worth determined by usefulness to your group; vulnerability signals weakness and becomes a liability to survival.",
+          "word": "error management theory",
+          "definition": "the evolved tendency to make the least costly type of mistake when uncertain",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "niche construction",
+          "definition": "an organism's ability to modify its environment to improve its own survival",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "halo effect",
+          "definition": "the tendency for one positive trait to make all other traits seem more positive",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "intersectionality",
+          "definition": "overlapping identities creating compounding social advantages or disadvantages",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "provisioning",
+          "definition": "providing material resources or financial support, especially in a relationship",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "egalitarian paradox",
+          "definition": "gender differences in preference grow larger, not smaller, in more equal societies",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "socialization",
+          "definition": "the process of learning a culture's norms, expectations, and roles",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "tonic",
+          "definition": "a baseline or resting state, as opposed to a reactive or triggered one",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "adaptation",
+          "definition": "a trait shaped by natural selection because it improved survival or reproduction",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "incentive structure",
+          "definition": "the set of rewards and penalties that shape behavior in a system",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "monogamy",
+          "definition": "a relationship structure involving one romantic partner at a time",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "signaling",
+          "definition": "communicating information about yourself through indirect or costly actions",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "reproductive strategy",
+          "definition": "the evolved approach an organism uses to maximize successful reproduction",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "status signaling",
+          "definition": "displaying achievements or traits to communicate social rank to others",
           "timestamp_seconds": null
         }
       ],
@@ -728,33 +1138,103 @@
       ],
       "vocab_vault": [
         {
-          "word": "AGI",
-          "definition": "Artificial general intelligence: AI capable of any intellectual task a human can perform, at or above human level.",
-          "timestamp_seconds": null
-        },
-        {
-          "word": "emergent capability",
-          "definition": "An ability that appears in an AI system after training, which its creators did not explicitly design.",
-          "timestamp_seconds": null
-        },
-        {
           "word": "singularity",
-          "definition": "The hypothetical point where AI improves itself so fast that human understanding cannot keep pace.",
+          "definition": "the hypothetical point where AI surpasses human intelligence and self-improves uncontrollably",
           "timestamp_seconds": null
         },
         {
-          "word": "longevity escape velocity",
-          "definition": "The point where medical advances extend lifespan faster than time passes, making aging optional.",
+          "word": "automation",
+          "definition": "replacing human labor with machines or software systems",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "substrate",
+          "definition": "the underlying material or platform that something runs on",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "AGI",
+          "definition": "artificial general intelligence: AI that can perform any intellectual task a human can",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "alignment",
+          "definition": "ensuring AI goals reliably match human values and intentions",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "exponential",
+          "definition": "growing at a rate proportional to current size, accelerating rapidly",
           "timestamp_seconds": null
         },
         {
           "word": "capability-safety gap",
-          "definition": "The growing distance between how powerful AI becomes and how well humans can understand or control it.",
+          "definition": "AI becoming more powerful faster than our ability to make it safe",
           "timestamp_seconds": null
         },
         {
-          "word": "black box",
-          "definition": "A system whose internal decision-making is opaque even to the engineers who built it.",
+          "word": "proliferation",
+          "definition": "rapid spread or increase in number",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "obsolescence",
+          "definition": "no longer being useful or needed because of newer alternatives",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "extrapolation",
+          "definition": "extending known data or trends into unknown territory",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "light cone",
+          "definition": "in physics, all events that can be causally connected to a given point in space-time",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "compounding",
+          "definition": "growth that accelerates because each gain builds on the previous one",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "displacement",
+          "definition": "being removed from a role or position by something more capable",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "leverage",
+          "definition": "using a resource to produce an effect far larger than the input",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "consent",
+          "definition": "voluntary agreement to something with full understanding of the terms",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "moat",
+          "definition": "a competitive advantage that protects a position from being easily copied",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "asymmetric",
+          "definition": "where inputs and outputs are wildly unequal in size or impact",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "threshold",
+          "definition": "the minimum point at which a system changes behavior or a trigger activates",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "retroactive",
+          "definition": "applying to or affecting past events or actions already taken",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "arbitrage",
+          "definition": "profiting from a gap between two systems, markets, or states of knowledge",
           "timestamp_seconds": null
         }
       ],
@@ -787,32 +1267,102 @@
       "vocab_vault": [
         {
           "word": "Jevons paradox",
-          "definition": "The counterintuitive pattern where cheaper access to a resource increases total consumption rather than reducing it.",
+          "definition": "efficiency improvements that increase total consumption rather than reducing it",
           "timestamp_seconds": null
         },
         {
-          "word": "parasocial proximity",
-          "definition": "The feeling of spending time with someone rather than just watching them, built through real-time presence.",
+          "word": "blue collar renaissance",
+          "definition": "skilled trade work regaining status and income as AI commoditizes white-collar work",
           "timestamp_seconds": null
         },
         {
-          "word": "algorithmic media",
-          "definition": "Content distribution where platforms show posts to anyone likely to engage, not to existing followers.",
+          "word": "SaaS",
+          "definition": "software sold as a recurring subscription rather than a one-time purchase",
           "timestamp_seconds": null
         },
         {
-          "word": "founder-opportunity fit",
-          "definition": "The alignment between who you are and what the problem demands, more predictive of success than market size.",
+          "word": "parasocial",
+          "definition": "a one-sided relationship where one person feels close to a public figure",
           "timestamp_seconds": null
         },
         {
-          "word": "micro SaaS",
-          "definition": "A small niche software product designed to serve hundreds of customers profitably, not thousands.",
+          "word": "algorithmic",
+          "definition": "determined or driven by a set of automated rules rather than human judgment",
           "timestamp_seconds": null
         },
         {
-          "word": "personal intellectual property",
-          "definition": "The unique combination of problems solved and disasters survived that only you possess.",
+          "word": "arbitrage",
+          "definition": "profiting from a gap in knowledge, geography, or market access",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "commoditize",
+          "definition": "to turn something unique into an interchangeable, undifferentiated product",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "bootstrapped",
+          "definition": "building a business without outside investment, funded by its own revenue",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "artisanal",
+          "definition": "made by hand with care and skill, contrasted with mass production",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "ecosystem",
+          "definition": "an interconnected set of products, services, or relationships that depend on each other",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "solopreneur",
+          "definition": "someone who builds and runs a business entirely alone",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "scalable",
+          "definition": "able to grow in output without proportional increase in cost or time",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "iteration",
+          "definition": "improving something through repeated cycles of testing and refinement",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "infrastructure",
+          "definition": "the foundational systems that other things depend on to function",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "white-collar",
+          "definition": "professional, office-based, or administrative work as opposed to manual labor",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "niche",
+          "definition": "a small, specific segment of a market with particular needs or interests",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "founder-problem match",
+          "definition": "a founder who has deep personal experience with the problem they're solving",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "boom-bust cycle",
+          "definition": "alternating periods of rapid growth and sharp contraction in a market",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "proliferate",
+          "definition": "to rapidly spread or increase in number across a market or field",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "proprietary",
+          "definition": "owned exclusively, not available for others to freely use",
           "timestamp_seconds": null
         }
       ],
@@ -848,32 +1398,102 @@
       "vocab_vault": [
         {
           "word": "compounding",
-          "definition": "Returns that build on themselves over time — applies to skills and habits, not just money.",
+          "definition": "growth that accelerates over time because each gain builds on previous ones",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "Parkinson's law",
+          "definition": "work expands to fill the time available for its completion",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "myopic",
+          "definition": "short-sighted, unable to see or plan for longer-term consequences",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "deliberate",
+          "definition": "chosen consciously and intentionally rather than by habit or default",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "actualization",
+          "definition": "reaching or realizing one's full potential across different life dimensions",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "cognitive dissonance",
+          "definition": "discomfort from holding two contradictory beliefs or values simultaneously",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "hedonic",
+          "definition": "relating to the pursuit of immediate pleasure as the primary goal",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "inflection point",
+          "definition": "a moment when the direction or rate of change shifts significantly",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "leverage",
+          "definition": "using a resource, skill, or relationship to produce a far larger effect",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "optionality",
+          "definition": "preserving the ability to choose between different paths later",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "default",
+          "definition": "what happens automatically when no deliberate choice is made",
           "timestamp_seconds": null
         },
         {
           "word": "opportunity cost",
-          "definition": "The value of the best alternative you gave up by choosing a different path.",
+          "definition": "the value of what you give up when choosing one option over another",
           "timestamp_seconds": null
         },
         {
-          "word": "skin in the game",
-          "definition": "Having real personal stakes in an outcome — the condition that forces serious decision-making.",
-          "timestamp_seconds": null
-        },
-        {
-          "word": "anti-fragile",
-          "definition": "A system that gets stronger under stress rather than merely surviving it.",
+          "word": "asymmetric",
+          "definition": "where small inputs produce large, unpredictable outputs",
           "timestamp_seconds": null
         },
         {
           "word": "tutorial phase",
-          "definition": "The early period where failure is cheap and learning is fastest — Koe's frame for your twenties.",
+          "definition": "early career period spent learning fundamentals before taking on real risk",
           "timestamp_seconds": null
         },
         {
-          "word": "default mode",
-          "definition": "The path you take when you make no deliberate choice — usually someone else's plan for your life.",
+          "word": "intrinsic motivation",
+          "definition": "drive that comes from within rather than from external rewards",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "status quo",
+          "definition": "the existing state of affairs, often maintained through inertia rather than choice",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "validation",
+          "definition": "seeking external approval as a substitute for internal confidence",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "exponential",
+          "definition": "growing at a rate that accelerates rapidly over time",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "third-of-life tax",
+          "definition": "the compounding cost of wasted time in your 20s on development and wealth",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "invisible competition",
+          "definition": "competing against future versions of yourself rather than other people",
           "timestamp_seconds": null
         }
       ],
@@ -903,38 +1523,103 @@
       ],
       "vocab_vault": [
         {
-          "word": "memento mori",
-          "definition": "Latin phrase meaning 'remember you must die'—using mortality awareness to clarify what matters.",
+          "word": "aperture",
+          "definition": "the range of possibilities or openness visible from your current position",
           "timestamp_seconds": null
         },
         {
-          "word": "non-neediness",
-          "definition": "The state of being comfortable with yourself such that you don't alter behavior for others' approval.",
+          "word": "mediocrity",
+          "definition": "performance that is average and falls short of genuine excellence",
           "timestamp_seconds": null
         },
         {
-          "word": "patronizing",
-          "definition": "Treating someone as less capable than they are, usually by offering special treatment disguised as help.",
+          "word": "victimhood",
+          "definition": "adopting the identity of a victim as a source of meaning or social currency",
           "timestamp_seconds": null
         },
         {
-          "word": "transactional",
-          "definition": "A relationship or action motivated purely by mutual exchange of value, not genuine care.",
-          "timestamp_seconds": null
-        },
-        {
-          "word": "trait confidence",
-          "definition": "Deep belief in your ability to handle unknown situations, built through surviving unprepared chaos.",
+          "word": "credentialism",
+          "definition": "valuing formal qualifications over actual demonstrated ability",
           "timestamp_seconds": null
         },
         {
           "word": "friction",
-          "definition": "Resistance or effort required; often the thing that builds meaning and prevents shallow connections.",
+          "definition": "deliberate resistance that makes a behavior harder to do automatically",
           "timestamp_seconds": null
         },
         {
-          "word": "aperture",
-          "definition": "Range of view or perspective; widening your aperture means zooming out to find durable certainty.",
+          "word": "prestige",
+          "definition": "high status or admiration earned through achievement or reputation",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "disposition",
+          "definition": "a person's natural tendency to think or behave in a particular way",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "intrinsic",
+          "definition": "arising from within, driven by genuine interest rather than external reward",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "extrinsic",
+          "definition": "motivated by external rewards such as money, status, or approval",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "envy",
+          "definition": "distress caused by wanting what someone else has, including their sacrifices",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "conviction",
+          "definition": "a firmly held belief that drives behavior even under pressure or criticism",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "trait",
+          "definition": "a stable, consistent characteristic of a person's personality or behavior",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "incongruent",
+          "definition": "not aligned between what you say and what you actually do",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "reciprocity",
+          "definition": "the tendency to give back what you receive from others",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "inversion",
+          "definition": "approaching a problem by thinking about what you want to avoid",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "serial obsessive",
+          "definition": "someone who cycles through deep, intense interests one at a time",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "worst-case anchoring",
+          "definition": "using a clear worst case as a mental safe ground for decision-making",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "state confidence",
+          "definition": "confidence that fluctuates with circumstances and mood",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "trait confidence",
+          "definition": "deep self-belief that holds regardless of current performance or outcomes",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "process vs outcome",
+          "definition": "the distinction between enjoying the doing versus fixating on the result",
           "timestamp_seconds": null
         }
       ],
@@ -1057,32 +1742,102 @@
       "vocab_vault": [
         {
           "word": "cybernetic",
-          "definition": "Relating to self-correcting systems that use feedback loops to reach a target.",
+          "definition": "relating to feedback loops used to regulate a system toward a goal",
           "timestamp_seconds": null
         },
         {
-          "word": "reification",
-          "definition": "Treating an abstract concept like 'the self' as if it were a concrete, fixed object.",
+          "word": "aporia",
+          "definition": "genuine philosophical puzzlement without a clear path to resolution",
           "timestamp_seconds": null
         },
         {
-          "word": "postconventional",
-          "definition": "Stages of moral and identity development beyond conformity to group rules.",
+          "word": "dissonance",
+          "definition": "a jarring mismatch between what you believe and what you experience",
           "timestamp_seconds": null
         },
         {
-          "word": "existential vacuum",
-          "definition": "Frankl's term for the absence of meaning; the root of most compulsive behavior.",
+          "word": "excavation",
+          "definition": "digging down to uncover something buried beneath the surface, especially psychologically",
           "timestamp_seconds": null
         },
         {
-          "word": "construct-aware",
-          "definition": "A developmental stage where you recognize your identity as a chosen role, not objective truth.",
+          "word": "construct",
+          "definition": "a concept or mental model built by thinking, not directly observable in the world",
           "timestamp_seconds": null
         },
         {
-          "word": "ego dissolution",
-          "definition": "Temporary loss of the rigid sense of self; often the precondition for real identity change.",
+          "word": "conformist",
+          "definition": "someone who follows the norms and expectations of their group without questioning",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "threshold",
+          "definition": "the minimum level required for something to take effect or trigger change",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "iterate",
+          "definition": "to improve by repeating a cycle of action, feedback, and adjustment",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "inertia",
+          "definition": "the tendency to remain in the same state unless pushed to change",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "gamification",
+          "definition": "applying game-like mechanics to non-game activities to increase motivation",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "intrinsic",
+          "definition": "arising from within, driven by genuine interest rather than outside pressure",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "minimum viable",
+          "definition": "the simplest version of something that still delivers the core value",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "conviction",
+          "definition": "a firmly held belief that holds even when challenged externally",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "agency",
+          "definition": "the capacity to take initiative and make real choices that affect your life",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "archetypal",
+          "definition": "representing the most fundamental or universal version of something",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "conceptual survival",
+          "definition": "holding on to an identity or belief system because losing it feels like dying",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "needle-moving",
+          "definition": "an action or lever that produces significant progress toward a goal",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "anti-vision",
+          "definition": "a clear picture of the life you absolutely refuse to live",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "identity loop",
+          "definition": "a self-reinforcing cycle where your actions confirm your self-image",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "visceral",
+          "definition": "felt intensely and instinctively in the body, not just thought through",
           "timestamp_seconds": null
         }
       ],
@@ -1112,33 +1867,103 @@
       ],
       "vocab_vault": [
         {
-          "word": "productize",
-          "definition": "Turn expertise into a reusable, scalable product rather than delivering it custom each time.",
+          "word": "solopreneur",
+          "definition": "a person who builds and runs a business entirely alone",
           "timestamp_seconds": null
         },
         {
           "word": "leverage",
-          "definition": "A multiplier (audience, software, IP) that lets the same effort produce exponentially more output.",
+          "definition": "using content, code, or reputation to create output without proportional effort",
           "timestamp_seconds": null
         },
         {
-          "word": "skill-stacking",
-          "definition": "Combining moderate proficiency in multiple skills to create a profile nobody else can replicate.",
+          "word": "saturation",
+          "definition": "a market state where similar offerings have made it hard to stand out",
           "timestamp_seconds": null
         },
         {
-          "word": "minimum viable offer",
-          "definition": "The smallest sellable version of a product, designed to get real feedback fast.",
-          "timestamp_seconds": null
-        },
-        {
-          "word": "eternal markets",
-          "definition": "The four domains (health, wealth, relationships, happiness) where demand never disappears.",
+          "word": "productize",
+          "definition": "turning a service or skill into a repeatable, scalable product",
           "timestamp_seconds": null
         },
         {
           "word": "no-code",
-          "definition": "Software tools requiring no programming, enabling a solo founder to run a full operation.",
+          "definition": "building software without writing traditional programming code",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "bootstrapped",
+          "definition": "building a business without outside investment, funded only by its own revenue",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "niche",
+          "definition": "a small, specific segment of a market with particular needs",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "contrarian",
+          "definition": "holding views that go against the prevailing consensus",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "passive income",
+          "definition": "earnings that continue without active daily work once the system is set up",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "optionality",
+          "definition": "keeping future choices open rather than locking into one path early",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "asymmetric",
+          "definition": "where a small action produces a disproportionately large result",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "scalable",
+          "definition": "growing in output without proportional growth in time or cost",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "customer avatar",
+          "definition": "a detailed profile of the ideal customer a product or service is built for",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "positioning",
+          "definition": "how you define your unique place in a competitive market",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "minimum viable offer",
+          "definition": "the simplest version of a product or service you can sell and get feedback on",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "IP (intellectual property)",
+          "definition": "creative work you own that others cannot use without your permission",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "build in public",
+          "definition": "sharing your work and process openly as you create, attracting an audience",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "consulting",
+          "definition": "offering specialized advice or skills as a service, before packaging it as a product",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "moat",
+          "definition": "a competitive advantage that is hard for others to replicate",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "eternal market",
+          "definition": "a problem or desire so fundamental that it will never stop being relevant",
           "timestamp_seconds": null
         }
       ],
@@ -1171,32 +1996,102 @@
       "vocab_vault": [
         {
           "word": "post-rationalization",
-          "definition": "Explaining why something worked after it succeeded, not before it was tried.",
+          "definition": "constructing a logical explanation for a decision already made intuitively",
           "timestamp_seconds": null
         },
         {
-          "word": "fat-tailed distribution",
-          "definition": "A probability curve where rare extreme events produce more value than all typical ones combined.",
-          "timestamp_seconds": null
-        },
-        {
-          "word": "reward prediction error",
-          "definition": "The dopamine spike that happens when reality exceeds expectation, not when the reward arrives.",
+          "word": "heuristic",
+          "definition": "a mental shortcut that helps make quick decisions with limited information",
           "timestamp_seconds": null
         },
         {
           "word": "loss aversion",
-          "definition": "The psychological tendency to feel losses more intensely than equivalent gains feel good.",
+          "definition": "the tendency to feel losses more painfully than equivalent gains feel good",
           "timestamp_seconds": null
         },
         {
-          "word": "explore vs exploit",
-          "definition": "The strategic tension between discovering new opportunities and maximizing known ones.",
+          "word": "decoy effect",
+          "definition": "adding a third option that makes one of the original choices look clearly better",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "counterintuitive",
+          "definition": "opposite to what common sense or logic would suggest",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "fat-tailed",
+          "definition": "a distribution where extreme outcomes are far more likely than standard models predict",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "arbitrary",
+          "definition": "chosen without strict logical reason, yet often effective precisely for that reason",
           "timestamp_seconds": null
         },
         {
           "word": "expectation gap",
-          "definition": "The distance between what someone predicts and what they experience, which determines satisfaction.",
+          "definition": "the difference between what was anticipated and what was actually delivered",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "asymmetric",
+          "definition": "where inputs and outputs are wildly unequal in size or impact",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "salience",
+          "definition": "the quality of standing out and being noticed above surrounding noise",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "brand equity",
+          "definition": "the value built up through a brand's accumulated reputation and associations",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "reciprocity",
+          "definition": "the social impulse to give back what you receive from others",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "anchoring",
+          "definition": "using a reference point to influence how subsequent options are judged",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "behavioral economics",
+          "definition": "the study of how psychological factors influence economic decisions",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "signaling",
+          "definition": "communicating information about yourself through indirect or costly actions",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "premium",
+          "definition": "a higher price that signals higher quality or status to a buyer",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "risk aversion",
+          "definition": "preferring a smaller certain outcome over a larger but uncertain one",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "explore vs exploit",
+          "definition": "the trade-off between searching for something better and using what already works",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "founder-led premium",
+          "definition": "the price advantage a business gains when the founder is visibly involved",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "reward prediction error",
+          "definition": "the brain's signal when an outcome is better or worse than expected",
           "timestamp_seconds": null
         }
       ],
@@ -1224,33 +2119,103 @@
       ],
       "vocab_vault": [
         {
-          "word": "sigmoid curve",
-          "definition": "S-shaped growth pattern: slow start, rapid acceleration, plateau. Not linear.",
-          "timestamp_seconds": null
-        },
-        {
           "word": "heuristic",
-          "definition": "A mental shortcut that trades precision for speed when full calculation is impossible.",
+          "definition": "a mental shortcut that works well enough without full logical analysis",
           "timestamp_seconds": null
         },
         {
-          "word": "local maximum",
-          "definition": "A decent solution where every logical step makes things worse; requires creative leap to escape.",
+          "word": "Austrian economics",
+          "definition": "a school of thought emphasizing subjective value and spontaneous market order",
           "timestamp_seconds": null
         },
         {
-          "word": "MAYA principle",
-          "definition": "Most Advanced Yet Acceptable—the sweet spot between innovation and familiarity.",
+          "word": "Maya principle",
+          "definition": "Most Advanced Yet Acceptable: design that feels fresh but not alienatingly unfamiliar",
           "timestamp_seconds": null
         },
         {
-          "word": "attribution illusion",
-          "definition": "Mistaking correlation for causation; ad platforms claim credit for sales that would have happened anyway.",
+          "word": "attribution",
+          "definition": "assigning credit or cause to a specific action, channel, or effort",
           "timestamp_seconds": null
         },
         {
-          "word": "social proof",
-          "definition": "The tendency to adopt behaviors or beliefs because you see others doing it first.",
+          "word": "compounding",
+          "definition": "gains that build on previous gains and accelerate over time",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "irrational",
+          "definition": "not following strict logical rules, yet often based on valid intuition",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "copycatting",
+          "definition": "imitating competitors' strategies without understanding why those strategies work",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "margin",
+          "definition": "the difference between what something costs to produce and what it sells for",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "exchange",
+          "definition": "a voluntary transaction where both sides feel they gain more than they give",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "friction",
+          "definition": "any obstacle that makes an action harder or slower to complete",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "loss aversion",
+          "definition": "feeling losses more acutely than equivalent gains feel positive",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "optionality",
+          "definition": "keeping multiple paths open rather than committing to one direction early",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "salience",
+          "definition": "the quality of standing out and being noticed above surrounding noise",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "elasticity",
+          "definition": "how much something changes in response to a change in price or other stimulus",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "commoditize",
+          "definition": "to become interchangeable with competitors, losing differentiation and pricing power",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "counterintuitive",
+          "definition": "opposite to what logic or common sense would suggest",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "process fetishism",
+          "definition": "over-focusing on frameworks and methods at the expense of actual results",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "local maximum trap",
+          "definition": "being stuck at the best available nearby solution when a far better one exists elsewhere",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "brand compounds",
+          "definition": "how consistent brand behavior accumulates into trust and preference over time",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "doorman fallacy",
+          "definition": "mistaking a gatekeeper for the decision-maker and optimizing for the wrong person",
           "timestamp_seconds": null
         }
       ],
@@ -1284,37 +2249,102 @@
       "vocab_vault": [
         {
           "word": "aporia",
-          "definition": "The practice of sitting with big unanswerable questions instead of rushing to Google for answers.",
-          "timestamp_seconds": null
-        },
-        {
-          "word": "coherence",
-          "definition": "The feeling that things happen for reasons you can understand, even if painful.",
-          "timestamp_seconds": null
-        },
-        {
-          "word": "oxytocin",
-          "definition": "The bonding hormone released through eye contact and physical presence, not screens.",
+          "definition": "genuine philosophical puzzlement with no clear path to resolution",
           "timestamp_seconds": null
         },
         {
           "word": "hormesis",
-          "definition": "The biological principle that small doses of stress make you stronger; comfort alone makes you fragile.",
+          "definition": "the effect where small doses of a stressor strengthen you while large doses harm",
           "timestamp_seconds": null
         },
         {
           "word": "atelic",
-          "definition": "An activity done for its own sake with no endpoint, where joy lives instead of in goal-driven doing.",
+          "definition": "an activity done purely for its own sake with no end goal or completion point",
           "timestamp_seconds": null
         },
         {
-          "word": "earned success",
-          "definition": "Being genuinely needed and rewarded for creating real value, distinct from status or applause.",
+          "word": "telic",
+          "definition": "an activity aimed at a specific end state or goal, ending when reached",
           "timestamp_seconds": null
         },
         {
           "word": "default mode network",
-          "definition": "Brain regions that activate during rest, reflection, and problem-solving; shut down by constant screen use.",
+          "definition": "the brain network active during mind-wandering, self-reflection, and rest",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "coherence",
+          "definition": "the sense that life is understandable, meaningful, and internally connected",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "oxytocin",
+          "definition": "a hormone linked to bonding, trust, and social connection between people",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "dopamine",
+          "definition": "a neurotransmitter linked to motivation, anticipation, and the drive to pursue",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "grievance",
+          "definition": "a real or perceived wrong that produces lasting resentment",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "counterfeit achievement",
+          "definition": "completing virtual tasks that simulate accomplishment without real-world consequence",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "existential",
+          "definition": "relating to the basic nature, purpose, and meaning of human existence",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "rumination",
+          "definition": "repetitive mental focus on problems or distress without moving toward resolution",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "hedonic adaptation",
+          "definition": "the return to a baseline level of happiness after positive or negative events",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "abstraction",
+          "definition": "moving away from concrete experience toward symbols, concepts, and representations",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "vicarious",
+          "definition": "experienced through watching or reading about another rather than doing it yourself",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "entropy",
+          "definition": "the natural tendency of systems to move toward disorder without ongoing energy input",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "neurocognitive",
+          "definition": "relating to the connection between brain structure and mental processes or behavior",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "earned vs free love",
+          "definition": "love that must be maintained through behavior versus love given unconditionally",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "Frankl's inverse law",
+          "definition": "the more you aim at happiness directly, the more it eludes you",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "serotonin",
+          "definition": "a neurotransmitter linked to mood stability, social status, and feelings of well-being",
           "timestamp_seconds": null
         }
       ],

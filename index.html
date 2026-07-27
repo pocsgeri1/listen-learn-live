@@ -13,14 +13,18 @@
 <link rel="shortcut icon" href="/favicon.ico">
 <!-- Canonical + Open Graph -->
 <link rel="canonical" href="https://epistemic.live/" />
-<meta name="description" content="Podcast ideas as concept cards — so what you learn actually stays with you." />
+<meta name="description" content="Turn podcast ideas into concept cards you actually keep. Plain definitions, real analogies, Spark prompts to use them in conversation." />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://epistemic.live/" />
 <meta property="og:title" content="Epistemic. — Master the concepts that shape intelligent conversation" />
-<meta property="og:description" content="Podcast ideas as concept cards — so what you learn actually stays with you." />
+<meta property="og:description" content="Turn podcast ideas into concept cards you actually keep. Plain definitions, real analogies, Spark prompts to use them in conversation." />
+<meta property="og:image" content="https://epistemic.live/og-image.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Epistemic. — Master the concepts that shape intelligent conversation" />
-<meta name="twitter:description" content="Podcast ideas as concept cards — so what you learn actually stays with you." />
+<meta name="twitter:description" content="Turn podcast ideas into concept cards you actually keep. Plain definitions, real analogies, Spark prompts to use them in conversation." />
+<meta name="twitter:image" content="https://epistemic.live/og-image.png" />
 <meta name="theme-color" content="#0d0d0d" id="themeColorMeta">
 <script>
   (function(){
@@ -10391,6 +10395,7 @@ function _renderIntelRow(pillsEl, collectionId, liveDna) {
 
         moreBtn.addEventListener('click', e => {
           e.stopPropagation();
+          track('vocab_expanded');
           if (isTouchDevice) {
             rest.forEach(v => grid.appendChild(buildVocabCell(v)));
             moreBtn.remove();
@@ -11597,6 +11602,7 @@ function _initDrawerParallax(bodyEl, heroBgEl) {
 function openEpisodeDrawer(collectionId) {
   const col = COLLECTIONS_BY_ID[collectionId];
   if (!col) return;
+  track('episode_drawer_opened', { id: collectionId, title: col.title });
 
   // Open the drawer IMMEDIATELY — empty shell, instant slide-up.
   // Then fill it on the next frame so the heavy DOM work doesn't block the animation.
@@ -11823,7 +11829,7 @@ function filterDrawerCat(catKey, silent) {
   });
 
   if (body) body.scrollTop = 0;
-  if (!silent) _playSwapSFX();
+  if (!silent) { _playSwapSFX(); track('drawer_cat_filtered', { cat: catKey }); }
 }
 
 function initMagneticDrawerPills() {
@@ -13748,6 +13754,7 @@ function spClearSearch() {
 function _spShowResults(q) {
   const dropdown = document.getElementById('spDropdown');
   if (!dropdown) return;
+  track('search_query', { q: q.slice(0, 80) });
   _spFocusedIdx = -1;
 
   // Position dropdown exactly against the search bar's own edges (not viewport-centered)
@@ -14963,6 +14970,7 @@ function cornerSubmit() {
     return;
   }
   _cornerDingSFX();
+  track('corner_query_submitted', { chars: userInput.length });
 
   // Hide Corner placeholder overlay
   var cornerPh = document.getElementById('spCornerPhOverlay');
@@ -24610,6 +24618,7 @@ function _convOpenCSById(id) {
   };
   window.ogActivate=async function(id,cx,cy){
     if(_ogOpenId===id)return;
+    track('og_map_node_clicked', { node: id });
     const path=OG_PATH[id];if(!path)return;
     const data=await loadOg();if(!data)return;
     const entry=ogGet(data,path);if(!entry)return;
