@@ -6,6 +6,16 @@
 
 ---
 
+## v2.31 — 2026-07-27 — Hero: word swap fix, pull quote stat, eyebrow spacing, episodes padding
+
+### index.html
+- **Word swap fix:** `_initWordSwap` now wraps "die" text in `.sp-die-inner` span and fades that independently — parent `#spHW1` opacity was incorrectly hiding the child `.sp-word-live` span, making "live" invisible.
+- **Pull quote stat:** Changed text to `94% of podcast ideas are forgotten in 48 hours.` with `<strong>94%</strong>` displayed as large accent-coloured Playfair block above the body text. Opacity bumped to 0.35.
+- **Eyebrow kicker spacing:** `margin-bottom` increased from 1.2rem to 2rem for breathing room between kicker and h1.
+- **Episodes section desktop shift:** `.browse-toggle-wrap` gets `margin-top: 5rem` at ≥769px, pushing the episodes section down ~80px to match hero shift.
+
+---
+
 ## v2.30 — 2026-07-27 — Hero: word swap, pull quote, eyebrow kicker, desktop shift
 
 ### index.html

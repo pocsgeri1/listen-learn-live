@@ -2313,6 +2313,9 @@
     box-sizing: border-box;
     position: relative;
   }
+  @media (min-width: 769px) {
+    .browse-toggle-wrap { margin-top: 5rem; }
+  }
   @media (max-width: 600px) {
     .browse-toggle-wrap { margin-top: 1.5rem; gap: 1.1rem; }
   }
@@ -8805,7 +8808,7 @@
   </div>
 
   <!-- Pull quote — desktop right margin, mobile below pills -->
-  <p class="sp-pull-quote" aria-hidden="true">What if you remembered<br>the best 1% of everything<br>you hear?</p>
+  <p class="sp-pull-quote" aria-hidden="true"><strong>94%</strong> of podcast ideas are forgotten in 48 hours.</p>
 
   <!-- Center column: tagline + search + mode toggle -->
   <div class="sp-hero-col">
@@ -13627,13 +13630,26 @@ function initSparkHero() {
       _liveSpan.textContent = 'live';
       _hw1.appendChild(_liveSpan);
     }
+    // Wrap "die" text in inner span so we can fade it independently of the child "live" span
+    let _dieSpan = _hw1.querySelector('.sp-die-inner');
+    if (!_dieSpan) {
+      _dieSpan = document.createElement('span');
+      _dieSpan.className = 'sp-die-inner';
+      _dieSpan.textContent = _hw1.childNodes[0] ? _hw1.childNodes[0].textContent : 'die';
+      // Replace the raw text node with the wrapped span
+      if (_hw1.firstChild && _hw1.firstChild.nodeType === 3) {
+        _hw1.replaceChild(_dieSpan, _hw1.firstChild);
+      } else {
+        _hw1.insertBefore(_dieSpan, _liveSpan);
+      }
+    }
     // Phase 1 — after delay: fade "die" out, "live" in (1.1s)
     setTimeout(() => {
-      _hw1.style.opacity = '0';
+      _dieSpan.style.opacity = '0';
       _liveSpan.style.opacity = '1';
       // Phase 2 — hold "live" for 1800ms, then crossfade back
       setTimeout(() => {
-        _hw1.style.opacity = '1';
+        _dieSpan.style.opacity = '1';
         _liveSpan.style.opacity = '0';
       }, 1100 + 1800);
     }, delay);
@@ -21410,7 +21426,7 @@ function playStreakMilestoneSFX() {
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--muted);
-  margin: 0 0 1.2rem;
+  margin: 0 0 2rem;
   line-height: 1;
 }
 body.corner-mode .sp-eyebrow-kicker { opacity: 0; pointer-events: none; transition: opacity 0.25s ease; }
@@ -21435,9 +21451,21 @@ body.corner-mode .sp-eyebrow-kicker { opacity: 0; pointer-events: none; transiti
     font-size: clamp(1.1rem, 1.5vw, 1.35rem);
     max-width: 220px;
     text-align: right;
-    opacity: 0.28;
+    opacity: 0.35;
     border-right: 2px solid var(--accent);
     padding-right: 1rem;
+  }
+  .sp-pull-quote strong {
+    display: block;
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 3vw, 2.6rem);
+    font-weight: 700;
+    font-style: normal;
+    color: var(--accent);
+    letter-spacing: -0.02em;
+    line-height: 1;
+    margin-bottom: 0.35rem;
+    opacity: 1;
   }
 }
 /* Mobile: hidden (hero is tight, eyebrow kicker carries the value) */
@@ -21451,6 +21479,10 @@ body.corner-mode .sp-pull-quote { opacity: 0; transition: opacity 0.3s ease; }
 #spHW1 {
   position: relative;
   display: inline-block;
+}
+/* Inner "die" wrapper — fades independently of the absolutely-positioned "live" child */
+.sp-die-inner {
+  display: inline;
   transition: opacity 1.1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .sp-word-live {
