@@ -8804,8 +8804,14 @@
     </div>
   </div>
 
+  <!-- Pull quote — desktop right margin, mobile below pills -->
+  <p class="sp-pull-quote" aria-hidden="true">What if you remembered<br>the best 1% of everything<br>you hear?</p>
+
   <!-- Center column: tagline + search + mode toggle -->
   <div class="sp-hero-col">
+
+    <!-- Eyebrow kicker — instant value signal, no animation delay -->
+    <p class="sp-eyebrow-kicker">Turn what you hear into what you say</p>
 
     <!-- Headline — words wrapped individually for stagger-out animation -->
     <h1 class="sp-tagline" id="spTagline" aria-label="Ideas die in your earbuds.">
@@ -13606,6 +13612,33 @@ function initSparkHero() {
     document.querySelectorAll('.sp-pill').forEach(p => p.classList.add('btns-settled'));
   }, 1100);
 
+  // Word swap helper: "die" → "live" → "die", smooth crossfade, one-shot
+  function _initWordSwap(delay) {
+    const _hw1 = document.getElementById('spHW1');
+    if (!_hw1) return;
+    // Respect prefers-reduced-motion — skip animation entirely
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    // Create the "live" overlay span if not already present
+    let _liveSpan = _hw1.querySelector('.sp-word-live');
+    if (!_liveSpan) {
+      _liveSpan = document.createElement('span');
+      _liveSpan.className = 'sp-word-live';
+      _liveSpan.setAttribute('aria-hidden', 'true');
+      _liveSpan.textContent = 'live';
+      _hw1.appendChild(_liveSpan);
+    }
+    // Phase 1 — after delay: fade "die" out, "live" in (1.1s)
+    setTimeout(() => {
+      _hw1.style.opacity = '0';
+      _liveSpan.style.opacity = '1';
+      // Phase 2 — hold "live" for 1800ms, then crossfade back
+      setTimeout(() => {
+        _hw1.style.opacity = '1';
+        _liveSpan.style.opacity = '0';
+      }, 1100 + 1800);
+    }, delay);
+  }
+
   // #6 Typewriter on "your earbuds." — one-shot per session
   const _typeEl = document.getElementById('spHW3');
   const _typeText = 'your earbuds.';
@@ -13646,6 +13679,8 @@ function initSparkHero() {
               }, 300);
             }, 120);
           }
+          // Word swap: "die" → "live" → "die", starts 2s after typewriter finishes
+          _initWordSwap(2000);
         }
       };
       setTimeout(_typeNext, 200);
@@ -13653,6 +13688,8 @@ function initSparkHero() {
       _typeEl.textContent = _typeText;
       const _subEl = document.getElementById('spSub');
       if (_subEl) { _subEl.style.opacity = '1'; _subEl.style.transform = 'translateY(0)'; }
+      // Already seen — run word swap 2s from now
+      _initWordSwap(2000);
     }
   }
 
@@ -21348,6 +21385,13 @@ function playStreakMilestoneSFX() {
   padding: 80px 2rem 3.5rem;
   overflow: visible; /* row2 absolute pills and dropdown need to escape */
 }
+/* Desktop: push hero content down so Episodes thumbnails peek into viewport */
+@media (min-width: 769px) {
+  .sp-hero {
+    padding-top: 160px;
+    align-items: flex-start;
+  }
+}
 
 /* --- Center copy column — overflow visible so preview card escapes --- */
 .sp-hero-col {
@@ -21357,6 +21401,71 @@ function playStreakMilestoneSFX() {
   max-width: 640px;
   text-align: center;
   overflow: visible;
+}
+
+/* ── Eyebrow kicker — instant value label above H1 ── */
+.sp-eyebrow-kicker {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 1.2rem;
+  line-height: 1;
+}
+body.corner-mode .sp-eyebrow-kicker { opacity: 0; pointer-events: none; transition: opacity 0.25s ease; }
+
+/* ── Pull quote — desktop right margin, mobile inline below mode pills ── */
+.sp-pull-quote {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-weight: 400;
+  color: var(--text);
+  margin: 0;
+  line-height: 1.45;
+  pointer-events: none;
+}
+/* Desktop: absolute in right margin */
+@media (min-width: 900px) {
+  .sp-pull-quote {
+    position: absolute;
+    right: 5%;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: clamp(1.1rem, 1.5vw, 1.35rem);
+    max-width: 220px;
+    text-align: right;
+    opacity: 0.28;
+    border-right: 2px solid var(--accent);
+    padding-right: 1rem;
+  }
+}
+/* Mobile: hidden (hero is tight, eyebrow kicker carries the value) */
+@media (max-width: 899px) {
+  .sp-pull-quote { display: none; }
+}
+body.corner-mode .sp-pull-quote { opacity: 0; transition: opacity 0.3s ease; }
+
+/* ── Word swap — "die" → "live" crossfade ──
+   #spHW1 gets position:relative; JS appends .sp-word-live span absolutely on top */
+#spHW1 {
+  position: relative;
+  display: inline-block;
+  transition: opacity 1.1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.sp-word-live {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  color: var(--accent);
+  font-style: italic;
+  opacity: 0;
+  /* Slow, cinematic crossfade */
+  transition: opacity 1.1s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+  user-select: none;
 }
 
 /* --- Tagline --- */

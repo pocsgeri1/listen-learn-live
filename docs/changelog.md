@@ -6,6 +6,16 @@
 
 ---
 
+## v2.30 — 2026-07-27 — Hero: word swap, pull quote, eyebrow kicker, desktop shift
+
+### index.html
+- **Word swap — "die → live → die":** `_initWordSwap(delay)` function crossfades #spHW1 "die" text to `.sp-word-live` "live" span (accent colour, italic) and back. 1.1s cubic-bezier on both opacities simultaneously. Triggers 2s after typewriter completes (both first-visit and already-seen paths). Respects `prefers-reduced-motion`. One-shot per page load.
+- **Pull quote:** `.sp-pull-quote` — right-margin quote ("What if you remembered the best 1%…"), `position:absolute`, 28% opacity, accent border-right. Visible ≥900px only; hidden on mobile.
+- **Eyebrow kicker:** `.sp-eyebrow-kicker` paragraph above h1 — "Turn what you hear into what you say". DM Mono, tracked, muted. Adds value signal above the fold on mobile.
+- **Hero desktop shift:** `.sp-hero` gets `padding-top: 160px; align-items: flex-start` at ≥769px. Moves hero elements down ~80px visually, improves breathing room above fold.
+
+---
+
 ## v2.29 — 2026-07-27 — Animation polish batch 1 (hero entrance, hover, theme, vault pop, shimmer, quiz lift)
 
 ### index.html
