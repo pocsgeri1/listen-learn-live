@@ -34,6 +34,16 @@ Claude updates without being asked: changelog.md (new entry at TOP), roadmap.md 
 
 ## Entries
 
+### 2026-07-27 — v2.29: Animation polish batch 1
+
+**Lesson 65 — Claude ran git commands from sandbox and wrote a wrong version number.** Both violate cowork-default-instructions.md. Root cause: Claude did not read `cowork-default-instructions.md` or `engineering-standards.md` at session start. `ep-commit.sh` must be run by Gergely from Mac Terminal only. Version must always be `max(changelog.md version) + 0.01`. Fix: stronger STOP block added to cowork-default-instructions.md invocation.
+
+**Lesson 66 — Card front `box-shadow` on hover fires a paint during the flip `transform` animation.** These two cannot composite independently — paint + transform in the same frame drops FPS. Fix: replace `box-shadow` upgrade with `outline` on hover; outline changes are compositor-only, zero repaint cost.
+
+**Lesson 67 — The hero typewriter (`spHW3`) + corner-mode transitions own the `.sp-hw` spans.** Do not add independent entrance animations to `.sp-hw` spans — they conflict with `body.corner-mode` rules and the typewriter timing. Hero entrance animations should target the wrapping container (`.sp-hero-col`) or elements the typewriter doesn't touch (`sp-search-wrap`, pills, sub-text).
+
+---
+
 ### 2026-07-27 — v2.28: Vocab backfill, Umami events, OG image, timestamp patch
 
 **Lesson 64 — When a long transcript causes Claude to default all `timestamp` fields to null during extraction, the `episode_ref` field is a reliable recovery path — no re-extraction needed.** Context-window overflow during a long Glasp transcript caused all 29 concepts in collection 522 to have `timestamp: null`. The `episode_ref` field (`"Episode Title, MM:SS"` or `"Episode Title, H:MM:SS"`) was populated correctly for every concept. A Python script parsed the time component from each `episode_ref` string and wrote it into the `timestamp` field — full recovery in one pass with zero API calls. **Lesson: if timestamps come out null for a batch, check `episode_ref` first before re-running the extraction. The time is already there in text form.**

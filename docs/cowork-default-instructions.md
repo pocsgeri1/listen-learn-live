@@ -1,7 +1,34 @@
 # Epistemic — Build & Editorial Session Protocol
-# v1.3 — 2026-07-27
+# v1.4 — 2026-07-27
 # Invocation: "Use cowork-default-instructions.md." — unchanged.
 # Project Knowledge copy may be stale — always read the live repo file when folder is connected.
+---
+
+## ⛔ MANDATORY STOP — Read and confirm before doing anything else
+
+You have just been invoked with "Use cowork-default-instructions.md."
+Do NOT write a plan, do NOT touch any file, do NOT run any command until you complete the following steps and confirm each one out loud in your response.
+
+**Step A — Read these four files in parallel right now:**
+1. `docs/cowork-default-instructions.md` (this file — you're reading it now ✓)
+2. `docs/engineering-standards.md` — read ALL of it
+3. `docs/changelog.md` — top 5 lines only (to get current version number)
+4. `docs/build-journal.md` — top entry only (latest lesson)
+
+**Step B — State these three things before proceeding:**
+1. Current version: `vX.XX` (from top of changelog.md) — your next commit will be `vX.XX + 0.01`
+2. Session type: BUILD or EDITORIAL
+3. Git rule: "I will NOT run any git commands. Gergely runs `./ep-commit.sh` from Mac Terminal."
+
+**Step C — Hard rules that override everything:**
+- NEVER run `git add`, `git commit`, `git push`, or any git write command from the sandbox bash. Claude edits files only. Gergely commits.
+- NEVER use a version number lower than the current changelog version + 0.01.
+- NEVER skip the ⚠️ DOC UPDATES section at the end.
+- NEVER rewrite a file in full — Edit tool only with targeted `old_string`/`new_string`.
+- Read `docs/engineering-standards.md` before writing a single line of CSS or JS.
+
+If you cannot confirm all three items in Step B, stop and ask.
+
 ---
 
 ## Where each rule lives

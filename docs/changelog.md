@@ -6,6 +6,20 @@
 
 ---
 
+## v2.29 — 2026-07-27 — Animation polish batch 1 (hero entrance, hover, theme, vault pop, shimmer, quiz lift)
+
+### index.html
+- **Card hover — outline swap:** `.nf-row` and `.ep-cat-column` card front hover changed from `box-shadow` upgrade to `outline: 1px solid rgba(255,255,255,0.12)`. Eliminates paint-on-hover repaint during flip animation. Light-mode override updated to match.
+- **Episode card lift:** Added `transform: translateY(-2px)` to `.episode-card:hover`. Transition property was already declared but the rule had no translateY — dead transition.
+- **Theme switch transition:** Added `background-color 150ms ease-in-out` to `body`, gated on `.theme-ready` class added after ep-preload guard lifts. Prevents FOUC on load; smooths the dark/light switch.
+- **Vault button winPop:** `@keyframes masterPop` (scale 0.82→1.18→0.96→1, 0.38s spring cubic). Fires on save only, not remove. Skipped under `prefers-reduced-motion`.
+- **Nav link hover lift:** Added `transform: translateY(-1px)` to `.nav-link:hover` and `:active` reset. `transform` added to transition list.
+- **Nav signup shimmer:** `::before` diagonal shimmer sweep on hover (`translateX(-140%)→translateX(240%) skewX(-15deg)`, 0.55s). Lift `translateY(-1px)` added. `overflow: hidden` added to `.nav-signup-btn`.
+- **Undo toast spring:** `.conv-undo-toast` transition changed from `ease` to `cubic-bezier(0.34,1.4,0.64,1)`. Travel reduced from 60px→24px. Opacity fade added (was opacity-less before).
+- **Quiz option lift:** `transform: translateY(-1px)` on `.quiz-option:hover:not(:disabled)`. `:active` reset added.
+- **Hero sequential entrance:** `.sp-tagline` slides in from left (`translateX(-32px)`→0) as preload guard lifts. `.sp-sub` slides from right (`translateX(28px)`→0) after typewriter completes. `.sp-search-wrap` floats up (`translateY(18px)`→0) 120ms after sub. Mode toggle pills float up 80ms after search. All gated on `prefers-reduced-motion: no-preference`. Transitions on base rules (not init classes) to ensure animation fires on class removal.
+- **`cowork-default-instructions.md`:** Added hard STOP block (v1.4) requiring Claude to read engineering-standards.md, state current version, and confirm no-git-from-sandbox rule before touching any file.
+
 ## v2.28 — 2026-07-27 — Vocab backfill (15 eps → 20 words), 6 Umami events, OG image + meta tags, description copy update, timestamp patch for collection 522 (Daniel Kokotajlo × DOAC, 29 concepts)
 
 ### Changes
