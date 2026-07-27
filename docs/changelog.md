@@ -6,6 +6,33 @@
 
 ---
 
+## v2.28 — 2026-07-27 — Vocab backfill (15 eps → 20 words), 6 Umami events, OG image + meta tags, description copy update, timestamp patch for collection 522 (Daniel Kokotajlo × DOAC, 29 concepts)
+
+### Changes
+
+**episode_meta.json — vocab backfill**
+- 15 episodes with 6-7 vocab words each expanded to 20 words each. Vocab generated editorially from concept content (no transcript or API call needed). Episodes covered: collections 11, 12, 13, 14, 501, 504, 510, 511, 512, 515, 516, 517, 518, 519, 520.
+
+**index.html — 6 new Umami analytics events**
+- `episode_drawer_opened` — fires in `openEpisodeDrawer()` with `{id, title}`
+- `drawer_cat_filtered` — fires in `filterDrawerCat()` with `{cat}`
+- `vocab_expanded` — fires on "+N more" vocab expand button click
+- `corner_query_submitted` — fires in `cornerSubmit()` with `{chars}`
+- `og_map_node_clicked` — fires in `window.ogActivate` with `{node}`
+- `search_query` — fires in `_spShowResults()` with `{q}` (capped at 80 chars)
+
+**index.html — OG meta tags**
+- Added `og:image`, `og:image:width`, `og:image:height`, `twitter:image` meta tags pointing to `/og-image.png`
+- Updated `og:description` copy: "Turn podcast ideas into concept cards you actually keep. Plain definitions, real analogies, Spark prompts to use them in conversation."
+
+**og-image.png — new file (repo root)**
+- 1200×630 PNG for social sharing previews. Dark bg (#0d0d0d), gold accent bar, "Epistemic." wordmark, tagline, 3 feature tiles (Concept Cards / Corner Mode / Quiz Mode), 5 mini concept card previews (Loss Aversion / Compounding / Status Signaling / Opportunity Cost / Imposter Syndrome), bottom bar with epistemic.live + source list. Generated with Python Pillow.
+
+**concepts.json — timestamp patch, collection 522**
+- 29 concepts (IDs 731–759, Daniel Kokotajlo × Steven Bartlett, Diary of a CEO — "No One Is Ready For What's Coming") had `timestamp: null` after extraction (context-window overflow caused Claude to default to null). Timestamps recovered by parsing the `episode_ref` field's time string for each concept. All 29 patched in one script pass, committed as v2.28.
+
+---
+
 ## v2.26 — 2026-07-06 — OG Map perf fix (blur removed), deeper zoom, nav counter animation, extract.html CORS+data-wipe fixes, episode_meta 521, ogmap.json anti-slop
 
 ### Changes

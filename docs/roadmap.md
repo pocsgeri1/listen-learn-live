@@ -22,7 +22,7 @@
 - **Weekly Concept Push (v3.0):** Brevo email via Make.com reading from Airtable. Personalised: concepts from stash not yet sparked + blind spot category pick.
 - **Story Mode activation (v3.0+):** Panel B is built and hidden. Activate when an interactive mechanic (Practice Mode or Role-Play) is ready to make stories functional rather than passive reading.
 - **RAG / knowledge-grounded responses (v3.0):** Embed all concept `plain` fields, store in Supabase pgvector, inject top-5 similar per API call. Prerequisite: library ≥1000 concepts.
-- **OG image** — `/og-image.png` not yet in repo root. Add for `og:image` + `twitter:image` tags.
+- **OG image** ✅ — done v2.28. `/og-image.png` in repo root, meta tags added to index.html.
 - **`duplicate_of` bug** — concepts with `duplicate_of` set are suppressed from library/search entirely. Correct behaviour: only affects drawer-level display. Separate session fix.
 - **Collection 501 keep/cut decision** — 17 flagged for cut, 13 keep/rewrite. Deferred.
 - **Plain rewrite — ~500 concepts not yet touched** against v2.2 rules. Use `concept-rewrite-prompt.md` for individual rewrites.
@@ -31,6 +31,9 @@
 - **Admin editorial picks tool** — `admin-picks.html` at `tools.epistemic.live`.
 
 ## Recently completed
+
+- v2.28 ✅ — 2026-07-27 — **Vocab backfill (15 episodes to 20 words), 6 Umami tracking events, OG image + meta tags, collection 522 timestamp patch.** 15 episodes expanded from 6-7 to 20 vocab words each (editorial, no API). Six new Umami events added covering episode drawer open, category filter, vocab expand, Corner submit, OG map node click, and search query. OG image (1200×630 PNG) created with Python Pillow and committed to repo root; `og:image`/`twitter:image` meta tags and updated `og:description` added to index.html. 29 concepts from collection 522 (Daniel Kokotajlo × DOAC) had null timestamps patched by parsing the `episode_ref` field's embedded time string — no re-extraction needed.
+
 
 - v2.25a ✅ — 2026-07-04 — **OG Map content card rebuilt as a spotlight modal + intro/bullets content restructuring.** Fixes all 3 bugs Gergely caught on v2.25's first live test (bleed-through, fuzzy text, cut-off text), all traced to the card being an SVG foreignObject inside the zoomed map transform. New `#ogSpotlight` overlay lives outside both the transform and the map wrap's `overflow:hidden`, as a true fixed-position modal (fullscreen sheet on mobile). Card copy now renders as a lead sentence + bullets instead of dense paragraphs. Caught and fixed a real content-loss bug in the sentence-splitter regex during QA (two entries with quoted mid-sentence questions were silently losing their leading text) via a round-trip check scripted against all 72 real content fields. See changelog v2.25a for full detail.
 - v2.25 ✅ — 2026-07-04 — **OG Map hyper-zoom rebuild.** All 24 map nodes (was 6) now click into a smooth zoom + in-place content card, reusing the existing pan/zoom transform system instead of a side panel. New `ogmap.json` (25 entries) gives every node an Understand + Activate card written for the power-user reader, plus crown-jewel content on the central hub and Flow's main node. Related concept pills added on the 6 nodes that map to existing scoring categories, styled to match Corner's pill pattern. 3 new Flow sub-nodes drawn from scratch (didn't exist visually before). See changelog v2.25 for full detail and pre-ship verification notes.
