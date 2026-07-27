@@ -6,6 +6,13 @@
 
 ---
 
+## v2.35 — 2026-07-27 — Pull quote shifted 40px more left (right: 7rem)
+
+### index.html
+- **Pull quote:** `right` changed from `4.5rem` to `7rem` — aligns bar with hairline SVG edge.
+
+---
+
 ## v2.34 — 2026-07-27 — Eyebrow kicker up, episodes down 100px, pull quote shifted left
 
 ### index.html
