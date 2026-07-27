@@ -6,6 +6,16 @@
 
 ---
 
+## v2.32 — 2026-07-27 — Pull quote to browse-toggle row, word swap 1.5s
+
+### index.html
+- **Pull quote relocated:** Moved `.sp-pull-quote` from hero section into `.browse-toggle-wrap` flex row. Now sits right-aligned on the same row as Episodes/Themes, with its border-right line landing exactly on the hairline divider. `margin-left:auto` pushes it to far right.
+- **94% sizing:** `<strong>` matches `.browse-toggle` font-size (1.8rem Playfair). Body copy `.sp-pull-body` is 0.72rem italic, right-aligned below.
+- **Word swap timing:** Crossfade transition extended from 1.1s to 1.5s. Hold phase updated accordingly.
+- **Pull quote hidden on mobile:** `display:none` below 900px — browse-toggle row is too tight.
+
+---
+
 ## v2.31 — 2026-07-27 — Hero: word swap fix, pull quote stat, eyebrow spacing, episodes padding
 
 ### index.html
