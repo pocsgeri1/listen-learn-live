@@ -8808,7 +8808,7 @@
   <div class="sp-hero-col">
 
     <!-- Headline — words wrapped individually for stagger-out animation -->
-    <h1 class="sp-tagline sp-tagline-init" id="spTagline" aria-label="Ideas die in your earbuds.">
+    <h1 class="sp-tagline" id="spTagline" aria-label="Ideas die in your earbuds.">
       <span class="sp-hw" id="spHW0">Ideas</span>
       <span class="sp-hw" id="spHW1">die</span>
       <span class="sp-hw" id="spHW2">in</span><br>
@@ -8819,7 +8819,7 @@
     <p class="sp-corner-tagline" id="spCornerTagline" aria-hidden="true"></p>
 
     <!-- Explore sub-tagline -->
-    <p class="sp-sub" id="spSub" style="opacity:0;transform:translateX(28px)">Turn 3 hours of podcast into 3 ideas you'll actually say out loud.</p>
+    <p class="sp-sub" id="spSub" style="opacity:0;transform:translateY(8px)">Turn 3 hours of podcast into 3 ideas you'll actually say out loud.</p>
 
     <!-- EXPLORE search bar (default, visible in Explore mode) -->
     <div class="sp-search-wrap" id="spSearchWrap">
@@ -10136,19 +10136,6 @@ async function loadConcepts() {
         document.documentElement.classList.remove('ep-preload');
         // Enable theme-switch transition only after initial paint — prevents FOUC
         document.body.classList.add('theme-ready');
-        // Hero entrance: tagline slides in from left as hero fades in
-        // Search/mode pill init classes added here so they're set before hero is visible
-        const _srchWrap = document.getElementById('spSearchWrap');
-        const _modeRow = document.getElementById('spModeToggleRow');
-        if (_srchWrap) _srchWrap.classList.add('sp-search-init');
-        if (_modeRow) _modeRow.classList.add('sp-mode-init');
-        // Tagline: remove init class now — existing transition on .sp-tagline kicks in
-        const _tl = document.getElementById('spTagline');
-        if (_tl) {
-          requestAnimationFrame(() => {
-            _tl.classList.remove('sp-tagline-init');
-          });
-        }
       });
     });
     // #1 Init reading progress observer after first grid render — v1.92
@@ -13631,6 +13618,9 @@ function initSparkHero() {
       localStorage.setItem(_typeKey, String(Date.now()));
       let _ti = 0;
       _typeEl.textContent = '';
+      // Add blinking cursor to the em parent while typing
+      const _typeEmParent = _typeEl.parentElement;
+      if (_typeEmParent && _typeEmParent.tagName === 'EM') _typeEmParent.classList.add('sp-typing');
       const _subEl = document.getElementById('spSub');
       const _typeNext = () => {
         if (_ti <= _typeText.length) {
@@ -13638,35 +13628,31 @@ function initSparkHero() {
           _ti++;
           setTimeout(_typeNext, _ti === 1 ? 300 : 55 + Math.random() * 25);
         } else {
-          // Sub slides in from right after typewriter finishes
+          // Remove cursor — add brief pause so it blinks once after last char
+          setTimeout(() => {
+            if (_typeEmParent) _typeEmParent.classList.remove('sp-typing');
+          }, 350);
           if (_subEl) {
             setTimeout(() => {
               _subEl.style.opacity = '1';
-              _subEl.style.transform = 'translateX(0)';
-              // Search bar floats up 120ms after sub
+              _subEl.style.transform = 'translateY(0)';
+              // Pulse search bar glow 300ms after sub appears — invites typing
               setTimeout(() => {
                 const _sw = document.getElementById('spSearchWrap');
-                if (_sw) _sw.classList.remove('sp-search-init');
-                // Mode pills 80ms after search
-                setTimeout(() => {
-                  const _mr = document.getElementById('spModeToggleRow');
-                  if (_mr) _mr.classList.remove('sp-mode-init');
-                }, 80);
-              }, 120);
+                if (_sw) {
+                  _sw.classList.add('sp-search-invite');
+                  setTimeout(() => _sw.classList.remove('sp-search-invite'), 900);
+                }
+              }, 300);
             }, 120);
           }
         }
       };
       setTimeout(_typeNext, 200);
     } else {
-      // Already seen — reveal everything immediately with short transition
       _typeEl.textContent = _typeText;
       const _subEl = document.getElementById('spSub');
-      if (_subEl) { _subEl.style.opacity = '1'; _subEl.style.transform = 'translateX(0)'; }
-      const _sw = document.getElementById('spSearchWrap');
-      if (_sw) _sw.classList.remove('sp-search-init');
-      const _mr = document.getElementById('spModeToggleRow');
-      if (_mr) _mr.classList.remove('sp-mode-init');
+      if (_subEl) { _subEl.style.opacity = '1'; _subEl.style.transform = 'translateY(0)'; }
     }
   }
 
@@ -21418,9 +21404,7 @@ function playStreakMilestoneSFX() {
   border-radius: 10px;
   padding: 0 14px;
   gap: 10px;
-  /* opacity + transform here so entrance animation fires when .sp-search-init is removed */
-  transition: border-color 0.25s, box-shadow 0.25s,
-              opacity 0.5s ease, transform 0.5s cubic-bezier(0.22,1,0.36,1);
+  transition: border-color 0.25s, box-shadow 0.25s;
   margin-bottom: 0.25rem;
   box-shadow:
     0 0 0 1px rgba(232,213,163,0.04),
@@ -22444,31 +22428,8 @@ body.corner-mode #signupSection {
 body.corner-mode { overflow: hidden; }
 body.corner-mode .sp-trigger-hint { display: none !important; }
 body.corner-mode::before, body.corner-mode::after { opacity: 0; }
-#spSub { transition: opacity 0.55s ease, transform 0.55s cubic-bezier(0.22,1,0.36,1) !important; }
+#spSub { transition: opacity 0.38s cubic-bezier(0.4,0,0.6,1), transform 0.38s cubic-bezier(0.4,0,0.6,1) !important; }
 body.corner-mode #spSub { opacity: 0 !important; transform: translateY(30px) !important; pointer-events: none; }
-
-/* ── Hero sequential entrance animations ── v2.29
-   Each element enters from a different direction, staggered.
-   Gated on prefers-reduced-motion: if reduced, skip all. */
-@media (prefers-reduced-motion: no-preference) {
-  /* Tagline slides in from LEFT */
-  .sp-tagline.sp-tagline-init {
-    opacity: 0;
-    transform: translateX(-32px);
-  }
-  /* Sub slides in from RIGHT — JS changes inline style from scale to translateX */
-
-  /* Search bar floats UP */
-  .sp-search-wrap.sp-search-init {
-    opacity: 0;
-    transform: translateY(18px);
-  }
-  /* Mode pills float UP, slightly less travel */
-  .sp-mode-toggle-row.sp-mode-init {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-}
 
 /* ---- Search bar zoom ---- */
 .sp-hero-col { transition: transform 0.42s cubic-bezier(0.22,0.61,0.36,1); }
@@ -22494,6 +22455,41 @@ body.corner-mode #spCornerSearchWrap {
   left: 42px; font-style: italic;
   max-width: calc(100% - 170px);
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+/* ── Hero typewriter cursor ──
+   A blinking | appended to spHW3 while typing. CSS-only, zero JS cost.
+   JS adds .sp-typing to the em wrapper, removes when done. */
+.sp-tagline em.sp-typing::after {
+  content: '|';
+  display: inline-block;
+  color: var(--accent);
+  opacity: 1;
+  margin-left: 1px;
+  animation: cursorBlink 0.65s step-end infinite;
+  font-style: normal;
+  font-weight: 300;
+}
+@keyframes cursorBlink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sp-tagline em.sp-typing::after { animation: none; opacity: 1; }
+}
+
+/* ── Search bar invite pulse ──
+   One-shot glow brightens briefly after sub reveals — invites typing.
+   Class added/removed by JS. */
+@keyframes searchInvite {
+  0%   { box-shadow: 0 0 0 1px rgba(232,213,163,0.04), 0 0 18px rgba(232,213,163,0.07), 0 2px 12px rgba(0,0,0,0.25); }
+  45%  { box-shadow: 0 0 0 2px rgba(232,213,163,0.22), 0 0 38px rgba(232,213,163,0.22), 0 2px 20px rgba(0,0,0,0.3); border-color: rgba(232,213,163,0.5); }
+  100% { box-shadow: 0 0 0 1px rgba(232,213,163,0.04), 0 0 18px rgba(232,213,163,0.07), 0 2px 12px rgba(0,0,0,0.25); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .sp-search-wrap.sp-search-invite {
+    animation: searchInvite 0.85s cubic-bezier(0.22,1,0.36,1) forwards;
+  }
 }
 
 /* ---- Panel overlay smooth fade ---- */
@@ -22580,7 +22576,6 @@ body.corner-mode #spCornerSearchWrap {
   justify-content: center;
   margin-top: 1.6rem;
   margin-bottom: 0.4rem;
-  transition: opacity 0.45s ease, transform 0.45s cubic-bezier(0.22,1,0.36,1);
 }
 .sp-mode-pill {
   font-family: 'DM Mono', monospace;
