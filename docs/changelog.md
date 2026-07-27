@@ -6,6 +6,15 @@
 
 ---
 
+## v2.34 — 2026-07-27 — Eyebrow kicker up, episodes down 100px, pull quote shifted left
+
+### index.html
+- **Eyebrow kicker:** `margin-top: -2.5rem` pulls "Turn what you hear…" up toward top of hero without changing hero padding. Offset reset to 0 on mobile.
+- **Episodes section gap:** `.browse-section-outer` gets `margin-top: 6rem` at ≥769px — adds ~100px breathing room between mode toggle buttons and Episodes/Themes row.
+- **Pull quote position:** `right` shifted from `2rem` to `4.5rem` (~40px left), away from screen edge.
+
+---
+
 ## v2.33 — 2026-07-27 — Pull quote right margin on hairline, dead space removed
 
 ### index.html

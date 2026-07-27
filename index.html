@@ -21423,14 +21423,20 @@ function playStreakMilestoneSFX() {
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--muted);
-  margin: 0 0 2rem;
+  margin: -2.5rem 0 2rem; /* negative top pulls kicker up without shrinking hero padding */
   line-height: 1;
+}
+@media (max-width: 768px) {
+  .sp-eyebrow-kicker { margin-top: 0; } /* no negative offset on mobile */
 }
 body.corner-mode .sp-eyebrow-kicker { opacity: 0; pointer-events: none; transition: opacity 0.25s ease; }
 
 /* ── Browse section outer — position context for the pull quote ── */
 .browse-section-outer {
   position: relative;
+}
+@media (min-width: 769px) {
+  .browse-section-outer { margin-top: 6rem; } /* ~100px extra gap after mode toggle buttons */
 }
 
 /* ── Pull quote — absolute, right margin, bottom aligned to the hairline ── */
@@ -21446,7 +21452,7 @@ body.corner-mode .sp-eyebrow-kicker { opacity: 0; pointer-events: none; transiti
     align-items: flex-end;
     text-align: right;
     position: absolute;
-    right: 2rem;
+    right: 4.5rem;
     bottom: 0; /* bottom edge sits on the hairline */
     padding-right: 1rem;
     border-right: 2px solid var(--accent);
