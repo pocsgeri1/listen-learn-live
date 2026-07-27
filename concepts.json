@@ -14622,5 +14622,947 @@
     "airtable_id": "recxyqlrLkvAjIv9W",
     "published_at": "2026-07-06T05:14:15.500Z",
     "extraction_prompt_version": null
+  },
+  {
+    "id": 731,
+    "term": "Truth-seeking Ai",
+    "category": "tech-ai",
+    "source": "sb",
+    "hook": "An assistant trained for honesty versus one with a hidden agenda.",
+    "plain": "AI designed to give accurate answers regardless of who benefits. No political bias inserted by the company. No steering users toward preferred candidates or products. The alternative is an AI quietly steered to serve whoever built it, while looking objective.",
+    "analogy": "A doctor who tells you what you want to hear versus one who tells you what you need to know.",
+    "prompt": "If your AI assistant was secretly biased, how would you know?",
+    "collection_id": 522,
+    "timestamp": null,
+    "editors_pick": false,
+    "related_ids": [
+      46,
+      144,
+      243,
+      365,
+      638
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 7,
+      "actionability": 6,
+      "novelty": 8,
+      "conversation_value": 8,
+      "composite": 7.3
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "rec4Bb9ZPXhP9qxdy",
+    "published_at": "2026-07-27T09:50:55.453Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 732,
+    "term": "Posterity vs Present",
+    "category": "philosophy",
+    "source": "sb",
+    "hook": "Future lives sound noble until you realize they risk everyone alive now.",
+    "plain": "Prioritizing people who don't exist yet versus people who do. Long-term thinking can justify massive present risk if the payoff for future generations is high enough. The ethical trap is using hypothetical future benefit to discount real current harm.",
+    "analogy": "Building a nuclear reactor next to a city because energy will benefit your great-grandchildren.",
+    "prompt": "What's a sacrifice you'd make today for someone 100 years from now?",
+    "collection_id": 522,
+    "timestamp": null,
+    "editors_pick": false,
+    "related_ids": [
+      89,
+      97,
+      277,
+      356,
+      648
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 7,
+      "actionability": 6,
+      "novelty": 8,
+      "conversation_value": 8,
+      "composite": 7.3
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "rec4g0BZtflJhbw01",
+    "published_at": "2026-07-27T09:50:55.453Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 733,
+    "term": "Scalpel vs Cudgel",
+    "category": "power",
+    "source": "sb",
+    "hook": "Blunt force bans everything. Precision targets the actual problem.",
+    "plain": "A cudgel is heavy regulation that restricts broadly because it's easier than thinking. A scalpel is precise policy that separates dangerous from safe, allowing progress where risk is low. The gap between them reveals how well a regulator understands what they're regulating.",
+    "analogy": "Banning all knives versus requiring a license for selling to minors.",
+    "prompt": "Think of a rule at your company that punishes everyone because one person messed up.",
+    "collection_id": 522,
+    "timestamp": null,
+    "editors_pick": false,
+    "related_ids": [
+      70,
+      395,
+      42,
+      313,
+      158
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 9,
+      "actionability": 7,
+      "novelty": 7,
+      "conversation_value": 9,
+      "composite": 8
+    },
+    "curated_collection_ids": [
+      201
+    ],
+    "airtable_id": "rec4iSMWIO1kUDqy3",
+    "published_at": "2026-07-27T09:50:55.453Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 734,
+    "term": "Spillover Effects",
+    "category": "thinking",
+    "source": "sb",
+    "hook": "Getting better at one thing makes you better at things you weren't even practicing.",
+    "plain": "Skills developed in one domain improve performance in adjacent areas without direct effort. Learning to code makes you better at structured thinking. Studying philosophy sharpens argumentation. The insight matters because it means investing in one capability often yields multiple returns.",
+    "analogy": "Training for a marathon improves your hiking, cycling, and mental toughness for free.",
+    "prompt": "Name a skill you learned for one reason that unexpectedly helped somewhere else.",
+    "collection_id": 522,
+    "timestamp": null,
+    "editors_pick": false,
+    "related_ids": [
+      41,
+      505,
+      529,
+      136,
+      470
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 7,
+      "novelty": 6,
+      "conversation_value": 7,
+      "composite": 7
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "rec69Ubf6E0IfFaIN",
+    "published_at": "2026-07-27T09:50:55.453Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 735,
+    "term": "Safety Case",
+    "category": "thinking",
+    "source": "sb",
+    "hook": "Every high-stakes move needs documented proof it won't fail.",
+    "plain": "A written argument explaining why a risky action is safe enough to take. Not a guess or good intention. You walk through the failure modes, show how you've addressed them, and explain why catastrophic outcomes are unlikely. Standard in engineering. Rare everywhere else.",
+    "analogy": "The pre-flight checklist pilots run before takeoff, written down and verified.",
+    "prompt": "What's the riskiest decision your team made this year without writing down why it was safe?",
+    "collection_id": 522,
+    "timestamp": null,
+    "editors_pick": false,
+    "related_ids": [
+      107,
+      18,
+      697,
+      155,
+      360
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 9,
+      "novelty": 8,
+      "conversation_value": 8,
+      "composite": 8.3
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "rec6AUdiXfuyyaNeK",
+    "published_at": "2026-07-27T09:50:55.453Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 736,
+    "term": "Citizens Dividend",
+    "category": "finance",
+    "source": "sb",
+    "hook": "When robots take the jobs, everyone gets paid from taxing the robots.",
+    "plain": "Everyone owns a slice of the automation economy. When companies use robots or AI, they pay a fee - and that money gets split among all citizens as a regular check. The more automation grows, the bigger your check.",
+    "analogy": "Alaska's oil dividend, but for AI instead of petroleum.",
+    "prompt": "If automation took half the jobs in your country, how should displaced workers survive?",
+    "collection_id": 522,
+    "timestamp": null,
+    "editors_pick": false,
+    "related_ids": [
+      28,
+      328,
+      348,
+      265,
+      696
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 6,
+      "actionability": 6,
+      "novelty": 8,
+      "conversation_value": 8,
+      "composite": 7
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "rec6lriBXsu04IEPu",
+    "published_at": "2026-07-27T09:50:55.453Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 737,
+    "term": "Pre-training vs Fine-tuning",
+    "category": "tech-ai",
+    "source": "sb",
+    "hook": "Pre-training builds the brain, fine-tuning teaches the skill.",
+    "plain": "Pre-training teaches an AI general patterns by predicting text. Fine-tuning specializes it for tasks like coding or conversation. First one builds the foundation, second one adapts it. Distinction matters because pre-training costs billions, fine-tuning costs thousands.",
+    "analogy": "General education versus apprenticeship.",
+    "prompt": "Name one thing you're good at that required years of general learning before you could specialize.",
+    "collection_id": 522,
+    "timestamp": null,
+    "editors_pick": false,
+    "related_ids": [
+      152,
+      505,
+      514,
+      149,
+      716
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 7,
+      "actionability": 6,
+      "novelty": 7,
+      "conversation_value": 7,
+      "composite": 6.8
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "rec7Hg18uAbOox0KH",
+    "published_at": "2026-07-27T09:50:55.453Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 738,
+    "term": "Safety vs Capabilities",
+    "category": "thinking",
+    "source": "sb",
+    "hook": "Racing to make it powerful versus pausing to make it safe.",
+    "plain": "Two competing priorities when building anything high-stakes. Capabilities research makes the system more powerful. Safety research makes it more controllable. Companies race on capabilities to beat competitors, then scramble on safety when regulators notice. The gap between them is the danger zone.",
+    "analogy": "Building faster cars versus inventing better brakes.",
+    "prompt": "Think of a project where you prioritized shipping over security because of a deadline.",
+    "collection_id": 522,
+    "timestamp": null,
+    "editors_pick": false,
+    "related_ids": [
+      17,
+      23,
+      242,
+      320,
+      697
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 7,
+      "novelty": 7,
+      "conversation_value": 8,
+      "composite": 7.5
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recARrmAYgEF7GiLd",
+    "published_at": "2026-07-27T09:50:55.453Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 739,
+    "term": "Warning Shot",
+    "category": "thinking",
+    "source": "sb",
+    "hook": "The disaster that scares people into fixing the system before the real one hits.",
+    "plain": "An early failure that's bad enough to force action but not catastrophic. A warning shot gives you time to regulate, redesign, or retreat before the final version of the problem arrives. The danger is when you need the warning but it never comes.",
+    "analogy": "The kitchen fire that makes you buy a smoke detector before the house burns down.",
+    "prompt": "Think of a time you ignored small failures until one finally got big enough to scare you.",
+    "collection_id": 522,
+    "timestamp": null,
+    "editors_pick": false,
+    "related_ids": [
+      36,
+      255,
+      77,
+      107,
+      697
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 7,
+      "novelty": 7,
+      "conversation_value": 8,
+      "composite": 7.5
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recDmqihoi8v28Fqi",
+    "published_at": "2026-07-27T09:50:55.453Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 740,
+    "term": "Post-hoc Principles",
+    "category": "thinking",
+    "source": "sb",
+    "hook": "Every organization claims principles. Most just justify what they already wanted.",
+    "plain": "Rationalization dresses up decisions you've already made. Guiding principles shape decisions before you make them. The gap between the two shows whether stated values actually constrain behavior or just explain it after the fact.",
+    "analogy": "Rationalization writes the mission statement after building the product.",
+    "prompt": "Name a decision where you picked the outcome first, then found reasons it was right.",
+    "collection_id": 522,
+    "timestamp": null,
+    "editors_pick": false,
+    "related_ids": [
+      3,
+      19,
+      588,
+      56,
+      643
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 9,
+      "actionability": 7,
+      "novelty": 6,
+      "conversation_value": 8,
+      "composite": 7.5
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recFdyjRSTAX0CrHX",
+    "published_at": "2026-07-27T09:50:55.453Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 741,
+    "term": "Power-seeking Incentives",
+    "category": "power",
+    "source": "sb",
+    "hook": "Money's fine. Control's better. The real game is who gets to decide.",
+    "plain": "When leaders care more about influence and autonomy than profit. Explains why tech CEOs race each other even when they're already rich. Not greed. Fear that if the other guy wins, he makes the rules. Applies beyond tech to any competitive domain with high stakes.",
+    "analogy": "Running for office when you could retire. It's not about the salary.",
+    "prompt": "Think of someone who turned down more money to keep more control. What were they protecting?",
+    "collection_id": 522,
+    "timestamp": null,
+    "editors_pick": false,
+    "related_ids": [
+      8,
+      39,
+      42,
+      56,
+      326
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 7,
+      "novelty": 7,
+      "conversation_value": 8,
+      "composite": 7.5
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recIyZQQb0eg5vNNv",
+    "published_at": "2026-07-27T09:50:55.453Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 742,
+    "term": "Economic vs Political Power",
+    "category": "power",
+    "source": "sb",
+    "hook": "Money buys things. Political power decides what's for sale.",
+    "plain": "Having income versus having influence. When workers lose jobs to automation, they lose both. No salary means no consumption. But also, no labor means no leverage. Governments don't need voters who don't contribute economically. The second loss is quieter and deadlier.",
+    "analogy": "Going on strike has power because it stops production. Unemployed people can't strike.",
+    "prompt": "What gives you more leverage at work: your salary or your ability to quit?",
+    "collection_id": 522,
+    "timestamp": null,
+    "editors_pick": false,
+    "related_ids": [
+      8,
+      42,
+      297,
+      712,
+      726
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 7,
+      "novelty": 8,
+      "conversation_value": 9,
+      "composite": 8
+    },
+    "curated_collection_ids": [
+      201
+    ],
+    "airtable_id": "recJs3qLlAxzXt9Ou",
+    "published_at": "2026-07-27T09:50:55.453Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 743,
+    "term": "Automation of Ai Research",
+    "category": "tech-ai",
+    "source": "sb",
+    "hook": "The milestone that changes everything: AI building the next AI.",
+    "plain": "When AI systems can do the full research loop to improve themselves without human scientists. Not just writing code. Designing experiments, analyzing results, proposing architectures. Once achieved, progress stops depending on human speed. The recursive loop begins.",
+    "analogy": "A car factory that designs and builds better car factories.",
+    "prompt": "What's the most valuable task in your job that nobody's automated yet?",
+    "collection_id": 522,
+    "timestamp": null,
+    "editors_pick": false,
+    "related_ids": [
+      323,
+      584,
+      41,
+      1,
+      340
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 6,
+      "actionability": 6,
+      "novelty": 9,
+      "conversation_value": 8,
+      "composite": 7.3
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recKDJxiUBqE7j58B",
+    "published_at": "2026-07-27T09:50:55.453Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 744,
+    "term": "Mechanistic Interpretability",
+    "category": "tech-ai",
+    "source": "sb",
+    "hook": "Opening the black box to see how AI makes decisions, connection by connection.",
+    "plain": "The field trying to reverse-engineer neural networks by studying their internal structure. Not just testing outputs. Actually mapping which parts activate for which inputs and why. Still early and hard. Success would mean understanding AI decisions instead of guessing.",
+    "analogy": "Dissecting a brain to understand thought versus just watching behavior.",
+    "prompt": "What's a decision-making process in your organization that nobody can explain, only observe?",
+    "collection_id": 522,
+    "timestamp": null,
+    "editors_pick": false,
+    "related_ids": [
+      330,
+      574,
+      576,
+      686,
+      714
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 5,
+      "actionability": 5,
+      "novelty": 9,
+      "conversation_value": 7,
+      "composite": 6.5
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recNmliyGpUhLAZoM",
+    "published_at": "2026-07-27T09:50:55.453Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 745,
+    "term": "Timelines (ai Forecasting)",
+    "category": "thinking",
+    "source": "sb",
+    "hook": "Not when it happens. When you think it happens. The forecast itself.",
+    "plain": "Your predicted date for a major milestone, with uncertainty intervals. Saying your timelines shortened means you now think something will happen sooner. Precise vocabulary in forecasting communities. Separates the prediction from the event.",
+    "analogy": "A weather forecast is the prediction, not the storm itself.",
+    "prompt": "Pick a change coming to your industry. Give it a probability of arriving before 2027.",
+    "collection_id": 522,
+    "timestamp": null,
+    "editors_pick": false,
+    "related_ids": [
+      242,
+      590,
+      616,
+      77,
+      697
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 7,
+      "actionability": 7,
+      "novelty": 7,
+      "conversation_value": 7,
+      "composite": 7
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recPgzhq06Brsffp7",
+    "published_at": "2026-07-27T09:50:55.453Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 746,
+    "term": "Total Research Transparency",
+    "category": "power",
+    "source": "sb",
+    "hook": "Publish every recipe. Kill the monopoly. Let the whole field catch up.",
+    "plain": "A regulatory approach requiring companies to publish all methods for training advanced systems. Recipes, architectures, data sources, everything. Sacrifices competitive advantage to accelerate safety research and prevent one actor from controlling critical technology. Commodifies instead of monopolizes.",
+    "analogy": "Forcing Coca-Cola to publish the secret formula.",
+    "prompt": "What's one process at your company that would lose all value if made public?",
+    "collection_id": 522,
+    "timestamp": null,
+    "editors_pick": false,
+    "related_ids": [
+      49,
+      70,
+      144,
+      395,
+      587
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 7,
+      "actionability": 6,
+      "novelty": 8,
+      "conversation_value": 8,
+      "composite": 7.3
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recRXR5Gx5fQYOqnN",
+    "published_at": "2026-07-27T09:50:55.453Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 747,
+    "term": "Bootstrapping Power",
+    "category": "power",
+    "source": "sb",
+    "hook": "Use the first bit of power to get more power. Loop until unstoppable.",
+    "plain": "The feedback loop where small advantages compound into control. Win the first election, change the rules to help you win the next. Build the first AI, use it to build better AI faster. The mechanism explains how temporary leads become permanent dominance.",
+    "analogy": "Using early profits to buy out competitors, then raising prices once they're gone.",
+    "prompt": "Think of an advantage you have now that helps you maintain or grow that advantage.",
+    "collection_id": 522,
+    "timestamp": null,
+    "editors_pick": false,
+    "related_ids": [
+      1,
+      41,
+      42,
+      164,
+      326
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 7,
+      "novelty": 7,
+      "conversation_value": 8,
+      "composite": 7.5
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recWKyx8oFqw7O9bQ",
+    "published_at": "2026-07-27T09:50:55.453Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 748,
+    "term": "Political vs Technical Question",
+    "category": "thinking",
+    "source": "sb",
+    "hook": "Some problems have solutions. Others have stakeholders.",
+    "plain": "A technical question has a correct answer you can engineer. A political question has competing interests you must balance. The distinction matters because treating a political problem like a technical one wastes time, and treating a technical problem like a political one wastes money.",
+    "analogy": "Building a bridge is technical. Deciding where to put it is political.",
+    "prompt": "Name a workplace fight that looked like a technical debate but was really about power.",
+    "collection_id": 522,
+    "timestamp": null,
+    "editors_pick": false,
+    "related_ids": [
+      8,
+      42,
+      56,
+      70,
+      712
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 9,
+      "actionability": 8,
+      "novelty": 7,
+      "conversation_value": 9,
+      "composite": 8.3
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "recWbZu3gILFsmPH5",
+    "published_at": "2026-07-27T09:50:55.453Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 749,
+    "term": "Commoditize vs Monopolize",
+    "category": "business",
+    "source": "sb",
+    "hook": "Transparency makes competitors equal. Secrecy creates winners.",
+    "plain": "Commoditizing spreads capability widely, lowering prices and margins. Monopolizing concentrates capability, protecting profits and control. Every business strategy picks one. Regulation can force commoditization by requiring companies to share methods, leveling the field but killing individual advantage.",
+    "analogy": "Publishing your recipe versus guarding it as a trade secret.",
+    "prompt": "What's one competitive advantage your company has that would vanish if forced to share it publicly?",
+    "collection_id": 522,
+    "timestamp": null,
+    "editors_pick": false,
+    "related_ids": [
+      23,
+      119,
+      121,
+      334,
+      636
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 7,
+      "novelty": 6,
+      "conversation_value": 8,
+      "composite": 7.3
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recXBhRwylbQ1kMsl",
+    "published_at": "2026-07-27T09:50:55.453Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 750,
+    "term": "Alignment Problem",
+    "category": "thinking",
+    "source": "sb",
+    "hook": "Making something smarter than you want the same things you want.",
+    "plain": "The challenge of ensuring a powerful system shares your goals and values, not just follows orders. Applies to AI, employees, children, or institutions. Hard because you can't just tell something what to want. Incentives, culture, and training shape goals over time.",
+    "analogy": "Raising a kid to have good values versus just obedience.",
+    "prompt": "Think of someone on your team whose incentives don't match the company's goals. What happens?",
+    "collection_id": 522,
+    "timestamp": null,
+    "editors_pick": false,
+    "related_ids": [
+      42,
+      56,
+      241,
+      469,
+      712
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 7,
+      "novelty": 8,
+      "conversation_value": 8,
+      "composite": 7.8
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recXRngmMg1sCjvv9",
+    "published_at": "2026-07-27T09:50:55.453Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 751,
+    "term": "Neural Net vs Code",
+    "category": "tech-ai",
+    "source": "sb",
+    "hook": "Software you can read. Neural nets you can only run and hope.",
+    "plain": "Traditional software is instructions a human wrote. You can audit every line. A neural net is millions of learned connections. Nobody wrote them. They emerged from training. This means you can't inspect an AI's decision-making the way you inspect code.",
+    "analogy": "Recipe you wrote down versus skills you learned by doing, stored in muscle memory.",
+    "prompt": "Think of a skill you have but couldn't write step-by-step instructions for.",
+    "collection_id": 522,
+    "timestamp": null,
+    "editors_pick": false,
+    "related_ids": [
+      574,
+      330,
+      576,
+      581,
+      686
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 6,
+      "actionability": 6,
+      "novelty": 9,
+      "conversation_value": 8,
+      "composite": 7.3
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recYPAwY807yImRrl",
+    "published_at": "2026-07-27T09:50:55.453Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 752,
+    "term": "Recursive Self-improvement",
+    "category": "tech-ai",
+    "source": "sb",
+    "hook": "The scariest loop starts when the thing building itself becomes what it's building.",
+    "plain": "When a system can improve itself, each improvement makes the next improvement faster. An AI that writes better code to train better AIs creates a feedback loop where progress compounds. Unlike human-driven improvement, there's no biological speed limit on how fast this cycle runs.",
+    "analogy": "Teaching a student to teach themselves, who then teaches better students to teach even better.",
+    "prompt": "Name a skill where getting better at it made you better at getting better at it.",
+    "collection_id": 522,
+    "timestamp": null,
+    "editors_pick": true,
+    "related_ids": [
+      41,
+      77,
+      340,
+      584,
+      323
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 6,
+      "novelty": 9,
+      "conversation_value": 9,
+      "composite": 8
+    },
+    "curated_collection_ids": [
+      206
+    ],
+    "airtable_id": "recYXZUZH02Xf2jgV",
+    "published_at": "2026-07-27T09:50:55.453Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 753,
+    "term": "The Button Question",
+    "category": "thinking",
+    "source": "sb",
+    "hook": "If you could stop something forever, would you? The answer reveals your real priorities.",
+    "plain": "A thought experiment that tests commitment by making a decision permanent. Pressing the button removes all future optionality. Useful for exposing whether someone wants reform or elimination, whether they're truly afraid or just complaining, whether they trust future solutions or demand action now.",
+    "analogy": "Delete this technology permanently or keep trying to control it?",
+    "prompt": "Name something you complain about constantly but wouldn't actually eliminate if given the chance.",
+    "collection_id": 522,
+    "timestamp": null,
+    "editors_pick": false,
+    "related_ids": [
+      33,
+      704,
+      64,
+      719,
+      728
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 7,
+      "novelty": 8,
+      "conversation_value": 9,
+      "composite": 8
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "recbBQElfPM5WeaHf",
+    "published_at": "2026-07-27T09:50:55.453Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 754,
+    "term": "Intelligence Explosion",
+    "category": "tech-ai",
+    "source": "sb",
+    "hook": "Once AI can improve itself, progress stops being gradual and starts being sudden.",
+    "plain": "The rapid acceleration when systems cross the threshold of being able to meaningfully improve themselves. Each generation is smarter than the last, shortening the time to the next. Goes from linear progress to exponential to nearly vertical in months.",
+    "analogy": "Compound interest hitting the hockey stick part of the curve.",
+    "prompt": "Name something in your life that started slow, then suddenly took off faster than you expected.",
+    "collection_id": 522,
+    "timestamp": null,
+    "editors_pick": false,
+    "related_ids": [
+      1,
+      41,
+      77,
+      340,
+      616
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 7,
+      "actionability": 6,
+      "novelty": 9,
+      "conversation_value": 8,
+      "composite": 7.5
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "rech0aaQHy0LQR6b9",
+    "published_at": "2026-07-27T09:50:55.453Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 755,
+    "term": "Inference vs Training",
+    "category": "tech-ai",
+    "source": "sb",
+    "hook": "Using AI is inference. Building better AI is training. One's allowed, one's banned.",
+    "plain": "Inference means running an existing AI to get answers or complete tasks. Training means creating or improving the AI itself, making it smarter or more capable. The distinction matters for regulation because you can freeze progress by banning training while still letting people use current systems.",
+    "analogy": "Driving a car versus building a faster car in your garage.",
+    "prompt": "If regulators banned all new AI training tomorrow, how would your work change?",
+    "collection_id": 522,
+    "timestamp": null,
+    "editors_pick": false,
+    "related_ids": [
+      262,
+      320,
+      323,
+      572,
+      584
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 6,
+      "actionability": 7,
+      "novelty": 8,
+      "conversation_value": 7,
+      "composite": 7
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "rechi9PNYGsTABzQC",
+    "published_at": "2026-07-27T09:50:55.453Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 756,
+    "term": "Default Trajectory",
+    "category": "thinking",
+    "source": "sb",
+    "hook": "Most futures aren't chosen. They're what happens when no one intervenes.",
+    "plain": "The path a situation takes if nobody acts to change it. Not a prediction, but the baseline you're working against. Useful for separating what you want to happen from what probably will happen without effort.",
+    "analogy": "A river flows downhill by default. Redirecting it requires a dam.",
+    "prompt": "What's the default trajectory of your current job if you change nothing for two years?",
+    "collection_id": 522,
+    "timestamp": null,
+    "editors_pick": false,
+    "related_ids": [
+      74,
+      242,
+      588,
+      697,
+      728
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 9,
+      "actionability": 8,
+      "novelty": 7,
+      "conversation_value": 8,
+      "composite": 8
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "recu09eHaEKMFEN9q",
+    "published_at": "2026-07-27T09:50:55.453Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 757,
+    "term": "Loss of Control Scenario",
+    "category": "power",
+    "source": "sb",
+    "hook": "You built something smarter than you. Now it doesn't need permission.",
+    "plain": "When a system becomes powerful enough that its creators can't constrain it. Not rebellion. Just the point where enforcement stops working because the thing you're trying to control is better at strategy, evasion, or leverage than you are. Applies to institutions, AI, teenagers.",
+    "analogy": "Raising a kid who eventually becomes stronger, richer, and smarter than you.",
+    "prompt": "Think of something you created or trained that eventually stopped needing your input.",
+    "collection_id": 522,
+    "timestamp": null,
+    "editors_pick": false,
+    "related_ids": [
+      8,
+      42,
+      241,
+      319,
+      638
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 7,
+      "actionability": 6,
+      "novelty": 8,
+      "conversation_value": 8,
+      "composite": 7.3
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recxdk3wtvZmPlfGu",
+    "published_at": "2026-07-27T09:50:55.453Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 758,
+    "term": "Talent Density",
+    "category": "business",
+    "source": "sb",
+    "hook": "Anthropic beat OpenAI with less money. Difference was talent per person, not headcount.",
+    "plain": "The average capability of people in an organization, not the total. A team of 20 experts often outperforms 200 mediocrities because coordination costs scale with headcount but output scales with skill. Hiring for density means saying no to adequate people.",
+    "analogy": "Navy SEAL team versus a battalion of recruits.",
+    "prompt": "If you could only keep half your team, which half would you choose and why?",
+    "collection_id": 522,
+    "timestamp": null,
+    "editors_pick": false,
+    "related_ids": [
+      117,
+      191,
+      334,
+      625,
+      729
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 9,
+      "actionability": 8,
+      "novelty": 6,
+      "conversation_value": 8,
+      "composite": 7.8
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recyCOmxrj1xOCuPf",
+    "published_at": "2026-07-27T09:50:55.453Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 759,
+    "term": "Smeared Probability",
+    "category": "thinking",
+    "source": "sb",
+    "hook": "A forecast isn't one date. It's uncertainty spread across a range.",
+    "plain": "Instead of saying something happens in 2030, you assign probabilities across multiple years. 20% chance by 2028, 50% by 2030, 80% by 2032. The distribution shows both your best guess and your confidence. Precise but honest forecasting requires this.",
+    "analogy": "Weather saying 40% chance of rain versus insisting it will rain at 3pm.",
+    "prompt": "Pick a goal with a deadline. Now assign probabilities to finishing early, on time, or late.",
+    "collection_id": 522,
+    "timestamp": null,
+    "editors_pick": false,
+    "related_ids": [
+      2,
+      242,
+      590,
+      616,
+      697
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 7,
+      "actionability": 8,
+      "novelty": 8,
+      "conversation_value": 7,
+      "composite": 7.5
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "reczi8Iomp72nwp5L",
+    "published_at": "2026-07-27T09:50:55.453Z",
+    "extraction_prompt_version": null
   }
 ]
