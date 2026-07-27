@@ -1,16 +1,13 @@
-# Cowork Default Instructions — Epistemic
-# v1.1 — live, 2026-07-03. Supersedes docs/master-session-prompt.md (now a
-# pointer to this file). Canonical session-protocol doc — edit here only.
-# v1.1 change: session-type branch moved before the doc-read step. Editorial
-# sessions no longer read the 5 style guides or the build-tracking docs
-# (changelog/roadmap/build-journal) by default — those were pure token cost
-# with no effect on editorial output, since concept-rewrite-prompt.md's
-# quick-reference is the actual working rule set and build docs track
-# site features, not concept content. Kept ONE file rather than splitting
-# into build/editorial variants — see "Why this exists" below; a split
-# would recreate the exact drift problem this file was built to kill,
-# since git-lock fixes, commit format, and communication style are
-# identical for both session types.
+# Epistemic — Build & Editorial Session Protocol
+# v1.2 — 2026-07-27. Supersedes docs/master-session-prompt.md.
+# v1.1 change: session-type branch before doc-read step; editorial sessions
+# no longer read 5 style guides by default.
+# v1.2 change: added engineering-standards.md reference; added mandatory doc
+# update rule; added session-plan requirement for HIGH-risk builds; added
+# three critical rules (A/B/C); improved communication rules; renamed from
+# "Cowork Default Instructions" to "Epistemic — Build & Editorial Session
+# Protocol" to avoid confusion with the Life OS session protocol.
+# Invocation: "Use cowork-default-instructions.md" — unchanged.
 
 ## Why this exists
 
@@ -23,23 +20,17 @@ point (whether Cowork can commit directly) as of 2026-07-02, and got fixed
 that session. This doc is the fix: one canonical session-protocol doc,
 everything else points to it instead of copying it.
 
-## Where each rule lives (so future edits touch the right file)
+## Where each rule lives
 
-- **What the product is** (schema, stack, design tokens, business context)
-  → Claude Project Instructions field (Claude.ai project settings). Static,
-  auto-injected every session in this Project. Never needs pasting.
-- **How Claude should work this session** (protocol, risk-gating, commit
-  workflow, git lock fixes) → this file. Single copy.
-- **Default performance rules for new UI/animation work** → Step 2a in this
-  file. Single copy — don't duplicate into build-journal.md or elsewhere.
-- **Lessons from past sessions** (bugs, gotchas, non-obvious fixes) →
-  build-journal.md's `## Entries` section only. Its "Standing Rules" block
-  is now just a two-line pointer back here — don't re-expand it.
-- **Editorial rewrite workflow** (field rules, self-check, batch logging)
-  → concept-rewrite-prompt.md. References this file for git mechanics
-  instead of restating them.
-- **What shipped, version by version** → changelog.md.
-- **What's next / done** → roadmap.md.
+- **Product identity** (schema, stack, design tokens, business context) → Claude Project Instructions. Auto-injected every session.
+- **Session protocol** (this file) → single copy. Everything else points here.
+- **CSS/JS/animation/mobile/pre-commit rules** → `docs/engineering-standards.md`. Read every build session.
+- **Colors, fonts, spacing, component specs** → `docs/design-tokens.md`.
+- **Data schemas, localStorage keys, state machines** → `docs/architecture.md`.
+- **Lessons/gotchas from past sessions** → `docs/build-journal.md` Entries only.
+- **Editorial rewrite workflow** → `docs/concept-rewrite-prompt.md`.
+- **Version log** → `docs/changelog.md`.
+- **What's next** → `docs/roadmap.md`.
 
 ## Invocation
 
@@ -80,7 +71,8 @@ read — don't read both branches' docs "just in case."
 
 - **Build session** → feature/bug work on the live site.
   Read in parallel: `docs/changelog.md` (top 30 lines), `docs/roadmap.md`
-  (Next Up section), `docs/build-journal.md` (Entries — latest one only).
+  (Next Up section), `docs/build-journal.md` (Entries — latest one only),
+  `docs/engineering-standards.md` (all — apply every build session).
   State in one line: files read + current version. Proceed to Step 2.
 
 - **Editorial session** → concept rewrites. Read ONLY:
@@ -105,17 +97,50 @@ read — don't read both branches' docs "just in case."
   inherit Step 0 and Steps 4/6 from here rather than restating them. Skip
   Step 2/3/5 below, they're build-session-only.
 
+## Three rules that break everything if skipped
+
+**A — Edit tool only for file content. Never Python for string replacement.**
+If Edit can't match a string, widen `old_string` until it's unique. Python only for: `node --check`, reading line numbers, byte-level fixes.
+
+**B — Targeted edits only. No full-file rewrites.**
+Read live file → targeted Edit calls → present result. Never paste full file content or find-and-replace blocks into chat.
+
+**C — Docs before closing the session. Non-negotiable.**
+See `⚠️ DOC UPDATES` section below. Every build commit triggers it.
+
+---
+
 ## Step 2 — action plan (build sessions)
 
-- Numbered phases, merged where sensible. Rate each LOW / MEDIUM / HIGH
-  risk. Explicit approval required before touching code — for HIGH risk
-  phases always; for LOW/MEDIUM, pick the most conservative valid
-  approach and flag it rather than asking.
+- Numbered phases, merged where sensible. Rate each LOW / MEDIUM / HIGH risk.
+- HIGH risk phases: write `docs/session-plan.md` (see below) and get explicit approval before touching code.
+- LOW/MEDIUM: pick most conservative valid approach and flag it — don't ask.
 - Flag design/architecture risk before touching anything, not after.
-- Match existing branding/patterns exactly unless told otherwise.
-- Any new animation, hover effect, or bulk-render feature must default to
-  the Performance Standing Rules below — don't wait for a future audit to
-  catch it.
+- Match existing tokens/patterns exactly unless told otherwise.
+- Any new animation, hover, or bulk-render feature must follow `docs/engineering-standards.md` performance rules by default.
+- Mark anything needing Gergely's action: **[ACTION]**
+
+### Session plan for HIGH-risk builds
+
+When a phase is rated HIGH, write `docs/session-plan.md` before any code:
+```
+## Goal
+One sentence: what this build achieves.
+
+## States
+All states this feature has (IDLE → LOADING → X → ERROR). What triggers each.
+
+## Dependencies
+Which data structures are read/written. Which other panels/functions are affected.
+
+## Phases
+1. [phase description] [RISK: HIGH]
+2. ...
+
+## Rollback
+What to do if phase N fails.
+```
+Delete `session-plan.md` after the commit lands successfully.
 
 ## Step 2a — performance standing rules (build sessions, every new feature)
 
@@ -181,32 +206,42 @@ Body:   - one bullet per change, no prose
 - `unable to unlink tmp_obj_*` in bash output = harmless sandbox
   artifact, not a failure signal.
 
-## Step 5 — end of session (build sessions only)
+## ⚠️ DOC UPDATES — MANDATORY after every build commit. No exceptions.
 
-Editorial sessions do NOT do this step — concept-rewrite-prompt.md and
-autonomous-batch-mode.md have their own end-of-batch bookkeeping
-(rewrite-concepts.json history, rewrite-reports diffs, rewrite-style-log.json)
-and don't touch changelog/roadmap/build-journal or Claude Project Files.
+This is a blocking rule. Do not move to the next task or close the session without completing it. Editorial sessions skip this — they have their own bookkeeping in `concept-rewrite-prompt.md`.
 
-- Update `changelog.md` (new entry at top), `roadmap.md` (move completed
-  → Recently Completed, update Next Up), `build-journal.md` (new lesson
-  at top of Entries only — never touch Standing Rules unless the
-  protocol itself changed).
-- Copy updated docs to Claude Project Files
-  (`/Users/gergelypocs/Downloads/.../Epistemic./Claude Project Files/`)
-  if that folder is connected this session.
-- Tell Gergely: "Click Push origin in GitHub Desktop."
+| Doc | Update when |
+|-----|-------------|
+| `changelog.md` | Every commit — new entry at top |
+| `roadmap.md` | Any item completed or new issue found |
+| `build-journal.md` | Any new recurring trap found — add at top of Entries |
+| `architecture.md` | Any localStorage key, schema, or state machine changed |
+| `design-tokens.md` | Any new component pattern introduced |
+| `engineering-standards.md` | Any new performance rule or gotcha discovered |
 
-## Communication style — applies to every response, every session
+Changelog entry format:
+```markdown
+## vX.XX — YYYY-MM-DD · Area: short title
+### filename.ext
+- **Feature/Fix name:** what changed and why
+- **Root cause (bugs):** what was wrong, not just what was fixed
+```
+
+After docs are updated:
+- **[ACTION]** Tell Gergely: "Click Push origin in GitHub Desktop."
+- Sync updated docs to Claude Project Files if that folder is connected.
+
+## Communication style — every response, every session
 
 - No preamble. Answer starts with the answer.
-- Bullets and numbered phases only. No prose paragraphs.
-- One idea per bullet, nested for depth.
+- Bullets and numbered phases only. No prose paragraphs in build responses.
+- One idea per bullet. Nested bullets for depth.
 - No restating what Gergely said. No summaries he didn't ask for.
-- Plain language, no jargon — explain non-obvious steps like he's never
-  done them before.
-- Say what could go wrong or what he might be missing, unprompted.
+- Say what could go wrong and what might be missing, unprompted.
+- Plain language. Explain non-obvious steps as if he's never done them.
 - Tell him the cheapest way to solve each problem.
+- Mark anything needing his action: **[ACTION]**
+- One feature area per session (e.g. Spark panel and episode drawer are separate). Finish + commit + docs before switching areas.
 
 ## Project Knowledge staleness — known limitation, not a bug
 
