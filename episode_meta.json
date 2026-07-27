@@ -2645,6 +2645,150 @@
         }
       ],
       "dna": {}
+    },
+    "522": {
+      "collection_id": 522,
+      "dna": {},
+      "summary_style": "A",
+      "summary": "Daniel Kokotajlo resigned from OpenAI, walked away from $2 million in equity, and now spends his days forecasting when AI might kill everyone. He's not dramatic about it. He just thinks there's a 70% chance superintelligence goes catastrophically wrong, possibly by 2030, and that most people are asleep to what's coming.\n\nThe conversation centers on recursive self-improvement, the point where AIs train themselves faster than humans can intervene. Kokotajlo argues the default path leads to either loss of control (AIs take over) or concentration of power (a few CEOs control everything). He thinks the race continues.\n\nHe told his wife not to have more kids. He doesn't think his children will join the workforce. By then, he says, it'll all be over.",
+      "sharpest_line": "These powerful CEOs are literally afraid that if the other guy gets there first, he might become dictator.",
+      "tension": "racing to build superintelligence vs. pausing to make it safe",
+      "verdict_listen": [
+        "you've ever wondered if the AI doomers have a point",
+        "you work in tech and pretend alignment isn't your problem",
+        "you're the kind of person who needs to understand the stakes before it's too late"
+      ],
+      "verdict_skip": [
+        "you're certain AI will plateau and none of this matters",
+        "forecasting existential risk sounds like science fiction to you"
+      ],
+      "vocab_vault": [
+        {
+          "word": "recursive self-improvement",
+          "definition": "when a system improves itself, accelerating progress without human limits",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "alignment problem",
+          "definition": "making powerful systems share your values, not just follow orders",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "loss of control scenario",
+          "definition": "when something becomes too powerful for its creators to constrain",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "safety case",
+          "definition": "documented proof a risky action won't cause catastrophic harm",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "intelligence explosion",
+          "definition": "rapid acceleration when AI crosses threshold of self-improvement",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "inference",
+          "definition": "running existing AI to get answers or complete tasks",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "training",
+          "definition": "creating or improving AI itself, making it more capable",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "neural net",
+          "definition": "millions of learned connections, not code humans wrote",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "parameters",
+          "definition": "adjustable weights inside a neural network, like synapses in a brain",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "pre-training",
+          "definition": "teaching AI general patterns by predicting text",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "fine-tuning",
+          "definition": "specializing AI for specific tasks after general learning",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "mechanistic interpretability",
+          "definition": "reverse-engineering neural nets to understand how they decide",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "timelines",
+          "definition": "predicted dates for major milestones, with uncertainty intervals",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "default trajectory",
+          "definition": "path a situation takes if nobody acts to change it",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "rationalization",
+          "definition": "dressing up decisions already made versus principles that guide them",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "warning shot",
+          "definition": "early failure bad enough to force action before catastrophic version",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "scalpel versus cudgel",
+          "definition": "precise regulation targeting problems versus blunt force bans",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "political versus technical question",
+          "definition": "competing interests to balance versus correct answer to engineer",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "posterity versus present",
+          "definition": "prioritizing future generations versus people alive now",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "talent density",
+          "definition": "average capability per person, not total headcount",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "spillover effects",
+          "definition": "skills in one domain improving performance in adjacent areas",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "smeared probability",
+          "definition": "uncertainty distributed across range, not single date prediction",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "citizens dividend",
+          "definition": "universal payment funded by taxing automation companies",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "total research transparency",
+          "definition": "publishing all methods to accelerate safety, sacrificing competitive edge",
+          "timestamp_seconds": null
+        },
+        {
+          "word": "bootstrapping power",
+          "definition": "using initial advantage to compound into control through feedback loops",
+          "timestamp_seconds": null
+        }
+      ]
     }
   }
 }
