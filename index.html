@@ -1948,6 +1948,296 @@
   }
   /* Nav Lexi button — inherits .nav-link base styles, no custom pill */
   .nav-lexicon-emoji { margin-right: 0; }
+
+  /* ── LEXI PANEL — v2.38 ─────────────────────────────────── */
+  /* .lexi-panel covers full viewport — it IS the backdrop.
+     Clicking outside .lexi-panel-inner closes the panel.
+     Same pattern as .conv-overlay. No z-index issues. */
+  .lexi-panel {
+    position: fixed;
+    inset: 0;
+    z-index: 1200;
+    pointer-events: none;
+    background: rgba(0,0,0,0);
+    transition: background 300ms ease;
+  }
+  .lexi-panel.open {
+    pointer-events: all;
+    background: rgba(0,0,0,0.32);
+  }
+  .lexi-panel-inner {
+    position: absolute;
+    top: 0; left: 0;
+    width: 360px;
+    height: 100vh;
+    background: var(--bg);
+    border-right: 0.5px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    transform: translateX(-100%);
+    transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1);
+    overflow: hidden;
+  }
+  .lexi-panel.open .lexi-panel-inner {
+    transform: translateX(0);
+  }
+  /* Header */
+  .lexi-panel-header {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding: 28px 22px 0;
+    flex-shrink: 0;
+  }
+  .lexi-panel-title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 1.35rem;
+    color: var(--text);
+    line-height: 1;
+  }
+  .lexi-panel-subtitle {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    flex: 1;
+  }
+  .lexi-panel-close {
+    background: none; border: none;
+    color: var(--muted);
+    font-size: 0.85rem;
+    cursor: pointer;
+    padding: 4px 6px;
+    transition: color 0.15s;
+    line-height: 1;
+    min-width: 28px; min-height: 28px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .lexi-panel-close:hover { color: var(--text); }
+  /* Actions bar */
+  .lexi-panel-actions {
+    padding: 16px 22px 12px;
+    flex-shrink: 0;
+    border-bottom: 0.5px solid var(--border);
+    min-height: 0;
+  }
+  .lexi-action-primary {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    border-radius: 999px;
+    padding: 9px 18px;
+    cursor: pointer;
+    min-height: 36px;
+    transition: opacity 0.15s;
+  }
+  .lexi-action-primary:hover { opacity: 0.82; }
+  /* Scrollable word list */
+  .lexi-panel-list {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0 0 env(safe-area-inset-bottom, 20px) 0;
+    -webkit-overflow-scrolling: touch;
+  }
+  /* Episode group */
+  .lexi-ep-group { padding: 20px 0 0; }
+  .lexi-ep-group-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 0 22px 8px;
+    border-bottom: 0.5px solid var(--border);
+    margin-bottom: 0;
+  }
+  /* Word row */
+  .lexi-word-row {
+    border-bottom: 0.5px solid var(--border);
+  }
+  .lexi-word-row-top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 13px 22px;
+    cursor: pointer;
+    transition: background 0.15s;
+    min-height: 44px;
+    box-sizing: border-box;
+  }
+  .lexi-word-row-top:hover { background: rgba(255,255,255,0.025); }
+  .lexi-chevron {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    color: var(--muted);
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+    display: inline-block;
+    width: 12px;
+  }
+  .lexi-word-row.expanded .lexi-chevron { transform: rotate(90deg); }
+  .lexi-word-name {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--accent);
+    flex: 1;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .lexi-state-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.52rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 999px;
+    border: 0.5px solid;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+  .lexi-state-new       { color: var(--accent); border-color: rgba(232,213,163,0.3); }
+  .lexi-state-practiced { color: var(--muted2); border-color: var(--border); }
+  .lexi-state-mastered  { color: var(--muted);  border-color: var(--border); opacity: 0.4; }
+  .lexi-remove-x {
+    background: none; border: none;
+    color: var(--muted);
+    font-size: 0.95rem;
+    cursor: pointer;
+    padding: 4px 6px;
+    margin-left: 2px;
+    opacity: 0;
+    transition: opacity 0.15s, color 0.15s;
+    flex-shrink: 0;
+    min-width: 28px; min-height: 44px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .lexi-word-row-top:hover .lexi-remove-x { opacity: 0.5; }
+  .lexi-remove-x:hover { opacity: 1 !important; color: var(--red); }
+  /* Word body accordion — grid pattern */
+  .lexi-word-body {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .lexi-word-row.expanded .lexi-word-body { grid-template-rows: 1fr; }
+  .lexi-word-body-inner {
+    overflow: hidden;
+    padding: 0 22px;
+  }
+  .lexi-word-body-inner-pad {
+    padding-bottom: 16px;
+  }
+  .lexi-word-def {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 300;
+    line-height: 1.6;
+    color: var(--muted2);
+    padding: 4px 0 12px;
+    border-top: 0.5px solid var(--border);
+    margin-top: 0;
+  }
+  /* Sentence blocks inside panel word body */
+  .lexi-word-sentences {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .lexi-word-sent-block {
+    padding: 10px 12px;
+    border-left: 2px solid rgba(232,213,163,0.25);
+    background: rgba(255,255,255,0.018);
+  }
+  .lexi-word-sent-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .lexi-word-sent-text {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 300;
+    line-height: 1.6;
+    color: var(--text);
+  }
+  .lexi-word-gen-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: none;
+    border: 0.5px solid var(--border);
+    color: var(--muted2);
+    border-radius: 999px;
+    padding: 7px 14px;
+    cursor: pointer;
+    margin-bottom: 14px;
+    transition: border-color 0.2s, color 0.2s;
+    min-height: 36px;
+  }
+  .lexi-word-gen-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .lexi-word-gen-btn:disabled { opacity: 0.35; cursor: default; }
+  /* Empty state */
+  .lexi-panel-empty {
+    padding: 48px 22px;
+    text-align: center;
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 300;
+    line-height: 1.7;
+  }
+  .lexi-panel-empty-icon {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    color: rgba(232,213,163,0.2);
+    margin-bottom: 12px;
+  }
+  /* Light mode overrides */
+  [data-theme="light"] .lexi-panel.open { background: rgba(0,0,0,0.18); }
+  [data-theme="light"] .lexi-panel-inner { background: var(--bg); border-right-color: var(--border); }
+  [data-theme="light"] .lexi-word-row-top:hover { background: rgba(0,0,0,0.025); }
+  [data-theme="light"] .lexi-state-new { border-color: rgba(184,134,11,0.3); }
+  [data-theme="light"] .lexi-word-sent-block {
+    border-left-color: rgba(184,134,11,0.3);
+    background: rgba(0,0,0,0.018);
+  }
+  [data-theme="light"] .lexi-remove-x:hover { color: var(--red); }
+  /* Mobile: full-width bottom sheet */
+  @media (max-width: 700px) {
+    .lexi-panel-inner {
+      top: auto; bottom: 0; left: 0;
+      width: 100%;
+      height: 92vh;
+      border-right: none;
+      border-top: 0.5px solid var(--border);
+      border-radius: 14px 14px 0 0;
+      transform: translateY(100%);
+    }
+    .lexi-panel.open .lexi-panel-inner { transform: translateY(0); }
+    .lexi-remove-x { opacity: 0.35; }
+  }
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .lexi-panel      { transition: none; }
+    .lexi-panel-inner { transition: none; }
+    .lexi-word-body  { transition: none; }
+    .lexi-chevron    { transition: none; }
+  }
   /* Mobile: safe-area bottom padding for Lexicon scroll sections */
   @media (max-width: 700px) {
     #lexSavedSection  { padding-bottom: calc(40px + env(safe-area-inset-bottom)); touch-action: pan-y; }
@@ -24301,6 +24591,30 @@ body.corner-panel-open .stories-panel {
 [data-theme="light"] .stories-panel .sp2-story-body { color: var(--text); }
 </style>
 
+<!-- ── LEXI PANEL (v2.38) — left-side slide-in desktop / bottom sheet mobile ── -->
+<!-- #lexiPanel covers full viewport (acts as backdrop); clicking outside inner closes. -->
+<div id="lexiPanel" class="lexi-panel" aria-hidden="true" role="dialog" aria-label="Your vocabulary">
+  <div class="lexi-panel-inner" id="lexiPanelInner">
+
+    <div class="lexi-panel-header">
+      <div class="lexi-panel-title">✦ Lexi</div>
+      <div class="lexi-panel-subtitle" id="lexiPanelCount">0 words</div>
+      <button class="lexi-panel-close" onclick="closeLexiPanel()" aria-label="Close">✕</button>
+    </div>
+
+    <div class="lexi-panel-actions" id="lexiPanelActions">
+      <button class="lexi-action-primary" id="lexiPracticeBtn" onclick="_lexiStartSession()" style="display:none">
+        ▶ Practice <span id="lexiPracticeCount">0</span> words
+      </button>
+    </div>
+
+    <div class="lexi-panel-list" id="lexiPanelList">
+      <!-- Rendered by _lexiRenderPanel() -->
+    </div>
+
+  </div>
+</div>
+
 <div class="conv-overlay" id="convOverlay" role="dialog" aria-modal="true" aria-label="Saved Conversations">
   <div class="conv-panel" id="convPanel">
     <div class="conv-header">
@@ -24628,6 +24942,285 @@ function _convEscHandler(e) {
 var LX_STORE_KEY = 'lll_lexicon_v1';
 var LX_MAX       = 100;
 
+// ── Lexi panel open / close ─────────────────────────────────
+function openLexiPanel() {
+  var panel = document.getElementById('lexiPanel');
+  var inner = document.getElementById('lexiPanelInner');
+  if (!panel) return;
+  panel.setAttribute('aria-hidden', 'false');
+  panel.classList.add('open');
+  _spLockBodyScroll();
+  _lexiRenderPanel();
+  _lexiUpdateBadge();
+  // Panel outer = backdrop; clicking outside inner closes
+  panel.onclick = closeLexiPanel;
+  // Inner panel: stop propagation so clicks inside don't bubble to backdrop
+  if (inner) inner.onclick = function(e) { e.stopPropagation(); };
+  // Esc key
+  document.addEventListener('keydown', _lexiEscHandler);
+}
+
+function closeLexiPanel() {
+  var panel = document.getElementById('lexiPanel');
+  if (!panel) return;
+  panel.classList.remove('open');
+  panel.setAttribute('aria-hidden', 'true');
+  _spUnlockBodyScroll();
+  document.removeEventListener('keydown', _lexiEscHandler);
+}
+
+function _lexiEscHandler(e) {
+  if (e.key === 'Escape') closeLexiPanel();
+}
+
+// ── Panel renderer ───────────────────────────────────────────
+function _lexiRenderPanel() {
+  var listEl    = document.getElementById('lexiPanelList');
+  var countEl   = document.getElementById('lexiPanelCount');
+  var practBtn  = document.getElementById('lexiPracticeBtn');
+  var practCount = document.getElementById('lexiPracticeCount');
+  if (!listEl) return;
+
+  var arr = _lexiconLoadStore();
+  listEl.innerHTML = '';
+
+  // Update header count
+  if (countEl) countEl.textContent = arr.length + (arr.length === 1 ? ' word' : ' words');
+
+  // Show practice button only when there are words to practice
+  var practisable = arr.filter(function(e) { return (e.practiceState || 'new') !== 'mastered'; });
+  if (practBtn) practBtn.style.display = practisable.length > 0 ? '' : 'none';
+  if (practCount) practCount.textContent = practisable.length;
+
+  // Empty state
+  if (!arr.length) {
+    var empty = document.createElement('div');
+    empty.className = 'lexi-panel-empty';
+    var icon = document.createElement('div');
+    icon.className = 'lexi-panel-empty-icon';
+    icon.textContent = 'Aa';
+    var msg = document.createElement('div');
+    msg.textContent = 'Open an episode, tap any shimmering word to save it here.';
+    empty.appendChild(icon);
+    empty.appendChild(msg);
+    listEl.appendChild(empty);
+    return;
+  }
+
+  // Group by episodeTitle
+  var groups = {};
+  var order  = [];
+  arr.forEach(function(entry) {
+    var key = entry.episodeTitle || '__free__';
+    if (!groups[key]) { groups[key] = []; order.push(key); }
+    groups[key].push(entry);
+  });
+
+  order.forEach(function(key) {
+    var groupEl = document.createElement('div');
+    groupEl.className = 'lexi-ep-group';
+
+    var labelEl = document.createElement('div');
+    labelEl.className = 'lexi-ep-group-label';
+    labelEl.textContent = key === '__free__' ? 'Free search' : key;
+    groupEl.appendChild(labelEl);
+
+    groups[key].forEach(function(entry) {
+      groupEl.appendChild(_lexiBuildWordRow(entry));
+    });
+
+    listEl.appendChild(groupEl);
+  });
+}
+
+// ── Build a single collapsible word row ──────────────────────
+function _lexiBuildWordRow(entry) {
+  var row = document.createElement('div');
+  row.className = 'lexi-word-row';
+
+  // ── Top bar (always visible) ──
+  var top = document.createElement('div');
+  top.className = 'lexi-word-row-top';
+
+  var chevron = document.createElement('span');
+  chevron.className = 'lexi-chevron';
+  chevron.setAttribute('aria-hidden', 'true');
+  chevron.textContent = '\u25b8'; // ▸
+
+  var nameEl = document.createElement('span');
+  nameEl.className = 'lexi-word-name';
+  nameEl.textContent = entry.word || '';
+
+  var state = entry.practiceState || 'new';
+  var badge = document.createElement('span');
+  badge.className = 'lexi-state-badge lexi-state-' + state;
+  badge.textContent = state;
+
+  var removeBtn = document.createElement('button');
+  removeBtn.type = 'button';
+  removeBtn.className = 'lexi-remove-x';
+  removeBtn.setAttribute('aria-label', 'Remove ' + (entry.word || ''));
+  removeBtn.textContent = '\u00d7';
+  removeBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    _lexiconRemove(entry.word);
+    // Collapse before removing
+    row.classList.remove('expanded');
+    setTimeout(function() {
+      if (row.parentNode) row.parentNode.removeChild(row);
+      _lexiUpdateBadge();
+      // Re-render if group now empty
+      var listEl = document.getElementById('lexiPanelList');
+      if (listEl && !listEl.querySelector('.lexi-word-row')) _lexiRenderPanel();
+      else {
+        var countEl = document.getElementById('lexiPanelCount');
+        var arr = _lexiconLoadStore();
+        if (countEl) countEl.textContent = arr.length + (arr.length === 1 ? ' word' : ' words');
+      }
+    }, 50);
+  });
+
+  top.appendChild(chevron);
+  top.appendChild(nameEl);
+  top.appendChild(badge);
+  top.appendChild(removeBtn);
+
+  // ── Body accordion ──
+  var body = document.createElement('div');
+  body.className = 'lexi-word-body';
+
+  var inner = document.createElement('div');
+  inner.className = 'lexi-word-body-inner';
+  var pad = document.createElement('div');
+  pad.className = 'lexi-word-body-inner-pad';
+
+  var defEl = document.createElement('div');
+  defEl.className = 'lexi-word-def';
+  defEl.textContent = entry.definition || '';
+  pad.appendChild(defEl);
+
+  var sentsEl = document.createElement('div');
+  sentsEl.className = 'lexi-word-sentences';
+  pad.appendChild(sentsEl);
+
+  inner.appendChild(pad);
+  body.appendChild(inner);
+
+  // ── Toggle on top-bar click ──
+  var _bodyLoaded = false;
+  top.addEventListener('click', function(e) {
+    if (e.target === removeBtn || removeBtn.contains(e.target)) return;
+    var wasExpanded = row.classList.contains('expanded');
+    row.classList.toggle('expanded');
+    if (!wasExpanded && !_bodyLoaded) {
+      _bodyLoaded = true;
+      _lexiLoadSentences(entry, sentsEl);
+    }
+  });
+
+  row.appendChild(top);
+  row.appendChild(body);
+  return row;
+}
+
+// ── Lazy sentence loading ────────────────────────────────────
+function _lexiLoadSentences(entry, sentsEl) {
+  if (!entry || !sentsEl) return;
+
+  var word    = entry.word || '';
+  var defText = entry.definition || '';
+  var wordKey = word.toLowerCase().replace(/\s+/g, '');
+
+  // Already have sentences in localStorage?
+  if (Array.isArray(entry.sentences) && entry.sentences.length) {
+    _lexiRenderSentences(sentsEl, entry.sentences);
+    return;
+  }
+
+  // Session cache?
+  var cacheKey = 'lll_lexicon_session_' + wordKey;
+  var cached = null;
+  try { cached = JSON.parse(sessionStorage.getItem(cacheKey) || 'null'); } catch(e) {}
+  if (cached && Array.isArray(cached.sentences) && cached.sentences.length) {
+    _lexiRenderSentences(sentsEl, cached.sentences);
+    _lexiPersistSentences(word, cached.sentences);
+    return;
+  }
+
+  // Show "Generate examples" button
+  var genBtn = document.createElement('button');
+  genBtn.type = 'button';
+  genBtn.className = 'lexi-word-gen-btn';
+  genBtn.textContent = '✦ Generate examples';
+  genBtn.addEventListener('click', function() {
+    genBtn.disabled = true;
+    genBtn.textContent = 'Generating\u2026';
+    _lexiFetchSentences(word, defText, cacheKey, sentsEl, genBtn);
+  });
+  sentsEl.appendChild(genBtn);
+}
+
+function _lexiFetchSentences(word, defText, cacheKey, sentsEl, genBtn) {
+  var ctrl  = typeof AbortController !== 'undefined' ? new AbortController() : null;
+  var timer = setTimeout(function() { if (ctrl) ctrl.abort(); }, 10000);
+
+  // Skeleton while loading
+  sentsEl.innerHTML = '<div class="lex-skeleton" style="width:85%;margin-bottom:8px"></div><div class="lex-skeleton" style="width:65%"></div>';
+
+  fetch('/api/cs-generate', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ mode: 'lexicon', word: word, definition: defText, context: word }),
+    signal: ctrl ? ctrl.signal : undefined
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    clearTimeout(timer);
+    if (!data || !Array.isArray(data.sentences) || !data.sentences.length) throw new Error('malformed');
+    try { sessionStorage.setItem(cacheKey, JSON.stringify({ sentences: data.sentences })); } catch(e) {}
+    _lexiRenderSentences(sentsEl, data.sentences);
+    _lexiPersistSentences(word, data.sentences);
+  })
+  .catch(function() {
+    clearTimeout(timer);
+    sentsEl.innerHTML = '';
+    if (genBtn) {
+      genBtn.disabled = false;
+      genBtn.textContent = 'Retry';
+      sentsEl.appendChild(genBtn);
+    }
+  });
+}
+
+function _lexiRenderSentences(sentsEl, sentences) {
+  sentsEl.innerHTML = '';
+  sentences.forEach(function(s) {
+    var block = document.createElement('div');
+    block.className = 'lexi-word-sent-block';
+    var lbl = document.createElement('div');
+    lbl.className = 'lexi-word-sent-label';
+    lbl.textContent = (s.label || '').toUpperCase();
+    var txt = document.createElement('div');
+    txt.className = 'lexi-word-sent-text';
+    txt.textContent = s.text || '';
+    block.appendChild(lbl);
+    block.appendChild(txt);
+    sentsEl.appendChild(block);
+  });
+}
+
+function _lexiPersistSentences(word, sentences) {
+  // Update the stored entry with generated sentences
+  var arr = _lexiconLoadStore();
+  arr = arr.map(function(e) {
+    if (e.word.toLowerCase() === word.toLowerCase()) {
+      return Object.assign({}, e, { sentences: sentences });
+    }
+    return e;
+  });
+  try { localStorage.setItem(LX_STORE_KEY, JSON.stringify(arr)); } catch(e) {}
+}
+
 // ── Drawer: tap word to save / unsave ───────────────────────
 function _lexiTapWord(wordText, defText, collectionId, rowEl, wordSpan, wordDiv) {
   var state = rowEl ? (rowEl.dataset.lexState || 'IDLE') : 'IDLE';
@@ -24721,20 +25314,11 @@ function _lexiUpdateBadge() {
   badge.style.display = count > 0 ? '' : 'none';
 }
 
-// ── Open / close ────────────────────────────────────────────
+// ── Open / close (legacy wrapper — delegates to openLexiPanel) ──
 function openLexiconPanel() {
-  _mountCSInPanel();
-  var overlay = document.getElementById('convOverlay');
-  if (overlay) overlay.classList.add('active');
-  document.body.classList.add('cs-panel-open');
-  panelSwitchTab('lexicon');
-  _lexiUpdateBadge();
-  var closeBtn = document.getElementById('convClose');
-  if (closeBtn) closeBtn.onclick = closeLexiconPanel;
-  document.addEventListener('keydown', _convEscHandler);
-  setTimeout(function() {
-    document.addEventListener('click', _convOutsideClickHandler, { capture: true });
-  }, 50);
+  // v2.38: Lexi is now the dedicated left panel. Wrapper kept so existing
+  // call sites (nav btn, mobile nav) continue to work without changes.
+  openLexiPanel();
 }
 
 function closeLexiconPanel() {
@@ -25103,7 +25687,8 @@ function _lexiconSave(word, definition, collectionId, sentences, rowEl) {
   var entry = {
     word: word, definition: definition,
     collectionId: colIdInt, episodeTitle: episodeTitle,
-    sentences: sentences, savedAt: Date.now()
+    sentences: sentences, savedAt: Date.now(),
+    practiceState: 'new', practiceCount: 0, hitCount: 0, lastPracticedAt: null
   };
   arr.unshift(entry);
 
@@ -25132,7 +25717,21 @@ function _lexiconRemove(word) {
 }
 
 function _lexiconLoadStore() {
-  try { return JSON.parse(localStorage.getItem(LX_STORE_KEY) || '[]'); } catch(e) { return []; }
+  var arr;
+  try { arr = JSON.parse(localStorage.getItem(LX_STORE_KEY) || '[]'); } catch(e) { return []; }
+  // Migration: add practice fields to entries saved before v2.40
+  var dirty = false;
+  arr = arr.map(function(e) {
+    if (e.practiceState === undefined) {
+      dirty = true;
+      return Object.assign({}, e, {
+        practiceState: 'new', practiceCount: 0, hitCount: 0, lastPracticedAt: null
+      });
+    }
+    return e;
+  });
+  if (dirty) { try { localStorage.setItem(LX_STORE_KEY, JSON.stringify(arr)); } catch(ex) {} }
+  return arr;
 }
 
 function _lexiconSaveStore(arr) {

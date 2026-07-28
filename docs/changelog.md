@@ -6,6 +6,28 @@
 
 ---
 
+## v2.40 — 2026-07-28 · Lexi Phase 3: practice state fields + migration
+
+### index.html
+- **`_lexiconSave`:** new entries include `practiceState: 'new'`, `practiceCount: 0`, `hitCount: 0`, `lastPracticedAt: null`.
+- **`_lexiconLoadStore`:** runs migration on load — any entry missing `practiceState` gets the four fields added and the store is re-persisted. No user action needed; transparent on next page load.
+
+---
+
+## v2.39 — 2026-07-28 · Lexi Phase 2: left panel — word list, lazy sentences, state badges
+
+### index.html
+- **`#lexiPanel`:** new fixed-position element covering full viewport (same pattern as `.conv-overlay` — panel = backdrop, inner = 360px content). Desktop: slides in from left (`translateX(-100%)→0`). Mobile (≤700px): bottom sheet (`translateY(100%)→0`, 92vh, rounded top corners).
+- **Open/close:** `openLexiPanel()` / `closeLexiPanel()`. Clicking outside `.lexi-panel-inner` closes via `panel.onclick = closeLexiPanel`; inner has `stopPropagation`. Esc key bound via `_lexiEscHandler`. Body scroll lock via `_spLockBodyScroll()` / `_spUnlockBodyScroll()`.
+- **`openLexiconPanel()`** now delegates to `openLexiPanel()` — nav button and mobile nav wiring unchanged.
+- **`_lexiRenderPanel()`:** reads `lll_lexicon_v1`, groups words by `episodeTitle`, renders episode group labels + collapsible word rows. Updates count in header and Practice button count.
+- **`_lexiBuildWordRow(entry)`:** each row has top bar (chevron + word name + state badge + remove ×) and a CSS-grid accordion body. Top bar click toggles `.expanded`; chevron rotates 90°. Remove × uses hover-reveal (always at 0.35 opacity on mobile).
+- **`_lexiLoadSentences(entry, sentsEl)`:** lazy — checks `entry.sentences` then sessionStorage, else shows "✦ Generate examples" button. On click: `_lexiFetchSentences` → API call → `_lexiRenderSentences` → `_lexiPersistSentences`.
+- **State badges:** `.lexi-state-new` (gold), `.lexi-state-practiced` (muted), `.lexi-state-mastered` (faded). Reads `entry.practiceState`, defaults to `'new'`.
+- **Empty state:** illustrated empty panel with Aa glyph and instruction text.
+- **CSS:** all tokens from design-tokens.md, no raw hex. Light-mode overrides, mobile bottom-sheet layout, reduced-motion (all transitions `none`). `align-items: start` pattern not needed (single-column list, not grid).
+- **Performance:** no `backdrop-filter`, no `will-change` in base rules, `.lexi-panel` background transition is a single property on one element.
+
 ## v2.38 — 2026-07-28 · Lexi Phase 1: tap-to-save, fly particle, nav badge
 
 ### index.html
