@@ -1893,6 +1893,59 @@
     min-width: 44px;
   }
   .lex-search-btn:hover { color: var(--accent); border-color: var(--accent); }
+  /* Saved state — shimmer off, checkmark visible */
+  .lexicon-word--saved::after { display: none; }
+  .lexicon-word--saved {
+    opacity: 0.55;
+    text-decoration: none;
+  }
+  .lexi-chip-check {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--accent);
+    opacity: 0.7;
+    margin-left: 3px;
+    pointer-events: none;
+  }
+  /* Nav badge counter */
+  .nav-lexi-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.52rem;
+    background: var(--accent);
+    color: var(--bg);
+    border-radius: 999px;
+    padding: 1px 5px;
+    margin-left: 5px;
+    vertical-align: middle;
+    line-height: 1.7;
+    min-width: 16px;
+    display: inline-block;
+    text-align: center;
+    letter-spacing: 0.02em;
+  }
+  /* Fly particle — word floats to nav on save */
+  .lexi-fly-particle {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 0.88rem;
+    color: var(--accent);
+    white-space: nowrap;
+    opacity: 1;
+    transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1),
+                opacity   420ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  @keyframes lexiBadgePulse {
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.22); }
+    100% { transform: scale(1); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .lexi-fly-particle { transition: none; }
+    .nav-lexi-badge    { animation: none; }
+  }
   /* Nav Lexi button — inherits .nav-link base styles, no custom pill */
   .nav-lexicon-emoji { margin-right: 0; }
   /* Mobile: safe-area bottom padding for Lexicon scroll sections */
@@ -8426,7 +8479,7 @@
     <a class="nav-link nav-spark-btn" onclick="openSparkPanel();playNavSFX()"><span class="nav-spark-emoji">💬</span>Spark</a>
     <a class="nav-link nav-story-btn" onclick="openStoriesPanel();playNavSFX()" style="display:none"><span class="nav-story-emoji">📖</span>Story</a>
     <a class="nav-link nav-corner-nav-btn" onclick="openCornerHistory();playNavSFX()"><span class="nav-corner-emoji">🥊</span>Corner</a>
-    <a class="nav-link nav-lexicon-btn" onclick="openLexiconPanel();playNavSFX()"><span class="nav-lexicon-emoji">Aa</span>Lexi</a>
+    <a class="nav-link nav-lexicon-btn" onclick="openLexiconPanel();playNavSFX()"><span class="nav-lexicon-emoji">Aa</span>Lexi<span class="nav-lexi-badge" id="navLexiBadge" style="display:none">0</span></a>
   </div>
   <!-- v1.71: epic button is now inside nav-right -->
 
@@ -10462,6 +10515,7 @@ async function loadConcepts() {
     render();
     updateProgress();
     updateHeaderCounts();
+    _lexiUpdateBadge();
     initMagneticCards();
     // Scroll-reveal for founder section elements — v2.4
     initScrollReveal('.founder-reveal', document.getElementById('founderText'));
@@ -10558,38 +10612,40 @@ function _renderIntelRow(pillsEl, collectionId, liveDna) {
       row.dataset.lexDef   = defText;
       row.dataset.lexColId = collectionId != null ? String(collectionId) : '';
 
-      // Check if already saved
+      // Check if already in Lexi
       const alreadySaved = !!_lexiconGetSaved(wordText);
       if (alreadySaved) row.dataset.lexState = 'SAVED';
 
       const word = document.createElement('div');
       word.className = 'ep-intel-vocab-word';
+
       const wordSpan = document.createElement('span');
-      wordSpan.className = 'lexicon-word';
+      wordSpan.className = 'lexicon-word' + (alreadySaved ? ' lexicon-word--saved' : '');
       wordSpan.style.setProperty('--shimmer-index', _lexVocabShimmerIdx++);
       wordSpan.textContent = wordText;
+      wordSpan.style.cursor = 'pointer';
       word.appendChild(wordSpan);
+
+      // Checkmark if already in Lexi
+      if (alreadySaved) {
+        const check = document.createElement('span');
+        check.className = 'lexi-chip-check';
+        check.textContent = ' \u2713';
+        word.appendChild(check);
+      }
+
+      // Tap = bookmark into Lexi — no generation in drawer (Lexi v2)
+      wordSpan.addEventListener('click', function(e) {
+        e.stopPropagation();
+        _lexiTapWord(wordText, defText, collectionId, row, wordSpan, word);
+      });
 
       const def = document.createElement('div');
       def.className = 'ep-intel-vocab-def';
       def.textContent = defText;
 
-      // Click the shimmering word to generate/toggle sentences
-      wordSpan.style.cursor = 'pointer';
-      wordSpan.addEventListener('click', function(e) {
-        e.stopPropagation();
-        _lexiconGenerate(wordText, defText, collectionId, row);
-      });
-
-      const sentenceWrap = document.createElement('div');
-      sentenceWrap.className = 'lex-sentence-wrap';
-      const sentenceInner = document.createElement('div');
-      sentenceInner.className = 'lex-sentence-wrap-inner';
-      sentenceWrap.appendChild(sentenceInner);
-
       row.appendChild(word);
       row.appendChild(def);
-      row.appendChild(sentenceWrap);
       return row;
     }
 
@@ -24564,13 +24620,106 @@ function _convEscHandler(e) {
 }
 
 // ============================================================
-// LEXICON — v2.36
-// Vocabulary practice panel: "→ Use it" on episode vocab words
-// generates two natural usage sentences via Claude Haiku.
+// LEXI — v2.38
+// Vocabulary system: tap to save → Lexi panel → practice overlay
+// Phase 1 (v2.38): tap-to-save in drawer, fly particle, nav badge.
 // ============================================================
 
 var LX_STORE_KEY = 'lll_lexicon_v1';
 var LX_MAX       = 100;
+
+// ── Drawer: tap word to save / unsave ───────────────────────
+function _lexiTapWord(wordText, defText, collectionId, rowEl, wordSpan, wordDiv) {
+  var state = rowEl ? (rowEl.dataset.lexState || 'IDLE') : 'IDLE';
+
+  if (state === 'SAVED') {
+    // Unsave
+    _lexiconRemove(wordText);
+    if (rowEl) rowEl.dataset.lexState = 'IDLE';
+    if (wordSpan) wordSpan.classList.remove('lexicon-word--saved');
+    var check = wordDiv ? wordDiv.querySelector('.lexi-chip-check') : null;
+    if (check) check.remove();
+    _lexiUpdateBadge();
+    return;
+  }
+
+  // Save — empty sentences array; generated lazily in the panel later
+  _lexiconSave(wordText, defText, collectionId, [], rowEl);
+  if (rowEl) rowEl.dataset.lexState = 'SAVED';
+  if (wordSpan) wordSpan.classList.add('lexicon-word--saved');
+
+  // Append checkmark
+  if (wordDiv && !wordDiv.querySelector('.lexi-chip-check')) {
+    var chk = document.createElement('span');
+    chk.className = 'lexi-chip-check';
+    chk.textContent = ' \u2713';
+    wordDiv.appendChild(chk);
+  }
+
+  _lexiFlyParticle(wordSpan);
+  _lexiUpdateBadge();
+}
+
+// ── Fly particle: word floats toward nav Lexi button on save ─
+function _lexiFlyParticle(fromEl) {
+  if (!fromEl) return;
+  // Respect prefers-reduced-motion — skip animation entirely
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  var navBtn = document.querySelector('.nav-lexicon-btn');
+  if (!navBtn) return;
+
+  var fromRect = fromEl.getBoundingClientRect();
+  var toRect   = navBtn.getBoundingClientRect();
+
+  var particle = document.createElement('span');
+  particle.className = 'lexi-fly-particle';
+  particle.textContent = fromEl.textContent.trim();
+  particle.style.left = fromRect.left + 'px';
+  particle.style.top  = fromRect.top  + 'px';
+  document.body.appendChild(particle);
+
+  // Two-frame pattern per engineering-standards.md:
+  // set element in DOM in one rAF, start transition in the next.
+  requestAnimationFrame(function() {
+    particle.style.willChange = 'transform, opacity';
+    requestAnimationFrame(function() {
+      var dx = (toRect.left + toRect.width  / 2) - fromRect.left;
+      var dy = (toRect.top  + toRect.height / 2) - fromRect.top;
+      particle.style.transform = 'translate(' + dx + 'px, ' + dy + 'px) scale(0.25)';
+      particle.style.opacity   = '0';
+
+      // Badge pulse timed to land as particle arrives
+      setTimeout(function() {
+        var badge = document.getElementById('navLexiBadge');
+        if (badge) {
+          badge.style.animation = 'none';
+          requestAnimationFrame(function() {
+            badge.style.animation = 'lexiBadgePulse 240ms ease-out';
+            setTimeout(function() { badge.style.animation = ''; }, 240);
+          });
+        }
+      }, 370);
+
+      // Clean up particle + will-change
+      setTimeout(function() {
+        particle.style.willChange = '';
+        if (particle.parentNode) particle.parentNode.removeChild(particle);
+      }, 450);
+    });
+  });
+}
+
+// ── Badge counter on nav Lexi button ────────────────────────
+function _lexiUpdateBadge() {
+  var badge = document.getElementById('navLexiBadge');
+  if (!badge) return;
+  var arr = [];
+  try { arr = JSON.parse(localStorage.getItem(LX_STORE_KEY) || '[]'); } catch(e) {}
+  var count = arr.length;
+  badge.textContent = count;
+  badge.style.display = count > 0 ? '' : 'none';
+}
 
 // ── Open / close ────────────────────────────────────────────
 function openLexiconPanel() {
@@ -24579,6 +24728,7 @@ function openLexiconPanel() {
   if (overlay) overlay.classList.add('active');
   document.body.classList.add('cs-panel-open');
   panelSwitchTab('lexicon');
+  _lexiUpdateBadge();
   var closeBtn = document.getElementById('convClose');
   if (closeBtn) closeBtn.onclick = closeLexiconPanel;
   document.addEventListener('keydown', _convEscHandler);

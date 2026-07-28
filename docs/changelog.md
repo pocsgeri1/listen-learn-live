@@ -6,6 +6,18 @@
 
 ---
 
+## v2.38 — 2026-07-28 · Lexi Phase 1: tap-to-save, fly particle, nav badge
+
+### index.html
+- **Drawer simplified:** `buildVocabCell` no longer creates a sentence accordion or triggers API calls. Tapping a word now saves it instantly to Lexi (one-tap bookmark). Re-tap unsaves (toggle).
+- **Fly particle:** on save, the word text clones as a fixed-position `<span class="lexi-fly-particle">` that translates toward the nav Lexi button over 420ms (`cubic-bezier(0.22,1,0.36,1)`), then disappears. Two-frame rAF pattern per engineering-standards. Skipped entirely when `prefers-reduced-motion: reduce` is set.
+- **Nav badge:** `<span class="nav-lexi-badge" id="navLexiBadge">` counts saved words on the Lexi nav button. Pulses (`lexiBadgePulse` 240ms) when a new word lands. Hidden at 0, updated on save/unsave/page-load/panel-open.
+- **Saved chip state:** `.lexicon-word--saved` disables shimmer (`::after { display:none }`) and reduces opacity. A `.lexi-chip-check ✓` span appended to the word div.
+- **`_lexiTapWord()`:** new function; replaces `_lexiconGenerate` as the drawer tap handler. Saves with empty `sentences: []` (generated lazily in panel).
+- **`_lexiFlyParticle(fromEl)`:** fly animation function; respects reduced-motion.
+- **`_lexiUpdateBadge()`:** reads `lll_lexicon_v1` length, updates badge. Called on page init, panel open, save, unsave.
+- **CSS:** `.lexi-fly-particle`, `.nav-lexi-badge`, `@keyframes lexiBadgePulse`, `.lexicon-word--saved`, `.lexi-chip-check`, reduced-motion overrides. All tokens from design-tokens.md — no raw hex.
+
 ## v2.37 — 2026-07-28 · Lexi UX pass: click-to-generate, auto-save, collapsible panel
 
 ### index.html

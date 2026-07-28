@@ -34,6 +34,12 @@ Claude updates without being asked: changelog.md (new entry at TOP), roadmap.md 
 
 ## Entries
 
+### 2026-07-28 — v2.38: Lexi Phase 1
+
+**Lesson 71 — CSS `animation:none` in a media query cannot override `element.style.animation` set by JS.** `@media (prefers-reduced-motion: reduce) { .nav-lexi-badge { animation: none } }` does nothing when JS later does `badge.style.animation = 'lexiBadgePulse ...'` — inline styles win. The fix: check `window.matchMedia('(prefers-reduced-motion: reduce)').matches` inside the JS function and skip the animation entirely. Applied in `_lexiFlyParticle`: the function returns early when reduced-motion is set, which skips both the particle and the badge pulse.
+
+**Lesson 72 — Clear `will-change` after animation completes.** `particle.style.willChange = 'transform, opacity'` is set right before the transition starts (correct — not in base CSS). But it must also be cleared in the cleanup `setTimeout` before removing the element, otherwise the browser holds the GPU layer open for a brief moment after the element is gone. Added `particle.style.willChange = ''` to the 450ms cleanup.
+
 ### 2026-07-28 — v2.37: Lexi UX pass
 
 **Lesson 69 — Don't cache popover height when content can change post-build.** The original `_popH = popover.offsetHeight` was measured once at build time for perf. With the Lexicon sentence accordion now living inside the popover, that cached height becomes stale the moment a user triggers generation and the accordion opens. Fix: re-read `popover.offsetHeight` at the top of `showPopover()` each time, falling back to `_popH` only if the live read returns 0 (hidden state). One reflow per mouseenter is negligible.
