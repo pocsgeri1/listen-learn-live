@@ -1609,7 +1609,11 @@
   @media (prefers-reduced-motion: reduce) {
     .lexicon-word::after { display: none; }
   }
+  /* .lex-use-btn removed in v2.37 — word chip click triggers generation */
   .lex-use-btn {
+    display: none !important;
+  }
+  .lex-use-btn-LEGACY {
     display: inline-flex;
     align-items: center;
     font-family: 'DM Mono', monospace;
@@ -1674,7 +1678,9 @@
     border-left: 2px solid var(--accent);
     padding-left: 10px;
   }
-  .lex-save-btn {
+  /* .lex-save-btn removed in v2.37 — auto-save on generation */
+  .lex-save-btn { display: none !important; }
+  .lex-save-btn-LEGACY {
     display: inline-flex;
     align-items: center;
     font-family: 'DM Mono', monospace;
@@ -1788,6 +1794,17 @@
     position: relative;
     display: inline-block;
   }
+  .lex-saved-word--toggle::before {
+    content: '▸';
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    opacity: 0.5;
+    margin-right: 5px;
+    display: inline-block;
+    transition: transform 0.2s ease;
+    vertical-align: middle;
+  }
+  .lex-saved-word--expanded::before { transform: rotate(90deg); }
   .lex-saved-word::after {
     content: '';
     position: absolute;
@@ -1876,35 +1893,8 @@
     min-width: 44px;
   }
   .lex-search-btn:hover { color: var(--accent); border-color: var(--accent); }
-  /* Nav Lexicon button */
-  .nav-lexicon-btn {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.68rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--accent);
-    background: rgba(232,213,163,0.06);
-    border: 0.5px solid rgba(232,213,163,0.28);
-    border-radius: 999px;
-    padding: 6px 13px;
-    cursor: pointer;
-    transition: color 0.2s, border-color 0.2s, background 0.2s;
-    white-space: nowrap;
-  }
-  .nav-lexicon-btn:hover {
-    background: rgba(232,213,163,0.12);
-    border-color: var(--accent);
-    color: var(--accent);
-  }
-  [data-theme="light"] .nav-lexicon-btn {
-    background: rgba(184,134,11,0.07);
-    border-color: rgba(184,134,11,0.3);
-  }
-  [data-theme="light"] .nav-lexicon-btn:hover {
-    background: rgba(184,134,11,0.14);
-    border-color: var(--accent);
-  }
-  .nav-lexicon-emoji { margin-right: 5px; font-style: normal; }
+  /* Nav Lexi button — inherits .nav-link base styles, no custom pill */
+  .nav-lexicon-emoji { margin-right: 0; }
   /* Mobile: safe-area bottom padding for Lexicon scroll sections */
   @media (max-width: 700px) {
     #lexSavedSection  { padding-bottom: calc(40px + env(safe-area-inset-bottom)); touch-action: pan-y; }
@@ -8436,7 +8426,7 @@
     <a class="nav-link nav-spark-btn" onclick="openSparkPanel();playNavSFX()"><span class="nav-spark-emoji">💬</span>Spark</a>
     <a class="nav-link nav-story-btn" onclick="openStoriesPanel();playNavSFX()" style="display:none"><span class="nav-story-emoji">📖</span>Story</a>
     <a class="nav-link nav-corner-nav-btn" onclick="openCornerHistory();playNavSFX()"><span class="nav-corner-emoji">🥊</span>Corner</a>
-    <a class="nav-link nav-lexicon-btn" onclick="openLexiconPanel();playNavSFX()"><span class="nav-lexicon-emoji">Aa</span>Lexicon</a>
+    <a class="nav-link nav-lexicon-btn" onclick="openLexiconPanel();playNavSFX()"><span class="nav-lexicon-emoji">Aa</span>Lexi</a>
   </div>
   <!-- v1.71: epic button is now inside nav-right -->
 
@@ -8463,7 +8453,7 @@
   <button class="nav-mobile-link nav-mobile-cs" onclick="playNavSFX();openSparkPanel();closeMobileNav()">💬 Spark</button>
   <button class="nav-mobile-link nav-mobile-no-border" onclick="playNavSFX();openStoriesPanel();closeMobileNav()" style="display:none">📖 Story</button>
   <button class="nav-mobile-link nav-mobile-no-border" onclick="playNavSFX();openCornerHistory();closeMobileNav()">🥊 Corner</button>
-  <button class="nav-mobile-link nav-mobile-no-border" onclick="playNavSFX();openLexiconPanel();closeMobileNav()">Aa Lexicon</button>
+  <button class="nav-mobile-link nav-mobile-no-border" onclick="playNavSFX();openLexiconPanel();closeMobileNav()">Aa Lexi</button>
   <div class="nav-mobile-divider"></div>
   <button class="nav-mobile-link nav-mobile-signup" onclick="playNavSFX();scrollToSection('signup');closeMobileNav()">◉ Sign Up 🎁 — Free Founding Access</button>
 </div>
@@ -10584,11 +10574,9 @@ function _renderIntelRow(pillsEl, collectionId, liveDna) {
       def.className = 'ep-intel-vocab-def';
       def.textContent = defText;
 
-      const useBtn = document.createElement('button');
-      useBtn.type = 'button';
-      useBtn.className = 'lex-use-btn' + (alreadySaved ? ' saved' : '');
-      useBtn.textContent = alreadySaved ? '\u2713 Saved' : '\u2192 Use it';
-      useBtn.addEventListener('click', function(e) {
+      // Click the shimmering word to generate/toggle sentences
+      wordSpan.style.cursor = 'pointer';
+      wordSpan.addEventListener('click', function(e) {
         e.stopPropagation();
         _lexiconGenerate(wordText, defText, collectionId, row);
       });
@@ -10601,7 +10589,6 @@ function _renderIntelRow(pillsEl, collectionId, liveDna) {
 
       row.appendChild(word);
       row.appendChild(def);
-      row.appendChild(useBtn);
       row.appendChild(sentenceWrap);
       return row;
     }
@@ -10739,13 +10726,11 @@ function _renderIntelRow(pillsEl, collectionId, liveDna) {
         if (left + popW > window.innerWidth - 8) left = window.innerWidth - popW - 8;
         if (left < 8) left = 8;
         popover.style.left = left + 'px';
+        // Re-read height each show: sentence accordion may have grown since build.
         // Default: anchor bottom of popover 10px above the pill (grows upward).
-        // Vertical-space-aware flip: if the popover is too tall to fit in the
-        // space above the pill (e.g. DNA with many categories), flip it to
-        // open below the pill instead — or clamp to the viewport top if
-        // there isn't enough room on either side. No-op for short content
-        // (Line/Tension/Vocab preview), which always has room above.
-        const popH = _popH;
+        // Flip to below only if popover taller than available space above AND
+        // there's room below. Clamp to viewport top as last resort.
+        const popH = popover.offsetHeight || _popH;
         const spaceAbove = pillRect.top - 10;
         const spaceBelow = window.innerHeight - pillRect.bottom - 18;
         if (popH > spaceAbove && spaceBelow >= popH) {
@@ -20989,7 +20974,8 @@ function playStreakMilestoneSFX() {
 .nav-stash-emoji,
 .nav-library-emoji,
 .nav-story-emoji,
-.nav-corner-emoji {
+.nav-corner-emoji,
+.nav-lexicon-emoji {
   display: inline-block;
   opacity: 0;
   max-width: 0;
@@ -21000,12 +20986,18 @@ function playStreakMilestoneSFX() {
   margin-right: 0;
   font-size: 0.8rem;
 }
+.nav-lexicon-emoji {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 0.85rem;
+}
 .nav-spark-btn:hover .nav-spark-emoji,
 .nav-browse-btn:hover .nav-browse-emoji,
 .nav-conv-btn:hover .nav-stash-emoji,
 .nav-library-btn:hover .nav-library-emoji,
 .nav-story-btn:hover .nav-story-emoji,
-.nav-corner-nav-btn:hover .nav-corner-emoji {
+.nav-corner-nav-btn:hover .nav-corner-emoji,
+.nav-lexicon-btn:hover .nav-lexicon-emoji {
   opacity: 1;
   max-width: 1.4em;
   margin-right: 4px;
@@ -21825,7 +21817,7 @@ body.corner-mode .sp-eyebrow-kicker { opacity: 0; pointer-events: none; transiti
     align-items: flex-end;
     text-align: right;
     position: absolute;
-    right: 9.5rem;
+    right: 9.35rem;
     bottom: 0; /* bottom edge sits on the hairline */
     padding-right: 1rem;
     border-right: 2px solid var(--accent);
@@ -24260,7 +24252,7 @@ body.corner-panel-open .stories-panel {
         <button class="conv-panel-tab active" id="panelTabSpark" onclick="panelSwitchTab('spark')"><span class="conv-panel-tab-emoji">💬</span>Spark</button>
         <button class="conv-panel-tab" id="panelTabStash" onclick="panelSwitchTab('stash')"><span class="conv-panel-tab-emoji">🔖</span>Stash</button>
         <button class="conv-panel-tab" id="panelTabHistory" onclick="panelSwitchTab('history')"><span class="conv-panel-tab-emoji">📖</span>History</button>
-        <button class="conv-panel-tab" id="panelTabLexicon" onclick="panelSwitchTab('lexicon')"><span class="conv-panel-tab-emoji" style="font-family:'DM Mono',monospace;font-style:normal">Aa</span>Lexicon</button>
+        <button class="conv-panel-tab" id="panelTabLexicon" onclick="panelSwitchTab('lexicon')"><span class="conv-panel-tab-emoji" style="font-family:'Playfair Display',serif;font-style:italic">Aa</span>Lexi</button>
       </div>
       <button class="conv-close" id="convClose" aria-label="Close">✕</button>
     </div>
@@ -24669,20 +24661,20 @@ function _lexiconBuildSavedCard(entry, section) {
   var card = document.createElement('div');
   card.className = 'lex-saved-card';
 
-  // Word row
+  // Word row — clicking the word toggles sentences
   var wordRow = document.createElement('div');
   wordRow.className = 'lex-saved-word-row';
   var wordEl = document.createElement('span');
-  wordEl.className = 'lex-saved-word';
+  wordEl.className = 'lex-saved-word lex-saved-word--toggle';
   wordEl.textContent = entry.word;
   var removeBtn = document.createElement('button');
   removeBtn.type = 'button';
   removeBtn.className = 'lex-remove-btn';
   removeBtn.textContent = '\u00D7 Remove';
-  removeBtn.addEventListener('click', function() {
+  removeBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
     _lexiconRemove(entry.word);
     card.remove();
-    // Re-render if group now empty
     if (section && !section.querySelector('.lex-saved-card')) _lexiconRenderSaved();
   });
   wordRow.appendChild(wordEl);
@@ -24695,6 +24687,7 @@ function _lexiconBuildSavedCard(entry, section) {
   var divider = document.createElement('div');
   divider.className = 'lex-card-divider';
 
+  // Definition — always show
   var defEl = document.createElement('div');
   defEl.className = 'lex-saved-def';
   defEl.textContent = entry.definition || '';
@@ -24702,8 +24695,13 @@ function _lexiconBuildSavedCard(entry, section) {
   card.appendChild(wordRow);
   card.appendChild(epChip);
   card.appendChild(divider);
-  if (entry.definition) card.appendChild(defEl);
+  card.appendChild(defEl);
 
+  // Collapsible sentences accordion
+  var sentWrap = document.createElement('div');
+  sentWrap.className = 'lex-sentence-wrap';
+  var sentInner = document.createElement('div');
+  sentInner.className = 'lex-sentence-wrap-inner';
   (entry.sentences || []).forEach(function(s) {
     var sDiv = document.createElement('div');
     sDiv.className = 'lex-sentence-block visible';
@@ -24715,8 +24713,19 @@ function _lexiconBuildSavedCard(entry, section) {
     txtEl.textContent = s.text || '';
     sDiv.appendChild(lblEl);
     sDiv.appendChild(txtEl);
-    card.appendChild(sDiv);
+    sentInner.appendChild(sDiv);
   });
+  sentWrap.appendChild(sentInner);
+  card.appendChild(sentWrap);
+
+  // Toggle accordion on word click
+  if ((entry.sentences || []).length) {
+    wordEl.style.cursor = 'pointer';
+    wordEl.addEventListener('click', function() {
+      sentWrap.classList.toggle('open');
+      wordEl.classList.toggle('lex-saved-word--expanded');
+    });
+  }
 
   return card;
 }
@@ -24776,21 +24785,13 @@ function _lexiconFreeSearch() {
 
 function _lexiconShowSearchResult(resultsEl, word, definition, sentences) {
   resultsEl.innerHTML = '';
-  var entry = { word: word, definition: definition, episodeTitle: null, collectionId: null, sentences: sentences };
-  var card = _lexiconBuildSavedCard(entry, resultsEl);
-  // Add save button
-  var saveBtn = document.createElement('button');
-  saveBtn.type = 'button';
-  saveBtn.className = 'lex-save-btn';
-  saveBtn.textContent = 'Save';
-  saveBtn.addEventListener('click', function() {
+  // Auto-save immediately
+  var alreadySaved = !!_lexiconGetSaved(word);
+  if (!alreadySaved) {
     _lexiconSave(word, definition, null, sentences, document.createElement('div'));
-    saveBtn.textContent = '\u2713 Saved';
-    saveBtn.classList.add('saved');
-    saveBtn.disabled = true;
-  });
-  card.appendChild(saveBtn);
-  resultsEl.appendChild(card);
+  }
+  var entry = _lexiconGetSaved(word) || { word: word, definition: definition, episodeTitle: null, collectionId: null, sentences: sentences };
+  resultsEl.appendChild(_lexiconBuildSavedCard(entry, resultsEl));
 }
 
 // ── Core generate function (called from vocab chip "→ Use it") ──
@@ -24803,8 +24804,6 @@ function _lexiconGenerate(word, definition, collectionId, rowEl) {
     var wrap = rowEl.querySelector('.lex-sentence-wrap');
     if (wrap) wrap.classList.remove('open');
     rowEl.dataset.lexState = 'IDLE';
-    var btn = rowEl.querySelector('.lex-use-btn');
-    if (btn) { btn.textContent = '\u2192 Use it'; btn.classList.remove('saved'); btn.disabled = false; }
     return;
   }
 
@@ -24879,8 +24878,6 @@ function _lexiconGenerate(word, definition, collectionId, rowEl) {
 function _lexiconSetLoading(rowEl) {
   var wrap  = rowEl.querySelector('.lex-sentence-wrap');
   var inner = rowEl.querySelector('.lex-sentence-wrap-inner');
-  var btn   = rowEl.querySelector('.lex-use-btn');
-  if (btn) btn.disabled = true;
   if (!inner) return;
   inner.innerHTML = '<div class="lex-skeleton" style="width:80%"></div><div class="lex-skeleton" style="width:65%"></div>';
   if (wrap) wrap.classList.add('open');
@@ -24889,8 +24886,11 @@ function _lexiconSetLoading(rowEl) {
 function _lexiconReveal(rowEl, sentences, isSaved) {
   var wrap  = rowEl.querySelector('.lex-sentence-wrap');
   var inner = rowEl.querySelector('.lex-sentence-wrap-inner');
-  var btn   = rowEl.querySelector('.lex-use-btn');
   if (!inner) return;
+
+  var word       = rowEl.dataset.lexWord || '';
+  var definition = rowEl.dataset.lexDef  || '';
+  var colId      = rowEl.dataset.lexColId ? parseInt(rowEl.dataset.lexColId) : null;
 
   inner.innerHTML = '';
   sentences.forEach(function(s, i) {
@@ -24908,43 +24908,22 @@ function _lexiconReveal(rowEl, sentences, isSaved) {
     inner.appendChild(block);
   });
 
-  // Save button
-  var word       = rowEl.dataset.lexWord || '';
-  var definition = rowEl.dataset.lexDef  || '';
-  var colId      = rowEl.dataset.lexColId ? parseInt(rowEl.dataset.lexColId) : null;
-
-  var saveBtn = document.createElement('button');
-  saveBtn.type = 'button';
-  saveBtn.className = 'lex-save-btn' + (isSaved ? ' saved' : '');
-  saveBtn.textContent = isSaved ? '\u2713 Saved' : 'Save';
-  saveBtn.style.opacity = '0';
-  saveBtn.addEventListener('click', function() {
-    _lexiconSave(word, definition, colId, sentences, rowEl);
-  });
-  inner.appendChild(saveBtn);
-
   if (wrap) wrap.classList.add('open');
 
   // Animate sentences in
   requestAnimationFrame(function() {
     inner.querySelectorAll('.lex-sentence-block').forEach(function(b) { b.classList.add('visible'); });
-    setTimeout(function() {
-      saveBtn.style.transition = 'opacity 0.1s ease';
-      saveBtn.style.opacity = '1';
-    }, sentences.length * 80 + 100);
   });
 
-  if (btn) {
-    btn.textContent = isSaved ? '\u2713 Saved' : '\u2192 Use it';
-    btn.classList.toggle('saved', isSaved);
-    btn.disabled = false;
+  // Auto-save immediately unless already saved
+  if (!isSaved && word) {
+    _lexiconSave(word, definition, colId, sentences, rowEl);
   }
 }
 
 function _lexiconSetError(rowEl, word, definition, collectionId) {
   var wrap  = rowEl.querySelector('.lex-sentence-wrap');
   var inner = rowEl.querySelector('.lex-sentence-wrap-inner');
-  var btn   = rowEl.querySelector('.lex-use-btn');
   if (!inner) return;
   inner.innerHTML = '';
   var errEl = document.createElement('div');
@@ -24956,7 +24935,6 @@ function _lexiconSetError(rowEl, word, definition, collectionId) {
   });
   inner.appendChild(errEl);
   if (wrap) wrap.classList.add('open');
-  if (btn) { btn.textContent = '\u2192 Use it'; btn.disabled = false; }
 }
 
 function _lexiconSave(word, definition, collectionId, sentences, rowEl) {
@@ -24985,11 +24963,7 @@ function _lexiconSave(word, definition, collectionId, sentences, rowEl) {
   if (toasted) _lexiconShowToast('Oldest word removed to make room.');
 
   // Update chip state
-  rowEl.dataset.lexState = 'SAVED';
-  var saveBtn = rowEl.querySelector('.lex-save-btn');
-  if (saveBtn) { saveBtn.textContent = '\u2713 Saved'; saveBtn.classList.add('saved'); saveBtn.disabled = true; }
-  var useBtn = rowEl.querySelector('.lex-use-btn');
-  if (useBtn) { useBtn.textContent = '\u2713 Saved'; useBtn.classList.add('saved'); }
+  if (rowEl && rowEl.dataset) rowEl.dataset.lexState = 'SAVED';
 }
 
 function _lexiconGetSaved(word) {

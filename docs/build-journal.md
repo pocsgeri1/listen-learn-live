@@ -34,6 +34,12 @@ Claude updates without being asked: changelog.md (new entry at TOP), roadmap.md 
 
 ## Entries
 
+### 2026-07-28 — v2.37: Lexi UX pass
+
+**Lesson 69 — Don't cache popover height when content can change post-build.** The original `_popH = popover.offsetHeight` was measured once at build time for perf. With the Lexicon sentence accordion now living inside the popover, that cached height becomes stale the moment a user triggers generation and the accordion opens. Fix: re-read `popover.offsetHeight` at the top of `showPopover()` each time, falling back to `_popH` only if the live read returns 0 (hidden state). One reflow per mouseenter is negligible.
+
+**Lesson 70 — `_lexiconSave` with a throwaway `document.createElement('div')` as rowEl is fine.** Auto-save from free-form search has no real chip row to update, so passing a detached div satisfies the function signature without error. The only thing `_lexiconSave` does with `rowEl` is set `rowEl.dataset.lexState = 'SAVED'` — harmless on a detached element.
+
 ### 2026-07-27 — v2.36: Lexicon
 
 **Lesson 66 — `_lexVocabShimmerIdx` must be reset inside `_renderIntelRow`'s `.then()` callback, not as a module-level variable.** Because `buildVocabCell` is defined as a closure inside the `.then()` callback, the shimmer index counter (declared with `var` inside the same closure) resets to 0 on each drawer open. This is intentional — stagger resets per-episode, which is the right behavior. Do not move it to module scope.

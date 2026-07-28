@@ -6,6 +6,15 @@
 
 ---
 
+## v2.37 — 2026-07-28 · Lexi UX pass: click-to-generate, auto-save, collapsible panel
+
+### index.html
+- **Nav:** Renamed "Lexicon" → "Lexi" in desktop nav, mobile nav, and conv-panel tab. "Aa" glyph now renders in Playfair Display italic for a typographic emoji feel. Nav button now hidden by default, animates in on hover like Corner/Spark (removed custom pill/border).
+- **Click-to-generate:** `buildVocabCell` no longer creates a "→ Use it" button. Clicking the shimmering `.lexicon-word` span triggers `_lexiconGenerate` directly. Second click collapses the accordion.
+- **Auto-save:** `_lexiconReveal` calls `_lexiconSave` immediately after building sentences — no manual Save button. Free-form word search (`_lexiconShowSearchResult`) also auto-saves. `.lex-use-btn` and `.lex-save-btn` CSS hidden with `display:none !important` as cleanup guard.
+- **Popover flip fix:** `showPopover` now re-reads `popover.offsetHeight` on each call instead of using the cached `_popH`. Prevents stale height (from an open sentence accordion) causing a spurious downward flip.
+- **Panel card redesign:** `_lexiconBuildSavedCard` always shows definition (removed the `if (entry.definition)` guard). Sentences moved into a `lex-sentence-wrap` grid accordion. Clicking the word title toggles sentences with a `▸` chevron that rotates 90° when expanded.
+
 ## v2.36 — 2026-07-27 · Lexicon: vocabulary practice tool
 
 ### index.html
