@@ -570,7 +570,7 @@ The modal operates as a 4-state machine:
 | `lll_stories_v1` | Story Mode saves (max 20). Entry: `{ scenario, date, preview, fullHtml, eyebrow, conceptIds }`. Dormant — Story Mode hidden. |
 | `lll_streak_v1` | Reading streak tracker. |
 | `lll_theme` | Dark/light mode preference. |
-| `lll_lexicon_v1` | **Lexicon saves (v2.36).** Array, max 100 entries, ring buffer (oldest dropped when cap hit). Entry: `{ word, definition, collectionId, episodeTitle, sentences: [{label, text}], savedAt }`. Written by `_lexiconSave()`. Read by `_lexiconGetSaved()` and Lexicon panel renderer. `collectionId` and `episodeTitle` are null for free-search entries. |
+| `lll_lexicon_v1` | **Lexicon saves (v2.40+).** Array, max 100 entries, ring buffer (oldest dropped when cap hit). Entry: `{ word, definition, collectionId, episodeTitle, sentences: [{label, text}], savedAt, practiceState: 'new'|'practiced'|'mastered', practiceCount, hitCount, lastPracticedAt }`. Written by `_lexiconSave()`. Read by `_lexiconGetSaved()` and Lexi panel renderer. `collectionId` and `episodeTitle` are null for free-search entries. Migration: `_lexiconLoadStore()` auto-adds practice fields to entries saved before v2.40. |
 
 **sessionStorage keys — Lexicon (v2.36):**
 | Key | Purpose |

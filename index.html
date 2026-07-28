@@ -1595,16 +1595,17 @@
   .lexicon-word::after {
     content: '';
     position: absolute;
-    inset: 0;
-    background: linear-gradient(105deg, transparent 30%, rgba(232,213,163,0.35) 50%, transparent 70%);
-    background-size: 200% 100%;
-    animation: lexiconShimmer 4s ease-in-out infinite;
-    animation-delay: calc(var(--shimmer-index, 0) * 0.6s);
+    inset: -1px 0px;
+    border-radius: 4px;
+    background: linear-gradient(105deg, transparent 38%, rgba(232,213,163,0.22) 50%, transparent 62%);
+    background-size: 300% 100%;
+    animation: lexiconShimmer 5s ease-in-out infinite;
+    animation-delay: calc(var(--shimmer-index, 0) * 0.7s);
     pointer-events: none;
   }
   [data-theme="light"] .lexicon-word::after {
-    background: linear-gradient(105deg, transparent 30%, rgba(184,134,11,0.25) 50%, transparent 70%);
-    background-size: 200% 100%;
+    background: linear-gradient(105deg, transparent 38%, rgba(184,134,11,0.16) 50%, transparent 62%);
+    background-size: 300% 100%;
   }
   @media (prefers-reduced-motion: reduce) {
     .lexicon-word::after { display: none; }
@@ -1949,6 +1950,19 @@
   /* Nav Lexi button — inherits .nav-link base styles, no custom pill */
   .nav-lexicon-emoji { margin-right: 0; }
 
+  /* ── PANEL TAGLINES (Lexi, Spark, Corner) ───────────────── */
+  .panel-tagline {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.45;
+    padding: 6px 24px 14px;
+    border-bottom: 0.5px solid var(--border);
+    font-style: italic;
+    letter-spacing: 0.01em;
+  }
+  [data-theme="light"] .panel-tagline { color: rgba(0,0,0,0.45); border-bottom-color: rgba(0,0,0,0.08); }
+
   /* ── LEXI PANEL — v2.38 ─────────────────────────────────── */
   /* .lexi-panel covers full viewport — it IS the backdrop.
      Clicking outside .lexi-panel-inner closes the panel.
@@ -2174,23 +2188,68 @@
     line-height: 1.6;
     color: var(--text);
   }
+  /* Word body action buttons — compact equal pills in a row */
+  .lexi-word-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+    margin-bottom: 6px;
+  }
   .lexi-word-gen-btn {
+    flex: 1;
     font-family: 'DM Mono', monospace;
-    font-size: 0.62rem;
-    letter-spacing: 0.06em;
+    font-size: 0.58rem;
+    letter-spacing: 0.07em;
     text-transform: uppercase;
     background: none;
     border: 0.5px solid var(--border);
-    color: var(--muted2);
+    color: var(--muted);
     border-radius: 999px;
-    padding: 7px 14px;
+    padding: 7px 10px;
     cursor: pointer;
-    margin-bottom: 14px;
-    transition: border-color 0.2s, color 0.2s;
-    min-height: 36px;
+    transition: border-color 0.2s, color 0.2s, box-shadow 0.2s;
+    min-height: 32px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
-  .lexi-word-gen-btn:hover { border-color: var(--accent); color: var(--accent); }
-  .lexi-word-gen-btn:disabled { opacity: 0.35; cursor: default; }
+  .lexi-word-gen-btn:hover {
+    border-color: rgba(232,213,163,0.5);
+    color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(232,213,163,0.07);
+  }
+  .lexi-word-gen-btn:disabled { opacity: 0.35; cursor: default; box-shadow: none; }
+  .lexi-word-gen-btn--practice:hover {
+    border-color: rgba(122,175,138,0.5);
+    color: var(--green);
+    box-shadow: 0 0 0 3px rgba(122,175,138,0.07);
+  }
+  [data-theme="light"] .lexi-word-gen-btn:hover { box-shadow: 0 0 0 3px rgba(184,134,11,0.08); }
+  /* Typewriter cursor */
+  .lexi-cursor {
+    color: var(--accent);
+    opacity: 0.8;
+    animation: lexiCursorBlink 0.7s step-end infinite;
+    font-weight: 300;
+  }
+  @keyframes lexiCursorBlink {
+    0%, 100% { opacity: 0.8; }
+    50%       { opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .lexi-cursor { animation: none; opacity: 0; }
+  }
+  /* Skeleton loading pulse — overrides existing lex-skeleton if present */
+  .lexi-skel-line {
+    height: 10px; border-radius: 4px;
+    background: rgba(232,213,163,0.08);
+    margin-bottom: 10px;
+    animation: lexiSkelPulse 1.4s ease-in-out infinite;
+  }
+  @keyframes lexiSkelPulse {
+    0%, 100% { opacity: 0.4; }
+    50%       { opacity: 0.85; }
+  }
   /* Empty state */
   .lexi-panel-empty {
     padding: 48px 22px;
@@ -11327,32 +11386,10 @@ function _renderIntelRow(pillsEl, collectionId, liveDna) {
     // and pushes the category filter row + card grid down. On touch devices
     // it just appends the rest of the words into this same grid in place.
     makePill('Vocab', !!vocab, pop => {
-      const VOCAB_PREVIEW_COUNT = 7;
-      const preview = vocab.slice(0, VOCAB_PREVIEW_COUNT);
-      const rest = vocab.slice(VOCAB_PREVIEW_COUNT);
-
-      const grid = buildVocabGrid(preview);
+      // Show all words immediately — no "+N more" click needed
+      const grid = buildVocabGrid(vocab);
       pop.appendChild(grid);
-
-      if (rest.length > 0) {
-        const moreBtn = document.createElement('button');
-        moreBtn.type = 'button';
-        moreBtn.className = 'ep-intel-vocab-more-cell';
-        moreBtn.textContent = '+' + rest.length + ' more';
-        grid.appendChild(moreBtn); // falls into the grid's next open cell (row2/col4 when preview=7)
-
-        moreBtn.addEventListener('click', e => {
-          e.stopPropagation();
-          track('vocab_expanded');
-          if (isTouchDevice) {
-            rest.forEach(v => grid.appendChild(buildVocabCell(v)));
-            moreBtn.remove();
-          } else {
-            pop.classList.remove('visible');
-            openVocabPanel(vocab);
-          }
-        });
-      }
+      track('vocab_expanded');
     }, 'vocab-popover');
 
     // Tension pill — two-column vs. layout
@@ -16295,6 +16332,7 @@ function _cornerOpenPanel(userInput, result) {
       '</div>' +
       '<button class="conv-close" onclick="closeCornerPanel()" aria-label="Close">✕</button>' +
     '</div>' +
+    '<div class="panel-tagline">Describe a situation. Get the concepts that help.</div>' +
     '<div id="cornerSectionResult" style="flex:1;overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column;">' +
       '<div class="corner-panel-situation" id="cornerPanelSituation">' +
         '<div class="corner-panel-situation-label">Your situation</div>' +
@@ -16311,7 +16349,10 @@ function _cornerOpenPanel(userInput, result) {
     '</div>';
 
   document.body.classList.add('corner-panel-open');
-  overlay.classList.add('active');
+  overlay.style.display = 'flex';
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() { overlay.classList.add('active'); });
+  });
 
   // Render history tab content
   var histSection = panel.querySelector('#cornerSectionHistory');
@@ -16696,7 +16737,10 @@ function _cornerCopy(btn, text) {
 // ---- Close Corner panel ----
 function closeCornerPanel() {
   var overlay = document.getElementById('storiesOverlay');
-  if (overlay) overlay.classList.remove('active');
+  if (overlay) {
+    overlay.classList.remove('active');
+    setTimeout(function() { if (overlay && !overlay.classList.contains('active')) overlay.style.display = ''; }, 400);
+  }
   document.body.classList.remove('corner-panel-open');
   document.removeEventListener('click', _cornerOutsideClick, { capture: true });
   document.removeEventListener('keydown', _cornerEscHandler);
@@ -16718,6 +16762,7 @@ function openCornerHistory() {
       '</div>' +
       '<button class="conv-close" onclick="closeCornerPanel()" aria-label="Close">✕</button>' +
     '</div>' +
+    '<div class="panel-tagline">Describe a situation. Get the concepts that help.</div>' +
     '<div id="cornerSectionResult" style="flex:1;overflow-y:auto;overflow-x:hidden;display:none;flex-direction:column;">' +
       '<div class="sp2-empty-state"><div class="sp2-empty-icon">🥊</div>' +
         '<div class="sp2-empty-text">Start a Corner session to see results here.</div></div>' +
@@ -16727,7 +16772,11 @@ function openCornerHistory() {
     '</div>';
 
   document.body.classList.add('corner-panel-open');
-  overlay.classList.add('active');
+  // Two-frame open so panel slide transition fires
+  overlay.style.display = 'flex';
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() { overlay.classList.add('active'); });
+  });
 
   setTimeout(function() {
     document.addEventListener('click', _cornerOutsideClick, { capture: true });
@@ -19794,7 +19843,11 @@ function _csFeedbackDone(isUp) {
 function openCS() {
   _mountCSInPanel();
   const overlay = document.getElementById('convOverlay');
-  overlay.classList.add('active');
+  // Two-frame open so display:flex → .active CSS transition fires correctly
+  overlay.style.display = 'flex';
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() { overlay.classList.add('active'); });
+  });
   document.body.classList.add('cs-panel-open');
   if (window.innerWidth <= 899) document.body.classList.add('cotd-open');
   panelSwitchTab('spark', true);
@@ -19810,8 +19863,10 @@ function openCS() {
 }
 
 function closeCS(persist) {
-  // Only close panel if we're on spark tab; otherwise just switch back
-  document.getElementById('convOverlay').classList.remove('active');
+  const overlay = document.getElementById('convOverlay');
+  overlay.classList.remove('active');
+  // Wait for slide-out transition before hiding
+  setTimeout(function() { if (!overlay.classList.contains('active')) overlay.style.display = ''; }, 300);
   document.body.classList.remove('cs-panel-open');
   document.body.classList.remove('cotd-open');
   document.removeEventListener('keydown', _convEscHandler);
@@ -21527,6 +21582,8 @@ function playStreakMilestoneSFX() {
   font-family: 'Playfair Display', serif;
   font-style: italic;
   font-size: 0.85rem;
+  position: relative;
+  top: 0.5px; /* Playfair italic cap-height differs from emoji — nudge to align */
 }
 .nav-spark-btn:hover .nav-spark-emoji,
 .nav-browse-btn:hover .nav-browse-emoji,
@@ -22329,7 +22386,7 @@ function playStreakMilestoneSFX() {
   line-height: 1;
 }
 @media (max-width: 768px) {
-  .sp-eyebrow-kicker { margin-top: 0; } /* no negative offset on mobile */
+  .sp-eyebrow-kicker { display: none; } /* too noisy on mobile */
 }
 body.corner-mode .sp-eyebrow-kicker { opacity: 0; pointer-events: none; transition: opacity 0.25s ease; }
 
@@ -24792,6 +24849,7 @@ body.corner-panel-open .stories-panel {
       <div class="lexi-panel-subtitle" id="lexiPanelCount">0 words</div>
       <button class="lexi-panel-close" onclick="closeLexiPanel()" aria-label="Close">✕</button>
     </div>
+    <div class="lexi-panel-tagline panel-tagline">Save words. Read examples. Practice until they stick.</div>
 
     <div class="lexi-panel-actions" id="lexiPanelActions">
       <button class="lexi-action-primary" id="lexiPracticeBtn" onclick="_lexiStartSession()" style="display:none">
@@ -24829,6 +24887,9 @@ body.corner-panel-open .stories-panel {
       </div>
       <button class="conv-close" id="convClose" aria-label="Close">✕</button>
     </div>
+    <!-- Per-tab taglines — shown/hidden by panelSwitchTab -->
+    <div class="panel-tagline" id="panelTaglineSpark">Turn any concept into your next great conversation.</div>
+    <div class="panel-tagline" id="panelTaglineStash" style="display:none">Your saved sparks. Revisit them anytime.</div>
 
     <!-- SPARK TAB — CS panel content lives here -->
     <div class="conv-tab-section" id="panelSectionSpark">
@@ -24964,6 +25025,12 @@ function panelSwitchTab(tab, skipRender) {
       setTimeout(function() { el.style.display = 'none'; }, 200);
     }
   });
+  // Show/hide per-tab taglines
+  ['Spark','Stash'].forEach(function(t) {
+    var tl = document.getElementById('panelTagline' + t);
+    if (tl) tl.style.display = (tab === t.toLowerCase()) ? '' : 'none';
+  });
+
   if (tab === 'stash' && !skipRender) {
     document.getElementById('convSavedControls').style.display = '';
     document.getElementById('convWarnBanner').style.display = 'none';
@@ -25350,36 +25417,39 @@ function _lexiLoadSentences(entry, sentsEl) {
     return;
   }
 
-  // Show "Generate examples" button
+  // Action row: Generate examples + Practice this word — equal-width compact pills
+  var actionsRow = document.createElement('div');
+  actionsRow.className = 'lexi-word-actions';
+
   var genBtn = document.createElement('button');
   genBtn.type = 'button';
   genBtn.className = 'lexi-word-gen-btn';
-  genBtn.textContent = '✦ Generate examples';
+  genBtn.textContent = '✦ Examples';
   genBtn.addEventListener('click', function() {
     genBtn.disabled = true;
     genBtn.textContent = 'Generating\u2026';
-    _lexiFetchSentences(word, defText, cacheKey, sentsEl, genBtn);
+    _lexiFetchSentences(word, defText, cacheKey, sentsEl, genBtn, actionsRow);
   });
-  sentsEl.appendChild(genBtn);
 
-  // "Practice this word" button
   var practBtn = document.createElement('button');
   practBtn.type = 'button';
-  practBtn.className = 'lexi-word-gen-btn';
-  practBtn.style.marginTop = '10px';
-  practBtn.textContent = '\u25B6 Practice this word';
+  practBtn.className = 'lexi-word-gen-btn lexi-word-gen-btn--practice';
+  practBtn.textContent = '\u25B6 Practice';
   (function(w) {
     practBtn.addEventListener('click', function() { _lexiStartSession(w); });
   })(word);
-  sentsEl.appendChild(practBtn);
+
+  actionsRow.appendChild(genBtn);
+  actionsRow.appendChild(practBtn);
+  sentsEl.appendChild(actionsRow);
 }
 
-function _lexiFetchSentences(word, defText, cacheKey, sentsEl, genBtn) {
+function _lexiFetchSentences(word, defText, cacheKey, sentsEl, genBtn, actionsRow) {
   var ctrl  = typeof AbortController !== 'undefined' ? new AbortController() : null;
   var timer = setTimeout(function() { if (ctrl) ctrl.abort(); }, 10000);
 
-  // Skeleton while loading
-  sentsEl.innerHTML = '<div class="lex-skeleton" style="width:85%;margin-bottom:8px"></div><div class="lex-skeleton" style="width:65%"></div>';
+  // Skeleton while loading — animated pulse lines
+  sentsEl.innerHTML = '<div class="lexi-skel-line" style="width:82%"></div><div class="lexi-skel-line" style="width:61%;animation-delay:0.2s"></div><div class="lexi-skel-line" style="width:74%;animation-delay:0.1s"></div><div class="lexi-skel-line" style="width:55%;animation-delay:0.3s"></div>';
 
   fetch('/api/cs-generate', {
     method: 'POST',
@@ -25400,14 +25470,16 @@ function _lexiFetchSentences(word, defText, cacheKey, sentsEl, genBtn) {
     sentsEl.innerHTML = '';
     if (genBtn) {
       genBtn.disabled = false;
-      genBtn.textContent = 'Retry';
-      sentsEl.appendChild(genBtn);
+      genBtn.textContent = '↺ Retry';
+      // Re-append the actions row (it was removed by innerHTML = '')
+      if (actionsRow && actionsRow.parentNode !== sentsEl) sentsEl.appendChild(actionsRow);
     }
   });
 }
 
 function _lexiRenderSentences(sentsEl, sentences) {
   sentsEl.innerHTML = '';
+  var delay = 0;
   sentences.forEach(function(s) {
     var block = document.createElement('div');
     block.className = 'lexi-word-sent-block';
@@ -25416,11 +25488,51 @@ function _lexiRenderSentences(sentsEl, sentences) {
     lbl.textContent = (s.label || '').toUpperCase();
     var txt = document.createElement('div');
     txt.className = 'lexi-word-sent-text';
-    txt.textContent = s.text || '';
+    txt.setAttribute('aria-label', s.text || '');
     block.appendChild(lbl);
     block.appendChild(txt);
     sentsEl.appendChild(block);
+
+    // Typewriter: reveal after a staggered delay, then type char by char
+    var fullText = s.text || '';
+    var startDelay = delay;
+    delay += fullText.length * 28 + 200; // ~28ms/char + pause between sentences
+
+    setTimeout(function() {
+      _lexiTypewriter(txt, fullText);
+    }, startDelay);
   });
+}
+
+function _lexiTypewriter(el, text) {
+  // Respect reduced-motion preference
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    el.textContent = text;
+    return;
+  }
+  var i = 0;
+  el.textContent = '';
+  // Inject blinking cursor
+  var cursor = document.createElement('span');
+  cursor.className = 'lexi-cursor';
+  cursor.textContent = '|';
+  el.appendChild(cursor);
+
+  function type() {
+    if (i >= text.length) {
+      // Remove cursor when done
+      if (cursor.parentNode) cursor.parentNode.removeChild(cursor);
+      return;
+    }
+    // Insert before cursor
+    el.insertBefore(document.createTextNode(text[i]), cursor);
+    i++;
+    // Vary typing speed: spaces slightly faster, punctuation pause longer
+    var ch = text[i - 1];
+    var speed = ch === ' ' ? 18 : (ch === '.' || ch === ',' || ch === '!') ? 55 : Math.random() * 20 + 20;
+    setTimeout(type, speed);
+  }
+  type();
 }
 
 function _lexiPersistSentences(word, sentences) {

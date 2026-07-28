@@ -196,9 +196,17 @@ Use consistent spacing values. Stick to this scale — don't introduce arbitrary
 
 ## Component Patterns
 
-### Lexicon word shimmer (`.lexicon-word`, `.lex-saved-word`) — added v2.36
+### Lexi practice overlay (`.lexi-practice-overlay`) — added v2.41
 
-A light sweep animation across vocab word text. GPU-composited via `::after` pseudo-element — safe for 20+ simultaneous instances.
+Full-screen practice mode overlay. `z-index: 2000` (above all panels). Opens via `opacity 0→1 + scale 0.97→1` (250ms ease-out). Closes by removing `.open` class — no `display:none` used, pointer-events handles interactivity. Verdict colors use `var(--green)` / `var(--accent)` / `var(--red)` tokens — never raw hex. Feedback text uses `lexiFadeIn` keyframe (200ms + 120ms stagger). Progress bar: `transition: width 400ms ease`.
+
+### Lexi panel tagline (`.panel-tagline`) — added v2.41a
+
+Short italic subtitle below any panel header (Lexi, Spark, Corner). DM Sans 0.78rem italic, `var(--muted)` color, `border-bottom: 0.5px solid var(--border)`. Always shown at panel open; hidden when switching to non-relevant tab (Spark tagline hidden on Stash tab, etc.).
+
+### Lexicon word shimmer (`.lexicon-word`, `.lex-saved-word`) — updated v2.41a (originally v2.36)
+
+A soft light sweep animation across vocab word text. GPU-composited via `::after` pseudo-element — safe for 20+ simultaneous instances. Shimmer is deliberately subtle: narrow highlight band (38–62%), reduced opacity (0.22), `border-radius: 4px` for soft edges, 5s cycle.
 
 ```css
 .lexicon-word {
@@ -212,15 +220,16 @@ A light sweep animation across vocab word text. GPU-composited via `::after` pse
 }
 .lexicon-word::after {
   content: '';
-  position: absolute; inset: 0;
-  background: linear-gradient(105deg, transparent 30%, rgba(232,213,163,0.35) 50%, transparent 70%);
-  background-size: 200% 100%;
-  animation: lexiconShimmer 4s ease-in-out infinite;
-  animation-delay: calc(var(--shimmer-index, 0) * 0.6s);  /* stagger set by JS */
+  position: absolute; inset: -1px 0px;
+  border-radius: 4px;
+  background: linear-gradient(105deg, transparent 38%, rgba(232,213,163,0.22) 50%, transparent 62%);
+  background-size: 300% 100%;
+  animation: lexiconShimmer 5s ease-in-out infinite;
+  animation-delay: calc(var(--shimmer-index, 0) * 0.7s);  /* stagger set by JS */
   pointer-events: none;
 }
 /* Light mode: softer sweep */
-[data-theme="light"] .lexicon-word::after { background: linear-gradient(105deg, transparent 30%, rgba(184,134,11,0.25) 50%, transparent 70%); background-size: 200% 100%; }
+[data-theme="light"] .lexicon-word::after { background: linear-gradient(105deg, transparent 38%, rgba(184,134,11,0.16) 50%, transparent 62%); background-size: 300% 100%; }
 @media (prefers-reduced-motion: reduce) { .lexicon-word::after { display: none; } }
 ```
 

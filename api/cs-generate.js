@@ -194,9 +194,12 @@ Return valid JSON only — no markdown, no preamble:
     const practiceData = await practiceApiRes.json();
     let practiceParsed;
     try {
-      const raw = practiceData.content[0].text.trim();
+      let raw = practiceData.content[0].text.trim();
+      // Strip markdown code fences if model wraps JSON in ```json ... ```
+      raw = raw.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '').trim();
       practiceParsed = JSON.parse(raw);
     } catch (e) {
+      console.error('lexi-practice parse error:', e, practiceData?.content?.[0]?.text);
       return res.status(502).json({ error: 'malformed response from model' });
     }
 

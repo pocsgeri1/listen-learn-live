@@ -6,6 +6,32 @@
 
 ---
 
+## v2.41a — 2026-07-28 · Polish pass: bug fixes, animations, panel headlines, shimmer, UX refinements
+
+### index.html
+- **Bug fix:** `lexi-practice` API 502 — strip markdown code fences from Haiku response before `JSON.parse`. Haiku occasionally wraps JSON in ` ```json ... ``` ` fences; regex strips them before parsing.
+- **Vocab pill:** clicking VOCAB pill now shows all words immediately — no "+N more" click required. `VOCAB_PREVIEW_COUNT` limit removed.
+- **Panel taglines:** short 8–10 word italic description added to Lexi, Spark, and Corner panels. `.panel-tagline` component — DM Sans 0.78rem italic, `var(--muted)`, bottom border. Spark tagline toggles with tab switching.
+- **Lexi word buttons redesign:** "Generate examples" and "Practice this word" replaced by compact equal-width pill pair (`✦ Examples` / `▶ Practice`) inside `.lexi-word-actions` flex row. Gold glow on hover for Examples, green glow for Practice (`box-shadow: 0 0 0 3px rgba(..., 0.07)`).
+- **Shimmer refinement:** `::after` pseudo reduced opacity (0.35→0.22), narrower highlight band (30–70% → 38–62%), `border-radius: 4px`, slower cycle (4s→5s), wider background-size (200%→300%). More subtle and premium.
+- **Nav Aa centering:** `.nav-lexicon-emoji { position: relative; top: 0.5px; }` — compensates for Playfair italic cap-height vs. nav text baseline.
+- **Spark + Corner panel animations:** `openCS()`, `openCornerHistory()`, `_cornerOpenPanel()` now use two-frame rAF to set `display:flex` one frame before adding `.active` class — allows panel slide-in and backdrop fade to fire. `closeCS()` and `closeCornerPanel()` clear `display` after transition (300–400ms timeout).
+- **Typewriter for generated sentences:** `_lexiRenderSentences` now calls `_lexiTypewriter(el, text)` per sentence. Varied typing speed (~20ms/char, 55ms on punctuation, 18ms on spaces). Blinking cursor (`.lexi-cursor`) removed when done. Sentences stagger (second starts after first finishes). Respects `prefers-reduced-motion` — instant render if set.
+- **Loading skeleton:** replaced plain `.lex-skeleton` divs with `.lexi-skel-line` — 4 pulsing lines with varied widths and staggered `animation-delay`.
+- **Mobile: eyebrow hidden:** `.sp-eyebrow-kicker { display: none; }` at ≤768px — reduces visual noise on small screens.
+
+### api/cs-generate.js
+- **`lexi-practice` JSON parse fix:** added `.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '')` before `JSON.parse`. Also added `console.error` with raw response text for future debugging.
+
+### docs/architecture.md
+- Updated `lll_lexicon_v1` entry with full v2.40 schema (practice fields added).
+
+### docs/design-tokens.md
+- Added component specs for `.lexi-practice-overlay` and `.panel-tagline`.
+- Updated shimmer spec values to v2.41a values.
+
+---
+
 ## v2.41 — 2026-07-28 · Lexi Phase 4: full practice mode (overlay, session, API, voice, state)
 
 ### index.html
