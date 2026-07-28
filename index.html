@@ -2244,6 +2244,197 @@
     #lexSearchSection { padding-bottom: calc(40px + env(safe-area-inset-bottom)); touch-action: pan-y; }
   }
 
+  /* ── LEXI PRACTICE OVERLAY ─────────────────────────────────── */
+  .lexi-practice-overlay {
+    position: fixed; inset: 0; background: var(--bg); z-index: 2000;
+    display: flex; flex-direction: column;
+    opacity: 0; transform: scale(0.97);
+    pointer-events: none;
+    transition: opacity 250ms ease-out, transform 250ms ease-out;
+  }
+  .lexi-practice-overlay.open {
+    opacity: 1; transform: scale(1); pointer-events: all;
+  }
+  .lexi-practice-header {
+    display: flex; align-items: center; gap: 16px;
+    padding: 20px 28px 0; flex-shrink: 0;
+  }
+  .lexi-practice-progress {
+    flex: 1; height: 2px; background: var(--border); border-radius: 1px; overflow: hidden;
+  }
+  .lexi-practice-progress-bar {
+    height: 100%; background: var(--accent); border-radius: 1px;
+    width: 0%; transition: width 400ms ease;
+  }
+  .lexi-practice-counter {
+    font-family: 'DM Mono', monospace; font-size: 0.65rem;
+    color: var(--muted); letter-spacing: 0.08em; flex-shrink: 0;
+  }
+  .lexi-practice-end {
+    background: none; border: none; font-family: 'DM Mono', monospace;
+    font-size: 0.65rem; color: var(--muted); cursor: pointer;
+    letter-spacing: 0.06em; padding: 4px 8px; transition: color 0.15s;
+  }
+  .lexi-practice-end:hover { color: var(--text); }
+  .lexi-practice-stage {
+    flex: 1; display: flex; align-items: center; justify-content: center;
+    padding: 24px 28px 40px; overflow-y: auto;
+  }
+  /* Practice card */
+  .lexi-card {
+    width: 100%; max-width: 560px; display: flex; flex-direction: column; gap: 0;
+  }
+  .lexi-card-word {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    font-weight: 700; color: var(--accent); line-height: 1.1; margin-bottom: 6px;
+  }
+  .lexi-card-source {
+    font-family: 'DM Mono', monospace; font-size: 0.62rem;
+    letter-spacing: 0.08em; color: var(--muted); text-transform: uppercase; margin-bottom: 20px;
+  }
+  .lexi-card-def-toggle {
+    background: none; border: none; font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem; color: var(--muted); cursor: pointer;
+    text-align: left; padding: 0; margin-bottom: 8px; transition: color 0.15s;
+  }
+  .lexi-card-def-toggle:hover { color: var(--text); }
+  .lexi-card-def {
+    font-family: 'DM Sans', sans-serif; font-size: 0.85rem;
+    color: var(--muted); line-height: 1.6; margin-bottom: 16px;
+    display: grid; grid-template-rows: 1fr; overflow: hidden;
+    transition: grid-template-rows 0.25s ease;
+  }
+  .lexi-card-def--hidden { grid-template-rows: 0fr; margin-bottom: 0; }
+  .lexi-card-def > span { overflow: hidden; }
+  .lexi-card-divider {
+    width: 100%; height: 0.5px; background: var(--border); margin: 20px 0;
+  }
+  .lexi-card-prompt-label {
+    font-family: 'DM Mono', monospace; font-size: 0.62rem;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+    margin-bottom: 12px; display: block;
+  }
+  .lexi-textarea-wrap { position: relative; }
+  .lexi-card-textarea {
+    width: 100%; background: rgba(255,255,255,0.03);
+    border: 0.5px solid var(--border); border-radius: 8px;
+    color: var(--text); font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem; line-height: 1.6;
+    padding: 14px 44px 14px 14px; resize: none;
+    transition: border-color 0.2s; box-sizing: border-box;
+  }
+  .lexi-card-textarea:focus { outline: none; border-color: rgba(232,213,163,0.4); }
+  .lexi-mic-btn {
+    position: absolute; right: 10px; bottom: 10px;
+    background: none; border: none; font-size: 1rem; cursor: pointer;
+    opacity: 0.5; transition: opacity 0.15s; padding: 4px;
+  }
+  .lexi-mic-btn:hover { opacity: 0.9; }
+  .lexi-mic-btn.recording {
+    opacity: 1; animation: lexiMicPulse 1.2s ease-in-out infinite;
+  }
+  @keyframes lexiMicPulse {
+    0%,100% { box-shadow: 0 0 0 0 rgba(212,113,90,0.4); border-radius: 50%; }
+    50%      { box-shadow: 0 0 0 8px rgba(212,113,90,0); border-radius: 50%; }
+  }
+  .lexi-card-actions {
+    display: flex; gap: 12px; align-items: center; margin-top: 16px;
+  }
+  .lexi-submit-btn {
+    font-family: 'DM Mono', monospace; font-size: 0.72rem;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    background: var(--accent); color: var(--bg);
+    border: none; border-radius: 999px; padding: 10px 22px;
+    cursor: pointer; transition: opacity 0.15s;
+  }
+  .lexi-submit-btn:hover { opacity: 0.85; }
+  .lexi-submit-btn:disabled { opacity: 0.35; cursor: default; }
+  .lexi-skip-btn {
+    background: none; border: none; font-family: 'DM Mono', monospace;
+    font-size: 0.65rem; letter-spacing: 0.06em; color: var(--muted);
+    cursor: pointer; transition: color 0.15s;
+  }
+  .lexi-skip-btn:hover { color: var(--text); }
+  /* Feedback state */
+  .lexi-feedback-user-sentence {
+    font-family: 'Playfair Display', serif; font-style: italic;
+    font-size: 1rem; color: var(--muted); line-height: 1.55; margin-bottom: 4px;
+  }
+  @keyframes lexiFadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .lexi-feedback-verdict {
+    font-family: 'DM Mono', monospace; font-size: 0.78rem;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    margin: 20px 0 8px;
+    opacity: 0; animation: lexiFadeIn 200ms ease forwards;
+  }
+  .lexi-verdict--hit   { color: var(--green); }
+  .lexi-verdict--almost { color: var(--accent); }
+  .lexi-verdict--off   { color: var(--red); }
+  .lexi-feedback-body {
+    font-family: 'DM Sans', sans-serif; font-size: 0.88rem;
+    line-height: 1.65; color: var(--muted);
+    opacity: 0; animation: lexiFadeIn 200ms 120ms ease forwards;
+  }
+  .lexi-next-btn {
+    font-family: 'DM Mono', monospace; font-size: 0.72rem;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    background: none; border: 0.5px solid var(--border); color: var(--text);
+    border-radius: 999px; padding: 10px 22px; cursor: pointer;
+    margin-top: 28px; transition: border-color 0.2s, color 0.2s;
+  }
+  .lexi-next-btn:hover { border-color: var(--accent); color: var(--accent); }
+  /* Summary card */
+  .lexi-card--summary { align-items: center; text-align: center; gap: 16px; }
+  .lexi-summary-icon {
+    font-size: 1.8rem; color: var(--accent); margin-bottom: 4px;
+  }
+  .lexi-summary-title {
+    font-family: 'Playfair Display', serif; font-size: 1.6rem;
+    font-weight: 700; color: var(--text);
+  }
+  .lexi-summary-stats {
+    display: flex; gap: 32px; justify-content: center;
+    margin: 8px 0 4px;
+  }
+  .lexi-summary-stat {
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+  }
+  .lexi-summary-num {
+    font-family: 'Playfair Display', serif; font-size: 2rem;
+    font-weight: 700; color: var(--text);
+  }
+  .lexi-num--green { color: var(--green); }
+  .lexi-num--gold  { color: var(--accent); }
+  .lexi-summary-label {
+    font-family: 'DM Mono', monospace; font-size: 0.58rem;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+  }
+  .lexi-summary-actions { display: flex; gap: 16px; align-items: center; margin-top: 8px; }
+  /* Light mode overrides */
+  [data-theme="light"] .lexi-practice-overlay { background: #faf8f3; }
+  [data-theme="light"] .lexi-card-textarea {
+    background: rgba(0,0,0,0.03); border-color: rgba(0,0,0,0.12); color: #1a1a18;
+  }
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .lexi-practice-overlay { transition: none; }
+    .lexi-practice-progress-bar { transition: none; }
+    .lexi-feedback-verdict { animation: none; opacity: 1; }
+    .lexi-feedback-body { animation: none; opacity: 1; }
+    .lexi-mic-btn.recording { animation: none; }
+  }
+  /* Mobile practice overlay */
+  @media (max-width: 700px) {
+    .lexi-practice-header { padding: 16px 18px 0; }
+    .lexi-practice-stage { padding: 20px 18px 32px; align-items: flex-start; padding-top: 40px; }
+    .lexi-card-word { font-size: 2rem; }
+    .lexi-summary-stats { gap: 20px; }
+  }
+
   /* ── IWTMT layout — equal 2-col grid (1fr 1fr avoids gap overflow) ── */
   .ep-iwtmt-grid {
     display: grid;
@@ -24615,6 +24806,18 @@ body.corner-panel-open .stories-panel {
   </div>
 </div>
 
+<!-- #lexiPracticeOverlay — full-screen practice mode (z-index 2000, above everything) -->
+<div id="lexiPracticeOverlay" class="lexi-practice-overlay" aria-hidden="true" role="dialog" aria-label="Practice mode">
+  <div class="lexi-practice-header">
+    <div class="lexi-practice-progress">
+      <div class="lexi-practice-progress-bar" id="lexiProgressBar"></div>
+    </div>
+    <div class="lexi-practice-counter" id="lexiPracticeCounter">1 of 1</div>
+    <button class="lexi-practice-end" onclick="_lexiEndSession()">✕ End</button>
+  </div>
+  <div class="lexi-practice-stage" id="lexiPracticeStage"></div>
+</div>
+
 <div class="conv-overlay" id="convOverlay" role="dialog" aria-modal="true" aria-label="Saved Conversations">
   <div class="conv-panel" id="convPanel">
     <div class="conv-header">
@@ -25158,6 +25361,17 @@ function _lexiLoadSentences(entry, sentsEl) {
     _lexiFetchSentences(word, defText, cacheKey, sentsEl, genBtn);
   });
   sentsEl.appendChild(genBtn);
+
+  // "Practice this word" button
+  var practBtn = document.createElement('button');
+  practBtn.type = 'button';
+  practBtn.className = 'lexi-word-gen-btn';
+  practBtn.style.marginTop = '10px';
+  practBtn.textContent = '\u25B6 Practice this word';
+  (function(w) {
+    practBtn.addEventListener('click', function() { _lexiStartSession(w); });
+  })(word);
+  sentsEl.appendChild(practBtn);
 }
 
 function _lexiFetchSentences(word, defText, cacheKey, sentsEl, genBtn) {
@@ -25764,6 +25978,415 @@ function _lexiconWireSearch() {
     inp.addEventListener('keydown', function(e) { if (e.key === 'Enter') _lexiconFreeSearch(); });
   }
 }
+
+// ── LEXI PRACTICE SESSION ───────────────────────────────────────────────────
+
+var _lexiSession = { queue: [], index: 0, results: [], singleWord: null };
+var _lexiRecognizer = null;
+var _lexiRecording  = false;
+
+function _lexiStartSession(singleWord) {
+  var arr = _lexiconLoadStore();
+  var pool = arr.filter(function(e) { return (e.practiceState || 'new') !== 'mastered'; });
+  if (singleWord) {
+    pool = arr.filter(function(e) { return e.word.toLowerCase() === singleWord.toLowerCase(); });
+  }
+  if (!pool.length) return;
+
+  // Shuffle
+  pool = pool.slice().sort(function() { return Math.random() - 0.5; });
+
+  _lexiSession.queue     = pool;
+  _lexiSession.index     = 0;
+  _lexiSession.results   = [];
+  _lexiSession.singleWord = singleWord || null;
+
+  var overlay = document.getElementById('lexiPracticeOverlay');
+  if (!overlay) return;
+  overlay.setAttribute('aria-hidden', 'false');
+  // Two-frame open (display → then animate)
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() { overlay.classList.add('open'); });
+  });
+  _spLockBodyScroll();
+  _lexiRenderCard();
+}
+
+function _lexiRenderCard() {
+  var stage   = document.getElementById('lexiPracticeStage');
+  var counter = document.getElementById('lexiPracticeCounter');
+  var bar     = document.getElementById('lexiProgressBar');
+  if (!stage) return;
+
+  var entry = _lexiSession.queue[_lexiSession.index];
+  if (!entry) { _lexiRenderSummary(); return; }
+
+  var total   = _lexiSession.queue.length;
+  var current = _lexiSession.index + 1;
+  if (counter) counter.textContent = current + ' of ' + total;
+  if (bar) bar.style.width = (((current - 1) / total) * 100) + '%';
+
+  var srcText = entry.episodeTitle ? 'from ' + entry.episodeTitle : '';
+
+  stage.innerHTML = '';
+  var card = document.createElement('div');
+  card.className = 'lexi-card lexi-card--prompt';
+
+  var wordEl = document.createElement('div');
+  wordEl.className = 'lexi-card-word';
+  wordEl.textContent = entry.word || '';
+  card.appendChild(wordEl);
+
+  if (srcText) {
+    var srcEl = document.createElement('div');
+    srcEl.className = 'lexi-card-source';
+    srcEl.textContent = srcText;
+    card.appendChild(srcEl);
+  }
+
+  var defToggle = document.createElement('button');
+  defToggle.className = 'lexi-card-def-toggle';
+  defToggle.id = 'lexiDefToggle';
+  defToggle.textContent = '👁 See definition';
+  card.appendChild(defToggle);
+
+  var defWrap = document.createElement('div');
+  defWrap.className = 'lexi-card-def lexi-card-def--hidden';
+  defWrap.id = 'lexiCardDef';
+  var defSpan = document.createElement('span');
+  defSpan.textContent = entry.definition || '';
+  defWrap.appendChild(defSpan);
+  card.appendChild(defWrap);
+  defToggle.onclick = function() { _lexiToggleDef(); };
+
+  var divider = document.createElement('div');
+  divider.className = 'lexi-card-divider';
+  card.appendChild(divider);
+
+  var label = document.createElement('label');
+  label.className = 'lexi-card-prompt-label';
+  label.textContent = 'Write a sentence using this word';
+  card.appendChild(label);
+
+  var wrap = document.createElement('div');
+  wrap.className = 'lexi-textarea-wrap';
+  var ta = document.createElement('textarea');
+  ta.className = 'lexi-card-textarea';
+  ta.id = 'lexiTextarea';
+  ta.setAttribute('placeholder', 'Type your sentence here\u2026');
+  ta.rows = 3;
+  ta.setAttribute('autocorrect', 'off');
+  // Submit on Ctrl/Cmd+Enter
+  ta.addEventListener('keydown', function(e) {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); _lexiSubmit(); }
+  });
+  wrap.appendChild(ta);
+
+  var mic = document.createElement('button');
+  mic.className = 'lexi-mic-btn';
+  mic.id = 'lexiMicBtn';
+  mic.setAttribute('aria-label', 'Voice input');
+  mic.textContent = '\uD83C\uDF99';
+  mic.style.display = 'none';
+  mic.onclick = function() { _lexiToggleVoice(); };
+  wrap.appendChild(mic);
+  card.appendChild(wrap);
+
+  var actions = document.createElement('div');
+  actions.className = 'lexi-card-actions';
+  var submitBtn = document.createElement('button');
+  submitBtn.className = 'lexi-submit-btn';
+  submitBtn.id = 'lexiSubmitBtn';
+  submitBtn.textContent = 'Submit \u2192';
+  submitBtn.onclick = function() { _lexiSubmit(); };
+  var skipBtn = document.createElement('button');
+  skipBtn.className = 'lexi-skip-btn';
+  skipBtn.textContent = 'Skip';
+  skipBtn.onclick = function() { _lexiSkip(); };
+  actions.appendChild(submitBtn);
+  actions.appendChild(skipBtn);
+  card.appendChild(actions);
+
+  stage.appendChild(card);
+  _lexiInitVoice();
+  ta.focus();
+}
+
+function _lexiToggleDef() {
+  var def    = document.getElementById('lexiCardDef');
+  var toggle = document.getElementById('lexiDefToggle');
+  if (!def) return;
+  var hidden = def.classList.toggle('lexi-card-def--hidden');
+  if (toggle) toggle.textContent = hidden ? '\uD83D\uDC41 See definition' : '\uD83D\uDC41 Hide definition';
+}
+
+function _lexiSubmit() {
+  var ta  = document.getElementById('lexiTextarea');
+  var btn = document.getElementById('lexiSubmitBtn');
+  if (!ta) return;
+  var sentence = (ta.value || '').trim();
+  if (!sentence) { ta.focus(); return; }
+  if (btn) btn.disabled = true;
+
+  var entry = _lexiSession.queue[_lexiSession.index];
+  if (!entry) return;
+
+  // Show loading state
+  var stage = document.getElementById('lexiPracticeStage');
+  if (stage) {
+    var loadMsg = stage.querySelector('.lexi-skip-btn');
+    if (loadMsg) loadMsg.textContent = 'Grading\u2026';
+  }
+
+  fetch('/api/cs-generate', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      mode: 'lexi-practice',
+      word: entry.word,
+      definition: entry.definition || '',
+      userSentence: sentence
+    })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    if (!data.verdict) throw new Error('bad response');
+    _lexiSavePracticeResult(entry.word, data.verdict);
+    _lexiSession.results.push({ word: entry.word, verdict: data.verdict });
+    _lexiRenderFeedback(entry.word, sentence, data.verdict, data.feedback);
+  })
+  .catch(function() {
+    if (btn) { btn.disabled = false; btn.textContent = 'Submit \u2192'; }
+    if (stage) {
+      var skipB = stage.querySelector('.lexi-skip-btn');
+      if (skipB) skipB.textContent = 'Skip';
+    }
+  });
+}
+
+function _lexiRenderFeedback(word, sentence, verdict, feedback) {
+  var stage = document.getElementById('lexiPracticeStage');
+  if (!stage) return;
+  var total   = _lexiSession.queue.length;
+  var current = _lexiSession.index + 1;
+  var bar     = document.getElementById('lexiProgressBar');
+  if (bar) bar.style.width = (current / total * 100) + '%';
+
+  stage.innerHTML = '';
+  var card = document.createElement('div');
+  card.className = 'lexi-card lexi-card--feedback';
+
+  var wordEl = document.createElement('div');
+  wordEl.className = 'lexi-card-word';
+  wordEl.textContent = word;
+  card.appendChild(wordEl);
+
+  var sentEl = document.createElement('div');
+  sentEl.className = 'lexi-feedback-user-sentence';
+  sentEl.textContent = '\u201C' + sentence + '\u201D';
+  card.appendChild(sentEl);
+
+  var verdictEl = document.createElement('div');
+  var vClass = verdict === 'hit' ? 'lexi-verdict--hit' : verdict === 'almost' ? 'lexi-verdict--almost' : 'lexi-verdict--off';
+  var vText  = verdict === 'hit' ? '\u2713 Hits the mark.' : verdict === 'almost' ? '\u2A01 Almost there.' : '\u2717 Off the mark.';
+  verdictEl.className = 'lexi-feedback-verdict ' + vClass;
+  verdictEl.textContent = vText;
+  card.appendChild(verdictEl);
+
+  var bodyEl = document.createElement('div');
+  bodyEl.className = 'lexi-feedback-body';
+  bodyEl.textContent = feedback || '';
+  card.appendChild(bodyEl);
+
+  var nextBtn = document.createElement('button');
+  nextBtn.className = 'lexi-next-btn';
+  nextBtn.textContent = _lexiSession.index + 1 >= _lexiSession.queue.length ? 'See results \u2192' : 'Next \u2192';
+  nextBtn.onclick = function() { _lexiNext(); };
+  card.appendChild(nextBtn);
+
+  stage.appendChild(card);
+}
+
+function _lexiNext() {
+  _lexiSession.index++;
+  if (_lexiSession.index >= _lexiSession.queue.length) {
+    _lexiRenderSummary();
+  } else {
+    _lexiRenderCard();
+  }
+}
+
+function _lexiSkip() {
+  _lexiSession.results.push({ word: (_lexiSession.queue[_lexiSession.index] || {}).word || '', verdict: 'skip' });
+  _lexiNext();
+}
+
+function _lexiEndSession() {
+  var overlay = document.getElementById('lexiPracticeOverlay');
+  if (!overlay) return;
+  overlay.classList.remove('open');
+  overlay.setAttribute('aria-hidden', 'true');
+  _spUnlockBodyScroll();
+  // Open Lexi panel and refresh
+  setTimeout(function() { openLexiPanel(); }, 260);
+}
+
+function _lexiRestartSession() {
+  _lexiSession.index   = 0;
+  _lexiSession.results = [];
+  // Refresh queue in case states changed
+  var arr  = _lexiconLoadStore();
+  var pool = arr.filter(function(e) { return (e.practiceState || 'new') !== 'mastered'; });
+  if (_lexiSession.singleWord) {
+    pool = arr.filter(function(e) { return e.word.toLowerCase() === (_lexiSession.singleWord || '').toLowerCase(); });
+  }
+  _lexiSession.queue = pool.slice().sort(function() { return Math.random() - 0.5; });
+  _lexiRenderCard();
+}
+
+function _lexiRenderSummary() {
+  var stage = document.getElementById('lexiPracticeStage');
+  var bar   = document.getElementById('lexiProgressBar');
+  var counter = document.getElementById('lexiPracticeCounter');
+  if (!stage) return;
+  if (bar) bar.style.width = '100%';
+  if (counter) counter.textContent = 'Done';
+
+  var results   = _lexiSession.results;
+  var practiced = results.filter(function(r) { return r.verdict !== 'skip'; }).length;
+  var hits      = results.filter(function(r) { return r.verdict === 'hit'; }).length;
+  var skipped   = results.filter(function(r) { return r.verdict === 'skip'; }).length;
+
+  // Count newly mastered this session
+  var arr = _lexiconLoadStore();
+  var mastered = results.filter(function(r) {
+    if (r.verdict !== 'hit') return false;
+    var e = arr.find(function(x) { return x.word.toLowerCase() === r.word.toLowerCase(); });
+    return e && e.practiceState === 'mastered';
+  }).length;
+
+  stage.innerHTML = '';
+  var card = document.createElement('div');
+  card.className = 'lexi-card lexi-card--summary';
+
+  var icon = document.createElement('div');
+  icon.className = 'lexi-summary-icon';
+  icon.textContent = '\u2756';
+  card.appendChild(icon);
+
+  var title = document.createElement('div');
+  title.className = 'lexi-summary-title';
+  title.textContent = 'Session complete.';
+  card.appendChild(title);
+
+  var stats = document.createElement('div');
+  stats.className = 'lexi-summary-stats';
+  function makeStat(num, label, cls) {
+    var s = document.createElement('div');
+    s.className = 'lexi-summary-stat';
+    var n = document.createElement('span');
+    n.className = 'lexi-summary-num' + (cls ? ' ' + cls : '');
+    n.textContent = num;
+    var l = document.createElement('span');
+    l.className = 'lexi-summary-label';
+    l.textContent = label;
+    s.appendChild(n);
+    s.appendChild(l);
+    return s;
+  }
+  stats.appendChild(makeStat(practiced, 'practiced', ''));
+  stats.appendChild(makeStat(hits,      'hit the mark', 'lexi-num--green'));
+  stats.appendChild(makeStat(mastered,  'mastered', 'lexi-num--gold'));
+  stats.appendChild(makeStat(skipped,   'skipped', ''));
+  card.appendChild(stats);
+
+  var actions = document.createElement('div');
+  actions.className = 'lexi-summary-actions';
+  var again = document.createElement('button');
+  again.className = 'lexi-submit-btn';
+  again.textContent = '\u25B6 Practice again';
+  again.onclick = function() { _lexiRestartSession(); };
+  var back = document.createElement('button');
+  back.className = 'lexi-skip-btn';
+  back.textContent = '\u2190 Back to Lexi';
+  back.onclick = function() { _lexiEndSession(); };
+  actions.appendChild(again);
+  actions.appendChild(back);
+  card.appendChild(actions);
+
+  stage.appendChild(card);
+  _lexiUpdateBadge();
+}
+
+// ── PRACTICE STATE PERSISTENCE ───────────────────────────────────────────────
+
+function _lexiSavePracticeResult(word, verdict) {
+  var arr = _lexiconLoadStore();
+  arr = arr.map(function(e) {
+    if (e.word.toLowerCase() !== word.toLowerCase()) return e;
+    var updated = Object.assign({}, e);
+    updated.practiceCount    = (updated.practiceCount || 0) + 1;
+    updated.lastPracticedAt  = Date.now();
+    if (verdict === 'hit') {
+      updated.hitCount = (updated.hitCount || 0) + 1;
+      // Mastered: 2+ hits after at least 3 attempts
+      if (updated.hitCount >= 2 && updated.practiceCount >= 3) {
+        updated.practiceState = 'mastered';
+      } else {
+        updated.practiceState = 'practiced';
+      }
+    } else {
+      updated.practiceState = 'practiced';
+    }
+    return updated;
+  });
+  _lexiconSaveStore(arr);
+}
+
+// ── VOICE INPUT ───────────────────────────────────────────────────────────────
+
+function _lexiInitVoice() {
+  var micBtn = document.getElementById('lexiMicBtn');
+  if (!micBtn) return;
+  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (SR) micBtn.style.display = 'block';
+}
+
+function _lexiToggleVoice() {
+  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) return;
+  var textarea = document.getElementById('lexiTextarea');
+  var micBtn   = document.getElementById('lexiMicBtn');
+  if (_lexiRecording && _lexiRecognizer) {
+    _lexiRecognizer.stop();
+    return;
+  }
+  _lexiRecognizer = new SR();
+  _lexiRecognizer.continuous     = false;
+  _lexiRecognizer.interimResults = true;
+  _lexiRecognizer.lang           = 'en-US';
+  _lexiRecognizer.onstart = function() {
+    _lexiRecording = true;
+    if (micBtn) micBtn.classList.add('recording');
+  };
+  _lexiRecognizer.onresult = function(e) {
+    var transcript = Array.from(e.results).map(function(r) { return r[0].transcript; }).join('');
+    if (textarea) textarea.value = transcript;
+  };
+  _lexiRecognizer.onend = function() {
+    _lexiRecording = false;
+    if (micBtn) micBtn.classList.remove('recording');
+    _lexiRecognizer = null;
+  };
+  _lexiRecognizer.onerror = function() {
+    _lexiRecording = false;
+    if (micBtn) micBtn.classList.remove('recording');
+    _lexiRecognizer = null;
+  };
+  _lexiRecognizer.start();
+}
+
+// ── END LEXI PRACTICE ────────────────────────────────────────────────────────
 
 function convSwitchTab(tab) {
   _convTab = tab;

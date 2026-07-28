@@ -6,6 +6,25 @@
 
 ---
 
+## v2.41 — 2026-07-28 · Lexi Phase 4: full practice mode (overlay, session, API, voice, state)
+
+### index.html
+- **`#lexiPracticeOverlay`:** full-screen fixed overlay (z-index 2000). Opens with scale(0.97)→scale(1) + opacity fade (250ms). Header: progress bar, "N of M" counter, "✕ End" button. Stage: centered flex container holding the active card.
+- **PROMPT card:** word (Playfair, accent, clamp 1.8–2.6rem), episode source label, collapsible definition toggle (CSS grid accordion), divider, textarea (DM Sans), mic button (hidden until SpeechRecognition detected), Submit + Skip buttons.
+- **FEEDBACK card:** user sentence in Playfair italic, animated verdict label (`.lexi-verdict--hit/almost/off`), feedback body (DM Sans, `lexiFadeIn` 200ms + 120ms delay), Next button.
+- **SUMMARY card:** ✦ icon, "Session complete.", stats row (practiced / hit the mark / mastered / skipped), Practice again + Back to Lexi buttons.
+- **"▶ Practice this word"** button added to each expanded word row body in the Lexi panel (below Generate examples).
+- **Practice session JS:** `_lexiStartSession(singleWord?)`, `_lexiRenderCard()`, `_lexiToggleDef()`, `_lexiSubmit()`, `_lexiRenderFeedback()`, `_lexiNext()`, `_lexiSkip()`, `_lexiEndSession()`, `_lexiRestartSession()`, `_lexiRenderSummary()`. Session state in `_lexiSession` object (in-memory only).
+- **State persistence:** `_lexiSavePracticeResult(word, verdict)` — increments `practiceCount`, `hitCount`, sets `lastPracticedAt`. Mastered rule: `hitCount >= 2` AND `practiceCount >= 3`. Writes back to `lll_lexicon_v1`.
+- **Voice input:** `_lexiInitVoice()` (shows mic button if `SpeechRecognition` available), `_lexiToggleVoice()` (toggle recording, interim results update textarea, `.recording` pulse animation).
+- **`_lexiEndSession()`:** closes overlay, waits 260ms, opens Lexi panel (so user sees updated state badges immediately).
+- **CSS tokens fixed:** `.lexi-verdict--hit` uses `var(--green)`, `.lexi-verdict--off` uses `var(--red)`, `.lexi-num--green` uses `var(--green)` — no raw hex.
+
+### api/cs-generate.js
+- **New `lexi-practice` mode:** accepts `{ mode, word, definition, userSentence }`. System prompt instructs Haiku to grade the sentence as a smart editor. Returns `{ verdict: "hit"|"almost"|"off", feedback: "..." }`. Model: `claude-haiku-4-5-20251001`, max_tokens: 220. Uses raw fetch (same pattern as other modes). Branch inserted before existing `lexicon` mode.
+
+---
+
 ## v2.40 — 2026-07-28 · Lexi Phase 3: practice state fields + migration
 
 ### index.html

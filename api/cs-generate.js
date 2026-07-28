@@ -143,6 +143,69 @@ Respond ONLY with valid JSON:
   }
   // ── END SPARRING MODE ──────────────────────────────────────────────────────
 
+  // ── LEXI-PRACTICE MODE ─────────────────────────────────────────────────────
+  if (mode === 'lexi-practice') {
+    const { word, definition, userSentence } = req.body;
+    if (!word || !userSentence) {
+      return res.status(400).json({ error: 'word and userSentence required for lexi-practice mode.' });
+    }
+
+    const practiceSystemPrompt = `You are a precise, intelligent writing coach. A user is learning the word "${word}" (defined as: "${definition || word}") and has written a sentence using it.
+
+Your job: analyze their sentence with depth and specificity.
+
+Rules:
+- Begin with exactly one of these verdicts on its own line:
+    ✓ Hits the mark.
+    ⚑ Almost there.
+    ✗ Off the mark.
+- Then write 2–4 sentences of analysis:
+  - If ✓: explain specifically WHY it works (word usage accuracy, sentence clarity, register, what makes it land). Don't just say "good job." Be specific. If anything could be even stronger, mention it briefly.
+  - If ⚑: state what's slightly off (loose usage, unclear context, register mismatch, structural weakness). Give a concrete suggested rewrite in quotes.
+  - If ✗: explain what's wrong with the word usage. Give a corrected example in quotes.
+- Never use the word "great," "nice," or "good job." Be direct, intelligent, zero fluff.
+- Do not explain the word — focus only on how they USED it in their sentence.
+- Tone: like a smart editor, not a cheerleader.
+
+Return valid JSON only — no markdown, no preamble:
+{"verdict":"hit","feedback":"..."} or {"verdict":"almost","feedback":"..."} or {"verdict":"off","feedback":"..."}`;
+
+    const practiceApiRes = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': ANTHROPIC_API_KEY,
+        'anthropic-version': '2023-06-01',
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 220,
+        system: practiceSystemPrompt,
+        messages: [{ role: 'user', content: `Word: "${word}"\nDefinition: "${definition || word}"\nUser's sentence: "${userSentence}"` }]
+      })
+    });
+
+    if (!practiceApiRes.ok) {
+      const err = await practiceApiRes.text();
+      console.error('Anthropic API error (lexi-practice):', err);
+      return res.status(502).json({ error: 'API error' });
+    }
+
+    const practiceData = await practiceApiRes.json();
+    let practiceParsed;
+    try {
+      const raw = practiceData.content[0].text.trim();
+      practiceParsed = JSON.parse(raw);
+    } catch (e) {
+      return res.status(502).json({ error: 'malformed response from model' });
+    }
+
+    if (!practiceParsed.verdict || !practiceParsed.feedback) {
+      return res.status(502).json({ error: 'malformed response from model' });
+    }
+    return res.json(practiceParsed);
+  }
+
   // ── LEXICON MODE ───────────────────────────────────────────────────────────
   if (mode === 'lexicon') {
     const lexWord       = req.body.word       || '';

@@ -1442,6 +1442,24 @@ tangible alternative if identity angle feels soft.
 
 ---
 
+## Session — 2026-07-28 — Lexi v2 full build (v2.37–v2.41)
+
+### Lessons learned
+
+**Lesson 73: API handlers that use raw fetch don't have `anthropic` in scope — match the existing pattern.**
+When adding a new API mode to `cs-generate.js`, the file uses `fetch('https://api.anthropic.com/v1/messages', ...)` directly — there's no Anthropic SDK instantiated. Writing `anthropic.messages.create(...)` would throw a ReferenceError at runtime. Always grep for the existing API call pattern before writing a new branch.
+
+**Lesson 74: z-index stacking context kills negative z-index children.**
+First attempt at the lexi panel backdrop used `z-index: -1` on a child of a `z-index: 1200` parent. A stacking context's floor is 0 from the outside — `z-index: -1` inside goes behind the context itself, making the backdrop invisible. Fix: make the parent element itself the backdrop (full `inset: 0`, `background: rgba(0,0,0,0.32)` on `.open`), with `stopPropagation` on the inner panel. Same as the existing `.conv-overlay` pattern.
+
+**Lesson 75: `display:none → animate` needs two requestAnimationFrame frames, not one.**
+Setting `display` and adding an animation class in the same synchronous block or even one rAF means the browser combines them into a single paint — the animation never runs from the start state. Pattern: remove `display:none` (or add `pointer-events:all`) in frame 1, add the animation/transition class in frame 2. Used in `_lexiStartSession` for the practice overlay open.
+
+**Lesson 76: `var(--text-muted)` doesn't exist — use `var(--muted)` or `var(--muted2)`.**
+The build plan pseudo-code used `--text-muted` as a token name, but the design system only has `--muted` and `--muted2`. Always verify token names against `docs/design-tokens.md` before writing CSS — never trust generated token names.
+
+---
+
 ## Session — 2026-05-31 — Quiz UX overhaul (v1.57)
 
 ### What shipped
