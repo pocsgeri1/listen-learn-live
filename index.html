@@ -1721,6 +1721,12 @@
     color: var(--muted);
     opacity: 0.6;
   }
+  /* Difficulty + actionability colors on score values */
+  .ep-profile-pop-score-val.diff-1 { color: #7aaf8a; }
+  .ep-profile-pop-score-val.diff-2 { color: #e0a060; }
+  .ep-profile-pop-score-val.diff-3 { color: #d4715a; }
+  .ep-profile-pop-score-val.tag-action-high { color: var(--accent); }
+
   .ep-profile-pop-score-val {
     font-family: 'DM Mono', monospace;
     font-size: 0.72rem;
@@ -1750,8 +1756,8 @@
     .ep-intel-pill.ep-pill-dna,
     .ep-intel-pill.ep-pill-line,
     .ep-intel-pill.ep-pill-tension { display: none; }
-    /* Mobile order: Vocab (default 11), Profile (12), Key Quotes (13) */
-    .ep-intel-pill.ep-pill-profile   { order: 12; }
+    /* Mobile order: Vocab(11) → Profile(12) → Quotes(13) → view-selector(20) */
+    .ep-intel-pill.ep-pill-profile    { order: 12; }
     .ep-intel-pill.ep-pill-key-quotes { order: 13; }
   }
 
@@ -3161,7 +3167,7 @@
     cursor: pointer;
     transition: color 0.15s, border-color 0.15s, background 0.15s;
     flex-shrink: 0;
-    order: 12;
+    order: 20; /* always last — after all pills including Key Quotes */
   }
   .ep-view-cycle-btn.active {
     color: var(--accent);
@@ -4300,24 +4306,9 @@
   0%   { transform: scale(0.85); opacity: 0; }
   100% { transform: scale(1);    opacity: 1; }
 }
-  /* Signup icon in nav */
-  .nav-signup-btn {
-    display: none; /* shown only on mobile via @media */
-    background: none;
-    border: none;
-    color: var(--accent);
-    font-family: 'DM Mono', monospace;
-    font-size: 1.1rem;
-    cursor: pointer;
-    min-width: 44px;
-    min-height: 44px;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    line-height: 1;
-    transition: opacity 0.15s;
-  }
-  .nav-signup-btn:hover { opacity: 0.7; }
+  /* Mobile nav — signup (gold icon ✦, mobile-only icon variant) */
+  /* Note: base .nav-signup-btn styles live at the desktop rule above (gold pill).
+     On mobile the @media block overrides to icon-only style. */
 
   /* RIGHT CLUSTER */
   .nav-right {
@@ -4437,18 +4428,62 @@
   }
   .nav-mobile-quiz:hover { color: var(--teal) !important; background: rgba(90,191,175,0.06) !important; }
 
+  /* Mobile-only nav action icons — hidden on desktop */
+  .nav-mob-action {
+    display: none;
+  }
+
   @media (max-width: 768px) {
-    nav { grid-template-columns: 1fr auto; padding: 0 1rem; }
+    nav { grid-template-columns: 1fr auto; padding: 0 0.75rem; }
     .nav-island { display: none; }
-    .nav-right { grid-column: 2; grid-row: 1; gap: 2px; flex-shrink: 0; }
+    .nav-right { grid-column: 2; grid-row: 1; gap: 0; flex-shrink: 0; }
     .nav-pill { display: none; }
-    .nav-mobile-toggle { display: flex; }
+    .nav-mobile-toggle { display: none; } /* hamburger hidden — actions now inline */
     .hiw-trigger { display: none; }
     .nav-logo { min-width: 0; overflow: hidden; }
-    /* Hide eyebrow on mobile — too long for small screens */
-    .nav-eyebrow { display: none; }
-    .theme-toggle { display: flex; min-width: 40px; min-height: 40px; padding: 0; }
-    .nav-signup-btn { display: flex; min-width: 40px; min-height: 40px; font-size: 0.9rem; }
+    .nav-eyebrow { display: none; } /* too long for small screens */
+    .theme-toggle { display: flex; min-width: 40px; min-height: 40px; padding: 0; font-size: 0.95rem; }
+    /* Signup — icon-only on mobile (override desktop gold pill) */
+    .nav-signup-btn {
+      display: flex;
+      min-width: 40px;
+      min-height: 40px;
+      font-size: 1rem;
+      background: none;
+      border: none;
+      box-shadow: none;
+      color: var(--accent);
+      padding: 0;
+      transform: none !important;
+    }
+    .nav-signup-btn::before, .nav-signup-btn::after { display: none; }
+    /* Show Lexi / Speak / Apply in top nav */
+    .nav-mob-action {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 40px;
+      min-height: 40px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      color: var(--muted2);
+      transition: color 0.18s;
+      -webkit-tap-highlight-color: transparent;
+      padding: 0;
+    }
+    .nav-mob-action:active { color: var(--accent); }
+    /* Lexi "Aa" uses Playfair italic to match the drawer */
+    #navMobLexi {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.05rem;
+    }
+    /* Hide bottom tab bar — everything is now in top nav */
+    .mobile-tab-bar { display: none !important; }
+    /* Remove the bottom padding that was added for the tab bar */
+    body { padding-bottom: 0 !important; }
   }
 
   /* ── MOBILE BOTTOM TAB BAR ─────────────────────────────────── */
@@ -9412,8 +9447,11 @@
   <div class="nav-right">
     <!-- v1.71: epic button lives in nav-right, hidden until nav hover -->
     <a class="nav-epic-standalone" id="navEpicBtn" onclick="openEgg();playNavSFX()" title="I feel epic!">😎 I feel epic!</a>
+    <!-- v2.50: mobile-only action icons (Lexi / Speak / Apply) — replaces bottom tab bar -->
+    <button class="nav-mob-action" id="navMobLexi" onclick="openLexiconPanel();playNavSFX()" aria-label="Lexi">Aa</button>
+    <button class="nav-mob-action" id="navMobSpeak" onclick="openSparkPanel();playNavSFX()" aria-label="Speak">💬</button>
+    <button class="nav-mob-action" id="navMobApply" onclick="enterCornerMode();playNavSFX()" aria-label="Apply">🥊</button>
     <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode" onclick="toggleTheme()">☽</button>
-    <!-- Sign Up removed from default nav — accessible via hamburger menu -->
     <div class="nav-pill">
       <div class="nav-dot"></div>
       <span id="navConceptCount">—</span> ideas

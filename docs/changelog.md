@@ -6,6 +6,27 @@
 
 ---
 
+## v2.50 — 2026-07-29 · Single mobile nav bar, pill order fix, difficulty colors
+
+### index.html — mobile nav (definitive fix)
+- **Bottom tab bar eliminated on mobile** (`display: none !important`). There were always TWO bars (top `#mainNav` + bottom `mobile-tab-bar`); user only saw the bottom one and didn't realise the top existed.
+- **Lexi / Speak / Apply added directly to `nav-right`** as icon buttons (`.nav-mob-action`, mobile-only): `Aa` (Playfair italic) · `💬` · `🥊`. All 40×40px touch targets.
+- **Hamburger removed on mobile** — all actions now inline in the top bar; hamburger still available in HTML for desktop hover menu.
+- **Nav layout**: `[Epistemic.] ......... [Aa][💬][🥊][☽][✦]` — one row, all visible.
+- **Signup button** overridden on mobile to icon-only (gold ✦, no pill/shimmer/shadow from desktop style).
+- **`body { padding-bottom: 0 }`** on mobile — removes the 60px gap that existed for the now-removed tab bar.
+- **Nav eyebrow hidden** on mobile (was causing text overflow into nav-right).
+- **Nav padding**: `0 0.75rem` on mobile for tighter fit.
+
+### index.html — Quotes pill mobile order
+- View-selector `◫` button `order` raised from 12 → 20 so it always sits last.
+- Mobile pill order confirmed: Vocab(11) → Profile(12) → Quotes(13) → ◫(20).
+
+### index.html — Profile popover difficulty colors
+- Added `.ep-profile-pop-score-val.diff-1/2/3` and `.tag-action-high` color rules. Previously the JS was setting these classes on score-val elements but only `.ep-profile-pop-tag.diff-*` rules existed, so no color showed.
+
+---
+
 ## v2.49 — 2026-07-29 · Intel pills restructure, Profile polish, mobile fixes
 
 ### index.html — intel pills restructure
