@@ -1963,6 +1963,77 @@
   }
   [data-theme="light"] .panel-tagline { color: rgba(0,0,0,0.45); border-bottom-color: rgba(0,0,0,0.08); }
 
+  /* ── LEXI PULL TAB — persistent left-edge handle ─────────── */
+  .lexi-pull-tab {
+    position: fixed;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 500;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-left: none;
+    border-radius: 0 8px 8px 0;
+    padding: 14px 10px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+    box-shadow: 2px 0 12px rgba(0,0,0,0.18);
+  }
+  .lexi-pull-tab:hover {
+    background: var(--surface2);
+    border-color: rgba(232,213,163,0.25);
+    box-shadow: 3px 0 18px rgba(0,0,0,0.28);
+    transform: translateY(-50%) translateX(2px);
+  }
+  .lexi-pull-tab-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+  }
+  .lexi-pull-tab-aa {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .lexi-pull-tab-text {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    line-height: 1;
+  }
+  .lexi-pull-tab-badge {
+    margin-top: 10px;
+    background: var(--accent);
+    color: var(--bg);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.55rem;
+    font-weight: 500;
+    border-radius: 999px;
+    min-width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 3px;
+    line-height: 1;
+  }
+  /* Hide on mobile — bottom tab handles it */
+  @media (max-width: 768px) { .lexi-pull-tab { display: none; } }
+  /* Subtle entrance */
+  [data-theme="light"] .lexi-pull-tab { box-shadow: 2px 0 10px rgba(0,0,0,0.08); }
+
   /* ── LEXI PANEL — v2.38 ─────────────────────────────────── */
   /* .lexi-panel covers full viewport — it IS the backdrop.
      Clicking outside .lexi-panel-inner closes the panel.
@@ -4171,6 +4242,61 @@
     .hiw-trigger { display: none; }
     .nav-logo { max-width: none; overflow: visible; }
     .nav-eyebrow { white-space: nowrap; overflow: visible; }
+  }
+
+  /* ── MOBILE BOTTOM TAB BAR ─────────────────────────────────── */
+  .mobile-tab-bar {
+    display: none;
+  }
+  @media (max-width: 768px) {
+    .mobile-tab-bar {
+      display: flex;
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      z-index: 900;
+      background: var(--surface);
+      border-top: 0.5px solid var(--border);
+      padding-bottom: env(safe-area-inset-bottom, 0);
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.22);
+    }
+    .mob-tab {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      padding: 10px 0 8px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--muted);
+      transition: color 0.18s ease, background 0.18s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .mob-tab:active,
+    .mob-tab.active {
+      color: var(--accent);
+    }
+    .mob-tab-icon {
+      font-size: 1.15rem;
+      line-height: 1;
+      display: block;
+    }
+    .mob-tab-aa {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.1rem;
+      color: inherit;
+    }
+    .mob-tab-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.5rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    /* Push page content above tab bar */
+    body { padding-bottom: calc(60px + env(safe-area-inset-bottom, 0)); }
   }
 
   /* HERO */
@@ -9065,7 +9191,6 @@
     <a class="nav-link nav-spark-btn" onclick="openSparkPanel();playNavSFX()"><span class="nav-spark-emoji">💬</span>Speak</a>
     <a class="nav-link nav-story-btn" onclick="openStoriesPanel();playNavSFX()" style="display:none"><span class="nav-story-emoji">📖</span>Story</a>
     <a class="nav-link nav-corner-nav-btn" onclick="enterCornerMode();playNavSFX()"><span class="nav-corner-emoji">🥊</span>Apply</a>
-    <a class="nav-link nav-lexicon-btn" onclick="openLexiconPanel();playNavSFX()"><span class="nav-lexicon-emoji">Aa</span>Lexi<span class="nav-lexi-badge" id="navLexiBadge" style="display:none">0</span></a>
   </div>
   <!-- v1.71: epic button is now inside nav-right -->
 
@@ -9096,6 +9221,26 @@
   <button class="nav-mobile-link nav-mobile-signup" onclick="playNavSFX();scrollToSection('signup');closeMobileNav()">◉ Sign Up 🎁 — Free Founding Access</button>
 </div>
 
+<!-- MOBILE BOTTOM TAB BAR ─────────────────────────── -->
+<nav class="mobile-tab-bar" id="mobileTabBar" aria-label="Main navigation">
+  <button class="mob-tab" id="mobTabHome" onclick="playNavSFX();closeMobileNav();window.scrollTo({top:0,behavior:'smooth'})" aria-label="Home">
+    <span class="mob-tab-icon">◉</span>
+    <span class="mob-tab-label">Episodes</span>
+  </button>
+  <button class="mob-tab" id="mobTabLexi" onclick="playNavSFX();openLexiconPanel();closeMobileNav()" aria-label="Lexi word bank">
+    <span class="mob-tab-icon mob-tab-aa">Aa</span>
+    <span class="mob-tab-label">Lexi</span>
+  </button>
+  <button class="mob-tab" id="mobTabSpeak" onclick="playNavSFX();openSparkPanel();closeMobileNav()" aria-label="Speak practice">
+    <span class="mob-tab-icon">💬</span>
+    <span class="mob-tab-label">Speak</span>
+  </button>
+  <button class="mob-tab" id="mobTabApply" onclick="playNavSFX();enterCornerMode();closeMobileNav()" aria-label="Apply — Corner mode">
+    <span class="mob-tab-icon">🥊</span>
+    <span class="mob-tab-label">Apply</span>
+  </button>
+</nav>
+
 <!-- EASTER EGG OVERLAY — v1.70 — 3 taps on logo -->
 <div class="egg-overlay" id="eggOverlay" onclick="closeEgg(event)">
   <div class="egg-card" id="eggCard">
@@ -9106,6 +9251,88 @@
 </div>
 
 <style>
+/* ── MICRO-LABELS (first-visit tour) ─────────────────────────
+   Three sequential callouts: Lexi pull tab, Speak, Apply.
+   Each is a small floating tooltip with a pointer arrow.
+   Fade in → hold 3.5s → fade out → next.
+   ─────────────────────────────────────────────────────────── */
+.sp-tour-backdrop {
+  position: fixed; inset: 0; z-index: 1500;
+  background: rgba(0,0,0,0); pointer-events: none;
+}
+.sp-tour-step {
+  position: fixed;
+  z-index: 1501;
+  pointer-events: auto;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.22,0.61,0.36,1);
+  /* Card */
+  background: var(--surface);
+  border: 0.5px solid rgba(232,213,163,0.3);
+  border-radius: 10px;
+  padding: 13px 16px 12px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(232,213,163,0.08);
+  max-width: 200px;
+  min-width: 160px;
+}
+.sp-tour-step.visible { opacity: 1; transform: translateY(0); }
+.sp-tour-step.exiting { opacity: 0; transform: translateY(-4px); transition-duration: 0.25s; }
+
+/* Arrow pointer */
+.sp-tour-step::before {
+  content: '';
+  position: absolute;
+  width: 8px; height: 8px;
+  background: var(--surface);
+  border: 0.5px solid rgba(232,213,163,0.3);
+  transform: rotate(45deg);
+}
+.sp-tour-step.arrow-left::before  { left: -5px;  top: 50%; margin-top: -4px; border-right: none; border-top: none; }
+.sp-tour-step.arrow-right::before { right: -5px; top: 50%; margin-top: -4px; border-left: none; border-bottom: none; }
+.sp-tour-step.arrow-bottom::before { bottom: -5px; left: 50%; margin-left: -4px; border-left: none; border-top: none; }
+.sp-tour-step.arrow-top::before    { top: -5px;    left: 50%; margin-left: -4px; border-right: none; border-bottom: none; }
+
+.sp-tour-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 5px;
+}
+.sp-tour-desc {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: var(--muted2);
+}
+.sp-tour-dismiss {
+  position: absolute;
+  top: 8px; right: 10px;
+  font-size: 0.7rem;
+  color: var(--muted);
+  background: none; border: none;
+  cursor: pointer; padding: 2px 4px;
+  line-height: 1;
+  transition: color 0.15s;
+}
+.sp-tour-dismiss:hover { color: var(--text); }
+.sp-tour-step-counter {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-top: 8px;
+  text-align: right;
+}
+[data-theme="light"] .sp-tour-step {
+  box-shadow: 0 6px 24px rgba(0,0,0,0.12), 0 0 0 1px rgba(150,120,40,0.15);
+}
+@media (prefers-reduced-motion: reduce) {
+  .sp-tour-step { transition: opacity 0.1s ease; }
+}
+
 .egg-overlay {
   position: fixed; inset: 0; z-index: 1200;
   display: none; align-items: center; justify-content: center;
@@ -9758,6 +9985,15 @@
 
 <!-- HERO -->
 <!-- ZONE 1 — Hero: spark.html v1.76 -->
+<!-- LEXI PULL TAB — persistent left-edge drawer handle -->
+<button class="lexi-pull-tab" id="lexiPullTab" onclick="openLexiconPanel();playNavSFX()" aria-label="Open Lexi — your word bank">
+  <span class="lexi-pull-tab-label">
+    <span class="lexi-pull-tab-aa">Aa</span>
+    <span class="lexi-pull-tab-text">Lexi</span>
+  </span>
+  <span class="lexi-pull-tab-badge" id="lexiPullBadge" style="display:none">0</span>
+</button>
+
 <section class="sp-hero" id="spHero">
 
   <!-- Floating concept preview card — shown when user clicks a term in search dropdown -->
@@ -9808,6 +10044,9 @@
       <span class="sp-ph-overlay" id="spCornerPhOverlay" aria-hidden="true"></span>
       <button class="sp-corner-submit" id="spCornerSubmit" onclick="cornerSubmit()" aria-label="Corner me">Corner me →</button>
     </div>
+
+    <!-- Hero product tagline — below search bar, always visible -->
+    <p class="sp-product-tagline" id="spProductTagline">Save ideas from podcasts. Practice the words. Use them.</p>
 
     <!-- Corner loading state — hidden by default -->
     <div class="sp-corner-loading" id="spCornerLoading" aria-live="polite"></div>
@@ -14712,7 +14951,7 @@ function initSparkHero() {
     }, delay);
   }
 
-  // ── Pull quote: appears after scroll, cycles stats, fades before library ──
+  // ── Pull quote: visible on load, cycles every 5s, fades near library ──
   (function() {
     var pq = document.getElementById('spPullQuote');
     var numEl = document.getElementById('spPullNum');
@@ -14727,7 +14966,6 @@ function initSparkHero() {
     ];
     var _idx = 0;
     var _swapping = false;
-    var _cycleStarted = false;
 
     function _nextStat() {
       if (_swapping) return;
@@ -14742,45 +14980,27 @@ function initSparkHero() {
       }, 320);
     }
 
-    // Scroll: show/hide via opacity only — no position class changes
-    var _browseWrap = document.getElementById('browseToggleWrap');
+    // Start cycling immediately, every 5s
+    setInterval(_nextStat, 5000);
+
+    // Only hide near library section — no scroll-show logic
     var _libEl = document.getElementById('libSection') || document.getElementById('netflixRows');
-    var _ticking = false;
-
-    function _onScroll() {
-      if (_ticking) return;
-      _ticking = true;
-      requestAnimationFrame(function() {
-        _ticking = false;
-
-        var scrolled = window.scrollY > 80;
-        // Near library: hide
-        var nearLib = false;
-        if (_libEl) {
+    if (_libEl) {
+      var _ticking = false;
+      window.addEventListener('scroll', function() {
+        if (_ticking) return;
+        _ticking = true;
+        requestAnimationFrame(function() {
+          _ticking = false;
           var libRect = _libEl.getBoundingClientRect();
-          nearLib = libRect.top < window.innerHeight + 100;
-        }
-
-        if (scrolled && !nearLib) {
-          pq.classList.add('pq-visible');
-          pq.classList.remove('pq-hidden');
-          // Start cycling on first show
-          if (!_cycleStarted) {
-            _cycleStarted = true;
-            setTimeout(function() { setInterval(_nextStat, 7000); }, 5000);
+          if (libRect.top < window.innerHeight + 100) {
+            pq.classList.add('pq-hidden');
+          } else {
+            pq.classList.remove('pq-hidden');
           }
-        } else if (nearLib) {
-          pq.classList.add('pq-hidden');
-          pq.classList.remove('pq-visible');
-        } else {
-          pq.classList.remove('pq-visible');
-          pq.classList.remove('pq-hidden');
-        }
-      });
+        });
+      }, { passive: true });
     }
-
-    window.addEventListener('scroll', _onScroll, { passive: true });
-    _onScroll();
   })();
 
   // #6 Typewriter on "your earbuds." — one-shot per session
@@ -22610,7 +22830,6 @@ body.corner-mode .sp-eyebrow-kicker { opacity: 0; pointer-events: none; transiti
     flex-direction: column;
     align-items: flex-end;
     text-align: right;
-    /* Always fixed — opacity-only transitions, no position switching */
     position: fixed;
     right: 9.35rem;
     top: 50%;
@@ -22618,12 +22837,10 @@ body.corner-mode .sp-eyebrow-kicker { opacity: 0; pointer-events: none; transiti
     padding-right: 1rem;
     border-right: 2px solid var(--accent);
     padding-bottom: 0;
-    /* Hidden on load — JS reveals after scroll */
-    opacity: 0;
+    opacity: 0.45;
     transition: opacity 0.6s ease;
     z-index: 10;
   }
-  .sp-pull-quote.pq-visible { opacity: 0.45; }
   .sp-pull-quote.pq-hidden  { opacity: 0 !important; }
   /* Text crossfade during stat swap */
   .sp-pull-quote.pq-swapping {
@@ -23704,6 +23921,28 @@ body.corner-mode #spHW2 { transition-delay: 0ms; }
 body.corner-mode #spHW3 { transition-delay: 0ms; }
 
 /* ---- Corner tagline 30% larger ---- */
+/* ── Hero product tagline ── */
+.sp-product-tagline {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 300;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  margin: 14px 0 0;
+  opacity: 0.75;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+.sp-product-tagline em {
+  font-style: italic;
+  font-family: 'Playfair Display', serif;
+  color: var(--accent);
+  opacity: 0.9;
+}
+body.corner-mode .sp-product-tagline { opacity: 0; transition: opacity 0.25s ease; pointer-events: none; }
+[data-theme="light"] .sp-product-tagline { color: var(--muted2); }
+
 .sp-corner-tagline {
   font-family: 'Playfair Display', serif;
   font-style: italic;
@@ -25876,7 +26115,8 @@ function _lexiFlyParticle(fromEl) {
   // Respect prefers-reduced-motion — skip animation entirely
   if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-  var navBtn = document.querySelector('.nav-lexicon-btn');
+  // Target: pull tab (preferred) or nav btn (fallback)
+  var navBtn = document.getElementById('lexiPullTab') || document.querySelector('.nav-lexicon-btn');
   if (!navBtn) return;
 
   var fromRect = fromEl.getBoundingClientRect();
@@ -25901,7 +26141,7 @@ function _lexiFlyParticle(fromEl) {
 
       // Badge pulse timed to land as particle arrives
       setTimeout(function() {
-        var badge = document.getElementById('navLexiBadge');
+        var badge = document.getElementById('lexiPullBadge') || document.getElementById('navLexiBadge');
         if (badge) {
           badge.style.animation = 'none';
           requestAnimationFrame(function() {
@@ -25922,13 +26162,15 @@ function _lexiFlyParticle(fromEl) {
 
 // ── Badge counter on nav Lexi button ────────────────────────
 function _lexiUpdateBadge() {
-  var badge = document.getElementById('navLexiBadge');
-  if (!badge) return;
   var arr = [];
   try { arr = JSON.parse(localStorage.getItem(LX_STORE_KEY) || '[]'); } catch(e) {}
   var count = arr.length;
-  badge.textContent = count;
-  badge.style.display = count > 0 ? '' : 'none';
+  // Nav badge (legacy — hidden now that Lexi is pull tab, but keep for safety)
+  var navBadge = document.getElementById('navLexiBadge');
+  if (navBadge) { navBadge.textContent = count; navBadge.style.display = count > 0 ? '' : 'none'; }
+  // Pull tab badge
+  var pullBadge = document.getElementById('lexiPullBadge');
+  if (pullBadge) { pullBadge.textContent = count; pullBadge.style.display = count > 0 ? '' : 'none'; }
 }
 
 // ── Open / close (legacy wrapper — delegates to openLexiPanel) ──
@@ -27631,6 +27873,146 @@ function _convOpenCSById(id) {
   window.ogZoomReset=function(duration,cb){
     animateTransform(1,0,0,duration,cb);
   };
+})();
+</script>
+
+<script>
+// ── First-visit micro-labels tour ────────────────────────────
+(function() {
+  var TOUR_KEY = 'lll_toured_v1';
+  var params   = new URLSearchParams(location.search);
+  var forced   = params.get('tour') === '1';
+
+  if (!forced && localStorage.getItem(TOUR_KEY)) return;
+
+  var STEPS = [
+    {
+      targetId:  'lexiPullTab',
+      arrow:     'arrow-left',
+      label:     'Your word bank',
+      desc:      'Save words from any episode. Practice them here.',
+      position:  'right'   // tooltip appears to the RIGHT of the target
+    },
+    {
+      targetSel: '.nav-spark-btn',
+      arrow:     'arrow-top',
+      label:     'Turn ideas into speech',
+      desc:      'Write a sentence using what you learned. Get instant feedback.',
+      position:  'below'
+    },
+    {
+      targetSel: '.nav-corner-nav-btn',
+      arrow:     'arrow-top',
+      label:     'Find your angle',
+      desc:      'Apply a concept to a real situation you\'re facing.',
+      position:  'below'
+    }
+  ];
+
+  var _currentStep = 0;
+  var _dismissed   = false;
+  var _stepEl      = null;
+
+  function _getTarget(step) {
+    if (step.targetId)  return document.getElementById(step.targetId);
+    if (step.targetSel) return document.querySelector(step.targetSel);
+    return null;
+  }
+
+  function _positionStep(el, target, position) {
+    var rect = target.getBoundingClientRect();
+    var GAP  = 14;
+    el.style.position = 'fixed';
+    el.style.zIndex   = '1501';
+
+    if (position === 'right') {
+      el.style.left = (rect.right + GAP) + 'px';
+      el.style.top  = (rect.top + rect.height / 2) + 'px';
+      el.style.transform = 'translateY(-50%)';
+    } else if (position === 'below') {
+      el.style.left = (rect.left + rect.width / 2) + 'px';
+      el.style.top  = (rect.bottom + GAP) + 'px';
+      el.style.transform = 'translateX(-50%)';
+    }
+  }
+
+  function _dismissTour() {
+    if (_dismissed) return;
+    _dismissed = true;
+    if (_stepEl) {
+      _stepEl.classList.remove('visible');
+      _stepEl.classList.add('exiting');
+      setTimeout(function() {
+        if (_stepEl && _stepEl.parentNode) _stepEl.parentNode.removeChild(_stepEl);
+        _stepEl = null;
+      }, 300);
+    }
+    if (!forced) localStorage.setItem(TOUR_KEY, '1');
+  }
+
+  function _showStep(idx) {
+    if (_dismissed || idx >= STEPS.length) {
+      _dismissTour();
+      return;
+    }
+
+    var step   = STEPS[idx];
+    var target = _getTarget(step);
+
+    // Skip step if target not visible
+    if (!target || target.getBoundingClientRect().width === 0) {
+      _showStep(idx + 1);
+      return;
+    }
+
+    // Remove old step if any
+    if (_stepEl && _stepEl.parentNode) {
+      _stepEl.classList.remove('visible');
+      _stepEl.classList.add('exiting');
+      var oldEl = _stepEl;
+      setTimeout(function() { if (oldEl.parentNode) oldEl.parentNode.removeChild(oldEl); }, 280);
+    }
+
+    var el = document.createElement('div');
+    el.className = 'sp-tour-step ' + step.arrow;
+    el.innerHTML =
+      '<button class="sp-tour-dismiss" onclick="(function(e){e.stopPropagation();window._tourDismiss&&window._tourDismiss();})(event)" aria-label="Dismiss">' +
+        '<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><line x1="1" y1="1" x2="9" y2="9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="9" y1="1" x2="1" y2="9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>' +
+      '</button>' +
+      '<div class="sp-tour-label">' + step.label + '</div>' +
+      '<div class="sp-tour-desc">'  + step.desc  + '</div>' +
+      '<div class="sp-tour-step-counter">' + (idx + 1) + ' / ' + STEPS.length + '</div>';
+
+    document.body.appendChild(el);
+    _stepEl = el;
+    _positionStep(el, target, step.position);
+
+    // Animate in
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        el.classList.add('visible');
+      });
+    });
+
+    // Auto-advance after 4s (3.5s hold + 0.5s for fade-in)
+    var timer = setTimeout(function() {
+      if (!_dismissed) _showStep(idx + 1);
+    }, 4000);
+
+    // Clicking the tooltip itself advances
+    el.addEventListener('click', function(e) {
+      if (e.target.closest('.sp-tour-dismiss')) return;
+      clearTimeout(timer);
+      _showStep(idx + 1);
+    });
+
+    _currentStep = idx;
+  }
+
+  window._tourDismiss = _dismissTour;
+
+  // Start after a short delay so the page settles
+  setTimeout(function() { _showStep(0); }, 800);
 })();
 </script>
 </body>
