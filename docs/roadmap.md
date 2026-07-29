@@ -1,7 +1,8 @@
 # Roadmap — Epistemic.
 
-**Last updated:** 2026-07-04
+**Last updated:** 2026-07-29
 **Purpose:** Phased build plan so every decision and feature fits into the bigger picture. Claude references this to avoid building things that will conflict with future phases.
+**Parking lot:** Ideas discussed but deferred live in `docs/ideas-parking-lot.md` — not here. Keeps Next Up clean.
 
 ---
 

@@ -156,7 +156,38 @@ VERDICT:
 verdict_listen: JSON array of 2-3 strings, each MUST start with "you've ever..." / "you work in..." / "you're the kind of person who..."
 verdict_skip: JSON array of 1-2 strings, honest enough to be believed.
 
-VOCAB VAULT: 20-25 words or short phrases worth owning, especially for non-native speakers. NOT concept card titles. Raw vocabulary only: Latin phrases, academic terms, expressions that compress a complex idea. definition: plain English, max 15 words. timestamp_seconds: always null. Draw from across the FULL episode, not just the opening minutes.`;
+VOCAB VAULT: 35-40 words or short phrases worth owning, especially for non-native English-speaking professionals (25-40). Draw from the FULL episode, not just the opening minutes. NOT concept card titles from this episode.
+
+THREE TIERS to include:
+- Tier 1 (always include): Latin phrases, academic terms, technical vocabulary — e.g. "post hoc ergo propter hoc", "cognitive dissonance", "compounding".
+- Tier 2 (include): Smart idioms and expressions that compress a complex social or intellectual idea and are stable in educated English — e.g. "skin in the game", "revealed preferences", "Overton window", "moral licensing". Include if the meaning is NOT obvious from the words alone.
+- Tier 3 (include carefully): Sharp informal expressions used by educated speakers that are stable enough to be worth owning. Passes the "would this appear in a longform New Yorker or Atlantic article?" test. Exclude if it would only appear on social media or if it will feel dated in 2 years.
+
+EXCLUDE:
+- Proper nouns and brand names
+- Words common in any basic dictionary used plainly (e.g. "leverage", "friction", "impact" used without specialist meaning)
+- Concept card titles from this episode
+- Terminology coined by the guest that does not exist outside this episode
+- Slang that is internet-specific or fast-changing
+
+For each word output: definition in plain English (max 15 words), timestamp_seconds as null, category as exactly one of the 9 values below, category_alt as null always.
+
+VALID CATEGORIES (use exact spelling):
+- "Small Talk" — casual, conversational, socially safe; used in low-stakes social settings
+- "Dinner Party" — impressive without trying too hard; educated but not academic; The Economist register
+- "Smartypants" — academic or philosophical; humanities lecture register; requires having read serious books
+- "Corporate" — business, professional, organizational; lives in meetings, pitch decks, and business books
+- "People Skills" — interpersonal, social dynamics, communication; how humans relate to or influence each other
+- "Head Space" — inner life, mental states, self-development; therapy or self-help register
+- "Lab Coat" — hard or applied sciences; biology, neuroscience, economics, statistics; researcher register
+- "Deep Cuts" — rare or arcane; low everyday frequency; you'd find it in a dictionary but almost nowhere else
+- "Zeitgeist" — culturally current and trending in educated discourse RIGHT NOW; will it feel dated in 5 years? Then it's Zeitgeist.
+
+CATEGORY DECISION RULES:
+1. Pick the category where a non-native speaker would most likely FIRST encounter this word in real life.
+2. Tie-break: pick the narrower register.
+3. If the word does not fit any category cleanly, set category to null.
+4. category_alt: always null — do not populate.`;
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -303,6 +334,16 @@ async function main() {
       console.error(`  Skipping ${col.title} — both attempts failed. Will retry on next run.`);
       failed++;
       continue;
+    }
+
+    // Validate and sanitize vocab_vault categories
+    const VALID_CATEGORIES = new Set(['Small Talk','Dinner Party','Smartypants','Corporate','People Skills','Head Space','Lab Coat','Deep Cuts','Zeitgeist']);
+    if (Array.isArray(result.vocab_vault)) {
+      result.vocab_vault = result.vocab_vault.map(w => ({
+        ...w,
+        category:     (w.category && VALID_CATEGORIES.has(w.category)) ? w.category : null,
+        category_alt: null, // never populated during extraction
+      }));
     }
 
     // Validate required fields

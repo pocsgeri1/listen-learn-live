@@ -6,6 +6,41 @@
 
 ---
 
+## v2.46 — 2026-07-29 · Vocab categories, enrichment layer, new tools
+
+### docs/vocab-categories.md (new)
+- **9 register-based vocab categories:** Small Talk, Dinner Party, Smartypants, Corporate, People Skills, Head Space, Lab Coat, Deep Cuts, Zeitgeist — each with a crisp rule, examples, Haiku decision logic, and an edge case table.
+- **Dual-category schema defined:** `category` (primary, required) + `category_alt` (secondary, null by default — reserved for a future dedicated pass once category filter UI exists).
+
+### tools/generate-episode-intel.js
+- **Vocab vault target raised:** 20–25 → 35–40 words per episode.
+- **Tier 2 + Tier 3 vocab rules added:** smart idioms (Tier 2) and stable educated-speaker expressions (Tier 3) now explicitly included. New Yorker/Atlantic test defined for Tier 3. Explicit exclusions added: proper nouns, common dictionary words, guest-coined jargon, internet-only slang.
+- **Category field added to vocab_vault output:** each word now includes `category` (one of 9 values) and `category_alt: null`. Validation step added — any category not in the approved list is nulled rather than saved.
+
+### tools/categorize-vocab.js (new)
+- Backfill script: adds `category` to all existing vocab_vault entries missing it. One Haiku call per episode. Validates against the 9-category list before writing. Resume-safe.
+
+### tools/generate-episode-enrichment.js (new)
+- New script separate from intel generation. Adds: `difficulty_level`, `tone`, `guest_field`, `key_quotes`, `core_claim`, `episode_type`, `actionability_score`, `evergreen`, `controversy_flag` (via Haiku). Auto-calculates `guest_return` (from collections.json) and `concept_density` (concept count). Seeds `episode_length_minutes: null` as placeholder for manual backfill.
+
+### epistemic-tools/extract.html
+- **Vocab display updated:** category shown inline in textarea as `word — definition [Category]` or `word — definition [Category | AltCat]`. Parse/serialize updated to round-trip correctly.
+- **Counter updated:** vocab entry count range changed from 20–25 to 35–40.
+- **Vocab vault schema example updated:** includes `category` and `category_alt` fields.
+- **INTEL SELF-CHECK prompt updated:** now checks for 35–40 entries with valid categories.
+
+### docs/ideas-parking-lot.md (new)
+- New file for deferred feature ideas. First entry: `related_episode_ids`.
+
+### docs/architecture.md
+- `vocab_vault` schema updated: new category fields, 35–40 target, backfill note.
+- All enrichment fields documented under new "Enrichment fields" subsection.
+
+### docs/roadmap.md
+- Reference to `docs/ideas-parking-lot.md` added.
+
+---
+
 ## v2.45 — 2026-07-29 · Micro-labels tour, mobile bottom tab bar, hero polish
 
 ### index.html
