@@ -9063,9 +9063,9 @@
   <div class="nav-island" id="navIsland">
     <!-- v2.5: Browse · Spark · Story -->
     <a class="nav-link nav-browse-btn" onclick="playNavSFX();document.getElementById('app').scrollIntoView({behavior:'smooth'})"><span class="nav-browse-emoji">🎬</span>Browse</a>
-    <a class="nav-link nav-spark-btn" onclick="openSparkPanel();playNavSFX()"><span class="nav-spark-emoji">💬</span>Spark</a>
+    <a class="nav-link nav-spark-btn" onclick="openSparkPanel();playNavSFX()"><span class="nav-spark-emoji">💬</span>Speak</a>
     <a class="nav-link nav-story-btn" onclick="openStoriesPanel();playNavSFX()" style="display:none"><span class="nav-story-emoji">📖</span>Story</a>
-    <a class="nav-link nav-corner-nav-btn" onclick="openCornerHistory();playNavSFX()"><span class="nav-corner-emoji">🥊</span>Corner</a>
+    <a class="nav-link nav-corner-nav-btn" onclick="enterCornerMode();playNavSFX()"><span class="nav-corner-emoji">🥊</span>Apply</a>
     <a class="nav-link nav-lexicon-btn" onclick="openLexiconPanel();playNavSFX()"><span class="nav-lexicon-emoji">Aa</span>Lexi<span class="nav-lexi-badge" id="navLexiBadge" style="display:none">0</span></a>
   </div>
   <!-- v1.71: epic button is now inside nav-right -->
@@ -9090,9 +9090,9 @@
   <div class="nav-mobile-divider"></div>
   <!-- v2.5: Browse · Spark · Story -->
   <button class="nav-mobile-link" onclick="playNavSFX();document.getElementById('app').scrollIntoView({behavior:'smooth'});closeMobileNav()">🎬 Browse</button>
-  <button class="nav-mobile-link nav-mobile-cs" onclick="playNavSFX();openSparkPanel();closeMobileNav()">💬 Spark</button>
+  <button class="nav-mobile-link nav-mobile-cs" onclick="playNavSFX();openSparkPanel();closeMobileNav()">💬 Speak</button>
   <button class="nav-mobile-link nav-mobile-no-border" onclick="playNavSFX();openStoriesPanel();closeMobileNav()" style="display:none">📖 Story</button>
-  <button class="nav-mobile-link nav-mobile-no-border" onclick="playNavSFX();openCornerHistory();closeMobileNav()">🥊 Corner</button>
+  <button class="nav-mobile-link nav-mobile-no-border" onclick="playNavSFX();enterCornerMode();closeMobileNav()">🥊 Apply</button>
   <button class="nav-mobile-link nav-mobile-no-border" onclick="playNavSFX();openLexiconPanel();closeMobileNav()">Aa Lexi</button>
   <div class="nav-mobile-divider"></div>
   <button class="nav-mobile-link nav-mobile-signup" onclick="playNavSFX();scrollToSection('signup');closeMobileNav()">◉ Sign Up 🎁 — Free Founding Access</button>
@@ -9819,8 +9819,8 @@
       <button class="sp-mode-pill active" id="spModeExplore" onclick="exitCornerMode()">
         🔍 Explore
       </button>
-      <button class="sp-mode-pill" id="spModeCorner" onclick="enterCornerMode()" onmouseenter="_cornerPillHoverIn()" onmouseleave="_cornerPillHoverOut()">
-        🥊 Corner
+      <button class="sp-mode-pill" id="spModeCorner" onclick="enterCornerMode()" onmouseenter="_cornerPillHoverIn()" onmouseleave="_cornerPillHoverOut()" style="display:none" aria-hidden="true">
+        🥊 Apply
       </button>
     </div>
 
@@ -14708,7 +14708,7 @@ function initSparkHero() {
     }, delay);
   }
 
-  // ── Pull quote: sticky cycling stats ──────────────────────────────────────
+  // ── Pull quote: sticky on scroll + cycling stats ──────────────────────────
   (function() {
     var pq = document.getElementById('spPullQuote');
     var numEl = document.getElementById('spPullNum');
@@ -14722,7 +14722,7 @@ function initSparkHero() {
       { num: '10,000', body: 'words separate the average\nadult from an educated one.' }
     ];
     var _idx = 0;
-    var _cycleTimer = null;
+    var _swapping = false;
 
     function _setContent(stat) {
       numEl.textContent = stat.num;
@@ -14730,44 +14730,56 @@ function initSparkHero() {
     }
 
     function _nextStat() {
-      // Fade out
+      if (_swapping) return;
+      _swapping = true;
       pq.classList.add('pq-swapping');
       setTimeout(function() {
         _idx = (_idx + 1) % STATS.length;
         _setContent(STATS[_idx]);
-        // Fade back in (remove swapping; pq-visible drives target opacity)
         pq.classList.remove('pq-swapping');
-      }, 370);
+        setTimeout(function() { _swapping = false; }, 350);
+      }, 320);
     }
 
-    function _startCycle() {
-      _cycleTimer = setInterval(_nextStat, 7000);
-    }
-    function _stopCycle() {
-      clearInterval(_cycleTimer);
-    }
+    // Start cycling after 6s delay, every 7s
+    setTimeout(function() {
+      setInterval(_nextStat, 7000);
+    }, 6000);
 
-    // Show after hero scrolls out of view; hide when back at top
-    var _heroEl = document.querySelector('.sp-hero');
-    if (_heroEl && 'IntersectionObserver' in window) {
-      var _obs = new IntersectionObserver(function(entries) {
-        var heroVisible = entries[0].isIntersecting;
-        if (heroVisible) {
-          pq.classList.remove('pq-visible');
-          _stopCycle();
+    // Scroll handler: sticky + hide before library
+    var _browseWrap = document.getElementById('browseToggleWrap');
+    var _libEl = document.getElementById('libSection') || document.getElementById('netflixRows');
+    var _ticking = false;
+
+    function _onScroll() {
+      if (_ticking) return;
+      _ticking = true;
+      requestAnimationFrame(function() {
+        _ticking = false;
+        if (!_browseWrap) return;
+
+        var browseRect = _browseWrap.getBoundingClientRect();
+        // Sticky: browse-toggle has scrolled above viewport top
+        if (browseRect.bottom < 0) {
+          pq.classList.add('pq-sticky');
         } else {
-          pq.classList.add('pq-visible');
-          if (!_cycleTimer) _startCycle();
+          pq.classList.remove('pq-sticky');
         }
-      }, { threshold: 0.1 });
-      _obs.observe(_heroEl);
-    } else {
-      // Fallback: always visible after 1s
-      setTimeout(function() {
-        pq.classList.add('pq-visible');
-        _startCycle();
-      }, 1000);
+
+        // Hidden: library section approaching (within 200px of bottom of viewport)
+        if (_libEl) {
+          var libRect = _libEl.getBoundingClientRect();
+          if (libRect.top < window.innerHeight + 200) {
+            pq.classList.add('pq-hidden');
+          } else {
+            pq.classList.remove('pq-hidden');
+          }
+        }
+      });
     }
+
+    window.addEventListener('scroll', _onScroll, { passive: true });
+    _onScroll(); // run once on load
   })();
 
   // #6 Typewriter on "your earbuds." — one-shot per session
@@ -16089,6 +16101,12 @@ function _cornerCalcTranslate() {
 // ---- Enter Corner Mode ----
 function enterCornerMode() {
   if (_cornerActive) return;
+  // If not at top, scroll there first then animate
+  if (window.scrollY > 60) {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(enterCornerMode, 350);
+    return;
+  }
   _cornerActive = true;
 
   _cornerPlaySFX(true);
@@ -16958,11 +16976,7 @@ function openCornerHistory() {
     '</div>';
 
   document.body.classList.add('corner-panel-open');
-  // Two-frame open so panel slide transition fires
-  overlay.style.display = 'flex';
-  requestAnimationFrame(function() {
-    requestAnimationFrame(function() { overlay.classList.add('active'); });
-  });
+  overlay.classList.add('active');
 
   setTimeout(function() {
     document.addEventListener('click', _cornerOutsideClick, { capture: true });
@@ -22586,32 +22600,39 @@ body.corner-mode .sp-eyebrow-kicker { opacity: 0; pointer-events: none; transiti
   margin: 0;
 }
 @media (min-width: 900px) {
+  /* Default: anchored at original position (bottom of browse-toggle-wrap) */
   .sp-pull-quote {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
     text-align: right;
-    position: fixed;
+    position: absolute;
     right: 9.35rem;
-    top: 50%;
-    transform: translateY(-50%);
+    bottom: 0;
     padding-right: 1rem;
     border-right: 2px solid var(--accent);
-    padding-bottom: 0;
-    /* Visibility: hidden until JS shows it after scroll */
-    opacity: 0;
-    transition: opacity 0.7s ease;
+    padding-bottom: 8px;
+    opacity: 0.45;
+    transition: opacity 0.6s ease;
     z-index: 10;
   }
-  .sp-pull-quote.pq-visible {
-    opacity: 0.45;
+  /* Sticky: becomes fixed after browse-toggle scrolls out of view */
+  .sp-pull-quote.pq-sticky {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    bottom: auto;
   }
-  /* Content crossfade during stat swap */
+  /* Hidden: fades out before library section */
+  .sp-pull-quote.pq-hidden {
+    opacity: 0 !important;
+  }
+  /* Text crossfade during stat swap */
   .sp-pull-quote.pq-swapping {
     opacity: 0 !important;
-    transition: opacity 0.35s ease;
+    transition: opacity 0.3s ease !important;
   }
-  /* Stat number — large Playfair */
+  /* Stat number */
   .sp-pull-quote strong {
     font-family: 'Playfair Display', serif;
     font-size: 1.8rem;
@@ -22622,7 +22643,7 @@ body.corner-mode .sp-eyebrow-kicker { opacity: 0; pointer-events: none; transiti
     line-height: 1;
     display: block;
   }
-  /* Stat body — small italic below */
+  /* Stat body text */
   .sp-pull-body {
     display: block;
     font-family: 'Playfair Display', serif;
@@ -22633,7 +22654,7 @@ body.corner-mode .sp-eyebrow-kicker { opacity: 0; pointer-events: none; transiti
     margin-top: 0.25rem;
   }
 }
-/* Hide when Spark/Corner/Lexi panels are open */
+/* Hide when panels open or corner mode active */
 body.corner-mode .sp-pull-quote,
 body.cs-panel-open .sp-pull-quote,
 body.sp2-panel-open .sp-pull-quote { opacity: 0 !important; transition: opacity 0.3s ease; }
