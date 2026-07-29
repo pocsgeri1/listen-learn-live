@@ -6,25 +6,54 @@
 
 ---
 
-## v2.45 — 2026-07-29 · Nav redesign, micro-labels tour, mobile tab bar, hero polish
+## v2.45 — 2026-07-29 · Micro-labels tour, mobile bottom tab bar, hero polish
 
 ### index.html
-- **Browse button removed:** desktop + mobile nav — cleared visual clutter.
-- **Lexi moved to left pull tab:** `#lexiPullTab` — `position: fixed; left: 0; top: 50%` — replaces nav Lexi button. Vertical text with Playfair italic "Aa" + DM Mono "LEXI" label. Badge tracks word count. Fly particle and badge pulse now target `#lexiPullTab`. Hidden on mobile (≤768px). `_lexiUpdateBadge()` updated to populate both `#lexiPullBadge` and legacy `#navLexiBadge`.
-- **Nav rename:** SPARK → 💬 Speak (`openSparkPanel()`), CORNER → 🥊 Apply (`enterCornerMode()` directly — no intermediate).
-- **Hero tagline:** `<p class="sp-product-tagline">` — DM Mono, 0.6rem, letter-spacing 0.18em, uppercase. Text: "Save ideas from podcasts. Practice the words. Use them." Replaces `.sp-eyebrow-kicker` which is now `visibility: hidden` (space preserved).
-- **Pull quote position:** `top: 35%` (was `50%`) — anchors it inside the hero section. Fades at scroll near `#netflixRows` (library). Cycles every 5s from page load, no initial delay. Stats: 94% / 14% / 10,000.
-- **Corner mode:** `enterCornerMode()` scroll-guards (scrolls to top if `scrollY > 60`, 350ms delay then re-calls). "Past situations" + "← Explore" mode-pill buttons appear in hero during corner mode; "🥊 Apply" pill hidden in corner.
-- **Episode grouping in Lexi panel:** Podcast → Episode → Words hierarchy. `_lexiconSave` writes `podcastName` + `episodeTitle` from `COLLECTIONS_BY_ID`. Lazy backfill in `_lexiRenderPanel` for pre-v2.42 entries.
-- **Lexi word removal animation:** opacity fade + translateY(-6px) + max-height collapse over 380ms.
-- **Practice grading persist:** `_lexiSaveGrading()` saves `{ verdict, feedback, sentence, userSentence, gradedAt }` to word entry; recap rendered in Lexi panel below word.
-- **Grading API prompt:** 3-paragraph format (verdict → detail → Try: rewrite). Returns `{ verdict, feedback, sentence }`. Model: `claude-haiku-4-5-20251001`, max_tokens: 380.
-- **Lexi scrollbar:** `scrollbar-width: none` + `::-webkit-scrollbar { display: none }` — scrolls but no visible scrollbar.
-- **Micro-labels tour:** JS IIFE runs on first visit (`lll_toured_v1` localStorage) or `?tour=1` URL param. 3 sequential `.sp-tour-step` callouts: Lexi pull tab → Speak nav → Apply nav. 4s auto-advance, click-to-advance, dismiss button. Saves toured flag on completion. CSS: arrow pointers (left/right/top/bottom), DM Mono label, DM Sans desc, step counter.
-- **Mobile bottom tab bar:** `<nav class="mobile-tab-bar">` — 4 tabs: Episodes · Aa Lexi · 💬 Speak · 🥊 Apply. `position: fixed; bottom: 0`. `env(safe-area-inset-bottom)` for iPhone notch. `body` gets `padding-bottom: calc(60px + ...)`. Only visible ≤768px.
+- **Hero tagline font:** `.sp-product-tagline` switched to DM Mono, 0.6rem, letter-spacing 0.18em, uppercase — matches eyebrow style. `.sp-eyebrow-kicker` set to `visibility: hidden` (space preserved, text gone).
+- **Pull quote position:** JS-aligned to `#browseToggleWrap` (Episodes/Themes header) via `getBoundingClientRect()` on load. `right` kept at `9.35rem`.
+- **Micro-labels tour JS:** IIFE checks `lll_toured_v1` or `?tour=1` URL param. 3 sequential `.sp-tour-step` callouts pointing at: Lexi pull tab (arrow-left), Speak nav (arrow-top), Apply nav (arrow-top). 4s auto-advance per step, click-to-advance, dismiss button on each. Saves `lll_toured_v1 = '1'` on completion or dismiss.
+- **Mobile bottom tab bar:** `<nav class="mobile-tab-bar" id="mobileTabBar">` — 4 fixed-bottom tabs: Episodes (◉) · Aa Lexi · 💬 Speak · 🥊 Apply. `env(safe-area-inset-bottom)` for iPhone home indicator. Body gets `padding-bottom: calc(60px + env(...))`. Only visible at ≤768px. Hamburger stays for Sign Up / Epic.
+
+---
+
+## v2.44 — 2026-07-29 · Pull quote: fixed position, stat cycling, fade, nav final
+
+### index.html
+- **Pull quote always visible on load:** `opacity: 0.45` by default (was `0` awaiting scroll). No scroll-trigger to show — only fades out when nearing library (`#netflixRows`).
+- **Pull quote fixed position:** always `position: fixed; right: 9.35rem` — no class-switching between absolute/fixed (was causing duplicate-looking element on scroll). Opacity-only control.
+- **Stat cycling:** starts immediately on page load (`setInterval(_nextStat, 5000)` — no initial delay). Crossfade via `.pq-swapping` class (opacity 0 → swap text → opacity back). Stats: `94%` / `14%` / `10,000`.
+- **Fade trigger:** scroll listener hides pull quote when `#netflixRows` top < `window.innerHeight + 100`. Removed `.pq-hidden` on hero/episode scroll — it now only hides near library.
+- **Nav Browse button removed:** from desktop nav island and mobile nav menu.
+- **Lexi moved to left pull tab:** `#lexiPullTab` — `position: fixed; left: 0; top: 50%; border-radius: 0 8px 8px 0`. Vertical text: Playfair italic "Aa" + DM Mono "LEXI". Badge `#lexiPullBadge` shows word count. Fly particle + badge pulse updated to target `#lexiPullTab`. Hidden on mobile.
+- **Nav rename:** SPARK → 💬 Speak, CORNER → 🥊 Apply. Apply nav button calls `enterCornerMode()` directly (no intermediate panel).
+- **Corner mode scroll guard:** `enterCornerMode()` checks `window.scrollY > 60` — if scrolled, calls `window.scrollTo({top:0, behavior:'smooth'})` then re-invokes after 350ms.
+- **Corner mode pills in hero:** "Past situations ↗" and "← Explore" pill buttons appear in `#spModeToggleRow` when corner mode activates; hidden when exiting.
+- **Hero product tagline:** `<p class="sp-product-tagline">` added below search bar. Text: "Save ideas from podcasts. Practice the words. Use them." DM Sans 0.8rem (later updated to DM Mono in v2.45).
+
+---
+
+## v2.43 — 2026-07-29 · Spark + Corner panel animation fix (canonical)
+
+### index.html
+- **Overlay animation pattern (canonical):** `conv-overlay` and `stories-overlay` now always `display: flex; pointer-events: none` in base CSS. `.active` class adds `pointer-events: all` and background fade. Removed all `display` toggling from JS open/close functions — no more `display:flex` in `openCS()`/`openCornerHistory()` or `display:none` in close functions.
+- **`openCS()` fix:** removed `overlay.style.display = 'flex'` + two-frame rAF pattern. Now just `overlay.classList.add('active')`.
+- **`openCornerHistory()` fix:** same — removed two-frame rAF, now direct `overlay.classList.add('active')`.
+- **Micro-labels CSS:** `.sp-tour-backdrop`, `.sp-tour-step`, `.sp-tour-label`, `.sp-tour-desc`, `.sp-tour-dismiss`, `.sp-tour-step-counter` added. Arrow variants: `arrow-left`, `arrow-right`, `arrow-bottom`, `arrow-top`. Light-mode shadow variant. `prefers-reduced-motion` fallback.
+
+---
+
+## v2.42 — 2026-07-29 · Lexi UX: word removal animation, vocab pill, episode grouping, grading persist
+
+### index.html
+- **Vocab pill dual behaviour:** Custom IIFE replaces `makePill` for VOCAB. Desktop hover shows N+More popover (7 words preview + "+N more" cell). Pill click → `openVocabPanel(vocab)` directly (full expansion). Mobile tap → bottom sheet. `VOCAB_PREVIEW_COUNT = 7`.
+- **Lexi word removal animation:** `removeBtn` click: `row.style.maxHeight` set to current pixel height, then rAF sets `opacity: 0`, `transform: translateY(-6px)`, `maxHeight: 0`. Row removed from DOM at 380ms. `_lexiUpdateBadge()` called after removal.
+- **Lexi scrollbar hidden:** `.lexi-panel-list { scrollbar-width: none }` + `.lexi-panel-list::-webkit-scrollbar { display: none }`. Scroll still works.
+- **Episode grouping in Lexi panel:** Podcast → Episode → Words 3-level hierarchy. `_lexiconSave` now writes `podcastName` (from `COLLECTIONS_BY_ID[colId].podcast`) and `episodeTitle`. `_lexiRenderPanel` groups by `podcastName` then `episodeTitle`. CSS: `.lexi-podcast-group`, `.lexi-podcast-header` (DM Mono accent), `.lexi-ep-group`, `.lexi-ep-group-label` (DM Sans muted2).
+- **Episode grouping backfill:** lazy migration in `_lexiRenderPanel` — for entries missing `podcastName`, reads `COLLECTIONS_BY_ID` and re-saves with `podcastName` + `episodeTitle` populated.
+- **Practice grading persist:** `_lexiSaveGrading(word, sentence, verdict, feedback, suggestedSentence)` saves `{ verdict, feedback, sentence, userSentence, gradedAt }` to word entry in `lll_lexicon_v1`. Grading recap rendered inside word row: verdict badge, feedback text, suggested sentence in accent monospace with left-border.
 
 ### api/cs-generate.js
-- **`lexi-practice` grading prompt:** 3-paragraph format system prompt. `sentence` field in JSON: `null` if verdict = "hit", "Try: ..." if "almost"/"off".
+- **Grading prompt rewrite:** 3-paragraph system prompt — Paragraph 1: verdict opener (`✓ Hits the mark.` / `⚑ Almost there.` / `✗ Off the mark.`) + 1–2 sentences. Paragraph 2: specific detail. Paragraph 3: "Try:" rewrite (omitted if verdict = hit). Returns `{ verdict: "hit"|"almost"|"off", feedback: "...", sentence: null|"Try: ..." }`. Model: `claude-haiku-4-5-20251001`, `max_tokens: 380`.
 
 ---
 

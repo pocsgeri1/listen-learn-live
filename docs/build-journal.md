@@ -34,7 +34,7 @@ Claude updates without being asked: changelog.md (new entry at TOP), roadmap.md 
 
 ## Entries
 
-### 2026-07-29 — v2.45: Nav redesign, micro-labels, mobile tab bar, hero polish
+### 2026-07-29 — v2.42–v2.45: Lexi UX, nav redesign, pull quote, tour, mobile tab bar
 
 **Lesson 78 — `position: fixed; top: 50%` sits at viewport center, not hero center.** When the hero occupies ~55% of the viewport height (90px top padding + content + 5rem bottom), the midpoint of the hero is closer to 30–35% from the top. `top: 50%` drops the element into the Episodes/filter zone. Fixed with `top: 35%`.
 
@@ -43,6 +43,18 @@ Claude updates without being asked: changelog.md (new entry at TOP), roadmap.md 
 **Lesson 80 — Sequential tooltip tour: hold position via `position: fixed` calculated each step.** Tooltip positioning must be re-computed per step because `getBoundingClientRect()` changes between targets. The IIFE stores only the current step element (`_stepEl`) and re-queries target rect each call. Fading old → new: add `.exiting` to old, wait for transition (280ms), then remove. Two-frame rAF for new element to allow transition to fire.
 
 **Lesson 81 — `env(safe-area-inset-bottom)` in `padding-bottom` shorthand fails in some browsers.** Use `padding-bottom: env(safe-area-inset-bottom, 0)` with a fallback. Also set `padding-bottom` on `body` as `calc(60px + env(safe-area-inset-bottom, 0))` — not just `60px` — so the tab bar never covers content on iPhone home-indicator devices.
+
+### 2026-07-29 — v2.39–v2.41: Lexi practice mode (Steps 4–13) + v2.41a polish
+
+**Lesson 73 — Practice overlay needs `z-index: 2000` to clear the Lexi panel at z-index 1100.** The panel itself is z-index 1100; the practice overlay must be above it. Any overlay stacking on top of another fixed/flex panel needs an explicit z-index audit first.
+
+**Lesson 74 — SpeechRecognition (`webkitSpeechRecognition`) must be gated on feature detection AND user gesture.** Calling `.start()` without a prior user gesture (click/tap) throws `InvalidStateError` on some Chrome builds. Always attach the `.start()` call to a button's click handler, never auto-start. Also, `SpeechRecognition` is only `window.webkitSpeechRecognition` on Chrome — check both `window.SpeechRecognition || window.webkitSpeechRecognition` and hide the mic button if neither exists.
+
+**Lesson 75 — CSS grid accordion (`grid-template-rows: 0fr → 1fr`) requires the inner element to have `overflow: hidden`.** Without `overflow: hidden` on the child div, content bleeds out even when `grid-template-rows: 0fr` — the grid row collapses but the content overflows it. The pattern: wrapper sets `grid-template-rows` + `transition`, inner div sets `overflow: hidden`, content sits inside inner div.
+
+**Lesson 76 — `JSON.parse` on Haiku API responses must strip markdown code fences first.** Haiku occasionally wraps JSON responses in ` ```json ... ``` ` fences even when instructed not to. Fix: `.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '')` before `JSON.parse`. Without this, the practice grading endpoint threw 502s intermittently.
+
+**Lesson 77 — Typewriter effect: stagger multiple sentences by chaining callbacks, not `setInterval`.** Each sentence's typewriter completes via callback → next sentence starts. Using `setInterval` with a fixed delay causes sentences to overlap if the first is longer than expected. Pattern: `_lexiTypewriter(el, text, callback)` calls `callback()` on the final character, caller chains the next sentence in that callback.
 
 ### 2026-07-28 — v2.38: Lexi Phase 1
 
