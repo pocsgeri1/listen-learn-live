@@ -9854,7 +9854,7 @@
     <button class="browse-toggle active" id="browseToggleEpisodes" onclick="browseSwitch('episodes')">Episodes</button>
     <button class="browse-toggle" id="browseToggleThemes" onclick="browseSwitch('themes')">Themes</button>
   </div>
-  <p class="sp-pull-quote" aria-hidden="true"><strong>94%</strong><span class="sp-pull-body">of podcast ideas are<br>forgotten in 48 hours.</span></p>
+  <p class="sp-pull-quote" id="spPullQuote" aria-hidden="true"><strong id="spPullNum">94%</strong><span class="sp-pull-body" id="spPullBody">of podcast ideas are<br>forgotten in 48 hours.</span></p>
 </div>
 
 <!-- EPISODES SECTION -->
@@ -14707,6 +14707,68 @@ function initSparkHero() {
       }, 1500 + 1800);
     }, delay);
   }
+
+  // ── Pull quote: sticky cycling stats ──────────────────────────────────────
+  (function() {
+    var pq = document.getElementById('spPullQuote');
+    var numEl = document.getElementById('spPullNum');
+    var bodyEl = document.getElementById('spPullBody');
+    if (!pq || !numEl || !bodyEl) return;
+    if (window.innerWidth < 900) return;
+
+    var STATS = [
+      { num: '94%',    body: 'of podcast ideas are\nforgotten in 48 hours.' },
+      { num: '14%',    body: 'of podcast listeners finish\nan episode they start.' },
+      { num: '10,000', body: 'words separate the average\nadult from an educated one.' }
+    ];
+    var _idx = 0;
+    var _cycleTimer = null;
+
+    function _setContent(stat) {
+      numEl.textContent = stat.num;
+      bodyEl.innerHTML = stat.body.replace(/\n/g, '<br>');
+    }
+
+    function _nextStat() {
+      // Fade out
+      pq.classList.add('pq-swapping');
+      setTimeout(function() {
+        _idx = (_idx + 1) % STATS.length;
+        _setContent(STATS[_idx]);
+        // Fade back in (remove swapping; pq-visible drives target opacity)
+        pq.classList.remove('pq-swapping');
+      }, 370);
+    }
+
+    function _startCycle() {
+      _cycleTimer = setInterval(_nextStat, 7000);
+    }
+    function _stopCycle() {
+      clearInterval(_cycleTimer);
+    }
+
+    // Show after hero scrolls out of view; hide when back at top
+    var _heroEl = document.querySelector('.sp-hero');
+    if (_heroEl && 'IntersectionObserver' in window) {
+      var _obs = new IntersectionObserver(function(entries) {
+        var heroVisible = entries[0].isIntersecting;
+        if (heroVisible) {
+          pq.classList.remove('pq-visible');
+          _stopCycle();
+        } else {
+          pq.classList.add('pq-visible');
+          if (!_cycleTimer) _startCycle();
+        }
+      }, { threshold: 0.1 });
+      _obs.observe(_heroEl);
+    } else {
+      // Fallback: always visible after 1s
+      setTimeout(function() {
+        pq.classList.add('pq-visible');
+        _startCycle();
+      }, 1000);
+    }
+  })();
 
   // #6 Typewriter on "your earbuds." — one-shot per session
   const _typeEl = document.getElementById('spHW3');
@@ -22529,15 +22591,27 @@ body.corner-mode .sp-eyebrow-kicker { opacity: 0; pointer-events: none; transiti
     flex-direction: column;
     align-items: flex-end;
     text-align: right;
-    position: absolute;
+    position: fixed;
     right: 9.35rem;
-    bottom: 0; /* bottom edge sits on the hairline */
+    top: 50%;
+    transform: translateY(-50%);
     padding-right: 1rem;
     border-right: 2px solid var(--accent);
-    opacity: 0.45;
-    padding-bottom: 8px; /* lifts text slightly above hairline */
+    padding-bottom: 0;
+    /* Visibility: hidden until JS shows it after scroll */
+    opacity: 0;
+    transition: opacity 0.7s ease;
+    z-index: 10;
   }
-  /* 94% — large, matching Episodes/Themes scale */
+  .sp-pull-quote.pq-visible {
+    opacity: 0.45;
+  }
+  /* Content crossfade during stat swap */
+  .sp-pull-quote.pq-swapping {
+    opacity: 0 !important;
+    transition: opacity 0.35s ease;
+  }
+  /* Stat number — large Playfair */
   .sp-pull-quote strong {
     font-family: 'Playfair Display', serif;
     font-size: 1.8rem;
@@ -22548,7 +22622,7 @@ body.corner-mode .sp-eyebrow-kicker { opacity: 0; pointer-events: none; transiti
     line-height: 1;
     display: block;
   }
-  /* "of podcast ideas are / forgotten in 48 hours." — small italic below */
+  /* Stat body — small italic below */
   .sp-pull-body {
     display: block;
     font-family: 'Playfair Display', serif;
@@ -22559,7 +22633,10 @@ body.corner-mode .sp-eyebrow-kicker { opacity: 0; pointer-events: none; transiti
     margin-top: 0.25rem;
   }
 }
-body.corner-mode .sp-pull-quote { opacity: 0; transition: opacity 0.3s ease; }
+/* Hide when Spark/Corner/Lexi panels are open */
+body.corner-mode .sp-pull-quote,
+body.cs-panel-open .sp-pull-quote,
+body.sp2-panel-open .sp-pull-quote { opacity: 0 !important; transition: opacity 0.3s ease; }
 
 /* ── Word swap — "die" → "live" crossfade ──
    #spHW1 gets position:relative; JS appends .sp-word-live span absolutely on top */
