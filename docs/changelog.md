@@ -6,6 +6,28 @@
 
 ---
 
+## v2.45 — 2026-07-29 · Nav redesign, micro-labels tour, mobile tab bar, hero polish
+
+### index.html
+- **Browse button removed:** desktop + mobile nav — cleared visual clutter.
+- **Lexi moved to left pull tab:** `#lexiPullTab` — `position: fixed; left: 0; top: 50%` — replaces nav Lexi button. Vertical text with Playfair italic "Aa" + DM Mono "LEXI" label. Badge tracks word count. Fly particle and badge pulse now target `#lexiPullTab`. Hidden on mobile (≤768px). `_lexiUpdateBadge()` updated to populate both `#lexiPullBadge` and legacy `#navLexiBadge`.
+- **Nav rename:** SPARK → 💬 Speak (`openSparkPanel()`), CORNER → 🥊 Apply (`enterCornerMode()` directly — no intermediate).
+- **Hero tagline:** `<p class="sp-product-tagline">` — DM Mono, 0.6rem, letter-spacing 0.18em, uppercase. Text: "Save ideas from podcasts. Practice the words. Use them." Replaces `.sp-eyebrow-kicker` which is now `visibility: hidden` (space preserved).
+- **Pull quote position:** `top: 35%` (was `50%`) — anchors it inside the hero section. Fades at scroll near `#netflixRows` (library). Cycles every 5s from page load, no initial delay. Stats: 94% / 14% / 10,000.
+- **Corner mode:** `enterCornerMode()` scroll-guards (scrolls to top if `scrollY > 60`, 350ms delay then re-calls). "Past situations" + "← Explore" mode-pill buttons appear in hero during corner mode; "🥊 Apply" pill hidden in corner.
+- **Episode grouping in Lexi panel:** Podcast → Episode → Words hierarchy. `_lexiconSave` writes `podcastName` + `episodeTitle` from `COLLECTIONS_BY_ID`. Lazy backfill in `_lexiRenderPanel` for pre-v2.42 entries.
+- **Lexi word removal animation:** opacity fade + translateY(-6px) + max-height collapse over 380ms.
+- **Practice grading persist:** `_lexiSaveGrading()` saves `{ verdict, feedback, sentence, userSentence, gradedAt }` to word entry; recap rendered in Lexi panel below word.
+- **Grading API prompt:** 3-paragraph format (verdict → detail → Try: rewrite). Returns `{ verdict, feedback, sentence }`. Model: `claude-haiku-4-5-20251001`, max_tokens: 380.
+- **Lexi scrollbar:** `scrollbar-width: none` + `::-webkit-scrollbar { display: none }` — scrolls but no visible scrollbar.
+- **Micro-labels tour:** JS IIFE runs on first visit (`lll_toured_v1` localStorage) or `?tour=1` URL param. 3 sequential `.sp-tour-step` callouts: Lexi pull tab → Speak nav → Apply nav. 4s auto-advance, click-to-advance, dismiss button. Saves toured flag on completion. CSS: arrow pointers (left/right/top/bottom), DM Mono label, DM Sans desc, step counter.
+- **Mobile bottom tab bar:** `<nav class="mobile-tab-bar">` — 4 tabs: Episodes · Aa Lexi · 💬 Speak · 🥊 Apply. `position: fixed; bottom: 0`. `env(safe-area-inset-bottom)` for iPhone notch. `body` gets `padding-bottom: calc(60px + ...)`. Only visible ≤768px.
+
+### api/cs-generate.js
+- **`lexi-practice` grading prompt:** 3-paragraph format system prompt. `sentence` field in JSON: `null` if verdict = "hit", "Try: ..." if "almost"/"off".
+
+---
+
 ## v2.41a — 2026-07-28 · Polish pass: bug fixes, animations, panel headlines, shimmer, UX refinements
 
 ### index.html

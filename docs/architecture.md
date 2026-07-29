@@ -570,7 +570,8 @@ The modal operates as a 4-state machine:
 | `lll_stories_v1` | Story Mode saves (max 20). Entry: `{ scenario, date, preview, fullHtml, eyebrow, conceptIds }`. Dormant — Story Mode hidden. |
 | `lll_streak_v1` | Reading streak tracker. |
 | `lll_theme` | Dark/light mode preference. |
-| `lll_lexicon_v1` | **Lexicon saves (v2.40+).** Array, max 100 entries, ring buffer (oldest dropped when cap hit). Entry: `{ word, definition, collectionId, episodeTitle, sentences: [{label, text}], savedAt, practiceState: 'new'|'practiced'|'mastered', practiceCount, hitCount, lastPracticedAt }`. Written by `_lexiconSave()`. Read by `_lexiconGetSaved()` and Lexi panel renderer. `collectionId` and `episodeTitle` are null for free-search entries. Migration: `_lexiconLoadStore()` auto-adds practice fields to entries saved before v2.40. |
+| `lll_lexicon_v1` | **Lexicon saves (v2.40+).** Array, max 100 entries, ring buffer. Entry shape: `{ word, definition, collectionId, episodeTitle, podcastName, sentences: [{label, text}], savedAt, practiceState, practiceCount, hitCount, lastPracticedAt, grading?: { verdict, feedback, sentence, userSentence, gradedAt } }`. `podcastName` added v2.42. `grading` added v2.44. Backfill in `_lexiRenderPanel` for pre-v2.42 entries. |
+| `lll_toured_v1` | **First-visit micro-labels tour (v2.45).** Set to `'1'` after tour completes or is dismissed. Absent = tour not yet shown. Override with `?tour=1` URL param. |
 
 **sessionStorage keys — Lexicon (v2.36):**
 | Key | Purpose |

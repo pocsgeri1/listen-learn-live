@@ -22804,6 +22804,7 @@ function playStreakMilestoneSFX() {
   color: var(--muted);
   margin: -2.5rem 0 2rem; /* negative top pulls kicker up without shrinking hero padding */
   line-height: 1;
+  visibility: hidden; /* text hidden but space preserved */
 }
 @media (max-width: 768px) {
   .sp-eyebrow-kicker { display: none; } /* too noisy on mobile */
@@ -22832,7 +22833,7 @@ body.corner-mode .sp-eyebrow-kicker { opacity: 0; pointer-events: none; transiti
     text-align: right;
     position: fixed;
     right: 9.35rem;
-    top: 50%;
+    top: 35%;
     transform: translateY(-50%);
     padding-right: 1rem;
     border-right: 2px solid var(--accent);
@@ -23923,13 +23924,14 @@ body.corner-mode #spHW3 { transition-delay: 0ms; }
 /* ---- Corner tagline 30% larger ---- */
 /* ── Hero product tagline ── */
 .sp-product-tagline {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.8rem;
-  font-weight: 300;
-  letter-spacing: 0.04em;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
   color: var(--muted);
   margin: 14px 0 0;
-  opacity: 0.75;
+  opacity: 0.7;
   text-align: center;
   position: relative;
   z-index: 2;

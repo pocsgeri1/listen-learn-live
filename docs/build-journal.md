@@ -34,6 +34,16 @@ Claude updates without being asked: changelog.md (new entry at TOP), roadmap.md 
 
 ## Entries
 
+### 2026-07-29 — v2.45: Nav redesign, micro-labels, mobile tab bar, hero polish
+
+**Lesson 78 — `position: fixed; top: 50%` sits at viewport center, not hero center.** When the hero occupies ~55% of the viewport height (90px top padding + content + 5rem bottom), the midpoint of the hero is closer to 30–35% from the top. `top: 50%` drops the element into the Episodes/filter zone. Fixed with `top: 35%`.
+
+**Lesson 79 — `visibility: hidden` is the right tool to blank text while preserving layout space.** `display: none` collapses the element and shifts surrounding elements. `opacity: 0` hides visually but leaves text accessible to screen readers. `visibility: hidden` hides visually AND to accessibility while holding the box model space — correct when you want surrounding padding/margins to be unaffected.
+
+**Lesson 80 — Sequential tooltip tour: hold position via `position: fixed` calculated each step.** Tooltip positioning must be re-computed per step because `getBoundingClientRect()` changes between targets. The IIFE stores only the current step element (`_stepEl`) and re-queries target rect each call. Fading old → new: add `.exiting` to old, wait for transition (280ms), then remove. Two-frame rAF for new element to allow transition to fire.
+
+**Lesson 81 — `env(safe-area-inset-bottom)` in `padding-bottom` shorthand fails in some browsers.** Use `padding-bottom: env(safe-area-inset-bottom, 0)` with a fallback. Also set `padding-bottom` on `body` as `calc(60px + env(safe-area-inset-bottom, 0))` — not just `60px` — so the tab bar never covers content on iPhone home-indicator devices.
+
 ### 2026-07-28 — v2.38: Lexi Phase 1
 
 **Lesson 71 — CSS `animation:none` in a media query cannot override `element.style.animation` set by JS.** `@media (prefers-reduced-motion: reduce) { .nav-lexi-badge { animation: none } }` does nothing when JS later does `badge.style.animation = 'lexiBadgePulse ...'` — inline styles win. The fix: check `window.matchMedia('(prefers-reduced-motion: reduce)').matches` inside the JS function and skip the animation entirely. Applied in `_lexiFlyParticle`: the function returns early when reduced-motion is set, which skips both the particle and the badge pulse.
