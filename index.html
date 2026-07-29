@@ -14959,6 +14959,16 @@ function initSparkHero() {
     if (!pq || !numEl || !bodyEl) return;
     if (window.innerWidth < 900) return;
 
+    // Align pull quote with the Episodes/Themes toggle header
+    (function _alignPQ() {
+      var toggle = document.getElementById('browseToggleWrap');
+      if (!toggle) return;
+      var rect = toggle.getBoundingClientRect();
+      var midY = rect.top + rect.height / 2;
+      pq.style.top = midY + 'px';
+      pq.style.transform = 'translateY(-50%)';
+    })();
+
     var STATS = [
       { num: '94%',    body: 'of podcast ideas are\nforgotten in 48 hours.' },
       { num: '14%',    body: 'of podcast listeners finish\nan episode they start.' },
@@ -22833,7 +22843,7 @@ body.corner-mode .sp-eyebrow-kicker { opacity: 0; pointer-events: none; transiti
     text-align: right;
     position: fixed;
     right: 9.35rem;
-    top: 35%;
+    top: 50%; /* overridden by JS to align with browse toggle */
     transform: translateY(-50%);
     padding-right: 1rem;
     border-right: 2px solid var(--accent);
