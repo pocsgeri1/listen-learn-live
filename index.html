@@ -4434,36 +4434,50 @@
   }
 
   @media (max-width: 768px) {
-    nav { grid-template-columns: 1fr auto; padding: 0 0.75rem; }
+    /* Logo takes only its natural width; buttons fill + spread across the rest */
+    nav { grid-template-columns: auto 1fr; padding: 0 1rem; }
     .nav-island { display: none; }
-    .nav-right { grid-column: 2; grid-row: 1; gap: 0; flex-shrink: 0; }
+    /* nav-right fills the 1fr column and spreads buttons evenly */
+    .nav-right {
+      grid-column: 2;
+      grid-row: 1;
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+    }
     .nav-pill { display: none; }
-    .nav-mobile-toggle { display: none; } /* hamburger hidden — actions now inline */
+    .nav-mobile-toggle { display: none; }
     .hiw-trigger { display: none; }
-    .nav-logo { min-width: 0; overflow: hidden; }
-    .nav-eyebrow { display: none; } /* too long for small screens */
-    .theme-toggle { display: flex; min-width: 40px; min-height: 40px; padding: 0; font-size: 0.95rem; }
-    /* Signup — icon-only on mobile (override desktop gold pill) */
+    /* Logo: natural size, no overflow */
+    .nav-logo { white-space: nowrap; overflow: hidden; font-size: 1.15rem; }
+    .nav-eyebrow { display: none; }
+    /* All 5 nav buttons: same size, centered, no extra padding */
+    .theme-toggle,
+    .nav-mob-action,
     .nav-signup-btn {
       display: flex;
-      min-width: 40px;
-      min-height: 40px;
-      font-size: 1rem;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      min-width: unset;
+      min-height: unset;
+      padding: 0;
+      flex-shrink: 0;
+    }
+    .theme-toggle { font-size: 1rem; }
+    /* Signup — icon-only, gold colour, no desktop pill styling */
+    .nav-signup-btn {
       background: none;
       border: none;
       box-shadow: none;
       color: var(--accent);
-      padding: 0;
+      font-size: 1.05rem;
       transform: none !important;
     }
     .nav-signup-btn::before, .nav-signup-btn::after { display: none; }
-    /* Show Lexi / Speak / Apply in top nav */
+    /* Action icons: muted by default, accent on tap */
     .nav-mob-action {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 40px;
-      min-height: 40px;
       background: none;
       border: none;
       cursor: pointer;
@@ -4471,18 +4485,11 @@
       color: var(--muted2);
       transition: color 0.18s;
       -webkit-tap-highlight-color: transparent;
-      padding: 0;
     }
     .nav-mob-action:active { color: var(--accent); }
-    /* Lexi "Aa" uses Playfair italic to match the drawer */
-    #navMobLexi {
-      font-family: 'Playfair Display', serif;
-      font-style: italic;
-      font-size: 1.05rem;
-    }
-    /* Hide bottom tab bar — everything is now in top nav */
+    #navMobLexi { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.1rem; }
+    /* Hide bottom tab bar — everything is in the top nav now */
     .mobile-tab-bar { display: none !important; }
-    /* Remove the bottom padding that was added for the tab bar */
     body { padding-bottom: 0 !important; }
   }
 

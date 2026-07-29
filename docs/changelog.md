@@ -8,7 +8,7 @@
 
 ## v2.50 — 2026-07-29 · Single mobile nav bar, pill order fix, difficulty colors
 
-### index.html — mobile nav (definitive fix)
+### index.html — mobile nav (definitive fix, v2.50 rev 2)
 - **Bottom tab bar eliminated on mobile** (`display: none !important`). There were always TWO bars (top `#mainNav` + bottom `mobile-tab-bar`); user only saw the bottom one and didn't realise the top existed.
 - **Lexi / Speak / Apply added directly to `nav-right`** as icon buttons (`.nav-mob-action`, mobile-only): `Aa` (Playfair italic) · `💬` · `🥊`. All 40×40px touch targets.
 - **Hamburger removed on mobile** — all actions now inline in the top bar; hamburger still available in HTML for desktop hover menu.
