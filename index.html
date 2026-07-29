@@ -2059,18 +2059,31 @@
     overflow-x: hidden;
     padding: 0 0 env(safe-area-inset-bottom, 20px) 0;
     -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
   }
-  /* Episode group */
-  .lexi-ep-group { padding: 20px 0 0; }
-  .lexi-ep-group-label {
+  .lexi-panel-list::-webkit-scrollbar { display: none; }
+  /* Podcast group (top-level) */
+  .lexi-podcast-group { padding: 0; }
+  .lexi-podcast-header {
     font-family: 'DM Mono', monospace;
-    font-size: 0.58rem;
-    letter-spacing: 0.14em;
+    font-size: 0.6rem;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: var(--muted);
+    color: var(--accent);
+    padding: 22px 22px 0;
+    opacity: 0.8;
+  }
+  /* Episode group (second-level) */
+  .lexi-ep-group { padding: 10px 0 0; }
+  .lexi-ep-group-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.01em;
+    color: var(--muted2);
     padding: 0 22px 8px;
     border-bottom: 0.5px solid var(--border);
     margin-bottom: 0;
+    line-height: 1.4;
   }
   /* Word row */
   .lexi-word-row {
@@ -2437,6 +2450,40 @@
     font-family: 'DM Sans', sans-serif; font-size: 0.88rem;
     line-height: 1.65; color: var(--muted);
     opacity: 0; animation: lexiFadeIn 200ms 120ms ease forwards;
+  }
+  .lexi-feedback-body + .lexi-feedback-body { margin-top: 10px; }
+  .lexi-feedback-rewrite {
+    font-family: 'DM Mono', monospace; font-size: 0.78rem;
+    line-height: 1.6; color: var(--accent);
+    background: rgba(232,213,163,0.06);
+    border-left: 2px solid rgba(232,213,163,0.35);
+    border-radius: 0 4px 4px 0;
+    padding: 8px 12px;
+    margin-top: 10px;
+    opacity: 0; animation: lexiFadeIn 200ms 200ms ease forwards;
+  }
+  /* Grading recap in Lexi panel */
+  .lexi-grading-recap {
+    margin: 10px 22px 4px;
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 6px;
+    border: 0.5px solid var(--border);
+  }
+  .lexi-grading-recap-verdict {
+    font-family: 'DM Mono', monospace; font-size: 0.62rem;
+    letter-spacing: 0.07em; text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+  .lexi-grading-recap-text {
+    font-family: 'DM Sans', sans-serif; font-size: 0.76rem;
+    line-height: 1.5; color: var(--muted2);
+  }
+  .lexi-grading-recap-sentence {
+    font-family: 'DM Mono', monospace; font-size: 0.72rem;
+    color: var(--accent); margin-top: 6px; line-height: 1.5;
+    border-left: 2px solid rgba(232,213,163,0.3);
+    padding-left: 8px;
   }
   .lexi-next-btn {
     font-family: 'DM Mono', monospace; font-size: 0.72rem;
@@ -11377,20 +11424,97 @@ function _renderIntelRow(pillsEl, collectionId, liveDna) {
       pop.appendChild(el);
     });
 
-    // Vocab pill — preview stays exactly as before (≤7 words, 2 rows, 3/4-col).
-    // v2.20: the "+N more" control now lives inside the preview grid itself
-    // (its empty 8th cell — row 2, col 4) as a small on-brand button, instead
-    // of a full-width row below the grid. Clicking it on desktop closes this
-    // hover popover and opens the inline drawer panel (openVocabPanel, defined
-    // above) so the full 20-25 word list expands in the drawer's real layout
-    // and pushes the category filter row + card grid down. On touch devices
-    // it just appends the rest of the words into this same grid in place.
-    makePill('Vocab', !!vocab, pop => {
-      // Show all words immediately — no "+N more" click needed
-      const grid = buildVocabGrid(vocab);
-      pop.appendChild(grid);
-      track('vocab_expanded');
-    }, 'vocab-popover');
+    // Vocab pill — shows N+More preview in hover popover.
+    // Clicking the pill button itself (or N+More) opens the full vocab panel.
+    // v2.42: reverted "show all" change; pill click now triggers full expansion.
+    (function() {
+      var VOCAB_PREVIEW_COUNT = 7;
+      var pill = document.createElement('button');
+      pill.className = 'ep-intel-pill';
+      pill.textContent = 'Vocab';
+      if (!vocab) { pill.setAttribute('data-empty', '1'); pillsEl.appendChild(pill); return; }
+      pillsEl.appendChild(pill);
+
+      if (isTouchDevice) {
+        pill.addEventListener('click', function(e) {
+          e.stopPropagation();
+          openSheet('Vocab', function(content) { content.appendChild(buildVocabGrid(vocab)); });
+          track('vocab_expanded');
+        });
+        return;
+      }
+
+      // Desktop: hover popover with N+More preview
+      var popover = document.createElement('div');
+      popover.className = 'ep-intel-popover vocab-popover';
+      var popLbl = document.createElement('div');
+      popLbl.className = 'ep-intel-popover-label';
+      popLbl.textContent = 'Vocab';
+      popover.appendChild(popLbl);
+
+      var previewList = vocab.slice(0, VOCAB_PREVIEW_COUNT);
+      var remaining = vocab.length - VOCAB_PREVIEW_COUNT;
+      var cols = previewList.length > 6 ? 4 : 3;
+      var grid = document.createElement('div');
+      grid.className = 'ep-intel-vocab-grid';
+      grid.style.gridTemplateColumns = 'repeat(' + cols + ', 1fr)';
+      previewList.forEach(function(v) { grid.appendChild(buildVocabCell(v)); });
+
+      if (remaining > 0) {
+        var moreBtn = document.createElement('button');
+        moreBtn.type = 'button';
+        moreBtn.className = 'ep-intel-vocab-more-cell';
+        moreBtn.textContent = '+' + remaining + ' more';
+        moreBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          popover.classList.remove('visible');
+          openVocabPanel(vocab);
+          track('vocab_expanded');
+        });
+        grid.appendChild(moreBtn);
+      }
+      popover.appendChild(grid);
+      pillsEl.appendChild(popover);
+
+      var _popW = popover.offsetWidth || 300;
+      var _popH = popover.offsetHeight || 0;
+      var _hideTimer = null;
+      function showVocabPopover() {
+        pillsEl.querySelectorAll('.ep-intel-popover.visible').forEach(function(p) { if (p !== popover) p.classList.remove('visible'); });
+        clearTimeout(_hideTimer);
+        var pillRect = pill.getBoundingClientRect();
+        var left = pillRect.left;
+        if (left + _popW > window.innerWidth - 8) left = window.innerWidth - _popW - 8;
+        if (left < 8) left = 8;
+        popover.style.left = left + 'px';
+        var popH = popover.offsetHeight || _popH;
+        var spaceAbove = pillRect.top - 10;
+        var spaceBelow = window.innerHeight - pillRect.bottom - 18;
+        if (popH > spaceAbove && spaceBelow >= popH) {
+          popover.style.top = (pillRect.bottom + 10) + 'px';
+          popover.style.bottom = 'auto';
+        } else if (popH > spaceAbove) {
+          popover.style.top = '8px';
+          popover.style.bottom = 'auto';
+        } else {
+          popover.style.bottom = (window.innerHeight - pillRect.top + 10) + 'px';
+          popover.style.top = 'auto';
+        }
+        popover.classList.add('visible');
+      }
+      function scheduleVocabHide() { _hideTimer = setTimeout(function() { popover.classList.remove('visible'); }, 150); }
+      pill.addEventListener('mouseenter', showVocabPopover);
+      pill.addEventListener('mouseleave', scheduleVocabHide);
+      popover.addEventListener('mouseenter', function() { clearTimeout(_hideTimer); });
+      popover.addEventListener('mouseleave', scheduleVocabHide);
+      // Pill click → open full vocab panel directly
+      pill.addEventListener('click', function(e) {
+        e.stopPropagation();
+        popover.classList.remove('visible');
+        openVocabPanel(vocab);
+        track('vocab_expanded');
+      });
+    })();
 
     // Tension pill — two-column vs. layout
     makePill('Tension', !!tension, pop => {
@@ -19843,11 +19967,7 @@ function _csFeedbackDone(isUp) {
 function openCS() {
   _mountCSInPanel();
   const overlay = document.getElementById('convOverlay');
-  // Two-frame open so display:flex → .active CSS transition fires correctly
-  overlay.style.display = 'flex';
-  requestAnimationFrame(function() {
-    requestAnimationFrame(function() { overlay.classList.add('active'); });
-  });
+  overlay.classList.add('active');
   document.body.classList.add('cs-panel-open');
   if (window.innerWidth <= 899) document.body.classList.add('cotd-open');
   panelSwitchTab('spark', true);
@@ -19865,8 +19985,6 @@ function openCS() {
 function closeCS(persist) {
   const overlay = document.getElementById('convOverlay');
   overlay.classList.remove('active');
-  // Wait for slide-out transition before hiding
-  setTimeout(function() { if (!overlay.classList.contains('active')) overlay.style.display = ''; }, 300);
   document.body.classList.remove('cs-panel-open');
   document.body.classList.remove('cotd-open');
   document.removeEventListener('keydown', _convEscHandler);
@@ -21486,13 +21604,14 @@ function playStreakMilestoneSFX() {
 /* ── CONVERSATIONS OVERLAY ─────────────────────────────── */
 .conv-overlay {
   position: fixed; inset: 0; z-index: 1100;
-  display: none;
-  background: rgba(13,13,13,0.38);
-  pointer-events: none;
-}
-.conv-overlay.active {
   display: flex;
   justify-content: flex-end;
+  background: rgba(13,13,13,0);
+  pointer-events: none;
+  transition: background 0.28s ease;
+}
+.conv-overlay.active {
+  background: rgba(13,13,13,0.38);
   pointer-events: all;
 }
 
@@ -21511,7 +21630,7 @@ function playStreakMilestoneSFX() {
 }
 .conv-overlay.active .conv-panel { transform: translateX(0); }
 
-[data-theme="light"] .conv-overlay { background: rgba(0,0,0,0.2); }
+[data-theme="light"] .conv-overlay.active { background: rgba(0,0,0,0.2); }
 
 /* v1.71 quiz pill — inherits cat-card + cat-name styles exactly, teal colour */
 .cat-quiz-pill {
@@ -23600,8 +23719,7 @@ body.corner-mode #spCornerSearchWrap {
   }
 }
 
-/* ---- Panel overlay smooth fade ---- */
-.stories-overlay { background: rgba(8,6,4,0); transition: background 0.35s ease; }
+/* ---- Panel overlay smooth fade (properties now in main .stories-overlay rule below) ---- */
 
 /* ---- Mode icon swap ---- */
 .sp-mode-icon {
@@ -24273,14 +24391,13 @@ body.corner-panel-open .stories-panel {
 
 .stories-overlay {
   position: fixed; inset: 0; z-index: 1200;
-  display: none;
+  display: flex;
+  justify-content: flex-end;
   background: rgba(8,6,4,0);
   pointer-events: none;
   transition: background 0.35s ease;
 }
 .stories-overlay.active {
-  display: flex;
-  justify-content: flex-end;
   background: rgba(8,6,4,0.55);
   pointer-events: all;
 }
@@ -24309,7 +24426,7 @@ body.corner-panel-open .stories-panel {
 .corner-panel-situation.cp-visible { opacity: 1; transform: translateY(0); }
 .corner-panel-body { opacity: 0; transition: opacity 0.25s ease; }
 .corner-panel-body.cp-visible { opacity: 1; }
-[data-theme="light"] .stories-overlay { background: rgba(0,0,0,0.28); }
+[data-theme="light"] .stories-overlay.active { background: rgba(0,0,0,0.28); }
 [data-theme="light"] .stories-panel {
   background: #faf8f3;
   border-left: 1px solid rgba(0,0,0,0.08);
@@ -25277,29 +25394,60 @@ function _lexiRenderPanel() {
     return;
   }
 
-  // Group by episodeTitle
-  var groups = {};
-  var order  = [];
+  // Group by podcast → episode title
+  var podcasts = {};    // podcastKey → { label, episodes: { epKey → { label, words } }, order: [] }
+  var podcastOrder = [];
   arr.forEach(function(entry) {
-    var key = entry.episodeTitle || '__free__';
-    if (!groups[key]) { groups[key] = []; order.push(key); }
-    groups[key].push(entry);
+    var podKey = entry.podcastName || '__none__';
+    var epKey  = entry.episodeTitle || '__free__';
+    if (!podcasts[podKey]) {
+      podcasts[podKey] = { label: entry.podcastName || null, episodes: {}, order: [] };
+      podcastOrder.push(podKey);
+    }
+    var pod = podcasts[podKey];
+    if (!pod.episodes[epKey]) {
+      pod.episodes[epKey] = { label: entry.episodeTitle || null, words: [] };
+      pod.order.push(epKey);
+    }
+    pod.episodes[epKey].words.push(entry);
   });
 
-  order.forEach(function(key) {
-    var groupEl = document.createElement('div');
-    groupEl.className = 'lexi-ep-group';
+  podcastOrder.forEach(function(podKey) {
+    var pod = podcasts[podKey];
+    var podEl = document.createElement('div');
+    podEl.className = 'lexi-podcast-group';
 
-    var labelEl = document.createElement('div');
-    labelEl.className = 'lexi-ep-group-label';
-    labelEl.textContent = key === '__free__' ? 'Free search' : key;
-    groupEl.appendChild(labelEl);
+    if (pod.label) {
+      var podHeader = document.createElement('div');
+      podHeader.className = 'lexi-podcast-header';
+      podHeader.textContent = pod.label;
+      podEl.appendChild(podHeader);
+    }
 
-    groups[key].forEach(function(entry) {
-      groupEl.appendChild(_lexiBuildWordRow(entry));
+    pod.order.forEach(function(epKey) {
+      var ep = pod.episodes[epKey];
+      var epEl = document.createElement('div');
+      epEl.className = 'lexi-ep-group';
+
+      if (ep.label) {
+        var epHeader = document.createElement('div');
+        epHeader.className = 'lexi-ep-group-label';
+        epHeader.textContent = ep.label;
+        epEl.appendChild(epHeader);
+      } else if (!pod.label) {
+        var epHeader2 = document.createElement('div');
+        epHeader2.className = 'lexi-ep-group-label';
+        epHeader2.textContent = 'Free search';
+        epEl.appendChild(epHeader2);
+      }
+
+      ep.words.forEach(function(entry) {
+        epEl.appendChild(_lexiBuildWordRow(entry));
+      });
+      podEl.appendChild(epEl);
     });
 
-    listEl.appendChild(groupEl);
+    listEl.appendChild(podEl);
   });
 }
 
@@ -25334,12 +25482,19 @@ function _lexiBuildWordRow(entry) {
   removeBtn.addEventListener('click', function(e) {
     e.stopPropagation();
     _lexiconRemove(entry.word);
-    // Collapse before removing
-    row.classList.remove('expanded');
+    // Animate out: fade + slide up + height collapse
+    var h = row.offsetHeight;
+    row.style.overflow = 'hidden';
+    row.style.transition = 'opacity 0.22s ease, transform 0.22s ease, max-height 0.28s ease 0.1s';
+    row.style.maxHeight = h + 'px';
+    requestAnimationFrame(function() {
+      row.style.opacity = '0';
+      row.style.transform = 'translateY(-6px)';
+      row.style.maxHeight = '0';
+    });
     setTimeout(function() {
       if (row.parentNode) row.parentNode.removeChild(row);
       _lexiUpdateBadge();
-      // Re-render if group now empty
       var listEl = document.getElementById('lexiPanelList');
       if (listEl && !listEl.querySelector('.lexi-word-row')) _lexiRenderPanel();
       else {
@@ -25347,7 +25502,7 @@ function _lexiBuildWordRow(entry) {
         var arr = _lexiconLoadStore();
         if (countEl) countEl.textContent = arr.length + (arr.length === 1 ? ' word' : ' words');
       }
-    }, 50);
+    }, 380);
   });
 
   top.appendChild(chevron);
@@ -25368,6 +25523,32 @@ function _lexiBuildWordRow(entry) {
   defEl.className = 'lexi-word-def';
   defEl.textContent = entry.definition || '';
   pad.appendChild(defEl);
+
+  // Grading recap (if word has been practiced and graded)
+  if (entry.grading && entry.grading.verdict) {
+    var g = entry.grading;
+    var gEl = document.createElement('div');
+    gEl.className = 'lexi-grading-recap';
+    var gVerdictEl = document.createElement('div');
+    gVerdictEl.className = 'lexi-grading-recap-verdict ' + (g.verdict === 'hit' ? 'lexi-verdict--hit' : g.verdict === 'almost' ? 'lexi-verdict--almost' : 'lexi-verdict--off');
+    gVerdictEl.textContent = g.verdict === 'hit' ? '\u2713 Hits the mark.' : g.verdict === 'almost' ? '\u2A01 Almost there.' : '\u2717 Off the mark.';
+    gEl.appendChild(gVerdictEl);
+    if (g.feedback) {
+      // Show first paragraph only in recap
+      var firstPara = g.feedback.split(/\n\n+/)[0] || g.feedback;
+      var gTextEl = document.createElement('div');
+      gTextEl.className = 'lexi-grading-recap-text';
+      gTextEl.textContent = firstPara.trim();
+      gEl.appendChild(gTextEl);
+    }
+    if (g.sentence) {
+      var gSentEl = document.createElement('div');
+      gSentEl.className = 'lexi-grading-recap-sentence';
+      gSentEl.textContent = g.sentence;
+      gEl.appendChild(gSentEl);
+    }
+    pad.appendChild(gEl);
+  }
 
   var sentsEl = document.createElement('div');
   sentsEl.className = 'lexi-word-sentences';
@@ -26000,11 +26181,13 @@ function _lexiconSetError(rowEl, word, definition, collectionId) {
 function _lexiconSave(word, definition, collectionId, sentences, rowEl) {
   var arr = _lexiconLoadStore();
 
-  // Get episode title
+  // Get episode title + podcast name
   var episodeTitle = null;
+  var podcastName = null;
   var colIdInt = collectionId != null ? parseInt(collectionId) : null;
   if (colIdInt && typeof COLLECTIONS_BY_ID !== 'undefined' && COLLECTIONS_BY_ID[colIdInt]) {
     episodeTitle = COLLECTIONS_BY_ID[colIdInt].title || null;
+    podcastName  = COLLECTIONS_BY_ID[colIdInt].podcast || null;
   }
 
   // Upsert: remove existing entry for this word
@@ -26012,7 +26195,7 @@ function _lexiconSave(word, definition, collectionId, sentences, rowEl) {
 
   var entry = {
     word: word, definition: definition,
-    collectionId: colIdInt, episodeTitle: episodeTitle,
+    collectionId: colIdInt, episodeTitle: episodeTitle, podcastName: podcastName,
     sentences: sentences, savedAt: Date.now(),
     practiceState: 'new', practiceCount: 0, hitCount: 0, lastPracticedAt: null
   };
@@ -26264,8 +26447,10 @@ function _lexiSubmit() {
   .then(function(data) {
     if (!data.verdict) throw new Error('bad response');
     _lexiSavePracticeResult(entry.word, data.verdict);
+    // Persist grading to localStorage entry
+    _lexiSaveGrading(entry.word, sentence, data.verdict, data.feedback, data.sentence || null);
     _lexiSession.results.push({ word: entry.word, verdict: data.verdict });
-    _lexiRenderFeedback(entry.word, sentence, data.verdict, data.feedback);
+    _lexiRenderFeedback(entry.word, sentence, data.verdict, data.feedback, data.sentence || null);
   })
   .catch(function() {
     if (btn) { btn.disabled = false; btn.textContent = 'Submit \u2192'; }
@@ -26276,7 +26461,7 @@ function _lexiSubmit() {
   });
 }
 
-function _lexiRenderFeedback(word, sentence, verdict, feedback) {
+function _lexiRenderFeedback(word, sentence, verdict, feedback, suggestedSentence) {
   var stage = document.getElementById('lexiPracticeStage');
   if (!stage) return;
   var total   = _lexiSession.queue.length;
@@ -26305,10 +26490,23 @@ function _lexiRenderFeedback(word, sentence, verdict, feedback) {
   verdictEl.textContent = vText;
   card.appendChild(verdictEl);
 
-  var bodyEl = document.createElement('div');
-  bodyEl.className = 'lexi-feedback-body';
-  bodyEl.textContent = feedback || '';
-  card.appendChild(bodyEl);
+  // Render feedback paragraphs (split on \n\n)
+  var feedbackParas = (feedback || '').split(/\n\n+/);
+  feedbackParas.forEach(function(para) {
+    if (!para.trim()) return;
+    var bodyEl = document.createElement('div');
+    bodyEl.className = 'lexi-feedback-body';
+    bodyEl.textContent = para.trim();
+    card.appendChild(bodyEl);
+  });
+
+  // Suggested rewrite paragraph (3rd paragraph)
+  if (suggestedSentence) {
+    var rewriteEl = document.createElement('div');
+    rewriteEl.className = 'lexi-feedback-rewrite';
+    rewriteEl.textContent = suggestedSentence;
+    card.appendChild(rewriteEl);
+  }
 
   var nextBtn = document.createElement('button');
   nextBtn.className = 'lexi-next-btn';
@@ -26450,6 +26648,23 @@ function _lexiSavePracticeResult(word, verdict) {
     } else {
       updated.practiceState = 'practiced';
     }
+    return updated;
+  });
+  _lexiconSaveStore(arr);
+}
+
+function _lexiSaveGrading(word, sentence, verdict, feedback, suggestedSentence) {
+  var arr = _lexiconLoadStore();
+  arr = arr.map(function(e) {
+    if (e.word.toLowerCase() !== word.toLowerCase()) return e;
+    var updated = Object.assign({}, e);
+    updated.grading = {
+      verdict: verdict,
+      feedback: feedback || '',
+      sentence: suggestedSentence || null,
+      userSentence: sentence || '',
+      gradedAt: Date.now()
+    };
     return updated;
   });
   _lexiconSaveStore(arr);
