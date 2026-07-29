@@ -4211,6 +4211,25 @@
   0%   { transform: scale(0.85); opacity: 0; }
   100% { transform: scale(1);    opacity: 1; }
 }
+  /* Signup icon in nav */
+  .nav-signup-btn {
+    display: none; /* shown only on mobile via @media */
+    background: none;
+    border: none;
+    color: var(--accent);
+    font-family: 'DM Mono', monospace;
+    font-size: 1.1rem;
+    cursor: pointer;
+    min-width: 44px;
+    min-height: 44px;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    line-height: 1;
+    transition: opacity 0.15s;
+  }
+  .nav-signup-btn:hover { opacity: 0.7; }
+
   /* RIGHT CLUSTER */
   .nav-right {
     display: flex;
@@ -4332,12 +4351,14 @@
   @media (max-width: 768px) {
     nav { grid-template-columns: 1fr auto; }
     .nav-island { display: none; }
+    .nav-right { grid-column: 2; grid-row: 1; gap: 0.25rem; }
     .nav-pill { display: none; }
     .nav-mobile-toggle { display: block; }
-    .nav-right { gap: 0.5rem; }
     .hiw-trigger { display: none; }
     .nav-logo { max-width: none; overflow: visible; }
     .nav-eyebrow { white-space: nowrap; overflow: visible; }
+    .theme-toggle { display: flex; min-width: 44px; min-height: 44px; }
+    .nav-signup-btn { display: flex; }
   }
 
   /* ── MOBILE BOTTOM TAB BAR ─────────────────────────────────── */
@@ -4829,7 +4850,7 @@
     .hero {
       display: flex;
       flex-direction: column;
-      padding: 90px 0 0 0;
+      padding: 76px 0 0 0;
     }
 
     /* Hero-copy becomes a flex column so we can reorder its children */
@@ -4955,6 +4976,14 @@
     .hc-term { font-size: 1.7rem; }
     .hero-copy { padding: 0 1.5rem 2.5rem 1.5rem; }
     .hero-card-col { padding: 0 1.5rem 3rem 1.5rem; }
+  }
+  /* v2.48: Tighten hero on small phones so Episodes/Themes peeks into viewport */
+  @media (max-width: 390px) {
+    .hero { padding: 76px 0 0 0; }
+    .hero-cta { margin-bottom: 1.25rem; }
+    .hero-card-col { padding-bottom: 1.25rem; }
+    .hero-stats { padding: 1rem 1.75rem; }
+    .hero-sub { margin-bottom: 1.25rem; }
   }
   /* ============================================
      CONCEPT OF THE DAY — MODAL
@@ -9299,6 +9328,7 @@
       <div class="nav-dot"></div>
       <span id="navConceptCount">—</span> ideas
     </div>
+    <button class="nav-signup-btn" aria-label="Sign up" onclick="document.getElementById('signup')?.scrollIntoView({behavior:'smooth'})">✦</button>
     <button class="nav-mobile-toggle" id="navToggle" onclick="toggleMobileNav()">≡</button>
   </div>
 </nav>
@@ -9319,10 +9349,6 @@
 
 <!-- MOBILE BOTTOM TAB BAR ─────────────────────────── -->
 <nav class="mobile-tab-bar" id="mobileTabBar" aria-label="Main navigation">
-  <button class="mob-tab" id="mobTabHome" onclick="playNavSFX();closeMobileNav();window.scrollTo({top:0,behavior:'smooth'})" aria-label="Home">
-    <span class="mob-tab-icon">◉</span>
-    <span class="mob-tab-label">Episodes</span>
-  </button>
   <button class="mob-tab" id="mobTabLexi" onclick="playNavSFX();openLexiconPanel();closeMobileNav()" aria-label="Lexi word bank">
     <span class="mob-tab-icon mob-tab-aa">Aa</span>
     <span class="mob-tab-label">Lexi</span>

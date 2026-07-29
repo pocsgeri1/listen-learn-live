@@ -6,6 +6,19 @@
 
 ---
 
+## v2.48 — 2026-07-29 · Mobile nav fixes + hero scroll
+
+### index.html — mobile nav
+- **Nav-right grid placement fixed:** on mobile, `nav-right` now explicitly placed in `grid-column: 2; grid-row: 1`, fixing a bug where it wrapped to row 2 (clipped by nav height), hiding the theme toggle and compressing the logo.
+- **Theme toggle:** ensured `display: flex; min-width/height: 44px` on mobile — always visible and touch-friendly.
+- **Episodes tab removed** from mobile bottom tab bar (`mobTabHome` ◉) — button did nothing useful; 3 tabs remain (Lexi, Speak, Apply).
+- **✦ signup button added** to `nav-right` — icon-only, `DM Mono`, accent-colored, 44×44px touch target, links to `#signup` section. Visible on mobile only (hidden on desktop via default `display: none`, shown at ≤768px).
+
+### index.html — hero scroll
+- **Hero top padding reduced** on mobile: `90px → 76px` at ≤900px; `390px` breakpoint adds further tightening on hero-cta, hero-card-col, hero-stats, hero-sub so the Episodes/Themes toggle peeks into viewport without scrolling.
+
+---
+
 ## v2.46 — 2026-07-29 · Vocab categories, enrichment layer, new tools
 
 ### docs/vocab-categories.md (new)
