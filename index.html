@@ -1581,7 +1581,7 @@
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    padding: 0 0 12px;
+    padding: 0 0 12px 8px;
     flex-shrink: 0;
     margin-bottom: 2px;
   }
@@ -1663,11 +1663,96 @@
     margin-bottom: 9px;
   }
   [data-theme="light"] .ep-profile-key-quote { color: rgba(30,27,22,0.55); }
-  /* On mobile: only Vocab + Profile pills show in the intel row */
+  /* Profile popover — wider, always opens upward like IWTMT */
+  .ep-intel-popover.ep-profile-popover {
+    min-width: min(500px, 92vw);
+    max-width: min(560px, 95vw);
+  }
+  /* Profile popover inner layout */
+  .ep-profile-pop-meta {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  .ep-profile-pop-type-row {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+  .ep-profile-pop-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.5rem;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .ep-profile-pop-tag.diff-1 { color: #7aaf8a; border-color: rgba(122,175,138,0.35); background: rgba(122,175,138,0.07); }
+  .ep-profile-pop-tag.diff-2 { color: #e0a060; border-color: rgba(224,160,96,0.35);  background: rgba(224,160,96,0.07); }
+  .ep-profile-pop-tag.diff-3 { color: #d4715a; border-color: rgba(212,113,90,0.35);  background: rgba(212,113,90,0.07); }
+  .ep-profile-pop-tag.tag-evergreen  { color: #7aaf8a; border-color: rgba(122,175,138,0.35); }
+  .ep-profile-pop-tag.tag-controversy{ color: #d4715a; border-color: rgba(212,113,90,0.35); }
+  .ep-profile-pop-tag.tag-action-high{ color: var(--accent); border-color: rgba(232,213,163,0.35); }
+  .ep-profile-pop-scores {
+    display: flex;
+    gap: 18px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+    opacity: 0.8;
+  }
+  .ep-profile-pop-score-item {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .ep-profile-pop-score-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.42rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    opacity: 0.6;
+  }
+  .ep-profile-pop-score-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--text);
+  }
+
+  /* Key Quotes popover — wider to fit full quote text */
+  .ep-intel-popover.key-quotes-popover {
+    min-width: min(380px, 90vw);
+    max-width: min(460px, 95vw);
+  }
+  .ep-kq-quote {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 0.82rem;
+    line-height: 1.55;
+    color: var(--muted2);
+    padding-left: 10px;
+    border-left: 2px solid rgba(232,213,163,0.3);
+    margin-bottom: 10px;
+  }
+  .ep-kq-quote:last-child { margin-bottom: 0; }
+  [data-theme="light"] .ep-kq-quote { color: rgba(30,27,22,0.55); }
+
+  /* On mobile: Vocab, Profile, Key Quotes shown; DNA/Line/Tension hidden */
   @media (max-width: 768px) {
     .ep-intel-pill.ep-pill-dna,
     .ep-intel-pill.ep-pill-line,
     .ep-intel-pill.ep-pill-tension { display: none; }
+    /* Mobile order: Vocab (default 11), Profile (12), Key Quotes (13) */
+    .ep-intel-pill.ep-pill-profile   { order: 12; }
+    .ep-intel-pill.ep-pill-key-quotes { order: 13; }
   }
 
   /* ── LEXICON — shimmer, chip UI, sentence blocks, panel ── */
@@ -2167,8 +2252,12 @@
     display: flex;
     align-items: baseline;
     gap: 10px;
-    padding: 28px 22px 0;
+    padding: calc(env(safe-area-inset-top, 0px) + 28px) 22px 0;
     flex-shrink: 0;
+  }
+  @media (max-width: 768px) {
+    /* Push header below phone status bar & mobile browser chrome */
+    .lexi-panel-header { padding-top: calc(env(safe-area-inset-top, 0px) + 56px); }
   }
   .lexi-panel-title {
     font-family: 'Playfair Display', serif;
@@ -4349,16 +4438,17 @@
   .nav-mobile-quiz:hover { color: var(--teal) !important; background: rgba(90,191,175,0.06) !important; }
 
   @media (max-width: 768px) {
-    nav { grid-template-columns: 1fr auto; }
+    nav { grid-template-columns: 1fr auto; padding: 0 1rem; }
     .nav-island { display: none; }
-    .nav-right { grid-column: 2; grid-row: 1; gap: 0.25rem; }
+    .nav-right { grid-column: 2; grid-row: 1; gap: 2px; flex-shrink: 0; }
     .nav-pill { display: none; }
-    .nav-mobile-toggle { display: block; }
+    .nav-mobile-toggle { display: flex; }
     .hiw-trigger { display: none; }
-    .nav-logo { max-width: none; overflow: visible; }
-    .nav-eyebrow { white-space: nowrap; overflow: visible; }
-    .theme-toggle { display: flex; min-width: 44px; min-height: 44px; }
-    .nav-signup-btn { display: flex; }
+    .nav-logo { min-width: 0; overflow: hidden; }
+    /* Hide eyebrow on mobile — too long for small screens */
+    .nav-eyebrow { display: none; }
+    .theme-toggle { display: flex; min-width: 40px; min-height: 40px; padding: 0; }
+    .nav-signup-btn { display: flex; min-width: 40px; min-height: 40px; font-size: 0.9rem; }
   }
 
   /* ── MOBILE BOTTOM TAB BAR ─────────────────────────────────── */
@@ -11820,17 +11910,16 @@ function _renderIntelRow(pillsEl, collectionId, liveDna) {
       });
     }, 'dna-popover', 'ep-pill-dna');
 
-    // Line pill — large Playfair italic with decorative quote mark
-    makePill('Line', !!line, pop => {
-      const mark = document.createElement('div');
-      mark.className = 'ep-intel-line-quote-mark';
-      mark.textContent = '\u201C';
-      pop.appendChild(mark);
-      const el = document.createElement('div');
-      el.className = 'ep-intel-line-text';
-      el.textContent = line + '\u201D';
-      pop.appendChild(el);
-    }, null, 'ep-pill-line');
+    // Key Quotes pill — standalone, shown on both desktop and mobile
+    const keyQuotes = (entry && Array.isArray(entry.key_quotes) && entry.key_quotes.length) ? entry.key_quotes : null;
+    makePill('Quotes', !!keyQuotes, pop => {
+      keyQuotes.forEach(function(q) {
+        const el = document.createElement('div');
+        el.className = 'ep-kq-quote';
+        el.textContent = q;
+        pop.appendChild(el);
+      });
+    }, 'key-quotes-popover', 'ep-pill-key-quotes');
 
     // Vocab pill — shows N+More preview in hover popover.
     // Clicking the pill button itself (or N+More) opens the full vocab panel.
@@ -11957,6 +12046,18 @@ function _renderIntelRow(pillsEl, collectionId, liveDna) {
       }
     }, null, 'ep-pill-tension');
 
+    // Line pill — large Playfair italic with decorative quote mark (hidden on mobile → Profile sheet)
+    makePill('Line', !!line, pop => {
+      const mark = document.createElement('div');
+      mark.className = 'ep-intel-line-quote-mark';
+      mark.textContent = '\u201C';
+      pop.appendChild(mark);
+      const el = document.createElement('div');
+      el.className = 'ep-intel-line-text';
+      el.textContent = line + '\u201D';
+      pop.appendChild(el);
+    }, null, 'ep-pill-line');
+
     // Profile pill — enrichment data (core_claim, difficulty, tone, type, actionability, evergreen, controversy)
     // On mobile: also shows DNA, Line, Tension (which are hidden as standalone pills)
     (function() {
@@ -11965,7 +12066,7 @@ function _renderIntelRow(pillsEl, collectionId, liveDna) {
       const hasProfileData = hasEnrichment || !!dna || !!line || !!tension;
 
       function buildProfileContent(pop) {
-        // Core claim
+        // Core claim — Playfair italic opener
         if (enrichment.core_claim) {
           const cc = document.createElement('div');
           cc.className = 'ep-profile-core-claim';
@@ -11973,48 +12074,47 @@ function _renderIntelRow(pillsEl, collectionId, liveDna) {
           pop.appendChild(cc);
         }
 
-        // Badges row
-        const badges = document.createElement('div');
-        badges.className = 'ep-profile-badges';
-
-        function addBadge(text, cls) {
-          const b = document.createElement('span');
-          b.className = 'ep-profile-badge' + (cls ? ' ' + cls : '');
-          b.textContent = text;
-          badges.appendChild(b);
+        // Type / Tone / Guest field row
+        const typeRow = document.createElement('div');
+        typeRow.className = 'ep-profile-pop-type-row';
+        function addTag(text, cls) {
+          if (!text) return;
+          const t = document.createElement('span');
+          t.className = 'ep-profile-pop-tag' + (cls ? ' ' + cls : '');
+          t.textContent = text;
+          typeRow.appendChild(t);
         }
+        if (enrichment.episode_type) addTag(enrichment.episode_type.charAt(0).toUpperCase() + enrichment.episode_type.slice(1));
+        if (enrichment.tone)         addTag(enrichment.tone.charAt(0).toUpperCase() + enrichment.tone.slice(1));
+        if (enrichment.guest_field)  addTag(enrichment.guest_field);
+        if (enrichment.evergreen === true)        addTag('🌿 Evergreen', 'tag-evergreen');
+        if (enrichment.controversy_flag === true) addTag('⚠ Debated', 'tag-controversy');
+        if (typeRow.children.length) pop.appendChild(typeRow);
 
-        if (enrichment.episode_type)    addBadge(enrichment.episode_type.charAt(0).toUpperCase() + enrichment.episode_type.slice(1));
-        if (enrichment.tone)            addBadge(enrichment.tone.charAt(0).toUpperCase() + enrichment.tone.slice(1));
-        if (enrichment.guest_field)     addBadge(enrichment.guest_field);
-        if (enrichment.difficulty_level === 1) addBadge('\u25CF Accessible', 'difficulty-1');
-        else if (enrichment.difficulty_level === 2) addBadge('\u25CF\u25CF Mid', 'difficulty-2');
-        else if (enrichment.difficulty_level === 3) addBadge('\u25CF\u25CF\u25CF Dense', 'difficulty-3');
-        if (enrichment.actionability_score === 3) addBadge('\u26A1 High takeaway', 'actionability-high');
-        else if (enrichment.actionability_score === 2) addBadge('\u26A1 Some takeaway');
-        else if (enrichment.actionability_score === 1) addBadge('Pure ideas');
-        if (enrichment.evergreen === true)       addBadge('\uD83C\uDF3F Evergreen', 'evergreen');
-        if (enrichment.controversy_flag === true) addBadge('\u26A0 Debated', 'controversy');
-
-        if (badges.children.length) pop.appendChild(badges);
-
-        // Key quotes
-        if (Array.isArray(enrichment.key_quotes) && enrichment.key_quotes.length) {
-          const div = document.createElement('div');
+        // Scores row — difficulty dots + actionability
+        const scoresRow = document.createElement('div');
+        scoresRow.className = 'ep-profile-pop-scores';
+        function addScore(label, val, cls) {
+          const item = document.createElement('div');
+          item.className = 'ep-profile-pop-score-item';
           const lbl = document.createElement('div');
-          lbl.className = 'ep-profile-section-label';
-          lbl.textContent = 'Key quotes';
-          div.appendChild(lbl);
-          enrichment.key_quotes.forEach(function(q) {
-            const el = document.createElement('div');
-            el.className = 'ep-profile-key-quote';
-            el.textContent = q;
-            div.appendChild(el);
-          });
-          pop.appendChild(div);
+          lbl.className = 'ep-profile-pop-score-label';
+          lbl.textContent = label;
+          const v = document.createElement('div');
+          v.className = 'ep-profile-pop-score-val' + (cls ? ' ' + cls : '');
+          v.textContent = val;
+          item.appendChild(lbl); item.appendChild(v);
+          scoresRow.appendChild(item);
         }
+        if (enrichment.difficulty_level === 1) addScore('Difficulty', '● Accessible', 'diff-1');
+        else if (enrichment.difficulty_level === 2) addScore('Difficulty', '●● Mid', 'diff-2');
+        else if (enrichment.difficulty_level === 3) addScore('Difficulty', '●●● Dense', 'diff-3');
+        if (enrichment.actionability_score === 3)      addScore('Takeaway', '⚡⚡⚡ High', 'tag-action-high');
+        else if (enrichment.actionability_score === 2) addScore('Takeaway', '⚡⚡ Some');
+        else if (enrichment.actionability_score === 1) addScore('Takeaway', '⚡ Ideas');
+        if (scoresRow.children.length) pop.appendChild(scoresRow);
 
-        // Mobile-only: DNA, Line, Tension (hidden as standalone pills on mobile)
+        // Mobile-only: DNA, Line, Tension (hidden as standalone pills on mobile; Key Quotes has its own pill)
         var isMobile = window.matchMedia('(max-width: 768px)').matches;
         if (isMobile) {
           if (dna && Object.keys(dna).length) {
@@ -12054,10 +12154,29 @@ function _renderIntelRow(pillsEl, collectionId, liveDna) {
             lbl.className = 'ep-profile-section-label';
             lbl.textContent = 'Core tension';
             pop.appendChild(lbl);
-            const el = document.createElement('div');
-            el.className = 'ep-intel-tension-text';
-            el.textContent = tension;
-            pop.appendChild(el);
+            if (tension.includes(' vs ') || tension.includes(' vs. ')) {
+              const parts = tension.split(/ vs\.? /i);
+              const tGrid = document.createElement('div');
+              tGrid.className = 'ep-intel-tension-vs';
+              const tA = document.createElement('div');
+              tA.className = 'ep-intel-tension-side';
+              const rawA = (parts[0] || '').trim();
+              tA.textContent = rawA.charAt(0).toLowerCase() + rawA.slice(1);
+              const tMid = document.createElement('div');
+              tMid.className = 'ep-intel-tension-vs-label';
+              tMid.textContent = 'vs';
+              const tB = document.createElement('div');
+              tB.className = 'ep-intel-tension-side';
+              const rawB = (parts.slice(1).join(' vs ') || '').trim();
+              tB.textContent = rawB.charAt(0).toLowerCase() + rawB.slice(1);
+              tGrid.appendChild(tA); tGrid.appendChild(tMid); tGrid.appendChild(tB);
+              pop.appendChild(tGrid);
+            } else {
+              const el = document.createElement('div');
+              el.className = 'ep-intel-tension-text';
+              el.textContent = tension;
+              pop.appendChild(el);
+            }
           }
         }
       }
@@ -12086,26 +12205,20 @@ function _renderIntelRow(pillsEl, collectionId, liveDna) {
       buildProfileContent(popover);
       pillsEl.appendChild(popover);
 
-      const _popW = 320;
+      const _popW = 500;
       let _hideTimer = null;
       function showProfilePop() {
         pillsEl.querySelectorAll('.ep-intel-popover.visible').forEach(function(p) { if (p !== popover) p.classList.remove('visible'); });
         clearTimeout(_hideTimer);
         const pillRect = profilePill.getBoundingClientRect();
+        // Always open upward — same behaviour as IWTMT popover
+        popover.style.bottom = (window.innerHeight - pillRect.top + 10) + 'px';
+        popover.style.top = 'auto';
         let left = pillRect.left;
-        if (left + _popW > window.innerWidth - 8) left = window.innerWidth - _popW - 8;
+        const actualW = popover.offsetWidth || _popW;
+        if (left + actualW > window.innerWidth - 8) left = window.innerWidth - actualW - 8;
         if (left < 8) left = 8;
         popover.style.left = left + 'px';
-        const popH = popover.offsetHeight || 200;
-        const spaceAbove = pillRect.top - 10;
-        const spaceBelow = window.innerHeight - pillRect.bottom - 18;
-        if (popH > spaceAbove && spaceBelow >= popH) {
-          popover.style.top = (pillRect.bottom + 10) + 'px';
-          popover.style.bottom = 'auto';
-        } else {
-          popover.style.bottom = (window.innerHeight - pillRect.top + 10) + 'px';
-          popover.style.top = 'auto';
-        }
         popover.classList.add('visible');
       }
       function scheduleProfileHide() { _hideTimer = setTimeout(function() { popover.classList.remove('visible'); }, 150); }
@@ -15324,6 +15437,9 @@ function initSparkHero() {
     // Start cycling immediately, every 5s
     setInterval(_nextStat, 5000);
 
+    // Delayed appearance — fade in after hero has settled (1600ms)
+    setTimeout(function() { pq.classList.add('pq-visible'); }, 1600);
+
     // Only hide near library section — no scroll-show logic
     var _libEl = document.getElementById('libSection') || document.getElementById('netflixRows');
     if (_libEl) {
@@ -15337,7 +15453,8 @@ function initSparkHero() {
           if (libRect.top < window.innerHeight + 100) {
             pq.classList.add('pq-hidden');
           } else {
-            pq.classList.remove('pq-hidden');
+            // Only show visible if it has already appeared
+            if (pq.classList.contains('pq-visible')) pq.classList.remove('pq-hidden');
           }
         });
       }, { passive: true });
@@ -23179,11 +23296,12 @@ body.corner-mode .sp-eyebrow-kicker { opacity: 0; pointer-events: none; transiti
     padding-right: 1rem;
     border-right: 2px solid var(--accent);
     padding-bottom: 0;
-    opacity: 0.45;
-    transition: opacity 0.6s ease;
+    opacity: 0; /* starts invisible — JS adds .pq-visible after delay */
+    transition: opacity 1.4s ease;
     z-index: 10;
   }
-  .sp-pull-quote.pq-hidden  { opacity: 0 !important; }
+  .sp-pull-quote.pq-visible  { opacity: 0.45; }
+  .sp-pull-quote.pq-hidden   { opacity: 0 !important; transition: opacity 0.5s ease !important; }
   /* Text crossfade during stat swap */
   .sp-pull-quote.pq-swapping {
     opacity: 0 !important;
@@ -25644,7 +25762,7 @@ body.corner-panel-open .stories-panel {
     </div>
     <div class="lexi-panel-tagline panel-tagline">Save words. Read examples. Practice until they stick.</div>
 
-    <div class="vocab-cat-pill-row" id="lexiCatPills" style="padding: 4px 0 10px;margin-top:4px"></div>
+    <div class="vocab-cat-pill-row" id="lexiCatPills" style="padding: 4px 0 10px 8px;margin-top:4px"></div>
 
     <div class="lexi-panel-actions" id="lexiPanelActions">
       <button class="lexi-action-primary" id="lexiPracticeBtn" onclick="_lexiStartSession()" style="display:none">

@@ -6,6 +6,36 @@
 
 ---
 
+## v2.49 — 2026-07-29 · Intel pills restructure, Profile polish, mobile fixes
+
+### index.html — intel pills restructure
+- **Key Quotes promoted to standalone pill** (`Quotes`): positioned between DNA and Vocab in desktop order (DNA → Quotes → Vocab → Tension → Line → Profile → IWTMT). On mobile: shown after Vocab and Profile (order 13 via CSS).
+- **Line pill moved** to after Tension (was after DNA). New desktop order confirmed: DNA | Quotes | Vocab | Tension | Line | Profile | IWTMT.
+- **Profile pill**: Key Quotes removed — Profile now shows only core_claim, type/tone/guest tags, and difficulty/actionability scores. Key Quotes have their own pill.
+- **Mobile Profile sheet**: Tension now renders with proper `ep-intel-tension-vs` pill-vs-pill grid (was rendering as plain text). Fix applies to all `vs.`-format tensions.
+
+### index.html — desktop Profile popover
+- **Opens upward**: popover now always opens above the pill row (same direction as IWTMT), never downward into the drawer.
+- **Wider**: min-width increased to 500px (was 320px).
+- **Redesigned layout**: core_claim in Playfair italic, then a type/tone/guest/evergreen/controversy tag row, then a structured scores row (Difficulty ● and Takeaway ⚡ with labels). Cleaner than the old badge jumble.
+
+### index.html — hero pull quote animation
+- Pull quote starts at `opacity: 0` on page load. Fades in with a 1.4s ease transition after a 1600ms delay — appears after the main hero elements have settled.
+- `pq-hidden` scroll-hide logic updated to only remove hidden state if `.pq-visible` class is already set.
+
+### index.html — lexi panel
+- **Pill row left padding**: `padding-left: 8px` added so "All" pill no longer butts against the panel edge.
+- **Mobile top offset**: `.lexi-panel-header` gets `padding-top: calc(env(safe-area-inset-top) + 56px)` on mobile — fixes X button hidden behind Chrome/Safari URL bar.
+
+### index.html — mobile nav
+- **Eyebrow hidden on mobile**: "Ideas worth saying out loud" (`nav-eyebrow`) was `white-space: nowrap` and overflowing onto nav-right buttons, hiding the theme toggle, signup icon, and hamburger. Now `display: none` on mobile.
+- **Nav padding reduced**: `0 2.5rem → 0 1rem` on mobile for more breathing room.
+- **Logo**: `min-width: 0; overflow: hidden` prevents layout bleed.
+- **Theme toggle + signup ✦ + hamburger**: all confirmed visible on mobile.
+- **Hamburger still present**: the `≡` menu contains Lexi, Speak, Apply, Sign Up, and the I feel epic egg — kept as utility overflow menu.
+
+---
+
 ## v2.48 — 2026-07-29 · Mobile nav fixes + hero scroll
 
 ### index.html — mobile nav
