@@ -6,6 +6,20 @@
 
 ---
 
+## v2.50 — 2026-07-29 · Single mobile nav bar, polish, hero padding
+
+### index.html — mobile nav final polish (rev 3)
+- **Logo clipping fixed**: `grid-template-columns: max-content 1fr` (was `auto 1fr`) + `overflow: visible` on `.nav-logo`. "Episte:" truncation eliminated.
+- **Buttons resized to 35×35px** for a cleaner, less crowded feel.
+- **Theme toggle hidden on mobile** — one less distraction in the slim nav bar.
+- **Signup button pulsing animation**: `navSignupPulse` keyframe (scale 1→1.28, glow shadow, 2.4s infinite). Replaces the static gold pill with an attention-drawing animated ✦ star icon.
+- **Nav spacing**: `justify-content: space-evenly` on `.nav-right` keeps buttons equally distributed without crowding.
+
+### index.html — hero top padding (mobile)
+- `padding-top` reduced from 76px → 46px at both `≤900px` and `≤390px` breakpoints. Hero copy now sits ~30px closer to the top; Episodes/Themes section peeks into view on most phone screens.
+
+---
+
 ## v2.50 — 2026-07-29 · Single mobile nav bar, pill order fix, difficulty colors
 
 ### index.html — mobile nav (definitive fix, v2.50 rev 2)
