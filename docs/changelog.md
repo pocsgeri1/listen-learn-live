@@ -6,6 +6,20 @@
 
 ---
 
+## v2.51 — 2026-07-30 · Hero mobile fix, library filter fix, vocab animation
+
+### index.html — hero mobile padding
+- **Root cause:** `padding: 46px` was 10px less than the mobile nav height (56px), causing hero content to start behind the opaque fixed nav. Also `hero-eyebrow-outer margin-bottom` was 2rem, pushing copy far down the viewport.
+- **Fix:** `padding: 56px 0 0 0` at ≤900px and ≤390px. Reduced eyebrow margin-bottom 2rem → 1rem, H1 margin-bottom 1.25rem → 0.75rem, hero-sub margin 2rem → 1.25rem, hero-cta margin 2.5rem → 1.75rem.
+
+### index.html — Library filter / Picks / Mastered intersection bug
+- **Root cause:** `spSetSort('picks')` and `spSetSort('mastered')` called `_spRenderFilteredGrid()` which ignores `activeCat`. And `setCat()` → `buildGrid()` ignored `spActiveSort`. The two filter axes were completely independent and never intersected.
+- **Fix:** `buildGrid()` now reads `spActiveSort` and applies picks/mastered filter in addition to `activeCat`. `spSetSort()` routes through `buildGrid()` when `activeCat !== 'all'` so the intersection always works.
+
+### index.html — Vocab + Lexi category animation
+- **Root cause:** Category filter in Vocab panel did full DOM rebuild (`innerHTML` wipe), causing instant height jump and content flash.
+- **Fix:** Vocab panel: cells stay in DOM, toggling `.vocab-row--hidden` (opacity 0, scale 0.9, 0.18s transition). Lexi panel: fade list out (opacity+scale), re-render, fade back in (150ms).
+
 ## v2.50 — 2026-07-29 · Single mobile nav bar, polish, hero padding
 
 ### index.html — mobile nav final polish (rev 3)

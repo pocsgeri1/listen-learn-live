@@ -1397,8 +1397,20 @@
     grid-template-columns: 1fr 1fr 1fr; /* overridden inline for >6 words */
     gap: 12px 20px;
   }
-  .ep-intel-vocab-row { margin-bottom: 0; }
+  .ep-intel-vocab-row {
+    margin-bottom: 0;
+    transition: opacity 0.18s ease, transform 0.18s ease;
+    will-change: auto; /* applied transiently during filter only */
+  }
   .ep-intel-vocab-row:last-child { margin-bottom: 0; }
+  .ep-intel-vocab-row.vocab-row--hidden {
+    opacity: 0;
+    transform: scale(0.9);
+    pointer-events: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ep-intel-vocab-row { transition: none; }
+  }
   .ep-intel-vocab-word {
     font-family: 'Playfair Display', serif;
     font-weight: 700;
@@ -4990,7 +5002,7 @@
     .hero {
       display: flex;
       flex-direction: column;
-      padding: 46px 0 0 0;
+      padding: 56px 0 0 0;
     }
 
     /* Hero-copy becomes a flex column so we can reorder its children */
@@ -5005,7 +5017,7 @@
 
     /* Tighter eyebrow → H1 gap on mobile */
     .hero-eyebrow-outer {
-      margin-bottom: 2rem;
+      margin-bottom: 1rem;
       order: 1;
     }
     .hero-eyebrow::before { display: none; }
@@ -5016,7 +5028,7 @@
       text-align: left;
       font-size: clamp(2.2rem, 8.5vw, 3.4rem);
       line-height: 1.1;
-      margin-bottom: 1.25rem;
+      margin-bottom: 0.75rem;
       order: 2;
     }
     .hero h1 .h1-line {
@@ -5035,7 +5047,7 @@
     /* Sub copy left-aligned to match H1 */
     .hero-sub {
       text-align: left;
-      margin: 0 0 2rem 0;
+      margin: 0 0 1.25rem 0;
       font-size: 1rem;
       line-height: 1.7;
       order: 3;
@@ -5044,7 +5056,7 @@
     /* CTA moves above the card on mobile */
     .hero-cta {
       order: 4;
-      margin-bottom: 2.5rem;
+      margin-bottom: 1.75rem;
     }
 
     /* Stats move BELOW the card on mobile (proof points) */
@@ -5117,9 +5129,9 @@
     .hero-copy { padding: 0 1.5rem 2.5rem 1.5rem; }
     .hero-card-col { padding: 0 1.5rem 3rem 1.5rem; }
   }
-  /* v2.48: Tighten hero on small phones so Episodes/Themes peeks into viewport */
+  /* v2.51: hero padding = mobile nav height (56px) so content clears the nav */
   @media (max-width: 390px) {
-    .hero { padding: 46px 0 0 0; }
+    .hero { padding: 56px 0 0 0; }
     .hero-cta { margin-bottom: 1.25rem; }
     .hero-card-col { padding-bottom: 1.25rem; }
     .hero-stats { padding: 1rem 1.75rem; }
@@ -11784,16 +11796,17 @@ function _renderIntelRow(pillsEl, collectionId, liveDna) {
           activeFilter = cat;
           row.querySelectorAll('.vocab-cat-pill').forEach(function(p) { p.classList.remove('active'); });
           btn.classList.add('active');
-          gridEl.style.transition = 'opacity 0.12s ease';
-          gridEl.style.opacity = '0';
-          setTimeout(function() {
-            var filtered = cat === 'All' ? allWords : allWords.filter(function(w) {
-              return w.category === cat || w.category_alt === cat;
-            });
-            while (gridEl.firstChild) gridEl.removeChild(gridEl.firstChild);
-            filtered.forEach(function(v) { gridEl.appendChild(buildVocabCell(v)); });
-            gridEl.style.opacity = '1';
-          }, 120);
+          // Animate: dissolve non-matching rows, show matching rows
+          gridEl.querySelectorAll('.ep-intel-vocab-row').forEach(function(cell) {
+            var cellCat = cell.dataset.lexCategory || '';
+            var cellCatAlt = cell.dataset.lexCategoryAlt || '';
+            var matches = cat === 'All' || cellCat === cat || cellCatAlt === cat;
+            if (matches) {
+              cell.classList.remove('vocab-row--hidden');
+            } else {
+              cell.classList.add('vocab-row--hidden');
+            }
+          });
         });
         row.appendChild(btn);
       });
@@ -12667,8 +12680,10 @@ function initScrollReveal(selector, container) {
 function buildGrid() {
   const container = document.getElementById('netflixRows');
   if (!container) return;
+  // Respect active sort filter (picks / mastered) in addition to activeCat
+  const _sortMode = (typeof spActiveSort !== 'undefined') ? spActiveSort : 'latest';
   // Collapse the reserved min-height once we're filtering (CSS handles the default 1800px).
-  container.style.minHeight = (activeCat === 'all' && !searchQ) ? '' : '0';
+  container.style.minHeight = (activeCat === 'all' && !searchQ && _sortMode === 'latest') ? '' : '0';
 
   const q = searchQ.toLowerCase();
   const isVault = vaultActive;
@@ -12684,7 +12699,8 @@ function buildGrid() {
 
   catsToShow.forEach(cat => {
     let cards = CONCEPTS.filter(c => c.category === cat.id && !c.duplicate_of);
-    if (isVault) cards = cards.filter(c => mastered.has(c.id));
+    if (isVault || _sortMode === 'mastered') cards = cards.filter(c => mastered.has(c.id));
+    if (_sortMode === 'picks') cards = cards.filter(c => c.editors_pick === true);
     if (matchIds) cards = cards.filter(c => matchIds.has(c.id));
     cards = cards.reverse();
     if (cards.length === 0) return;
@@ -14895,7 +14911,11 @@ function spSetSort(sort, btn) {
     if (_rBtnScan) _rBtnScan.classList.remove('active');
   }
 
+  // When a specific category is active, use buildGrid() which respects both activeCat + spActiveSort
   if (sort === 'latest') {
+    buildGrid();
+  } else if (activeCat !== 'all') {
+    // Intersect sort filter with active category via buildGrid
     buildGrid();
   } else if (sort === 'trending') {
     _spRenderFilteredGrid(CONCEPTS.filter(c => TRENDING_IDS.includes(c.id) && !c.duplicate_of));
@@ -26254,7 +26274,28 @@ function _lexiRenderPanel() {
       btn.addEventListener('click', function() {
         if (_lexiActiveCat === cat) return;
         _lexiActiveCat = cat;
-        _lexiRenderPanel();
+        // Smooth dissolve: fade list out, re-render, fade back in
+        var _ll = document.getElementById('lexiPanelList');
+        if (_ll && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          _ll.style.transition = 'opacity 0.15s ease, transform 0.15s ease';
+          _ll.style.opacity = '0';
+          _ll.style.transform = 'scale(0.97)';
+          requestAnimationFrame(function() {
+            requestAnimationFrame(function() {
+              setTimeout(function() {
+                _lexiRenderPanel();
+                _ll.style.opacity = '1';
+                _ll.style.transform = 'scale(1)';
+                setTimeout(function() {
+                  _ll.style.transition = '';
+                  _ll.style.transform = '';
+                }, 160);
+              }, 150);
+            });
+          });
+        } else {
+          _lexiRenderPanel();
+        }
       });
       pillsRow.appendChild(btn);
     });
