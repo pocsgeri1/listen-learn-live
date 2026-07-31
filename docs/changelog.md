@@ -6,6 +6,102 @@
 
 ---
 
+## v2.57 — 2026-07-31 · Pull quotes final position, vocab layout, Lexi typography
+
+### index.html — pull quotes horizontal position (final)
+- Right quote: `right: 9.3rem`. Left quote: `left: 9.3rem`. Settled after iterating through 9.35 → 9.4 → 9.3rem. This is the locked position.
+
+### index.html — vocab view layout
+- `.vv-content` left padding raised to `3.2rem` (~51px) to clear the 38px fixed pull tabs. `.vv-back-bar` gets matching left padding.
+- `.vv-grid` changed to `grid-template-columns: repeat(auto-fill, minmax(260px, 1fr))` — wider minimum column prevents cramped 8-column layouts on large screens.
+- Each vocab cell gets an editorial gradient divider at bottom: `linear-gradient(to right, transparent 0%, rgba(232,213,163,0.15) 12%, rgba(232,213,163,0.15) 88%, transparent 100%)` as a 1px `background-image`.
+
+### index.html — Lexi panel typography
+- Episode group labels (`.lexi-ep-group-label`): switched to Playfair Display italic, 0.78rem, opacity 0.72.
+- Word definitions (`.lexi-word-def`): switched to Playfair Display italic, 0.84rem, letter-spacing 0.01em.
+
+---
+
+## v2.56 — 2026-07-31 · Pull quotes SVG-derived position, Lexi+vocab font pass
+
+### index.html — pull quote horizontal positioning
+- Attempted `left: 3.61vw` / `right: 3.61vw` derived from SVG hairline positions (x=52 and x=1388 in 1440-wide viewBox). Too close to viewport edges on 16" MacBook. Reverted to rem values in v2.57.
+
+### index.html — pull quote scroll trigger
+- Replaced broken load-time `getBoundingClientRect()` approach (runs before layout is stable) with scroll-triggered measurement: `getBoundingClientRect().top + window.scrollY` on first scroll event. Quotes now align correctly regardless of page load timing.
+- Pull quotes only revealed after `scrollY > 80` — avoids flash at page top.
+
+---
+
+## v2.55 — 2026-07-31 · Vocab view bug fix, global vocab session plan
+
+### index.html — vocab view display bug fix
+- **Root cause:** `_resetDrawerVocabView()` set `vocabView.style.display = 'none'` as inline style, which overrode CSS `.vv-entering { display: flex }`. Words disappeared after first open.
+- **Fix:** Added `vocabView.style.display = ''` to clear the inline style before adding `.vv-entering` class.
+
+### docs/global-vocab-session-plan.md (new)
+- Full 2-session plan for the "All Words" global vocabulary feature inside the Lexi panel.
+- **Mode A (Session 1) — Category Browse:** full-screen overlay, 6 category cards (All + 5), word list with Add to Lexi per row, full animation spec (7 transitions with timing curves), HTML structure, CSS rules, JS function signatures.
+- **Mode B (Session 2) — Word Constellation:** canvas-less absolutely-positioned spans, seeded random layout, category dim filter, mode toggle in header.
+- Data architecture: `_buildGlobalVocabIndex()` walks all `episode_meta.json` vocab_vault arrays, deduplicates, caches in `window._globalVocabCache`.
+- Entry point: "All Words" button added to Lexi panel above Practice button.
+
+---
+
+## v2.54 — 2026-07-31 · Lexi ℒ symbol, Vocab pull tab animation, Vocab replaces card grid
+
+### index.html — Lexi pull tab symbol
+- Replaced `📝` emoji with `ℒ` (U+2112, Script Capital L) — typographic, no emoji rendering inconsistency, matches editorial aesthetic.
+
+### index.html — Vocab pull tab animated entrance (desktop only)
+- `.vocab-pull-tab` added to the `.left-tabs-group` below the Lexi tab.
+- Tab is hidden by default (`opacity: 0`, `pointer-events: none`). After episode drawer opens (350ms), a 420ms delayed CSS animation (`.vv-entering`) springs the tab in using `cubic-bezier(0.34, 1.56, 0.64, 1)`.
+- Tab disappears on drawer close via `_resetDrawerVocabView()`.
+- Desktop only — hidden via `.left-tabs-group { display: none }` at ≤900px.
+
+### index.html — Vocab view replaces card grid in drawer
+- Clicking Vocab tab now opens an in-drawer vocab view (`#epDrawerVocabView`) that slides over the episode card grid — cards animate out, vocab list animates in.
+- Back button (`.vv-back-bar`) restores card grid with reverse animation.
+- Category filter pills (`.vocab-cat-pill`) filter in-place without DOM rebuild.
+- JS functions: `_openDrawerVocabView()`, `_closeDrawerVocabView()`, `_resetDrawerVocabView()`, `openDrawerVocabTab()`.
+- Module-level vars `_vvCurrentList`, `_vvCurrentColId`, `_vvCurrentPrefix`, `_vvBuildCell` expose the closure-scoped `buildVocabCell` function for reuse outside `_renderIntelRow`.
+
+---
+
+## v2.53 — 2026-07-31 · 5-category vocab system, Aa Vocab pull tab (desktop), SEO session plan
+
+### docs/vocab-categories.md — rewrite to v2.0
+- Collapsed 9 categories → 5: **Small Talk**, **Smartypants**, **Business**, **Science**, **Mind & People**.
+- Each category has: register description, assignment rule, examples, edge case guidance.
+- Decision rules: primary context rule → tie-break by narrower register → no invented categories → `category_alt` stays null during extraction.
+- Edge case table covers 10 common ambiguous cases.
+
+### tools/categorize-vocab.js + tools/generate-episode-intel.js + epistemic-tools/extract.html
+- `VALID_CATEGORIES` updated to the 5 new categories in all three files.
+- System prompts updated with new category definitions and rules.
+
+### index.html — CATS / LX_CATS arrays
+- `CATS`: `['All','Small Talk','Smartypants','Business','Science','Mind & People']`
+- `LX_CATS`: `['All','Favorites','Small Talk','Smartypants','Business','Science','Mind & People']`
+
+### index.html — Aa Vocab pull tab (desktop only)
+- Fixed left-edge pull tab group (`.left-tabs-group`): `position: fixed; left: 0; top: 50%; transform: translateY(-50%); z-index: 500; flex-direction: column; gap: 4px`. Hidden on mobile.
+- Lexi and Vocab tabs are `position: relative` children of the group — share the fixed anchor.
+- Tab hover: slides right `4px` using `translateX`.
+
+### docs/seo-session-plan.md — rewrite to v2.0
+- Added SPA explanation (why Google can't crawl the current site).
+- Architecture locked: Node build script → static HTML files → `/public/concepts/` → Vercel serves alongside SPA. No Next.js.
+- Canonical URL format: `/concepts/[zero-padded-id]-[term-slug]`.
+- 4-session breakdown: (1) static pages + routing, (2) OG images + meta tags, (3) structured data + sitemap + robots.txt, (4) category pages + redirect helper.
+- Model recommendation: claude-sonnet-4-6.
+- Mandatory file-read start command for each session.
+
+### docs/ideas-parking-lot.md
+- Added **Next.js migration** entry — deferred in favour of static page generation approach.
+
+---
+
 ## v2.52 — 2026-07-31 · Hero tighten, pull quotes ×10 + left mirror, Lexi favorites
 
 ### index.html — hero mobile spacing (rev 2)
