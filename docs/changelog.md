@@ -6,6 +6,25 @@
 
 ---
 
+## v2.61 — 2026-07-31 · Global Vocab Mode B: Word Constellation + quick fixes
+
+### index.html — Word Constellation (Mode B)
+- **New:** full-screen overlay (z-index 2000) with all vocab words as absolutely-positioned `<span>` elements, colored by category
+- **Layout:** grid-jitter algorithm — seeded deterministic random (LCG), each word gets a grid cell + ±35% jitter. Stable across reloads.
+- **Entrance:** words bloom in with 3ms/word stagger (capped 900ms) via opacity transition
+- **Hover/tap tooltip:** `position:fixed` card showing category badge (colored), word, definition, "+ Add to Lexi" button. Flips left/right to stay in viewport.
+- **Category filter:** pills in header, active pill filled with category color. Non-matching words dim to `opacity: 0.07` (280ms transition).
+- **Mobile (≤600px):** 3-column pill grid instead of constellation; tap pill to expand definition inline.
+- **Entry:** "◎" circle icon button added to Lexi panel actions + Vocab panel header.
+- **"⊞ List" toggle:** closes constellation, opens Vocab panel (Mode A).
+- **Light mode + reduced motion:** full overrides applied.
+
+### index.html — Quick fixes
+- Flying word animation: `0.55s` → `0.85s` (transition + setTimeout)
+- Pull quotes: `9.2rem` → `9.25rem` (left + right)
+
+---
+
 ## v2.60 — 2026-07-31 · Vocab panel UX polish + pull quote nudge
 
 ### index.html — Vocab panel z-index fix

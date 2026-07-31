@@ -2515,6 +2515,15 @@
     transition: color 0.15s, border-color 0.15s;
   }
   .lexi-action-secondary:hover { color: var(--accent); border-color: var(--accent); }
+  .lexi-map-btn {
+    flex-shrink: 0;
+    background: none; border: 0.5px solid var(--border);
+    border-radius: 50%; width: 36px; height: 36px;
+    cursor: pointer; font-size: 0.9rem; color: var(--muted);
+    display: flex; align-items: center; justify-content: center;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .lexi-map-btn:hover { color: var(--accent); border-color: var(--accent); }
   /* Scrollable word list */
   .lexi-panel-list {
     flex: 1;
@@ -23661,7 +23670,7 @@ body.corner-mode .sp-eyebrow-kicker { opacity: 0; pointer-events: none; transiti
     align-items: flex-end;
     text-align: right;
     position: fixed;
-    right: 9.2rem;
+    right: 9.25rem;
     top: 50%; /* overridden by JS to align with browse toggle */
     transform: translateY(-50%);
     padding-right: 1rem;
@@ -23701,7 +23710,7 @@ body.corner-mode .sp-eyebrow-kicker { opacity: 0; pointer-events: none; transiti
 /* ── Left-side mirrored pull quote ── */
 @media (min-width: 900px) {
   .sp-pull-quote-left {
-    left: 9.2rem;
+    left: 9.25rem;
     right: auto;
     align-items: flex-start;
     text-align: left;
@@ -26156,6 +26165,7 @@ body.corner-panel-open .stories-panel {
       <button class="lexi-action-secondary" id="lexiAllWordsBtn" onclick="_openGlobalVocabView()">
         ☰ All Words
       </button>
+      <button class="lexi-map-btn" id="lexiMapBtn" onclick="_openConstellationView('lexi')" aria-label="Word Map" title="Word Map">◎</button>
       <button class="lexi-action-primary" id="lexiPracticeBtn" onclick="_lexiStartSession()" style="display:none">
         ▶ Practice <span id="lexiPracticeCount">0</span> words
       </button>
@@ -29444,7 +29454,7 @@ function _gvAddWordToLexi(word, def, category, colId, btn) {
     'left:' + (btnRect.left + btnRect.width / 2) + 'px',
     'top:' + (btnRect.top + btnRect.height / 2) + 'px',
     'transform:translate(-50%,-50%)',
-    'transition:left 0.55s cubic-bezier(0.32,0.72,0,1), top 0.55s cubic-bezier(0.32,0.72,0,1), opacity 0.55s ease'
+    'transition:left 0.85s cubic-bezier(0.32,0.72,0,1), top 0.85s cubic-bezier(0.32,0.72,0,1), opacity 0.85s ease'
   ].join(';');
   document.body.appendChild(ghost);
 
@@ -29461,7 +29471,7 @@ function _gvAddWordToLexi(word, def, category, colId, btn) {
   setTimeout(function() {
     document.body.removeChild(ghost);
     _gvBumpLexiCount();
-  }, 580);
+  }, 880);
 }
 
 function _gvBumpLexiCount() {
@@ -29508,6 +29518,7 @@ function _gvEsc(str) {
       <button class="gv-back" id="gvBack" onclick="_gvAnimateListToCat()" style="display:none" aria-label="Back">←</button>
       <span class="gv-title" id="gvTitle">All Words</span>
       <span class="gv-count" id="gvCount"></span>
+      <button class="gv-map-btn" onclick="_openConstellationView('vocab')" aria-label="Word Map" title="Word Map">◎</button>
       <button class="gv-close" onclick="_closeGlobalVocabView()" aria-label="Close">✕</button>
     </div>
     <div class="gv-body" id="gvBody">
@@ -29565,6 +29576,15 @@ function _gvEsc(str) {
   font-size: 0.65rem; letter-spacing: 0.06em;
   color: var(--muted); text-transform: uppercase;
 }
+.gv-map-btn {
+  background: none; border: 0.5px solid var(--border);
+  border-radius: 50%; width: 28px; height: 28px;
+  cursor: pointer; font-size: 0.78rem; color: var(--muted);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: color 0.15s, border-color 0.15s;
+}
+.gv-map-btn:hover { color: var(--accent); border-color: var(--accent); }
 .gv-close {
   background: none; border: none; cursor: pointer;
   color: var(--muted); font-size: 0.85rem; padding: 4px 6px;
@@ -29676,6 +29696,9 @@ function _gvEsc(str) {
   .gv-overlay, .gv-panel, .gv-cat-card, .gv-word-row { transition: none; }
 }
 
+/* ── Vocab panel map button ──────────────────────────────────── */
+[data-theme="light"] .gv-map-btn { border-color: rgba(0,0,0,0.1); }
+
 /* ── Flying word + bump animation ───────────────────────────── */
 @keyframes gvBump {
   0%   { transform: scale(1); }
@@ -29694,6 +29717,588 @@ function _gvEsc(str) {
 /* Site-wide scrollbar hide */
 html { scrollbar-width: none; }
 html::-webkit-scrollbar { display: none; }
+</style>
+<script>
+/* ════════════════════════════════════════════════════════
+   WORD CONSTELLATION — Mode B — v2.61
+   ════════════════════════════════════════════════════════ */
+
+var GV_CAT_COLORS = {
+  'All':          '#e8d5a3',
+  'Small Talk':   '#5abfaf',
+  'Smartypants':  '#a08fd4',
+  'Business':     '#e0a060',
+  'Science':      '#6ab0c4',
+  'Mind & People':'#c47a9f'
+};
+
+var _csActiveCat    = 'All';
+var _csWords        = [];
+var _csTooltipWord  = null; // currently shown word
+var _csResizeTimer  = null;
+var _csSource       = 'lexi'; // 'lexi' or 'vocab'
+
+// ── Open ──────────────────────────────────────────────────────
+function _openConstellationView(source) {
+  _csSource = source || 'lexi';
+  var overlay = document.getElementById('csOverlay');
+  if (!overlay) return;
+
+  _spLockBodyScroll();
+  overlay.style.display = 'flex';
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() { overlay.classList.add('open'); });
+  });
+
+  _loadEpisodeMeta().then(function() {
+    _csWords = _buildGlobalVocabIndex();
+    _csActiveCat = 'All';
+    _csBuildFilterPills();
+    _csDetectAndRender();
+  }).catch(function() {
+    var stage = document.getElementById('csStage');
+    if (stage) stage.innerHTML = '<p style="padding:40px;color:var(--muted);font-family:DM Sans,sans-serif">Could not load words.</p>';
+  });
+
+  // Debounced resize
+  window.addEventListener('resize', _csOnResize);
+}
+
+// ── Close ─────────────────────────────────────────────────────
+function _closeConstellationView() {
+  var overlay = document.getElementById('csOverlay');
+  if (!overlay) return;
+  _csHideTooltip();
+  overlay.classList.remove('open');
+  _spUnlockBodyScroll();
+  window.removeEventListener('resize', _csOnResize);
+  setTimeout(function() {
+    overlay.style.display = 'none';
+    var stage = document.getElementById('csStage');
+    if (stage) stage.innerHTML = '';
+    var mg = document.getElementById('csMobileGrid');
+    if (mg) { mg.innerHTML = ''; mg.style.display = 'none'; }
+  }, 320);
+}
+
+function _switchToVocabList() {
+  _closeConstellationView();
+  setTimeout(function() { _openGlobalVocabView(); }, 320);
+}
+
+// ── Detect mobile vs desktop ──────────────────────────────────
+function _csDetectAndRender() {
+  var isMobile = window.innerWidth <= 600;
+  var stage = document.getElementById('csStage');
+  var mgrid = document.getElementById('csMobileGrid');
+  if (!stage || !mgrid) return;
+
+  if (isMobile) {
+    stage.style.display = 'none';
+    mgrid.style.display = 'flex';
+    _csRenderMobileGrid(_csWords);
+  } else {
+    stage.style.display = '';
+    mgrid.style.display = 'none';
+    _csRenderStars(_csWords);
+  }
+}
+
+function _csOnResize() {
+  clearTimeout(_csResizeTimer);
+  _csResizeTimer = setTimeout(_csDetectAndRender, 120);
+}
+
+// ── Seeded random (deterministic per word index) ──────────────
+function _csRandom(seed) {
+  var x = Math.sin(seed * 127.1 + 311.7) * 43758.5453;
+  return x - Math.floor(x);
+}
+
+// ── Layout: grid-jitter ───────────────────────────────────────
+function _csLayout(n, W, H) {
+  // Aim for a grid that roughly fills the space
+  var aspect = W / H;
+  var cols   = Math.ceil(Math.sqrt(n * aspect));
+  var rows   = Math.ceil(n / cols);
+  var cw     = W / cols;
+  var ch     = H / rows;
+
+  var positions = [];
+  for (var i = 0; i < n; i++) {
+    var col = i % cols;
+    var row = Math.floor(i / cols);
+    // Jitter: ±35% of cell, seeded by index
+    var jx = (_csRandom(i * 2)     - 0.5) * cw * 0.7;
+    var jy = (_csRandom(i * 2 + 1) - 0.5) * ch * 0.7;
+    var x  = col * cw + cw / 2 + jx;
+    var y  = row * ch + ch / 2 + jy;
+    // Clamp to stage with padding
+    x = Math.max(6, Math.min(W - 80, x));
+    y = Math.max(6, Math.min(H - 20, y));
+    positions.push({ x: x, y: y });
+  }
+  return positions;
+}
+
+// ── Render stars (desktop) ────────────────────────────────────
+function _csRenderStars(words) {
+  var stage = document.getElementById('csStage');
+  if (!stage) return;
+  stage.innerHTML = '';
+
+  var W = stage.clientWidth  || window.innerWidth;
+  var H = stage.clientHeight || (window.innerHeight - 60);
+  var positions = _csLayout(words.length, W, H);
+
+  var frag = document.createDocumentFragment();
+
+  words.forEach(function(w, i) {
+    var color   = GV_CAT_COLORS[w.category] || '#6b6b6b';
+    var isDimmed = _csActiveCat !== 'All' && w.category !== _csActiveCat;
+
+    var span = document.createElement('span');
+    span.className = 'cs-word' + (isDimmed ? ' cs-dimmed' : '');
+    span.textContent = w.word;
+    span.style.left  = positions[i].x + 'px';
+    span.style.top   = positions[i].y + 'px';
+    span.style.color = color;
+    span.dataset.word     = w.word;
+    span.dataset.def      = w.definition;
+    span.dataset.category = w.category || '';
+    span.dataset.colId    = w.colId != null ? String(w.colId) : '';
+    span.dataset.catAlt   = w.category_alt || '';
+
+    // Stagger entrance: 3ms per word, capped at 900ms
+    var delay = Math.min(i * 3, 900);
+    span.style.animationDelay = delay + 'ms';
+
+    // Mouse / touch events
+    span.addEventListener('mouseenter', _csWordMouseEnter);
+    span.addEventListener('mouseleave', _csWordMouseLeave);
+    span.addEventListener('click',      _csWordClick);
+
+    frag.appendChild(span);
+  });
+
+  stage.appendChild(frag);
+
+  // Bloom in: add cs-visible class after paint (triggers opacity transition)
+  requestAnimationFrame(function() {
+    var spans = stage.querySelectorAll('.cs-word');
+    spans.forEach(function(s, i) {
+      var delay = Math.min(i * 3, 900);
+      setTimeout(function() {
+        if (!s.classList.contains('cs-dimmed')) {
+          s.classList.add('cs-visible');
+        }
+      }, delay);
+    });
+  });
+}
+
+// ── Word hover / click ────────────────────────────────────────
+function _csWordMouseEnter(e) {
+  _csShowTooltip(e.currentTarget);
+}
+function _csWordMouseLeave(e) {
+  // Hide unless cursor moved into tooltip
+  setTimeout(function() {
+    var tt = document.getElementById('csTooltip');
+    if (tt && tt.matches(':hover')) return;
+    _csHideTooltip();
+  }, 80);
+}
+function _csWordClick(e) {
+  var span = e.currentTarget;
+  if (_csTooltipWord === span.dataset.word) {
+    _csHideTooltip();
+    _csTooltipWord = null;
+  } else {
+    _csShowTooltip(span);
+  }
+}
+
+function _csShowTooltip(spanEl) {
+  var tt     = document.getElementById('csTooltip');
+  var catEl  = document.getElementById('csTtCat');
+  var wordEl = document.getElementById('csTtWord');
+  var defEl  = document.getElementById('csTtDef');
+  var addBtn = document.getElementById('csTtAdd');
+  if (!tt || !spanEl) return;
+
+  var word     = spanEl.dataset.word;
+  var def      = spanEl.dataset.def;
+  var cat      = spanEl.dataset.category;
+  var colId    = spanEl.dataset.colId ? parseInt(spanEl.dataset.colId) : null;
+  var catAlt   = spanEl.dataset.catAlt || undefined;
+  var color    = GV_CAT_COLORS[cat] || '#6b6b6b';
+  var isSaved  = !!_lexiconGetSaved(word);
+
+  _csTooltipWord = word;
+
+  if (catEl)  { catEl.textContent = cat || ''; catEl.style.color = color; }
+  if (wordEl) wordEl.textContent = word;
+  if (defEl)  defEl.textContent  = def;
+  if (addBtn) {
+    addBtn.textContent = isSaved ? '✓ In Lexi' : '+ Add to Lexi';
+    addBtn.className   = 'cs-tt-add' + (isSaved ? ' saved' : '');
+    addBtn.onclick = isSaved ? null : function() {
+      _lexiconSave(word, def, colId, [], document.createElement('div'), cat || undefined, catAlt || undefined);
+      _lexiUpdateBadge();
+      if (typeof _lexiRenderPanel === 'function') _lexiRenderPanel();
+      addBtn.textContent = '✓ In Lexi';
+      addBtn.className   = 'cs-tt-add saved';
+      _gvBumpLexiCount();
+    };
+  }
+
+  // Position: prefer right of word, flip left if near right edge
+  var rect   = spanEl.getBoundingClientRect();
+  var vw     = window.innerWidth;
+  var vh     = window.innerHeight;
+  var ttW    = 268;
+  var ttH    = 160; // approximate
+  var left   = rect.right + 10;
+  var top    = rect.top - 10;
+
+  if (left + ttW > vw - 12) left = rect.left - ttW - 10;
+  if (top + ttH > vh - 12)  top  = vh - ttH - 12;
+  if (top < 8) top = 8;
+  if (left < 8) left = 8;
+
+  tt.style.display = 'block';
+  tt.style.left    = left + 'px';
+  tt.style.top     = top  + 'px';
+  tt.classList.remove('visible');
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() { tt.classList.add('visible'); });
+  });
+
+  // Hide tooltip when mouse leaves it too
+  tt.onmouseleave = _csHideTooltip;
+}
+
+function _csHideTooltip() {
+  var tt = document.getElementById('csTooltip');
+  if (!tt) return;
+  tt.classList.remove('visible');
+  setTimeout(function() {
+    if (!tt.classList.contains('visible')) tt.style.display = 'none';
+  }, 200);
+  _csTooltipWord = null;
+}
+
+// ── Category filter ───────────────────────────────────────────
+function _csBuildFilterPills() {
+  var row = document.getElementById('csFilterRow');
+  if (!row) return;
+  row.innerHTML = '';
+
+  GV_CATS.forEach(function(cat) {
+    var color = GV_CAT_COLORS[cat] || '#e8d5a3';
+    var btn = document.createElement('button');
+    btn.className = 'cs-filter-pill' + (cat === _csActiveCat ? ' active' : '');
+    btn.textContent = cat;
+    if (cat === _csActiveCat) btn.style.background = color;
+
+    btn.addEventListener('click', function() {
+      _csActiveCat = cat;
+      row.querySelectorAll('.cs-filter-pill').forEach(function(p) {
+        p.classList.remove('active');
+        p.style.background = '';
+      });
+      btn.classList.add('active');
+      btn.style.background = color;
+      _csFilterCat(cat);
+      _csHideTooltip();
+    });
+    row.appendChild(btn);
+  });
+}
+
+function _csFilterCat(cat) {
+  var spans = document.querySelectorAll('#csStage .cs-word');
+  spans.forEach(function(s) {
+    var match = cat === 'All' || s.dataset.category === cat;
+    s.classList.toggle('cs-dimmed',  !match);
+    s.classList.toggle('cs-visible',  match);
+  });
+  // Mobile: show/hide pills
+  var pills = document.querySelectorAll('#csMobileGrid .cs-mobile-pill');
+  pills.forEach(function(p) {
+    var match = cat === 'All' || p.dataset.category === cat;
+    p.style.display = match ? '' : 'none';
+    // also hide paired def if present
+    var next = p.nextElementSibling;
+    if (next && next.classList.contains('cs-mobile-def')) next.style.display = 'none';
+    p.classList.remove('expanded');
+  });
+}
+
+// ── Mobile: 3-col pill grid ───────────────────────────────────
+function _csRenderMobileGrid(words) {
+  var grid = document.getElementById('csMobileGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  var frag = document.createDocumentFragment();
+
+  words.forEach(function(w) {
+    var color = GV_CAT_COLORS[w.category] || '#6b6b6b';
+    var pill = document.createElement('span');
+    pill.className = 'cs-mobile-pill';
+    pill.textContent = w.word;
+    pill.style.borderColor = color + '60';
+    pill.style.color = color;
+    pill.dataset.category = w.category || '';
+
+    var defEl = document.createElement('div');
+    defEl.className = 'cs-mobile-def';
+    defEl.textContent = w.definition;
+
+    pill.addEventListener('click', function() {
+      var wasOpen = pill.classList.contains('expanded');
+      grid.querySelectorAll('.cs-mobile-pill.expanded').forEach(function(p) {
+        p.classList.remove('expanded');
+        var nd = p.nextElementSibling;
+        if (nd && nd.classList.contains('cs-mobile-def')) nd.style.display = 'none';
+      });
+      if (!wasOpen) {
+        pill.classList.add('expanded');
+        defEl.style.display = 'block';
+      }
+    });
+
+    frag.appendChild(pill);
+    frag.appendChild(defEl);
+  });
+
+  grid.appendChild(frag);
+}
+</script>
+
+<!-- ════════════════════════════════════════════════════════
+     WORD CONSTELLATION — Mode B — v2.61
+     Full-screen word map, colored by category, hover tooltip.
+     ════════════════════════════════════════════════════════ -->
+
+<div class="cs-overlay" id="csOverlay" style="display:none" role="dialog" aria-modal="true" aria-label="Word Map">
+
+  <div class="cs-header" id="csHeader">
+    <div class="cs-filter-row" id="csFilterRow">
+      <!-- category pills injected by JS -->
+    </div>
+    <div class="cs-header-right">
+      <button class="cs-list-btn" onclick="_switchToVocabList()" title="Switch to list">⊞ List</button>
+      <button class="cs-close-btn" onclick="_closeConstellationView()" aria-label="Close">✕</button>
+    </div>
+  </div>
+
+  <div class="cs-stage" id="csStage">
+    <!-- word spans injected by JS -->
+  </div>
+
+  <!-- Mobile fallback: 3-col pill grid -->
+  <div class="cs-mobile-grid" id="csMobileGrid" style="display:none">
+    <!-- word pills injected by JS on mobile -->
+  </div>
+
+</div>
+
+<!-- Tooltip card (fixed, singleton) -->
+<div class="cs-tooltip" id="csTooltip" style="display:none" role="tooltip">
+  <div class="cs-tt-cat" id="csTtCat"></div>
+  <div class="cs-tt-word" id="csTtWord"></div>
+  <div class="cs-tt-def" id="csTtDef"></div>
+  <button class="cs-tt-add" id="csTtAdd"></button>
+</div>
+
+<style>
+/* ══════════════════════════════════════════════════════════
+   WORD CONSTELLATION — v2.61
+   ══════════════════════════════════════════════════════════ */
+
+/* ── Overlay ──────────────────────────────────────────────── */
+.cs-overlay {
+  position: fixed; inset: 0; z-index: 2000;
+  background: var(--bg);
+  display: flex; flex-direction: column;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.cs-overlay.open {
+  opacity: 1; pointer-events: all;
+}
+
+/* ── Header ───────────────────────────────────────────────── */
+.cs-header {
+  display: flex; align-items: center;
+  padding: 14px 20px 12px;
+  border-bottom: 0.5px solid var(--border);
+  flex-shrink: 0; gap: 12px;
+  z-index: 1;
+}
+.cs-filter-row {
+  display: flex; flex-wrap: wrap; gap: 6px; flex: 1;
+}
+.cs-filter-pill {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.58rem; letter-spacing: 0.07em; text-transform: uppercase;
+  padding: 5px 12px; border-radius: 20px; cursor: pointer;
+  border: 0.5px solid var(--border);
+  background: none; color: var(--muted);
+  transition: background 0.18s, color 0.18s, border-color 0.18s;
+  min-height: 30px;
+}
+.cs-filter-pill.active {
+  color: var(--bg); border-color: transparent;
+  /* background set inline per category color */
+}
+.cs-filter-pill:not(.active):hover {
+  background: rgba(232,213,163,0.08);
+  color: var(--muted2); border-color: var(--border-hover);
+}
+.cs-header-right {
+  display: flex; align-items: center; gap: 8px; flex-shrink: 0;
+}
+.cs-list-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem; letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 5px 12px; border: 0.5px solid var(--border);
+  border-radius: 20px; background: none; color: var(--muted);
+  cursor: pointer; min-height: 30px;
+  transition: color 0.15s, border-color 0.15s;
+}
+.cs-list-btn:hover { color: var(--accent); border-color: var(--accent); }
+.cs-close-btn {
+  background: none; border: none; cursor: pointer;
+  color: var(--muted); font-size: 0.85rem;
+  padding: 4px 6px; min-width: 28px; min-height: 28px;
+  transition: color 0.15s;
+}
+.cs-close-btn:hover { color: var(--text); }
+
+/* ── Stage (constellation canvas) ────────────────────────── */
+.cs-stage {
+  flex: 1; position: relative; overflow: hidden;
+  /* words are absolutely positioned inside here */
+}
+
+/* ── Word spans ───────────────────────────────────────────── */
+.cs-word {
+  position: absolute;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.75rem;
+  line-height: 1;
+  cursor: pointer;
+  user-select: none;
+  opacity: 0;
+  transition: opacity 0.28s ease, transform 0.18s ease;
+  white-space: nowrap;
+  padding: 3px 1px;
+  will-change: opacity; /* applied only during load animation */
+}
+.cs-word.cs-visible {
+  opacity: 0.82;
+  will-change: auto;
+}
+.cs-word.cs-dimmed {
+  opacity: 0.07;
+  transition: opacity 0.28s ease;
+}
+.cs-word:hover {
+  opacity: 1 !important;
+  transform: scale(1.12);
+}
+
+/* ── Tooltip card ─────────────────────────────────────────── */
+.cs-tooltip {
+  position: fixed; z-index: 2100;
+  background: var(--surface);
+  border: 0.5px solid var(--border-hover);
+  border-radius: 10px;
+  padding: 14px 16px;
+  max-width: 260px; min-width: 180px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.45);
+  pointer-events: all;
+  opacity: 0;
+  transform: scale(0.94) translateY(4px);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+.cs-tooltip.visible {
+  opacity: 1; transform: scale(1) translateY(0);
+}
+.cs-tt-cat {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.55rem; letter-spacing: 0.1em; text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.cs-tt-word {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.05rem; font-style: italic;
+  color: var(--text); margin-bottom: 8px; line-height: 1.2;
+}
+.cs-tt-def {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.72rem; color: var(--muted2);
+  line-height: 1.5; margin-bottom: 12px;
+}
+.cs-tt-add {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.58rem; letter-spacing: 0.07em; text-transform: uppercase;
+  background: none; border: none; cursor: pointer;
+  padding: 0; color: var(--muted);
+  transition: color 0.15s;
+}
+.cs-tt-add:hover { color: var(--accent); }
+.cs-tt-add.saved { color: var(--accent); pointer-events: none; }
+
+/* ── Mobile: 3-col pill grid ──────────────────────────────── */
+.cs-mobile-grid {
+  flex: 1; overflow-y: auto;
+  display: flex; flex-wrap: wrap; gap: 8px;
+  padding: 16px; align-content: start;
+  scrollbar-width: none;
+}
+.cs-mobile-grid::-webkit-scrollbar { display: none; }
+.cs-mobile-pill {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.72rem; padding: 5px 12px;
+  border: 0.5px solid var(--border); border-radius: 20px;
+  cursor: pointer; color: var(--muted2);
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+.cs-mobile-pill:hover, .cs-mobile-pill.expanded {
+  background: rgba(232,213,163,0.08);
+  border-color: var(--border-hover); color: var(--text);
+}
+.cs-mobile-def {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.68rem; color: var(--muted);
+  line-height: 1.45; width: 100%;
+  padding: 4px 8px 8px; display: none;
+}
+.cs-mobile-pill.expanded + .cs-mobile-def { display: block; }
+
+/* ── Entrance animation ───────────────────────────────────── */
+@keyframes csBloomIn {
+  from { opacity: 0; transform: scale(0.6); }
+  to   { opacity: 0.82; transform: scale(1); }
+}
+
+/* ── Light mode ───────────────────────────────────────────── */
+[data-theme="light"] .cs-overlay { background: #f5f0e8; }
+[data-theme="light"] .cs-tooltip {
+  background: #eee8db;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+/* ── Reduced motion ───────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .cs-overlay, .cs-word, .cs-tooltip { transition: none; animation: none; }
+  .cs-word.cs-visible { opacity: 0.82; }
+}
 </style>
 </body>
 </html>
