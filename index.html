@@ -29726,7 +29726,8 @@ html::-webkit-scrollbar { display: none; }
 </style>
 <script>
 /* ════════════════════════════════════════════════════════
-   WORD CONSTELLATION — Mode B — v2.61
+   WORD CONSTELLATION — Mode B — v2.62
+   Prefixed wc- to avoid collision with Conversation Starter cs- classes
    ════════════════════════════════════════════════════════ */
 
 var GV_CAT_COLORS = {
@@ -29738,22 +29739,21 @@ var GV_CAT_COLORS = {
   'Mind & People':'#c47a9f'
 };
 
-var _csActiveCat    = 'All';
-var _csWords        = [];
-var _csTooltipWord  = null; // currently shown word
-var _csResizeTimer  = null;
-var _csSource       = 'lexi'; // 'lexi' or 'vocab'
-var _csDidLockBody  = false;  // whether WE locked the body (vs it was already locked)
+var _wcActiveCat   = 'All';
+var _wcWords       = [];
+var _wcTooltipWord = null;
+var _wcResizeTimer = null;
+var _wcSource      = 'lexi';
+var _wcDidLockBody = false;
 
 // ── Open ──────────────────────────────────────────────────────
 function _openConstellationView(source) {
-  _csSource = source || 'lexi';
-  var overlay = document.getElementById('csOverlay');
+  _wcSource = source || 'lexi';
+  var overlay = document.getElementById('wcOverlay');
   if (!overlay) return;
 
-  // Only lock body if not already locked (Lexi may have it locked)
-  _csDidLockBody = document.body.style.position !== 'fixed';
-  if (_csDidLockBody) _spLockBodyScroll();
+  _wcDidLockBody = document.body.style.position !== 'fixed';
+  if (_wcDidLockBody) _spLockBodyScroll();
 
   overlay.style.display = 'flex';
   requestAnimationFrame(function() {
@@ -29761,32 +29761,31 @@ function _openConstellationView(source) {
   });
 
   _loadEpisodeMeta().then(function() {
-    _csWords = _buildGlobalVocabIndex();
-    _csActiveCat = 'All';
-    _csBuildFilterPills();
-    _csDetectAndRender();
+    _wcWords = _buildGlobalVocabIndex();
+    _wcActiveCat = 'All';
+    _wcBuildFilterPills();
+    _wcDetectAndRender();
   }).catch(function() {
-    var stage = document.getElementById('csStage');
-    if (stage) stage.innerHTML = '<p style="padding:40px;color:var(--muted);font-family:DM Sans,sans-serif">Could not load words.</p>';
+    var stage = document.getElementById('wcStage');
+    if (stage) stage.innerHTML = '<p style="padding:40px;color:var(--muted);font-family:\'DM Sans\',sans-serif">Could not load words.</p>';
   });
 
-  // Debounced resize
-  window.addEventListener('resize', _csOnResize);
+  window.addEventListener('resize', _wcOnResize);
 }
 
 // ── Close ─────────────────────────────────────────────────────
 function _closeConstellationView() {
-  var overlay = document.getElementById('csOverlay');
+  var overlay = document.getElementById('wcOverlay');
   if (!overlay) return;
-  _csHideTooltip();
+  _wcHideTooltip();
   overlay.classList.remove('open');
-  if (_csDidLockBody) _spUnlockBodyScroll();
-  window.removeEventListener('resize', _csOnResize);
+  if (_wcDidLockBody) _spUnlockBodyScroll();
+  window.removeEventListener('resize', _wcOnResize);
   setTimeout(function() {
     overlay.style.display = 'none';
-    var stage = document.getElementById('csStage');
+    var stage = document.getElementById('wcStage');
     if (stage) stage.innerHTML = '';
-    var mg = document.getElementById('csMobileGrid');
+    var mg = document.getElementById('wcMobileGrid');
     if (mg) { mg.innerHTML = ''; mg.style.display = 'none'; }
   }, 320);
 }
@@ -29797,53 +29796,49 @@ function _switchToVocabList() {
 }
 
 // ── Detect mobile vs desktop ──────────────────────────────────
-function _csDetectAndRender() {
+function _wcDetectAndRender() {
   var isMobile = window.innerWidth <= 600;
-  var stage = document.getElementById('csStage');
-  var mgrid = document.getElementById('csMobileGrid');
+  var stage = document.getElementById('wcStage');
+  var mgrid = document.getElementById('wcMobileGrid');
   if (!stage || !mgrid) return;
 
   if (isMobile) {
     stage.style.display = 'none';
     mgrid.style.display = 'flex';
-    _csRenderMobileGrid(_csWords);
+    _wcRenderMobileGrid(_wcWords);
   } else {
     stage.style.display = '';
     mgrid.style.display = 'none';
-    _csRenderStars(_csWords);
+    _wcRenderStars(_wcWords);
   }
 }
 
-function _csOnResize() {
-  clearTimeout(_csResizeTimer);
-  _csResizeTimer = setTimeout(_csDetectAndRender, 120);
+function _wcOnResize() {
+  clearTimeout(_wcResizeTimer);
+  _wcResizeTimer = setTimeout(_wcDetectAndRender, 120);
 }
 
-// ── Seeded random (deterministic per word index) ──────────────
-function _csRandom(seed) {
+// ── Seeded random ─────────────────────────────────────────────
+function _wcRandom(seed) {
   var x = Math.sin(seed * 127.1 + 311.7) * 43758.5453;
   return x - Math.floor(x);
 }
 
 // ── Layout: grid-jitter ───────────────────────────────────────
-function _csLayout(n, W, H) {
-  // Aim for a grid that roughly fills the space
+function _wcLayout(n, W, H) {
   var aspect = W / H;
   var cols   = Math.ceil(Math.sqrt(n * aspect));
   var rows   = Math.ceil(n / cols);
   var cw     = W / cols;
   var ch     = H / rows;
-
   var positions = [];
   for (var i = 0; i < n; i++) {
     var col = i % cols;
     var row = Math.floor(i / cols);
-    // Jitter: ±35% of cell, seeded by index
-    var jx = (_csRandom(i * 2)     - 0.5) * cw * 0.7;
-    var jy = (_csRandom(i * 2 + 1) - 0.5) * ch * 0.7;
-    var x  = col * cw + cw / 2 + jx;
-    var y  = row * ch + ch / 2 + jy;
-    // Clamp to stage with padding
+    var jx  = (_wcRandom(i * 2)     - 0.5) * cw * 0.7;
+    var jy  = (_wcRandom(i * 2 + 1) - 0.5) * ch * 0.7;
+    var x   = col * cw + cw / 2 + jx;
+    var y   = row * ch + ch / 2 + jy;
     x = Math.max(6, Math.min(W - 80, x));
     y = Math.max(6, Math.min(H - 20, y));
     positions.push({ x: x, y: y });
@@ -29851,24 +29846,23 @@ function _csLayout(n, W, H) {
   return positions;
 }
 
-// ── Render stars (desktop) ────────────────────────────────────
-function _csRenderStars(words) {
-  var stage = document.getElementById('csStage');
+// ── Render stars ──────────────────────────────────────────────
+function _wcRenderStars(words) {
+  var stage = document.getElementById('wcStage');
   if (!stage) return;
   stage.innerHTML = '';
 
   var W = stage.clientWidth  || window.innerWidth;
   var H = stage.clientHeight || (window.innerHeight - 60);
-  var positions = _csLayout(words.length, W, H);
-
+  var positions = _wcLayout(words.length, W, H);
   var frag = document.createDocumentFragment();
 
   words.forEach(function(w, i) {
-    var color   = GV_CAT_COLORS[w.category] || '#6b6b6b';
-    var isDimmed = _csActiveCat !== 'All' && w.category !== _csActiveCat;
+    var color    = GV_CAT_COLORS[w.category] || '#6b6b6b';
+    var isDimmed = _wcActiveCat !== 'All' && w.category !== _wcActiveCat;
 
     var span = document.createElement('span');
-    span.className = 'cs-word' + (isDimmed ? ' cs-dimmed' : '');
+    span.className = 'wc-word' + (isDimmed ? ' wc-dimmed' : '');
     span.textContent = w.word;
     span.style.left  = positions[i].x + 'px';
     span.style.top   = positions[i].y + 'px';
@@ -29879,435 +29873,321 @@ function _csRenderStars(words) {
     span.dataset.colId    = w.colId != null ? String(w.colId) : '';
     span.dataset.catAlt   = w.category_alt || '';
 
-    // Stagger entrance: 3ms per word, capped at 900ms
-    var delay = Math.min(i * 3, 900);
-    span.style.animationDelay = delay + 'ms';
-
-    // Mouse / touch events
-    span.addEventListener('mouseenter', _csWordMouseEnter);
-    span.addEventListener('mouseleave', _csWordMouseLeave);
-    span.addEventListener('click',      _csWordClick);
-
+    span.addEventListener('mouseenter', _wcWordMouseEnter);
+    span.addEventListener('mouseleave', _wcWordMouseLeave);
+    span.addEventListener('click',      _wcWordClick);
     frag.appendChild(span);
   });
 
   stage.appendChild(frag);
 
-  // Bloom in: add cs-visible class after paint (triggers opacity transition)
+  // Bloom in with stagger
   requestAnimationFrame(function() {
-    var spans = stage.querySelectorAll('.cs-word');
+    var spans = stage.querySelectorAll('.wc-word');
     spans.forEach(function(s, i) {
       var delay = Math.min(i * 3, 900);
       setTimeout(function() {
-        if (!s.classList.contains('cs-dimmed')) {
-          s.classList.add('cs-visible');
-        }
+        if (!s.classList.contains('wc-dimmed')) s.classList.add('wc-visible');
       }, delay);
     });
   });
 }
 
-// ── Word hover / click ────────────────────────────────────────
-function _csWordMouseEnter(e) {
-  _csShowTooltip(e.currentTarget);
-}
-function _csWordMouseLeave(e) {
-  // Hide unless cursor moved into tooltip
+// ── Word events ───────────────────────────────────────────────
+function _wcWordMouseEnter(e) { _wcShowTooltip(e.currentTarget); }
+function _wcWordMouseLeave() {
   setTimeout(function() {
-    var tt = document.getElementById('csTooltip');
+    var tt = document.getElementById('wcTooltip');
     if (tt && tt.matches(':hover')) return;
-    _csHideTooltip();
+    _wcHideTooltip();
   }, 80);
 }
-function _csWordClick(e) {
+function _wcWordClick(e) {
   var span = e.currentTarget;
-  if (_csTooltipWord === span.dataset.word) {
-    _csHideTooltip();
-    _csTooltipWord = null;
+  if (_wcTooltipWord === span.dataset.word) {
+    _wcHideTooltip(); _wcTooltipWord = null;
   } else {
-    _csShowTooltip(span);
+    _wcShowTooltip(span);
   }
 }
 
-function _csShowTooltip(spanEl) {
-  var tt     = document.getElementById('csTooltip');
-  var catEl  = document.getElementById('csTtCat');
-  var wordEl = document.getElementById('csTtWord');
-  var defEl  = document.getElementById('csTtDef');
-  var addBtn = document.getElementById('csTtAdd');
+function _wcShowTooltip(spanEl) {
+  var tt     = document.getElementById('wcTooltip');
+  var catEl  = document.getElementById('wcTtCat');
+  var wordEl = document.getElementById('wcTtWord');
+  var defEl  = document.getElementById('wcTtDef');
+  var addBtn = document.getElementById('wcTtAdd');
   if (!tt || !spanEl) return;
 
-  var word     = spanEl.dataset.word;
-  var def      = spanEl.dataset.def;
-  var cat      = spanEl.dataset.category;
-  var colId    = spanEl.dataset.colId ? parseInt(spanEl.dataset.colId) : null;
-  var catAlt   = spanEl.dataset.catAlt || undefined;
-  var color    = GV_CAT_COLORS[cat] || '#6b6b6b';
-  var isSaved  = !!_lexiconGetSaved(word);
+  var word   = spanEl.dataset.word;
+  var def    = spanEl.dataset.def;
+  var cat    = spanEl.dataset.category;
+  var colId  = spanEl.dataset.colId ? parseInt(spanEl.dataset.colId) : null;
+  var catAlt = spanEl.dataset.catAlt || undefined;
+  var color  = GV_CAT_COLORS[cat] || '#6b6b6b';
+  var isSaved = !!_lexiconGetSaved(word);
 
-  _csTooltipWord = word;
+  _wcTooltipWord = word;
 
   if (catEl)  { catEl.textContent = cat || ''; catEl.style.color = color; }
   if (wordEl) wordEl.textContent = word;
   if (defEl)  defEl.textContent  = def;
   if (addBtn) {
     addBtn.textContent = isSaved ? '✓ In Lexi' : '+ Add to Lexi';
-    addBtn.className   = 'cs-tt-add' + (isSaved ? ' saved' : '');
+    addBtn.className   = 'wc-tt-add' + (isSaved ? ' saved' : '');
     addBtn.onclick = isSaved ? null : function() {
       _lexiconSave(word, def, colId, [], document.createElement('div'), cat || undefined, catAlt || undefined);
       _lexiUpdateBadge();
       if (typeof _lexiRenderPanel === 'function') _lexiRenderPanel();
       addBtn.textContent = '✓ In Lexi';
-      addBtn.className   = 'cs-tt-add saved';
+      addBtn.className   = 'wc-tt-add saved';
       _gvBumpLexiCount();
     };
   }
 
-  // Position: prefer right of word, flip left if near right edge
-  var rect   = spanEl.getBoundingClientRect();
-  var vw     = window.innerWidth;
-  var vh     = window.innerHeight;
-  var ttW    = 268;
-  var ttH    = 160; // approximate
-  var left   = rect.right + 10;
-  var top    = rect.top - 10;
-
+  var rect = spanEl.getBoundingClientRect();
+  var vw   = window.innerWidth;
+  var vh   = window.innerHeight;
+  var ttW  = 268; var ttH = 160;
+  var left = rect.right + 10;
+  var top  = rect.top - 10;
   if (left + ttW > vw - 12) left = rect.left - ttW - 10;
   if (top + ttH > vh - 12)  top  = vh - ttH - 12;
-  if (top < 8) top = 8;
+  if (top < 8)  top  = 8;
   if (left < 8) left = 8;
 
   tt.style.display = 'block';
-  tt.style.left    = left + 'px';
-  tt.style.top     = top  + 'px';
+  tt.style.left = left + 'px';
+  tt.style.top  = top  + 'px';
   tt.classList.remove('visible');
   requestAnimationFrame(function() {
     requestAnimationFrame(function() { tt.classList.add('visible'); });
   });
-
-  // Hide tooltip when mouse leaves it too
-  tt.onmouseleave = _csHideTooltip;
+  tt.onmouseleave = _wcHideTooltip;
 }
 
-function _csHideTooltip() {
-  var tt = document.getElementById('csTooltip');
+function _wcHideTooltip() {
+  var tt = document.getElementById('wcTooltip');
   if (!tt) return;
   tt.classList.remove('visible');
   setTimeout(function() {
     if (!tt.classList.contains('visible')) tt.style.display = 'none';
   }, 200);
-  _csTooltipWord = null;
+  _wcTooltipWord = null;
 }
 
 // ── Category filter ───────────────────────────────────────────
-function _csBuildFilterPills() {
-  var row = document.getElementById('csFilterRow');
+function _wcBuildFilterPills() {
+  var row = document.getElementById('wcFilterRow');
   if (!row) return;
   row.innerHTML = '';
-
   GV_CATS.forEach(function(cat) {
     var color = GV_CAT_COLORS[cat] || '#e8d5a3';
     var btn = document.createElement('button');
-    btn.className = 'cs-filter-pill' + (cat === _csActiveCat ? ' active' : '');
+    btn.className = 'wc-filter-pill' + (cat === _wcActiveCat ? ' active' : '');
     btn.textContent = cat;
-    if (cat === _csActiveCat) btn.style.background = color;
-
+    if (cat === _wcActiveCat) btn.style.background = color;
     btn.addEventListener('click', function() {
-      _csActiveCat = cat;
-      row.querySelectorAll('.cs-filter-pill').forEach(function(p) {
-        p.classList.remove('active');
-        p.style.background = '';
+      _wcActiveCat = cat;
+      row.querySelectorAll('.wc-filter-pill').forEach(function(p) {
+        p.classList.remove('active'); p.style.background = '';
       });
-      btn.classList.add('active');
-      btn.style.background = color;
-      _csFilterCat(cat);
-      _csHideTooltip();
+      btn.classList.add('active'); btn.style.background = color;
+      _wcFilterCat(cat);
+      _wcHideTooltip();
     });
     row.appendChild(btn);
   });
 }
 
-function _csFilterCat(cat) {
-  var spans = document.querySelectorAll('#csStage .cs-word');
-  spans.forEach(function(s) {
+function _wcFilterCat(cat) {
+  document.querySelectorAll('#wcStage .wc-word').forEach(function(s) {
     var match = cat === 'All' || s.dataset.category === cat;
-    s.classList.toggle('cs-dimmed',  !match);
-    s.classList.toggle('cs-visible',  match);
+    s.classList.toggle('wc-dimmed',  !match);
+    s.classList.toggle('wc-visible',  match);
   });
-  // Mobile: show/hide pills
-  var pills = document.querySelectorAll('#csMobileGrid .cs-mobile-pill');
-  pills.forEach(function(p) {
+  document.querySelectorAll('#wcMobileGrid .wc-mobile-pill').forEach(function(p) {
     var match = cat === 'All' || p.dataset.category === cat;
     p.style.display = match ? '' : 'none';
-    // also hide paired def if present
     var next = p.nextElementSibling;
-    if (next && next.classList.contains('cs-mobile-def')) next.style.display = 'none';
+    if (next && next.classList.contains('wc-mobile-def')) next.style.display = 'none';
     p.classList.remove('expanded');
   });
 }
 
-// ── Mobile: 3-col pill grid ───────────────────────────────────
-function _csRenderMobileGrid(words) {
-  var grid = document.getElementById('csMobileGrid');
+// ── Mobile grid ───────────────────────────────────────────────
+function _wcRenderMobileGrid(words) {
+  var grid = document.getElementById('wcMobileGrid');
   if (!grid) return;
   grid.innerHTML = '';
   var frag = document.createDocumentFragment();
-
   words.forEach(function(w) {
     var color = GV_CAT_COLORS[w.category] || '#6b6b6b';
     var pill = document.createElement('span');
-    pill.className = 'cs-mobile-pill';
+    pill.className = 'wc-mobile-pill';
     pill.textContent = w.word;
     pill.style.borderColor = color + '60';
     pill.style.color = color;
     pill.dataset.category = w.category || '';
-
     var defEl = document.createElement('div');
-    defEl.className = 'cs-mobile-def';
+    defEl.className = 'wc-mobile-def';
     defEl.textContent = w.definition;
-
     pill.addEventListener('click', function() {
       var wasOpen = pill.classList.contains('expanded');
-      grid.querySelectorAll('.cs-mobile-pill.expanded').forEach(function(p) {
+      grid.querySelectorAll('.wc-mobile-pill.expanded').forEach(function(p) {
         p.classList.remove('expanded');
         var nd = p.nextElementSibling;
-        if (nd && nd.classList.contains('cs-mobile-def')) nd.style.display = 'none';
+        if (nd && nd.classList.contains('wc-mobile-def')) nd.style.display = 'none';
       });
-      if (!wasOpen) {
-        pill.classList.add('expanded');
-        defEl.style.display = 'block';
-      }
+      if (!wasOpen) { pill.classList.add('expanded'); defEl.style.display = 'block'; }
     });
-
     frag.appendChild(pill);
     frag.appendChild(defEl);
   });
-
   grid.appendChild(frag);
 }
 </script>
 
 <!-- ════════════════════════════════════════════════════════
-     WORD CONSTELLATION — Mode B — v2.61
-     Full-screen word map, colored by category, hover tooltip.
+     WORD CONSTELLATION — Mode B — v2.62
+     wc- prefix to avoid collision with Conversation Starter cs- classes
      ════════════════════════════════════════════════════════ -->
 
-<div class="cs-overlay" id="csOverlay" style="display:none" role="dialog" aria-modal="true" aria-label="Word Map">
-
-  <div class="cs-header" id="csHeader">
-    <div class="cs-filter-row" id="csFilterRow">
-      <!-- category pills injected by JS -->
-    </div>
-    <div class="cs-header-right">
-      <button class="cs-list-btn" onclick="_switchToVocabList()" title="Switch to list">⊞ List</button>
-      <button class="cs-close-btn" onclick="_closeConstellationView()" aria-label="Close">✕</button>
+<div class="wc-overlay" id="wcOverlay" style="display:none" role="dialog" aria-modal="true" aria-label="Word Map">
+  <div class="wc-header" id="wcHeader">
+    <div class="wc-filter-row" id="wcFilterRow"></div>
+    <div class="wc-header-right">
+      <button class="wc-list-btn" onclick="_switchToVocabList()" title="Switch to list">⊞ List</button>
+      <button class="wc-close-btn" onclick="_closeConstellationView()" aria-label="Close">✕</button>
     </div>
   </div>
-
-  <div class="cs-stage" id="csStage">
-    <!-- word spans injected by JS -->
-  </div>
-
-  <!-- Mobile fallback: 3-col pill grid -->
-  <div class="cs-mobile-grid" id="csMobileGrid" style="display:none">
-    <!-- word pills injected by JS on mobile -->
-  </div>
-
+  <div class="wc-stage" id="wcStage"></div>
+  <div class="wc-mobile-grid" id="wcMobileGrid" style="display:none"></div>
 </div>
 
-<!-- Tooltip card (fixed, singleton) -->
-<div class="cs-tooltip" id="csTooltip" style="display:none" role="tooltip">
-  <div class="cs-tt-cat" id="csTtCat"></div>
-  <div class="cs-tt-word" id="csTtWord"></div>
-  <div class="cs-tt-def" id="csTtDef"></div>
-  <button class="cs-tt-add" id="csTtAdd"></button>
+<div class="wc-tooltip" id="wcTooltip" style="display:none" role="tooltip">
+  <div class="wc-tt-cat" id="wcTtCat"></div>
+  <div class="wc-tt-word" id="wcTtWord"></div>
+  <div class="wc-tt-def" id="wcTtDef"></div>
+  <button class="wc-tt-add" id="wcTtAdd"></button>
 </div>
 
 <style>
 /* ══════════════════════════════════════════════════════════
-   WORD CONSTELLATION — v2.61
+   WORD CONSTELLATION — v2.62  (wc- prefix)
    ══════════════════════════════════════════════════════════ */
-
-/* ── Overlay ──────────────────────────────────────────────── */
-.cs-overlay {
+.wc-overlay {
   position: fixed; inset: 0; z-index: 2000;
   background: var(--bg);
   display: flex; flex-direction: column;
   opacity: 0; pointer-events: none;
   transition: opacity 0.3s ease;
 }
-.cs-overlay.open {
-  opacity: 1; pointer-events: all;
-}
+.wc-overlay.open { opacity: 1; pointer-events: all; }
 
-/* ── Header ───────────────────────────────────────────────── */
-.cs-header {
+.wc-header {
   display: flex; align-items: center;
   padding: 14px 20px 12px;
   border-bottom: 0.5px solid var(--border);
   flex-shrink: 0; gap: 12px;
-  z-index: 1;
 }
-.cs-filter-row {
-  display: flex; flex-wrap: wrap; gap: 6px; flex: 1;
-}
-.cs-filter-pill {
+.wc-filter-row { display: flex; flex-wrap: wrap; gap: 6px; flex: 1; }
+.wc-filter-pill {
   font-family: 'DM Mono', monospace;
   font-size: 0.58rem; letter-spacing: 0.07em; text-transform: uppercase;
   padding: 5px 12px; border-radius: 20px; cursor: pointer;
-  border: 0.5px solid var(--border);
-  background: none; color: var(--muted);
-  transition: background 0.18s, color 0.18s, border-color 0.18s;
-  min-height: 30px;
+  border: 0.5px solid var(--border); background: none; color: var(--muted);
+  transition: background 0.18s, color 0.18s, border-color 0.18s; min-height: 30px;
 }
-.cs-filter-pill.active {
-  color: var(--bg); border-color: transparent;
-  /* background set inline per category color */
+.wc-filter-pill.active { color: var(--bg); border-color: transparent; }
+.wc-filter-pill:not(.active):hover {
+  background: rgba(232,213,163,0.08); color: var(--muted2); border-color: var(--border-hover);
 }
-.cs-filter-pill:not(.active):hover {
-  background: rgba(232,213,163,0.08);
-  color: var(--muted2); border-color: var(--border-hover);
-}
-.cs-header-right {
-  display: flex; align-items: center; gap: 8px; flex-shrink: 0;
-}
-.cs-list-btn {
+.wc-header-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.wc-list-btn {
   font-family: 'DM Mono', monospace;
   font-size: 0.6rem; letter-spacing: 0.06em; text-transform: uppercase;
-  padding: 5px 12px; border: 0.5px solid var(--border);
-  border-radius: 20px; background: none; color: var(--muted);
-  cursor: pointer; min-height: 30px;
+  padding: 5px 12px; border: 0.5px solid var(--border); border-radius: 20px;
+  background: none; color: var(--muted); cursor: pointer; min-height: 30px;
   transition: color 0.15s, border-color 0.15s;
 }
-.cs-list-btn:hover { color: var(--accent); border-color: var(--accent); }
-.cs-close-btn {
-  background: none; border: none; cursor: pointer;
-  color: var(--muted); font-size: 0.85rem;
-  padding: 4px 6px; min-width: 28px; min-height: 28px;
+.wc-list-btn:hover { color: var(--accent); border-color: var(--accent); }
+.wc-close-btn {
+  background: none; border: none; cursor: pointer; color: var(--muted);
+  font-size: 0.85rem; padding: 4px 6px; min-width: 28px; min-height: 28px;
   transition: color 0.15s;
 }
-.cs-close-btn:hover { color: var(--text); }
+.wc-close-btn:hover { color: var(--text); }
 
-/* ── Stage (constellation canvas) ────────────────────────── */
-.cs-stage {
-  flex: 1; position: relative; overflow: hidden;
-  /* words are absolutely positioned inside here */
-}
+.wc-stage { flex: 1; position: relative; overflow: hidden; }
 
-/* ── Word spans ───────────────────────────────────────────── */
-.cs-word {
-  position: absolute;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.75rem;
-  line-height: 1;
-  cursor: pointer;
-  user-select: none;
-  opacity: 0;
-  transition: opacity 0.28s ease, transform 0.18s ease;
-  white-space: nowrap;
-  padding: 3px 1px;
-  will-change: opacity; /* applied only during load animation */
+.wc-word {
+  position: absolute; font-family: 'DM Sans', sans-serif;
+  font-size: 0.75rem; line-height: 1; cursor: pointer; user-select: none;
+  opacity: 0; transition: opacity 0.28s ease, transform 0.18s ease;
+  white-space: nowrap; padding: 3px 1px;
 }
-.cs-word.cs-visible {
-  opacity: 0.82;
-  will-change: auto;
-}
-.cs-word.cs-dimmed {
-  opacity: 0.07;
-  transition: opacity 0.28s ease;
-}
-.cs-word:hover {
-  opacity: 1 !important;
-  transform: scale(1.12);
-}
+.wc-word.wc-visible { opacity: 0.82; }
+.wc-word.wc-dimmed  { opacity: 0.07; transition: opacity 0.28s ease; }
+.wc-word:hover      { opacity: 1 !important; transform: scale(1.12); }
 
-/* ── Tooltip card ─────────────────────────────────────────── */
-.cs-tooltip {
-  position: fixed; z-index: 2100;
-  background: var(--surface);
-  border: 0.5px solid var(--border-hover);
-  border-radius: 10px;
-  padding: 14px 16px;
-  max-width: 260px; min-width: 180px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.45);
-  pointer-events: all;
-  opacity: 0;
-  transform: scale(0.94) translateY(4px);
+.wc-tooltip {
+  position: fixed; z-index: 2100; background: var(--surface);
+  border: 0.5px solid var(--border-hover); border-radius: 10px;
+  padding: 14px 16px; max-width: 260px; min-width: 180px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.45); pointer-events: all;
+  opacity: 0; transform: scale(0.94) translateY(4px);
   transition: opacity 0.18s ease, transform 0.18s ease;
 }
-.cs-tooltip.visible {
-  opacity: 1; transform: scale(1) translateY(0);
+.wc-tooltip.visible { opacity: 1; transform: scale(1) translateY(0); }
+.wc-tt-cat {
+  font-family: 'DM Mono', monospace; font-size: 0.55rem;
+  letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px;
 }
-.cs-tt-cat {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.55rem; letter-spacing: 0.1em; text-transform: uppercase;
-  margin-bottom: 6px;
+.wc-tt-word {
+  font-family: 'Playfair Display', serif; font-size: 1.05rem;
+  font-style: italic; color: var(--text); margin-bottom: 8px; line-height: 1.2;
 }
-.cs-tt-word {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.05rem; font-style: italic;
-  color: var(--text); margin-bottom: 8px; line-height: 1.2;
+.wc-tt-def {
+  font-family: 'DM Sans', sans-serif; font-size: 0.72rem;
+  color: var(--muted2); line-height: 1.5; margin-bottom: 12px;
 }
-.cs-tt-def {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.72rem; color: var(--muted2);
-  line-height: 1.5; margin-bottom: 12px;
+.wc-tt-add {
+  font-family: 'DM Mono', monospace; font-size: 0.58rem;
+  letter-spacing: 0.07em; text-transform: uppercase;
+  background: none; border: none; cursor: pointer; padding: 0;
+  color: var(--muted); transition: color 0.15s;
 }
-.cs-tt-add {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.58rem; letter-spacing: 0.07em; text-transform: uppercase;
-  background: none; border: none; cursor: pointer;
-  padding: 0; color: var(--muted);
-  transition: color 0.15s;
-}
-.cs-tt-add:hover { color: var(--accent); }
-.cs-tt-add.saved { color: var(--accent); pointer-events: none; }
+.wc-tt-add:hover { color: var(--accent); }
+.wc-tt-add.saved { color: var(--accent); pointer-events: none; }
 
-/* ── Mobile: 3-col pill grid ──────────────────────────────── */
-.cs-mobile-grid {
-  flex: 1; overflow-y: auto;
-  display: flex; flex-wrap: wrap; gap: 8px;
-  padding: 16px; align-content: start;
+.wc-mobile-grid {
+  flex: 1; overflow-y: auto; display: flex; flex-wrap: wrap;
+  gap: 8px; padding: 16px; align-content: start;
   scrollbar-width: none;
 }
-.cs-mobile-grid::-webkit-scrollbar { display: none; }
-.cs-mobile-pill {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.72rem; padding: 5px 12px;
-  border: 0.5px solid var(--border); border-radius: 20px;
-  cursor: pointer; color: var(--muted2);
-  transition: background 0.15s, border-color 0.15s, color 0.15s;
+.wc-mobile-grid::-webkit-scrollbar { display: none; }
+.wc-mobile-pill {
+  font-family: 'DM Sans', sans-serif; font-size: 0.72rem; padding: 5px 12px;
+  border: 0.5px solid var(--border); border-radius: 20px; cursor: pointer;
+  color: var(--muted2); transition: background 0.15s, border-color 0.15s, color 0.15s;
   white-space: nowrap;
 }
-.cs-mobile-pill:hover, .cs-mobile-pill.expanded {
-  background: rgba(232,213,163,0.08);
-  border-color: var(--border-hover); color: var(--text);
+.wc-mobile-pill:hover, .wc-mobile-pill.expanded {
+  background: rgba(232,213,163,0.08); border-color: var(--border-hover); color: var(--text);
 }
-.cs-mobile-def {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.68rem; color: var(--muted);
-  line-height: 1.45; width: 100%;
-  padding: 4px 8px 8px; display: none;
+.wc-mobile-def {
+  font-family: 'DM Sans', sans-serif; font-size: 0.68rem; color: var(--muted);
+  line-height: 1.45; width: 100%; padding: 4px 8px 8px; display: none;
 }
-.cs-mobile-pill.expanded + .cs-mobile-def { display: block; }
+.wc-mobile-pill.expanded + .wc-mobile-def { display: block; }
 
-/* ── Entrance animation ───────────────────────────────────── */
-@keyframes csBloomIn {
-  from { opacity: 0; transform: scale(0.6); }
-  to   { opacity: 0.82; transform: scale(1); }
-}
+[data-theme="light"] .wc-overlay { background: #f5f0e8; }
+[data-theme="light"] .wc-tooltip { background: #eee8db; box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
 
-/* ── Light mode ───────────────────────────────────────────── */
-[data-theme="light"] .cs-overlay { background: #f5f0e8; }
-[data-theme="light"] .cs-tooltip {
-  background: #eee8db;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-}
-
-/* ── Reduced motion ───────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
-  .cs-overlay, .cs-word, .cs-tooltip { transition: none; animation: none; }
-  .cs-word.cs-visible { opacity: 0.82; }
+  .wc-overlay, .wc-word, .wc-tooltip { transition: none; animation: none; }
+  .wc-word.wc-visible { opacity: 0.82; }
 }
 </style>
 </body>

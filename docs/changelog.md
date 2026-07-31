@@ -6,6 +6,14 @@
 
 ---
 
+## v2.63 — 2026-07-31 · Fix constellation ID/class collision with Conversation Starter
+
+### index.html — Root cause of ◎ doing nothing
+- **Root cause:** The existing Conversation Starter modal already uses `id="csOverlay"`, `class="cs-overlay"`, and has a permanent `display: none !important` rule on `.cs-overlay`. My constellation overlay shared both — so `getElementById('csOverlay')` found the wrong element, and `.cs-overlay` was permanently hidden.
+- **Fix:** Renamed all constellation HTML, CSS, and JS from `cs-` / `csXxx` prefix to `wc-` / `wcXxx` (Word Constellation). Zero conflicts with existing code.
+
+---
+
 ## v2.62 — 2026-07-31 · Constellation fixes, button layout, backdrop close
 
 ### index.html — ◎ button moved
