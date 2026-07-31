@@ -6,6 +6,23 @@
 
 ---
 
+## v2.58 — 2026-07-31 · Global Vocab Mode A: Category Browse
+
+### index.html — Global Vocab overlay (Mode A)
+- **New feature:** "All Words" button added to Lexi panel (`.lexi-action-secondary`, outline style) above Practice button
+- **New overlay:** `.gv-overlay` / `.gv-panel` — 420px right-panel, same z-index 600, backdrop + slide-in transition using `cubic-bezier(0.32, 0.72, 0, 1)`
+- **Category grid:** 6 cards (All + 5 categories), 2-col grid, shows word count + 3 preview words per card
+- **Word list:** filterable by category pills, shows word + definition + "Add to Lexi" / "In Lexi" state per row
+- **Data:** `_buildGlobalVocabIndex()` walks `EPISODE_META`, deduplicates by lowercase word, sorts alphabetically, caches in `_globalVocabCache`; cache invalidates if episode count changes
+- **Transitions:** cat→list (slide left/right, 200ms out, 280ms in); list→cat (reverse); filter pills hide rows via `.gv-hidden` (height collapse)
+- **Add to Lexi:** calls `_lexiconSave()` with correct 7-arg signature, updates badge via `_lexiUpdateBadge()`
+- **Body scroll lock:** uses `_spLockBodyScroll()` / `_spUnlockBodyScroll()` — correct iOS-safe pattern
+- **Light mode:** `.gv-overlay`, `.gv-panel`, `.gv-cat-card` overrides added
+- **Mobile:** `gv-panel` goes `width: 100%` at ≤480px
+- **Reduced motion:** all `.gv-*` transitions suppressed
+
+---
+
 ## v2.57 — 2026-07-31 · Pull quotes final position, vocab layout, Lexi typography
 
 ### index.html — pull quotes horizontal position (final)
