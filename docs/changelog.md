@@ -6,6 +6,22 @@
 
 ---
 
+## v2.67 — 2026-07-31 · Constellation Clusters view + Collect animation, pull quote flash fix + drag smooth
+
+### index.html — Pull quote: flash fix
+- Default CSS `top: 50%` → `top: -100vh`. Quotes are off-screen until `_alignPQ()` sets real position. Prevents mid-hero flash on page refresh with scroll restoration.
+
+### index.html — Pull quote: drag smoothness
+- Removed settle timer (was snapping `_pqTargetDrag = 0` causing sudden jump on stop).
+- Lerp loop now decays target naturally each frame (`*= 0.91`). Both target and current drain together — symmetric, smooth arrival in both directions.
+
+### index.html — Constellation: Clusters view
+- New `◉ Clusters` view button (between Free and Nebula). `_wcClustersLayout()`: groups words by category into 5 zone centers, packs each group into rows within their zone (row height 24px, char width estimated 7.2px). No overlap guaranteed by row layout. Tiny ±4px jitter keeps it organic.
+
+### index.html — Constellation: Collect button
+- Appears in Free view when a category filter is active. Animates active words into a centered grid (0.9s cubic-bezier `left/top` transition). Inactive words fade to 0. Toggles to `⊡ Scatter` to restore original positions. Gentle pulse animation on button.
+- Original positions stored in `dataset.origLeft/origTop` at render time.
+
 ## v2.66 — 2026-07-31 · Constellation view modes (Free / Nebula), pull quote lerp drag
 
 ### index.html — Constellation view modes

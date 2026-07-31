@@ -15786,13 +15786,15 @@ function initSparkHero() {
     var _pqDragActive  = false;
 
     function _pqLerpLoop() {
-      // Very slow lerp = heavy lag feel (4% of gap per frame ≈ 0.6s to mostly settle)
-      _pqCurrentDrag += (_pqTargetDrag - _pqCurrentDrag) * 0.04;
+      // Target decays naturally each frame — no settle timer, no snap
+      _pqTargetDrag  *= 0.91;
+      // Current slowly chases target (6% per frame ≈ ~0.5s lag)
+      _pqCurrentDrag += (_pqTargetDrag - _pqCurrentDrag) * 0.06;
       var val = _pqCurrentDrag.toFixed(2);
       if (pq)  pq.style.transform  = 'translateY(calc(-50% + ' + val + 'px))';
       if (pqL) pqL.style.transform = 'translateY(calc(-50% + ' + val + 'px))';
 
-      var stillMoving = Math.abs(_pqCurrentDrag - _pqTargetDrag) > 0.08 || Math.abs(_pqTargetDrag) > 0.08;
+      var stillMoving = Math.abs(_pqCurrentDrag) > 0.08 || Math.abs(_pqTargetDrag) > 0.08;
       if (stillMoving) {
         _pqDragRaf = requestAnimationFrame(_pqLerpLoop);
       } else {
@@ -15809,7 +15811,6 @@ function initSparkHero() {
       _pqDragRaf = requestAnimationFrame(_pqLerpLoop);
     }
 
-    // _pqDragFrame kept as no-op for compat
     function _pqDragFrame() {}
 
     var STATS = [
@@ -15873,9 +15874,6 @@ function initSparkHero() {
         // Accumulate: fast scroll builds more drag (clamped to ±32px)
         _pqTargetDrag = Math.max(-32, Math.min(32, _pqTargetDrag + _pqScrollVel * -0.55));
         _pqStartLerp();
-        clearTimeout(_pqSettleTimer);
-        // After scrolling stops, let target slowly return to 0
-        _pqSettleTimer = setTimeout(function() { _pqTargetDrag = 0; }, 80);
       }
 
       if (_ticking) return;
@@ -23739,7 +23737,7 @@ body.corner-mode .sp-eyebrow-kicker { opacity: 0; pointer-events: none; transiti
     text-align: right;
     position: fixed;
     right: 9.35rem;
-    top: 50%; /* overridden by JS to align with browse toggle */
+    top: -100vh; /* off-screen until JS sets real position — prevents mid-hero flash on refresh */
     transform: translateY(-50%);
     padding-right: 1rem;
     border-right: 2px solid var(--accent);
@@ -29979,10 +29977,15 @@ var _wcDriftRaf   = null;
 var _wcDriftStart = 0;
 
 function _wcSetView(mode) {
-  _wcViewMode = mode;
+  _wcViewMode   = mode;
+  _wcCollected  = false;
   document.querySelectorAll('.wc-view-btn').forEach(function(b) { b.classList.remove('active'); });
-  var btn = document.getElementById(mode === 'free' ? 'wcViewFree' : 'wcViewNebula');
-  if (btn) btn.classList.add('active');
+  var idMap = { free: 'wcViewFree', clusters: 'wcViewClusters', nebula: 'wcViewNebula' };
+  var activeBtn = document.getElementById(idMap[mode] || 'wcViewFree');
+  if (activeBtn) activeBtn.classList.add('active');
+  // Collect button only available in Free mode when a cat is selected
+  var collectBtn = document.getElementById('wcCollectBtn');
+  if (collectBtn) { collectBtn.style.display = 'none'; collectBtn.textContent = '⊹ Collect'; }
   _wcStopDrift();
   _wcDetectAndRender();
 }
@@ -30019,6 +30022,133 @@ function _wcNebulaLayout(words, W, H) {
     var x  = Math.max(8, Math.min(W - 90, z.cx + dx));
     var y  = Math.max(8, Math.min(H - 24, z.cy + dy));
     return { x: x, y: y, zoneIdx: zoneIdx };
+  });
+}
+
+// ── Clusters layout: row-packed zones, no overlap ─────────────
+function _wcClustersLayout(words, W, H) {
+  var zones = [
+    { cx: W*0.19, cy: H*0.30 }, // top-left
+    { cx: W*0.76, cy: H*0.24 }, // top-right
+    { cx: W*0.50, cy: H*0.54 }, // center
+    { cx: W*0.17, cy: H*0.74 }, // bottom-left
+    { cx: W*0.79, cy: H*0.74 }, // bottom-right
+  ];
+  var ROW_H   = 24;   // px between rows
+  var CHAR_W  = 7.2;  // estimated px per char at ~0.75rem
+  var PAD     = 10;   // padding between words on same row
+  var MAX_W   = Math.min(W * 0.26, 230); // max zone width
+
+  // Group words by zone index
+  var buckets = [[], [], [], [], []];
+  words.forEach(function(w) {
+    var zi = _WC_CAT_ZONES[w.category];
+    zi = (zi != null) ? zi : 2; // uncategorised → center
+    buckets[zi].push(w);
+  });
+
+  // Build word→index map for output array
+  var posMap = {};
+  words.forEach(function(w, i) { posMap[w.word] = i; });
+  var positions = new Array(words.length);
+
+  buckets.forEach(function(bucket, zi) {
+    var z = zones[zi];
+    // Pack into rows
+    var rows = [[]], rowW = [0];
+    bucket.forEach(function(w) {
+      var ww = w.word.length * CHAR_W + PAD;
+      var ri = rows.length - 1;
+      if (rowW[ri] + ww > MAX_W && rows[ri].length > 0) {
+        rows.push([]); rowW.push(0); ri++;
+      }
+      rows[ri].push(w);
+      rowW[ri] += ww;
+    });
+
+    var totalH = rows.length * ROW_H;
+    var startY = z.cy - totalH / 2;
+
+    rows.forEach(function(row, ri) {
+      var rw = rowW[ri];
+      var cx = z.cx - rw / 2;
+      row.forEach(function(w) {
+        var ww = w.word.length * CHAR_W + PAD;
+        var idx = posMap[w.word];
+        var jx = (_wcRandom(idx * 7 + 11) - 0.5) * 4;
+        var jy = (_wcRandom(idx * 7 + 13) - 0.5) * 3;
+        positions[idx] = {
+          x: Math.max(8, Math.min(W - 90, cx + jx)),
+          y: Math.max(8, Math.min(H - 24, startY + ri * ROW_H + jy))
+        };
+        cx += ww;
+      });
+    });
+  });
+
+  // Fallback for any undefined (shouldn't happen)
+  positions.forEach(function(p, i) {
+    if (!p) positions[i] = { x: W * 0.5, y: H * 0.5 };
+  });
+  return positions;
+}
+
+// ── Collect: animate active words into a centered grid ─────────
+var _wcCollected = false;
+
+function _wcCollect() {
+  var stage = document.getElementById('wcStage');
+  if (!stage) return;
+  var btn = document.getElementById('wcCollectBtn');
+
+  if (_wcCollected) { _wcScatter(); return; }
+  _wcCollected = true;
+  if (btn) btn.textContent = '⊡ Scatter';
+
+  var active   = Array.from(stage.querySelectorAll('.wc-word:not(.wc-dimmed)'));
+  var inactive = Array.from(stage.querySelectorAll('.wc-word.wc-dimmed'));
+
+  // Fade out inactive
+  inactive.forEach(function(s) { s.style.transition = 'opacity 0.4s ease'; s.style.opacity = '0'; });
+
+  // Calculate grid
+  var W    = stage.clientWidth  || window.innerWidth;
+  var H    = stage.clientHeight || window.innerHeight - 60;
+  var cols = Math.ceil(Math.sqrt(active.length * 1.8));
+  var ROW_H = 30;
+  var COL_W = Math.min(170, (W * 0.72) / cols);
+  var rows  = Math.ceil(active.length / cols);
+  var startX = (W - cols * COL_W) / 2;
+  var startY = (H - rows * ROW_H) / 2;
+
+  // Enable transitions + move
+  active.forEach(function(s, i) {
+    s.style.transition = 'left 0.9s cubic-bezier(0.4,0,0.2,1), top 0.9s cubic-bezier(0.4,0,0.2,1), opacity 0.4s ease';
+    var col = i % cols;
+    var row = Math.floor(i / cols);
+    requestAnimationFrame(function() {
+      s.style.left = (startX + col * COL_W) + 'px';
+      s.style.top  = (startY + row * ROW_H) + 'px';
+    });
+  });
+}
+
+function _wcScatter() {
+  var stage = document.getElementById('wcStage');
+  if (!stage) return;
+  var btn = document.getElementById('wcCollectBtn');
+  _wcCollected = false;
+  if (btn) btn.textContent = '⊹ Collect';
+
+  var all = Array.from(stage.querySelectorAll('.wc-word'));
+  all.forEach(function(s) {
+    s.style.transition = 'left 0.7s cubic-bezier(0.4,0,0.2,1), top 0.7s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease';
+    var ox = s.dataset.origLeft;
+    var oy = s.dataset.origTop;
+    if (ox) s.style.left = ox;
+    if (oy) s.style.top  = oy;
+    var baseOp = parseFloat(s.dataset.baseOpacity) || 0.75;
+    if (!s.classList.contains('wc-dimmed')) s.style.opacity = String(baseOp);
   });
 }
 
@@ -30061,9 +30191,9 @@ function _wcRenderStars(words) {
   _wcStopDrift();
   var W = stage.clientWidth  || window.innerWidth;
   var H = stage.clientHeight || (window.innerHeight - 60);
-  var positions = _wcViewMode === 'nebula'
-    ? _wcNebulaLayout(words, W, H)
-    : _wcLayout(words.length, W, H);
+  var positions = _wcViewMode === 'nebula'    ? _wcNebulaLayout(words, W, H)
+               : _wcViewMode === 'clusters'  ? _wcClustersLayout(words, W, H)
+               : _wcLayout(words.length, W, H);
   var frag = document.createDocumentFragment();
 
   words.forEach(function(w, i) {
@@ -30085,6 +30215,8 @@ function _wcRenderStars(words) {
     span.textContent = w.word;
     span.style.left      = positions[i].x + 'px';
     span.style.top       = positions[i].y + 'px';
+    span.dataset.origLeft = positions[i].x + 'px';
+    span.dataset.origTop  = positions[i].y + 'px';
     span.style.color     = color;
     span.style.fontSize  = fontSize;
     span.dataset.baseOpacity = String(opacity); // store for visible class
@@ -30255,13 +30387,24 @@ function _wcBuildFilterPills() {
 }
 
 function _wcFilterCat(cat) {
+  _wcCollected = false;
   document.querySelectorAll('#wcStage .wc-word').forEach(function(s) {
     var match = cat === 'All' || s.dataset.category === cat;
     var baseOp = parseFloat(s.dataset.baseOpacity) || 0.75;
+    s.style.transition = '';
     s.style.opacity = match ? String(baseOp) : '0.07';
+    // Restore original positions if previously collected
+    if (s.dataset.origLeft) s.style.left = s.dataset.origLeft;
+    if (s.dataset.origTop)  s.style.top  = s.dataset.origTop;
     s.classList.toggle('wc-dimmed',  !match);
     s.classList.toggle('wc-visible',  match);
   });
+  // Show Collect button only in Free view when a specific category is active
+  var collectBtn = document.getElementById('wcCollectBtn');
+  if (collectBtn) {
+    collectBtn.style.display = (_wcViewMode === 'free' && cat !== 'All') ? '' : 'none';
+    collectBtn.textContent = '⊹ Collect';
+  }
   document.querySelectorAll('#wcMobileGrid .wc-mobile-pill').forEach(function(p) {
     var match = cat === 'All' || p.dataset.category === cat;
     p.style.display = match ? '' : 'none';
@@ -30313,8 +30456,10 @@ function _wcRenderMobileGrid(words) {
   <div class="wc-header" id="wcHeader">
     <div class="wc-filter-row" id="wcFilterRow"></div>
     <div class="wc-view-row" id="wcViewRow">
-      <button class="wc-view-btn active" id="wcViewFree"   onclick="_wcSetView('free')"   title="Scattered layout">✦ Free</button>
-      <button class="wc-view-btn"        id="wcViewNebula" onclick="_wcSetView('nebula')" title="Category clusters with drift">⬡ Nebula</button>
+      <button class="wc-view-btn active"  id="wcViewFree"     onclick="_wcSetView('free')"     title="Scattered layout">✦ Free</button>
+      <button class="wc-view-btn"         id="wcViewClusters" onclick="_wcSetView('clusters')" title="Category clusters, no overlap">◉ Clusters</button>
+      <button class="wc-view-btn"         id="wcViewNebula"   onclick="_wcSetView('nebula')"   title="Category clusters with drift">⬡ Nebula</button>
+      <button class="wc-collect-btn" id="wcCollectBtn" onclick="_wcCollect()" style="display:none" title="Animate active words into a grid">⊹ Collect</button>
     </div>
     <div class="wc-header-right">
       <button class="wc-list-btn" onclick="_switchToVocabList()" title="Switch to list">⊞ List</button>
@@ -30362,6 +30507,19 @@ function _wcRenderMobileGrid(words) {
 }
 .wc-view-btn:hover { color: var(--accent); border-color: var(--accent); }
 .wc-view-btn.active { color: var(--accent); border-color: var(--accent); background: rgba(232,213,163,0.07); }
+.wc-collect-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.55rem; letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 4px 11px; border: 0.5px solid var(--accent); border-radius: 20px;
+  background: rgba(232,213,163,0.10); color: var(--accent); cursor: pointer; min-height: 26px;
+  transition: background 0.15s; margin-left: 6px;
+  animation: wcCollectPulse 2.5s ease-in-out infinite;
+}
+.wc-collect-btn:hover { background: rgba(232,213,163,0.18); }
+@keyframes wcCollectPulse {
+  0%, 100% { opacity: 0.7; } 50% { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) { .wc-collect-btn { animation: none; } }
 .wc-filter-pill {
   font-family: 'DM Mono', monospace;
   font-size: 0.58rem; letter-spacing: 0.07em; text-transform: uppercase;
