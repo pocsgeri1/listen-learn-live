@@ -33,8 +33,7 @@ const DELAY_MS   = 1500;
 const TIMEOUT_MS = 45000;
 
 const VALID_CATEGORIES = new Set([
-  'Small Talk', 'Dinner Party', 'Smartypants', 'Corporate',
-  'People Skills', 'Head Space', 'Lab Coat', 'Deep Cuts', 'Zeitgeist',
+  'Small Talk', 'Smartypants', 'Business', 'Science', 'Mind & People',
 ]);
 
 // ── Args ─────────────────────────────────────────────────────────────────────
@@ -62,15 +61,11 @@ You will receive a list of words and expressions extracted from a podcast episod
 Assign each word exactly one category from the list below.
 
 VALID CATEGORIES:
-- "Small Talk" — casual, conversational, socially safe; used in low-stakes social settings
-- "Dinner Party" — impressive without trying too hard; educated but not academic; The Economist register
-- "Smartypants" — academic or philosophical; humanities lecture register; requires having read serious books
-- "Corporate" — business, professional, organizational; lives in meetings, pitch decks, and business books
-- "People Skills" — interpersonal, social dynamics, communication; how humans relate to or influence each other
-- "Head Space" — inner life, mental states, self-development; therapy or self-help register
-- "Lab Coat" — hard or applied sciences; biology, neuroscience, economics, statistics; researcher register
-- "Deep Cuts" — rare or arcane; low everyday frequency; you'd find it in a dictionary but almost nowhere else
-- "Zeitgeist" — culturally current and trending in educated discourse RIGHT NOW; will feel dated in 5 years
+- "Small Talk" — casual, everyday language; used in social settings, bars, friendly chats; accessible to any non-native speaker
+- "Smartypants" — academic, philosophical, or intellectual; humanities lecture register; signals serious reading
+- "Business" — professional and organizational; lives in meetings, pitch decks, strategy docs, and business books
+- "Science" — hard or applied sciences; biology, neuroscience, economics, statistics, tech; researcher register
+- "Mind & People" — inner life, mental states, self-development, interpersonal dynamics, emotional intelligence; therapy or self-help register
 
 DECISION RULES (apply in order):
 1. Pick the category where a non-native English-speaking professional (25-40) would most likely FIRST encounter this word in real life.
@@ -79,7 +74,7 @@ DECISION RULES (apply in order):
 
 OUTPUT: valid JSON array only, no preamble, no markdown.
 Each element: { "word": "...", "category": "..." }
-Preserve the exact word string. category must be one of the 9 values above, or null.`;
+Preserve the exact word string. category must be one of the 5 values above, or null.`;
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 

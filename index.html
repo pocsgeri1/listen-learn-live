@@ -2162,13 +2162,23 @@
   }
   [data-theme="light"] .panel-tagline { color: rgba(0,0,0,0.45); border-bottom-color: rgba(0,0,0,0.08); }
 
-  /* ── LEXI PULL TAB — persistent left-edge handle ─────────── */
-  .lexi-pull-tab {
+  /* ── LEFT TABS GROUP — Lexi + Vocab pull tabs on left edge (desktop only) ── */
+  .left-tabs-group {
     position: fixed;
     left: 0;
     top: 50%;
     transform: translateY(-50%);
     z-index: 500;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  @media (max-width: 768px) { .left-tabs-group { display: none; } }
+
+  /* ── LEXI PULL TAB — persistent left-edge handle ─────────── */
+  .lexi-pull-tab {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -2186,7 +2196,31 @@
     background: var(--surface2);
     border-color: rgba(232,213,163,0.25);
     box-shadow: 3px 0 18px rgba(0,0,0,0.28);
-    transform: translateY(-50%) translateX(2px);
+    transform: translateX(2px);
+  }
+
+  /* ── VOCAB PULL TAB — shown when episode drawer with vocab is open ── */
+  .vocab-pull-tab {
+    position: relative;
+    display: none; /* shown via .visible class */
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-left: none;
+    border-radius: 0 8px 8px 0;
+    padding: 14px 10px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+    box-shadow: 2px 0 12px rgba(0,0,0,0.18);
+  }
+  .vocab-pull-tab.visible { display: flex; }
+  .vocab-pull-tab:hover {
+    background: var(--surface2);
+    border-color: rgba(232,213,163,0.25);
+    box-shadow: 3px 0 18px rgba(0,0,0,0.28);
+    transform: translateX(2px);
   }
   .lexi-pull-tab-label {
     display: flex;
@@ -2203,6 +2237,7 @@
     font-size: 1rem;
     color: var(--accent);
     line-height: 1;
+    font-style: normal; /* emoji ignores italic */
   }
   .lexi-pull-tab-text {
     font-family: 'DM Mono', monospace;
@@ -2228,10 +2263,8 @@
     padding: 0 3px;
     line-height: 1;
   }
-  /* Hide on mobile — bottom tab handles it */
-  @media (max-width: 768px) { .lexi-pull-tab { display: none; } }
-  /* Subtle entrance */
-  [data-theme="light"] .lexi-pull-tab { box-shadow: 2px 0 10px rgba(0,0,0,0.08); }
+  [data-theme="light"] .lexi-pull-tab,
+  [data-theme="light"] .vocab-pull-tab { box-shadow: 2px 0 10px rgba(0,0,0,0.08); }
 
   /* ── LEXI PANEL — v2.38 ─────────────────────────────────── */
   /* .lexi-panel covers full viewport — it IS the backdrop.
@@ -10296,14 +10329,22 @@
 
 <!-- HERO -->
 <!-- ZONE 1 — Hero: spark.html v1.76 -->
-<!-- LEXI PULL TAB — persistent left-edge drawer handle -->
-<button class="lexi-pull-tab" id="lexiPullTab" onclick="openLexiconPanel();playNavSFX()" aria-label="Open Lexi — your word bank">
-  <span class="lexi-pull-tab-label">
-    <span class="lexi-pull-tab-aa">Aa</span>
-    <span class="lexi-pull-tab-text">Lexi</span>
-  </span>
-  <span class="lexi-pull-tab-badge" id="lexiPullBadge" style="display:none">0</span>
-</button>
+<!-- LEFT TABS GROUP — Lexi + Vocab pull tabs (desktop only) -->
+<div class="left-tabs-group">
+  <button class="lexi-pull-tab" id="lexiPullTab" onclick="openLexiconPanel();playNavSFX()" aria-label="Open Lexi — your word bank">
+    <span class="lexi-pull-tab-label">
+      <span class="lexi-pull-tab-aa">📝</span>
+      <span class="lexi-pull-tab-text">Lexi</span>
+    </span>
+    <span class="lexi-pull-tab-badge" id="lexiPullBadge" style="display:none">0</span>
+  </button>
+  <button class="vocab-pull-tab" id="vocabPullTab" onclick="openDrawerVocabTab()" aria-label="Open Vocab for this episode">
+    <span class="lexi-pull-tab-label">
+      <span class="lexi-pull-tab-aa">Aa</span>
+      <span class="lexi-pull-tab-text">Vocab</span>
+    </span>
+  </button>
+</div>
 
 <section class="sp-hero" id="spHero">
 
@@ -11811,7 +11852,7 @@ function _renderIntelRow(pillsEl, collectionId, liveDna) {
     // Build a scrollable category pill row that filters the given gridEl in place.
     // allWords: full vocab array. gridEl: the .ep-intel-vocab-grid DOM node.
     function buildVocabCatPills(allWords, gridEl, panelMode) {
-      var CATS = ['All','Small Talk','Dinner Party','Smartypants','Corporate','People Skills','Head Space','Lab Coat','Deep Cuts','Zeitgeist'];
+      var CATS = ['All','Small Talk','Smartypants','Business','Science','Mind & People'];
       var counts = {};
       allWords.forEach(function(w) {
         if (w.category) counts[w.category] = (counts[w.category] || 0) + 1;
@@ -12493,6 +12534,9 @@ function _renderIntelRow(pillsEl, collectionId, liveDna) {
         pillsEl.querySelectorAll('.ep-intel-popover.visible').forEach(p => p.classList.remove('visible'));
       }
     });
+
+    // Update vocab pull tab visibility (desktop only — ep drawer only)
+    if (pillsEl.id === 'epDrawerPills') setTimeout(_updateVocabPullTab, 50);
   });
 }
 // ── END EPISODE INTEL ─────────────────────────────────────────────────────
@@ -13782,6 +13826,7 @@ function closeEpisodeDrawer() {
   // body sections still display:none — so nothing heavy happens this frame.
   document.getElementById('epBackdrop').classList.remove('open');
   document.getElementById('epDrawer').classList.remove('open');
+  _updateVocabPullTab();
 
   // Reset any open-card state inside the drawer (cheap — drawer DOM only)
   const grid = document.getElementById('epDrawerGrid');
@@ -26351,7 +26396,7 @@ function _lexiRenderPanel() {
   var pillsRow = document.getElementById('lexiCatPills');
   if (pillsRow) {
     pillsRow.innerHTML = '';
-    var LX_CATS = ['All','Favorites','Small Talk','Dinner Party','Smartypants','Corporate','People Skills','Head Space','Lab Coat','Deep Cuts','Zeitgeist'];
+    var LX_CATS = ['All','Favorites','Small Talk','Smartypants','Business','Science','Mind & People'];
     var catCounts = {};
     var favCount = arr.filter(function(e) { return !!e.isFavorite; }).length;
     arr.forEach(function(e) {
@@ -26903,6 +26948,42 @@ function _lexiFlyParticle(fromEl) {
       }, 450);
     });
   });
+}
+
+// ── Vocab pull tab — show/hide based on open episode drawer ────
+function _updateVocabPullTab() {
+  var tab = document.getElementById('vocabPullTab');
+  if (!tab) return;
+  var drawerOpen = document.getElementById('epDrawer') &&
+    document.getElementById('epDrawer').classList.contains('open');
+  if (!drawerOpen) { tab.classList.remove('visible'); return; }
+  // Check if vocab pill exists and is not empty
+  var vocabPill = null;
+  var pills = document.querySelectorAll('#epDrawerPills .ep-intel-pill');
+  for (var i = 0; i < pills.length; i++) {
+    if (pills[i].textContent.trim() === 'Vocab' && !pills[i].hasAttribute('data-empty')) {
+      vocabPill = pills[i]; break;
+    }
+  }
+  tab.classList.toggle('visible', !!vocabPill);
+}
+
+function openDrawerVocabTab() {
+  // Find and click the Vocab pill in the open episode drawer
+  var pills = document.querySelectorAll('#epDrawerPills .ep-intel-pill');
+  for (var i = 0; i < pills.length; i++) {
+    if (pills[i].textContent.trim() === 'Vocab' && !pills[i].hasAttribute('data-empty')) {
+      pills[i].click();
+      // Scroll the vocab panel into view
+      setTimeout(function() {
+        var panel = document.getElementById('epDrawerVocabPanel');
+        if (panel && panel.classList.contains('open')) {
+          panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 80);
+      return;
+    }
+  }
 }
 
 // ── Badge counter on nav Lexi button ────────────────────────

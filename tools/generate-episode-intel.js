@@ -170,18 +170,14 @@ EXCLUDE:
 - Terminology coined by the guest that does not exist outside this episode
 - Slang that is internet-specific or fast-changing
 
-For each word output: definition in plain English (max 15 words), timestamp_seconds as null, category as exactly one of the 9 values below, category_alt as null always.
+For each word output: definition in plain English (max 15 words), timestamp_seconds as null, category as exactly one of the 5 values below, category_alt as null always.
 
 VALID CATEGORIES (use exact spelling):
-- "Small Talk" — casual, conversational, socially safe; used in low-stakes social settings
-- "Dinner Party" — impressive without trying too hard; educated but not academic; The Economist register
-- "Smartypants" — academic or philosophical; humanities lecture register; requires having read serious books
-- "Corporate" — business, professional, organizational; lives in meetings, pitch decks, and business books
-- "People Skills" — interpersonal, social dynamics, communication; how humans relate to or influence each other
-- "Head Space" — inner life, mental states, self-development; therapy or self-help register
-- "Lab Coat" — hard or applied sciences; biology, neuroscience, economics, statistics; researcher register
-- "Deep Cuts" — rare or arcane; low everyday frequency; you'd find it in a dictionary but almost nowhere else
-- "Zeitgeist" — culturally current and trending in educated discourse RIGHT NOW; will it feel dated in 5 years? Then it's Zeitgeist.
+- "Small Talk" — casual, everyday language; used in social settings, bars, friendly chats; accessible to any non-native speaker
+- "Smartypants" — academic, philosophical, or intellectual; humanities lecture register; signals serious reading
+- "Business" — professional and organizational; lives in meetings, pitch decks, strategy docs, and business books
+- "Science" — hard or applied sciences; biology, neuroscience, economics, statistics, tech; researcher register
+- "Mind & People" — inner life, mental states, self-development, interpersonal dynamics, emotional intelligence; therapy or self-help register
 
 CATEGORY DECISION RULES:
 1. Pick the category where a non-native speaker would most likely FIRST encounter this word in real life.
@@ -337,7 +333,7 @@ async function main() {
     }
 
     // Validate and sanitize vocab_vault categories
-    const VALID_CATEGORIES = new Set(['Small Talk','Dinner Party','Smartypants','Corporate','People Skills','Head Space','Lab Coat','Deep Cuts','Zeitgeist']);
+    const VALID_CATEGORIES = new Set(['Small Talk','Smartypants','Business','Science','Mind & People']);
     if (Array.isArray(result.vocab_vault)) {
       result.vocab_vault = result.vocab_vault.map(w => ({
         ...w,
