@@ -6,6 +6,31 @@
 
 ---
 
+## v2.60 — 2026-07-31 · Vocab panel UX polish + pull quote nudge
+
+### index.html — Vocab panel z-index fix
+- **Root cause:** Vocab panel was z-index 600; Lexi panel backdrop is z-index 1200 and intercepts all clicks. Raised Vocab overlay to z-index 1300, backdrop `pointer-events: none`, only `.gv-panel` captures clicks — both panels now coexist without closing each other.
+
+### index.html — Flying word animation + bump
+- **New:** clicking "Add to Lexi" spawns a ghost `<span>` that flies from the button to `#lexiPanelCount`, then removes itself. On arrival: `_lexiRenderPanel()` refreshes counts, `gvBump` keyframe pulses `#lexiPanelCount` and `#lexiPracticeCount` (if visible).
+
+### index.html — Hide scrollbars
+- Vocab panel (`.gv-word-rows`, `.gv-cat-grid`, `.gv-word-list`): `scrollbar-width: none` + `::-webkit-scrollbar: display:none`.
+- Site-wide: `html { scrollbar-width: none }` + webkit override.
+
+### index.html — Pull quotes
+- Both left and right pull quotes nudged from `9.3rem` → `9.2rem`.
+
+---
+
+## v2.59 — 2026-07-31 · Fix global vocab data path, button row layout
+
+### index.html
+- **Bug fix:** `_buildGlobalVocabIndex` was iterating `EPISODE_META` directly; correct path is `EPISODE_META.episodes`. Caused empty Vocab panel.
+- **Button layout:** `.lexi-panel-actions` → `display:flex; flex-direction:row; gap:8px`. Removed `width:100%` from `.lexi-action-secondary`.
+
+---
+
 ## v2.58 — 2026-07-31 · Global Vocab Mode A: Category Browse
 
 ### index.html — Global Vocab overlay (Mode A)

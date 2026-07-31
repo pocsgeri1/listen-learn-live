@@ -23661,7 +23661,7 @@ body.corner-mode .sp-eyebrow-kicker { opacity: 0; pointer-events: none; transiti
     align-items: flex-end;
     text-align: right;
     position: fixed;
-    right: 9.3rem;
+    right: 9.2rem;
     top: 50%; /* overridden by JS to align with browse toggle */
     transform: translateY(-50%);
     padding-right: 1rem;
@@ -23701,7 +23701,7 @@ body.corner-mode .sp-eyebrow-kicker { opacity: 0; pointer-events: none; transiti
 /* ── Left-side mirrored pull quote ── */
 @media (min-width: 900px) {
   .sp-pull-quote-left {
-    left: 9.3rem;
+    left: 9.2rem;
     right: auto;
     align-items: flex-start;
     text-align: left;
@@ -29412,17 +29412,78 @@ function _gvAnimateListToCat() {
   }, 210);
 }
 
-// ── Add to Lexi ───────────────────────────────────────────────
+// ── Add to Lexi — with flying word animation ──────────────────
 function _gvAddWordToLexi(word, def, category, colId, btn) {
   if (!btn || btn.classList.contains('saved')) return;
+
+  // Save immediately
   _lexiconSave(word, def, colId, [], document.createElement('div'), category || undefined, undefined);
   _lexiUpdateBadge();
   btn.classList.add('saved');
   btn.textContent = 'In Lexi';
-  // Reuse lexiFavPop spring animation if defined
-  if (typeof lexiFavPop !== 'undefined') {
-    btn.style.animation = 'none';
-    requestAnimationFrame(function() { btn.style.animation = 'lexiFavPop 0.3s ease'; });
+
+  // ── Flying ghost word ──────────────────────────────────────
+  var btnRect = btn.getBoundingClientRect();
+
+  // Target: Lexi panel subtitle (word count) — top-left panel area
+  var targetEl = document.getElementById('lexiPanelCount');
+  var targetRect = targetEl ? targetEl.getBoundingClientRect() : { left: 40, top: 80, width: 80, height: 20 };
+
+  var ghost = document.createElement('span');
+  ghost.textContent = word;
+  ghost.style.cssText = [
+    'position:fixed',
+    'z-index:2000',
+    'pointer-events:none',
+    'font-family:Playfair Display,serif',
+    'font-size:0.78rem',
+    'font-style:italic',
+    'color:var(--accent)',
+    'opacity:0.9',
+    'white-space:nowrap',
+    'left:' + (btnRect.left + btnRect.width / 2) + 'px',
+    'top:' + (btnRect.top + btnRect.height / 2) + 'px',
+    'transform:translate(-50%,-50%)',
+    'transition:left 0.55s cubic-bezier(0.32,0.72,0,1), top 0.55s cubic-bezier(0.32,0.72,0,1), opacity 0.55s ease'
+  ].join(';');
+  document.body.appendChild(ghost);
+
+  // Trigger animation in next frame
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
+      ghost.style.left = (targetRect.left + targetRect.width / 2) + 'px';
+      ghost.style.top  = (targetRect.top  + targetRect.height / 2) + 'px';
+      ghost.style.opacity = '0';
+    });
+  });
+
+  // On arrival: bump counts, remove ghost
+  setTimeout(function() {
+    document.body.removeChild(ghost);
+    _gvBumpLexiCount();
+  }, 580);
+}
+
+function _gvBumpLexiCount() {
+  // Refresh the panel render so count and practice btn update
+  if (typeof _lexiRenderPanel === 'function') _lexiRenderPanel();
+
+  // Bump animation on lexiPanelCount
+  var countEl = document.getElementById('lexiPanelCount');
+  if (countEl) {
+    countEl.style.animation = 'none';
+    requestAnimationFrame(function() {
+      countEl.style.animation = 'gvBump 0.35s cubic-bezier(0.32,0.72,0,1)';
+    });
+  }
+  // Bump animation on practice count if button is visible
+  var practiceCount = document.getElementById('lexiPracticeCount');
+  var practiceBtn   = document.getElementById('lexiPracticeBtn');
+  if (practiceCount && practiceBtn && practiceBtn.style.display !== 'none') {
+    practiceCount.style.animation = 'none';
+    requestAnimationFrame(function() {
+      practiceCount.style.animation = 'gvBump 0.35s cubic-bezier(0.32,0.72,0,1)';
+    });
   }
 }
 
@@ -29458,13 +29519,15 @@ function _gvEsc(str) {
 <style>
 /* ── GLOBAL VOCAB OVERLAY — v2.58 ──────────────────────────── */
 .gv-overlay {
-  position: fixed; inset: 0; z-index: 600;
+  position: fixed; inset: 0; z-index: 1300;
   background: rgba(0,0,0,0);
-  pointer-events: none;
+  pointer-events: none; /* backdrop never blocks clicks — only .gv-panel does */
   transition: background 0.3s ease;
 }
 .gv-overlay.open {
-  background: rgba(0,0,0,0.55);
+  background: rgba(0,0,0,0); /* no backdrop tint — Lexi panel already provides context */
+}
+.gv-overlay.open .gv-panel {
   pointer-events: all;
 }
 .gv-panel {
@@ -29612,6 +29675,25 @@ function _gvEsc(str) {
 @media (prefers-reduced-motion: reduce) {
   .gv-overlay, .gv-panel, .gv-cat-card, .gv-word-row { transition: none; }
 }
+
+/* ── Flying word + bump animation ───────────────────────────── */
+@keyframes gvBump {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.28); color: var(--accent); }
+  100% { transform: scale(1); }
+}
+
+/* ── Hide scrollbars — Vocab panel + site-wide ────────────── */
+.gv-word-rows, .gv-cat-grid, .gv-word-list {
+  scrollbar-width: none;
+}
+.gv-word-rows::-webkit-scrollbar,
+.gv-cat-grid::-webkit-scrollbar,
+.gv-word-list::-webkit-scrollbar { display: none; }
+
+/* Site-wide scrollbar hide */
+html { scrollbar-width: none; }
+html::-webkit-scrollbar { display: none; }
 </style>
 </body>
 </html>
