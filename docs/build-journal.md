@@ -3618,6 +3618,49 @@ Process lesson: Project files in Claude don't auto-sync with GitHub. Re-upload i
 
 ---
 
+### 2026-07-31 — Vocab 5-category system, pull tabs, vocab view, pull quotes, Lexi typography
+
+**What was built:**
+- Collapsed 9 vocab categories → 5: Small Talk, Smartypants, Business, Science, Mind & People. Updated `categorize-vocab.js`, `generate-episode-intel.js`, `extract.html`, and `docs/vocab-categories.md`.
+- Desktop left-edge pull tab group (`.left-tabs-group`): fixed position, center-left, column layout. Lexi (ℒ) and Vocab (Aa) tabs are `position: relative` children — group anchors them both.
+- Replaced `📝` emoji on Lexi tab with `ℒ` (U+2112 Script Capital L) — no emoji rendering inconsistency.
+- Vocab pull tab hidden by default, springs in 420ms after drawer open via `.vv-entering` + `cubic-bezier(0.34, 1.56, 0.64, 1)`.
+- Clicking Vocab tab now opens an in-drawer vocab view that slides over the card grid. Module-level vars `_vvCurrentList`, `_vvBuildCell` etc. expose the closure-scoped `buildVocabCell` function.
+- Pull quotes: scroll-triggered reveal (only after `scrollY > 80`), position measurement deferred to first scroll event, final horizontal position `9.3rem` from each edge.
+- Lexi episode titles and word definitions switched to Playfair Display italic.
+- Wrote `docs/seo-session-plan.md` v2.0 (4-session SEO build plan, SPA explanation, Next.js → parking lot).
+- Wrote `docs/global-vocab-session-plan.md` (Mode A category browse + Mode B word constellation full spec).
+
+**Key bugs / challenges:**
+
+1. **Vocab view words didn't appear after first open**
+   - **Root cause:** `_resetDrawerVocabView()` set `vocabView.style.display = 'none'` as an inline style. CSS class `.vv-entering { display: flex }` has lower specificity than inline styles, so it was silently overridden.
+   - **Fix:** `vocabView.style.display = ''` (clear the inline) before adding `.vv-entering`.
+   - **Gotcha:** Inline `style.display` always wins over class-based display rules. If an element refuses to show with a CSS class, check for inline style pollution first.
+
+2. **`buildVocabCell` not accessible outside its closure**
+   - **Root cause:** `buildVocabCell` is a function declaration inside `_renderIntelRow`'s async `.then()` callback — it has access to `collectionId` and shimmer state. Can't be called from `_openDrawerVocabView()` directly.
+   - **Fix:** Add `_vvBuildCell = buildVocabCell` immediately after the function declaration inside the `.then()` block. Function declarations are hoisted within their scope, so this works even though it looks like a forward reference.
+
+3. **Pull quote position measurement unreliable at page load**
+   - **Root cause:** `getBoundingClientRect()` at page load returns wrong offsets because layout hasn't stabilised yet (fonts loading, dynamic content injecting).
+   - **Fix:** Measure on first `scroll` event instead — by then layout is fully stable. Use `el.getBoundingClientRect().top + window.scrollY` to get the absolute page offset.
+
+4. **Fish shell `KEY=value command` syntax**
+   - Fish doesn't support inline env var syntax (`ANTHROPIC_API_KEY=xxx node script.js`). Throws "too many arguments".
+   - **Fix:** `export ANTHROPIC_API_KEY=xxx` on its own line, then `node script.js`.
+
+5. **`./ep-commit.sh` "no such file or directory"**
+   - Script uses `$HOME` (Mac home dir) internally. Running from `~` home directory doesn't set `$HOME` to the repo. Always `cd ~/Documents/GitHub/listen-learn-live` first.
+
+**Lessons:**
+- CSS specificity: inline `style.display` beats class-based display every time. When in doubt, clear the inline style (`el.style.display = ''`) before applying CSS classes.
+- Closures exposing functions: set `_moduleVar = innerFunction` right after the function declaration inside the closure — hoisting makes this safe.
+- Pull quote / floating element positioning: always measure on a scroll or interaction event, never at DOMContentLoaded or load. Layout is rarely stable by then if fonts or async content are involved.
+- Fish shell users: never use `KEY=value command` syntax. Teach them `export KEY=value` + separate command.
+
+---
+
 ## Entries template for future sessions
 
 When adding a new entry, use this structure:

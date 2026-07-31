@@ -1,6 +1,6 @@
 # Roadmap — Epistemic.
 
-**Last updated:** 2026-07-29
+**Last updated:** 2026-07-31
 **Purpose:** Phased build plan so every decision and feature fits into the bigger picture. Claude references this to avoid building things that will conflict with future phases.
 **Parking lot:** Ideas discussed but deferred live in `docs/ideas-parking-lot.md` — not here. Keeps Next Up clean.
 
@@ -8,6 +8,9 @@
 
 ## Next up
 
+- **SEO — static page generation (4 sessions, see `docs/seo-session-plan.md`)** — Session 1: `tools/generate-static-pages.js` → `/public/concepts/*.html` → `vercel.json` update. Session 2: OG images + site-wide meta tags. Session 3: JSON-LD + sitemap + robots.txt. Session 4: category pages + redirect helper. Start command is in the plan doc.
+- **Global Vocab — Mode A: Category Browse (see `docs/global-vocab-session-plan.md`)** — "All Words" button in Lexi panel, full-screen overlay, 6 category cards, word list with Add to Lexi. Full animation spec and JS function signatures are in the plan doc. One session.
+- **Global Vocab — Mode B: Word Constellation** — canvas-less absolutely-positioned spans, seeded layout, category dim filter. Follow-on session after Mode A.
 - **OG Map spotlight modal — live visual pass (2026-07-04)** — v2.25a rebuilt the content card as a `position:fixed` spotlight modal (fixing v2.25's bleed-through/fuzzy-text/cut-off bugs, all traced to the card living inside the zoomed SVG) and restructured card copy into intro+bullets. Structural correctness was verified programmatically (syntax checks, XML well-formedness, ID cross-checks, a round-trip check of the sentence-splitter against all 72 real content fields), but there's been no live browser preview yet. Worth one pass in-browser (desktop + mobile) to confirm the scrim dim/blur, card entrance animation, and mobile bottom-sheet transition all feel right.
 - **Theme drawer render chunking** — `_renderThemeDrawerContent` likely has the same synchronous single-pass card-grid render that `_renderDrawerContent` (episode drawer) had before v2.24's chunking fix. Not touched in v2.24 to keep that session's diff contained to what was explicitly approved — same `_buildEpColumnHtml`/`_finishEpDrawerRender`-style extraction should work for the theme drawer too.
 - **`.theme-card-img` lazy-loading** — homepage theme grid images have no `loading="lazy"` attribute. Minor, low-effort win, flagged during v2.24 performance audit, not applied.
@@ -32,6 +35,8 @@
 - **Admin editorial picks tool** — `admin-picks.html` at `tools.epistemic.live`.
 
 ## Recently completed
+
+- v2.53–2.57 ✅ — 2026-07-31 — **Vocab 5-category system, desktop pull tabs, vocab view in drawer, pull quotes polish, Lexi typography, SEO + Global Vocab session plans.** Collapsed 9 vocab categories → 5 (Small Talk, Smartypants, Business, Science, Mind & People) across all tools and docs. Added desktop left-edge pull tab group with Lexi (ℒ) + Vocab (Aa) tabs; Vocab tab springs in after drawer open. Vocab tab now opens an in-drawer view replacing the card grid with animated vocab list. Pull quotes: scroll-triggered reveal, final horizontal position 9.3rem. Lexi episode titles and definitions switched to Playfair Display italic. Wrote `docs/seo-session-plan.md` v2.0 and `docs/global-vocab-session-plan.md` (Mode A + B). Next.js migration added to parking lot.
 
 - v2.28 ✅ — 2026-07-27 — **Vocab backfill (15 episodes to 20 words), 6 Umami tracking events, OG image + meta tags, collection 522 timestamp patch.** 15 episodes expanded from 6-7 to 20 vocab words each (editorial, no API). Six new Umami events added covering episode drawer open, category filter, vocab expand, Corner submit, OG map node click, and search query. OG image (1200×630 PNG) created with Python Pillow and committed to repo root; `og:image`/`twitter:image` meta tags and updated `og:description` added to index.html. 29 concepts from collection 522 (Daniel Kokotajlo × DOAC) had null timestamps patched by parsing the `episode_ref` field's embedded time string — no re-extraction needed.
 
