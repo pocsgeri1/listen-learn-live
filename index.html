@@ -15772,7 +15772,7 @@ function initSparkHero() {
       pq.style.top = midY + 'px';
       pq.style.transform = 'translateY(-50%)';
       // Left quote: 50px lower
-      if (pqL) { pqL.style.top = (midY + 50) + 'px'; pqL.style.transform = 'translateY(-50%)'; }
+      if (pqL) { pqL.style.top = (midY + 150) + 'px'; pqL.style.transform = 'translateY(-50%)'; }
       _pqAligned = true;
     }
 
@@ -15783,23 +15783,18 @@ function initSparkHero() {
     var _pqDragRaf     = null;
     var _pqSettleTimer = null;
 
-    function _pqDragFrame() {
-      _pqScrollVel *= 0.80; // dampen
-      var drag = _pqScrollVel * -0.45; // lag offset in px
-      var blur = Math.min(Math.abs(_pqScrollVel) * 0.06, 1.8);
-
-      if (pq)  { pq.style.transform  = 'translateY(calc(-50% + ' + drag + 'px))';  pq.style.filter  = blur > 0.05 ? 'blur(' + blur.toFixed(2) + 'px)' : ''; }
-      if (pqL) { pqL.style.transform = 'translateY(calc(-50% + ' + drag + 'px))'; pqL.style.filter = blur > 0.05 ? 'blur(' + blur.toFixed(2) + 'px)' : ''; }
-
-      if (Math.abs(_pqScrollVel) > 0.15) {
-        _pqDragRaf = requestAnimationFrame(_pqDragFrame);
-      } else {
-        // Settle: restore cleanly
-        if (pq)  { pq.style.transform  = 'translateY(-50%)'; pq.style.filter  = ''; }
-        if (pqL) { pqL.style.transform = 'translateY(-50%)'; pqL.style.filter = ''; }
-        _pqDragActive = false;
-      }
+    // CSS-transition drag: no rAF loop needed — just set target offset, let CSS ease it
+    function _pqApplyDrag(dragPx) {
+      if (pq)  pq.style.transform  = 'translateY(calc(-50% + ' + dragPx + 'px))';
+      if (pqL) pqL.style.transform = 'translateY(calc(-50% + ' + dragPx + 'px))';
     }
+    function _pqSettle() {
+      if (pq)  pq.style.transform  = 'translateY(-50%)';
+      if (pqL) pqL.style.transform = 'translateY(-50%)';
+      _pqDragActive = false;
+    }
+    // _pqDragFrame kept as no-op for compatibility with existing references
+    function _pqDragFrame() {}
 
     var STATS = [
       { num: '90%',    body: 'of what you learn is forgotten\nwithin a week without review.' },
@@ -15854,13 +15849,16 @@ function initSparkHero() {
     var _libEl = document.getElementById('libSection') || document.getElementById('netflixRows');
     var _ticking = false;
     window.addEventListener('scroll', function() {
-      // Drag velocity tracking — runs every scroll event (lightweight)
+      // Drag: clamp velocity → offset, apply directly (CSS transition handles easing)
       var nowY = window.scrollY;
       _pqScrollVel = nowY - _pqLastY;
       _pqLastY = nowY;
-      if (!_pqDragActive && _pqAligned) {
+      if (_pqAligned) {
+        var drag = Math.max(-18, Math.min(18, _pqScrollVel * -0.6));
+        _pqApplyDrag(drag);
         _pqDragActive = true;
-        _pqDragRaf = requestAnimationFrame(_pqDragFrame);
+        clearTimeout(_pqSettleTimer);
+        _pqSettleTimer = setTimeout(_pqSettle, 220);
       }
 
       if (_ticking) return;
@@ -23723,14 +23721,14 @@ body.corner-mode .sp-eyebrow-kicker { opacity: 0; pointer-events: none; transiti
     align-items: flex-end;
     text-align: right;
     position: fixed;
-    right: 9.32rem;
+    right: 9.35rem;
     top: 50%; /* overridden by JS to align with browse toggle */
     transform: translateY(-50%);
     padding-right: 1rem;
     border-right: 2px solid var(--accent);
     padding-bottom: 0;
     opacity: 0; /* starts invisible — JS adds .pq-visible after delay */
-    transition: opacity 1.4s ease;
+    transition: opacity 1.4s ease, transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94) 0.15s;
     z-index: 10;
   }
   .sp-pull-quote.pq-visible  { opacity: 0.45; }
@@ -23763,7 +23761,7 @@ body.corner-mode .sp-eyebrow-kicker { opacity: 0; pointer-events: none; transiti
 /* ── Left-side mirrored pull quote ── */
 @media (min-width: 900px) {
   .sp-pull-quote-left {
-    left: 9.32rem;
+    left: 9.35rem;
     right: auto;
     align-items: flex-start;
     text-align: left;
@@ -30151,6 +30149,8 @@ function _wcBuildFilterPills() {
 function _wcFilterCat(cat) {
   document.querySelectorAll('#wcStage .wc-word').forEach(function(s) {
     var match = cat === 'All' || s.dataset.category === cat;
+    var baseOp = parseFloat(s.dataset.baseOpacity) || 0.75;
+    s.style.opacity = match ? String(baseOp) : '0.07';
     s.classList.toggle('wc-dimmed',  !match);
     s.classList.toggle('wc-visible',  match);
   });

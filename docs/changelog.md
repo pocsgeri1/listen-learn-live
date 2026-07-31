@@ -6,6 +6,17 @@
 
 ---
 
+## v2.65 — 2026-07-31 · Constellation category filter fix, pull quote drag redesign
+
+### index.html — Constellation category filter
+- **Bug fix:** `_wcFilterCat` now sets `s.style.opacity` directly (from `s.dataset.baseOpacity`), overriding the inline opacity set during bloom-in. CSS class `.wc-dimmed { opacity: 0.07 }` alone was overridden by inline style. Category pills now correctly dim/undim words.
+
+### index.html — Pull quotes
+- **No blur:** removed all `filter: blur()` from pull quote drag. No more shake/blur effect.
+- **CSS transition drag:** replaced rAF velocity loop with direct drag-offset calculation on each scroll event. CSS `transition: transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94) 0.15s` provides the delayed-start and eased-arrival feel. Settle fires after 220ms idle via `setTimeout`.
+- **Left quote:** now 150px below right quote (was 50px) — clearer asymmetry.
+- **Rem:** updated `right`/`left` from `9.32rem` to `9.35rem`.
+
 ## v2.64 — 2026-07-31 · Constellation visuals, ◎ pulse, pull quote drag, episode source links
 
 ### index.html — Constellation visual improvements
