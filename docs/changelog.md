@@ -6,6 +6,30 @@
 
 ---
 
+## v2.64 — 2026-07-31 · Constellation visuals, ◎ pulse, pull quote drag, episode source links
+
+### index.html — Constellation visual improvements
+- **Rotation:** each word rotated ±10° (seeded per word index) — feels handwritten and alive
+- **3-tier font sizes:** 0.65rem / 0.75rem / 0.86rem (seeded) — visual depth without noise
+- **Opacity depth:** 0.55–0.90 per word (seeded) — foreground/background feel
+- **Hover:** switched from `transform: scale` to `filter: brightness(1.15)` to avoid fighting seeded rotation
+
+### index.html — ◎ pulse animation
+- `@keyframes wcMapPulse`: opacity 0.55→1→0.55, 3s ease-in-out infinite. CSS only, no GPU cost beyond normal opacity compositing. Applied to both `.lexi-map-btn` and `.gv-map-btn`. Stops on hover. Suppressed with `prefers-reduced-motion`.
+
+### index.html — Pull quotes
+- Left quote now 50px lower than right quote (offset in `_alignPQ`)
+- Drag+blur scroll effect: JS velocity tracking on scroll event, `_pqDragFrame` rAF loop applies `translateY(drag)` + `filter:blur()` proportional to velocity, settles when velocity < 0.15
+- `9.28rem` → `9.32rem`
+
+### index.html — Episode source links
+- `_openSourceEpisode(collectionId)`: closes all panels (constellation → vocab → lexi), then calls `openEpisodeDrawer(colId)` after 340ms
+- `↗` button in Lexi panel word row top bar (hidden until hover, `.lexi-src-btn`)
+- `↗` button in Vocab panel word row bottom row (alongside "Add to Lexi")
+- `↗ episode` link in constellation tooltip (`wc-tt-src`)
+
+---
+
 ## v2.63 — 2026-07-31 · Fix constellation ID/class collision with Conversation Starter
 
 ### index.html — Root cause of ◎ doing nothing

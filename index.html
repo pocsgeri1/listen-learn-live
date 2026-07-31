@@ -2522,8 +2522,14 @@
     cursor: pointer; font-size: 0.9rem; color: var(--muted);
     display: flex; align-items: center; justify-content: center;
     transition: color 0.15s, border-color 0.15s;
+    animation: wcMapPulse 3s ease-in-out infinite;
   }
-  .lexi-map-btn:hover { color: var(--accent); border-color: var(--accent); }
+  .lexi-map-btn:hover { color: var(--accent); border-color: var(--accent); animation: none; }
+  @keyframes wcMapPulse {
+    0%, 100% { opacity: 0.55; }
+    50%       { opacity: 1; }
+  }
+  @media (prefers-reduced-motion: reduce) { .lexi-map-btn { animation: none; } }
   /* Scrollable word list */
   .lexi-panel-list {
     flex: 1;
@@ -2625,6 +2631,16 @@
   }
   .lexi-word-row-top:hover .lexi-remove-x { opacity: 0.5; }
   .lexi-remove-x:hover { opacity: 1 !important; color: var(--red); }
+  /* Source episode link */
+  .lexi-src-btn {
+    background: none; border: none; cursor: pointer;
+    font-size: 0.65rem; color: var(--muted); opacity: 0;
+    transition: opacity 0.15s, color 0.15s; padding: 2px;
+    line-height: 1; min-width: 20px; min-height: 20px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .lexi-word-row-top:hover .lexi-src-btn { opacity: 0.45; }
+  .lexi-src-btn:hover { opacity: 1 !important; color: var(--accent); }
   /* ── Favorite (heart) button ── */
   .lexi-fav-btn {
     background: none; border: none;
@@ -15745,16 +15761,44 @@ function initSparkHero() {
     // Vertical position: computed from browseToggleWrap's absolute page offset,
     // set once on first scroll so layout is fully settled (not at load time).
     var _pqAligned = false;
+    var _pqBaseTop = 0; // absolute page Y of right quote center
     function _alignPQ() {
       if (_pqAligned) return;
       var toggle = document.getElementById('browseToggleWrap');
       if (!toggle) return;
       var absTop = toggle.getBoundingClientRect().top + window.scrollY;
       var midY = absTop + toggle.offsetHeight / 2;
+      _pqBaseTop = midY;
       pq.style.top = midY + 'px';
       pq.style.transform = 'translateY(-50%)';
-      if (pqL) { pqL.style.top = midY + 'px'; pqL.style.transform = 'translateY(-50%)'; }
+      // Left quote: 50px lower
+      if (pqL) { pqL.style.top = (midY + 50) + 'px'; pqL.style.transform = 'translateY(-50%)'; }
       _pqAligned = true;
+    }
+
+    // ── Drag + blur scroll effect ─────────────────────────────
+    var _pqScrollVel   = 0;
+    var _pqLastY       = 0;
+    var _pqDragActive  = false;
+    var _pqDragRaf     = null;
+    var _pqSettleTimer = null;
+
+    function _pqDragFrame() {
+      _pqScrollVel *= 0.80; // dampen
+      var drag = _pqScrollVel * -0.45; // lag offset in px
+      var blur = Math.min(Math.abs(_pqScrollVel) * 0.06, 1.8);
+
+      if (pq)  { pq.style.transform  = 'translateY(calc(-50% + ' + drag + 'px))';  pq.style.filter  = blur > 0.05 ? 'blur(' + blur.toFixed(2) + 'px)' : ''; }
+      if (pqL) { pqL.style.transform = 'translateY(calc(-50% + ' + drag + 'px))'; pqL.style.filter = blur > 0.05 ? 'blur(' + blur.toFixed(2) + 'px)' : ''; }
+
+      if (Math.abs(_pqScrollVel) > 0.15) {
+        _pqDragRaf = requestAnimationFrame(_pqDragFrame);
+      } else {
+        // Settle: restore cleanly
+        if (pq)  { pq.style.transform  = 'translateY(-50%)'; pq.style.filter  = ''; }
+        if (pqL) { pqL.style.transform = 'translateY(-50%)'; pqL.style.filter = ''; }
+        _pqDragActive = false;
+      }
     }
 
     var STATS = [
@@ -15810,6 +15854,15 @@ function initSparkHero() {
     var _libEl = document.getElementById('libSection') || document.getElementById('netflixRows');
     var _ticking = false;
     window.addEventListener('scroll', function() {
+      // Drag velocity tracking — runs every scroll event (lightweight)
+      var nowY = window.scrollY;
+      _pqScrollVel = nowY - _pqLastY;
+      _pqLastY = nowY;
+      if (!_pqDragActive && _pqAligned) {
+        _pqDragActive = true;
+        _pqDragRaf = requestAnimationFrame(_pqDragFrame);
+      }
+
       if (_ticking) return;
       _ticking = true;
       requestAnimationFrame(function() {
@@ -23670,7 +23723,7 @@ body.corner-mode .sp-eyebrow-kicker { opacity: 0; pointer-events: none; transiti
     align-items: flex-end;
     text-align: right;
     position: fixed;
-    right: 9.28rem;
+    right: 9.32rem;
     top: 50%; /* overridden by JS to align with browse toggle */
     transform: translateY(-50%);
     padding-right: 1rem;
@@ -23710,7 +23763,7 @@ body.corner-mode .sp-eyebrow-kicker { opacity: 0; pointer-events: none; transiti
 /* ── Left-side mirrored pull quote ── */
 @media (min-width: 900px) {
   .sp-pull-quote-left {
-    left: 9.28rem;
+    left: 9.32rem;
     right: auto;
     align-items: flex-start;
     text-align: left;
@@ -26807,6 +26860,21 @@ function _lexiBuildWordRow(entry) {
     }
   });
 
+  // Source link — only when collectionId is known
+  if (entry.collectionId) {
+    var srcBtn = document.createElement('button');
+    srcBtn.type = 'button';
+    srcBtn.className = 'lexi-src-btn';
+    srcBtn.textContent = '↗';
+    srcBtn.title = 'Open source episode';
+    srcBtn.setAttribute('aria-label', 'Open source episode for ' + (entry.word || ''));
+    srcBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      _openSourceEpisode(entry.collectionId);
+    });
+    top.appendChild(srcBtn);
+  }
+
   var removeBtn = document.createElement('button');
   removeBtn.type = 'button';
   removeBtn.className = 'lexi-remove-x';
@@ -29357,9 +29425,25 @@ function _gvRenderWordList(words, selectedCat) {
       })(w.word, w.definition, w.category, w.colId));
     }
 
+    // Source link — small ↗ to open the episode drawer
+    var bottomRow = document.createElement('div');
+    bottomRow.style.cssText = 'display:flex;align-items:center;gap:10px;';
+    bottomRow.appendChild(addBtn);
+    if (w.colId) {
+      var srcBtn = document.createElement('button');
+      srcBtn.className = 'gv-src-btn';
+      srcBtn.textContent = '↗';
+      srcBtn.title = 'Open source episode';
+      srcBtn.setAttribute('aria-label', 'Open source episode');
+      srcBtn.addEventListener('click', (function(colId) {
+        return function(e) { e.stopPropagation(); _openSourceEpisode(colId); };
+      })(w.colId));
+      bottomRow.appendChild(srcBtn);
+    }
+
     row.appendChild(wordEl);
     row.appendChild(defEl);
-    row.appendChild(addBtn);
+    row.appendChild(bottomRow);
     rowsContainer.appendChild(row);
   });
 
@@ -29503,6 +29587,24 @@ function _gvBumpLexiCount() {
   }
 }
 
+// ── Source episode helper — closes panels then opens drawer ──────
+function _openSourceEpisode(collectionId) {
+  if (!collectionId) return;
+  var colIdInt = parseInt(collectionId, 10);
+  if (!colIdInt) return;
+  // Close constellation if open
+  var wcOv = document.getElementById('wcOverlay');
+  if (wcOv && wcOv.classList.contains('open')) _closeConstellationView();
+  // Close Vocab panel
+  var gvOv = document.getElementById('gvOverlay');
+  if (gvOv && gvOv.classList.contains('open')) _closeGlobalVocabView();
+  // Close Lexi panel
+  var lx = document.getElementById('lexiPanel');
+  if (lx && lx.classList.contains('open')) closeLexiPanel();
+  // Open episode drawer after panels animate out
+  setTimeout(function() { openEpisodeDrawer(colIdInt); }, 340);
+}
+
 // ── Escape helper (no innerHTML with user strings) ────────────
 function _gvEsc(str) {
   if (!str) return '';
@@ -29589,8 +29691,9 @@ function _gvEsc(str) {
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
   transition: color 0.15s, border-color 0.15s;
+  animation: wcMapPulse 3s ease-in-out infinite;
 }
-.gv-map-btn:hover { color: var(--accent); border-color: var(--accent); }
+.gv-map-btn:hover { color: var(--accent); border-color: var(--accent); animation: none; }
 .gv-close {
   background: none; border: none; cursor: pointer;
   color: var(--muted); font-size: 0.85rem; padding: 4px 6px;
@@ -29686,6 +29789,13 @@ function _gvEsc(str) {
 .gv-add-btn.saved { color: var(--accent); }
 .gv-add-btn.saved::before { content: '✓ '; }
 .gv-add-btn:not(.saved)::before { content: '+ '; }
+.gv-src-btn {
+  background: none; border: none; cursor: pointer; padding: 0;
+  font-size: 0.6rem; color: var(--muted); opacity: 0.5;
+  transition: opacity 0.15s, color 0.15s;
+  line-height: 1; margin-top: 2px; flex-shrink: 0;
+}
+.gv-src-btn:hover { opacity: 1; color: var(--accent); }
 
 /* Light mode */
 [data-theme="light"] .gv-overlay.open { background: rgba(0,0,0,0.25); }
@@ -29861,17 +29971,30 @@ function _wcRenderStars(words) {
     var color    = GV_CAT_COLORS[w.category] || '#6b6b6b';
     var isDimmed = _wcActiveCat !== 'All' && w.category !== _wcActiveCat;
 
+    // Seeded visual variation — rotation, size tier, opacity depth
+    var r1 = _wcRandom(i * 7 + 3);
+    var r2 = _wcRandom(i * 11 + 5);
+    var r3 = _wcRandom(i * 13 + 7);
+    var rotation = (r1 - 0.5) * 20;          // ±10° rotation
+    var sizeIdx  = Math.floor(r2 * 3);        // 0,1,2
+    var sizes    = ['0.65rem', '0.75rem', '0.86rem'];
+    var fontSize = sizes[sizeIdx];
+    var opacity  = 0.55 + r3 * 0.35;         // 0.55–0.90 depth variation
+
     var span = document.createElement('span');
     span.className = 'wc-word' + (isDimmed ? ' wc-dimmed' : '');
     span.textContent = w.word;
-    span.style.left  = positions[i].x + 'px';
-    span.style.top   = positions[i].y + 'px';
-    span.style.color = color;
+    span.style.left      = positions[i].x + 'px';
+    span.style.top       = positions[i].y + 'px';
+    span.style.color     = color;
+    span.style.fontSize  = fontSize;
+    span.dataset.baseOpacity = String(opacity); // store for visible class
     span.dataset.word     = w.word;
     span.dataset.def      = w.definition;
     span.dataset.category = w.category || '';
     span.dataset.colId    = w.colId != null ? String(w.colId) : '';
     span.dataset.catAlt   = w.category_alt || '';
+    span.style.transform  = 'rotate(' + rotation + 'deg)';
 
     span.addEventListener('mouseenter', _wcWordMouseEnter);
     span.addEventListener('mouseleave', _wcWordMouseLeave);
@@ -29881,13 +30004,17 @@ function _wcRenderStars(words) {
 
   stage.appendChild(frag);
 
-  // Bloom in with stagger
+  // Bloom in with stagger — apply per-word base opacity
   requestAnimationFrame(function() {
     var spans = stage.querySelectorAll('.wc-word');
     spans.forEach(function(s, i) {
-      var delay = Math.min(i * 3, 900);
+      var delay   = Math.min(i * 3, 900);
+      var baseOp  = parseFloat(s.dataset.baseOpacity) || 0.82;
       setTimeout(function() {
-        if (!s.classList.contains('wc-dimmed')) s.classList.add('wc-visible');
+        if (!s.classList.contains('wc-dimmed')) {
+          s.classList.add('wc-visible');
+          s.style.opacity = String(baseOp);
+        }
       }, delay);
     });
   });
@@ -29943,6 +30070,27 @@ function _wcShowTooltip(spanEl) {
       addBtn.className   = 'wc-tt-add saved';
       _gvBumpLexiCount();
     };
+  }
+
+  // Source link in tooltip
+  var srcRow = tt.querySelector('.wc-tt-src-row');
+  if (!srcRow) {
+    srcRow = document.createElement('div');
+    srcRow.className = 'wc-tt-src-row';
+    srcRow.style.cssText = 'display:flex;align-items:center;gap:10px;margin-top:0;';
+    var addContainer = tt.querySelector('.wc-tt-add');
+    if (addContainer && addContainer.parentNode) addContainer.parentNode.insertBefore(srcRow, addContainer);
+    else tt.appendChild(srcRow);
+  }
+  srcRow.innerHTML = '';
+  if (addBtn) srcRow.appendChild(addBtn);
+  if (colId) {
+    var ttSrc = document.createElement('button');
+    ttSrc.className = 'wc-tt-src';
+    ttSrc.textContent = '↗ episode';
+    ttSrc.title = 'Open source episode';
+    ttSrc.onclick = function() { _openSourceEpisode(colId); };
+    srcRow.appendChild(ttSrc);
   }
 
   var rect = spanEl.getBoundingClientRect();
@@ -30129,7 +30277,7 @@ function _wcRenderMobileGrid(words) {
 }
 .wc-word.wc-visible { opacity: 0.82; }
 .wc-word.wc-dimmed  { opacity: 0.07; transition: opacity 0.28s ease; }
-.wc-word:hover      { opacity: 1 !important; transform: scale(1.12); }
+.wc-word:hover      { opacity: 1 !important; filter: brightness(1.15); }
 
 .wc-tooltip {
   position: fixed; z-index: 2100; background: var(--surface);
@@ -30160,6 +30308,13 @@ function _wcRenderMobileGrid(words) {
 }
 .wc-tt-add:hover { color: var(--accent); }
 .wc-tt-add.saved { color: var(--accent); pointer-events: none; }
+.wc-tt-src {
+  font-family: 'DM Mono', monospace; font-size: 0.55rem;
+  letter-spacing: 0.07em; text-transform: uppercase;
+  background: none; border: none; cursor: pointer; padding: 0;
+  color: var(--muted); opacity: 0.6; transition: opacity 0.15s, color 0.15s;
+}
+.wc-tt-src:hover { opacity: 1; color: var(--accent); }
 
 .wc-mobile-grid {
   flex: 1; overflow-y: auto; display: flex; flex-wrap: wrap;
