@@ -6,6 +6,22 @@
 
 ---
 
+## v2.62 — 2026-07-31 · Constellation fixes, button layout, backdrop close
+
+### index.html — ◎ button moved
+- Removed from `.lexi-panel-actions` row (was squeezing Practice + All Words text). Moved to `.lexi-panel-header` left of close button — same pattern as Vocab panel header.
+
+### index.html — closeLexiPanel: close Vocab alongside
+- Clicking Lexi backdrop (or ✕) now also closes Vocab panel if it's open. Handles "click middle area → both close" case.
+
+### index.html — Constellation scroll lock fix
+- **Root cause of ◎ not working:** `_spLockBodyScroll()` was called even when Lexi already held the body lock, overwriting `_spScrollLockY` to 0. `_csDidLockBody` flag now skips lock/unlock if body was already fixed.
+
+### index.html — Pull quotes
+- `9.25rem` → `9.28rem`
+
+---
+
 ## v2.61 — 2026-07-31 · Global Vocab Mode B: Word Constellation + quick fixes
 
 ### index.html — Word Constellation (Mode B)

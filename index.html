@@ -23670,7 +23670,7 @@ body.corner-mode .sp-eyebrow-kicker { opacity: 0; pointer-events: none; transiti
     align-items: flex-end;
     text-align: right;
     position: fixed;
-    right: 9.25rem;
+    right: 9.28rem;
     top: 50%; /* overridden by JS to align with browse toggle */
     transform: translateY(-50%);
     padding-right: 1rem;
@@ -23710,7 +23710,7 @@ body.corner-mode .sp-eyebrow-kicker { opacity: 0; pointer-events: none; transiti
 /* ── Left-side mirrored pull quote ── */
 @media (min-width: 900px) {
   .sp-pull-quote-left {
-    left: 9.25rem;
+    left: 9.28rem;
     right: auto;
     align-items: flex-start;
     text-align: left;
@@ -26155,6 +26155,7 @@ body.corner-panel-open .stories-panel {
     <div class="lexi-panel-header">
       <div class="lexi-panel-title">✦ Lexi</div>
       <div class="lexi-panel-subtitle" id="lexiPanelCount">0 words</div>
+      <button class="lexi-map-btn" id="lexiMapBtn" onclick="_openConstellationView('lexi')" aria-label="Word Map" title="Word Map">◎</button>
       <button class="lexi-panel-close" onclick="closeLexiPanel()" aria-label="Close">✕</button>
     </div>
     <div class="lexi-panel-tagline panel-tagline">Save words. Read examples. Practice until they stick.</div>
@@ -26165,7 +26166,6 @@ body.corner-panel-open .stories-panel {
       <button class="lexi-action-secondary" id="lexiAllWordsBtn" onclick="_openGlobalVocabView()">
         ☰ All Words
       </button>
-      <button class="lexi-map-btn" id="lexiMapBtn" onclick="_openConstellationView('lexi')" aria-label="Word Map" title="Word Map">◎</button>
       <button class="lexi-action-primary" id="lexiPracticeBtn" onclick="_lexiStartSession()" style="display:none">
         ▶ Practice <span id="lexiPracticeCount">0</span> words
       </button>
@@ -26552,6 +26552,12 @@ function closeLexiPanel() {
   panel.setAttribute('aria-hidden', 'true');
   _spUnlockBodyScroll();
   document.removeEventListener('keydown', _lexiEscHandler);
+  // Close Vocab panel if open alongside Lexi
+  var gvOverlay = document.getElementById('gvOverlay');
+  if (gvOverlay && gvOverlay.classList.contains('open')) {
+    gvOverlay.classList.remove('open');
+    setTimeout(function() { gvOverlay.style.display = 'none'; }, 320);
+  }
 }
 
 function _lexiEscHandler(e) {
@@ -29737,6 +29743,7 @@ var _csWords        = [];
 var _csTooltipWord  = null; // currently shown word
 var _csResizeTimer  = null;
 var _csSource       = 'lexi'; // 'lexi' or 'vocab'
+var _csDidLockBody  = false;  // whether WE locked the body (vs it was already locked)
 
 // ── Open ──────────────────────────────────────────────────────
 function _openConstellationView(source) {
@@ -29744,7 +29751,10 @@ function _openConstellationView(source) {
   var overlay = document.getElementById('csOverlay');
   if (!overlay) return;
 
-  _spLockBodyScroll();
+  // Only lock body if not already locked (Lexi may have it locked)
+  _csDidLockBody = document.body.style.position !== 'fixed';
+  if (_csDidLockBody) _spLockBodyScroll();
+
   overlay.style.display = 'flex';
   requestAnimationFrame(function() {
     requestAnimationFrame(function() { overlay.classList.add('open'); });
@@ -29770,7 +29780,7 @@ function _closeConstellationView() {
   if (!overlay) return;
   _csHideTooltip();
   overlay.classList.remove('open');
-  _spUnlockBodyScroll();
+  if (_csDidLockBody) _spUnlockBodyScroll();
   window.removeEventListener('resize', _csOnResize);
   setTimeout(function() {
     overlay.style.display = 'none';
