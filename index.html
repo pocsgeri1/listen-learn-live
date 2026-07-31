@@ -2424,6 +2424,39 @@
   }
   .lexi-word-row-top:hover .lexi-remove-x { opacity: 0.5; }
   .lexi-remove-x:hover { opacity: 1 !important; color: var(--red); }
+  /* ── Favorite (heart) button ── */
+  .lexi-fav-btn {
+    background: none; border: none;
+    font-size: 0.82rem;
+    cursor: pointer;
+    padding: 4px 5px;
+    margin-left: 4px;
+    opacity: 0.22;
+    color: var(--muted2);
+    transition: opacity 0.2s ease, color 0.2s ease, transform 0.18s ease;
+    flex-shrink: 0;
+    min-width: 28px; min-height: 44px;
+    display: flex; align-items: center; justify-content: center;
+    line-height: 1;
+  }
+  .lexi-fav-btn:hover { opacity: 0.6; }
+  .lexi-fav-btn.faved {
+    color: var(--accent);
+    opacity: 1;
+  }
+  .lexi-fav-btn.faved:hover { opacity: 0.8; }
+  /* Burst pop on save */
+  @keyframes lexiFavPop {
+    0%   { transform: scale(1); }
+    35%  { transform: scale(1.55); }
+    65%  { transform: scale(0.9); }
+    100% { transform: scale(1); }
+  }
+  .lexi-fav-btn.fav-pop { animation: lexiFavPop 0.32s cubic-bezier(0.34, 1.56, 0.64, 1); }
+  @media (prefers-reduced-motion: reduce) {
+    .lexi-fav-btn { transition: opacity 0.15s, color 0.15s; }
+    .lexi-fav-btn.fav-pop { animation: none; }
+  }
   /* Word body accordion — grid pattern */
   .lexi-word-body {
     display: grid;
@@ -2557,6 +2590,7 @@
   [data-theme="light"] .lexi-panel.open { background: rgba(0,0,0,0.18); }
   [data-theme="light"] .lexi-panel-inner { background: var(--bg); border-right-color: var(--border); }
   [data-theme="light"] .lexi-word-row-top:hover { background: rgba(0,0,0,0.025); }
+  [data-theme="light"] .lexi-fav-btn.faved { color: rgba(150,120,40,0.9); }
   [data-theme="light"] .lexi-state-new { border-color: rgba(184,134,11,0.3); }
   [data-theme="light"] .lexi-word-sent-block {
     border-left-color: rgba(184,134,11,0.3);
@@ -5017,7 +5051,7 @@
 
     /* Tighter eyebrow → H1 gap on mobile */
     .hero-eyebrow-outer {
-      margin-bottom: 1rem;
+      margin-bottom: 0.5rem;
       order: 1;
     }
     .hero-eyebrow::before { display: none; }
@@ -5047,16 +5081,16 @@
     /* Sub copy left-aligned to match H1 */
     .hero-sub {
       text-align: left;
-      margin: 0 0 1.25rem 0;
+      margin: 0 0 0.9rem 0;
       font-size: 1rem;
-      line-height: 1.7;
+      line-height: 1.6;
       order: 3;
     }
 
     /* CTA moves above the card on mobile */
     .hero-cta {
       order: 4;
-      margin-bottom: 1.75rem;
+      margin-bottom: 1.25rem;
     }
 
     /* Stats move BELOW the card on mobile (proof points) */
@@ -5064,7 +5098,7 @@
       order: 3;
       width: 100%;
       margin: 0;
-      padding: 1.5rem 1.75rem;
+      padding: 1rem 1.75rem;
       box-sizing: border-box;
     }
     .stat + .stat { border-left: 1px solid var(--border); }
@@ -5072,7 +5106,7 @@
     /* Card column lives between CTA and stats */
     .hero-divider { display: none; }
     .hero-card-col {
-      padding: 0 1.75rem 2.5rem 1.75rem;
+      padding: 0 1.75rem 1.25rem 1.75rem;
       min-height: auto;
       order: 2;
       align-self: stretch;
@@ -5082,7 +5116,7 @@
     .hero-card-wrap {
       width: 100%;
       max-width: 340px;
-      height: 450px;
+      height: 400px;
       transform: rotate(0deg);
     }
     .hero-card-face {
@@ -5124,18 +5158,18 @@
   }
 
     @media (max-width: 480px) {
-    .hero-card-wrap { max-width: 320px; height: 480px; }
+    .hero-card-wrap { max-width: 320px; height: 400px; }
     .hc-term { font-size: 1.7rem; }
-    .hero-copy { padding: 0 1.5rem 2.5rem 1.5rem; }
-    .hero-card-col { padding: 0 1.5rem 3rem 1.5rem; }
+    .hero-copy { padding: 0 1.5rem 0 1.5rem; }
+    .hero-card-col { padding: 0 1.5rem 1.25rem 1.5rem; }
   }
   /* v2.51: hero padding = mobile nav height (56px) so content clears the nav */
   @media (max-width: 390px) {
     .hero { padding: 56px 0 0 0; }
-    .hero-cta { margin-bottom: 1.25rem; }
-    .hero-card-col { padding-bottom: 1.25rem; }
-    .hero-stats { padding: 1rem 1.75rem; }
-    .hero-sub { margin-bottom: 1.25rem; }
+    .hero-cta { margin-bottom: 1rem; }
+    .hero-card-col { padding-bottom: 1rem; }
+    .hero-stats { padding: 0.75rem 1.5rem; }
+    .hero-sub { margin-bottom: 0.75rem; }
   }
   /* ============================================
      CONCEPT OF THE DAY — MODAL
@@ -10375,6 +10409,7 @@
     <button class="browse-toggle" id="browseToggleThemes" onclick="browseSwitch('themes')">Themes</button>
   </div>
   <p class="sp-pull-quote" id="spPullQuote" aria-hidden="true"><strong id="spPullNum">94%</strong><span class="sp-pull-body" id="spPullBody">of podcast ideas are<br>forgotten in 48 hours.</span></p>
+  <p class="sp-pull-quote sp-pull-quote-left" id="spPullQuoteLeft" aria-hidden="true"><strong id="spPullNumL">50%</strong><span class="sp-pull-body" id="spPullBodyL">of a lecture is forgotten<br>within 24 hours.</span></p>
 </div>
 
 <!-- EPISODES SECTION -->
@@ -15487,22 +15522,46 @@ function initSparkHero() {
     })();
 
     var STATS = [
-      { num: '94%',    body: 'of podcast ideas are\nforgotten in 48 hours.' },
-      { num: '14%',    body: 'of podcast listeners finish\nan episode they start.' },
-      { num: '10,000', body: 'words separate the average\nadult from an educated one.' }
+      { num: '90%',    body: 'of what you learn is forgotten\nwithin a week without review.' },
+      { num: '79%',    body: 'of people check their phone\nwithin 15 minutes of waking.' },
+      { num: '89%',    body: 'of arguments are about how\nsomething was said, not what.' },
+      { num: '1/5',    body: 'podcast listeners actually apply\nideas from what they hear.' },
+      { num: '300',    body: 'words make up 65% of all\neveryday conversations.' },
+      { num: '66%',    body: 'of people confuse things\nthey\'ve heard with things they know.' },
+      { num: '1%',     body: 'of shower ideas make it\ninto a real conversation.' },
+      { num: '50%',    body: 'of a lecture is forgotten\nwithin 24 hours.' },
+      { num: '6h 40m', body: 'average daily screen time\nfor adults in 2025.' },
+      { num: '2\u00D7', body: 'more likely to remember something\nyou said out loud vs. just thought.' }
     ];
     var _idx = 0;
     var _swapping = false;
+
+    // Left-side pull quote — offset by half the array length
+    var pqL = document.getElementById('spPullQuoteLeft');
+    var numElL = document.getElementById('spPullNumL');
+    var bodyElL = document.getElementById('spPullBodyL');
+    var _idxL = Math.floor(STATS.length / 2);
+
+    function _applyLeft(idx) {
+      if (!numElL || !bodyElL) return;
+      numElL.textContent = STATS[idx].num;
+      bodyElL.innerHTML = STATS[idx].body.replace(/\n/g, '<br>');
+    }
+    _applyLeft(_idxL);
 
     function _nextStat() {
       if (_swapping) return;
       _swapping = true;
       pq.classList.add('pq-swapping');
+      if (pqL) pqL.classList.add('pq-swapping');
       setTimeout(function() {
         _idx = (_idx + 1) % STATS.length;
+        _idxL = (_idxL + 1) % STATS.length;
         numEl.textContent = STATS[_idx].num;
         bodyEl.innerHTML = STATS[_idx].body.replace(/\n/g, '<br>');
+        _applyLeft(_idxL);
         pq.classList.remove('pq-swapping');
+        if (pqL) pqL.classList.remove('pq-swapping');
         setTimeout(function() { _swapping = false; }, 350);
       }, 320);
     }
@@ -15511,7 +15570,22 @@ function initSparkHero() {
     setInterval(_nextStat, 5000);
 
     // Delayed appearance — fade in after hero has settled (1600ms)
-    setTimeout(function() { pq.classList.add('pq-visible'); }, 1600);
+    setTimeout(function() {
+      pq.classList.add('pq-visible');
+      if (pqL) pqL.classList.add('pq-visible');
+    }, 1600);
+
+    // Align left quote symmetrically
+    if (pqL) {
+      (function _alignPQL() {
+        var toggle = document.getElementById('browseToggleWrap');
+        if (!toggle) return;
+        var rect = toggle.getBoundingClientRect();
+        var midY = rect.top + rect.height / 2;
+        pqL.style.top = midY + 'px';
+        pqL.style.transform = 'translateY(-50%)';
+      })();
+    }
 
     // Only hide near library section — no scroll-show logic
     var _libEl = document.getElementById('libSection') || document.getElementById('netflixRows');
@@ -15525,9 +15599,10 @@ function initSparkHero() {
           var libRect = _libEl.getBoundingClientRect();
           if (libRect.top < window.innerHeight + 100) {
             pq.classList.add('pq-hidden');
+            if (pqL) pqL.classList.add('pq-hidden');
           } else {
-            // Only show visible if it has already appeared
             if (pq.classList.contains('pq-visible')) pq.classList.remove('pq-hidden');
+            if (pqL && pqL.classList.contains('pq-visible')) pqL.classList.remove('pq-hidden');
           }
         });
       }, { passive: true });
@@ -23400,10 +23475,27 @@ body.corner-mode .sp-eyebrow-kicker { opacity: 0; pointer-events: none; transiti
     margin-top: 0.25rem;
   }
 }
+/* ── Left-side mirrored pull quote ── */
+@media (min-width: 900px) {
+  .sp-pull-quote-left {
+    left: 9.35rem;
+    right: auto;
+    align-items: flex-start;
+    text-align: left;
+    border-left: 2px solid var(--accent);
+    border-right: none;
+    padding-left: 1rem;
+    padding-right: 0;
+  }
+}
+
 /* Hide when panels open or corner mode active */
 body.corner-mode .sp-pull-quote,
 body.cs-panel-open .sp-pull-quote,
-body.sp2-panel-open .sp-pull-quote { opacity: 0 !important; transition: opacity 0.3s ease; }
+body.sp2-panel-open .sp-pull-quote,
+body.corner-mode .sp-pull-quote-left,
+body.cs-panel-open .sp-pull-quote-left,
+body.sp2-panel-open .sp-pull-quote-left { opacity: 0 !important; transition: opacity 0.3s ease; }
 
 /* ── Word swap — "die" → "live" crossfade ──
    #spHW1 gets position:relative; JS appends .sp-word-live span absolutely on top */
@@ -26259,8 +26351,9 @@ function _lexiRenderPanel() {
   var pillsRow = document.getElementById('lexiCatPills');
   if (pillsRow) {
     pillsRow.innerHTML = '';
-    var LX_CATS = ['All','Small Talk','Dinner Party','Smartypants','Corporate','People Skills','Head Space','Lab Coat','Deep Cuts','Zeitgeist'];
+    var LX_CATS = ['All','Favorites','Small Talk','Dinner Party','Smartypants','Corporate','People Skills','Head Space','Lab Coat','Deep Cuts','Zeitgeist'];
     var catCounts = {};
+    var favCount = arr.filter(function(e) { return !!e.isFavorite; }).length;
     arr.forEach(function(e) {
       if (e.category) catCounts[e.category] = (catCounts[e.category] || 0) + 1;
       if (e.category_alt) catCounts[e.category_alt] = (catCounts[e.category_alt] || 0) + 1;
@@ -26269,8 +26362,11 @@ function _lexiRenderPanel() {
       var btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'vocab-cat-pill' + (cat === _lexiActiveCat ? ' active' : '');
-      btn.textContent = cat === 'All' ? 'All \u00B7 ' + arr.length : cat;
-      if (cat !== 'All' && !catCounts[cat]) btn.setAttribute('data-empty', '1');
+      if (cat === 'All') btn.textContent = 'All \u00B7 ' + arr.length;
+      else if (cat === 'Favorites') btn.textContent = '\u2665 Saved' + (favCount > 0 ? ' \u00B7 ' + favCount : '');
+      else btn.textContent = cat;
+      if (cat === 'Favorites' && favCount === 0) btn.setAttribute('data-empty', '1');
+      if (cat !== 'All' && cat !== 'Favorites' && !catCounts[cat]) btn.setAttribute('data-empty', '1');
       btn.addEventListener('click', function() {
         if (_lexiActiveCat === cat) return;
         _lexiActiveCat = cat;
@@ -26301,10 +26397,17 @@ function _lexiRenderPanel() {
     });
   }
 
-  // Apply category filter
-  var displayArr = _lexiActiveCat === 'All' ? arr : arr.filter(function(e) {
-    return e.category === _lexiActiveCat || e.category_alt === _lexiActiveCat;
-  });
+  // Apply category filter (Favorites = isFavorite:true, else by category)
+  var displayArr;
+  if (_lexiActiveCat === 'All') {
+    displayArr = arr;
+  } else if (_lexiActiveCat === 'Favorites') {
+    displayArr = arr.filter(function(e) { return !!e.isFavorite; });
+  } else {
+    displayArr = arr.filter(function(e) {
+      return e.category === _lexiActiveCat || e.category_alt === _lexiActiveCat;
+    });
+  }
 
   listEl.innerHTML = '';
 
@@ -26422,6 +26525,46 @@ function _lexiBuildWordRow(entry) {
   badge.className = 'lexi-state-badge lexi-state-' + state;
   badge.textContent = state;
 
+  // ── Favorite heart button ──
+  var favBtn = document.createElement('button');
+  favBtn.type = 'button';
+  favBtn.className = 'lexi-fav-btn' + (entry.isFavorite ? ' faved' : '');
+  favBtn.setAttribute('aria-label', (entry.isFavorite ? 'Unfavorite' : 'Favorite') + ' ' + (entry.word || ''));
+  favBtn.setAttribute('aria-pressed', entry.isFavorite ? 'true' : 'false');
+  favBtn.textContent = '\u2665'; // ♥
+  favBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    var store = _lexiconLoadStore();
+    var idx = store.findIndex(function(w) { return w.word === entry.word; });
+    if (idx === -1) return;
+    store[idx].isFavorite = !store[idx].isFavorite;
+    entry.isFavorite = store[idx].isFavorite;
+    _lexiconSaveStore(store);
+    favBtn.classList.toggle('faved', !!entry.isFavorite);
+    favBtn.setAttribute('aria-pressed', entry.isFavorite ? 'true' : 'false');
+    favBtn.setAttribute('aria-label', (entry.isFavorite ? 'Unfavorite' : 'Favorite') + ' ' + (entry.word || ''));
+    // Burst pop animation on save
+    if (entry.isFavorite) {
+      favBtn.classList.remove('fav-pop');
+      void favBtn.offsetWidth; // reflow to restart animation
+      favBtn.classList.add('fav-pop');
+      setTimeout(function() { favBtn.classList.remove('fav-pop'); }, 340);
+    }
+    // Refresh Favorites pill count
+    var pillsRow = document.getElementById('lexiCatPills');
+    if (pillsRow) {
+      var favPill = Array.from(pillsRow.querySelectorAll('.vocab-cat-pill')).find(function(p) {
+        return p.textContent.startsWith('\u2665');
+      });
+      if (favPill) {
+        var newFavCount = _lexiconLoadStore().filter(function(w) { return !!w.isFavorite; }).length;
+        favPill.textContent = '\u2665 Saved' + (newFavCount > 0 ? ' \u00B7 ' + newFavCount : '');
+        favPill.removeAttribute('data-empty');
+        if (newFavCount === 0) favPill.setAttribute('data-empty', '1');
+      }
+    }
+  });
+
   var removeBtn = document.createElement('button');
   removeBtn.type = 'button';
   removeBtn.className = 'lexi-remove-x';
@@ -26456,6 +26599,7 @@ function _lexiBuildWordRow(entry) {
   top.appendChild(chevron);
   top.appendChild(nameEl);
   top.appendChild(badge);
+  top.appendChild(favBtn);
   top.appendChild(removeBtn);
 
   // ── Body accordion ──
@@ -27185,13 +27329,17 @@ function _lexiconLoadStore() {
   // Migration: add practice fields to entries saved before v2.40
   var dirty = false;
   arr = arr.map(function(e) {
+    var patched = {};
     if (e.practiceState === undefined) {
       dirty = true;
-      return Object.assign({}, e, {
-        practiceState: 'new', practiceCount: 0, hitCount: 0, lastPracticedAt: null
-      });
+      patched = { practiceState: 'new', practiceCount: 0, hitCount: 0, lastPracticedAt: null };
     }
-    return e;
+    // Migration: add isFavorite to entries saved before v2.51
+    if (e.isFavorite === undefined) {
+      dirty = true;
+      patched.isFavorite = false;
+    }
+    return Object.keys(patched).length ? Object.assign({}, e, patched) : e;
   });
   if (dirty) { try { localStorage.setItem(LX_STORE_KEY, JSON.stringify(arr)); } catch(ex) {} }
   return arr;

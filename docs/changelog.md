@@ -6,6 +6,17 @@
 
 ---
 
+## v2.52 — 2026-07-31 · Hero tighten, pull quotes ×10 + left mirror, Lexi favorites
+
+### index.html — hero mobile spacing (rev 2)
+- **Change:** Further compressed eyebrow margin (0.5rem), sub margin (0.9rem), CTA margin (1.25rem), card height (450px→400px), card-col bottom padding (2.5rem→1.25rem), stats padding (1.5rem→1rem). Total vertical saving ~80px; Episodes/Themes section now peeks at bottom of most phone viewports.
+
+### index.html — pull quotes expanded to 10 stats + left-side mirror
+- **Change:** STATS array replaced with 10 selected stats (90%, 79%, 89%, 1/5, 300, 66%, 1%, 50%, 6h 40m, 2×). Added `.sp-pull-quote-left` element mirrored on the left side of viewport (text-align left, border-left, positioned at `left: 9.35rem`). Left quote offset by 5 indices from right quote so they never show the same stat simultaneously.
+
+### index.html — Lexi favorites feature
+- **Change:** Added `isFavorite: boolean` field to lexicon entry schema (backward-compat migration in `_lexiconLoadStore`). Heart button `♥` (`.lexi-fav-btn`) added between state badge and ✕ on each word row — subtle (opacity 0.22) until active (gold, opacity 1). `lexiFavPop` spring animation on save. `♥ Saved · N` pill added to Lexi category row (first position). Favorites filter renders only `isFavorite === true` entries.
+
 ## v2.51 — 2026-07-30 · Hero mobile fix, library filter fix, vocab animation
 
 ### index.html — hero mobile padding
