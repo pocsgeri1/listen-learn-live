@@ -15673,15 +15673,20 @@ function initSparkHero() {
     if (!pq || !numEl || !bodyEl) return;
     if (window.innerWidth < 900) return;
 
-    // Align pull quote with the Episodes/Themes toggle header
-    (function _alignPQ() {
+    // Vertical position: computed from browseToggleWrap's absolute page offset,
+    // set once on first scroll so layout is fully settled (not at load time).
+    var _pqAligned = false;
+    function _alignPQ() {
+      if (_pqAligned) return;
       var toggle = document.getElementById('browseToggleWrap');
       if (!toggle) return;
-      var rect = toggle.getBoundingClientRect();
-      var midY = rect.top + rect.height / 2;
+      var absTop = toggle.getBoundingClientRect().top + window.scrollY;
+      var midY = absTop + toggle.offsetHeight / 2;
       pq.style.top = midY + 'px';
       pq.style.transform = 'translateY(-50%)';
-    })();
+      if (pqL) { pqL.style.top = midY + 'px'; pqL.style.transform = 'translateY(-50%)'; }
+      _pqAligned = true;
+    }
 
     var STATS = [
       { num: '90%',    body: 'of what you learn is forgotten\nwithin a week without review.' },
@@ -15731,44 +15736,40 @@ function initSparkHero() {
     // Start cycling immediately, every 5s
     setInterval(_nextStat, 5000);
 
-    // Delayed appearance — fade in after hero has settled (1600ms)
-    setTimeout(function() {
-      pq.classList.add('pq-visible');
-      if (pqL) pqL.classList.add('pq-visible');
-    }, 1600);
-
-    // Align left quote symmetrically
-    if (pqL) {
-      (function _alignPQL() {
-        var toggle = document.getElementById('browseToggleWrap');
-        if (!toggle) return;
-        var rect = toggle.getBoundingClientRect();
-        var midY = rect.top + rect.height / 2;
-        pqL.style.top = midY + 'px';
-        pqL.style.transform = 'translateY(-50%)';
-      })();
-    }
-
-    // Only hide near library section — no scroll-show logic
+    // Quotes appear on scroll (not page load) and align with Episodes/Themes header.
+    var _pqShown = false;
     var _libEl = document.getElementById('libSection') || document.getElementById('netflixRows');
-    if (_libEl) {
-      var _ticking = false;
-      window.addEventListener('scroll', function() {
-        if (_ticking) return;
-        _ticking = true;
-        requestAnimationFrame(function() {
-          _ticking = false;
+    var _ticking = false;
+    window.addEventListener('scroll', function() {
+      if (_ticking) return;
+      _ticking = true;
+      requestAnimationFrame(function() {
+        _ticking = false;
+        var scrollY = window.scrollY;
+
+        // Align once, on first scroll (layout is stable by then)
+        _alignPQ();
+
+        // Reveal once user has started scrolling
+        if (!_pqShown && scrollY > 80) {
+          _pqShown = true;
+          pq.classList.add('pq-visible');
+          if (pqL) pqL.classList.add('pq-visible');
+        }
+
+        // Hide when library section enters view
+        if (_libEl) {
           var libRect = _libEl.getBoundingClientRect();
           if (libRect.top < window.innerHeight + 100) {
             pq.classList.add('pq-hidden');
             if (pqL) pqL.classList.add('pq-hidden');
-          } else {
-            if (pq.classList.contains('pq-visible')) pq.classList.remove('pq-hidden');
-            if (pqL && pqL.classList.contains('pq-visible')) pqL.classList.remove('pq-hidden');
+          } else if (_pqShown) {
+            pq.classList.remove('pq-hidden');
+            if (pqL) pqL.classList.remove('pq-hidden');
           }
-        });
-      }, { passive: true });
-    }
+        }
+      });
+    }, { passive: true });
   })();
 
   // #6 Typewriter on "your earbuds." — one-shot per session
@@ -23600,7 +23601,7 @@ body.corner-mode .sp-eyebrow-kicker { opacity: 0; pointer-events: none; transiti
     align-items: flex-end;
     text-align: right;
     position: fixed;
-    right: 9.35rem;
+    right: 9.3rem;
     top: 50%; /* overridden by JS to align with browse toggle */
     transform: translateY(-50%);
     padding-right: 1rem;
@@ -23640,7 +23641,7 @@ body.corner-mode .sp-eyebrow-kicker { opacity: 0; pointer-events: none; transiti
 /* ── Left-side mirrored pull quote ── */
 @media (min-width: 900px) {
   .sp-pull-quote-left {
-    left: 9.35rem;
+    left: 9.3rem;
     right: auto;
     align-items: flex-start;
     text-align: left;
@@ -27156,6 +27157,7 @@ function _openDrawerVocabView(list, colId, prefix, buildCellFn) {
     bodyEl.style.display = 'none';
     bodyEl.classList.remove('vv-cards-exit');
     if (filterRow) { filterRow.style.display = 'none'; filterRow.classList.remove('vv-filter-exit'); }
+    vocabView.style.display = ''; /* clear inline display so CSS class wins */
     vocabView.classList.add('vv-entering');
     setTimeout(function() {
       vocabView.classList.remove('vv-entering');
