@@ -1621,12 +1621,12 @@
     from { opacity: 0; transform: translateY(10px); }
     to   { opacity: 1; transform: translateY(0); }
   }
-  /* Back bar */
+  /* Back bar — left pad clears pull tabs (tabs ~38px + gap) */
   .vv-back-bar {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 10px 20px 8px;
+    padding: 10px 2.5rem 8px 3.2rem;
     border-bottom: 0.5px solid var(--border);
     flex-shrink: 0;
   }
@@ -1651,12 +1651,11 @@
     text-transform: uppercase;
     color: var(--muted2);
   }
-  /* Scrollable content area — left padding matches ep-drawer-body (2.5rem)
-     so words don't extend under the left-side pull tabs */
+  /* Scrollable content — left pad clears pull tabs */
   .vv-content {
     flex: 1;
     overflow-y: auto;
-    padding: 14px 2.5rem 20px 2.5rem;
+    padding: 18px 2.5rem 24px 3.2rem;
     min-height: 0;
   }
   /* Staggered word row entrance */
@@ -1668,13 +1667,49 @@
     from { opacity: 0; transform: translateY(7px); }
     to   { opacity: 1; transform: translateY(0); }
   }
-  /* Grid inside vocab view — full width, more columns */
+  /* Grid — matches concept card column widths.
+     Each cell is a vocab entry with generous internal padding.
+     No background/border on the cell itself — dividers come from
+     the editorial rule below each row. */
   .vv-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 8px;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 0;              /* dividers are drawn by the cells, not gap */
+    column-gap: 0;
   }
   @media (max-width: 900px) { .vv-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 600px) { .vv-grid { grid-template-columns: 1fr; } }
+
+  /* Individual vocab cell — editorial table style */
+  .ep-intel-vocab-row.vv-word-row {
+    padding: 16px 18px 14px;
+    /* Fade-to-nothing horizontal rule below each cell */
+    background-image: linear-gradient(
+      to right,
+      transparent 0%,
+      rgba(232,213,163,0.15) 12%,
+      rgba(232,213,163,0.15) 88%,
+      transparent 100%
+    );
+    background-size: 100% 1px;
+    background-position: bottom center;
+    background-repeat: no-repeat;
+    border-bottom: none;  /* replace solid border with gradient rule */
+    margin-bottom: 0;
+  }
+  /* Vertical separator between columns — subtle hairline */
+  .ep-intel-vocab-row.vv-word-row:not(:nth-child(1)):not(:nth-child(2)) {
+    /* handled by column gap instead — column dividers via box-shadow */
+  }
+  [data-theme="light"] .ep-intel-vocab-row.vv-word-row {
+    background-image: linear-gradient(
+      to right,
+      transparent 0%,
+      rgba(184,134,11,0.12) 12%,
+      rgba(184,134,11,0.12) 88%,
+      transparent 100%
+    );
+  }
 
   /* ── VOCAB / LEXI CATEGORY PILL ROW (v2.47) ── */
   .vocab-cat-pill-row {
@@ -23607,7 +23642,7 @@ body.corner-mode .sp-eyebrow-kicker { opacity: 0; pointer-events: none; transiti
     align-items: flex-end;
     text-align: right;
     position: fixed;
-    right: 3.61vw;
+    right: 9.4rem;
     top: 50%; /* overridden by JS to align with browse toggle */
     transform: translateY(-50%);
     padding-right: 1rem;
@@ -23647,7 +23682,7 @@ body.corner-mode .sp-eyebrow-kicker { opacity: 0; pointer-events: none; transiti
 /* ── Left-side mirrored pull quote ── */
 @media (min-width: 900px) {
   .sp-pull-quote-left {
-    left: 3.61vw;
+    left: 9.4rem;
     right: auto;
     align-items: flex-start;
     text-align: left;
