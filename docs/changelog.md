@@ -6,6 +6,19 @@
 
 ---
 
+## v2.66 — 2026-07-31 · Constellation view modes (Free / Nebula), pull quote lerp drag
+
+### index.html — Constellation view modes
+- **✦ Free / ⬡ Nebula toggle:** new `.wc-view-row` with 2 mode buttons in the constellation header. State stored in `_wcViewMode`.
+- **Nebula layout:** `_wcNebulaLayout()` — 5 zone centers spread across canvas (top-left, top-right, center, bottom-left, bottom-right); each category assigned to a zone via `_WC_CAT_ZONES`. Words placed near their zone center with bell-curve spread (`spread = min(W,H)*0.2`).
+- **Ambient drift:** `_wcStartDrift()` / `_wcDriftFrame()` rAF loop — each word orbits its position on a 8–12s sine cycle with 2.5–4.5px amplitude. Starts after bloom completes in nebula mode. Stops on close or view switch.
+- **`dataset.baseRot`** stored per-word so drift can compose with seeded rotation.
+
+### index.html — Pull quote drag (lerp spring)
+- Replaced CSS-transition approach with true lerp rAF loop (`_pqLerpLoop`). Lerp factor 0.04 = ~0.6s to mostly settle — heavy, natural drag feel.
+- Target accumulates scroll velocity (clamped ±32px); resets to 0 after 80ms idle. Loop self-terminates when motion is negligible.
+- Removed CSS `transition: transform` from `.sp-pull-quote` (no longer needed).
+
 ## v2.65 — 2026-07-31 · Constellation category filter fix, pull quote drag redesign
 
 ### index.html — Constellation category filter

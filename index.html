@@ -15776,24 +15776,40 @@ function initSparkHero() {
       _pqAligned = true;
     }
 
-    // ── Drag + blur scroll effect ─────────────────────────────
-    var _pqScrollVel   = 0;
-    var _pqLastY       = 0;
-    var _pqDragActive  = false;
+    // ── Drag scroll effect — lerp spring ─────────────────────────
+    var _pqTargetDrag  = 0;   // where we want the quotes to go
+    var _pqCurrentDrag = 0;   // where they are right now
     var _pqDragRaf     = null;
     var _pqSettleTimer = null;
+    var _pqScrollVel   = 0;   // kept for compat
+    var _pqLastY       = window.scrollY || 0;
+    var _pqDragActive  = false;
 
-    // CSS-transition drag: no rAF loop needed — just set target offset, let CSS ease it
-    function _pqApplyDrag(dragPx) {
-      if (pq)  pq.style.transform  = 'translateY(calc(-50% + ' + dragPx + 'px))';
-      if (pqL) pqL.style.transform = 'translateY(calc(-50% + ' + dragPx + 'px))';
+    function _pqLerpLoop() {
+      // Very slow lerp = heavy lag feel (4% of gap per frame ≈ 0.6s to mostly settle)
+      _pqCurrentDrag += (_pqTargetDrag - _pqCurrentDrag) * 0.04;
+      var val = _pqCurrentDrag.toFixed(2);
+      if (pq)  pq.style.transform  = 'translateY(calc(-50% + ' + val + 'px))';
+      if (pqL) pqL.style.transform = 'translateY(calc(-50% + ' + val + 'px))';
+
+      var stillMoving = Math.abs(_pqCurrentDrag - _pqTargetDrag) > 0.08 || Math.abs(_pqTargetDrag) > 0.08;
+      if (stillMoving) {
+        _pqDragRaf = requestAnimationFrame(_pqLerpLoop);
+      } else {
+        _pqCurrentDrag = 0; _pqTargetDrag = 0;
+        if (pq)  pq.style.transform  = 'translateY(-50%)';
+        if (pqL) pqL.style.transform = 'translateY(-50%)';
+        _pqDragRaf    = null;
+        _pqDragActive = false;
+      }
     }
-    function _pqSettle() {
-      if (pq)  pq.style.transform  = 'translateY(-50%)';
-      if (pqL) pqL.style.transform = 'translateY(-50%)';
-      _pqDragActive = false;
+
+    function _pqStartLerp() {
+      if (_pqDragRaf) return; // already running
+      _pqDragRaf = requestAnimationFrame(_pqLerpLoop);
     }
-    // _pqDragFrame kept as no-op for compatibility with existing references
+
+    // _pqDragFrame kept as no-op for compat
     function _pqDragFrame() {}
 
     var STATS = [
@@ -15849,16 +15865,17 @@ function initSparkHero() {
     var _libEl = document.getElementById('libSection') || document.getElementById('netflixRows');
     var _ticking = false;
     window.addEventListener('scroll', function() {
-      // Drag: clamp velocity → offset, apply directly (CSS transition handles easing)
+      // Drag: accumulate velocity into target, lerp loop does the heavy lifting
       var nowY = window.scrollY;
       _pqScrollVel = nowY - _pqLastY;
       _pqLastY = nowY;
       if (_pqAligned) {
-        var drag = Math.max(-18, Math.min(18, _pqScrollVel * -0.6));
-        _pqApplyDrag(drag);
-        _pqDragActive = true;
+        // Accumulate: fast scroll builds more drag (clamped to ±32px)
+        _pqTargetDrag = Math.max(-32, Math.min(32, _pqTargetDrag + _pqScrollVel * -0.55));
+        _pqStartLerp();
         clearTimeout(_pqSettleTimer);
-        _pqSettleTimer = setTimeout(_pqSettle, 220);
+        // After scrolling stops, let target slowly return to 0
+        _pqSettleTimer = setTimeout(function() { _pqTargetDrag = 0; }, 80);
       }
 
       if (_ticking) return;
@@ -23728,7 +23745,7 @@ body.corner-mode .sp-eyebrow-kicker { opacity: 0; pointer-events: none; transiti
     border-right: 2px solid var(--accent);
     padding-bottom: 0;
     opacity: 0; /* starts invisible — JS adds .pq-visible after delay */
-    transition: opacity 1.4s ease, transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94) 0.15s;
+    transition: opacity 1.4s ease;
     z-index: 10;
   }
   .sp-pull-quote.pq-visible  { opacity: 0.45; }
@@ -29871,6 +29888,7 @@ function _openConstellationView(source) {
   _loadEpisodeMeta().then(function() {
     _wcWords = _buildGlobalVocabIndex();
     _wcActiveCat = 'All';
+    _wcViewMode  = 'free';
     _wcBuildFilterPills();
     _wcDetectAndRender();
   }).catch(function() {
@@ -29886,6 +29904,7 @@ function _closeConstellationView() {
   var overlay = document.getElementById('wcOverlay');
   if (!overlay) return;
   _wcHideTooltip();
+  _wcStopDrift();
   overlay.classList.remove('open');
   if (_wcDidLockBody) _spUnlockBodyScroll();
   window.removeEventListener('resize', _wcOnResize);
@@ -29954,15 +29973,97 @@ function _wcLayout(n, W, H) {
   return positions;
 }
 
+// ── View mode ─────────────────────────────────────────────────
+var _wcViewMode   = 'free';
+var _wcDriftRaf   = null;
+var _wcDriftStart = 0;
+
+function _wcSetView(mode) {
+  _wcViewMode = mode;
+  document.querySelectorAll('.wc-view-btn').forEach(function(b) { b.classList.remove('active'); });
+  var btn = document.getElementById(mode === 'free' ? 'wcViewFree' : 'wcViewNebula');
+  if (btn) btn.classList.add('active');
+  _wcStopDrift();
+  _wcDetectAndRender();
+}
+
+// ── Nebula layout: soft category zone clustering ───────────────
+// 5 zones spread across canvas; categories assigned round-robin by hue group
+var _WC_CAT_ZONES = {
+  'Small Talk':   0,
+  'Business':     1,
+  'Science':      2,
+  'Smartypants':  3,
+  'Mind & People':4
+};
+
+function _wcNebulaLayout(words, W, H) {
+  // 5 zone centers — pentagon-ish spread
+  var pad = 0.15;
+  var zones = [
+    { cx: W * 0.22, cy: H * 0.28 }, // top-left
+    { cx: W * 0.75, cy: H * 0.22 }, // top-right
+    { cx: W * 0.50, cy: H * 0.55 }, // center
+    { cx: W * 0.18, cy: H * 0.72 }, // bottom-left
+    { cx: W * 0.78, cy: H * 0.72 }, // bottom-right
+  ];
+  var spread = Math.min(W, H) * 0.2; // how wide each nebula spreads
+  return words.map(function(w, i) {
+    var zoneIdx = _WC_CAT_ZONES[w.category] != null ? _WC_CAT_ZONES[w.category] : (i % 5);
+    var z = zones[zoneIdx];
+    var r1 = _wcRandom(i * 3 + 1);
+    var r2 = _wcRandom(i * 3 + 2);
+    // Gaussian-ish: sum two uniforms for bell curve feel
+    var dx = (r1 + _wcRandom(i * 3 + 9) - 1) * spread;
+    var dy = (r2 + _wcRandom(i * 3 + 7) - 1) * spread;
+    var x  = Math.max(8, Math.min(W - 90, z.cx + dx));
+    var y  = Math.max(8, Math.min(H - 24, z.cy + dy));
+    return { x: x, y: y, zoneIdx: zoneIdx };
+  });
+}
+
+// ── Ambient drift animation ────────────────────────────────────
+function _wcStartDrift() {
+  _wcDriftStart = performance.now();
+  _wcDriftRaf = requestAnimationFrame(_wcDriftFrame);
+}
+
+function _wcStopDrift() {
+  if (_wcDriftRaf) { cancelAnimationFrame(_wcDriftRaf); _wcDriftRaf = null; }
+  // Reset transforms set by drift
+  document.querySelectorAll('#wcStage .wc-word').forEach(function(s) {
+    var rot = s.dataset.baseRot || '0';
+    s.style.transform = 'rotate(' + rot + 'deg)';
+  });
+}
+
+function _wcDriftFrame(now) {
+  var t = (now - _wcDriftStart) / 1000; // seconds
+  document.querySelectorAll('#wcStage .wc-word').forEach(function(s, i) {
+    var period  = 8 + _wcRandom(i * 5 + 1) * 4;   // 8–12s cycle
+    var ampX    = 2.5 + _wcRandom(i * 5 + 2) * 2;  // 2.5–4.5px
+    var ampY    = 2   + _wcRandom(i * 5 + 3) * 2;  // 2–4px
+    var phase   = _wcRandom(i * 5 + 4) * Math.PI * 2;
+    var rot     = parseFloat(s.dataset.baseRot) || 0;
+    var dx = ampX * Math.sin(2 * Math.PI * t / period + phase);
+    var dy = ampY * Math.cos(2 * Math.PI * t / period + phase * 0.7);
+    s.style.transform = 'translate(' + dx.toFixed(2) + 'px,' + dy.toFixed(2) + 'px) rotate(' + rot + 'deg)';
+  });
+  _wcDriftRaf = requestAnimationFrame(_wcDriftFrame);
+}
+
 // ── Render stars ──────────────────────────────────────────────
 function _wcRenderStars(words) {
   var stage = document.getElementById('wcStage');
   if (!stage) return;
   stage.innerHTML = '';
 
+  _wcStopDrift();
   var W = stage.clientWidth  || window.innerWidth;
   var H = stage.clientHeight || (window.innerHeight - 60);
-  var positions = _wcLayout(words.length, W, H);
+  var positions = _wcViewMode === 'nebula'
+    ? _wcNebulaLayout(words, W, H)
+    : _wcLayout(words.length, W, H);
   var frag = document.createDocumentFragment();
 
   words.forEach(function(w, i) {
@@ -29993,6 +30094,7 @@ function _wcRenderStars(words) {
     span.dataset.colId    = w.colId != null ? String(w.colId) : '';
     span.dataset.catAlt   = w.category_alt || '';
     span.style.transform  = 'rotate(' + rotation + 'deg)';
+    span.dataset.baseRot  = String(rotation);
 
     span.addEventListener('mouseenter', _wcWordMouseEnter);
     span.addEventListener('mouseleave', _wcWordMouseLeave);
@@ -30005,8 +30107,10 @@ function _wcRenderStars(words) {
   // Bloom in with stagger — apply per-word base opacity
   requestAnimationFrame(function() {
     var spans = stage.querySelectorAll('.wc-word');
+    var maxDelay = 0;
     spans.forEach(function(s, i) {
       var delay   = Math.min(i * 3, 900);
+      maxDelay    = Math.max(maxDelay, delay);
       var baseOp  = parseFloat(s.dataset.baseOpacity) || 0.82;
       setTimeout(function() {
         if (!s.classList.contains('wc-dimmed')) {
@@ -30015,6 +30119,10 @@ function _wcRenderStars(words) {
         }
       }, delay);
     });
+    // Start drift after bloom completes (nebula mode only)
+    if (_wcViewMode === 'nebula') {
+      setTimeout(_wcStartDrift, maxDelay + 400);
+    }
   });
 }
 
@@ -30204,6 +30312,10 @@ function _wcRenderMobileGrid(words) {
 <div class="wc-overlay" id="wcOverlay" style="display:none" role="dialog" aria-modal="true" aria-label="Word Map">
   <div class="wc-header" id="wcHeader">
     <div class="wc-filter-row" id="wcFilterRow"></div>
+    <div class="wc-view-row" id="wcViewRow">
+      <button class="wc-view-btn active" id="wcViewFree"   onclick="_wcSetView('free')"   title="Scattered layout">✦ Free</button>
+      <button class="wc-view-btn"        id="wcViewNebula" onclick="_wcSetView('nebula')" title="Category clusters with drift">⬡ Nebula</button>
+    </div>
     <div class="wc-header-right">
       <button class="wc-list-btn" onclick="_switchToVocabList()" title="Switch to list">⊞ List</button>
       <button class="wc-close-btn" onclick="_closeConstellationView()" aria-label="Close">✕</button>
@@ -30240,6 +30352,16 @@ function _wcRenderMobileGrid(words) {
   flex-shrink: 0; gap: 12px;
 }
 .wc-filter-row { display: flex; flex-wrap: wrap; gap: 6px; flex: 1; }
+.wc-view-row { display: flex; gap: 4px; padding: 6px 16px 8px; flex-shrink: 0; }
+.wc-view-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.55rem; letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 4px 11px; border: 0.5px solid var(--border); border-radius: 20px;
+  background: none; color: var(--muted); cursor: pointer; min-height: 26px;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+.wc-view-btn:hover { color: var(--accent); border-color: var(--accent); }
+.wc-view-btn.active { color: var(--accent); border-color: var(--accent); background: rgba(232,213,163,0.07); }
 .wc-filter-pill {
   font-family: 'DM Mono', monospace;
   font-size: 0.58rem; letter-spacing: 0.07em; text-transform: uppercase;
