@@ -2480,6 +2480,10 @@
     flex-shrink: 0;
     border-bottom: 0.5px solid var(--border);
     min-height: 0;
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
   }
   .lexi-action-primary {
     font-family: 'DM Mono', monospace;
@@ -2508,7 +2512,6 @@
     padding: 9px 18px;
     cursor: pointer;
     min-height: 36px;
-    width: 100%;
     transition: color 0.15s, border-color 0.15s;
   }
   .lexi-action-secondary:hover { color: var(--accent); border-color: var(--accent); }
@@ -29162,14 +29165,15 @@ var GV_CATS = ['All', 'Small Talk', 'Smartypants', 'Business', 'Science', 'Mind 
 // ── Build / cache the global index ──────────────────────────
 function _buildGlobalVocabIndex() {
   if (!EPISODE_META) return [];
-  var keys = Object.keys(EPISODE_META);
+  var episodes = EPISODE_META.episodes || {};
+  var keys = Object.keys(episodes);
   // Invalidate cache if episode list has grown
   if (_globalVocabCache && keys.length === _globalVocabCacheLen) return _globalVocabCache;
 
   var seen = {};
   var result = [];
   keys.forEach(function(k) {
-    var ep = EPISODE_META[k];
+    var ep = episodes[k];
     if (!ep || !Array.isArray(ep.vocab_vault)) return;
     var colId = ep.collection_id != null ? ep.collection_id : null;
     ep.vocab_vault.forEach(function(v) {
