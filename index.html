@@ -1586,6 +1586,95 @@
     .ep-drawer-vocab-panel { display: none !important; } /* mobile uses the bottom sheet instead */
   }
 
+  /* ── VOCAB VIEW — replaces card grid in drawer body ─────────────────────── */
+  .ep-drawer-vocab-view {
+    display: none;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+    min-height: 0;
+  }
+  .ep-drawer-vocab-view.vv-entering {
+    display: flex;
+    animation: vvSlideIn 0.32s cubic-bezier(0.32, 0.72, 0, 1) both;
+  }
+  .ep-drawer-vocab-view.vv-open { display: flex; }
+  @keyframes vvSlideIn {
+    from { opacity: 0; transform: translateY(22px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  /* Cards exit animation */
+  .ep-drawer-body.vv-cards-exit,
+  .ep-drawer-filter-row.vv-filter-exit {
+    animation: vvFadeOut 0.18s ease forwards;
+    pointer-events: none;
+  }
+  @keyframes vvFadeOut {
+    from { opacity: 1; transform: translateY(0); }
+    to   { opacity: 0; transform: translateY(-10px); }
+  }
+  /* Cards re-enter animation */
+  .ep-drawer-body.vv-cards-enter {
+    animation: vvFadeIn 0.24s ease both;
+  }
+  @keyframes vvFadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  /* Back bar */
+  .vv-back-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 20px 8px;
+    border-bottom: 0.5px solid var(--border);
+    flex-shrink: 0;
+  }
+  .vv-back-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    background: none;
+    border: 0.5px solid var(--border);
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: color 0.18s, border-color 0.18s;
+  }
+  .vv-back-btn:hover { color: var(--text); border-color: var(--border-hover); }
+  .vv-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted2);
+  }
+  /* Scrollable content area */
+  .vv-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 14px 20px 20px;
+    min-height: 0;
+  }
+  /* Staggered word row entrance */
+  .vv-word-row {
+    opacity: 0;
+    animation: vvRowIn 0.22s ease forwards;
+  }
+  @keyframes vvRowIn {
+    from { opacity: 0; transform: translateY(7px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  /* Grid inside vocab view — full width, more columns */
+  .vv-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 8px;
+  }
+  @media (max-width: 900px) { .vv-grid { grid-template-columns: repeat(2, 1fr); } }
+
   /* ── VOCAB / LEXI CATEGORY PILL ROW (v2.47) ── */
   .vocab-cat-pill-row {
     display: flex;
@@ -2215,7 +2304,20 @@
     transition: background 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.2s;
     box-shadow: 2px 0 12px rgba(0,0,0,0.18);
   }
-  .vocab-pull-tab.visible { display: flex; }
+  .vocab-pull-tab.visible {
+    display: flex;
+    animation: vocabTabEntrance 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+  @keyframes vocabTabEntrance {
+    0%   { opacity: 0; transform: translateX(-14px) scaleY(0.7); }
+    60%  { opacity: 1; transform: translateX(3px) scaleY(1.04); }
+    80%  { transform: translateX(-1px) scaleY(0.98); }
+    100% { opacity: 1; transform: translateX(0) scaleY(1); }
+  }
+  /* Lexi tab slides up smoothly when Vocab appears below it */
+  .left-tabs-group {
+    transition: gap 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+  }
   .vocab-pull-tab:hover {
     background: var(--surface2);
     border-color: rgba(232,213,163,0.25);
@@ -2237,7 +2339,6 @@
     font-size: 1rem;
     color: var(--accent);
     line-height: 1;
-    font-style: normal; /* emoji ignores italic */
   }
   .lexi-pull-tab-text {
     font-family: 'DM Mono', monospace;
@@ -10333,7 +10434,7 @@
 <div class="left-tabs-group">
   <button class="lexi-pull-tab" id="lexiPullTab" onclick="openLexiconPanel();playNavSFX()" aria-label="Open Lexi — your word bank">
     <span class="lexi-pull-tab-label">
-      <span class="lexi-pull-tab-aa">📝</span>
+      <span class="lexi-pull-tab-aa">ℒ</span>
       <span class="lexi-pull-tab-text">Lexi</span>
     </span>
     <span class="lexi-pull-tab-badge" id="lexiPullBadge" style="display:none">0</span>
@@ -10558,6 +10659,7 @@
     <div class="ep-drawer-all-grid" id="epDrawerAllGrid"></div>
     <div class="ep-drawer-grid" id="epDrawerGrid"></div>
   </div>
+  <div class="ep-drawer-vocab-view" id="epDrawerVocabView"></div>
 </div>
 
 <!-- THEME DRAWER — v1.77, reuses ep-drawer CSS classes -->
@@ -10589,6 +10691,7 @@
     <div class="ep-drawer-all-grid" id="themeDrawerAllGrid"></div>
     <div class="ep-drawer-grid" id="themeDrawerGrid"></div>
   </div>
+  <div class="ep-drawer-vocab-view" id="themeDrawerVocabView"></div>
 </div>
 
 <!-- NEWSLETTER CAPTURE -->
@@ -11784,6 +11887,15 @@ function _renderIntelRow(pillsEl, collectionId, liveDna) {
     const drawerPrefix = pillsEl.id === 'epDrawerPills' ? 'ep' : 'theme';
     const vocabPanel = document.getElementById(drawerPrefix + 'DrawerVocabPanel');
     if (vocabPanel) { vocabPanel.classList.remove('open'); vocabPanel.innerHTML = ''; }
+    // Reset any open vocab view when new episode opens
+    _resetDrawerVocabView(drawerPrefix);
+
+    // Expose vocab state for vocab view + pull tab
+    if (vocab && drawerPrefix === 'ep') {
+      _vvCurrentList   = vocab;
+      _vvCurrentColId  = collectionId;
+      _vvCurrentPrefix = 'ep';
+    }
 
     var _lexVocabShimmerIdx = 0;
     function buildVocabCell(v) {
@@ -11833,6 +11945,9 @@ function _renderIntelRow(pillsEl, collectionId, liveDna) {
       row.appendChild(def);
       return row;
     }
+
+    // Expose buildVocabCell for the global vocab view (set after function is defined below)
+    if (vocab && drawerPrefix === 'ep') _vvBuildCell = buildVocabCell;
 
     // v2.21: panelMode=true builds the inline drawer-panel grid (full drawer
     // width, auto-fill columns via CSS — see .ep-intel-vocab-grid.panel-grid)
@@ -12111,7 +12226,7 @@ function _renderIntelRow(pillsEl, collectionId, liveDna) {
         moreBtn.addEventListener('click', function(e) {
           e.stopPropagation();
           popover.classList.remove('visible');
-          openVocabPanel(vocab);
+          _openDrawerVocabView(vocab, collectionId, drawerPrefix, buildVocabCell);
           track('vocab_expanded');
         });
         grid.appendChild(moreBtn);
@@ -12150,11 +12265,11 @@ function _renderIntelRow(pillsEl, collectionId, liveDna) {
       pill.addEventListener('mouseleave', scheduleVocabHide);
       popover.addEventListener('mouseenter', function() { clearTimeout(_hideTimer); });
       popover.addEventListener('mouseleave', scheduleVocabHide);
-      // Pill click → open full vocab panel directly
+      // Pill click → open full vocab view in drawer body
       pill.addEventListener('click', function(e) {
         e.stopPropagation();
         popover.classList.remove('visible');
-        openVocabPanel(vocab);
+        _openDrawerVocabView(vocab, collectionId, drawerPrefix, buildVocabCell);
         track('vocab_expanded');
       });
     })();
@@ -12535,8 +12650,8 @@ function _renderIntelRow(pillsEl, collectionId, liveDna) {
       }
     });
 
-    // Update vocab pull tab visibility (desktop only — ep drawer only)
-    if (pillsEl.id === 'epDrawerPills') setTimeout(_updateVocabPullTab, 50);
+    // Update vocab pull tab visibility — delay until drawer slide-up animation finishes (350ms)
+    if (pillsEl.id === 'epDrawerPills') setTimeout(_updateVocabPullTab, 420);
   });
 }
 // ── END EPISODE INTEL ─────────────────────────────────────────────────────
@@ -13826,6 +13941,8 @@ function closeEpisodeDrawer() {
   // body sections still display:none — so nothing heavy happens this frame.
   document.getElementById('epBackdrop').classList.remove('open');
   document.getElementById('epDrawer').classList.remove('open');
+  _resetDrawerVocabView('ep');
+  _vvCurrentList = null; _vvBuildCell = null;
   _updateVocabPullTab();
 
   // Reset any open-card state inside the drawer (cheap — drawer DOM only)
@@ -26950,6 +27067,139 @@ function _lexiFlyParticle(fromEl) {
   });
 }
 
+// ── Vocab view — full body replacement for drawer card grid ─────────────────
+// Module-level vocab state (set by _renderIntelRow when ep drawer opens)
+var _vvCurrentList = null;
+var _vvCurrentColId = null;
+var _vvCurrentPrefix = 'ep';
+var _vvBuildCell = null; // reference to buildVocabCell closure of current episode
+
+function _openDrawerVocabView(list, colId, prefix, buildCellFn) {
+  prefix = prefix || 'ep';
+  var drawerEl   = document.getElementById(prefix + 'Drawer');
+  if (!drawerEl) return;
+  var bodyEl     = drawerEl.querySelector('.ep-drawer-body');
+  var filterRow  = drawerEl.querySelector('.ep-drawer-filter-row');
+  var vocabView  = document.getElementById(prefix + 'DrawerVocabView');
+  if (!bodyEl || !vocabView) return;
+
+  // ── Build vocab view content ──────────────────────────────────
+  vocabView.innerHTML = '';
+
+  // Back bar
+  var backBar = document.createElement('div');
+  backBar.className = 'vv-back-bar';
+  var backBtn = document.createElement('button');
+  backBtn.className = 'vv-back-btn';
+  backBtn.textContent = '← Cards';
+  backBtn.addEventListener('click', function() { _closeDrawerVocabView(prefix); });
+  var titleEl = document.createElement('span');
+  titleEl.className = 'vv-title';
+  titleEl.textContent = 'Vocab · ' + list.length + ' words';
+  backBar.appendChild(backBtn);
+  backBar.appendChild(titleEl);
+  vocabView.appendChild(backBar);
+
+  // Scrollable content
+  var content = document.createElement('div');
+  content.className = 'vv-content';
+  vocabView.appendChild(content);
+
+  // Category filter pills (reuse existing buildVocabCatPills pattern)
+  var CATS = ['All','Small Talk','Smartypants','Business','Science','Mind & People'];
+  var catRow = document.createElement('div');
+  catRow.className = 'vocab-cat-pill-row';
+  var counts = {};
+  list.forEach(function(w) { if (w.category) counts[w.category] = (counts[w.category] || 0) + 1; });
+  var activeVVCat = 'All';
+
+  function renderVVGrid() {
+    var old = content.querySelector('.vv-grid');
+    if (old) old.remove();
+    var filtered = activeVVCat === 'All' ? list : list.filter(function(w) { return w.category === activeVVCat; });
+    var grid = document.createElement('div');
+    grid.className = 'vv-grid';
+    filtered.forEach(function(v, i) {
+      var row = buildCellFn ? buildCellFn(v) : null;
+      if (!row) return;
+      row.classList.add('vv-word-row');
+      row.style.animationDelay = Math.min(i * 16, 280) + 'ms';
+      grid.appendChild(row);
+    });
+    content.appendChild(grid);
+  }
+
+  CATS.forEach(function(cat) {
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'vocab-cat-pill' + (cat === 'All' ? ' active' : '');
+    var cnt = cat === 'All' ? list.length : (counts[cat] || 0);
+    btn.textContent = cat === 'All' ? 'All · ' + list.length : (cnt > 0 ? cat + ' · ' + cnt : cat);
+    if (cat !== 'All' && cnt === 0) btn.setAttribute('data-empty', '1');
+    btn.addEventListener('click', function() {
+      if (activeVVCat === cat) return;
+      activeVVCat = cat;
+      catRow.querySelectorAll('.vocab-cat-pill').forEach(function(p) { p.classList.remove('active'); });
+      btn.classList.add('active');
+      renderVVGrid();
+    });
+    catRow.appendChild(btn);
+  });
+  content.appendChild(catRow);
+  renderVVGrid();
+
+  // ── Animate: cards exit → vocab enter ─────────────────────────
+  bodyEl.classList.add('vv-cards-exit');
+  if (filterRow) filterRow.classList.add('vv-filter-exit');
+
+  setTimeout(function() {
+    bodyEl.style.display = 'none';
+    bodyEl.classList.remove('vv-cards-exit');
+    if (filterRow) { filterRow.style.display = 'none'; filterRow.classList.remove('vv-filter-exit'); }
+    vocabView.classList.add('vv-entering');
+    setTimeout(function() {
+      vocabView.classList.remove('vv-entering');
+      vocabView.classList.add('vv-open');
+    }, 320);
+  }, 180);
+}
+
+function _closeDrawerVocabView(prefix) {
+  prefix = prefix || 'ep';
+  var drawerEl  = document.getElementById(prefix + 'Drawer');
+  if (!drawerEl) return;
+  var bodyEl    = drawerEl.querySelector('.ep-drawer-body');
+  var filterRow = drawerEl.querySelector('.ep-drawer-filter-row');
+  var vocabView = document.getElementById(prefix + 'DrawerVocabView');
+  if (!bodyEl || !vocabView) return;
+
+  // Fade vocab view out
+  vocabView.style.animation = 'vvFadeOut 0.18s ease forwards';
+  setTimeout(function() {
+    vocabView.style.animation = '';
+    vocabView.classList.remove('vv-open');
+    vocabView.style.display = 'none';
+    vocabView.innerHTML = '';
+    // Restore filter row + body with enter animation
+    if (filterRow) { filterRow.style.display = ''; }
+    bodyEl.style.display = '';
+    bodyEl.classList.add('vv-cards-enter');
+    setTimeout(function() { bodyEl.classList.remove('vv-cards-enter'); }, 260);
+  }, 180);
+}
+
+function _resetDrawerVocabView(prefix) {
+  prefix = prefix || 'ep';
+  var drawerEl  = document.getElementById(prefix + 'Drawer');
+  if (!drawerEl) return;
+  var bodyEl    = drawerEl.querySelector('.ep-drawer-body');
+  var filterRow = drawerEl.querySelector('.ep-drawer-filter-row');
+  var vocabView = document.getElementById(prefix + 'DrawerVocabView');
+  if (vocabView) { vocabView.style.animation = ''; vocabView.classList.remove('vv-open', 'vv-entering'); vocabView.style.display = 'none'; vocabView.innerHTML = ''; }
+  if (bodyEl)    { bodyEl.style.display = ''; bodyEl.classList.remove('vv-cards-exit', 'vv-cards-enter'); }
+  if (filterRow) { filterRow.style.display = ''; filterRow.classList.remove('vv-filter-exit'); }
+}
+
 // ── Vocab pull tab — show/hide based on open episode drawer ────
 function _updateVocabPullTab() {
   var tab = document.getElementById('vocabPullTab');
@@ -26969,20 +27219,8 @@ function _updateVocabPullTab() {
 }
 
 function openDrawerVocabTab() {
-  // Find and click the Vocab pill in the open episode drawer
-  var pills = document.querySelectorAll('#epDrawerPills .ep-intel-pill');
-  for (var i = 0; i < pills.length; i++) {
-    if (pills[i].textContent.trim() === 'Vocab' && !pills[i].hasAttribute('data-empty')) {
-      pills[i].click();
-      // Scroll the vocab panel into view
-      setTimeout(function() {
-        var panel = document.getElementById('epDrawerVocabPanel');
-        if (panel && panel.classList.contains('open')) {
-          panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      }, 80);
-      return;
-    }
+  if (_vvCurrentList && _vvBuildCell) {
+    _openDrawerVocabView(_vvCurrentList, _vvCurrentColId, _vvCurrentPrefix, _vvBuildCell);
   }
 }
 
