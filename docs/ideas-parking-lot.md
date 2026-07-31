@@ -8,6 +8,15 @@
 
 ## Deferred ideas
 
+### Next.js migration
+**What it is:** Migrating epistemic.live from a vanilla HTML/JS SPA to Next.js for server-side rendering (SSR), which would solve the SEO crawlability problem natively — every page would be pre-rendered HTML, no static build step needed.
+
+**Why deferred:** Significant migration effort (full rewrite), adds framework complexity, and the static page generation approach (see `docs/seo-session-plan.md`) solves the same SEO problem with far less risk. Next.js is the right call if the site grows significantly in complexity or if the static build approach becomes unmanageable at scale.
+
+**Estimated effort:** Large. Full framework migration, new deployment config, likely 1–2 weeks.
+
+---
+
 ### `related_episode_ids` — cross-episode thematic links
 **What it is:** An array of episode IDs that share strong thematic overlap with a given episode. Stored in `episode_meta.json` per episode.
 
