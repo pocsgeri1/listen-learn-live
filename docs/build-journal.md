@@ -6,6 +6,16 @@
 
 ---
 
+## 2026-08-03 — SEO static pages session (v2.68–v2.70)
+
+**Large file diffs block GitHub Desktop push button.** When committing 700+ files (e.g. all static concept pages), GitHub Desktop shows "diff too large" and hides the Push button. Fix: use `git push origin main` from Terminal directly — nothing is broken, it's purely a display limit.
+
+**Pre-push hook can't be written by Claude's sandbox** — `.git/hooks/` is a protected path. Solution: write a `tools/setup-hooks.sh` installer script that the user runs once from Terminal. Document this as a **[ACTION]** in the session summary.
+
+**Deep-link `#open=ID` was null because `duplicate_of` concepts aren't rendered.** `buildGrid()` filters `!c.duplicate_of`, so cards for those concepts never appear in the DOM. Fix: look up concept in `CONCEPTS` array first, skip if `duplicate_of`, call `setCat(concept.category)` to rebuild grid for just that category, then find and open the card.
+
+**`concepts-backup.json` and test files must be in `.gitignore`** — SEO working files created during the redirect-helper session showed up as untracked in GitHub Desktop. Added `tools/concepts-backup.json` and `concepts-test.json` to `.gitignore` immediately.
+
 ## Standing Rules — Cowork Workflow
 
 ### Before every session (Gergely does this)
