@@ -6,6 +6,13 @@
 
 ---
 
+## v2.70 — 2026-08-03 · SEO redirect helper
+
+### tools/update-seo-redirects.js (new)
+- **Rename detector:** Diffs an old `concepts.json` backup against current, finds any concepts where the term (and therefore URL slug) changed, writes 301 redirect entries directly into `vercel.json`.
+- **Workflow:** Before any rewrite session that may rename terms: `cp concepts.json tools/concepts-backup.json`. After session: `node tools/update-seo-redirects.js tools/concepts-backup.json`. Commit `vercel.json` + `concepts.json` together.
+- **Handles:** Duplicate detection (skips already-present redirects), removed concepts (warns but doesn't auto-redirect — manual review), slug-only renames (e.g. capitalisation changes that don't affect slug are silently skipped).
+
 ## v2.69 — 2026-08-03 · SEO Session 3 — 14 category hub pages + deep-link fix
 
 ### tools/generate-static-pages.js
