@@ -2,7 +2,9 @@
   "generated_from": "concepts.json (715 total concepts, scanned 2026-08-03)",
   "excludes_done_ids": [
     23,
+    93,
     110,
+    121,
     161,
     168,
     177,
@@ -13,14 +15,21 @@
     182,
     184,
     185,
+    188,
     190,
     192,
+    193,
     194,
     196,
     201,
+    205,
     207,
     210,
+    211,
     212,
+    216,
+    218,
+    220,
     222,
     223,
     224,
@@ -33,6 +42,7 @@
     280,
     281,
     284,
+    285,
     292,
     307,
     310,
@@ -95,130 +105,6 @@
   "excludes_in_flight_ids": [],
   "sort": "length_score desc, then em_dash desc",
   "candidates": [
-    {
-      "id": 93,
-      "term": "Luck Surface Area",
-      "length_score": 8.4,
-      "em_dash": 0,
-      "hw": 9,
-      "pw": 32,
-      "aw": 34,
-      "flags": [
-        "analogy 34w"
-      ]
-    },
-    {
-      "id": 121,
-      "term": "First Mover Edge",
-      "length_score": 8.4,
-      "em_dash": 0,
-      "hw": 11,
-      "pw": 25,
-      "aw": 34,
-      "flags": [
-        "analogy 34w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 188,
-      "term": "Entrepreneurial Pyramid",
-      "length_score": 8.4,
-      "em_dash": 0,
-      "hw": 10,
-      "pw": 51,
-      "aw": 34,
-      "flags": [
-        "analogy 34w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 193,
-      "term": "Geography Arbitrage",
-      "length_score": 8.4,
-      "em_dash": 0,
-      "hw": 12,
-      "pw": 55,
-      "aw": 34,
-      "flags": [
-        "analogy 34w"
-      ]
-    },
-    {
-      "id": 205,
-      "term": "Space Holding",
-      "length_score": 8.4,
-      "em_dash": 0,
-      "hw": 11,
-      "pw": 38,
-      "aw": 34,
-      "flags": [
-        "analogy 34w"
-      ]
-    },
-    {
-      "id": 211,
-      "term": "Your Emotions Aren't Too Big for Me",
-      "length_score": 8.4,
-      "em_dash": 0,
-      "hw": 12,
-      "pw": 42,
-      "aw": 34,
-      "flags": [
-        "analogy 34w"
-      ]
-    },
-    {
-      "id": 216,
-      "term": "Labeling the Difficult Conversation",
-      "length_score": 8.4,
-      "em_dash": 0,
-      "hw": 9,
-      "pw": 38,
-      "aw": 34,
-      "flags": [
-        "analogy 34w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 218,
-      "term": "Tell Me What I'm Missing",
-      "length_score": 8.4,
-      "em_dash": 0,
-      "hw": 9,
-      "pw": 33,
-      "aw": 34,
-      "flags": [
-        "analogy 34w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 220,
-      "term": "Hidden Metrics",
-      "length_score": 8.4,
-      "em_dash": 0,
-      "hw": 12,
-      "pw": 44,
-      "aw": 34,
-      "flags": [
-        "analogy 34w"
-      ]
-    },
-    {
-      "id": 285,
-      "term": "Loyalty Tax",
-      "length_score": 8.4,
-      "em_dash": 0,
-      "hw": 11,
-      "pw": 49,
-      "aw": 34,
-      "flags": [
-        "analogy 34w"
-      ]
-    },
     {
       "id": 298,
       "term": "Pick Me Policing",
@@ -1368,6 +1254,136 @@
       "flags": [
         "hook 15w",
         "analogy 29w"
+      ]
+    },
+    {
+      "id": 400,
+      "term": "Only Envy Invisible Sacrifices",
+      "length_score": 6,
+      "em_dash": 2,
+      "hw": 9,
+      "pw": 43,
+      "aw": 30,
+      "flags": [
+        "em-dash x2",
+        "analogy 30w"
+      ]
+    },
+    {
+      "id": 128,
+      "term": "Digital Leverage",
+      "length_score": 6,
+      "em_dash": 1,
+      "hw": 12,
+      "pw": 24,
+      "aw": 30,
+      "flags": [
+        "em-dash x1",
+        "analogy 30w"
+      ]
+    },
+    {
+      "id": 236,
+      "term": "Wound-Sharing Economy",
+      "length_score": 6,
+      "em_dash": 1,
+      "hw": 10,
+      "pw": 42,
+      "aw": 30,
+      "flags": [
+        "em-dash x1",
+        "analogy 30w"
+      ]
+    },
+    {
+      "id": 262,
+      "term": "Technology Diffusion",
+      "length_score": 6,
+      "em_dash": 1,
+      "hw": 11,
+      "pw": 50,
+      "aw": 30,
+      "flags": [
+        "em-dash x1",
+        "analogy 30w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 534,
+      "term": "Survivorship Bias",
+      "length_score": 6,
+      "em_dash": 1,
+      "hw": 9,
+      "pw": 32,
+      "aw": 30,
+      "flags": [
+        "em-dash x1",
+        "analogy 30w"
+      ]
+    },
+    {
+      "id": 539,
+      "term": "Falsifiability",
+      "length_score": 6,
+      "em_dash": 1,
+      "hw": 11,
+      "pw": 37,
+      "aw": 30,
+      "flags": [
+        "em-dash x1",
+        "analogy 30w"
+      ]
+    },
+    {
+      "id": 554,
+      "term": "The Curse of Knowledge",
+      "length_score": 6,
+      "em_dash": 1,
+      "hw": 9,
+      "pw": 34,
+      "aw": 30,
+      "flags": [
+        "em-dash x1",
+        "analogy 30w"
+      ]
+    },
+    {
+      "id": 567,
+      "term": "Fixed vs Variable Costs",
+      "length_score": 6,
+      "em_dash": 1,
+      "hw": 9,
+      "pw": 38,
+      "aw": 30,
+      "flags": [
+        "em-dash x1",
+        "analogy 30w",
+        "term/hook overlap: fixed, costs"
+      ]
+    },
+    {
+      "id": 109,
+      "term": "The Body Keeps the Score",
+      "length_score": 6,
+      "em_dash": 0,
+      "hw": 9,
+      "pw": 29,
+      "aw": 30,
+      "flags": [
+        "analogy 30w"
+      ]
+    },
+    {
+      "id": 135,
+      "term": "Build From Genuine Curiosity",
+      "length_score": 6,
+      "em_dash": 0,
+      "hw": 8,
+      "pw": 26,
+      "aw": 30,
+      "flags": [
+        "analogy 30w"
       ]
     }
   ]

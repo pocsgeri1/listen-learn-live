@@ -2,66 +2,6 @@
   "_note": "Rolling log of the last 50 approved concepts' analogy openers and core images, for the cross-batch repetition check in autonomous-batch-mode.md. Trim to last 50 as new entries are appended.",
   "log": [
     {
-      "id": 212,
-      "batch": 5,
-      "opener": "Dad slammed doors",
-      "image": "dad slamming doors, mom's silent treatment, inherited shutdown"
-    },
-    {
-      "id": 223,
-      "batch": 5,
-      "opener": "Your partner mentions",
-      "image": "partner mentions dinner plans, inexplicable upset named out loud"
-    },
-    {
-      "id": 284,
-      "batch": 6,
-      "opener": "Everyone at",
-      "image": "poker table, everyone inventing new hands to beat yours"
-    },
-    {
-      "id": 311,
-      "batch": 6,
-      "opener": "A pirate ship",
-      "image": "pirate ship, 65 crew as Assistant Vice Captains of Morale"
-    },
-    {
-      "id": 467,
-      "batch": 6,
-      "opener": "A CEO doesn't",
-      "image": "CEO who just hates sleeping past their alarm"
-    },
-    {
-      "id": 472,
-      "batch": 6,
-      "opener": "One writer quits",
-      "image": "writer quits after 10 flops vs. tests 30 headlines"
-    },
-    {
-      "id": 604,
-      "batch": 6,
-      "opener": "A local landscaper",
-      "image": "landscaper on Facebook ads vs. Unilever on Super Bowl ads"
-    },
-    {
-      "id": 618,
-      "batch": 6,
-      "opener": "One creative sits",
-      "image": "creative in strategy decks vs. a day on the shop floor"
-    },
-    {
-      "id": 385,
-      "batch": 6,
-      "opener": "You tell her",
-      "image": "claiming to love hiking you actually hate, to seem compatible"
-    },
-    {
-      "id": 635,
-      "batch": 6,
-      "opener": "You order the",
-      "image": "oat-milk latte ordered right after a friend ordered one"
-    },
-    {
       "id": 229,
       "batch": 6,
       "opener": "Your friend is",
@@ -300,6 +240,66 @@
       "batch": 10,
       "opener": "A new hire",
       "image": "new hire refusing to badmouth rival team, watched before trusted"
+    },
+    {
+      "id": 298,
+      "batch": 11,
+      "opener": "Friends agree to",
+      "image": "friends agree casual party dress code, freeze out person in blazer"
+    },
+    {
+      "id": 382,
+      "batch": 11,
+      "opener": "A mediocre guitarist",
+      "image": "mediocre guitarist sounds passable with AI, virtuoso loses unique edge"
+    },
+    {
+      "id": 629,
+      "batch": 11,
+      "opener": "A car seat",
+      "image": "car seat inflating around corners, test pilot feeling"
+    },
+    {
+      "id": 637,
+      "batch": 11,
+      "opener": "Solving a client's",
+      "image": "consultant solves in 15 minutes, junior takes 3 days, hourly earns less"
+    },
+    {
+      "id": 162,
+      "batch": 11,
+      "opener": "You see the",
+      "image": "rockets and fortune visible, mind that never stops hidden"
+    },
+    {
+      "id": 239,
+      "batch": 11,
+      "opener": "A startup wouldn't",
+      "image": "startup skips messy unpredictable no-exit projects, treating own life as pitch deck"
+    },
+    {
+      "id": 241,
+      "batch": 11,
+      "opener": "Spending years in",
+      "image": "flight simulator with restart button, then real keys at real runway"
+    },
+    {
+      "id": 228,
+      "batch": 11,
+      "opener": "A photographer with",
+      "image": "photographer unlimited shots vs single roll of film, constraint forces seeing"
+    },
+    {
+      "id": 565,
+      "batch": 11,
+      "opener": "Low-fuel flying means",
+      "image": "low-fuel plane watching two gauges: drop rate and distance remaining"
+    },
+    {
+      "id": 26,
+      "batch": 11,
+      "opener": "A fitness influencer",
+      "image": "influencer selling diet plan he skips vs coach who eats what she prescribes"
     }
   ]
 }
