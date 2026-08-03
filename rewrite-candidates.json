@@ -6,6 +6,8 @@
     93,
     110,
     121,
+    122,
+    123,
     161,
     162,
     168,
@@ -17,11 +19,13 @@
     182,
     184,
     185,
+    186,
     188,
     190,
     192,
     193,
     194,
+    195,
     196,
     201,
     205,
@@ -40,6 +44,7 @@
     227,
     228,
     229,
+    230,
     239,
     240,
     241,
@@ -49,6 +54,8 @@
     284,
     285,
     292,
+    293,
+    297,
     298,
     307,
     310,
@@ -56,7 +63,9 @@
     314,
     315,
     317,
+    318,
     319,
+    324,
     328,
     330,
     334,
@@ -65,6 +74,7 @@
     337,
     338,
     339,
+    367,
     377,
     381,
     382,
@@ -115,134 +125,6 @@
   "excludes_in_flight_ids": [],
   "sort": "length_score desc, then em_dash desc",
   "candidates": [
-    {
-      "id": 122,
-      "term": "The Long Game",
-      "length_score": 7.8,
-      "em_dash": 0,
-      "hw": 7,
-      "pw": 27,
-      "aw": 33,
-      "flags": [
-        "analogy 33w"
-      ]
-    },
-    {
-      "id": 123,
-      "term": "Earned Confidence",
-      "length_score": 7.8,
-      "em_dash": 0,
-      "hw": 11,
-      "pw": 21,
-      "aw": 33,
-      "flags": [
-        "analogy 33w",
-        "hook 2 sentences (must be 1)",
-        "term/hook overlap: earned, confidence"
-      ]
-    },
-    {
-      "id": 186,
-      "term": "Bell Curve Vs. Power Law",
-      "length_score": 7.8,
-      "em_dash": 0,
-      "hw": 10,
-      "pw": 46,
-      "aw": 33,
-      "flags": [
-        "analogy 33w",
-        "hook 2 sentences (must be 1)",
-        "term/hook overlap: bell, power"
-      ]
-    },
-    {
-      "id": 195,
-      "term": "Lifestyle Boutique",
-      "length_score": 7.8,
-      "em_dash": 0,
-      "hw": 12,
-      "pw": 54,
-      "aw": 33,
-      "flags": [
-        "analogy 33w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 230,
-      "term": "One Conversation Isn't Enough",
-      "length_score": 7.8,
-      "em_dash": 0,
-      "hw": 11,
-      "pw": 41,
-      "aw": 33,
-      "flags": [
-        "analogy 33w"
-      ]
-    },
-    {
-      "id": 293,
-      "term": "Adaptation Executor",
-      "length_score": 7.8,
-      "em_dash": 0,
-      "hw": 8,
-      "pw": 48,
-      "aw": 33,
-      "flags": [
-        "analogy 33w"
-      ]
-    },
-    {
-      "id": 297,
-      "term": "Coalitional Value",
-      "length_score": 7.8,
-      "em_dash": 0,
-      "hw": 12,
-      "pw": 51,
-      "aw": 33,
-      "flags": [
-        "analogy 33w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 318,
-      "term": "Infinite $0 Labor",
-      "length_score": 7.8,
-      "em_dash": 0,
-      "hw": 11,
-      "pw": 42,
-      "aw": 33,
-      "flags": [
-        "analogy 33w"
-      ]
-    },
-    {
-      "id": 324,
-      "term": "Intellectual Necessity Threshold",
-      "length_score": 7.8,
-      "em_dash": 0,
-      "hw": 11,
-      "pw": 42,
-      "aw": 33,
-      "flags": [
-        "analogy 33w",
-        "hook 2 sentences (must be 1)",
-        "plain jargon: cognitive"
-      ]
-    },
-    {
-      "id": 367,
-      "term": "Deliberate Ignorance",
-      "length_score": 7.8,
-      "em_dash": 0,
-      "hw": 9,
-      "pw": 35,
-      "aw": 33,
-      "flags": [
-        "analogy 33w"
-      ]
-    },
     {
       "id": 412,
       "term": "State vs Trait Confidence",
@@ -1391,6 +1273,134 @@
       "flags": [
         "analogy 30w",
         "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 404,
+      "term": "Prestige for Expertise Barter",
+      "length_score": 6,
+      "em_dash": 0,
+      "hw": 8,
+      "pw": 50,
+      "aw": 30,
+      "flags": [
+        "analogy 30w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 407,
+      "term": "Outcome vs Process Satisfaction",
+      "length_score": 6,
+      "em_dash": 0,
+      "hw": 11,
+      "pw": 37,
+      "aw": 30,
+      "flags": [
+        "analogy 30w"
+      ]
+    },
+    {
+      "id": 475,
+      "term": "Pressure Peels You Back",
+      "length_score": 6,
+      "em_dash": 0,
+      "hw": 13,
+      "pw": 48,
+      "aw": 30,
+      "flags": [
+        "analogy 30w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 513,
+      "term": "Value Creator vs Entertainer",
+      "length_score": 6,
+      "em_dash": 0,
+      "hw": 6,
+      "pw": 45,
+      "aw": 30,
+      "flags": [
+        "analogy 30w",
+        "hook 2 sentences (must be 1)",
+        "plain jargon: leverage"
+      ]
+    },
+    {
+      "id": 521,
+      "term": "Quantity Breeds Quality",
+      "length_score": 6,
+      "em_dash": 0,
+      "hw": 10,
+      "pw": 47,
+      "aw": 30,
+      "flags": [
+        "analogy 30w"
+      ]
+    },
+    {
+      "id": 523,
+      "term": "The Curse of the Blank Page",
+      "length_score": 6,
+      "em_dash": 0,
+      "hw": 8,
+      "pw": 34,
+      "aw": 30,
+      "flags": [
+        "analogy 30w"
+      ]
+    },
+    {
+      "id": 583,
+      "term": "Brute Force",
+      "length_score": 6,
+      "em_dash": 0,
+      "hw": 11,
+      "pw": 40,
+      "aw": 30,
+      "flags": [
+        "analogy 30w"
+      ]
+    },
+    {
+      "id": 595,
+      "term": "Every Trend Has a Backlash",
+      "length_score": 6,
+      "em_dash": 0,
+      "hw": 11,
+      "pw": 35,
+      "aw": 30,
+      "flags": [
+        "analogy 30w",
+        "hook 2 sentences (must be 1)",
+        "term/hook overlap: every, has"
+      ]
+    },
+    {
+      "id": 610,
+      "term": "Cluster Copying",
+      "length_score": 6,
+      "em_dash": 0,
+      "hw": 10,
+      "pw": 50,
+      "aw": 30,
+      "flags": [
+        "analogy 30w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 624,
+      "term": "Brand Compounds Like Interest",
+      "length_score": 6,
+      "em_dash": 0,
+      "hw": 10,
+      "pw": 45,
+      "aw": 30,
+      "flags": [
+        "analogy 30w",
+        "term/hook overlap: brand, like"
       ]
     }
   ]

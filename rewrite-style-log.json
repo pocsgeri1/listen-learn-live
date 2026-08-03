@@ -2,66 +2,6 @@
   "_note": "Rolling log of the last 50 approved concepts' analogy openers and core images, for the cross-batch repetition check in autonomous-batch-mode.md. Trim to last 50 as new entries are appended.",
   "log": [
     {
-      "id": 406,
-      "batch": 7,
-      "opener": "Blame your boss",
-      "image": "blaming boss for promotion vs. blaming your own pitch"
-    },
-    {
-      "id": 487,
-      "batch": 7,
-      "opener": "You spend every",
-      "image": "researching a business idea every evening instead of starting it"
-    },
-    {
-      "id": 616,
-      "batch": 8,
-      "opener": "Month-old sourdough",
-      "image": "sourdough starter dormant for days then doubling overnight"
-    },
-    {
-      "id": 627,
-      "batch": 8,
-      "opener": "Gold status expiring",
-      "image": "hotel loyalty status expiring triggering renewals"
-    },
-    {
-      "id": 630,
-      "batch": 8,
-      "opener": "GPS routes you",
-      "image": "GPS routing through an alley that turns out faster"
-    },
-    {
-      "id": 240,
-      "batch": 8,
-      "opener": "At the concert",
-      "image": "concert-goer filming the whole set, leaves with footage but no memory"
-    },
-    {
-      "id": 242,
-      "batch": 8,
-      "opener": "A building inspector",
-      "image": "building inspector who flagged fire risk two years early, no credit"
-    },
-    {
-      "id": 377,
-      "batch": 8,
-      "opener": "A teenager tastes",
-      "image": "teenager tastes street tacos, decides no meal tops it"
-    },
-    {
-      "id": 110,
-      "batch": 8,
-      "opener": "Same gym, but",
-      "image": "same gym plus nutrition plan, coaching, and refund guarantee"
-    },
-    {
-      "id": 292,
-      "batch": 8,
-      "opener": "Some video game",
-      "image": "video game character with +5 charisma, NPCs friendlier, quests easier"
-    },
-    {
       "id": 307,
       "batch": 9,
       "opener": "Hiring a contractor",
@@ -300,6 +240,66 @@
       "batch": 12,
       "opener": "Asking for investment",
       "image": "investment strategy from someone paycheck to paycheck, prescribes saving fifty dollars a month"
+    },
+    {
+      "id": 412,
+      "batch": 13,
+      "opener": "A pilot trained",
+      "image": "pilot trained for turbulence, engine fails in new way, needs something deeper"
+    },
+    {
+      "id": 474,
+      "batch": 13,
+      "opener": "Someone drops 30",
+      "image": "person drops 30 pounds counting down days to eat pizza again, weight returns"
+    },
+    {
+      "id": 488,
+      "batch": 13,
+      "opener": "Someone raised inside",
+      "image": "person raised in strict sect, cannot picture anyone leaving"
+    },
+    {
+      "id": 524,
+      "batch": 13,
+      "opener": "A musician plays",
+      "image": "musician plays cover songs for years, own voice emerges from borrowed parts"
+    },
+    {
+      "id": 527,
+      "batch": 13,
+      "opener": "A songwriter pulls",
+      "image": "songwriter pulls discarded chorus from notebook five years later, becomes hit hook"
+    },
+    {
+      "id": 603,
+      "batch": 13,
+      "opener": "A diner expecting",
+      "image": "diner expecting airport food rates pasta four stars when warm and unsalted"
+    },
+    {
+      "id": 608,
+      "batch": 13,
+      "opener": "A prospector works",
+      "image": "prospector works gold vein every morning, pans new creek one afternoon a week"
+    },
+    {
+      "id": 138,
+      "batch": 13,
+      "opener": "A chef runs",
+      "image": "chef runs pop-up dinner for eight strangers before signing restaurant lease"
+    },
+    {
+      "id": 235,
+      "batch": 13,
+      "opener": "Every confession goes",
+      "image": "all confessions go to paid professional, friend who drove through traffic hears fine thanks"
+    },
+    {
+      "id": 321,
+      "batch": 13,
+      "opener": "Someone announces they're",
+      "image": "someone printing billion counterfeit hundreds, bill in wallet already statistically fake"
     }
   ]
 }
