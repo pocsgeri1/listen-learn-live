@@ -35,6 +35,7 @@
     149,
     154,
     155,
+    159,
     160,
     161,
     162,
@@ -59,14 +60,17 @@
     195,
     196,
     201,
+    203,
     204,
     205,
+    206,
     207,
     208,
     210,
     211,
     212,
     214,
+    215,
     216,
     217,
     218,
@@ -94,10 +98,12 @@
     244,
     245,
     246,
+    248,
     250,
     253,
     254,
     262,
+    265,
     280,
     281,
     282,
@@ -105,9 +111,12 @@
     285,
     292,
     293,
+    294,
+    295,
     296,
     297,
     298,
+    300,
     306,
     307,
     308,
@@ -133,6 +142,7 @@
     338,
     339,
     340,
+    342,
     363,
     366,
     367,
@@ -245,132 +255,6 @@
   "excludes_in_flight_ids": [],
   "sort": "length_score desc, then em_dash desc",
   "candidates": [
-    {
-      "id": 159,
-      "term": "Lindy Effect",
-      "length_score": 5.4,
-      "em_dash": 0,
-      "hw": 11,
-      "pw": 30,
-      "aw": 29,
-      "flags": [
-        "analogy 29w"
-      ]
-    },
-    {
-      "id": 203,
-      "term": "Feelings Don't Care About Facts",
-      "length_score": 5.4,
-      "em_dash": 0,
-      "hw": 13,
-      "pw": 32,
-      "aw": 29,
-      "flags": [
-        "analogy 29w"
-      ]
-    },
-    {
-      "id": 206,
-      "term": "Conversation Within a Conversation",
-      "length_score": 5.4,
-      "em_dash": 0,
-      "hw": 11,
-      "pw": 43,
-      "aw": 29,
-      "flags": [
-        "analogy 29w"
-      ]
-    },
-    {
-      "id": 215,
-      "term": "The No-first Framework",
-      "length_score": 5.4,
-      "em_dash": 0,
-      "hw": 8,
-      "pw": 45,
-      "aw": 29,
-      "flags": [
-        "analogy 29w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 248,
-      "term": "Self-love as Marketing Strategy",
-      "length_score": 5.4,
-      "em_dash": 0,
-      "hw": 11,
-      "pw": 39,
-      "aw": 29,
-      "flags": [
-        "analogy 29w"
-      ]
-    },
-    {
-      "id": 265,
-      "term": "California Wealth Tax",
-      "length_score": 5.4,
-      "em_dash": 0,
-      "hw": 11,
-      "pw": 54,
-      "aw": 29,
-      "flags": [
-        "analogy 29w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 294,
-      "term": "Error Management Theory",
-      "length_score": 5.4,
-      "em_dash": 0,
-      "hw": 10,
-      "pw": 49,
-      "aw": 29,
-      "flags": [
-        "analogy 29w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 295,
-      "term": "Pathologizing Preferences",
-      "length_score": 5.4,
-      "em_dash": 0,
-      "hw": 11,
-      "pw": 40,
-      "aw": 29,
-      "flags": [
-        "analogy 29w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 300,
-      "term": "Supernormal Stimuli",
-      "length_score": 5.4,
-      "em_dash": 0,
-      "hw": 10,
-      "pw": 46,
-      "aw": 29,
-      "flags": [
-        "analogy 29w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 342,
-      "term": "Micro SaaS with Soul",
-      "length_score": 5.4,
-      "em_dash": 0,
-      "hw": 11,
-      "pw": 58,
-      "aw": 27,
-      "flags": [
-        "plain 58w",
-        "analogy 27w"
-      ]
-    },
     {
       "id": 364,
       "term": "Mental Weightlifting",
@@ -1515,6 +1399,139 @@
         "analogy 27w",
         "hook 2 sentences (must be 1)",
         "plain jargon: incremental"
+      ]
+    },
+    {
+      "id": 658,
+      "term": "Leisure ≠ Laziness",
+      "length_score": 4.2,
+      "em_dash": 0,
+      "hw": 9,
+      "pw": 52,
+      "aw": 27,
+      "flags": [
+        "analogy 27w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 550,
+      "term": "Motte and Bailey",
+      "length_score": 4,
+      "em_dash": 2,
+      "hw": 15,
+      "pw": 34,
+      "aw": 25,
+      "flags": [
+        "em-dash x2",
+        "hook 15w",
+        "analogy 25w"
+      ]
+    },
+    {
+      "id": 654,
+      "term": "Specialness vs Happiness",
+      "length_score": 3.8,
+      "em_dash": 0,
+      "hw": 16,
+      "pw": 49,
+      "aw": 23,
+      "flags": [
+        "hook 16w",
+        "analogy 23w"
+      ]
+    },
+    {
+      "id": 711,
+      "term": "Mastering the Middle",
+      "length_score": 3.8,
+      "em_dash": 0,
+      "hw": 12,
+      "pw": 60,
+      "aw": 23,
+      "flags": [
+        "plain 60w",
+        "analogy 23w"
+      ]
+    },
+    {
+      "id": 415,
+      "term": "Meaning as Survival Mechanism",
+      "length_score": 3.6,
+      "em_dash": 3,
+      "hw": 10,
+      "pw": 45,
+      "aw": 26,
+      "flags": [
+        "em-dash x3",
+        "analogy 26w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 416,
+      "term": "Meaning Makes Pain Matter",
+      "length_score": 3.6,
+      "em_dash": 2,
+      "hw": 9,
+      "pw": 41,
+      "aw": 26,
+      "flags": [
+        "em-dash x2",
+        "analogy 26w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 99,
+      "term": "Productive Disagreement",
+      "length_score": 3.6,
+      "em_dash": 1,
+      "hw": 8,
+      "pw": 24,
+      "aw": 26,
+      "flags": [
+        "em-dash x1",
+        "analogy 26w"
+      ]
+    },
+    {
+      "id": 399,
+      "term": "True Equality as Identical Standards",
+      "length_score": 3.6,
+      "em_dash": 1,
+      "hw": 4,
+      "pw": 42,
+      "aw": 26,
+      "flags": [
+        "em-dash x1",
+        "analogy 26w"
+      ]
+    },
+    {
+      "id": 419,
+      "term": "Blue Dot Effect",
+      "length_score": 3.6,
+      "em_dash": 1,
+      "hw": 8,
+      "pw": 45,
+      "aw": 26,
+      "flags": [
+        "em-dash x1",
+        "analogy 26w"
+      ]
+    },
+    {
+      "id": 561,
+      "term": "Dollar-Cost Averaging",
+      "length_score": 3.6,
+      "em_dash": 1,
+      "hw": 10,
+      "pw": 36,
+      "aw": 26,
+      "flags": [
+        "em-dash x1",
+        "analogy 26w"
       ]
     }
   ]

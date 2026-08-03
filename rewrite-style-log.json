@@ -2,36 +2,6 @@
   "_note": "Rolling log of the last 50 approved concepts' analogy openers and core images, for the cross-batch repetition check in autonomous-batch-mode.md. Trim to last 50 as new entries are appended.",
   "log": [
     {
-      "id": 309,
-      "batch": 21,
-      "opener": "Joining the queue",
-      "image": "join queue outside restaurant rather than reading the menu because the crowd already did the vetting"
-    },
-    {
-      "id": 329,
-      "batch": 21,
-      "opener": "Factory closes: retrain",
-      "image": "factory closes retrain for trucks, trucks go driverless retrain for code, code gets automated, ladder runs out"
-    },
-    {
-      "id": 340,
-      "batch": 21,
-      "opener": "Cameras got cheap",
-      "image": "cameras got cheap and instead of fewer photographers billions shot daily and millions earned from it"
-    },
-    {
-      "id": 366,
-      "batch": 21,
-      "opener": "5K runners and",
-      "image": "5K runners and marathon runners both lace up daily; only marathon runner redesigns entire week around sleep food pacing"
-    },
-    {
-      "id": 369,
-      "batch": 21,
-      "opener": "Scales sound identical",
-      "image": "scales sound identical in bedroom and on stage, but only one makes your hands shake"
-    },
-    {
       "id": 404,
       "batch": 22,
       "opener": "Reporter stops the",
@@ -270,6 +240,66 @@
       "batch": 25,
       "opener": "Wine-club software with",
       "image": "wine-club software with weekly Zoom tasting and private forum outcompetes feature-rich app with no human layer"
+    },
+    {
+      "id": 364,
+      "batch": 26,
+      "opener": "A boxer who",
+      "image": "boxer who only shadowboxes never discovers how she reacts to an actual punch"
+    },
+    {
+      "id": 371,
+      "batch": 26,
+      "opener": "A compass magnetized",
+      "image": "compass magnetized by a nearby wire points confidently in the wrong direction on every hike"
+    },
+    {
+      "id": 383,
+      "batch": 26,
+      "opener": "A racing engine",
+      "image": "racing engine dropped into a chassis built for city driving shakes itself apart on the first real track"
+    },
+    {
+      "id": 409,
+      "batch": 26,
+      "opener": "Two people order",
+      "image": "two people order the same dish but eat every meal that week at opposite hours in opposite moods"
+    },
+    {
+      "id": 480,
+      "batch": 26,
+      "opener": "Software written for",
+      "image": "software written for a seven-year-old still running the hardware of a forty-year-old"
+    },
+    {
+      "id": 482,
+      "batch": 26,
+      "opener": "Six months of",
+      "image": "six months of bank statements sitting unopened in a drawer while you wonder why money never stretches"
+    },
+    {
+      "id": 484,
+      "batch": 26,
+      "opener": "A novelist who",
+      "image": "novelist who answers all her emails has a clean inbox and zero new pages"
+    },
+    {
+      "id": 525,
+      "batch": 26,
+      "opener": "A child asks",
+      "image": "child asks why planes cannot have parachutes for the whole aircraft; decades later someone built exactly that"
+    },
+    {
+      "id": 526,
+      "batch": 26,
+      "opener": "A week choosing",
+      "image": "a week choosing the perfect font for a business plan no customer has ever seen"
+    },
+    {
+      "id": 580,
+      "batch": 26,
+      "opener": "A motorway wide",
+      "image": "motorway wide enough for thousands of cars blocked by a toll gate that takes thirty seconds per vehicle"
     }
   ]
 }
