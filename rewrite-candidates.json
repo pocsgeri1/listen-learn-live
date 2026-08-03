@@ -95,14 +95,18 @@
     338,
     339,
     367,
+    376,
     377,
     381,
     382,
     385,
+    390,
+    391,
     396,
     397,
     403,
     406,
+    408,
     411,
     412,
     467,
@@ -112,6 +116,7 @@
     474,
     476,
     477,
+    478,
     483,
     485,
     486,
@@ -121,6 +126,7 @@
     490,
     491,
     516,
+    517,
     518,
     519,
     524,
@@ -128,8 +134,11 @@
     528,
     535,
     565,
+    590,
     592,
     593,
+    594,
+    598,
     599,
     600,
     603,
@@ -142,6 +151,7 @@
     615,
     616,
     618,
+    622,
     623,
     625,
     627,
@@ -155,129 +165,6 @@
   "excludes_in_flight_ids": [],
   "sort": "length_score desc, then em_dash desc",
   "candidates": [
-    {
-      "id": 376,
-      "term": "Goal Gravity",
-      "length_score": 7.2,
-      "em_dash": 0,
-      "hw": 11,
-      "pw": 32,
-      "aw": 32,
-      "flags": [
-        "analogy 32w"
-      ]
-    },
-    {
-      "id": 390,
-      "term": "Victimhood as Entitlement Currency",
-      "length_score": 7.2,
-      "em_dash": 0,
-      "hw": 9,
-      "pw": 41,
-      "aw": 32,
-      "flags": [
-        "analogy 32w"
-      ]
-    },
-    {
-      "id": 391,
-      "term": "Relationship-first Agreement",
-      "length_score": 7.2,
-      "em_dash": 0,
-      "hw": 9,
-      "pw": 50,
-      "aw": 32,
-      "flags": [
-        "analogy 32w"
-      ]
-    },
-    {
-      "id": 408,
-      "term": "Inverse Relationship: Convenience and Significance",
-      "length_score": 7.2,
-      "em_dash": 0,
-      "hw": 7,
-      "pw": 36,
-      "aw": 32,
-      "flags": [
-        "analogy 32w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 478,
-      "term": "Conceptual Survival",
-      "length_score": 7.2,
-      "em_dash": 0,
-      "hw": 12,
-      "pw": 44,
-      "aw": 32,
-      "flags": [
-        "analogy 32w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 517,
-      "term": "Adjacent Possible",
-      "length_score": 7.2,
-      "em_dash": 0,
-      "hw": 13,
-      "pw": 46,
-      "aw": 32,
-      "flags": [
-        "analogy 32w"
-      ]
-    },
-    {
-      "id": 590,
-      "term": "The Long Flat Start",
-      "length_score": 7.2,
-      "em_dash": 0,
-      "hw": 12,
-      "pw": 54,
-      "aw": 32,
-      "flags": [
-        "analogy 32w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 594,
-      "term": "Brands as Insurance",
-      "length_score": 7.2,
-      "em_dash": 0,
-      "hw": 6,
-      "pw": 46,
-      "aw": 32,
-      "flags": [
-        "analogy 32w"
-      ]
-    },
-    {
-      "id": 598,
-      "term": "Process Fetishism",
-      "length_score": 7.2,
-      "em_dash": 0,
-      "hw": 13,
-      "pw": 37,
-      "aw": 32,
-      "flags": [
-        "analogy 32w"
-      ]
-    },
-    {
-      "id": 622,
-      "term": "Maya Principle",
-      "length_score": 7.2,
-      "em_dash": 0,
-      "hw": 10,
-      "pw": 49,
-      "aw": 32,
-      "flags": [
-        "analogy 32w"
-      ]
-    },
     {
       "id": 232,
       "term": "Optimized for the Wrong Life",
@@ -1427,6 +1314,127 @@
       "flags": [
         "plain 58w",
         "analogy 27w"
+      ]
+    },
+    {
+      "id": 364,
+      "term": "Mental Weightlifting",
+      "length_score": 5.4,
+      "em_dash": 0,
+      "hw": 9,
+      "pw": 29,
+      "aw": 29,
+      "flags": [
+        "analogy 29w"
+      ]
+    },
+    {
+      "id": 371,
+      "term": "Psychological Money Relationship",
+      "length_score": 5.4,
+      "em_dash": 0,
+      "hw": 8,
+      "pw": 32,
+      "aw": 29,
+      "flags": [
+        "analogy 29w"
+      ]
+    },
+    {
+      "id": 383,
+      "term": "Disposition for Fame",
+      "length_score": 5.4,
+      "em_dash": 0,
+      "hw": 14,
+      "pw": 50,
+      "aw": 29,
+      "flags": [
+        "analogy 29w"
+      ]
+    },
+    {
+      "id": 409,
+      "term": "Choosing a Lifestyle, Not Just a Partner",
+      "length_score": 5.4,
+      "em_dash": 0,
+      "hw": 8,
+      "pw": 45,
+      "aw": 29,
+      "flags": [
+        "analogy 29w"
+      ]
+    },
+    {
+      "id": 480,
+      "term": "Identity Loop",
+      "length_score": 5.4,
+      "em_dash": 0,
+      "hw": 10,
+      "pw": 43,
+      "aw": 29,
+      "flags": [
+        "analogy 29w"
+      ]
+    },
+    {
+      "id": 482,
+      "term": "Psychological Excavation",
+      "length_score": 5.4,
+      "em_dash": 0,
+      "hw": 8,
+      "pw": 39,
+      "aw": 29,
+      "flags": [
+        "analogy 29w"
+      ]
+    },
+    {
+      "id": 484,
+      "term": "Needle-Moving Levers",
+      "length_score": 5.4,
+      "em_dash": 0,
+      "hw": 12,
+      "pw": 35,
+      "aw": 29,
+      "flags": [
+        "analogy 29w",
+        "hook 3 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 525,
+      "term": "Beginner's Mind",
+      "length_score": 5.4,
+      "em_dash": 0,
+      "hw": 9,
+      "pw": 41,
+      "aw": 29,
+      "flags": [
+        "analogy 29w"
+      ]
+    },
+    {
+      "id": 526,
+      "term": "Premature Optimization",
+      "length_score": 5.4,
+      "em_dash": 0,
+      "hw": 10,
+      "pw": 46,
+      "aw": 29,
+      "flags": [
+        "analogy 29w"
+      ]
+    },
+    {
+      "id": 580,
+      "term": "Latency vs Bandwidth",
+      "length_score": 5.4,
+      "em_dash": 0,
+      "hw": 12,
+      "pw": 40,
+      "aw": 29,
+      "flags": [
+        "analogy 29w"
       ]
     }
   ]
