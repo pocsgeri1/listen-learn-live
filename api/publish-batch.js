@@ -378,7 +378,27 @@ export default async function handler(req, res) {
       });
     }
 
-    // Step 5: append and serialize
+    // Step 5: sort batch chronologically before appending.
+    // Primary: timestamp ascending (nulls last — concepts without a transcript
+    // timestamp go to the end of the episode block).
+    // Tiebreaker: composite score descending (highest quality first within same second).
+    toAppend.sort((a, b) => {
+      const aTs = a.timestamp;
+      const bTs = b.timestamp;
+      if (aTs === null && bTs === null) {
+        const aC = (a.scores && a.scores.composite) || 0;
+        const bC = (b.scores && b.scores.composite) || 0;
+        return bC - aC;
+      }
+      if (aTs === null) return 1;
+      if (bTs === null) return -1;
+      if (aTs !== bTs) return aTs - bTs;
+      const aC = (a.scores && a.scores.composite) || 0;
+      const bC = (b.scores && b.scores.composite) || 0;
+      return bC - aC;
+    });
+
+    // Step 5b: append and serialize
     const updatedConcepts = existingConcepts.concat(toAppend);
     const updatedContent = JSON.stringify(updatedConcepts, null, 2) + '\n';
     const updatedContentBase64 = Buffer.from(updatedContent, 'utf-8').toString('base64');

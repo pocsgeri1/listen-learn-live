@@ -6,6 +6,14 @@
 
 ---
 
+## 2026-08-03 — Chronological ordering session (v2.71)
+
+**Sorting concepts.json retroactively is safe** — IDs are the canonical references (related_ids, duplicate_of all use integer IDs). Reordering positions in the array breaks nothing. The sort script is idempotent; re-running it on an already-sorted file reports 0 moves and exits without writing.
+
+**Vocab vault had 0 timestamps despite 374 items.** Root cause: extraction prompt v1.9 only showed `"timestamp_seconds": null` in the schema example with no enforcement instruction — LLM defaulted to null for everything. Fixed in v2.0 by adding self-check item 7 and a mandatory scan-backwards rule. Cannot retroactively fix existing vocab_vault items without re-running extractions.
+
+**Collections with no timestamps (1–14, 500, 506–510, 511–514):** These concepts predate the timestamp extraction feature. They stay at their current positions; sort script leaves them untouched.
+
 ## 2026-08-03 — SEO static pages session (v2.68–v2.70)
 
 **Large file diffs block GitHub Desktop push button.** When committing 700+ files (e.g. all static concept pages), GitHub Desktop shows "diff too large" and hides the Push button. Fix: use `git push origin main` from Terminal directly — nothing is broken, it's purely a display limit.

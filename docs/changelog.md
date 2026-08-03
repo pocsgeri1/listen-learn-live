@@ -6,6 +6,22 @@
 
 ---
 
+## v2.71 — 2026-08-03 · Chronological concept + vocab ordering
+
+### docs/extraction-prompt-v2_0.txt (new)
+- **Sort order changed:** Output sort changed from "composite score descending" to "timestamp ascending (nulls last), composite score as tiebreaker." Applies to both the concepts array and vocab_vault array.
+- **Timestamp extraction mandatory:** Self-check item 7 added — LLM must scan backwards for the nearest transcript timestamp marker rather than defaulting to null. Only emit null if the entire transcript has zero markers.
+- **vocab_vault timestamp_seconds:** Instruction strengthened from "integer or null" to required integer with fallback rule. Schema example updated from `null` to `1394`.
+
+### api/publish-batch.js
+- **Chronological sort before append:** `toAppend` array is now sorted by timestamp asc (nulls last), composite desc as tiebreaker, immediately before being concatenated to `existingConcepts`. Ensures all future publish batches land in concepts.json in episode chronological order.
+
+### tools/sort-by-timestamp.js (new)
+- **Retroactive sort script:** Reads concepts.json, sorts within each collection by timestamp asc (nulls last, composite desc as tiebreaker), writes back. Applied once — 349 of 715 concepts reordered across 14 collections. Idempotent / safe to re-run.
+
+### concepts.json
+- **Retroactively sorted:** 349 concepts reordered into chronological order within their episode collections (collections 15, 501–522). No IDs changed; related_ids and duplicate_of links unaffected.
+
 ## v2.70 — 2026-08-03 · SEO redirect helper
 
 ### tools/update-seo-redirects.js (new)
