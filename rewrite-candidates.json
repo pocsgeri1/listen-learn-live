@@ -136,8 +136,10 @@
     398,
     400,
     403,
+    404,
     405,
     406,
+    407,
     408,
     411,
     412,
@@ -149,6 +151,7 @@
     472,
     473,
     474,
+    475,
     476,
     477,
     478,
@@ -161,11 +164,14 @@
     489,
     490,
     491,
+    513,
     516,
     517,
     518,
     519,
+    521,
     522,
+    523,
     524,
     527,
     528,
@@ -177,11 +183,13 @@
     554,
     565,
     567,
+    583,
     590,
     591,
     592,
     593,
     594,
+    595,
     598,
     599,
     600,
@@ -192,6 +200,7 @@
     607,
     608,
     609,
+    610,
     612,
     614,
     615,
@@ -200,6 +209,7 @@
     618,
     622,
     623,
+    624,
     625,
     626,
     627,
@@ -215,134 +225,6 @@
   "excludes_in_flight_ids": [],
   "sort": "length_score desc, then em_dash desc",
   "candidates": [
-    {
-      "id": 404,
-      "term": "Prestige for Expertise Barter",
-      "length_score": 6,
-      "em_dash": 0,
-      "hw": 8,
-      "pw": 50,
-      "aw": 30,
-      "flags": [
-        "analogy 30w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 407,
-      "term": "Outcome vs Process Satisfaction",
-      "length_score": 6,
-      "em_dash": 0,
-      "hw": 11,
-      "pw": 37,
-      "aw": 30,
-      "flags": [
-        "analogy 30w"
-      ]
-    },
-    {
-      "id": 475,
-      "term": "Pressure Peels You Back",
-      "length_score": 6,
-      "em_dash": 0,
-      "hw": 13,
-      "pw": 48,
-      "aw": 30,
-      "flags": [
-        "analogy 30w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 513,
-      "term": "Value Creator vs Entertainer",
-      "length_score": 6,
-      "em_dash": 0,
-      "hw": 6,
-      "pw": 45,
-      "aw": 30,
-      "flags": [
-        "analogy 30w",
-        "hook 2 sentences (must be 1)",
-        "plain jargon: leverage"
-      ]
-    },
-    {
-      "id": 521,
-      "term": "Quantity Breeds Quality",
-      "length_score": 6,
-      "em_dash": 0,
-      "hw": 10,
-      "pw": 47,
-      "aw": 30,
-      "flags": [
-        "analogy 30w"
-      ]
-    },
-    {
-      "id": 523,
-      "term": "The Curse of the Blank Page",
-      "length_score": 6,
-      "em_dash": 0,
-      "hw": 8,
-      "pw": 34,
-      "aw": 30,
-      "flags": [
-        "analogy 30w"
-      ]
-    },
-    {
-      "id": 583,
-      "term": "Brute Force",
-      "length_score": 6,
-      "em_dash": 0,
-      "hw": 11,
-      "pw": 40,
-      "aw": 30,
-      "flags": [
-        "analogy 30w"
-      ]
-    },
-    {
-      "id": 595,
-      "term": "Every Trend Has a Backlash",
-      "length_score": 6,
-      "em_dash": 0,
-      "hw": 11,
-      "pw": 35,
-      "aw": 30,
-      "flags": [
-        "analogy 30w",
-        "hook 2 sentences (must be 1)",
-        "term/hook overlap: every, has"
-      ]
-    },
-    {
-      "id": 610,
-      "term": "Cluster Copying",
-      "length_score": 6,
-      "em_dash": 0,
-      "hw": 10,
-      "pw": 50,
-      "aw": 30,
-      "flags": [
-        "analogy 30w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 624,
-      "term": "Brand Compounds Like Interest",
-      "length_score": 6,
-      "em_dash": 0,
-      "hw": 10,
-      "pw": 45,
-      "aw": 30,
-      "flags": [
-        "analogy 30w",
-        "term/hook overlap: brand, like"
-      ]
-    },
     {
       "id": 631,
       "term": "Pay for the Result",
@@ -1487,6 +1369,133 @@
       "em_dash": 0,
       "hw": 11,
       "pw": 28,
+      "aw": 27,
+      "flags": [
+        "analogy 27w"
+      ]
+    },
+    {
+      "id": 47,
+      "term": "Entropy",
+      "length_score": 4.2,
+      "em_dash": 0,
+      "hw": 6,
+      "pw": 30,
+      "aw": 27,
+      "flags": [
+        "analogy 27w"
+      ]
+    },
+    {
+      "id": 51,
+      "term": "Survivorship Bias",
+      "length_score": 4.2,
+      "em_dash": 0,
+      "hw": 9,
+      "pw": 30,
+      "aw": 27,
+      "flags": [
+        "analogy 27w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 72,
+      "term": "Hedging",
+      "length_score": 4.2,
+      "em_dash": 0,
+      "hw": 7,
+      "pw": 26,
+      "aw": 27,
+      "flags": [
+        "analogy 27w"
+      ]
+    },
+    {
+      "id": 73,
+      "term": "Slippery Slope",
+      "length_score": 4.2,
+      "em_dash": 0,
+      "hw": 9,
+      "pw": 27,
+      "aw": 27,
+      "flags": [
+        "analogy 27w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 85,
+      "term": "Toxic Stoicism",
+      "length_score": 4.2,
+      "em_dash": 0,
+      "hw": 14,
+      "pw": 24,
+      "aw": 27,
+      "flags": [
+        "analogy 27w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 89,
+      "term": "Meaning vs Happiness",
+      "length_score": 4.2,
+      "em_dash": 0,
+      "hw": 10,
+      "pw": 23,
+      "aw": 27,
+      "flags": [
+        "analogy 27w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 96,
+      "term": "Comfort Zone Creep",
+      "length_score": 4.2,
+      "em_dash": 0,
+      "hw": 13,
+      "pw": 23,
+      "aw": 27,
+      "flags": [
+        "analogy 27w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 105,
+      "term": "Identity-Based Habits",
+      "length_score": 4.2,
+      "em_dash": 0,
+      "hw": 10,
+      "pw": 25,
+      "aw": 27,
+      "flags": [
+        "analogy 27w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 140,
+      "term": "Build the Audience First",
+      "length_score": 4.2,
+      "em_dash": 0,
+      "hw": 4,
+      "pw": 27,
+      "aw": 27,
+      "flags": [
+        "analogy 27w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 166,
+      "term": "Self-education, Self-interest, Self-sufficiency Triad",
+      "length_score": 4.2,
+      "em_dash": 0,
+      "hw": 10,
+      "pw": 47,
       "aw": 27,
       "flags": [
         "analogy 27w"

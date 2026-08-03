@@ -2,66 +2,6 @@
   "_note": "Rolling log of the last 50 approved concepts' analogy openers and core images, for the cross-batch repetition check in autonomous-batch-mode.md. Trim to last 50 as new entries are appended.",
   "log": [
     {
-      "id": 183,
-      "batch": 18,
-      "opener": "Apprentice cooks who",
-      "image": "apprentice cooks work service at Michelin kitchen, learn speed, waste, pressure in one month of shifts"
-    },
-    {
-      "id": 187,
-      "batch": 18,
-      "opener": "A restaurant seats",
-      "image": "restaurant seats forty, stays full six nights a week, never squeezes in eighty"
-    },
-    {
-      "id": 204,
-      "batch": 18,
-      "opener": "A paramedic who",
-      "image": "paramedic holds steady while patient screams, resets room before words do"
-    },
-    {
-      "id": 246,
-      "batch": 18,
-      "opener": "An actor owns",
-      "image": "actor owns spotlight but freezes when fan recognizes them at grocery store checkout"
-    },
-    {
-      "id": 296,
-      "batch": 18,
-      "opener": "Someone joins a",
-      "image": "someone joins vegan meetup for dating pool, not ethics"
-    },
-    {
-      "id": 384,
-      "batch": 18,
-      "opener": "A fidgety, loud",
-      "image": "fidgety loud talker drains most people, energizes partner who finds silence suffocating"
-    },
-    {
-      "id": 398,
-      "batch": 18,
-      "opener": "Someone reads twelve",
-      "image": "someone reads twelve training science books, stays on couch because no program felt optimized"
-    },
-    {
-      "id": 405,
-      "batch": 18,
-      "opener": "A soloist plays",
-      "image": "soloist plays passage correctly at rehearsal, runs it four hundred more times until nerves cannot reach it"
-    },
-    {
-      "id": 469,
-      "batch": 18,
-      "opener": "Someone who says",
-      "image": "someone who says I do not smoke declines cigarettes without fighting willpower; I am trying to quit loses every time"
-    },
-    {
-      "id": 470,
-      "batch": 18,
-      "opener": "Someone who understands",
-      "image": "someone who understands persuasion writes ads, negotiates deals, designs products without studying each field"
-    },
-    {
       "id": 471,
       "batch": 19,
       "opener": "Mild dissatisfaction with",
@@ -300,6 +240,66 @@
       "batch": 22,
       "opener": "Five years of",
       "image": "five years of consistent presence buys default trust the quarter-chaser cannot buy at any price"
+    },
+    {
+      "id": 631,
+      "batch": 23,
+      "opener": "Solar panels go",
+      "image": "solar panels go on your roof at no cost; installer takes a cut of your smaller electricity bill"
+    },
+    {
+      "id": 94,
+      "batch": 23,
+      "opener": "Two strangers debate",
+      "image": "two strangers debate a topic neither researched, proving to the room they belong on the smart side"
+    },
+    {
+      "id": 234,
+      "batch": 23,
+      "opener": "Debating thermostat settings",
+      "image": "debating thermostat settings in a house that is on fire"
+    },
+    {
+      "id": 61,
+      "batch": 23,
+      "opener": "Two runners miss",
+      "image": "two runners miss a qualifying time: one books a coach, the other blames the course"
+    },
+    {
+      "id": 126,
+      "batch": 23,
+      "opener": "A writer with",
+      "image": "writer with fifty thousand subscribers selling ninety-seven euro guide out-earns agency with twenty staff"
+    },
+    {
+      "id": 130,
+      "batch": 23,
+      "opener": "A former nightclub",
+      "image": "former nightclub DJ who reads philosophy and makes self-improvement content occupies slot no algorithm could assign"
+    },
+    {
+      "id": 422,
+      "batch": 23,
+      "opener": "Rewatching a film",
+      "image": "rewatching a film knowing the ending reveals every early scene was already lying to you"
+    },
+    {
+      "id": 556,
+      "batch": 23,
+      "opener": "Someone says treasure",
+      "image": "someone says treasure is buried in your garden; proving it is their job, not yours to excavate"
+    },
+    {
+      "id": 564,
+      "batch": 23,
+      "opener": "Given a choice",
+      "image": "given a choice between a thousand euros now and a thousand in a year, you take it now"
+    },
+    {
+      "id": 569,
+      "batch": 23,
+      "opener": "Keeping the holiday",
+      "image": "keeping holiday jar untouched on the counter while a credit card at 20% drains from another drawer"
     }
   ]
 }
