@@ -2,7 +2,9 @@
   "generated_from": "concepts.json (715 total concepts, scanned 2026-08-03)",
   "excludes_done_ids": [
     3,
+    12,
     18,
+    19,
     23,
     24,
     26,
@@ -16,10 +18,13 @@
     91,
     93,
     94,
+    97,
     109,
     110,
     111,
+    116,
     118,
+    120,
     121,
     122,
     123,
@@ -32,6 +37,7 @@
     132,
     135,
     136,
+    137,
     138,
     142,
     145,
@@ -227,11 +233,15 @@
     564,
     565,
     567,
+    568,
     569,
+    570,
     580,
+    581,
     583,
     584,
     587,
+    589,
     590,
     591,
     592,
@@ -275,134 +285,6 @@
   "excludes_in_flight_ids": [],
   "sort": "length_score desc, then em_dash desc",
   "candidates": [
-    {
-      "id": 568,
-      "term": "The Pull of Right Now",
-      "length_score": 4.8,
-      "em_dash": 1,
-      "hw": 12,
-      "pw": 37,
-      "aw": 28,
-      "flags": [
-        "em-dash x1",
-        "analogy 28w"
-      ]
-    },
-    {
-      "id": 570,
-      "term": "Anchoring",
-      "length_score": 4.8,
-      "em_dash": 1,
-      "hw": 10,
-      "pw": 36,
-      "aw": 28,
-      "flags": [
-        "em-dash x1",
-        "analogy 28w"
-      ]
-    },
-    {
-      "id": 581,
-      "term": "Technical Debt",
-      "length_score": 4.8,
-      "em_dash": 1,
-      "hw": 12,
-      "pw": 41,
-      "aw": 28,
-      "flags": [
-        "em-dash x1",
-        "analogy 28w"
-      ]
-    },
-    {
-      "id": 589,
-      "term": "Three Prices, One Decoy",
-      "length_score": 4.8,
-      "em_dash": 1,
-      "hw": 9,
-      "pw": 35,
-      "aw": 28,
-      "flags": [
-        "em-dash x1",
-        "analogy 28w"
-      ]
-    },
-    {
-      "id": 12,
-      "term": "Emotional Intelligence (EQ)",
-      "length_score": 4.8,
-      "em_dash": 0,
-      "hw": 6,
-      "pw": 30,
-      "aw": 28,
-      "flags": [
-        "analogy 28w"
-      ]
-    },
-    {
-      "id": 19,
-      "term": "Cognitive Dissonance",
-      "length_score": 4.8,
-      "em_dash": 0,
-      "hw": 11,
-      "pw": 33,
-      "aw": 28,
-      "flags": [
-        "analogy 28w",
-        "hook 2 sentences (must be 1)",
-        "plain jargon: cognitive"
-      ]
-    },
-    {
-      "id": 97,
-      "term": "Intentional Living",
-      "length_score": 4.8,
-      "em_dash": 0,
-      "hw": 8,
-      "pw": 25,
-      "aw": 28,
-      "flags": [
-        "analogy 28w"
-      ]
-    },
-    {
-      "id": 116,
-      "term": "Premium Pricing",
-      "length_score": 4.8,
-      "em_dash": 0,
-      "hw": 10,
-      "pw": 25,
-      "aw": 28,
-      "flags": [
-        "analogy 28w"
-      ]
-    },
-    {
-      "id": 120,
-      "term": "Solve the Right Problem",
-      "length_score": 4.8,
-      "em_dash": 0,
-      "hw": 13,
-      "pw": 24,
-      "aw": 28,
-      "flags": [
-        "analogy 28w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 137,
-      "term": "Reinvention Capital",
-      "length_score": 4.8,
-      "em_dash": 0,
-      "hw": 14,
-      "pw": 33,
-      "aw": 28,
-      "flags": [
-        "analogy 28w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
     {
       "id": 144,
       "term": "Manufactured Consent",
@@ -1553,6 +1435,136 @@
       "aw": 26,
       "flags": [
         "analogy 26w"
+      ]
+    },
+    {
+      "id": 264,
+      "term": "Haber-Bosch Process",
+      "length_score": 3.6,
+      "em_dash": 0,
+      "hw": 10,
+      "pw": 47,
+      "aw": 26,
+      "flags": [
+        "analogy 26w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 303,
+      "term": "The Instagram Partner",
+      "length_score": 3.6,
+      "em_dash": 0,
+      "hw": 6,
+      "pw": 48,
+      "aw": 26,
+      "flags": [
+        "analogy 26w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 312,
+      "term": "99% Unemployment Horizon",
+      "length_score": 3.6,
+      "em_dash": 0,
+      "hw": 8,
+      "pw": 48,
+      "aw": 26,
+      "flags": [
+        "analogy 26w",
+        "hook 3 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 313,
+      "term": "HR Manual Workaround",
+      "length_score": 3.6,
+      "em_dash": 0,
+      "hw": 11,
+      "pw": 48,
+      "aw": 26,
+      "flags": [
+        "analogy 26w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 322,
+      "term": "Consent Without Comprehension",
+      "length_score": 3.6,
+      "em_dash": 0,
+      "hw": 10,
+      "pw": 48,
+      "aw": 26,
+      "flags": [
+        "analogy 26w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 347,
+      "term": "Product - Service Ecosystem",
+      "length_score": 3.6,
+      "em_dash": 0,
+      "hw": 11,
+      "pw": 52,
+      "aw": 26,
+      "flags": [
+        "analogy 26w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 350,
+      "term": "The AI-Fog Analogy",
+      "length_score": 3.6,
+      "em_dash": 0,
+      "hw": 12,
+      "pw": 53,
+      "aw": 26,
+      "flags": [
+        "analogy 26w",
+        "hook 4 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 370,
+      "term": "Tutorial Phase",
+      "length_score": 3.6,
+      "em_dash": 0,
+      "hw": 10,
+      "pw": 39,
+      "aw": 26,
+      "flags": [
+        "analogy 26w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 375,
+      "term": "Emotional Maturity Lag",
+      "length_score": 3.6,
+      "em_dash": 0,
+      "hw": 10,
+      "pw": 24,
+      "aw": 26,
+      "flags": [
+        "analogy 26w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 379,
+      "term": "Your 20s Are Compounding",
+      "length_score": 3.6,
+      "em_dash": 0,
+      "hw": 11,
+      "pw": 37,
+      "aw": 26,
+      "flags": [
+        "analogy 26w",
+        "hook 2 sentences (must be 1)"
       ]
     }
   ]
