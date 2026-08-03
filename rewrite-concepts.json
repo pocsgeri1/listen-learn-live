@@ -527,8 +527,25 @@
         "469": ["hook", "plain", "analogy"],
         "470": ["hook", "plain", "analogy"]
       }
+    },
+    {
+      "batch": 19,
+      "status": "patched_locally",
+      "ids": [471, 479, 522, 601, 614, 617, 626, 591, 628, 666],
+      "fields_changed_per_id": {
+        "471": ["plain", "analogy"],
+        "479": ["plain", "analogy"],
+        "522": ["hook", "plain", "analogy"],
+        "591": ["hook", "plain", "analogy"],
+        "601": ["plain", "analogy"],
+        "614": ["hook", "plain", "analogy"],
+        "617": ["term", "hook", "plain", "analogy"],
+        "626": ["plain", "analogy"],
+        "628": ["hook", "plain", "analogy"],
+        "666": ["hook", "plain", "analogy"]
+      }
     }
   ],
   "approved": [],
-  "batch": 19
+  "batch": 20
 }

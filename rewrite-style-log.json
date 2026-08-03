@@ -2,66 +2,6 @@
   "_note": "Rolling log of the last 50 approved concepts' analogy openers and core images, for the cross-batch repetition check in autonomous-batch-mode.md. Trim to last 50 as new entries are appended.",
   "log": [
     {
-      "id": 592,
-      "batch": 14,
-      "opener": "Early coal sellers",
-      "image": "coal sack weighed at door, scale turns trust-us into a receipt"
-    },
-    {
-      "id": 231,
-      "batch": 14,
-      "opener": "A dinner guest",
-      "image": "dinner guest rehearsing what host will say after they leave"
-    },
-    {
-      "id": 48,
-      "batch": 14,
-      "opener": "After winning ten",
-      "image": "ten straight coin flips, next ten average to five"
-    },
-    {
-      "id": 237,
-      "batch": 14,
-      "opener": "The cast comes",
-      "image": "cast off at week six, arm stays bent from habit not fracture"
-    },
-    {
-      "id": 238,
-      "batch": 14,
-      "opener": "Charity fundraisers who",
-      "image": "charity fundraisers switch to individual children, donations triple, volunteers burn out"
-    },
-    {
-      "id": 396,
-      "batch": 14,
-      "opener": "Boarding a flight",
-      "image": "boarding flight, cataloguing every crash before seatbelt clicks"
-    },
-    {
-      "id": 516,
-      "batch": 14,
-      "opener": "A pop-up stall",
-      "image": "pop-up stall at Saturday market before signing five-year commercial lease"
-    },
-    {
-      "id": 28,
-      "batch": 14,
-      "opener": "A surgeon paid",
-      "image": "surgeon paid per operation never per outcome, schedules twice as many procedures"
-    },
-    {
-      "id": 46,
-      "batch": 14,
-      "opener": "Whoever reaches the",
-      "image": "first to reach reporter shapes headline, other person spends weeks correcting"
-    },
-    {
-      "id": 127,
-      "batch": 14,
-      "opener": "A boxer who",
-      "image": "boxer trains obsessively, wins title, opens gym for kids in old neighborhood"
-    },
-    {
       "id": 160,
       "batch": 15,
       "opener": "An essay posted",
@@ -300,6 +240,66 @@
       "batch": 18,
       "opener": "Someone who understands",
       "image": "someone who understands persuasion writes ads, negotiates deals, designs products without studying each field"
+    },
+    {
+      "id": 471,
+      "batch": 19,
+      "opener": "Mild dissatisfaction with",
+      "image": "mild dissatisfaction with weight lasts a decade; one photo at a wedding ends it overnight"
+    },
+    {
+      "id": 479,
+      "batch": 19,
+      "opener": "The unfinished manuscript",
+      "image": "unfinished manuscript stays unfinished, protecting its author from every review it will never receive"
+    },
+    {
+      "id": 522,
+      "batch": 19,
+      "opener": "Phone, camera, music",
+      "image": "phone camera music player map already existed; someone bolted them together and called it a smartphone"
+    },
+    {
+      "id": 591,
+      "batch": 19,
+      "opener": "Ten finished ads",
+      "image": "ten finished ads pitched to brands that never asked; three bought on the spot"
+    },
+    {
+      "id": 601,
+      "batch": 19,
+      "opener": "Cardiac risk assessment",
+      "image": "cardiac risk assessment reduced to five checkboxes; tick two and full test runs, no arithmetic required"
+    },
+    {
+      "id": 614,
+      "batch": 19,
+      "opener": "Rubber ducks mailed",
+      "image": "rubber ducks mailed to loyal customers, no explanation; ones who tried to explain got fewer laughs"
+    },
+    {
+      "id": 617,
+      "batch": 19,
+      "opener": "Phone across the",
+      "image": "phone across room charging, transaction timed out, work lost; device and person assumed inseparable"
+    },
+    {
+      "id": 626,
+      "batch": 19,
+      "opener": "Campaigns planted in",
+      "image": "campaigns planted in year one pay dividends in year four; successor cashes them, planter is gone"
+    },
+    {
+      "id": 628,
+      "batch": 19,
+      "opener": "Speed limit signs",
+      "image": "speed limit signs replaced with 20 mph zone signs, speed bumps removed; same law, packed with reciprocity"
+    },
+    {
+      "id": 666,
+      "batch": 19,
+      "opener": "Employee of the",
+      "image": "employee of month for saving money sits differently than same award for making manager laugh"
     }
   ]
 }

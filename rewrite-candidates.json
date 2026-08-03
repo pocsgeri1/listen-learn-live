@@ -30,9 +30,11 @@
     180,
     181,
     182,
+    183,
     184,
     185,
     186,
+    187,
     188,
     190,
     192,
@@ -41,6 +43,7 @@
     195,
     196,
     201,
+    204,
     205,
     207,
     208,
@@ -69,6 +72,7 @@
     241,
     242,
     245,
+    246,
     250,
     253,
     254,
@@ -78,6 +82,7 @@
     285,
     292,
     293,
+    296,
     297,
     298,
     307,
@@ -107,18 +112,23 @@
     377,
     381,
     382,
+    384,
     385,
     390,
     391,
     396,
     397,
+    398,
     403,
+    405,
     406,
     408,
     411,
     412,
     467,
     468,
+    469,
+    470,
     472,
     473,
     474,
@@ -175,132 +185,6 @@
   "excludes_in_flight_ids": [],
   "sort": "length_score desc, then em_dash desc",
   "candidates": [
-    {
-      "id": 183,
-      "term": "Entrepreneurial Apprenticeship",
-      "length_score": 6.6,
-      "em_dash": 0,
-      "hw": 13,
-      "pw": 51,
-      "aw": 31,
-      "flags": [
-        "analogy 31w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 187,
-      "term": "Official Capacity",
-      "length_score": 6.6,
-      "em_dash": 0,
-      "hw": 11,
-      "pw": 47,
-      "aw": 31,
-      "flags": [
-        "analogy 31w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 204,
-      "term": "Vagal Authority",
-      "length_score": 6.6,
-      "em_dash": 0,
-      "hw": 9,
-      "pw": 39,
-      "aw": 31,
-      "flags": [
-        "analogy 31w"
-      ]
-    },
-    {
-      "id": 246,
-      "term": "The Vanity Paradox",
-      "length_score": 6.6,
-      "em_dash": 0,
-      "hw": 13,
-      "pw": 39,
-      "aw": 31,
-      "flags": [
-        "analogy 31w"
-      ]
-    },
-    {
-      "id": 296,
-      "term": "Woke Fishing",
-      "length_score": 6.6,
-      "em_dash": 0,
-      "hw": 11,
-      "pw": 52,
-      "aw": 31,
-      "flags": [
-        "analogy 31w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 384,
-      "term": "Air Fryer vs Fiat 500 Partner",
-      "length_score": 6.6,
-      "em_dash": 0,
-      "hw": 9,
-      "pw": 53,
-      "aw": 31,
-      "flags": [
-        "analogy 31w"
-      ]
-    },
-    {
-      "id": 398,
-      "term": "Study Paralysis",
-      "length_score": 6.6,
-      "em_dash": 0,
-      "hw": 8,
-      "pw": 37,
-      "aw": 31,
-      "flags": [
-        "analogy 31w"
-      ]
-    },
-    {
-      "id": 405,
-      "term": "Practicing Until It's Impossible to Get Wrong",
-      "length_score": 6.6,
-      "em_dash": 0,
-      "hw": 12,
-      "pw": 41,
-      "aw": 31,
-      "flags": [
-        "analogy 31w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 469,
-      "term": "Behaviour Follows Identity",
-      "length_score": 6.6,
-      "em_dash": 0,
-      "hw": 8,
-      "pw": 47,
-      "aw": 31,
-      "flags": [
-        "analogy 31w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 470,
-      "term": "Deep Generalist",
-      "length_score": 6.6,
-      "em_dash": 0,
-      "hw": 10,
-      "pw": 40,
-      "aw": 31,
-      "flags": [
-        "analogy 31w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
     {
       "id": 471,
       "term": "The Disgust Threshold",
@@ -1445,6 +1329,134 @@
       "flags": [
         "em-dash x1",
         "analogy 28w"
+      ]
+    },
+    {
+      "id": 568,
+      "term": "The Pull of Right Now",
+      "length_score": 4.8,
+      "em_dash": 1,
+      "hw": 12,
+      "pw": 37,
+      "aw": 28,
+      "flags": [
+        "em-dash x1",
+        "analogy 28w"
+      ]
+    },
+    {
+      "id": 570,
+      "term": "Anchoring",
+      "length_score": 4.8,
+      "em_dash": 1,
+      "hw": 10,
+      "pw": 36,
+      "aw": 28,
+      "flags": [
+        "em-dash x1",
+        "analogy 28w"
+      ]
+    },
+    {
+      "id": 581,
+      "term": "Technical Debt",
+      "length_score": 4.8,
+      "em_dash": 1,
+      "hw": 12,
+      "pw": 41,
+      "aw": 28,
+      "flags": [
+        "em-dash x1",
+        "analogy 28w"
+      ]
+    },
+    {
+      "id": 589,
+      "term": "Three Prices, One Decoy",
+      "length_score": 4.8,
+      "em_dash": 1,
+      "hw": 9,
+      "pw": 35,
+      "aw": 28,
+      "flags": [
+        "em-dash x1",
+        "analogy 28w"
+      ]
+    },
+    {
+      "id": 12,
+      "term": "Emotional Intelligence (EQ)",
+      "length_score": 4.8,
+      "em_dash": 0,
+      "hw": 6,
+      "pw": 30,
+      "aw": 28,
+      "flags": [
+        "analogy 28w"
+      ]
+    },
+    {
+      "id": 19,
+      "term": "Cognitive Dissonance",
+      "length_score": 4.8,
+      "em_dash": 0,
+      "hw": 11,
+      "pw": 33,
+      "aw": 28,
+      "flags": [
+        "analogy 28w",
+        "hook 2 sentences (must be 1)",
+        "plain jargon: cognitive"
+      ]
+    },
+    {
+      "id": 97,
+      "term": "Intentional Living",
+      "length_score": 4.8,
+      "em_dash": 0,
+      "hw": 8,
+      "pw": 25,
+      "aw": 28,
+      "flags": [
+        "analogy 28w"
+      ]
+    },
+    {
+      "id": 116,
+      "term": "Premium Pricing",
+      "length_score": 4.8,
+      "em_dash": 0,
+      "hw": 10,
+      "pw": 25,
+      "aw": 28,
+      "flags": [
+        "analogy 28w"
+      ]
+    },
+    {
+      "id": 120,
+      "term": "Solve the Right Problem",
+      "length_score": 4.8,
+      "em_dash": 0,
+      "hw": 13,
+      "pw": 24,
+      "aw": 28,
+      "flags": [
+        "analogy 28w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 137,
+      "term": "Reinvention Capital",
+      "length_score": 4.8,
+      "em_dash": 0,
+      "hw": 14,
+      "pw": 33,
+      "aw": 28,
+      "flags": [
+        "analogy 28w",
+        "hook 2 sentences (must be 1)"
       ]
     }
   ]
