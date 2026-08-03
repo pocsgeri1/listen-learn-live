@@ -2,18 +2,6 @@
   "_note": "Rolling log of the last 50 approved concepts' analogy openers and core images, for the cross-batch repetition check in autonomous-batch-mode.md. Trim to last 50 as new entries are appended.",
   "log": [
     {
-      "id": 542,
-      "batch": 17,
-      "opener": "Adenosine fills your",
-      "image": "adenosine fills brain like water in sealed tank; only sleep opens the drain"
-    },
-    {
-      "id": 543,
-      "batch": 17,
-      "opener": "Flip a coin",
-      "image": "flip coin thousand times, report lucky streak of seven heads, bury the rest"
-    },
-    {
       "id": 183,
       "batch": 18,
       "opener": "Apprentice cooks who",
@@ -252,6 +240,66 @@
       "batch": 21,
       "opener": "Scales sound identical",
       "image": "scales sound identical in bedroom and on stage, but only one makes your hands shake"
+    },
+    {
+      "id": 404,
+      "batch": 22,
+      "opener": "Reporter stops the",
+      "image": "reporter stops recorder, flips notebook, asks Nobel laureate for career advice"
+    },
+    {
+      "id": 407,
+      "batch": 22,
+      "opener": "Two years rewriting",
+      "image": "two years rewriting every chapter; final word typed lands differently than pressing Generate"
+    },
+    {
+      "id": 475,
+      "batch": 22,
+      "opener": "CEO who handles",
+      "image": "CEO handles bad earnings call by firing scapegoat, running a seven-year-old's playbook"
+    },
+    {
+      "id": 513,
+      "batch": 22,
+      "opener": "Knife-skills tutorial earns",
+      "image": "knife-skills tutorial earns views in year three; reaction video needs year-four sequel to survive"
+    },
+    {
+      "id": 521,
+      "batch": 22,
+      "opener": "Pottery students graded",
+      "image": "pottery students graded on number of pots threw better work by week eight than those chasing one masterpiece"
+    },
+    {
+      "id": 523,
+      "batch": 22,
+      "opener": "Writer given no",
+      "image": "writer given no assignment stares at cursor; writer given two-hundred-word brief files in ten minutes"
+    },
+    {
+      "id": 583,
+      "batch": 22,
+      "opener": "Child who forgot",
+      "image": "child who forgot locker combination tries every number from one upward until door swings open"
+    },
+    {
+      "id": 595,
+      "batch": 22,
+      "opener": "Streaming made music",
+      "image": "streaming made music free and infinite, so people started paying forty dollars for one vinyl record"
+    },
+    {
+      "id": 610,
+      "batch": 22,
+      "opener": "Six EV chargers",
+      "image": "six EV chargers in one office parking lot turn half the building into EV drivers within a year"
+    },
+    {
+      "id": 624,
+      "batch": 22,
+      "opener": "Five years of",
+      "image": "five years of consistent presence buys default trust the quarter-chaser cannot buy at any price"
     }
   ]
 }

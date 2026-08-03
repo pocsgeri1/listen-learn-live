@@ -53,7 +53,9 @@
     210,
     211,
     212,
+    214,
     216,
+    217,
     218,
     220,
     222,
@@ -75,6 +77,7 @@
     240,
     241,
     242,
+    244,
     245,
     246,
     250,
@@ -83,6 +86,7 @@
     262,
     280,
     281,
+    282,
     284,
     285,
     292,
@@ -90,8 +94,10 @@
     296,
     297,
     298,
+    306,
     307,
     308,
+    309,
     310,
     311,
     314,
@@ -104,6 +110,7 @@
     321,
     324,
     328,
+    329,
     330,
     334,
     335,
@@ -111,8 +118,11 @@
     337,
     338,
     339,
+    340,
     363,
+    366,
     367,
+    369,
     376,
     377,
     381,
@@ -205,132 +215,6 @@
   "excludes_in_flight_ids": [],
   "sort": "length_score desc, then em_dash desc",
   "candidates": [
-    {
-      "id": 214,
-      "term": "Schedule Worry Time",
-      "length_score": 6,
-      "em_dash": 0,
-      "hw": 7,
-      "pw": 43,
-      "aw": 30,
-      "flags": [
-        "analogy 30w",
-        "term/hook overlap: schedule, worry"
-      ]
-    },
-    {
-      "id": 217,
-      "term": "Hedging Language",
-      "length_score": 6,
-      "em_dash": 0,
-      "hw": 9,
-      "pw": 45,
-      "aw": 30,
-      "flags": [
-        "analogy 30w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 244,
-      "term": "Situationship Drift",
-      "length_score": 6,
-      "em_dash": 0,
-      "hw": 10,
-      "pw": 44,
-      "aw": 30,
-      "flags": [
-        "analogy 30w"
-      ]
-    },
-    {
-      "id": 282,
-      "term": "Benevolent Sexism",
-      "length_score": 6,
-      "em_dash": 0,
-      "hw": 14,
-      "pw": 42,
-      "aw": 30,
-      "flags": [
-        "analogy 30w"
-      ]
-    },
-    {
-      "id": 306,
-      "term": "The Effort-Reward Ledger",
-      "length_score": 6,
-      "em_dash": 0,
-      "hw": 13,
-      "pw": 30,
-      "aw": 30,
-      "flags": [
-        "analogy 30w"
-      ]
-    },
-    {
-      "id": 309,
-      "term": "Mate Copying",
-      "length_score": 6,
-      "em_dash": 0,
-      "hw": 14,
-      "pw": 42,
-      "aw": 30,
-      "flags": [
-        "analogy 30w",
-        "hook 3 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 329,
-      "term": "AI = Mass Job Loss",
-      "length_score": 6,
-      "em_dash": 0,
-      "hw": 13,
-      "pw": 43,
-      "aw": 30,
-      "flags": [
-        "analogy 30w",
-        "hook 2 sentences (must be 1)",
-        "plain jargon: cognitive"
-      ]
-    },
-    {
-      "id": 340,
-      "term": "Jevons Paradox",
-      "length_score": 6,
-      "em_dash": 0,
-      "hw": 9,
-      "pw": 51,
-      "aw": 30,
-      "flags": [
-        "analogy 30w"
-      ]
-    },
-    {
-      "id": 366,
-      "term": "Parkinson's Law for Goals",
-      "length_score": 6,
-      "em_dash": 0,
-      "hw": 10,
-      "pw": 41,
-      "aw": 30,
-      "flags": [
-        "analogy 30w"
-      ]
-    },
-    {
-      "id": 369,
-      "term": "Learn to Earn",
-      "length_score": 6,
-      "em_dash": 0,
-      "hw": 11,
-      "pw": 39,
-      "aw": 30,
-      "flags": [
-        "analogy 30w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
     {
       "id": 404,
       "term": "Prestige for Expertise Barter",
@@ -1474,6 +1358,137 @@
       "aw": 27,
       "flags": [
         "plain 56w",
+        "analogy 27w"
+      ]
+    },
+    {
+      "id": 657,
+      "term": "Phone Fasts",
+      "length_score": 4.4,
+      "em_dash": 0,
+      "hw": 16,
+      "pw": 55,
+      "aw": 24,
+      "flags": [
+        "hook 16w",
+        "analogy 24w"
+      ]
+    },
+    {
+      "id": 663,
+      "term": "The Arrival Fallacy",
+      "length_score": 4.4,
+      "em_dash": 0,
+      "hw": 16,
+      "pw": 55,
+      "aw": 24,
+      "flags": [
+        "hook 16w",
+        "analogy 24w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 395,
+      "term": "Reintroducing Friction at Scale",
+      "length_score": 4.2,
+      "em_dash": 2,
+      "hw": 12,
+      "pw": 46,
+      "aw": 27,
+      "flags": [
+        "em-dash x2",
+        "analogy 27w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 529,
+      "term": "Cross-Pollination",
+      "length_score": 4.2,
+      "em_dash": 2,
+      "hw": 13,
+      "pw": 29,
+      "aw": 27,
+      "flags": [
+        "em-dash x2",
+        "analogy 27w"
+      ]
+    },
+    {
+      "id": 544,
+      "term": "Biological vs Chronological Age",
+      "length_score": 4.2,
+      "em_dash": 2,
+      "hw": 11,
+      "pw": 34,
+      "aw": 27,
+      "flags": [
+        "em-dash x2",
+        "analogy 27w"
+      ]
+    },
+    {
+      "id": 124,
+      "term": "The Discipline Paradox",
+      "length_score": 4.2,
+      "em_dash": 1,
+      "hw": 13,
+      "pw": 28,
+      "aw": 27,
+      "flags": [
+        "em-dash x1",
+        "analogy 27w"
+      ]
+    },
+    {
+      "id": 541,
+      "term": "Allostatic Load",
+      "length_score": 4.2,
+      "em_dash": 1,
+      "hw": 13,
+      "pw": 39,
+      "aw": 27,
+      "flags": [
+        "em-dash x1",
+        "analogy 27w"
+      ]
+    },
+    {
+      "id": 560,
+      "term": "Aphorism vs Argument",
+      "length_score": 4.2,
+      "em_dash": 1,
+      "hw": 11,
+      "pw": 37,
+      "aw": 27,
+      "flags": [
+        "em-dash x1",
+        "analogy 27w"
+      ]
+    },
+    {
+      "id": 582,
+      "term": "Single Point of Failure",
+      "length_score": 4.2,
+      "em_dash": 1,
+      "hw": 11,
+      "pw": 33,
+      "aw": 27,
+      "flags": [
+        "em-dash x1",
+        "analogy 27w"
+      ]
+    },
+    {
+      "id": 30,
+      "term": "Dunning-Kruger Effect",
+      "length_score": 4.2,
+      "em_dash": 0,
+      "hw": 11,
+      "pw": 28,
+      "aw": 27,
+      "flags": [
         "analogy 27w"
       ]
     }
