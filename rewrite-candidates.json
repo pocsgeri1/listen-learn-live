@@ -6,17 +6,21 @@
     28,
     46,
     48,
+    61,
     67,
     91,
     93,
+    94,
     109,
     110,
     111,
     121,
     122,
     123,
+    126,
     127,
     128,
+    130,
     135,
     136,
     138,
@@ -69,6 +73,7 @@
     230,
     231,
     232,
+    234,
     235,
     236,
     237,
@@ -143,6 +148,7 @@
     408,
     411,
     412,
+    422,
     467,
     468,
     469,
@@ -181,8 +187,11 @@
     542,
     543,
     554,
+    556,
+    564,
     565,
     567,
+    569,
     583,
     590,
     591,
@@ -216,6 +225,7 @@
     628,
     629,
     630,
+    631,
     633,
     635,
     637,
@@ -225,140 +235,6 @@
   "excludes_in_flight_ids": [],
   "sort": "length_score desc, then em_dash desc",
   "candidates": [
-    {
-      "id": 631,
-      "term": "Pay for the Result",
-      "length_score": 6,
-      "em_dash": 0,
-      "hw": 12,
-      "pw": 50,
-      "aw": 30,
-      "flags": [
-        "analogy 30w"
-      ]
-    },
-    {
-      "id": 94,
-      "term": "The Status Game",
-      "length_score": 5.6,
-      "em_dash": 0,
-      "hw": 16,
-      "pw": 31,
-      "aw": 26,
-      "flags": [
-        "hook 16w",
-        "analogy 26w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 234,
-      "term": "Language That Hides THE Problem",
-      "length_score": 5.4,
-      "em_dash": 2,
-      "hw": 14,
-      "pw": 42,
-      "aw": 29,
-      "flags": [
-        "em-dash x2",
-        "analogy 29w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 61,
-      "term": "Locus of Control",
-      "length_score": 5.4,
-      "em_dash": 1,
-      "hw": 4,
-      "pw": 29,
-      "aw": 29,
-      "flags": [
-        "em-dash x1",
-        "analogy 29w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 126,
-      "term": "The One-Person Business",
-      "length_score": 5.4,
-      "em_dash": 1,
-      "hw": 12,
-      "pw": 29,
-      "aw": 29,
-      "flags": [
-        "em-dash x1",
-        "analogy 29w",
-        "plain jargon: leverage"
-      ]
-    },
-    {
-      "id": 130,
-      "term": "Niche of One",
-      "length_score": 5.4,
-      "em_dash": 1,
-      "hw": 13,
-      "pw": 27,
-      "aw": 29,
-      "flags": [
-        "em-dash x1",
-        "analogy 29w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 422,
-      "term": "Stage 3: Retroactive Realization",
-      "length_score": 5.4,
-      "em_dash": 1,
-      "hw": 9,
-      "pw": 47,
-      "aw": 29,
-      "flags": [
-        "em-dash x1",
-        "analogy 29w"
-      ]
-    },
-    {
-      "id": 556,
-      "term": "Burden of Proof",
-      "length_score": 5.4,
-      "em_dash": 1,
-      "hw": 11,
-      "pw": 36,
-      "aw": 29,
-      "flags": [
-        "em-dash x1",
-        "analogy 29w"
-      ]
-    },
-    {
-      "id": 564,
-      "term": "A Euro Today Beats a Euro Tomorrow",
-      "length_score": 5.4,
-      "em_dash": 1,
-      "hw": 10,
-      "pw": 33,
-      "aw": 29,
-      "flags": [
-        "em-dash x1",
-        "analogy 29w"
-      ]
-    },
-    {
-      "id": 569,
-      "term": "Mental Accounting",
-      "length_score": 5.4,
-      "em_dash": 1,
-      "hw": 10,
-      "pw": 41,
-      "aw": 29,
-      "flags": [
-        "em-dash x1",
-        "analogy 29w"
-      ]
-    },
     {
       "id": 619,
       "term": "The Cost of Not Knowing",
@@ -1499,6 +1375,134 @@
       "aw": 27,
       "flags": [
         "analogy 27w"
+      ]
+    },
+    {
+      "id": 167,
+      "term": "Idea Museum",
+      "length_score": 4.2,
+      "em_dash": 0,
+      "hw": 12,
+      "pw": 54,
+      "aw": 27,
+      "flags": [
+        "analogy 27w",
+        "plain jargon: framework"
+      ]
+    },
+    {
+      "id": 171,
+      "term": "Hyperspecific System",
+      "length_score": 4.2,
+      "em_dash": 0,
+      "hw": 13,
+      "pw": 54,
+      "aw": 27,
+      "flags": [
+        "analogy 27w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 174,
+      "term": "Mechanical Living",
+      "length_score": 4.2,
+      "em_dash": 0,
+      "hw": 12,
+      "pw": 40,
+      "aw": 27,
+      "flags": [
+        "analogy 27w"
+      ]
+    },
+    {
+      "id": 189,
+      "term": "Leverage Test",
+      "length_score": 4.2,
+      "em_dash": 0,
+      "hw": 7,
+      "pw": 44,
+      "aw": 27,
+      "flags": [
+        "analogy 27w",
+        "hook 2 sentences (must be 1)",
+        "plain jargon: leverage"
+      ]
+    },
+    {
+      "id": 199,
+      "term": "The Exception-Conformity Paradox",
+      "length_score": 4.2,
+      "em_dash": 0,
+      "hw": 9,
+      "pw": 24,
+      "aw": 27,
+      "flags": [
+        "analogy 27w"
+      ]
+    },
+    {
+      "id": 209,
+      "term": "Social Pain Is Real Pain",
+      "length_score": 4.2,
+      "em_dash": 0,
+      "hw": 9,
+      "pw": 42,
+      "aw": 27,
+      "flags": [
+        "analogy 27w"
+      ]
+    },
+    {
+      "id": 219,
+      "term": "The Open Loop Anxiety",
+      "length_score": 4.2,
+      "em_dash": 0,
+      "hw": 10,
+      "pw": 51,
+      "aw": 27,
+      "flags": [
+        "analogy 27w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 243,
+      "term": "Morality Made Measurable",
+      "length_score": 4.2,
+      "em_dash": 0,
+      "hw": 12,
+      "pw": 42,
+      "aw": 27,
+      "flags": [
+        "analogy 27w"
+      ]
+    },
+    {
+      "id": 304,
+      "term": "Juice Not Worth Squeeze",
+      "length_score": 4.2,
+      "em_dash": 0,
+      "hw": 6,
+      "pw": 50,
+      "aw": 27,
+      "flags": [
+        "analogy 27w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 326,
+      "term": "Light Cone Ambition",
+      "length_score": 4.2,
+      "em_dash": 0,
+      "hw": 12,
+      "pw": 43,
+      "aw": 27,
+      "flags": [
+        "analogy 27w",
+        "hook 2 sentences (must be 1)",
+        "term/hook overlap: light, ambition"
       ]
     }
   ]
