@@ -144,13 +144,16 @@
     340,
     342,
     363,
+    364,
     366,
     367,
     369,
+    371,
     376,
     377,
     381,
     382,
+    383,
     384,
     385,
     390,
@@ -165,6 +168,7 @@
     406,
     407,
     408,
+    409,
     411,
     412,
     422,
@@ -181,7 +185,10 @@
     477,
     478,
     479,
+    480,
+    482,
     483,
+    484,
     485,
     486,
     487,
@@ -198,6 +205,8 @@
     522,
     523,
     524,
+    525,
+    526,
     527,
     528,
     534,
@@ -211,6 +220,7 @@
     565,
     567,
     569,
+    580,
     583,
     590,
     591,
@@ -255,127 +265,6 @@
   "excludes_in_flight_ids": [],
   "sort": "length_score desc, then em_dash desc",
   "candidates": [
-    {
-      "id": 364,
-      "term": "Mental Weightlifting",
-      "length_score": 5.4,
-      "em_dash": 0,
-      "hw": 9,
-      "pw": 29,
-      "aw": 29,
-      "flags": [
-        "analogy 29w"
-      ]
-    },
-    {
-      "id": 371,
-      "term": "Psychological Money Relationship",
-      "length_score": 5.4,
-      "em_dash": 0,
-      "hw": 8,
-      "pw": 32,
-      "aw": 29,
-      "flags": [
-        "analogy 29w"
-      ]
-    },
-    {
-      "id": 383,
-      "term": "Disposition for Fame",
-      "length_score": 5.4,
-      "em_dash": 0,
-      "hw": 14,
-      "pw": 50,
-      "aw": 29,
-      "flags": [
-        "analogy 29w"
-      ]
-    },
-    {
-      "id": 409,
-      "term": "Choosing a Lifestyle, Not Just a Partner",
-      "length_score": 5.4,
-      "em_dash": 0,
-      "hw": 8,
-      "pw": 45,
-      "aw": 29,
-      "flags": [
-        "analogy 29w"
-      ]
-    },
-    {
-      "id": 480,
-      "term": "Identity Loop",
-      "length_score": 5.4,
-      "em_dash": 0,
-      "hw": 10,
-      "pw": 43,
-      "aw": 29,
-      "flags": [
-        "analogy 29w"
-      ]
-    },
-    {
-      "id": 482,
-      "term": "Psychological Excavation",
-      "length_score": 5.4,
-      "em_dash": 0,
-      "hw": 8,
-      "pw": 39,
-      "aw": 29,
-      "flags": [
-        "analogy 29w"
-      ]
-    },
-    {
-      "id": 484,
-      "term": "Needle-Moving Levers",
-      "length_score": 5.4,
-      "em_dash": 0,
-      "hw": 12,
-      "pw": 35,
-      "aw": 29,
-      "flags": [
-        "analogy 29w",
-        "hook 3 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 525,
-      "term": "Beginner's Mind",
-      "length_score": 5.4,
-      "em_dash": 0,
-      "hw": 9,
-      "pw": 41,
-      "aw": 29,
-      "flags": [
-        "analogy 29w"
-      ]
-    },
-    {
-      "id": 526,
-      "term": "Premature Optimization",
-      "length_score": 5.4,
-      "em_dash": 0,
-      "hw": 10,
-      "pw": 46,
-      "aw": 29,
-      "flags": [
-        "analogy 29w"
-      ]
-    },
-    {
-      "id": 580,
-      "term": "Latency vs Bandwidth",
-      "length_score": 5.4,
-      "em_dash": 0,
-      "hw": 12,
-      "pw": 40,
-      "aw": 29,
-      "flags": [
-        "analogy 29w"
-      ]
-    },
     {
       "id": 584,
       "term": "Emergent Behavior",
@@ -1531,6 +1420,134 @@
       "aw": 26,
       "flags": [
         "em-dash x1",
+        "analogy 26w"
+      ]
+    },
+    {
+      "id": 563,
+      "term": "The Latte Factor",
+      "length_score": 3.6,
+      "em_dash": 1,
+      "hw": 11,
+      "pw": 35,
+      "aw": 26,
+      "flags": [
+        "em-dash x1",
+        "analogy 26w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 620,
+      "term": "Think Like a Marketer",
+      "length_score": 3.6,
+      "em_dash": 1,
+      "hw": 7,
+      "pw": 44,
+      "aw": 26,
+      "flags": [
+        "em-dash x1",
+        "analogy 26w"
+      ]
+    },
+    {
+      "id": 1,
+      "term": "Compound Interest",
+      "length_score": 3.6,
+      "em_dash": 0,
+      "hw": 7,
+      "pw": 28,
+      "aw": 26,
+      "flags": [
+        "analogy 26w"
+      ]
+    },
+    {
+      "id": 16,
+      "term": "Reciprocity",
+      "length_score": 3.6,
+      "em_dash": 0,
+      "hw": 10,
+      "pw": 29,
+      "aw": 26,
+      "flags": [
+        "analogy 26w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 20,
+      "term": "Boundaries",
+      "length_score": 3.6,
+      "em_dash": 0,
+      "hw": 9,
+      "pw": 26,
+      "aw": 26,
+      "flags": [
+        "analogy 26w"
+      ]
+    },
+    {
+      "id": 21,
+      "term": "Memetic",
+      "length_score": 3.6,
+      "em_dash": 0,
+      "hw": 8,
+      "pw": 34,
+      "aw": 26,
+      "flags": [
+        "analogy 26w"
+      ]
+    },
+    {
+      "id": 29,
+      "term": "Halo Effect",
+      "length_score": 3.6,
+      "em_dash": 0,
+      "hw": 12,
+      "pw": 28,
+      "aw": 26,
+      "flags": [
+        "analogy 26w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 58,
+      "term": "Cognitive Reframing",
+      "length_score": 3.6,
+      "em_dash": 0,
+      "hw": 8,
+      "pw": 29,
+      "aw": 26,
+      "flags": [
+        "analogy 26w",
+        "hook 3 sentences (must be 1)",
+        "plain jargon: cognitive"
+      ]
+    },
+    {
+      "id": 60,
+      "term": "Meritocracy (myth of)",
+      "length_score": 3.6,
+      "em_dash": 0,
+      "hw": 9,
+      "pw": 30,
+      "aw": 26,
+      "flags": [
+        "analogy 26w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 77,
+      "term": "Tipping Point",
+      "length_score": 3.6,
+      "em_dash": 0,
+      "hw": 7,
+      "pw": 20,
+      "aw": 26,
+      "flags": [
         "analogy 26w"
       ]
     }

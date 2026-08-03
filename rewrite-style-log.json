@@ -2,66 +2,6 @@
   "_note": "Rolling log of the last 50 approved concepts' analogy openers and core images, for the cross-batch repetition check in autonomous-batch-mode.md. Trim to last 50 as new entries are appended.",
   "log": [
     {
-      "id": 404,
-      "batch": 22,
-      "opener": "Reporter stops the",
-      "image": "reporter stops recorder, flips notebook, asks Nobel laureate for career advice"
-    },
-    {
-      "id": 407,
-      "batch": 22,
-      "opener": "Two years rewriting",
-      "image": "two years rewriting every chapter; final word typed lands differently than pressing Generate"
-    },
-    {
-      "id": 475,
-      "batch": 22,
-      "opener": "CEO who handles",
-      "image": "CEO handles bad earnings call by firing scapegoat, running a seven-year-old's playbook"
-    },
-    {
-      "id": 513,
-      "batch": 22,
-      "opener": "Knife-skills tutorial earns",
-      "image": "knife-skills tutorial earns views in year three; reaction video needs year-four sequel to survive"
-    },
-    {
-      "id": 521,
-      "batch": 22,
-      "opener": "Pottery students graded",
-      "image": "pottery students graded on number of pots threw better work by week eight than those chasing one masterpiece"
-    },
-    {
-      "id": 523,
-      "batch": 22,
-      "opener": "Writer given no",
-      "image": "writer given no assignment stares at cursor; writer given two-hundred-word brief files in ten minutes"
-    },
-    {
-      "id": 583,
-      "batch": 22,
-      "opener": "Child who forgot",
-      "image": "child who forgot locker combination tries every number from one upward until door swings open"
-    },
-    {
-      "id": 595,
-      "batch": 22,
-      "opener": "Streaming made music",
-      "image": "streaming made music free and infinite, so people started paying forty dollars for one vinyl record"
-    },
-    {
-      "id": 610,
-      "batch": 22,
-      "opener": "Six EV chargers",
-      "image": "six EV chargers in one office parking lot turn half the building into EV drivers within a year"
-    },
-    {
-      "id": 624,
-      "batch": 22,
-      "opener": "Five years of",
-      "image": "five years of consistent presence buys default trust the quarter-chaser cannot buy at any price"
-    },
-    {
       "id": 631,
       "batch": 23,
       "opener": "Solar panels go",
@@ -300,6 +240,66 @@
       "batch": 26,
       "opener": "A motorway wide",
       "image": "motorway wide enough for thousands of cars blocked by a toll gate that takes thirty seconds per vehicle"
+    },
+    {
+      "id": 3,
+      "batch": 27,
+      "opener": "Buy a red",
+      "image": "buy a red car and red cars appear everywhere; they were always there, just invisible to you before"
+    },
+    {
+      "id": 125,
+      "batch": 27,
+      "opener": "A consultant who",
+      "image": "consultant who writes a course earns from ten thousand students at once, while the hourly version earns from one"
+    },
+    {
+      "id": 131,
+      "batch": 27,
+      "opener": "A street musician",
+      "image": "street musician earns from the crowd, not a boss; no restructuring email ends her working day"
+    },
+    {
+      "id": 388,
+      "batch": 27,
+      "opener": "The guy who",
+      "image": "guy who bombs every date but dazzles at bars does not exist; solid fundamentals carry across every room"
+    },
+    {
+      "id": 413,
+      "batch": 27,
+      "opener": "One brick laid",
+      "image": "one brick laid at the same hour each morning; a year later, a wall nobody saw being built"
+    },
+    {
+      "id": 537,
+      "batch": 27,
+      "opener": "A recipe only",
+      "image": "recipe only one cook has ever pulled off is not a recipe; it is a lucky afternoon"
+    },
+    {
+      "id": 551,
+      "batch": 27,
+      "opener": "Nothing beats lifelong",
+      "image": "nothing beats lifelong health; a cheap snack beats nothing; so a cheap snack wins — one word, two jobs"
+    },
+    {
+      "id": 562,
+      "batch": 27,
+      "opener": "Each pay rise",
+      "image": "each pay rise buys a slightly more expensive version of the same month, leaving the savings gap unchanged"
+    },
+    {
+      "id": 584,
+      "batch": 27,
+      "opener": "No ant has",
+      "image": "no ant has the blueprints, yet thousands collectively produce tunnels, farms, and temperature control"
+    },
+    {
+      "id": 587,
+      "batch": 27,
+      "opener": "A firm with",
+      "image": "firm with no ad budget that lets only critical journalists announce its products, then wonders why no one buys"
     }
   ]
 }
