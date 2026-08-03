@@ -2,114 +2,6 @@
   "_note": "Rolling log of the last 50 approved concepts' analogy openers and core images, for the cross-batch repetition check in autonomous-batch-mode.md. Trim to last 50 as new entries are appended.",
   "log": [
     {
-      "id": 376,
-      "batch": 16,
-      "opener": "Weeds bother you",
-      "image": "weeds in garden only bother after a month of daily tending"
-    },
-    {
-      "id": 390,
-      "batch": 16,
-      "opener": "Two candidates apply",
-      "image": "job candidates: one leads with suffering, other leads with what suffering built"
-    },
-    {
-      "id": 391,
-      "batch": 16,
-      "opener": "Someone who ranks",
-      "image": "person ranked fourth behind school training and work, cannot negotiate to first"
-    },
-    {
-      "id": 408,
-      "batch": 16,
-      "opener": "Free samples disappear",
-      "image": "free samples gone in seconds, jar saved-for stays on shelf for years"
-    },
-    {
-      "id": 478,
-      "batch": 16,
-      "opener": "A poker player",
-      "image": "poker player folds winning hand because bet size feels threatening"
-    },
-    {
-      "id": 517,
-      "batch": 16,
-      "opener": "Morse code unlocks",
-      "image": "morse code to telegraphy to undersea cables to Reuters, each unlocking the next"
-    },
-    {
-      "id": 590,
-      "batch": 16,
-      "opener": "A seed germinates",
-      "image": "seed germinates underground for weeks, gardeners who dig to check kill it"
-    },
-    {
-      "id": 594,
-      "batch": 16,
-      "opener": "Travelers pick the",
-      "image": "traveler picks recognizable airport hotel over charming unknown inn nearby"
-    },
-    {
-      "id": 598,
-      "batch": 16,
-      "opener": "3M's Post-it came",
-      "image": "Post-it note from failed adhesive experiment outside approved project brief"
-    },
-    {
-      "id": 622,
-      "batch": 16,
-      "opener": "The original Volkswagen",
-      "image": "Volkswagen Beetle sold millions looking friendly and round in era of fins and chrome"
-    },
-    {
-      "id": 67,
-      "batch": 17,
-      "opener": "Board members nodded",
-      "image": "board members nodded through flawed product launch each privately knew would fail"
-    },
-    {
-      "id": 91,
-      "batch": 17,
-      "opener": "A man sprints",
-      "image": "man sprints from car backfire, heart pounding, threat gone before he stops running"
-    },
-    {
-      "id": 111,
-      "batch": 17,
-      "opener": "Two programs, same",
-      "image": "two programs same result: one promises six weeks and a shake, other six months and meal prep"
-    },
-    {
-      "id": 136,
-      "batch": 17,
-      "opener": "A nurse who",
-      "image": "nurse who became personal trainer holds ground no pure coach or clinician can reach"
-    },
-    {
-      "id": 154,
-      "batch": 17,
-      "opener": "One minute picturing",
-      "image": "hands too arthritic to hold a pen, and the pen you're holding changes"
-    },
-    {
-      "id": 155,
-      "batch": 17,
-      "opener": "A city builds",
-      "image": "city builds new highway lanes and within two years traffic doubles back to gridlock"
-    },
-    {
-      "id": 232,
-      "batch": 17,
-      "opener": "A beautiful kitchen",
-      "image": "beautiful kitchen with marble counters and chef's knives, used only for unpacking delivery boxes each night"
-    },
-    {
-      "id": 363,
-      "batch": 17,
-      "opener": "Someone who follows",
-      "image": "someone follows 30 NBA players assumes basketball overcrowded, ignoring fewer than 5,000 humans reach semi-pro"
-    },
-    {
       "id": 542,
       "batch": 17,
       "opener": "Adenosine fills your",
@@ -300,6 +192,66 @@
       "batch": 20,
       "opener": "A decade obsessing",
       "image": "decade obsessing over Roman history produces richer content than picking topic because it trended last week"
+    },
+    {
+      "id": 214,
+      "batch": 21,
+      "opener": "A waiting room",
+      "image": "waiting room with numbered ticket: worry does not vanish, it just has to wait its turn"
+    },
+    {
+      "id": 217,
+      "batch": 21,
+      "opener": "Same resume, different",
+      "image": "same resume, different closer: probably a good fit versus I am the right hire"
+    },
+    {
+      "id": 244,
+      "batch": 21,
+      "opener": "Clocking fifty-hour weeks",
+      "image": "clocking fifty-hour weeks at company where promotion has been under review for eight months"
+    },
+    {
+      "id": 282,
+      "batch": 21,
+      "opener": "A lifeguard who",
+      "image": "lifeguard pulls strong swimmers out of the water because they look like they need help"
+    },
+    {
+      "id": 306,
+      "batch": 21,
+      "opener": "A bank account",
+      "image": "bank account kept open despite monthly fees, zero interest, broken ATMs, and no customer service"
+    },
+    {
+      "id": 309,
+      "batch": 21,
+      "opener": "Joining the queue",
+      "image": "join queue outside restaurant rather than reading the menu because the crowd already did the vetting"
+    },
+    {
+      "id": 329,
+      "batch": 21,
+      "opener": "Factory closes: retrain",
+      "image": "factory closes retrain for trucks, trucks go driverless retrain for code, code gets automated, ladder runs out"
+    },
+    {
+      "id": 340,
+      "batch": 21,
+      "opener": "Cameras got cheap",
+      "image": "cameras got cheap and instead of fewer photographers billions shot daily and millions earned from it"
+    },
+    {
+      "id": 366,
+      "batch": 21,
+      "opener": "5K runners and",
+      "image": "5K runners and marathon runners both lace up daily; only marathon runner redesigns entire week around sleep food pacing"
+    },
+    {
+      "id": 369,
+      "batch": 21,
+      "opener": "Scales sound identical",
+      "image": "scales sound identical in bedroom and on stage, but only one makes your hands shake"
     }
   ]
 }

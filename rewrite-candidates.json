@@ -9,12 +9,15 @@
     67,
     91,
     93,
+    109,
     110,
     111,
     121,
     122,
     123,
     127,
+    128,
+    135,
     136,
     138,
     154,
@@ -65,6 +68,7 @@
     231,
     232,
     235,
+    236,
     237,
     238,
     239,
@@ -76,6 +80,7 @@
     250,
     253,
     254,
+    262,
     280,
     281,
     284,
@@ -119,6 +124,7 @@
     396,
     397,
     398,
+    400,
     403,
     405,
     406,
@@ -153,10 +159,14 @@
     524,
     527,
     528,
+    534,
     535,
+    539,
     542,
     543,
+    554,
     565,
+    567,
     590,
     591,
     592,
@@ -195,136 +205,6 @@
   "excludes_in_flight_ids": [],
   "sort": "length_score desc, then em_dash desc",
   "candidates": [
-    {
-      "id": 400,
-      "term": "Only Envy Invisible Sacrifices",
-      "length_score": 6,
-      "em_dash": 2,
-      "hw": 9,
-      "pw": 43,
-      "aw": 30,
-      "flags": [
-        "em-dash x2",
-        "analogy 30w"
-      ]
-    },
-    {
-      "id": 128,
-      "term": "Digital Leverage",
-      "length_score": 6,
-      "em_dash": 1,
-      "hw": 12,
-      "pw": 24,
-      "aw": 30,
-      "flags": [
-        "em-dash x1",
-        "analogy 30w"
-      ]
-    },
-    {
-      "id": 236,
-      "term": "Wound-Sharing Economy",
-      "length_score": 6,
-      "em_dash": 1,
-      "hw": 10,
-      "pw": 42,
-      "aw": 30,
-      "flags": [
-        "em-dash x1",
-        "analogy 30w"
-      ]
-    },
-    {
-      "id": 262,
-      "term": "Technology Diffusion",
-      "length_score": 6,
-      "em_dash": 1,
-      "hw": 11,
-      "pw": 50,
-      "aw": 30,
-      "flags": [
-        "em-dash x1",
-        "analogy 30w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 534,
-      "term": "Survivorship Bias",
-      "length_score": 6,
-      "em_dash": 1,
-      "hw": 9,
-      "pw": 32,
-      "aw": 30,
-      "flags": [
-        "em-dash x1",
-        "analogy 30w"
-      ]
-    },
-    {
-      "id": 539,
-      "term": "Falsifiability",
-      "length_score": 6,
-      "em_dash": 1,
-      "hw": 11,
-      "pw": 37,
-      "aw": 30,
-      "flags": [
-        "em-dash x1",
-        "analogy 30w"
-      ]
-    },
-    {
-      "id": 554,
-      "term": "The Curse of Knowledge",
-      "length_score": 6,
-      "em_dash": 1,
-      "hw": 9,
-      "pw": 34,
-      "aw": 30,
-      "flags": [
-        "em-dash x1",
-        "analogy 30w"
-      ]
-    },
-    {
-      "id": 567,
-      "term": "Fixed vs Variable Costs",
-      "length_score": 6,
-      "em_dash": 1,
-      "hw": 9,
-      "pw": 38,
-      "aw": 30,
-      "flags": [
-        "em-dash x1",
-        "analogy 30w",
-        "term/hook overlap: fixed, costs"
-      ]
-    },
-    {
-      "id": 109,
-      "term": "The Body Keeps the Score",
-      "length_score": 6,
-      "em_dash": 0,
-      "hw": 9,
-      "pw": 29,
-      "aw": 30,
-      "flags": [
-        "analogy 30w"
-      ]
-    },
-    {
-      "id": 135,
-      "term": "Build From Genuine Curiosity",
-      "length_score": 6,
-      "em_dash": 0,
-      "hw": 8,
-      "pw": 26,
-      "aw": 30,
-      "flags": [
-        "analogy 30w"
-      ]
-    },
     {
       "id": 214,
       "term": "Schedule Worry Time",
@@ -1467,6 +1347,134 @@
       "flags": [
         "analogy 28w",
         "plain jargon: leverage"
+      ]
+    },
+    {
+      "id": 323,
+      "term": "Endless Capability Discovery",
+      "length_score": 4.8,
+      "em_dash": 0,
+      "hw": 14,
+      "pw": 43,
+      "aw": 28,
+      "flags": [
+        "analogy 28w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 325,
+      "term": "Terminal Biological Clock",
+      "length_score": 4.8,
+      "em_dash": 0,
+      "hw": 14,
+      "pw": 37,
+      "aw": 28,
+      "flags": [
+        "analogy 28w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 374,
+      "term": "Myopic Pleasure Focus",
+      "length_score": 4.8,
+      "em_dash": 0,
+      "hw": 11,
+      "pw": 31,
+      "aw": 28,
+      "flags": [
+        "analogy 28w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 402,
+      "term": "Releasing the Desire",
+      "length_score": 4.8,
+      "em_dash": 0,
+      "hw": 10,
+      "pw": 26,
+      "aw": 28,
+      "flags": [
+        "analogy 28w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 588,
+      "term": "Post-rationalization",
+      "length_score": 4.8,
+      "em_dash": 0,
+      "hw": 10,
+      "pw": 38,
+      "aw": 28,
+      "flags": [
+        "analogy 28w"
+      ]
+    },
+    {
+      "id": 602,
+      "term": "Fat-Tailed Marketing",
+      "length_score": 4.8,
+      "em_dash": 0,
+      "hw": 13,
+      "pw": 46,
+      "aw": 28,
+      "flags": [
+        "analogy 28w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 621,
+      "term": "Solve the Fear, Not the Fact",
+      "length_score": 4.8,
+      "em_dash": 0,
+      "hw": 10,
+      "pw": 53,
+      "aw": 28,
+      "flags": [
+        "analogy 28w"
+      ]
+    },
+    {
+      "id": 632,
+      "term": "More Doors, More Sales",
+      "length_score": 4.8,
+      "em_dash": 0,
+      "hw": 13,
+      "pw": 45,
+      "aw": 28,
+      "flags": [
+        "analogy 28w"
+      ]
+    },
+    {
+      "id": 634,
+      "term": "Local Maximum Trap",
+      "length_score": 4.8,
+      "em_dash": 0,
+      "hw": 13,
+      "pw": 38,
+      "aw": 28,
+      "flags": [
+        "analogy 28w",
+        "hook 2 sentences (must be 1)",
+        "plain jargon: incremental"
+      ]
+    },
+    {
+      "id": 283,
+      "term": "Middle-Class Hay Fever",
+      "length_score": 4.6,
+      "em_dash": 0,
+      "hw": 12,
+      "pw": 56,
+      "aw": 27,
+      "flags": [
+        "plain 56w",
+        "analogy 27w"
       ]
     }
   ]

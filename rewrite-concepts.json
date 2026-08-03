@@ -1,503 +1,151 @@
 {
   "_note": "Running patch doc — editorial rewrites, approved 1-by-1. Each entry lists ONLY changed fields + id. Merge into concepts.json by id once batch of 10 is approved.",
-  "batch": 18,
+  "batch": 22,
   "history": [
     {
       "batch": 1,
       "status": "patched into concepts.json and committed",
-      "ids": [
-        281,
-        485,
-        180,
-        335,
-        489,
-        177,
-        178,
-        181,
-        336,
-        491
-      ]
+      "ids": [281, 485, 180, 335, 489, 177, 178, 181, 336, 491]
     },
     {
       "batch": 2,
       "status": "patched into concepts.json, committed (9cef09d), pushed to origin/main",
-      "ids": [
-        179,
-        337,
-        339,
-        207,
-        468,
-        201,
-        224,
-        226,
-        334,
-        196
-      ]
+      "ids": [179, 337, 339, 207, 468, 201, 224, 226, 334, 196]
     },
     {
       "batch": 3,
       "status": "patched_locally",
-      "ids": [
-        518,
-        338,
-        473,
-        490,
-        182,
-        185,
-        225,
-        227,
-        593,
-        609
-      ]
+      "ids": [518, 338, 473, 490, 182, 185, 225, 227, 593, 609]
     },
     {
       "batch": 4,
       "status": "patched_locally, reviewed and revised by Gergely (638 term reverted, 310 plain edited, analogy ceiling 25->20 + hook 1-sentence rule applied retroactively, 486 jargon fix), verified with tools/check-fields.js, 0 hard-rule failures — ready to push. See rewrite-reports/batch-4-diff.md",
-      "ids": [
-        184,
-        210,
-        310,
-        317,
-        403,
-        483,
-        486,
-        638,
-        599,
-        625
-      ]
+      "ids": [184, 210, 310, 317, 403, 483, 486, 638, 599, 625]
     },
     {
       "batch": 5,
       "status": "patched_locally, autonomous batch, verified with tools/check-fields.js, 0 hard-rule failures, 0 needs_human. See rewrite-reports/batch-5-diff.md",
-      "ids": [
-        190,
-        222,
-        477,
-        605,
-        607,
-        315,
-        623,
-        194,
-        212,
-        223
-      ]
+      "ids": [190, 222, 477, 605, 607, 315, 623, 194, 212, 223]
     },
     {
       "batch": 6,
       "status": "patched_locally, autonomous batch, verified with tools/check-fields.js, 0 hard-rule failures, 0 needs_human. See rewrite-reports/batch-6-diff.md",
-      "ids": [
-        284,
-        311,
-        467,
-        472,
-        604,
-        618,
-        385,
-        635,
-        229,
-        535
-      ]
+      "ids": [284, 311, 467, 472, 604, 618, 385, 635, 229, 535]
     },
     {
       "batch": 7,
       "status": "patched_locally, autonomous batch, verified with tools/check-fields.js, 0 hard-rule failures, 0 needs_human. See rewrite-reports/batch-7-diff.md",
-      "ids": [
-        600,
-        161,
-        168,
-        192,
-        280,
-        314,
-        381,
-        397,
-        406,
-        487
-      ]
+      "ids": [600, 161, 168, 192, 280, 314, 381, 397, 406, 487]
     },
     {
       "batch": 8,
       "status": "patched_locally",
-      "ids": [
-        519,
-        612,
-        616,
-        627,
-        630,
-        240,
-        242,
-        377,
-        110,
-        292
-      ]
+      "ids": [519, 612, 616, 627, 630, 240, 242, 377, 110, 292]
     },
     {
       "batch": 9,
       "status": "patched_locally",
-      "ids": [
-        307,
-        319,
-        328,
-        330,
-        476,
-        615,
-        528,
-        633,
-        411,
-        23
-      ]
+      "ids": [307, 319, 328, 330, 476, 615, 528, 633, 411, 23]
     },
     {
       "batch": 10,
       "status": "patched_locally",
-      "ids": [
-        93,
-        121,
-        188,
-        193,
-        205,
-        211,
-        216,
-        218,
-        220,
-        285
-      ]
+      "ids": [93, 121, 188, 193, 205, 211, 216, 218, 220, 285]
     },
     {
       "batch": 11,
       "status": "patched_locally",
-      "ids": [
-        298,
-        382,
-        629,
-        637,
-        162,
-        239,
-        241,
-        228,
-        565,
-        26
-      ]
+      "ids": [298, 382, 629, 637, 162, 239, 241, 228, 565, 26]
     },
     {
       "batch": 12,
       "status": "patched_locally",
-      "ids": [
-        122,
-        123,
-        186,
-        195,
-        230,
-        293,
-        297,
-        318,
-        324,
-        367
-      ],
+      "ids": [122, 123, 186, 195, 230, 293, 297, 318, 324, 367],
       "fields_changed_per_id": {
-        "122": [
-          "analogy"
-        ],
-        "123": [
-          "hook",
-          "plain",
-          "analogy"
-        ],
-        "186": [
-          "hook",
-          "plain",
-          "analogy"
-        ],
-        "195": [
-          "hook",
-          "plain",
-          "analogy"
-        ],
-        "230": [
-          "plain",
-          "analogy"
-        ],
-        "293": [
-          "plain",
-          "analogy"
-        ],
-        "297": [
-          "hook",
-          "plain",
-          "analogy"
-        ],
-        "318": [
-          "analogy"
-        ],
-        "324": [
-          "hook",
-          "plain",
-          "analogy"
-        ],
-        "367": [
-          "analogy"
-        ]
+        "122": ["analogy"],
+        "123": ["hook", "plain", "analogy"],
+        "186": ["hook", "plain", "analogy"],
+        "195": ["hook", "plain", "analogy"],
+        "230": ["plain", "analogy"],
+        "293": ["plain", "analogy"],
+        "297": ["hook", "plain", "analogy"],
+        "318": ["analogy"],
+        "324": ["hook", "plain", "analogy"],
+        "367": ["analogy"]
       }
     },
     {
       "batch": 13,
       "status": "patched_locally",
-      "ids": [
-        412,
-        474,
-        488,
-        524,
-        527,
-        603,
-        608,
-        138,
-        235,
-        321
-      ],
+      "ids": [412, 474, 488, 524, 527, 603, 608, 138, 235, 321],
       "fields_changed_per_id": {
-        "138": [
-          "hook",
-          "analogy"
-        ],
-        "235": [
-          "hook",
-          "plain",
-          "analogy"
-        ],
-        "321": [
-          "hook",
-          "analogy"
-        ],
-        "412": [
-          "plain",
-          "analogy"
-        ],
-        "474": [
-          "term",
-          "hook",
-          "analogy"
-        ],
-        "488": [
-          "analogy"
-        ],
-        "524": [
-          "hook",
-          "plain",
-          "analogy"
-        ],
-        "527": [
-          "term",
-          "plain",
-          "analogy"
-        ],
-        "603": [
-          "analogy"
-        ],
-        "608": [
-          "hook",
-          "analogy"
-        ]
+        "138": ["hook", "analogy"],
+        "235": ["hook", "plain", "analogy"],
+        "321": ["hook", "analogy"],
+        "412": ["plain", "analogy"],
+        "474": ["term", "hook", "analogy"],
+        "488": ["analogy"],
+        "524": ["hook", "plain", "analogy"],
+        "527": ["term", "plain", "analogy"],
+        "603": ["analogy"],
+        "608": ["hook", "analogy"]
       }
     },
     {
       "batch": 14,
       "status": "patched_locally",
-      "ids": [
-        592,
-        231,
-        48,
-        237,
-        238,
-        396,
-        516,
-        28,
-        46,
-        127
-      ],
+      "ids": [592, 231, 48, 237, 238, 396, 516, 28, 46, 127],
       "fields_changed_per_id": {
-        "28": [
-          "plain",
-          "analogy"
-        ],
-        "46": [
-          "plain",
-          "analogy",
-          "prompt"
-        ],
-        "48": [
-          "hook",
-          "analogy"
-        ],
-        "127": [
-          "hook",
-          "plain",
-          "analogy"
-        ],
-        "231": [
-          "hook",
-          "plain",
-          "analogy"
-        ],
-        "237": [
-          "hook",
-          "plain",
-          "analogy"
-        ],
-        "238": [
-          "hook",
-          "analogy"
-        ],
-        "396": [
-          "hook",
-          "analogy"
-        ],
-        "516": [
-          "hook",
-          "plain",
-          "analogy"
-        ],
-        "592": [
-          "hook",
-          "analogy"
-        ]
+        "28": ["plain", "analogy"],
+        "46": ["plain", "analogy", "prompt"],
+        "48": ["hook", "analogy"],
+        "127": ["hook", "plain", "analogy"],
+        "231": ["hook", "plain", "analogy"],
+        "237": ["hook", "plain", "analogy"],
+        "238": ["hook", "analogy"],
+        "396": ["hook", "analogy"],
+        "516": ["hook", "plain", "analogy"],
+        "592": ["hook", "analogy"]
       }
     },
     {
       "batch": 15,
       "status": "patched_locally",
-      "ids": [
-        160,
-        164,
-        208,
-        245,
-        250,
-        253,
-        254,
-        308,
-        316,
-        320
-      ],
+      "ids": [160, 164, 208, 245, 250, 253, 254, 308, 316, 320],
       "fields_changed_per_id": {
-        "160": [
-          "analogy"
-        ],
-        "164": [
-          "plain",
-          "analogy"
-        ],
-        "208": [
-          "hook",
-          "analogy",
-          "prompt"
-        ],
-        "245": [
-          "plain",
-          "analogy"
-        ],
-        "250": [
-          "hook",
-          "analogy",
-          "prompt"
-        ],
-        "253": [
-          "hook",
-          "plain",
-          "analogy"
-        ],
-        "254": [
-          "hook",
-          "plain",
-          "analogy",
-          "prompt"
-        ],
-        "308": [
-          "plain",
-          "analogy"
-        ],
-        "316": [
-          "hook",
-          "plain",
-          "analogy"
-        ],
-        "320": [
-          "hook",
-          "analogy"
-        ]
+        "160": ["analogy"],
+        "164": ["plain", "analogy"],
+        "208": ["hook", "analogy", "prompt"],
+        "245": ["plain", "analogy"],
+        "250": ["hook", "analogy", "prompt"],
+        "253": ["hook", "plain", "analogy"],
+        "254": ["hook", "plain", "analogy", "prompt"],
+        "308": ["plain", "analogy"],
+        "316": ["hook", "plain", "analogy"],
+        "320": ["hook", "analogy"]
       }
     },
     {
       "batch": 16,
       "status": "patched_locally",
-      "ids": [
-        376,
-        390,
-        391,
-        408,
-        478,
-        517,
-        590,
-        594,
-        598,
-        622
-      ],
+      "ids": [376, 390, 391, 408, 478, 517, 590, 594, 598, 622],
       "fields_changed_per_id": {
-        "376": [
-          "analogy"
-        ],
-        "390": [
-          "hook",
-          "plain",
-          "analogy",
-          "prompt"
-        ],
-        "391": [
-          "plain",
-          "analogy"
-        ],
-        "408": [
-          "term",
-          "hook",
-          "plain",
-          "analogy"
-        ],
-        "478": [
-          "hook",
-          "analogy"
-        ],
-        "517": [
-          "plain",
-          "analogy"
-        ],
-        "590": [
-          "hook",
-          "analogy"
-        ],
-        "594": [
-          "plain",
-          "analogy"
-        ],
-        "598": [
-          "analogy"
-        ],
-        "622": [
-          "analogy"
-        ]
+        "376": ["analogy"],
+        "390": ["hook", "plain", "analogy", "prompt"],
+        "391": ["plain", "analogy"],
+        "408": ["term", "hook", "plain", "analogy"],
+        "478": ["hook", "analogy"],
+        "517": ["plain", "analogy"],
+        "590": ["hook", "analogy"],
+        "594": ["plain", "analogy"],
+        "598": ["analogy"],
+        "622": ["analogy"]
       }
     },
     {
       "batch": 17,
       "status": "patched_locally",
-      "ids": [
-        232,
-        363,
-        542,
-        543,
-        67,
-        91,
-        111,
-        136,
-        154,
-        155
-      ],
+      "ids": [232, 363, 542, 543, 67, 91, 111, 136, 154, 155],
       "fields_changed_per_id": {
         "232": ["hook", "plain", "analogy"],
         "363": ["hook", "plain", "analogy"],
@@ -561,8 +209,24 @@
         "109": ["plain", "analogy"],
         "135": ["analogy", "prompt"]
       }
+    },
+    {
+      "batch": 21,
+      "status": "patched_locally",
+      "ids": [214, 217, 244, 282, 306, 309, 329, 340, 366, 369],
+      "fields_changed_per_id": {
+        "214": ["analogy"],
+        "217": ["hook", "analogy"],
+        "244": ["plain", "analogy"],
+        "282": ["hook", "plain", "analogy"],
+        "306": ["analogy"],
+        "309": ["hook", "plain", "analogy", "prompt"],
+        "329": ["hook", "plain", "analogy"],
+        "340": ["hook", "plain", "analogy"],
+        "366": ["analogy"],
+        "369": ["hook", "plain", "analogy"]
+      }
     }
   ],
-  "approved": [],
-  "batch": 21
+  "approved": []
 }
