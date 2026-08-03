@@ -14,8 +14,9 @@ MSG="${1:-"wip: auto-commit from ep-commit.sh"}"
 # Stage all modified tracked files (equivalent to git add for changed files)
 git add -u
 
-# Always stage diff reports (untracked new files not picked up by git add -u)
+# Always stage diff reports and new concept pages (untracked new files not picked up by git add -u)
 git add rewrite-reports/
+git add concepts/
 
 # Also stage any explicitly listed files passed after the message
 shift
