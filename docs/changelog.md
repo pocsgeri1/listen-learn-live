@@ -6,6 +6,65 @@
 
 ---
 
+## v2.92 — 2026-08-03 · Editorial rewrite batches 8–28 + surgical em-dash pass
+
+### concepts.json
+- **210 concepts rewritten** across batches 8–28 (IDs below), plus a surgical em-dash pass on 16 additional concepts. Total today: 226 concepts touched.
+- **Fields touched:** analogy (virtually all), hook (~60%), plain (~50%), prompt (~15%), term (~5% renamed).
+- **Root causes fixed:** analogy ceiling violations (20–42w → 10–20w), multi-sentence hooks, em-dashes, banned analogy openers ("It's like", "Imagine", bare -ing), jargon in plain (cognitive, leverage, fungible, heuristic, rhetoric), plains over 55w, cross-field image overlaps, parenthetical self-references, banned prompt openers.
+- **Term renames (301 redirects added to vercel.json):** 384 → "Asymmetric Fit Partner", 405 → "Deliberate Overlearning", 408 → "Earned Value Effect", 474 renamed, 527 renamed, 617 → "Design vs. Human Reality", 234 casing fixed.
+
+### ep-commit.sh
+- **Auto-stages untracked files:** Added `git add rewrite-reports/` and `git add concepts/` so diff reports and new concept slug HTML pages are never missed in commits.
+
+### docs/cowork-default-instructions.md (v1.4 → v1.5)
+- **SEO integration baked into editorial workflow:** Backup before rewrites (`cp concepts.json tools/concepts-backup.json`), run `generate-static-pages.js` + `update-seo-redirects.js` after each batch, single commit covers everything.
+
+### Batch IDs processed today:
+- **Batch 8:** 519, 612, 616, 627, 630, 240, 242, 377, 110, 292
+- **Batch 9:** 307, 319, 328, 330, 476, 615, 528, 633, 411, 23
+- **Batch 10:** 93, 121, 188, 193, 205, 211, 216, 218, 220, 285
+- **Batch 11:** 298, 382, 629, 637, 162, 239, 241, 228, 565, 26
+- **Batch 12:** 122, 123, 186, 195, 230, 293, 297, 318, 324, 367
+- **Batch 13:** 412, 474, 488, 524, 527, 603, 608, 138, 235, 321
+- **Batch 14:** 592, 231, 48, 237, 238, 396, 516, 28, 46, 127
+- **Batch 15:** 160, 164, 208, 245, 250, 253, 254, 308, 316, 320
+- **Batch 16:** 376, 390, 391, 408, 478, 517, 590, 594, 598, 622
+- **Batch 17:** 232, 363, 542, 543, 67, 91, 111, 136, 154, 155
+- **Batch 18:** 183, 187, 204, 246, 296, 384, 398, 405, 469, 470
+- **Batch 19:** 471, 479, 522, 601, 614, 617, 626, 591, 628, 666
+- **Batch 20:** 400, 128, 236, 262, 534, 539, 554, 567, 109, 135
+- **Batch 21:** 214, 217, 244, 282, 306, 309, 329, 340, 366, 369
+- **Batch 22:** 404, 407, 475, 513, 521, 523, 583, 595, 610, 624
+- **Batch 23:** 631, 94, 234, 61, 126, 130, 422, 556, 564, 569
+- **Batch 24:** 619, 18, 24, 50, 90, 118, 132, 142, 145, 149
+- **Batch 25:** 159, 203, 206, 215, 248, 265, 294, 295, 300, 342
+- **Batch 26:** 364, 371, 383, 409, 480, 482, 484, 525, 526, 580
+- **Batch 27:** 584, 587, 125, 388, 3, 131, 413, 537, 551, 562
+- **Batch 28:** 568, 570, 581, 589, 12, 19, 97, 116, 120, 137
+- **Em-dash pass:** 395, 529, 544, 124, 541, 560, 582, 550, 415, 416, 99, 399, 419, 561, 563, 620
+
+---
+
+## v2.72 — 2026-08-03 · SEO Session 2 — OG images: 710 branded PNGs per concept
+
+### tools/generate-og-images.js (new)
+- **710 branded OG images generated** — one 1200×630 PNG per non-duplicate concept, output to `/og/[id].png`.
+- **Design:** dark background (`#0d0d0d`), 4px left category stripe, corner ornaments, category pill + `#ID` eyebrow (DM Mono), Playfair Display Bold term (font-size scales 72→38px by length), italic category-colored hook, "1000+ concepts" + "epistemic.live" wordmark bottom row.
+- **Font loading:** woff1 files read from locally-installed `@fontsource` packages (`files/[name]-latin-[weight]-[style].woff`) — Satori supports woff1 only, not woff2.
+- **Satori helper functions:** `el(style, children)` and `txt(style, text)` guarantee every div has `display: flex` as required by Satori.
+- **Dead code removed:** Old draft `buildElement` variants with syntax errors stripped before final run.
+- **Run:** `node tools/generate-og-images.js` — skips `duplicate_of` concepts automatically.
+
+### tools/generate-static-pages.js
+- **Per-concept OG image tag:** `og:image` now points to `/og/${concept.id}.png` instead of the shared `/og-image.png`.
+- **Static pages regenerated** after OG images to pick up the per-concept URLs.
+
+### package.json
+- Dependencies `satori`, `sharp`, `@fontsource/playfair-display`, `@fontsource/dm-mono` already present from earlier session.
+
+---
+
 ## v2.71 — 2026-08-03 · Chronological concept + vocab ordering
 
 ### docs/extraction-prompt-v2_0.txt (new)

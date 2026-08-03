@@ -6,6 +6,18 @@
 
 ---
 
+## 2026-08-03 — Editorial rewrite session (v2.79–v2.92, batches 17–28)
+
+**Backup timing is critical for SEO redirects.** `concepts-backup.json` must be taken at session start before any concept is touched. If taken after interactive patches, those term renames won't get redirect entries in vercel.json. Baked into cowork-default-instructions.md v1.5.
+
+**ep-commit.sh missed untracked files.** `git add -u` only stages tracked files. New diff reports (`rewrite-reports/`) and new concept slug HTML pages (`concepts/`) were silently skipped. Fix: added `git add rewrite-reports/` and `git add concepts/` to ep-commit.sh permanently.
+
+**Analogy word counts were the dominant failure mode.** The old extraction prompt produced analogies of 28–42 words consistently. The 20-word hard ceiling was violated on virtually every concept processed this session. New extraction prompt (v2.0+) produces clean analogies; only pre-v2.0 concepts need rewriting.
+
+**Surgical em-dash pass is faster than a full batch.** When only em-dashes need fixing (no analogy/hook violations), run a targeted agent that replaces "—" with appropriate punctuation only — no rewrite needed. 20 em-dashes removed across 16 concepts in one agent call.
+
+**Node.js v22 rejects `!` in `-e` inline scripts.** Use `node << 'EOF' ... EOF` heredoc syntax or replace `!` with a function-style workaround. The `!` character in `Array.filter(!x.flags...)` causes a syntax error in node -e context.
+
 ## 2026-08-03 — Chronological ordering session (v2.71)
 
 **Sorting concepts.json retroactively is safe** — IDs are the canonical references (related_ids, duplicate_of all use integer IDs). Reordering positions in the array breaks nothing. The sort script is idempotent; re-running it on an already-sorted file reports 0 moves and exits without writing.
@@ -13,6 +25,16 @@
 **Vocab vault had 0 timestamps despite 374 items.** Root cause: extraction prompt v1.9 only showed `"timestamp_seconds": null` in the schema example with no enforcement instruction — LLM defaulted to null for everything. Fixed in v2.0 by adding self-check item 7 and a mandatory scan-backwards rule. Cannot retroactively fix existing vocab_vault items without re-running extractions.
 
 **Collections with no timestamps (1–14, 500, 506–510, 511–514):** These concepts predate the timestamp extraction feature. They stay at their current positions; sort script leaves them untouched.
+
+## 2026-08-03 — OG image generation session (v2.72)
+
+**Satori rejects woff2 — use woff1 only.** `@fontsource` packages install both woff2 and woff1 variants. Satori's internal opentype.js throws `Unsupported OpenType signature wOF2` on woff2. The woff1 files live at `files/[name]-latin-[weight]-[style].woff` in the same package directory. Always use `.woff` (not `.woff2`) with Satori.
+
+**Satori requires `display: flex` on every div with more than one child.** Even corner ornament divs with `children: []` and text containers with only style need explicit `display: 'flex'`. The fix: two helper functions — `el(style, children)` for containers (caller passes style including display) and `txt(style, text)` for text nodes (auto-merges `display: 'flex'`). Rewriting buildElement with these helpers eliminated the `Expected <div> to have explicit "display: flex"` error.
+
+**Dead code with syntax errors will prevent the script from parsing.** Old draft buildElement variants left in the file as "reference" had malformed object literals. Node refuses to parse the file at all, so the script never runs. Strip dead code before running — or at minimum before checking in.
+
+**710 images, ~12MB total — committed to repo.** Hosting directly in the repo (not Cloudinary/Vercel Blob) works fine at this size. GitHub handles it; Vercel serves them with standard CDN caching. Reassess if library grows to 2,000+ concepts (~35MB).
 
 ## 2026-08-03 — SEO static pages session (v2.68–v2.70)
 

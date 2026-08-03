@@ -1,6 +1,6 @@
 # Roadmap — Epistemic.
 
-**Last updated:** 2026-07-31
+**Last updated:** 2026-08-03
 **Purpose:** Phased build plan so every decision and feature fits into the bigger picture. Claude references this to avoid building things that will conflict with future phases.
 **Parking lot:** Ideas discussed but deferred live in `docs/ideas-parking-lot.md` — not here. Keeps Next Up clean.
 
@@ -9,10 +9,9 @@
 ## Next up
 
 - **SEO Session 1 ✅ v2.68** — `tools/generate-static-pages.js` generates `/concepts/[id]-[slug].html` for all concepts. `vercel.json` SPA fallback added. GSC tag + deep-link hash handler in `index.html`. Run `node tools/generate-static-pages.js` then commit the `/concepts/` folder to deploy pages. Install pre-push hook via `tools/setup-hooks.sh` (one-time manual **[ACTION]**).
-- **SEO Session 2 — OG images** — Design 1 prototype image first (1200×630, branded). Generate per-concept PNGs only after concept library is stable. Host on Vercel Blob or Cloudinary (not in repo). See `docs/seo-session-plan.md`.
+- **SEO Session 2 ✅ v2.72** — 710 branded OG images (1200×630 PNG) generated via `tools/generate-og-images.js` using Satori + Sharp. One image per concept at `/og/[id].png`. Each static concept page now references its own OG image. Hosted in repo, served by Vercel. When someone shares a concept URL on WhatsApp/Twitter/Slack, the branded preview card appears automatically.
 - **SEO Session 3 ✅ v2.69** — 14 category hub pages at `/category/[name]`. Breadcrumb JSON-LD, full concept list with links, category-coloured accent. Sitemap updated to include category URLs at priority 0.8.
 - **SEO Session 4 ✅ v2.70** — `tools/update-seo-redirects.js` built and tested. Workflow: `cp concepts.json tools/concepts-backup.json` before rewrite session → run script after → commit `vercel.json` + `concepts.json` together.
-- **SEO Session 2 — OG images** — Prototype approved (term + hook + category stripe + 1000+ concepts counter + wordmark, 1200×630). Generate per-concept PNGs only after concept library rewrites are stable. Host on Vercel Blob or Cloudinary (not in repo). See `docs/seo-session-plan.md`.
 - **Global Vocab — Mode A: Category Browse (see `docs/global-vocab-session-plan.md`)** — "All Words" button in Lexi panel, full-screen overlay, 6 category cards, word list with Add to Lexi. Full animation spec and JS function signatures are in the plan doc. One session.
 - **Global Vocab — Mode B: Word Constellation** — canvas-less absolutely-positioned spans, seeded layout, category dim filter. Follow-on session after Mode A.
 - **OG Map spotlight modal — live visual pass (2026-07-04)** — v2.25a rebuilt the content card as a `position:fixed` spotlight modal (fixing v2.25's bleed-through/fuzzy-text/cut-off bugs, all traced to the card living inside the zoomed SVG) and restructured card copy into intro+bullets. Structural correctness was verified programmatically (syntax checks, XML well-formedness, ID cross-checks, a round-trip check of the sentence-splitter against all 72 real content fields), but there's been no live browser preview yet. Worth one pass in-browser (desktop + mobile) to confirm the scrim dim/blur, card entrance animation, and mobile bottom-sheet transition all feel right.
