@@ -119,13 +119,13 @@ function buildPage(concept, allConcepts, totalCount) {
 <meta property="og:url" content="${canonicalUrl}">
 <meta property="og:title" content="${escapeHtml(concept.term)} | Epistemic">
 <meta property="og:description" content="${metaDescription}">
-<meta property="og:image" content="${BASE_URL}/og-image.png">
+<meta property="og:image" content="${BASE_URL}/og/${concept.id}.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="${escapeHtml(concept.term)} | Epistemic">
 <meta name="twitter:description" content="${metaDescription}">
-<meta name="twitter:image" content="${BASE_URL}/og-image.png">
+<meta name="twitter:image" content="${BASE_URL}/og/${concept.id}.png">
 <!-- Structured data -->
 <script type="application/ld+json">${jsonLd}</script>
 <!-- Fonts -->
