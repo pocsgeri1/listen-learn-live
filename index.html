@@ -11907,18 +11907,21 @@ async function loadConcepts() {
       if (!hash || hash.indexOf('#open=') !== 0) return;
       var targetId = parseInt(hash.replace('#open=', ''), 10);
       if (!targetId || isNaN(targetId)) return;
-      // 600ms: generous delay to let grid fully paint + preload guard lift
+      // Look up concept — skip if duplicate_of (card won't be in grid)
+      var concept = (window.CONCEPTS || []).find(function(c) { return c.id === targetId; });
+      if (!concept || concept.duplicate_of) return;
+      // setCat rebuilds grid for just this category, guaranteeing the card exists in DOM
+      if (typeof setCat === 'function') setCat(concept.category);
       setTimeout(function() {
         var el = document.getElementById('cc' + targetId);
         if (!el) return;
-        // Scroll page to card section first, then to the card itself
         var appSection = document.getElementById('netflixRows');
         if (appSection) appSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
         setTimeout(function() {
           el.scrollIntoView({ behavior: 'smooth', block: 'center' });
           if (typeof toggleCard === 'function') setTimeout(function() { toggleCard(targetId); }, 200);
-        }, 400);
-      }, 600);
+        }, 350);
+      }, 400);
     })();
 
   } catch (error) {
