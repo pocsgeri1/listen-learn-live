@@ -1,6 +1,7 @@
 {
   "generated_from": "concepts.json (715 total concepts, scanned 2026-08-03)",
   "excludes_done_ids": [
+    3,
     18,
     23,
     24,
@@ -22,10 +23,12 @@
     121,
     122,
     123,
+    125,
     126,
     127,
     128,
     130,
+    131,
     132,
     135,
     136,
@@ -156,6 +159,7 @@
     383,
     384,
     385,
+    388,
     390,
     391,
     396,
@@ -171,6 +175,7 @@
     409,
     411,
     412,
+    413,
     422,
     467,
     468,
@@ -211,17 +216,22 @@
     528,
     534,
     535,
+    537,
     539,
     542,
     543,
+    551,
     554,
     556,
+    562,
     564,
     565,
     567,
     569,
     580,
     583,
+    584,
+    587,
     590,
     591,
     592,
@@ -265,135 +275,6 @@
   "excludes_in_flight_ids": [],
   "sort": "length_score desc, then em_dash desc",
   "candidates": [
-    {
-      "id": 584,
-      "term": "Emergent Behavior",
-      "length_score": 5.4,
-      "em_dash": 0,
-      "hw": 10,
-      "pw": 29,
-      "aw": 29,
-      "flags": [
-        "analogy 29w"
-      ]
-    },
-    {
-      "id": 587,
-      "term": "Selling Without a Brand",
-      "length_score": 5.4,
-      "em_dash": 0,
-      "hw": 12,
-      "pw": 40,
-      "aw": 29,
-      "flags": [
-        "analogy 29w"
-      ]
-    },
-    {
-      "id": 125,
-      "term": "Productize Yourself",
-      "length_score": 5.2,
-      "em_dash": 0,
-      "hw": 15,
-      "pw": 31,
-      "aw": 27,
-      "flags": [
-        "hook 15w",
-        "analogy 27w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 388,
-      "term": "The Unified Theory of Attractive",
-      "length_score": 5.2,
-      "em_dash": 0,
-      "hw": 10,
-      "pw": 56,
-      "aw": 28,
-      "flags": [
-        "plain 56w",
-        "analogy 28w"
-      ]
-    },
-    {
-      "id": 3,
-      "term": "Confirmation Bias",
-      "length_score": 4.8,
-      "em_dash": 2,
-      "hw": 10,
-      "pw": 26,
-      "aw": 28,
-      "flags": [
-        "em-dash x2",
-        "analogy 28w"
-      ]
-    },
-    {
-      "id": 131,
-      "term": "Sovereign Individual",
-      "length_score": 4.8,
-      "em_dash": 1,
-      "hw": 14,
-      "pw": 34,
-      "aw": 28,
-      "flags": [
-        "em-dash x1",
-        "analogy 28w"
-      ]
-    },
-    {
-      "id": 413,
-      "term": "Protected Hour Strategy",
-      "length_score": 4.8,
-      "em_dash": 1,
-      "hw": 9,
-      "pw": 37,
-      "aw": 28,
-      "flags": [
-        "em-dash x1",
-        "analogy 28w"
-      ]
-    },
-    {
-      "id": 537,
-      "term": "The Replication Crisis",
-      "length_score": 4.8,
-      "em_dash": 1,
-      "hw": 11,
-      "pw": 36,
-      "aw": 28,
-      "flags": [
-        "em-dash x1",
-        "analogy 28w"
-      ]
-    },
-    {
-      "id": 551,
-      "term": "Equivocation",
-      "length_score": 4.8,
-      "em_dash": 1,
-      "hw": 6,
-      "pw": 39,
-      "aw": 28,
-      "flags": [
-        "em-dash x1",
-        "analogy 28w"
-      ]
-    },
-    {
-      "id": 562,
-      "term": "Lifestyle Creep",
-      "length_score": 4.8,
-      "em_dash": 1,
-      "hw": 8,
-      "pw": 38,
-      "aw": 28,
-      "flags": [
-        "em-dash x1",
-        "analogy 28w"
-      ]
-    },
     {
       "id": 568,
       "term": "The Pull of Right Now",
@@ -1546,6 +1427,129 @@
       "em_dash": 0,
       "hw": 7,
       "pw": 20,
+      "aw": 26,
+      "flags": [
+        "analogy 26w"
+      ]
+    },
+    {
+      "id": 92,
+      "term": "Status Anxiety",
+      "length_score": 3.6,
+      "em_dash": 0,
+      "hw": 9,
+      "pw": 23,
+      "aw": 26,
+      "flags": [
+        "analogy 26w"
+      ]
+    },
+    {
+      "id": 98,
+      "term": "Rejection Sensitivity",
+      "length_score": 3.6,
+      "em_dash": 0,
+      "hw": 13,
+      "pw": 29,
+      "aw": 26,
+      "flags": [
+        "analogy 26w"
+      ]
+    },
+    {
+      "id": 103,
+      "term": "Cognitive Flexibility",
+      "length_score": 3.6,
+      "em_dash": 0,
+      "hw": 9,
+      "pw": 27,
+      "aw": 26,
+      "flags": [
+        "analogy 26w"
+      ]
+    },
+    {
+      "id": 108,
+      "term": "Hard Conversations",
+      "length_score": 3.6,
+      "em_dash": 0,
+      "hw": 10,
+      "pw": 24,
+      "aw": 26,
+      "flags": [
+        "analogy 26w"
+      ]
+    },
+    {
+      "id": 113,
+      "term": "Pain is the Pitch",
+      "length_score": 3.6,
+      "em_dash": 0,
+      "hw": 14,
+      "pw": 23,
+      "aw": 26,
+      "flags": [
+        "analogy 26w"
+      ]
+    },
+    {
+      "id": 114,
+      "term": "Risk Reversal",
+      "length_score": 3.6,
+      "em_dash": 0,
+      "hw": 9,
+      "pw": 24,
+      "aw": 26,
+      "flags": [
+        "analogy 26w"
+      ]
+    },
+    {
+      "id": 119,
+      "term": "Category of One",
+      "length_score": 3.6,
+      "em_dash": 0,
+      "hw": 8,
+      "pw": 37,
+      "aw": 26,
+      "flags": [
+        "analogy 26w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 147,
+      "term": "Ego vs Self-Esteem",
+      "length_score": 3.6,
+      "em_dash": 0,
+      "hw": 9,
+      "pw": 29,
+      "aw": 26,
+      "flags": [
+        "analogy 26w",
+        "hook 2 sentences (must be 1)",
+        "term/hook overlap: ego, self-esteem"
+      ]
+    },
+    {
+      "id": 156,
+      "term": "Availability Heuristic",
+      "length_score": 3.6,
+      "em_dash": 0,
+      "hw": 11,
+      "pw": 30,
+      "aw": 26,
+      "flags": [
+        "analogy 26w"
+      ]
+    },
+    {
+      "id": 158,
+      "term": "Overton Window",
+      "length_score": 3.6,
+      "em_dash": 0,
+      "hw": 9,
+      "pw": 29,
       "aw": 26,
       "flags": [
         "analogy 26w"
