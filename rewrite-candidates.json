@@ -1,19 +1,24 @@
 {
   "generated_from": "concepts.json (715 total concepts, scanned 2026-08-03)",
   "excludes_done_ids": [
+    18,
     23,
+    24,
     26,
     28,
     46,
     48,
+    50,
     61,
     67,
+    90,
     91,
     93,
     94,
     109,
     110,
     111,
+    118,
     121,
     122,
     123,
@@ -21,9 +26,13 @@
     127,
     128,
     130,
+    132,
     135,
     136,
     138,
+    142,
+    145,
+    149,
     154,
     155,
     160,
@@ -216,6 +225,7 @@
     616,
     617,
     618,
+    619,
     622,
     623,
     624,
@@ -235,132 +245,6 @@
   "excludes_in_flight_ids": [],
   "sort": "length_score desc, then em_dash desc",
   "candidates": [
-    {
-      "id": 619,
-      "term": "The Cost of Not Knowing",
-      "length_score": 5.4,
-      "em_dash": 1,
-      "hw": 8,
-      "pw": 38,
-      "aw": 29,
-      "flags": [
-        "em-dash x1",
-        "analogy 29w"
-      ]
-    },
-    {
-      "id": 18,
-      "term": "First Principles Thinking",
-      "length_score": 5.4,
-      "em_dash": 0,
-      "hw": 8,
-      "pw": 43,
-      "aw": 29,
-      "flags": [
-        "analogy 29w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 24,
-      "term": "Narrative Fallacy",
-      "length_score": 5.4,
-      "em_dash": 0,
-      "hw": 11,
-      "pw": 31,
-      "aw": 29,
-      "flags": [
-        "analogy 29w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 50,
-      "term": "Systems Thinking",
-      "length_score": 5.4,
-      "em_dash": 0,
-      "hw": 9,
-      "pw": 39,
-      "aw": 29,
-      "flags": [
-        "analogy 29w"
-      ]
-    },
-    {
-      "id": 90,
-      "term": "Comfort Addiction",
-      "length_score": 5.4,
-      "em_dash": 0,
-      "hw": 8,
-      "pw": 28,
-      "aw": 29,
-      "flags": [
-        "analogy 29w"
-      ]
-    },
-    {
-      "id": 118,
-      "term": "Outwork Your Self-Doubt",
-      "length_score": 5.4,
-      "em_dash": 0,
-      "hw": 9,
-      "pw": 27,
-      "aw": 29,
-      "flags": [
-        "analogy 29w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 132,
-      "term": "Shiny Object Syndrome",
-      "length_score": 5.4,
-      "em_dash": 0,
-      "hw": 11,
-      "pw": 28,
-      "aw": 29,
-      "flags": [
-        "analogy 29w"
-      ]
-    },
-    {
-      "id": 142,
-      "term": "Done Beats Perfect",
-      "length_score": 5.4,
-      "em_dash": 0,
-      "hw": 13,
-      "pw": 25,
-      "aw": 29,
-      "flags": [
-        "analogy 29w",
-        "term/hook overlap: beats, perfect"
-      ]
-    },
-    {
-      "id": 145,
-      "term": "The 4-Hour Workday",
-      "length_score": 5.4,
-      "em_dash": 0,
-      "hw": 9,
-      "pw": 26,
-      "aw": 29,
-      "flags": [
-        "analogy 29w"
-      ]
-    },
-    {
-      "id": 149,
-      "term": "Self-Education Advantage",
-      "length_score": 5.4,
-      "em_dash": 0,
-      "hw": 14,
-      "pw": 24,
-      "aw": 29,
-      "flags": [
-        "analogy 29w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
     {
       "id": 159,
       "term": "Lindy Effect",
@@ -1503,6 +1387,134 @@
         "analogy 27w",
         "hook 2 sentences (must be 1)",
         "term/hook overlap: light, ambition"
+      ]
+    },
+    {
+      "id": 327,
+      "term": "Silicon Substrate Advantage",
+      "length_score": 4.2,
+      "em_dash": 0,
+      "hw": 11,
+      "pw": 34,
+      "aw": 27,
+      "flags": [
+        "analogy 27w"
+      ]
+    },
+    {
+      "id": 362,
+      "term": "Hole-Digging Effect",
+      "length_score": 4.2,
+      "em_dash": 0,
+      "hw": 10,
+      "pw": 36,
+      "aw": 27,
+      "flags": [
+        "analogy 27w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 378,
+      "term": "Third-of-Life Tax",
+      "length_score": 4.2,
+      "em_dash": 0,
+      "hw": 14,
+      "pw": 38,
+      "aw": 27,
+      "flags": [
+        "analogy 27w"
+      ]
+    },
+    {
+      "id": 392,
+      "term": "The Settle Question",
+      "length_score": 4.2,
+      "em_dash": 0,
+      "hw": 10,
+      "pw": 42,
+      "aw": 27,
+      "flags": [
+        "analogy 27w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 394,
+      "term": "Permission You Give Yourself",
+      "length_score": 4.2,
+      "em_dash": 0,
+      "hw": 12,
+      "pw": 43,
+      "aw": 27,
+      "flags": [
+        "analogy 27w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 401,
+      "term": "Love Under Pressure",
+      "length_score": 4.2,
+      "em_dash": 0,
+      "hw": 10,
+      "pw": 46,
+      "aw": 27,
+      "flags": [
+        "analogy 27w"
+      ]
+    },
+    {
+      "id": 410,
+      "term": "Aperture of Confidence",
+      "length_score": 4.2,
+      "em_dash": 0,
+      "hw": 12,
+      "pw": 50,
+      "aw": 27,
+      "flags": [
+        "analogy 27w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 606,
+      "term": "Free Trial, Forced Buy",
+      "length_score": 4.2,
+      "em_dash": 0,
+      "hw": 12,
+      "pw": 49,
+      "aw": 27,
+      "flags": [
+        "analogy 27w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 611,
+      "term": "Make It Easy to Say Yes",
+      "length_score": 4.2,
+      "em_dash": 0,
+      "hw": 14,
+      "pw": 50,
+      "aw": 27,
+      "flags": [
+        "analogy 27w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 636,
+      "term": "Margin Beats Volume",
+      "length_score": 4.2,
+      "em_dash": 0,
+      "hw": 13,
+      "pw": 49,
+      "aw": 27,
+      "flags": [
+        "analogy 27w",
+        "hook 2 sentences (must be 1)",
+        "plain jargon: incremental"
       ]
     }
   ]
