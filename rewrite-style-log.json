@@ -2,66 +2,6 @@
   "_note": "Rolling log of the last 50 approved concepts' analogy openers and core images, for the cross-batch repetition check in autonomous-batch-mode.md. Trim to last 50 as new entries are appended.",
   "log": [
     {
-      "id": 599,
-      "batch": 4,
-      "opener": "Tap",
-      "image": "app button with a rapper's face, dinner pre-decided"
-    },
-    {
-      "id": 625,
-      "batch": 4,
-      "opener": "Willie Walsh",
-      "image": "Willie Walsh, ex-pilot now running British Airways' parent company"
-    },
-    {
-      "id": 190,
-      "batch": 5,
-      "opener": "The gated",
-      "image": "gated Slack group buzzing vs. identical open one ignored"
-    },
-    {
-      "id": 222,
-      "batch": 5,
-      "opener": "Someone insults",
-      "image": "insult in a meeting, slow breath, calm ask to repeat"
-    },
-    {
-      "id": 477,
-      "batch": 5,
-      "opener": "Decide to buy",
-      "image": "red Honda suddenly everywhere on the road"
-    },
-    {
-      "id": 605,
-      "batch": 5,
-      "opener": "You call a",
-      "image": "Lotus dealership missed call, callback later that day"
-    },
-    {
-      "id": 607,
-      "batch": 5,
-      "opener": "An airline",
-      "image": "airline self-check-in kiosk vs. agent who'd rebook for free"
-    },
-    {
-      "id": 315,
-      "batch": 5,
-      "opener": "You're playing chess",
-      "image": "chess grandmaster whose every move is predictable"
-    },
-    {
-      "id": 623,
-      "batch": 5,
-      "opener": "Tiny shampoo",
-      "image": "tiny airport shampoo bottles, triple price, sell out"
-    },
-    {
-      "id": 194,
-      "batch": 5,
-      "opener": "A startup raises",
-      "image": "startup raising 400k for 10 percent, valued at 4 million"
-    },
-    {
       "id": 212,
       "batch": 5,
       "opener": "Dad slammed doors",
@@ -300,6 +240,66 @@
       "batch": 9,
       "opener": "Writing a book",
       "image": "book at 200 hours, flops lose time, hits shift career permanently"
+    },
+    {
+      "id": 93,
+      "batch": 10,
+      "opener": "A fisherman",
+      "image": "fisherman casting one line in private pond vs nets across open water"
+    },
+    {
+      "id": 121,
+      "batch": 10,
+      "opener": "One founder",
+      "image": "founder ships prototype by Friday vs still on slides three months out"
+    },
+    {
+      "id": 188,
+      "batch": 10,
+      "opener": "A consultant",
+      "image": "consultant bills hourly, licenses training, builds quiz funnel"
+    },
+    {
+      "id": 193,
+      "batch": 10,
+      "opener": "Dubai fills",
+      "image": "Dubai skyline filled with relocated London and New York bankers"
+    },
+    {
+      "id": 205,
+      "batch": 10,
+      "opener": "Two friends",
+      "image": "two friends silent on bench for an hour after bad news"
+    },
+    {
+      "id": 211,
+      "batch": 10,
+      "opener": "She apologizes",
+      "image": "partner apologizes mid-sob, he holds gaze and shakes head"
+    },
+    {
+      "id": 216,
+      "batch": 10,
+      "opener": "Doctors who",
+      "image": "doctor opening with difficult news vs smiling first"
+    },
+    {
+      "id": 218,
+      "batch": 10,
+      "opener": "Your coworker",
+      "image": "coworker snaps, ask what missing instead of defending, they exhale"
+    },
+    {
+      "id": 220,
+      "batch": 10,
+      "opener": "Your LinkedIn",
+      "image": "LinkedIn shows promotion, Sunday-night dread tracked nowhere"
+    },
+    {
+      "id": 285,
+      "batch": 10,
+      "opener": "A new hire",
+      "image": "new hire refusing to badmouth rival team, watched before trusted"
     }
   ]
 }

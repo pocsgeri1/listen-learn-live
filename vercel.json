@@ -16,5 +16,17 @@
       "source": "/(.*)",
       "destination": "/index.html"
     }
+  ],
+  "redirects": [
+    {
+      "source": "/concepts/211-your-emotions-arent-too-big-for-me",
+      "destination": "/concepts/211-emotional-acceptance-signal",
+      "permanent": true
+    },
+    {
+      "source": "/concepts/218-tell-me-what-im-missing",
+      "destination": "/concepts/218-curiosity-over-defense",
+      "permanent": true
+    }
   ]
 }

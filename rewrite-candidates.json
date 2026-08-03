@@ -1,6 +1,8 @@
 {
-  "generated_from": "concepts.json (651 total concepts, scanned 2026-07-03)",
+  "generated_from": "concepts.json (715 total concepts, scanned 2026-08-03)",
   "excludes_done_ids": [
+    23,
+    110,
     161,
     168,
     177,
@@ -26,29 +28,39 @@
     226,
     227,
     229,
+    240,
+    242,
     280,
     281,
     284,
+    292,
+    307,
     310,
     311,
     314,
     315,
     317,
+    319,
+    328,
+    330,
     334,
     335,
     336,
     337,
     338,
     339,
+    377,
     381,
     385,
     397,
     403,
     406,
+    411,
     467,
     468,
     472,
     473,
+    476,
     477,
     483,
     485,
@@ -58,6 +70,8 @@
     490,
     491,
     518,
+    519,
+    528,
     535,
     593,
     599,
@@ -66,9 +80,15 @@
     605,
     607,
     609,
+    612,
+    615,
+    616,
     618,
     623,
     625,
+    627,
+    630,
+    633,
     635,
     638
   ],
@@ -76,257 +96,9 @@
   "sort": "length_score desc, then em_dash desc",
   "candidates": [
     {
-      "id": 519,
-      "term": "Divergent Thinking",
-      "length_score": 6.6,
-      "em_dash": 0,
-      "hw": 8,
-      "pw": 33,
-      "aw": 36,
-      "flags": [
-        "analogy 36w"
-      ]
-    },
-    {
-      "id": 612,
-      "term": "Belief Changes the Taste",
-      "length_score": 6.6,
-      "em_dash": 0,
-      "hw": 13,
-      "pw": 49,
-      "aw": 36,
-      "flags": [
-        "analogy 36w"
-      ]
-    },
-    {
-      "id": 616,
-      "term": "Slow, Slow, Then All at Once",
-      "length_score": 6.6,
-      "em_dash": 0,
-      "hw": 13,
-      "pw": 44,
-      "aw": 36,
-      "flags": [
-        "analogy 36w"
-      ]
-    },
-    {
-      "id": 627,
-      "term": "Loss Aversion",
-      "length_score": 6.6,
-      "em_dash": 0,
-      "hw": 12,
-      "pw": 47,
-      "aw": 36,
-      "flags": [
-        "analogy 36w"
-      ]
-    },
-    {
-      "id": 630,
-      "term": "The Logical 15%",
-      "length_score": 6.6,
-      "em_dash": 0,
-      "hw": 13,
-      "pw": 47,
-      "aw": 36,
-      "flags": [
-        "analogy 36w"
-      ]
-    },
-    {
-      "id": 240,
-      "term": "Anticipation of Audience",
-      "length_score": 6,
-      "em_dash": 2,
-      "hw": 9,
-      "pw": 45,
-      "aw": 35,
-      "flags": [
-        "em-dash x2",
-        "analogy 35w"
-      ]
-    },
-    {
-      "id": 242,
-      "term": "Right but Early",
-      "length_score": 6,
-      "em_dash": 2,
-      "hw": 12,
-      "pw": 49,
-      "aw": 35,
-      "flags": [
-        "em-dash x2",
-        "analogy 35w"
-      ]
-    },
-    {
-      "id": 377,
-      "term": "Peak Experience Trap",
-      "length_score": 6,
-      "em_dash": 2,
-      "hw": 12,
-      "pw": 35,
-      "aw": 35,
-      "flags": [
-        "em-dash x2",
-        "analogy 35w"
-      ]
-    },
-    {
-      "id": 110,
-      "term": "Grand Slam Offer",
-      "length_score": 6,
-      "em_dash": 0,
-      "hw": 8,
-      "pw": 21,
-      "aw": 35,
-      "flags": [
-        "analogy 35w"
-      ]
-    },
-    {
-      "id": 292,
-      "term": "The Pretty Privilege",
-      "length_score": 6,
-      "em_dash": 0,
-      "hw": 14,
-      "pw": 41,
-      "aw": 35,
-      "flags": [
-        "analogy 35w"
-      ]
-    },
-    {
-      "id": 307,
-      "term": "Deceptive Mating Strategy",
-      "length_score": 6,
-      "em_dash": 0,
-      "hw": 11,
-      "pw": 42,
-      "aw": 35,
-      "flags": [
-        "analogy 35w"
-      ]
-    },
-    {
-      "id": 319,
-      "term": "Perpetual Safety Paradox",
-      "length_score": 6,
-      "em_dash": 0,
-      "hw": 10,
-      "pw": 48,
-      "aw": 35,
-      "flags": [
-        "analogy 35w"
-      ]
-    },
-    {
-      "id": 328,
-      "term": "Minimum Wage as Admission",
-      "length_score": 6,
-      "em_dash": 0,
-      "hw": 14,
-      "pw": 42,
-      "aw": 35,
-      "flags": [
-        "analogy 35w"
-      ]
-    },
-    {
-      "id": 330,
-      "term": "Black Box Intelligence",
-      "length_score": 6,
-      "em_dash": 0,
-      "hw": 13,
-      "pw": 47,
-      "aw": 35,
-      "flags": [
-        "analogy 35w"
-      ]
-    },
-    {
-      "id": 476,
-      "term": "Anti-Vision",
-      "length_score": 6,
-      "em_dash": 0,
-      "hw": 13,
-      "pw": 49,
-      "aw": 35,
-      "flags": [
-        "analogy 35w"
-      ]
-    },
-    {
-      "id": 615,
-      "term": "Function vs Feeling",
-      "length_score": 6,
-      "em_dash": 0,
-      "hw": 13,
-      "pw": 42,
-      "aw": 35,
-      "flags": [
-        "analogy 35w"
-      ]
-    },
-    {
-      "id": 528,
-      "term": "Taste Gap",
-      "length_score": 5.8,
-      "em_dash": 1,
-      "hw": 15,
-      "pw": 35,
-      "aw": 33,
-      "flags": [
-        "em-dash x1",
-        "hook 15w",
-        "analogy 33w",
-        "term/hook overlap: taste, gap"
-      ]
-    },
-    {
-      "id": 633,
-      "term": "Attribution Illusion",
-      "length_score": 5.8,
-      "em_dash": 0,
-      "hw": 12,
-      "pw": 56,
-      "aw": 34,
-      "flags": [
-        "plain 56w",
-        "analogy 34w"
-      ]
-    },
-    {
-      "id": 411,
-      "term": "Serial Obsessive",
-      "length_score": 5.4,
-      "em_dash": 1,
-      "hw": 13,
-      "pw": 38,
-      "aw": 34,
-      "flags": [
-        "em-dash x1",
-        "analogy 34w"
-      ]
-    },
-    {
-      "id": 23,
-      "term": "Asymmetric Risk",
-      "length_score": 5.4,
-      "em_dash": 0,
-      "hw": 9,
-      "pw": 25,
-      "aw": 34,
-      "flags": [
-        "analogy 34w"
-      ]
-    },
-    {
       "id": 93,
       "term": "Luck Surface Area",
-      "length_score": 5.4,
+      "length_score": 8.4,
       "em_dash": 0,
       "hw": 9,
       "pw": 32,
@@ -338,31 +110,33 @@
     {
       "id": 121,
       "term": "First Mover Edge",
-      "length_score": 5.4,
+      "length_score": 8.4,
       "em_dash": 0,
       "hw": 11,
       "pw": 25,
       "aw": 34,
       "flags": [
-        "analogy 34w"
+        "analogy 34w",
+        "hook 2 sentences (must be 1)"
       ]
     },
     {
       "id": 188,
       "term": "Entrepreneurial Pyramid",
-      "length_score": 5.4,
+      "length_score": 8.4,
       "em_dash": 0,
       "hw": 10,
       "pw": 51,
       "aw": 34,
       "flags": [
-        "analogy 34w"
+        "analogy 34w",
+        "hook 2 sentences (must be 1)"
       ]
     },
     {
       "id": 193,
       "term": "Geography Arbitrage",
-      "length_score": 5.4,
+      "length_score": 8.4,
       "em_dash": 0,
       "hw": 12,
       "pw": 55,
@@ -374,7 +148,7 @@
     {
       "id": 205,
       "term": "Space Holding",
-      "length_score": 5.4,
+      "length_score": 8.4,
       "em_dash": 0,
       "hw": 11,
       "pw": 38,
@@ -386,7 +160,7 @@
     {
       "id": 211,
       "term": "Your Emotions Aren't Too Big for Me",
-      "length_score": 5.4,
+      "length_score": 8.4,
       "em_dash": 0,
       "hw": 12,
       "pw": 42,
@@ -398,31 +172,33 @@
     {
       "id": 216,
       "term": "Labeling the Difficult Conversation",
-      "length_score": 5.4,
+      "length_score": 8.4,
       "em_dash": 0,
       "hw": 9,
       "pw": 38,
       "aw": 34,
       "flags": [
-        "analogy 34w"
+        "analogy 34w",
+        "hook 2 sentences (must be 1)"
       ]
     },
     {
       "id": 218,
       "term": "Tell Me What I'm Missing",
-      "length_score": 5.4,
+      "length_score": 8.4,
       "em_dash": 0,
       "hw": 9,
       "pw": 33,
       "aw": 34,
       "flags": [
-        "analogy 34w"
+        "analogy 34w",
+        "hook 2 sentences (must be 1)"
       ]
     },
     {
       "id": 220,
       "term": "Hidden Metrics",
-      "length_score": 5.4,
+      "length_score": 8.4,
       "em_dash": 0,
       "hw": 12,
       "pw": 44,
@@ -434,7 +210,7 @@
     {
       "id": 285,
       "term": "Loyalty Tax",
-      "length_score": 5.4,
+      "length_score": 8.4,
       "em_dash": 0,
       "hw": 11,
       "pw": 49,
@@ -446,19 +222,20 @@
     {
       "id": 298,
       "term": "Pick Me Policing",
-      "length_score": 5.4,
+      "length_score": 8.4,
       "em_dash": 0,
       "hw": 11,
       "pw": 48,
       "aw": 34,
       "flags": [
-        "analogy 34w"
+        "analogy 34w",
+        "hook 2 sentences (must be 1)"
       ]
     },
     {
       "id": 382,
       "term": "AI = Race to Mediocrity",
-      "length_score": 5.4,
+      "length_score": 8.4,
       "em_dash": 0,
       "hw": 9,
       "pw": 49,
@@ -470,7 +247,7 @@
     {
       "id": 629,
       "term": "Easter Egg Thinking",
-      "length_score": 5.4,
+      "length_score": 8.4,
       "em_dash": 0,
       "hw": 8,
       "pw": 48,
@@ -482,19 +259,20 @@
     {
       "id": 637,
       "term": "Time-Cost Perversity",
-      "length_score": 5.4,
+      "length_score": 8.4,
       "em_dash": 0,
       "hw": 10,
       "pw": 53,
       "aw": 34,
       "flags": [
-        "analogy 34w"
+        "analogy 34w",
+        "hook 2 sentences (must be 1)"
       ]
     },
     {
       "id": 162,
       "term": "Thin Slice Jealousy",
-      "length_score": 5.2,
+      "length_score": 8.2,
       "em_dash": 0,
       "hw": 10,
       "pw": 56,
@@ -507,7 +285,7 @@
     {
       "id": 239,
       "term": "Product, Not Person",
-      "length_score": 4.8,
+      "length_score": 7.8,
       "em_dash": 2,
       "hw": 9,
       "pw": 48,
@@ -520,33 +298,35 @@
     {
       "id": 241,
       "term": "Control Addiction",
-      "length_score": 4.8,
+      "length_score": 7.8,
       "em_dash": 2,
       "hw": 12,
       "pw": 40,
       "aw": 33,
       "flags": [
         "em-dash x2",
-        "analogy 33w"
+        "analogy 33w",
+        "hook 2 sentences (must be 1)"
       ]
     },
     {
       "id": 228,
       "term": "Selective Productivity",
-      "length_score": 4.8,
+      "length_score": 7.8,
       "em_dash": 1,
       "hw": 13,
       "pw": 29,
       "aw": 33,
       "flags": [
         "em-dash x1",
-        "analogy 33w"
+        "analogy 33w",
+        "hook 2 sentences (must be 1)"
       ]
     },
     {
       "id": 565,
       "term": "Burn Rate & Runway",
-      "length_score": 4.8,
+      "length_score": 7.8,
       "em_dash": 1,
       "hw": 11,
       "pw": 38,
@@ -559,7 +339,7 @@
     {
       "id": 26,
       "term": "Skin in the Game",
-      "length_score": 4.8,
+      "length_score": 7.8,
       "em_dash": 0,
       "hw": 10,
       "pw": 32,
@@ -571,7 +351,7 @@
     {
       "id": 122,
       "term": "The Long Game",
-      "length_score": 4.8,
+      "length_score": 7.8,
       "em_dash": 0,
       "hw": 7,
       "pw": 27,
@@ -583,45 +363,48 @@
     {
       "id": 123,
       "term": "Earned Confidence",
-      "length_score": 4.8,
+      "length_score": 7.8,
       "em_dash": 0,
       "hw": 11,
       "pw": 21,
       "aw": 33,
       "flags": [
         "analogy 33w",
+        "hook 2 sentences (must be 1)",
         "term/hook overlap: earned, confidence"
       ]
     },
     {
       "id": 186,
       "term": "Bell Curve Vs. Power Law",
-      "length_score": 4.8,
+      "length_score": 7.8,
       "em_dash": 0,
       "hw": 10,
       "pw": 46,
       "aw": 33,
       "flags": [
         "analogy 33w",
+        "hook 2 sentences (must be 1)",
         "term/hook overlap: bell, power"
       ]
     },
     {
       "id": 195,
       "term": "Lifestyle Boutique",
-      "length_score": 4.8,
+      "length_score": 7.8,
       "em_dash": 0,
       "hw": 12,
       "pw": 54,
       "aw": 33,
       "flags": [
-        "analogy 33w"
+        "analogy 33w",
+        "hook 2 sentences (must be 1)"
       ]
     },
     {
       "id": 230,
       "term": "One Conversation Isn't Enough",
-      "length_score": 4.8,
+      "length_score": 7.8,
       "em_dash": 0,
       "hw": 11,
       "pw": 41,
@@ -633,7 +416,7 @@
     {
       "id": 293,
       "term": "Adaptation Executor",
-      "length_score": 4.8,
+      "length_score": 7.8,
       "em_dash": 0,
       "hw": 8,
       "pw": 48,
@@ -645,19 +428,20 @@
     {
       "id": 297,
       "term": "Coalitional Value",
-      "length_score": 4.8,
+      "length_score": 7.8,
       "em_dash": 0,
       "hw": 12,
       "pw": 51,
       "aw": 33,
       "flags": [
-        "analogy 33w"
+        "analogy 33w",
+        "hook 2 sentences (must be 1)"
       ]
     },
     {
       "id": 318,
       "term": "Infinite $0 Labor",
-      "length_score": 4.8,
+      "length_score": 7.8,
       "em_dash": 0,
       "hw": 11,
       "pw": 42,
@@ -669,20 +453,21 @@
     {
       "id": 324,
       "term": "Intellectual Necessity Threshold",
-      "length_score": 4.8,
+      "length_score": 7.8,
       "em_dash": 0,
       "hw": 11,
       "pw": 42,
       "aw": 33,
       "flags": [
         "analogy 33w",
+        "hook 2 sentences (must be 1)",
         "plain jargon: cognitive"
       ]
     },
     {
       "id": 367,
       "term": "Deliberate Ignorance",
-      "length_score": 4.8,
+      "length_score": 7.8,
       "em_dash": 0,
       "hw": 9,
       "pw": 35,
@@ -694,7 +479,7 @@
     {
       "id": 412,
       "term": "State vs Trait Confidence",
-      "length_score": 4.8,
+      "length_score": 7.8,
       "em_dash": 0,
       "hw": 9,
       "pw": 47,
@@ -706,19 +491,20 @@
     {
       "id": 474,
       "term": "Act the Part Before You Get the Part",
-      "length_score": 4.8,
+      "length_score": 7.8,
       "em_dash": 0,
       "hw": 11,
       "pw": 43,
       "aw": 33,
       "flags": [
-        "analogy 33w"
+        "analogy 33w",
+        "hook 2 sentences (must be 1)"
       ]
     },
     {
       "id": 488,
       "term": "Conformist Stage",
-      "length_score": 4.8,
+      "length_score": 7.8,
       "em_dash": 0,
       "hw": 10,
       "pw": 41,
@@ -730,19 +516,20 @@
     {
       "id": 524,
       "term": "Steal Like an Artist",
-      "length_score": 4.8,
+      "length_score": 7.8,
       "em_dash": 0,
       "hw": 8,
       "pw": 35,
       "aw": 33,
       "flags": [
-        "analogy 33w"
+        "analogy 33w",
+        "hook 2 sentences (must be 1)"
       ]
     },
     {
       "id": 527,
       "term": "Your Old Work Is a Quarry",
-      "length_score": 4.8,
+      "length_score": 7.8,
       "em_dash": 0,
       "hw": 10,
       "pw": 45,
@@ -755,7 +542,7 @@
     {
       "id": 603,
       "term": "Expectation Gap",
-      "length_score": 4.8,
+      "length_score": 7.8,
       "em_dash": 0,
       "hw": 8,
       "pw": 49,
@@ -767,19 +554,20 @@
     {
       "id": 608,
       "term": "Explore vs Exploit",
-      "length_score": 4.8,
+      "length_score": 7.8,
       "em_dash": 0,
       "hw": 8,
       "pw": 43,
       "aw": 33,
       "flags": [
-        "analogy 33w"
+        "analogy 33w",
+        "hook 2 sentences (must be 1)"
       ]
     },
     {
       "id": 138,
       "term": "Minimum Viable Offer",
-      "length_score": 4.6,
+      "length_score": 7.6,
       "em_dash": 2,
       "hw": 15,
       "pw": 22,
@@ -793,7 +581,7 @@
     {
       "id": 235,
       "term": "Anxiously Attached to Experts",
-      "length_score": 4.6,
+      "length_score": 7.6,
       "em_dash": 1,
       "hw": 10,
       "pw": 56,
@@ -801,13 +589,14 @@
       "flags": [
         "em-dash x1",
         "plain 56w",
-        "analogy 32w"
+        "analogy 32w",
+        "hook 2 sentences (must be 1)"
       ]
     },
     {
       "id": 321,
       "term": "Retroactive Simulation Commitment",
-      "length_score": 4.6,
+      "length_score": 7.6,
       "em_dash": 0,
       "hw": 15,
       "pw": 44,
@@ -820,7 +609,7 @@
     {
       "id": 592,
       "term": "Horsepower as Marketing Metric",
-      "length_score": 4.6,
+      "length_score": 7.6,
       "em_dash": 0,
       "hw": 15,
       "pw": 46,
@@ -828,13 +617,14 @@
       "flags": [
         "hook 15w",
         "analogy 31w",
+        "hook 2 sentences (must be 1)",
         "term/hook overlap: horsepower, metric"
       ]
     },
     {
       "id": 231,
       "term": "Reputation Management",
-      "length_score": 4.2,
+      "length_score": 7.2,
       "em_dash": 2,
       "hw": 8,
       "pw": 41,
@@ -847,46 +637,49 @@
     {
       "id": 48,
       "term": "Reversion to the Mean",
-      "length_score": 4.2,
+      "length_score": 7.2,
       "em_dash": 1,
       "hw": 8,
       "pw": 29,
       "aw": 32,
       "flags": [
         "em-dash x1",
-        "analogy 32w"
+        "analogy 32w",
+        "hook 2 sentences (must be 1)"
       ]
     },
     {
       "id": 237,
       "term": "Trapped in the Story",
-      "length_score": 4.2,
+      "length_score": 7.2,
       "em_dash": 1,
       "hw": 13,
       "pw": 48,
       "aw": 32,
       "flags": [
         "em-dash x1",
-        "analogy 32w"
+        "analogy 32w",
+        "hook 2 sentences (must be 1)"
       ]
     },
     {
       "id": 238,
       "term": "Radicalization Through Empathy",
-      "length_score": 4.2,
+      "length_score": 7.2,
       "em_dash": 1,
       "hw": 10,
       "pw": 47,
       "aw": 32,
       "flags": [
         "em-dash x1",
-        "analogy 32w"
+        "analogy 32w",
+        "hook 2 sentences (must be 1)"
       ]
     },
     {
       "id": 396,
       "term": "Worst-Case Is a Safe Place",
-      "length_score": 4.2,
+      "length_score": 7.2,
       "em_dash": 1,
       "hw": 9,
       "pw": 35,
@@ -899,20 +692,21 @@
     {
       "id": 516,
       "term": "Minimum Viable Offer",
-      "length_score": 4.2,
+      "length_score": 7.2,
       "em_dash": 1,
       "hw": 9,
       "pw": 48,
       "aw": 32,
       "flags": [
         "em-dash x1",
-        "analogy 32w"
+        "analogy 32w",
+        "hook 2 sentences (must be 1)"
       ]
     },
     {
       "id": 28,
       "term": "Moral Hazard",
-      "length_score": 4.2,
+      "length_score": 7.2,
       "em_dash": 0,
       "hw": 9,
       "pw": 28,
@@ -924,7 +718,7 @@
     {
       "id": 46,
       "term": "Narrative Control",
-      "length_score": 4.2,
+      "length_score": 7.2,
       "em_dash": 0,
       "hw": 9,
       "pw": 32,
@@ -936,14 +730,644 @@
     {
       "id": 127,
       "term": "Self-Actualize → Self-Monetize → Self-Transcend",
-      "length_score": 4.2,
+      "length_score": 7.2,
       "em_dash": 0,
       "hw": 14,
       "pw": 27,
       "aw": 32,
       "flags": [
         "analogy 32w",
+        "hook 3 sentences (must be 1)",
         "plain jargon: framework"
+      ]
+    },
+    {
+      "id": 160,
+      "term": "The Writing Habit",
+      "length_score": 7.2,
+      "em_dash": 0,
+      "hw": 10,
+      "pw": 30,
+      "aw": 32,
+      "flags": [
+        "analogy 32w"
+      ]
+    },
+    {
+      "id": 164,
+      "term": "Matthew Principle",
+      "length_score": 7.2,
+      "em_dash": 0,
+      "hw": 7,
+      "pw": 44,
+      "aw": 32,
+      "flags": [
+        "analogy 32w"
+      ]
+    },
+    {
+      "id": 208,
+      "term": "Anger Hides Grief",
+      "length_score": 7.2,
+      "em_dash": 0,
+      "hw": 11,
+      "pw": 34,
+      "aw": 32,
+      "flags": [
+        "analogy 32w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 245,
+      "term": "Performative Vulnerability",
+      "length_score": 7.2,
+      "em_dash": 0,
+      "hw": 9,
+      "pw": 38,
+      "aw": 32,
+      "flags": [
+        "analogy 32w"
+      ]
+    },
+    {
+      "id": 250,
+      "term": "The Zero-Sum Spin",
+      "length_score": 7.2,
+      "em_dash": 0,
+      "hw": 9,
+      "pw": 38,
+      "aw": 32,
+      "flags": [
+        "analogy 32w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 253,
+      "term": "Simulation Substitution",
+      "length_score": 7.2,
+      "em_dash": 0,
+      "hw": 13,
+      "pw": 49,
+      "aw": 32,
+      "flags": [
+        "analogy 32w"
+      ]
+    },
+    {
+      "id": 254,
+      "term": "Bound by Hatred, Not Love",
+      "length_score": 7.2,
+      "em_dash": 0,
+      "hw": 13,
+      "pw": 44,
+      "aw": 32,
+      "flags": [
+        "analogy 32w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 308,
+      "term": "Looks-maxing",
+      "length_score": 7.2,
+      "em_dash": 0,
+      "hw": 12,
+      "pw": 45,
+      "aw": 32,
+      "flags": [
+        "analogy 32w"
+      ]
+    },
+    {
+      "id": 316,
+      "term": "Outrun Death Point",
+      "length_score": 7.2,
+      "em_dash": 0,
+      "hw": 11,
+      "pw": 53,
+      "aw": 32,
+      "flags": [
+        "analogy 32w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 320,
+      "term": "Capability-safety Gap",
+      "length_score": 7.2,
+      "em_dash": 0,
+      "hw": 12,
+      "pw": 46,
+      "aw": 32,
+      "flags": [
+        "analogy 32w",
+        "hook 3 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 376,
+      "term": "Goal Gravity",
+      "length_score": 7.2,
+      "em_dash": 0,
+      "hw": 11,
+      "pw": 32,
+      "aw": 32,
+      "flags": [
+        "analogy 32w"
+      ]
+    },
+    {
+      "id": 390,
+      "term": "Victimhood as Entitlement Currency",
+      "length_score": 7.2,
+      "em_dash": 0,
+      "hw": 9,
+      "pw": 41,
+      "aw": 32,
+      "flags": [
+        "analogy 32w"
+      ]
+    },
+    {
+      "id": 391,
+      "term": "Relationship-first Agreement",
+      "length_score": 7.2,
+      "em_dash": 0,
+      "hw": 9,
+      "pw": 50,
+      "aw": 32,
+      "flags": [
+        "analogy 32w"
+      ]
+    },
+    {
+      "id": 408,
+      "term": "Inverse Relationship: Convenience and Significance",
+      "length_score": 7.2,
+      "em_dash": 0,
+      "hw": 7,
+      "pw": 36,
+      "aw": 32,
+      "flags": [
+        "analogy 32w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 478,
+      "term": "Conceptual Survival",
+      "length_score": 7.2,
+      "em_dash": 0,
+      "hw": 12,
+      "pw": 44,
+      "aw": 32,
+      "flags": [
+        "analogy 32w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 517,
+      "term": "Adjacent Possible",
+      "length_score": 7.2,
+      "em_dash": 0,
+      "hw": 13,
+      "pw": 46,
+      "aw": 32,
+      "flags": [
+        "analogy 32w"
+      ]
+    },
+    {
+      "id": 590,
+      "term": "The Long Flat Start",
+      "length_score": 7.2,
+      "em_dash": 0,
+      "hw": 12,
+      "pw": 54,
+      "aw": 32,
+      "flags": [
+        "analogy 32w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 594,
+      "term": "Brands as Insurance",
+      "length_score": 7.2,
+      "em_dash": 0,
+      "hw": 6,
+      "pw": 46,
+      "aw": 32,
+      "flags": [
+        "analogy 32w"
+      ]
+    },
+    {
+      "id": 598,
+      "term": "Process Fetishism",
+      "length_score": 7.2,
+      "em_dash": 0,
+      "hw": 13,
+      "pw": 37,
+      "aw": 32,
+      "flags": [
+        "analogy 32w"
+      ]
+    },
+    {
+      "id": 622,
+      "term": "Maya Principle",
+      "length_score": 7.2,
+      "em_dash": 0,
+      "hw": 10,
+      "pw": 49,
+      "aw": 32,
+      "flags": [
+        "analogy 32w"
+      ]
+    },
+    {
+      "id": 232,
+      "term": "Optimized for the Wrong Life",
+      "length_score": 6.6,
+      "em_dash": 3,
+      "hw": 12,
+      "pw": 44,
+      "aw": 31,
+      "flags": [
+        "em-dash x3",
+        "analogy 31w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 363,
+      "term": "Invisible Competition",
+      "length_score": 6.6,
+      "em_dash": 2,
+      "hw": 11,
+      "pw": 37,
+      "aw": 31,
+      "flags": [
+        "em-dash x2",
+        "analogy 31w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 542,
+      "term": "Sleep Pressure",
+      "length_score": 6.6,
+      "em_dash": 1,
+      "hw": 12,
+      "pw": 36,
+      "aw": 31,
+      "flags": [
+        "em-dash x1",
+        "analogy 31w",
+        "analogy banned opener: 'it's like'"
+      ]
+    },
+    {
+      "id": 543,
+      "term": "P-Hacking",
+      "length_score": 6.6,
+      "em_dash": 1,
+      "hw": 11,
+      "pw": 30,
+      "aw": 31,
+      "flags": [
+        "em-dash x1",
+        "analogy 31w"
+      ]
+    },
+    {
+      "id": 67,
+      "term": "Groupthink",
+      "length_score": 6.6,
+      "em_dash": 0,
+      "hw": 13,
+      "pw": 21,
+      "aw": 31,
+      "flags": [
+        "analogy 31w",
+        "hook 3 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 91,
+      "term": "Evolved Mismatch",
+      "length_score": 6.6,
+      "em_dash": 0,
+      "hw": 13,
+      "pw": 25,
+      "aw": 31,
+      "flags": [
+        "analogy 31w"
+      ]
+    },
+    {
+      "id": 111,
+      "term": "Value Equation",
+      "length_score": 6.6,
+      "em_dash": 0,
+      "hw": 10,
+      "pw": 44,
+      "aw": 31,
+      "flags": [
+        "analogy 31w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 136,
+      "term": "Domain of Mastery",
+      "length_score": 6.6,
+      "em_dash": 0,
+      "hw": 11,
+      "pw": 26,
+      "aw": 31,
+      "flags": [
+        "analogy 31w"
+      ]
+    },
+    {
+      "id": 154,
+      "term": "Negative Visualization",
+      "length_score": 6.6,
+      "em_dash": 0,
+      "hw": 9,
+      "pw": 33,
+      "aw": 31,
+      "flags": [
+        "analogy 31w"
+      ]
+    },
+    {
+      "id": 155,
+      "term": "Second-Order Thinking",
+      "length_score": 6.6,
+      "em_dash": 0,
+      "hw": 6,
+      "pw": 31,
+      "aw": 31,
+      "flags": [
+        "analogy 31w"
+      ]
+    },
+    {
+      "id": 183,
+      "term": "Entrepreneurial Apprenticeship",
+      "length_score": 6.6,
+      "em_dash": 0,
+      "hw": 13,
+      "pw": 51,
+      "aw": 31,
+      "flags": [
+        "analogy 31w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 187,
+      "term": "Official Capacity",
+      "length_score": 6.6,
+      "em_dash": 0,
+      "hw": 11,
+      "pw": 47,
+      "aw": 31,
+      "flags": [
+        "analogy 31w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 204,
+      "term": "Vagal Authority",
+      "length_score": 6.6,
+      "em_dash": 0,
+      "hw": 9,
+      "pw": 39,
+      "aw": 31,
+      "flags": [
+        "analogy 31w"
+      ]
+    },
+    {
+      "id": 246,
+      "term": "The Vanity Paradox",
+      "length_score": 6.6,
+      "em_dash": 0,
+      "hw": 13,
+      "pw": 39,
+      "aw": 31,
+      "flags": [
+        "analogy 31w"
+      ]
+    },
+    {
+      "id": 296,
+      "term": "Woke Fishing",
+      "length_score": 6.6,
+      "em_dash": 0,
+      "hw": 11,
+      "pw": 52,
+      "aw": 31,
+      "flags": [
+        "analogy 31w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 384,
+      "term": "Air Fryer vs Fiat 500 Partner",
+      "length_score": 6.6,
+      "em_dash": 0,
+      "hw": 9,
+      "pw": 53,
+      "aw": 31,
+      "flags": [
+        "analogy 31w"
+      ]
+    },
+    {
+      "id": 398,
+      "term": "Study Paralysis",
+      "length_score": 6.6,
+      "em_dash": 0,
+      "hw": 8,
+      "pw": 37,
+      "aw": 31,
+      "flags": [
+        "analogy 31w"
+      ]
+    },
+    {
+      "id": 405,
+      "term": "Practicing Until It's Impossible to Get Wrong",
+      "length_score": 6.6,
+      "em_dash": 0,
+      "hw": 12,
+      "pw": 41,
+      "aw": 31,
+      "flags": [
+        "analogy 31w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 469,
+      "term": "Behaviour Follows Identity",
+      "length_score": 6.6,
+      "em_dash": 0,
+      "hw": 8,
+      "pw": 47,
+      "aw": 31,
+      "flags": [
+        "analogy 31w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 470,
+      "term": "Deep Generalist",
+      "length_score": 6.6,
+      "em_dash": 0,
+      "hw": 10,
+      "pw": 40,
+      "aw": 31,
+      "flags": [
+        "analogy 31w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 471,
+      "term": "The Disgust Threshold",
+      "length_score": 6.6,
+      "em_dash": 0,
+      "hw": 9,
+      "pw": 45,
+      "aw": 31,
+      "flags": [
+        "analogy 31w"
+      ]
+    },
+    {
+      "id": 479,
+      "term": "The Real Reason You're Stuck",
+      "length_score": 6.6,
+      "em_dash": 0,
+      "hw": 12,
+      "pw": 39,
+      "aw": 31,
+      "flags": [
+        "analogy 31w"
+      ]
+    },
+    {
+      "id": 522,
+      "term": "Remix, Don't (Re)invent",
+      "length_score": 6.6,
+      "em_dash": 0,
+      "hw": 9,
+      "pw": 42,
+      "aw": 31,
+      "flags": [
+        "analogy 31w"
+      ]
+    },
+    {
+      "id": 601,
+      "term": "Heuristics for Complexity",
+      "length_score": 6.6,
+      "em_dash": 0,
+      "hw": 14,
+      "pw": 49,
+      "aw": 31,
+      "flags": [
+        "analogy 31w",
+        "plain jargon: heuristic"
+      ]
+    },
+    {
+      "id": 614,
+      "term": "Arbitrary Surprise",
+      "length_score": 6.6,
+      "em_dash": 0,
+      "hw": 9,
+      "pw": 45,
+      "aw": 31,
+      "flags": [
+        "analogy 31w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 617,
+      "term": "Built for the Wild, Living Online",
+      "length_score": 6.6,
+      "em_dash": 0,
+      "hw": 13,
+      "pw": 48,
+      "aw": 31,
+      "flags": [
+        "analogy 31w"
+      ]
+    },
+    {
+      "id": 626,
+      "term": "Short-Term Trap",
+      "length_score": 6.6,
+      "em_dash": 0,
+      "hw": 5,
+      "pw": 44,
+      "aw": 31,
+      "flags": [
+        "analogy 31w"
+      ]
+    },
+    {
+      "id": 591,
+      "term": "Build, Then See Who Buys",
+      "length_score": 6.4,
+      "em_dash": 0,
+      "hw": 12,
+      "pw": 56,
+      "aw": 30,
+      "flags": [
+        "plain 56w",
+        "analogy 30w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 628,
+      "term": "Exchange > Imposition",
+      "length_score": 6.4,
+      "em_dash": 0,
+      "hw": 15,
+      "pw": 43,
+      "aw": 29,
+      "flags": [
+        "hook 15w",
+        "analogy 29w"
+      ]
+    },
+    {
+      "id": 666,
+      "term": "Earned Success",
+      "length_score": 6.4,
+      "em_dash": 0,
+      "hw": 15,
+      "pw": 54,
+      "aw": 29,
+      "flags": [
+        "hook 15w",
+        "analogy 29w"
       ]
     }
   ]
