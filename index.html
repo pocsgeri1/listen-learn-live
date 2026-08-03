@@ -11907,13 +11907,18 @@ async function loadConcepts() {
       if (!hash || hash.indexOf('#open=') !== 0) return;
       var targetId = parseInt(hash.replace('#open=', ''), 10);
       if (!targetId || isNaN(targetId)) return;
+      // 600ms: generous delay to let grid fully paint + preload guard lift
       setTimeout(function() {
         var el = document.getElementById('cc' + targetId);
-        if (el && typeof toggleCard === 'function') {
+        if (!el) return;
+        // Scroll page to card section first, then to the card itself
+        var appSection = document.getElementById('netflixRows');
+        if (appSection) appSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        setTimeout(function() {
           el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          setTimeout(function() { toggleCard(targetId); }, 300);
-        }
-      }, 150);
+          if (typeof toggleCard === 'function') setTimeout(function() { toggleCard(targetId); }, 200);
+        }, 400);
+      }, 600);
     })();
 
   } catch (error) {
