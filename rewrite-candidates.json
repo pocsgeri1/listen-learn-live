@@ -2,10 +2,12 @@
   "generated_from": "concepts.json (715 total concepts, scanned 2026-08-03)",
   "excludes_done_ids": [
     23,
+    26,
     93,
     110,
     121,
     161,
+    162,
     168,
     177,
     178,
@@ -36,14 +38,18 @@
     225,
     226,
     227,
+    228,
     229,
+    239,
     240,
+    241,
     242,
     280,
     281,
     284,
     285,
     292,
+    298,
     307,
     310,
     311,
@@ -61,6 +67,7 @@
     339,
     377,
     381,
+    382,
     385,
     397,
     403,
@@ -83,6 +90,7 @@
     519,
     528,
     535,
+    565,
     593,
     599,
     600,
@@ -97,143 +105,16 @@
     623,
     625,
     627,
+    629,
     630,
     633,
     635,
+    637,
     638
   ],
   "excludes_in_flight_ids": [],
   "sort": "length_score desc, then em_dash desc",
   "candidates": [
-    {
-      "id": 298,
-      "term": "Pick Me Policing",
-      "length_score": 8.4,
-      "em_dash": 0,
-      "hw": 11,
-      "pw": 48,
-      "aw": 34,
-      "flags": [
-        "analogy 34w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 382,
-      "term": "AI = Race to Mediocrity",
-      "length_score": 8.4,
-      "em_dash": 0,
-      "hw": 9,
-      "pw": 49,
-      "aw": 34,
-      "flags": [
-        "analogy 34w"
-      ]
-    },
-    {
-      "id": 629,
-      "term": "Easter Egg Thinking",
-      "length_score": 8.4,
-      "em_dash": 0,
-      "hw": 8,
-      "pw": 48,
-      "aw": 34,
-      "flags": [
-        "analogy 34w"
-      ]
-    },
-    {
-      "id": 637,
-      "term": "Time-Cost Perversity",
-      "length_score": 8.4,
-      "em_dash": 0,
-      "hw": 10,
-      "pw": 53,
-      "aw": 34,
-      "flags": [
-        "analogy 34w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 162,
-      "term": "Thin Slice Jealousy",
-      "length_score": 8.2,
-      "em_dash": 0,
-      "hw": 10,
-      "pw": 56,
-      "aw": 33,
-      "flags": [
-        "plain 56w",
-        "analogy 33w"
-      ]
-    },
-    {
-      "id": 239,
-      "term": "Product, Not Person",
-      "length_score": 7.8,
-      "em_dash": 2,
-      "hw": 9,
-      "pw": 48,
-      "aw": 33,
-      "flags": [
-        "em-dash x2",
-        "analogy 33w"
-      ]
-    },
-    {
-      "id": 241,
-      "term": "Control Addiction",
-      "length_score": 7.8,
-      "em_dash": 2,
-      "hw": 12,
-      "pw": 40,
-      "aw": 33,
-      "flags": [
-        "em-dash x2",
-        "analogy 33w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 228,
-      "term": "Selective Productivity",
-      "length_score": 7.8,
-      "em_dash": 1,
-      "hw": 13,
-      "pw": 29,
-      "aw": 33,
-      "flags": [
-        "em-dash x1",
-        "analogy 33w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 565,
-      "term": "Burn Rate & Runway",
-      "length_score": 7.8,
-      "em_dash": 1,
-      "hw": 11,
-      "pw": 38,
-      "aw": 33,
-      "flags": [
-        "em-dash x1",
-        "analogy 33w"
-      ]
-    },
-    {
-      "id": 26,
-      "term": "Skin in the Game",
-      "length_score": 7.8,
-      "em_dash": 0,
-      "hw": 10,
-      "pw": 32,
-      "aw": 33,
-      "flags": [
-        "analogy 33w"
-      ]
-    },
     {
       "id": 122,
       "term": "The Long Game",
@@ -1384,6 +1265,132 @@
       "aw": 30,
       "flags": [
         "analogy 30w"
+      ]
+    },
+    {
+      "id": 214,
+      "term": "Schedule Worry Time",
+      "length_score": 6,
+      "em_dash": 0,
+      "hw": 7,
+      "pw": 43,
+      "aw": 30,
+      "flags": [
+        "analogy 30w",
+        "term/hook overlap: schedule, worry"
+      ]
+    },
+    {
+      "id": 217,
+      "term": "Hedging Language",
+      "length_score": 6,
+      "em_dash": 0,
+      "hw": 9,
+      "pw": 45,
+      "aw": 30,
+      "flags": [
+        "analogy 30w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 244,
+      "term": "Situationship Drift",
+      "length_score": 6,
+      "em_dash": 0,
+      "hw": 10,
+      "pw": 44,
+      "aw": 30,
+      "flags": [
+        "analogy 30w"
+      ]
+    },
+    {
+      "id": 282,
+      "term": "Benevolent Sexism",
+      "length_score": 6,
+      "em_dash": 0,
+      "hw": 14,
+      "pw": 42,
+      "aw": 30,
+      "flags": [
+        "analogy 30w"
+      ]
+    },
+    {
+      "id": 306,
+      "term": "The Effort-Reward Ledger",
+      "length_score": 6,
+      "em_dash": 0,
+      "hw": 13,
+      "pw": 30,
+      "aw": 30,
+      "flags": [
+        "analogy 30w"
+      ]
+    },
+    {
+      "id": 309,
+      "term": "Mate Copying",
+      "length_score": 6,
+      "em_dash": 0,
+      "hw": 14,
+      "pw": 42,
+      "aw": 30,
+      "flags": [
+        "analogy 30w",
+        "hook 3 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 329,
+      "term": "AI = Mass Job Loss",
+      "length_score": 6,
+      "em_dash": 0,
+      "hw": 13,
+      "pw": 43,
+      "aw": 30,
+      "flags": [
+        "analogy 30w",
+        "hook 2 sentences (must be 1)",
+        "plain jargon: cognitive"
+      ]
+    },
+    {
+      "id": 340,
+      "term": "Jevons Paradox",
+      "length_score": 6,
+      "em_dash": 0,
+      "hw": 9,
+      "pw": 51,
+      "aw": 30,
+      "flags": [
+        "analogy 30w"
+      ]
+    },
+    {
+      "id": 366,
+      "term": "Parkinson's Law for Goals",
+      "length_score": 6,
+      "em_dash": 0,
+      "hw": 10,
+      "pw": 41,
+      "aw": 30,
+      "flags": [
+        "analogy 30w"
+      ]
+    },
+    {
+      "id": 369,
+      "term": "Learn to Earn",
+      "length_score": 6,
+      "em_dash": 0,
+      "hw": 11,
+      "pw": 39,
+      "aw": 30,
+      "flags": [
+        "analogy 30w",
+        "hook 2 sentences (must be 1)"
       ]
     }
   ]

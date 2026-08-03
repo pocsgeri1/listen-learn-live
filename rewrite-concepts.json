@@ -1,6 +1,6 @@
 {
   "_note": "Running patch doc — editorial rewrites, approved 1-by-1. Each entry lists ONLY changed fields + id. Merge into concepts.json by id once batch of 10 is approved.",
-  "batch": 12,
+  "batch": 13,
   "history": [
     {
       "batch": 1,
@@ -177,6 +177,66 @@
         565,
         26
       ]
+    },
+    {
+      "batch": 12,
+      "status": "patched_locally",
+      "ids": [
+        122,
+        123,
+        186,
+        195,
+        230,
+        293,
+        297,
+        318,
+        324,
+        367
+      ],
+      "fields_changed_per_id": {
+        "122": [
+          "analogy"
+        ],
+        "123": [
+          "hook",
+          "plain",
+          "analogy"
+        ],
+        "186": [
+          "hook",
+          "plain",
+          "analogy"
+        ],
+        "195": [
+          "hook",
+          "plain",
+          "analogy"
+        ],
+        "230": [
+          "plain",
+          "analogy"
+        ],
+        "293": [
+          "plain",
+          "analogy"
+        ],
+        "297": [
+          "hook",
+          "plain",
+          "analogy"
+        ],
+        "318": [
+          "analogy"
+        ],
+        "324": [
+          "hook",
+          "plain",
+          "analogy"
+        ],
+        "367": [
+          "analogy"
+        ]
+      }
     }
   ],
   "approved": []
