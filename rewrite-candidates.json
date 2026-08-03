@@ -129,12 +129,14 @@
     468,
     469,
     470,
+    471,
     472,
     473,
     474,
     476,
     477,
     478,
+    479,
     483,
     485,
     486,
@@ -147,6 +149,7 @@
     517,
     518,
     519,
+    522,
     524,
     527,
     528,
@@ -155,12 +158,14 @@
     543,
     565,
     590,
+    591,
     592,
     593,
     594,
     598,
     599,
     600,
+    601,
     603,
     604,
     605,
@@ -168,149 +173,28 @@
     608,
     609,
     612,
+    614,
     615,
     616,
+    617,
     618,
     622,
     623,
     625,
+    626,
     627,
+    628,
     629,
     630,
     633,
     635,
     637,
-    638
+    638,
+    666
   ],
   "excludes_in_flight_ids": [],
   "sort": "length_score desc, then em_dash desc",
   "candidates": [
-    {
-      "id": 471,
-      "term": "The Disgust Threshold",
-      "length_score": 6.6,
-      "em_dash": 0,
-      "hw": 9,
-      "pw": 45,
-      "aw": 31,
-      "flags": [
-        "analogy 31w"
-      ]
-    },
-    {
-      "id": 479,
-      "term": "The Real Reason You're Stuck",
-      "length_score": 6.6,
-      "em_dash": 0,
-      "hw": 12,
-      "pw": 39,
-      "aw": 31,
-      "flags": [
-        "analogy 31w"
-      ]
-    },
-    {
-      "id": 522,
-      "term": "Remix, Don't (Re)invent",
-      "length_score": 6.6,
-      "em_dash": 0,
-      "hw": 9,
-      "pw": 42,
-      "aw": 31,
-      "flags": [
-        "analogy 31w"
-      ]
-    },
-    {
-      "id": 601,
-      "term": "Heuristics for Complexity",
-      "length_score": 6.6,
-      "em_dash": 0,
-      "hw": 14,
-      "pw": 49,
-      "aw": 31,
-      "flags": [
-        "analogy 31w",
-        "plain jargon: heuristic"
-      ]
-    },
-    {
-      "id": 614,
-      "term": "Arbitrary Surprise",
-      "length_score": 6.6,
-      "em_dash": 0,
-      "hw": 9,
-      "pw": 45,
-      "aw": 31,
-      "flags": [
-        "analogy 31w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 617,
-      "term": "Built for the Wild, Living Online",
-      "length_score": 6.6,
-      "em_dash": 0,
-      "hw": 13,
-      "pw": 48,
-      "aw": 31,
-      "flags": [
-        "analogy 31w"
-      ]
-    },
-    {
-      "id": 626,
-      "term": "Short-Term Trap",
-      "length_score": 6.6,
-      "em_dash": 0,
-      "hw": 5,
-      "pw": 44,
-      "aw": 31,
-      "flags": [
-        "analogy 31w"
-      ]
-    },
-    {
-      "id": 591,
-      "term": "Build, Then See Who Buys",
-      "length_score": 6.4,
-      "em_dash": 0,
-      "hw": 12,
-      "pw": 56,
-      "aw": 30,
-      "flags": [
-        "plain 56w",
-        "analogy 30w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 628,
-      "term": "Exchange > Imposition",
-      "length_score": 6.4,
-      "em_dash": 0,
-      "hw": 15,
-      "pw": 43,
-      "aw": 29,
-      "flags": [
-        "hook 15w",
-        "analogy 29w"
-      ]
-    },
-    {
-      "id": 666,
-      "term": "Earned Success",
-      "length_score": 6.4,
-      "em_dash": 0,
-      "hw": 15,
-      "pw": 54,
-      "aw": 29,
-      "flags": [
-        "hook 15w",
-        "analogy 29w"
-      ]
-    },
     {
       "id": 400,
       "term": "Only Envy Invisible Sacrifices",
@@ -1457,6 +1341,132 @@
       "flags": [
         "analogy 28w",
         "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 144,
+      "term": "Manufactured Consent",
+      "length_score": 4.8,
+      "em_dash": 0,
+      "hw": 12,
+      "pw": 37,
+      "aw": 28,
+      "flags": [
+        "analogy 28w"
+      ]
+    },
+    {
+      "id": 150,
+      "term": "Defensive Pessimism",
+      "length_score": 4.8,
+      "em_dash": 0,
+      "hw": 9,
+      "pw": 27,
+      "aw": 28,
+      "flags": [
+        "analogy 28w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 173,
+      "term": "Systems Economy",
+      "length_score": 4.8,
+      "em_dash": 0,
+      "hw": 11,
+      "pw": 44,
+      "aw": 28,
+      "flags": [
+        "analogy 28w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 191,
+      "term": "Top 10% Monetization",
+      "length_score": 4.8,
+      "em_dash": 0,
+      "hw": 11,
+      "pw": 53,
+      "aw": 28,
+      "flags": [
+        "analogy 28w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 221,
+      "term": "Bad Times Predict Relationships",
+      "length_score": 4.8,
+      "em_dash": 0,
+      "hw": 9,
+      "pw": 43,
+      "aw": 28,
+      "flags": [
+        "analogy 28w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 247,
+      "term": "Platform Feminization",
+      "length_score": 4.8,
+      "em_dash": 0,
+      "hw": 10,
+      "pw": 33,
+      "aw": 28,
+      "flags": [
+        "analogy 28w"
+      ]
+    },
+    {
+      "id": 251,
+      "term": "Recursive Red Pill Learning",
+      "length_score": 4.8,
+      "em_dash": 0,
+      "hw": 11,
+      "pw": 41,
+      "aw": 28,
+      "flags": [
+        "analogy 28w"
+      ]
+    },
+    {
+      "id": 259,
+      "term": "Arm Farms",
+      "length_score": 4.8,
+      "em_dash": 0,
+      "hw": 11,
+      "pw": 44,
+      "aw": 28,
+      "flags": [
+        "analogy 28w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 287,
+      "term": "Gender Egalitarian Paradox",
+      "length_score": 4.8,
+      "em_dash": 0,
+      "hw": 11,
+      "pw": 41,
+      "aw": 28,
+      "flags": [
+        "analogy 28w"
+      ]
+    },
+    {
+      "id": 289,
+      "term": "The Price of Sex",
+      "length_score": 4.8,
+      "em_dash": 0,
+      "hw": 11,
+      "pw": 52,
+      "aw": 28,
+      "flags": [
+        "analogy 28w",
+        "plain jargon: leverage"
       ]
     }
   ]
