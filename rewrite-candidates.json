@@ -3,11 +3,15 @@
   "excludes_done_ids": [
     23,
     26,
+    28,
+    46,
+    48,
     93,
     110,
     121,
     122,
     123,
+    127,
     138,
     161,
     162,
@@ -46,7 +50,10 @@
     228,
     229,
     230,
+    231,
     235,
+    237,
+    238,
     239,
     240,
     241,
@@ -82,6 +89,7 @@
     381,
     382,
     385,
+    396,
     397,
     403,
     406,
@@ -102,6 +110,7 @@
     489,
     490,
     491,
+    516,
     518,
     519,
     524,
@@ -109,6 +118,7 @@
     528,
     535,
     565,
+    592,
     593,
     599,
     600,
@@ -135,141 +145,6 @@
   "excludes_in_flight_ids": [],
   "sort": "length_score desc, then em_dash desc",
   "candidates": [
-    {
-      "id": 592,
-      "term": "Horsepower as Marketing Metric",
-      "length_score": 7.6,
-      "em_dash": 0,
-      "hw": 15,
-      "pw": 46,
-      "aw": 31,
-      "flags": [
-        "hook 15w",
-        "analogy 31w",
-        "hook 2 sentences (must be 1)",
-        "term/hook overlap: horsepower, metric"
-      ]
-    },
-    {
-      "id": 231,
-      "term": "Reputation Management",
-      "length_score": 7.2,
-      "em_dash": 2,
-      "hw": 8,
-      "pw": 41,
-      "aw": 32,
-      "flags": [
-        "em-dash x2",
-        "analogy 32w"
-      ]
-    },
-    {
-      "id": 48,
-      "term": "Reversion to the Mean",
-      "length_score": 7.2,
-      "em_dash": 1,
-      "hw": 8,
-      "pw": 29,
-      "aw": 32,
-      "flags": [
-        "em-dash x1",
-        "analogy 32w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 237,
-      "term": "Trapped in the Story",
-      "length_score": 7.2,
-      "em_dash": 1,
-      "hw": 13,
-      "pw": 48,
-      "aw": 32,
-      "flags": [
-        "em-dash x1",
-        "analogy 32w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 238,
-      "term": "Radicalization Through Empathy",
-      "length_score": 7.2,
-      "em_dash": 1,
-      "hw": 10,
-      "pw": 47,
-      "aw": 32,
-      "flags": [
-        "em-dash x1",
-        "analogy 32w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 396,
-      "term": "Worst-Case Is a Safe Place",
-      "length_score": 7.2,
-      "em_dash": 1,
-      "hw": 9,
-      "pw": 35,
-      "aw": 32,
-      "flags": [
-        "em-dash x1",
-        "analogy 32w"
-      ]
-    },
-    {
-      "id": 516,
-      "term": "Minimum Viable Offer",
-      "length_score": 7.2,
-      "em_dash": 1,
-      "hw": 9,
-      "pw": 48,
-      "aw": 32,
-      "flags": [
-        "em-dash x1",
-        "analogy 32w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 28,
-      "term": "Moral Hazard",
-      "length_score": 7.2,
-      "em_dash": 0,
-      "hw": 9,
-      "pw": 28,
-      "aw": 32,
-      "flags": [
-        "analogy 32w"
-      ]
-    },
-    {
-      "id": 46,
-      "term": "Narrative Control",
-      "length_score": 7.2,
-      "em_dash": 0,
-      "hw": 9,
-      "pw": 32,
-      "aw": 32,
-      "flags": [
-        "analogy 32w"
-      ]
-    },
-    {
-      "id": 127,
-      "term": "Self-Actualize → Self-Monetize → Self-Transcend",
-      "length_score": 7.2,
-      "em_dash": 0,
-      "hw": 14,
-      "pw": 27,
-      "aw": 32,
-      "flags": [
-        "analogy 32w",
-        "hook 3 sentences (must be 1)",
-        "plain jargon: framework"
-      ]
-    },
     {
       "id": 160,
       "term": "The Writing Habit",
@@ -1415,6 +1290,132 @@
       "flags": [
         "em-dash x1",
         "analogy 29w"
+      ]
+    },
+    {
+      "id": 619,
+      "term": "The Cost of Not Knowing",
+      "length_score": 5.4,
+      "em_dash": 1,
+      "hw": 8,
+      "pw": 38,
+      "aw": 29,
+      "flags": [
+        "em-dash x1",
+        "analogy 29w"
+      ]
+    },
+    {
+      "id": 18,
+      "term": "First Principles Thinking",
+      "length_score": 5.4,
+      "em_dash": 0,
+      "hw": 8,
+      "pw": 43,
+      "aw": 29,
+      "flags": [
+        "analogy 29w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 24,
+      "term": "Narrative Fallacy",
+      "length_score": 5.4,
+      "em_dash": 0,
+      "hw": 11,
+      "pw": 31,
+      "aw": 29,
+      "flags": [
+        "analogy 29w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 50,
+      "term": "Systems Thinking",
+      "length_score": 5.4,
+      "em_dash": 0,
+      "hw": 9,
+      "pw": 39,
+      "aw": 29,
+      "flags": [
+        "analogy 29w"
+      ]
+    },
+    {
+      "id": 90,
+      "term": "Comfort Addiction",
+      "length_score": 5.4,
+      "em_dash": 0,
+      "hw": 8,
+      "pw": 28,
+      "aw": 29,
+      "flags": [
+        "analogy 29w"
+      ]
+    },
+    {
+      "id": 118,
+      "term": "Outwork Your Self-Doubt",
+      "length_score": 5.4,
+      "em_dash": 0,
+      "hw": 9,
+      "pw": 27,
+      "aw": 29,
+      "flags": [
+        "analogy 29w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 132,
+      "term": "Shiny Object Syndrome",
+      "length_score": 5.4,
+      "em_dash": 0,
+      "hw": 11,
+      "pw": 28,
+      "aw": 29,
+      "flags": [
+        "analogy 29w"
+      ]
+    },
+    {
+      "id": 142,
+      "term": "Done Beats Perfect",
+      "length_score": 5.4,
+      "em_dash": 0,
+      "hw": 13,
+      "pw": 25,
+      "aw": 29,
+      "flags": [
+        "analogy 29w",
+        "term/hook overlap: beats, perfect"
+      ]
+    },
+    {
+      "id": 145,
+      "term": "The 4-Hour Workday",
+      "length_score": 5.4,
+      "em_dash": 0,
+      "hw": 9,
+      "pw": 26,
+      "aw": 29,
+      "flags": [
+        "analogy 29w"
+      ]
+    },
+    {
+      "id": 149,
+      "term": "Self-Education Advantage",
+      "length_score": 5.4,
+      "em_dash": 0,
+      "hw": 14,
+      "pw": 24,
+      "aw": 29,
+      "flags": [
+        "analogy 29w",
+        "hook 2 sentences (must be 1)"
       ]
     }
   ]

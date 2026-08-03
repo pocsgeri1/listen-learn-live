@@ -1,6 +1,6 @@
 {
-  "_note": "Running patch doc \u2014 editorial rewrites, approved 1-by-1. Each entry lists ONLY changed fields + id. Merge into concepts.json by id once batch of 10 is approved.",
-  "batch": 15,
+  "_note": "Running patch doc — editorial rewrites, approved 1-by-1. Each entry lists ONLY changed fields + id. Merge into concepts.json by id once batch of 10 is approved.",
+  "batch": 16,
   "history": [
     {
       "batch": 1,
@@ -52,7 +52,7 @@
     },
     {
       "batch": 4,
-      "status": "patched_locally, reviewed and revised by Gergely (638 term reverted, 310 plain edited, analogy ceiling 25->20 + hook 1-sentence rule applied retroactively, 486 jargon fix), verified with tools/check-fields.js, 0 hard-rule failures \u2014 ready to push. See rewrite-reports/batch-4-diff.md",
+      "status": "patched_locally, reviewed and revised by Gergely (638 term reverted, 310 plain edited, analogy ceiling 25->20 + hook 1-sentence rule applied retroactively, 486 jargon fix), verified with tools/check-fields.js, 0 hard-rule failures — ready to push. See rewrite-reports/batch-4-diff.md",
       "ids": [
         184,
         210,
@@ -314,17 +314,27 @@
         127
       ],
       "fields_changed_per_id": {
-        "592": [
+        "28": [
+          "plain",
+          "analogy"
+        ],
+        "46": [
+          "plain",
+          "analogy",
+          "prompt"
+        ],
+        "48": [
           "hook",
+          "analogy"
+        ],
+        "127": [
+          "hook",
+          "plain",
           "analogy"
         ],
         "231": [
           "hook",
           "plain",
-          "analogy"
-        ],
-        "48": [
-          "hook",
           "analogy"
         ],
         "237": [
@@ -345,18 +355,71 @@
           "plain",
           "analogy"
         ],
-        "28": [
+        "592": [
+          "hook",
+          "analogy"
+        ]
+      }
+    },
+    {
+      "batch": 15,
+      "status": "patched_locally",
+      "ids": [
+        160,
+        164,
+        208,
+        245,
+        250,
+        253,
+        254,
+        308,
+        316,
+        320
+      ],
+      "fields_changed_per_id": {
+        "160": [
+          "analogy"
+        ],
+        "164": [
           "plain",
           "analogy"
         ],
-        "46": [
+        "208": [
+          "hook",
+          "analogy",
+          "prompt"
+        ],
+        "245": [
+          "plain",
+          "analogy"
+        ],
+        "250": [
+          "hook",
+          "analogy",
+          "prompt"
+        ],
+        "253": [
+          "hook",
+          "plain",
+          "analogy"
+        ],
+        "254": [
+          "hook",
           "plain",
           "analogy",
           "prompt"
         ],
-        "127": [
+        "308": [
+          "plain",
+          "analogy"
+        ],
+        "316": [
           "hook",
           "plain",
+          "analogy"
+        ],
+        "320": [
+          "hook",
           "analogy"
         ]
       }

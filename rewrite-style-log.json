@@ -2,66 +2,6 @@
   "_note": "Rolling log of the last 50 approved concepts' analogy openers and core images, for the cross-batch repetition check in autonomous-batch-mode.md. Trim to last 50 as new entries are appended.",
   "log": [
     {
-      "id": 93,
-      "batch": 10,
-      "opener": "A fisherman",
-      "image": "fisherman casting one line in private pond vs nets across open water"
-    },
-    {
-      "id": 121,
-      "batch": 10,
-      "opener": "One founder",
-      "image": "founder ships prototype by Friday vs still on slides three months out"
-    },
-    {
-      "id": 188,
-      "batch": 10,
-      "opener": "A consultant",
-      "image": "consultant bills hourly, licenses training, builds quiz funnel"
-    },
-    {
-      "id": 193,
-      "batch": 10,
-      "opener": "Dubai fills",
-      "image": "Dubai skyline filled with relocated London and New York bankers"
-    },
-    {
-      "id": 205,
-      "batch": 10,
-      "opener": "Two friends",
-      "image": "two friends silent on bench for an hour after bad news"
-    },
-    {
-      "id": 211,
-      "batch": 10,
-      "opener": "She apologizes",
-      "image": "partner apologizes mid-sob, he holds gaze and shakes head"
-    },
-    {
-      "id": 216,
-      "batch": 10,
-      "opener": "Doctors who",
-      "image": "doctor opening with difficult news vs smiling first"
-    },
-    {
-      "id": 218,
-      "batch": 10,
-      "opener": "Your coworker",
-      "image": "coworker snaps, ask what missing instead of defending, they exhale"
-    },
-    {
-      "id": 220,
-      "batch": 10,
-      "opener": "Your LinkedIn",
-      "image": "LinkedIn shows promotion, Sunday-night dread tracked nowhere"
-    },
-    {
-      "id": 285,
-      "batch": 10,
-      "opener": "A new hire",
-      "image": "new hire refusing to badmouth rival team, watched before trusted"
-    },
-    {
       "id": 298,
       "batch": 11,
       "opener": "Friends agree to",
@@ -300,6 +240,66 @@
       "batch": 14,
       "opener": "A boxer who",
       "image": "boxer trains obsessively, wins title, opens gym for kids in old neighborhood"
+    },
+    {
+      "id": 160,
+      "batch": 15,
+      "opener": "An essay posted",
+      "image": "essay posted years ago still arriving in inbox today"
+    },
+    {
+      "id": 164,
+      "batch": 15,
+      "opener": "One on-time loan",
+      "image": "loan payment unlocks lower rate, making next payment easier"
+    },
+    {
+      "id": 208,
+      "batch": 15,
+      "opener": "A father who",
+      "image": "father cold and silent over scratched car, usually terrified not furious"
+    },
+    {
+      "id": 245,
+      "batch": 15,
+      "opener": "Reading your diary",
+      "image": "reading diary in town square for applause, walking home alone"
+    },
+    {
+      "id": 250,
+      "batch": 15,
+      "opener": "Your company gives",
+      "image": "bike-to-work bonus, driver insists they are being punished"
+    },
+    {
+      "id": 253,
+      "batch": 15,
+      "opener": "Diet soda when",
+      "image": "diet soda when dehydrated, craving muted but cells still dry"
+    },
+    {
+      "id": 254,
+      "batch": 15,
+      "opener": "Friends who only",
+      "image": "friend group only meets to vent about ex-boss, nothing left once he leaves"
+    },
+    {
+      "id": 308,
+      "batch": 15,
+      "opener": "Studying hard for",
+      "image": "memorizing wrong textbook, classmate approval vs teacher rubric"
+    },
+    {
+      "id": 316,
+      "batch": 15,
+      "opener": "Running from a",
+      "image": "wave slower than runner, pace holds, water never catches"
+    },
+    {
+      "id": 320,
+      "batch": 15,
+      "opener": "A teenager getting",
+      "image": "teenager ten times stronger every month, house rules unchanged"
     }
   ]
 }
