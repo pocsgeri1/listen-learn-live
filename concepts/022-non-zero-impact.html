@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Non-Zero Impact — It&#39;s small, but it&#39;s genuinely not nothing. | Epistemic</title>
+<meta name="description" content="It&#39;s small, but it&#39;s genuinely not nothing. A way to say an action has real, measurable effect, however tiny. Used to push back against dismissing somethin">
+<link rel="canonical" href="https://epistemic.live/concepts/022-non-zero-impact">
+<meta name="robots" content="index, follow">
+<!-- Open Graph -->
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://epistemic.live/concepts/022-non-zero-impact">
+<meta property="og:title" content="Non-Zero Impact | Epistemic">
+<meta property="og:description" content="It&#39;s small, but it&#39;s genuinely not nothing. A way to say an action has real, measurable effect, however tiny. Used to push back against dismissing somethin">
+<meta property="og:image" content="https://epistemic.live/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Non-Zero Impact | Epistemic">
+<meta name="twitter:description" content="It&#39;s small, but it&#39;s genuinely not nothing. A way to say an action has real, measurable effect, however tiny. Used to push back against dismissing somethin">
+<meta name="twitter:image" content="https://epistemic.live/og-image.png">
+<!-- Structured data -->
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"DefinedTerm","name":"Non-Zero Impact","description":"It's small, but it's genuinely not nothing. A way to say an action has real, measurable effect, however tiny. Used to push back against dismissing something as pointless. Small contributions compound if repeated.","inDefinedTermSet":{"@type":"DefinedTermSet","name":"Epistemic Concept Library","url":"https://epistemic.live"},"url":"https://epistemic.live/concepts/022-non-zero-impact"}</script>
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d0d0d;
+    --surface: #141414;
+    --border: rgba(255,255,255,0.07);
+    --border-hover: rgba(255,255,255,0.15);
+    --text: #f0ede8;
+    --muted: #6b6b6b;
+    --muted2: #9a9a9a;
+    --accent: #e8d5a3;
+    --cat: #7aaf8a;
+  }
+
+  html, body {
+    min-height: 100%;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Noise overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.35;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* Nav */
+  .ep-nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 10;
+    padding: 18px 32px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(13,13,13,0.94);
+  }
+  .ep-nav-logo {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .ep-nav-back {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+  .ep-nav-back:hover { color: var(--text); }
+
+  /* Page layout */
+  .ep-page {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 100px 24px 80px;
+  }
+
+  /* Card */
+  .ep-card {
+    width: 100%;
+    max-width: 600px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    position: relative;
+    animation: fadeUp 0.35s ease both;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ep-card { animation: none; }
+  }
+
+  .ep-card-accent {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--cat);
+  }
+
+  .ep-card-inner {
+    padding: 32px 32px 32px 36px;
+  }
+
+  /* Eyebrow */
+  .ep-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .ep-cat-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--cat);
+    background: #7aaf8a1a;
+    border: 1px solid #7aaf8a33;
+    border-radius: 999px;
+    padding: 3px 10px;
+  }
+  .ep-id-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* Term + hook */
+  h1.ep-term {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 2rem;
+    color: var(--text);
+    margin-bottom: 10px;
+    line-height: 1.15;
+  }
+  .ep-hook {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 1.05rem;
+    color: var(--cat);
+    margin-bottom: 28px;
+    line-height: 1.5;
+  }
+
+  /* Divider */
+  .ep-divider {
+    height: 1px;
+    background: var(--border);
+    margin-bottom: 24px;
+  }
+
+  /* Labels + body */
+  .ep-section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .ep-body {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    font-size: 0.93rem;
+    color: var(--text);
+    line-height: 1.75;
+    margin-bottom: 24px;
+  }
+
+  /* Analogy block */
+  .ep-analogy-block {
+    background: rgba(232,213,163,0.04);
+    border: 1px solid rgba(232,213,163,0.1);
+    border-radius: 8px;
+    padding: 16px 18px;
+    margin-bottom: 24px;
+  }
+  .ep-analogy-block .ep-section-label { margin-bottom: 6px; }
+  .ep-analogy-block .ep-body { margin-bottom: 0; }
+
+  /* Prompt block */
+  .ep-prompt-block {
+    background: #7aaf8a1a;
+    border: 1px solid #7aaf8a33;
+    border-radius: 8px;
+    padding: 16px 18px;
+    margin-bottom: 28px;
+  }
+  .ep-prompt-block .ep-section-label {
+    color: var(--cat);
+    opacity: 0.7;
+    margin-bottom: 6px;
+  }
+  .ep-prompt-text {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 400;
+    font-size: 0.88rem;
+    color: var(--text);
+    line-height: 1.65;
+  }
+
+  /* Related */
+  .ep-related {
+    border-top: 1px solid var(--border);
+    padding-top: 20px;
+  }
+  .ep-related-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .ep-related-chip {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 5px 10px;
+    text-decoration: none;
+    transition: color 0.15s, border-color 0.15s;
+    display: inline-block;
+  }
+  .ep-related-chip:hover {
+    color: var(--text);
+    border-color: var(--border-hover);
+  }
+
+  /* CTA */
+  .ep-cta-wrap {
+    width: 100%;
+    max-width: 600px;
+    margin-top: 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  .ep-cta-btn {
+    display: inline-block;
+    background: var(--accent);
+    color: #0d0d0d;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: 999px;
+    padding: 13px 36px;
+    text-decoration: none;
+    transition: background 0.15s, transform 0.15s;
+  }
+  .ep-cta-btn:hover {
+    background: #f0e0b0;
+    transform: translateY(-1px);
+  }
+  .ep-cta-sub {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 300;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  /* Footer */
+  .ep-footer {
+    margin-top: 40px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #3a3a3a;
+    text-align: center;
+  }
+
+  /* Mobile */
+  @media (max-width: 600px) {
+    .ep-nav { padding: 16px 20px; }
+    .ep-card-inner { padding: 24px 24px 24px 28px; }
+    h1.ep-term { font-size: 1.6rem; }
+    .ep-page { padding: 90px 16px 60px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="ep-nav">
+  <a class="ep-nav-logo" href="/">Epistemic</a>
+  <a class="ep-nav-back" href="/">← Back to library</a>
+</nav>
+
+<main class="ep-page">
+
+  <article class="ep-card">
+    <div class="ep-card-accent"></div>
+    <div class="ep-card-inner">
+
+      <div class="ep-eyebrow">
+        <span class="ep-cat-pill">thinking</span>
+        <span class="ep-id-label">#022</span>
+      </div>
+
+      <h1 class="ep-term">Non-Zero Impact</h1>
+      <p class="ep-hook">It&#39;s small, but it&#39;s genuinely not nothing.</p>
+
+      <div class="ep-divider"></div>
+
+      <p class="ep-section-label">What it means</p>
+      <p class="ep-body">A way to say an action has real, measurable effect, however tiny. Used to push back against dismissing something as pointless. Small contributions compound if repeated.</p>
+
+      <div class="ep-analogy-block">
+        <p class="ep-section-label">Analogy</p>
+        <p class="ep-body">Donating €5 has non-zero impact on a charity. It&#39;s not huge, but it&#39;s genuinely not nothing either.</p>
+      </div>
+
+      <div class="ep-prompt-block">
+        <p class="ep-section-label">Reflect on this</p>
+        <p class="ep-prompt-text">What small daily action have you been skipping because it &#39;won&#39;t matter,&#39; even though it would have real non-zero impact if you did it for 90 days?</p>
+      </div>
+
+        <div class="ep-related">
+          <p class="ep-section-label">Related concepts</p>
+          <div class="ep-related-chips">
+            <a class="ep-related-chip" href="/concepts/041-compound-effect">Compound Effect</a>
+            <a class="ep-related-chip" href="/concepts/059-latent-potential">Latent Potential</a>
+            <a class="ep-related-chip" href="/concepts/376-goal-gravity">Goal Gravity</a>
+          </div>
+        </div>
+
+    </div>
+  </article>
+
+  <div class="ep-cta-wrap">
+    <a class="ep-cta-btn" href="/#open=22">Open this card in Epistemic →</a>
+    <a class="ep-cta-btn" href="/" style="background:transparent;color:var(--accent);border:1px solid rgba(232,213,163,0.25);margin-top:-4px;">Explore all 715 concepts →</a>
+    <p class="ep-cta-sub">epistemic.live — ideas from the podcasts you already listen to</p>
+  </div>
+
+  <footer class="ep-footer">epistemic.live &nbsp;·&nbsp; vol. i</footer>
+
+</main>
+
+</body>
+</html>
