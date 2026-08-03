@@ -510,7 +510,25 @@
         "154": ["plain", "analogy"],
         "155": ["plain", "analogy"]
       }
+    },
+    {
+      "batch": 18,
+      "status": "patched_locally",
+      "ids": [183, 187, 204, 246, 296, 384, 398, 405, 469, 470],
+      "fields_changed_per_id": {
+        "183": ["hook", "plain", "analogy"],
+        "187": ["hook", "plain", "analogy"],
+        "204": ["plain", "analogy"],
+        "246": ["plain", "analogy"],
+        "296": ["hook", "plain", "analogy", "prompt"],
+        "384": ["term", "plain", "analogy", "prompt"],
+        "398": ["plain", "analogy"],
+        "405": ["term", "hook", "plain", "analogy"],
+        "469": ["hook", "plain", "analogy"],
+        "470": ["hook", "plain", "analogy"]
+      }
     }
   ],
-  "approved": []
+  "approved": [],
+  "batch": 19
 }

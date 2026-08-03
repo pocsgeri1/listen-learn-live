@@ -6,13 +6,19 @@
     28,
     46,
     48,
+    67,
+    91,
     93,
     110,
+    111,
     121,
     122,
     123,
     127,
+    136,
     138,
+    154,
+    155,
     160,
     161,
     162,
@@ -54,6 +60,7 @@
     229,
     230,
     231,
+    232,
     235,
     237,
     238,
@@ -94,6 +101,7 @@
     337,
     338,
     339,
+    363,
     367,
     376,
     377,
@@ -133,6 +141,8 @@
     527,
     528,
     535,
+    542,
+    543,
     565,
     590,
     592,
@@ -165,135 +175,6 @@
   "excludes_in_flight_ids": [],
   "sort": "length_score desc, then em_dash desc",
   "candidates": [
-    {
-      "id": 232,
-      "term": "Optimized for the Wrong Life",
-      "length_score": 6.6,
-      "em_dash": 3,
-      "hw": 12,
-      "pw": 44,
-      "aw": 31,
-      "flags": [
-        "em-dash x3",
-        "analogy 31w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 363,
-      "term": "Invisible Competition",
-      "length_score": 6.6,
-      "em_dash": 2,
-      "hw": 11,
-      "pw": 37,
-      "aw": 31,
-      "flags": [
-        "em-dash x2",
-        "analogy 31w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 542,
-      "term": "Sleep Pressure",
-      "length_score": 6.6,
-      "em_dash": 1,
-      "hw": 12,
-      "pw": 36,
-      "aw": 31,
-      "flags": [
-        "em-dash x1",
-        "analogy 31w",
-        "analogy banned opener: 'it's like'"
-      ]
-    },
-    {
-      "id": 543,
-      "term": "P-Hacking",
-      "length_score": 6.6,
-      "em_dash": 1,
-      "hw": 11,
-      "pw": 30,
-      "aw": 31,
-      "flags": [
-        "em-dash x1",
-        "analogy 31w"
-      ]
-    },
-    {
-      "id": 67,
-      "term": "Groupthink",
-      "length_score": 6.6,
-      "em_dash": 0,
-      "hw": 13,
-      "pw": 21,
-      "aw": 31,
-      "flags": [
-        "analogy 31w",
-        "hook 3 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 91,
-      "term": "Evolved Mismatch",
-      "length_score": 6.6,
-      "em_dash": 0,
-      "hw": 13,
-      "pw": 25,
-      "aw": 31,
-      "flags": [
-        "analogy 31w"
-      ]
-    },
-    {
-      "id": 111,
-      "term": "Value Equation",
-      "length_score": 6.6,
-      "em_dash": 0,
-      "hw": 10,
-      "pw": 44,
-      "aw": 31,
-      "flags": [
-        "analogy 31w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 136,
-      "term": "Domain of Mastery",
-      "length_score": 6.6,
-      "em_dash": 0,
-      "hw": 11,
-      "pw": 26,
-      "aw": 31,
-      "flags": [
-        "analogy 31w"
-      ]
-    },
-    {
-      "id": 154,
-      "term": "Negative Visualization",
-      "length_score": 6.6,
-      "em_dash": 0,
-      "hw": 9,
-      "pw": 33,
-      "aw": 31,
-      "flags": [
-        "analogy 31w"
-      ]
-    },
-    {
-      "id": 155,
-      "term": "Second-Order Thinking",
-      "length_score": 6.6,
-      "em_dash": 0,
-      "hw": 6,
-      "pw": 31,
-      "aw": 31,
-      "flags": [
-        "analogy 31w"
-      ]
-    },
     {
       "id": 183,
       "term": "Entrepreneurial Apprenticeship",
@@ -1435,6 +1316,135 @@
       "aw": 29,
       "flags": [
         "analogy 29w"
+      ]
+    },
+    {
+      "id": 584,
+      "term": "Emergent Behavior",
+      "length_score": 5.4,
+      "em_dash": 0,
+      "hw": 10,
+      "pw": 29,
+      "aw": 29,
+      "flags": [
+        "analogy 29w"
+      ]
+    },
+    {
+      "id": 587,
+      "term": "Selling Without a Brand",
+      "length_score": 5.4,
+      "em_dash": 0,
+      "hw": 12,
+      "pw": 40,
+      "aw": 29,
+      "flags": [
+        "analogy 29w"
+      ]
+    },
+    {
+      "id": 125,
+      "term": "Productize Yourself",
+      "length_score": 5.2,
+      "em_dash": 0,
+      "hw": 15,
+      "pw": 31,
+      "aw": 27,
+      "flags": [
+        "hook 15w",
+        "analogy 27w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 388,
+      "term": "The Unified Theory of Attractive",
+      "length_score": 5.2,
+      "em_dash": 0,
+      "hw": 10,
+      "pw": 56,
+      "aw": 28,
+      "flags": [
+        "plain 56w",
+        "analogy 28w"
+      ]
+    },
+    {
+      "id": 3,
+      "term": "Confirmation Bias",
+      "length_score": 4.8,
+      "em_dash": 2,
+      "hw": 10,
+      "pw": 26,
+      "aw": 28,
+      "flags": [
+        "em-dash x2",
+        "analogy 28w"
+      ]
+    },
+    {
+      "id": 131,
+      "term": "Sovereign Individual",
+      "length_score": 4.8,
+      "em_dash": 1,
+      "hw": 14,
+      "pw": 34,
+      "aw": 28,
+      "flags": [
+        "em-dash x1",
+        "analogy 28w"
+      ]
+    },
+    {
+      "id": 413,
+      "term": "Protected Hour Strategy",
+      "length_score": 4.8,
+      "em_dash": 1,
+      "hw": 9,
+      "pw": 37,
+      "aw": 28,
+      "flags": [
+        "em-dash x1",
+        "analogy 28w"
+      ]
+    },
+    {
+      "id": 537,
+      "term": "The Replication Crisis",
+      "length_score": 4.8,
+      "em_dash": 1,
+      "hw": 11,
+      "pw": 36,
+      "aw": 28,
+      "flags": [
+        "em-dash x1",
+        "analogy 28w"
+      ]
+    },
+    {
+      "id": 551,
+      "term": "Equivocation",
+      "length_score": 4.8,
+      "em_dash": 1,
+      "hw": 6,
+      "pw": 39,
+      "aw": 28,
+      "flags": [
+        "em-dash x1",
+        "analogy 28w"
+      ]
+    },
+    {
+      "id": 562,
+      "term": "Lifestyle Creep",
+      "length_score": 4.8,
+      "em_dash": 1,
+      "hw": 8,
+      "pw": 38,
+      "aw": 28,
+      "flags": [
+        "em-dash x1",
+        "analogy 28w"
       ]
     }
   ]

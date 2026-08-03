@@ -2,66 +2,6 @@
   "_note": "Rolling log of the last 50 approved concepts' analogy openers and core images, for the cross-batch repetition check in autonomous-batch-mode.md. Trim to last 50 as new entries are appended.",
   "log": [
     {
-      "id": 412,
-      "batch": 13,
-      "opener": "A pilot trained",
-      "image": "pilot trained for turbulence, engine fails in new way, needs something deeper"
-    },
-    {
-      "id": 474,
-      "batch": 13,
-      "opener": "Someone drops 30",
-      "image": "person drops 30 pounds counting down days to eat pizza again, weight returns"
-    },
-    {
-      "id": 488,
-      "batch": 13,
-      "opener": "Someone raised inside",
-      "image": "person raised in strict sect, cannot picture anyone leaving"
-    },
-    {
-      "id": 524,
-      "batch": 13,
-      "opener": "A musician plays",
-      "image": "musician plays cover songs for years, own voice emerges from borrowed parts"
-    },
-    {
-      "id": 527,
-      "batch": 13,
-      "opener": "A songwriter pulls",
-      "image": "songwriter pulls discarded chorus from notebook five years later, becomes hit hook"
-    },
-    {
-      "id": 603,
-      "batch": 13,
-      "opener": "A diner expecting",
-      "image": "diner expecting airport food rates pasta four stars when warm and unsalted"
-    },
-    {
-      "id": 608,
-      "batch": 13,
-      "opener": "A prospector works",
-      "image": "prospector works gold vein every morning, pans new creek one afternoon a week"
-    },
-    {
-      "id": 138,
-      "batch": 13,
-      "opener": "A chef runs",
-      "image": "chef runs pop-up dinner for eight strangers before signing restaurant lease"
-    },
-    {
-      "id": 235,
-      "batch": 13,
-      "opener": "Every confession goes",
-      "image": "all confessions go to paid professional, friend who drove through traffic hears fine thanks"
-    },
-    {
-      "id": 321,
-      "batch": 13,
-      "opener": "Someone announces they're",
-      "image": "someone printing billion counterfeit hundreds, bill in wallet already statistically fake"
-    },
-    {
       "id": 592,
       "batch": 14,
       "opener": "Early coal sellers",
@@ -300,6 +240,66 @@
       "batch": 17,
       "opener": "Flip a coin",
       "image": "flip coin thousand times, report lucky streak of seven heads, bury the rest"
+    },
+    {
+      "id": 183,
+      "batch": 18,
+      "opener": "Apprentice cooks who",
+      "image": "apprentice cooks work service at Michelin kitchen, learn speed, waste, pressure in one month of shifts"
+    },
+    {
+      "id": 187,
+      "batch": 18,
+      "opener": "A restaurant seats",
+      "image": "restaurant seats forty, stays full six nights a week, never squeezes in eighty"
+    },
+    {
+      "id": 204,
+      "batch": 18,
+      "opener": "A paramedic who",
+      "image": "paramedic holds steady while patient screams, resets room before words do"
+    },
+    {
+      "id": 246,
+      "batch": 18,
+      "opener": "An actor owns",
+      "image": "actor owns spotlight but freezes when fan recognizes them at grocery store checkout"
+    },
+    {
+      "id": 296,
+      "batch": 18,
+      "opener": "Someone joins a",
+      "image": "someone joins vegan meetup for dating pool, not ethics"
+    },
+    {
+      "id": 384,
+      "batch": 18,
+      "opener": "A fidgety, loud",
+      "image": "fidgety loud talker drains most people, energizes partner who finds silence suffocating"
+    },
+    {
+      "id": 398,
+      "batch": 18,
+      "opener": "Someone reads twelve",
+      "image": "someone reads twelve training science books, stays on couch because no program felt optimized"
+    },
+    {
+      "id": 405,
+      "batch": 18,
+      "opener": "A soloist plays",
+      "image": "soloist plays passage correctly at rehearsal, runs it four hundred more times until nerves cannot reach it"
+    },
+    {
+      "id": 469,
+      "batch": 18,
+      "opener": "Someone who says",
+      "image": "someone who says I do not smoke declines cigarettes without fighting willpower; I am trying to quit loses every time"
+    },
+    {
+      "id": 470,
+      "batch": 18,
+      "opener": "Someone who understands",
+      "image": "someone who understands persuasion writes ads, negotiates deals, designs products without studying each field"
     }
   ]
 }
