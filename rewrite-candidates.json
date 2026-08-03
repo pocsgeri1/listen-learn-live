@@ -13,8 +13,10 @@
     123,
     127,
     138,
+    160,
     161,
     162,
+    164,
     168,
     177,
     178,
@@ -35,6 +37,7 @@
     201,
     205,
     207,
+    208,
     210,
     211,
     212,
@@ -58,6 +61,10 @@
     240,
     241,
     242,
+    245,
+    250,
+    253,
+    254,
     280,
     281,
     284,
@@ -67,13 +74,16 @@
     297,
     298,
     307,
+    308,
     310,
     311,
     314,
     315,
+    316,
     317,
     318,
     319,
+    320,
     321,
     324,
     328,
@@ -145,131 +155,6 @@
   "excludes_in_flight_ids": [],
   "sort": "length_score desc, then em_dash desc",
   "candidates": [
-    {
-      "id": 160,
-      "term": "The Writing Habit",
-      "length_score": 7.2,
-      "em_dash": 0,
-      "hw": 10,
-      "pw": 30,
-      "aw": 32,
-      "flags": [
-        "analogy 32w"
-      ]
-    },
-    {
-      "id": 164,
-      "term": "Matthew Principle",
-      "length_score": 7.2,
-      "em_dash": 0,
-      "hw": 7,
-      "pw": 44,
-      "aw": 32,
-      "flags": [
-        "analogy 32w"
-      ]
-    },
-    {
-      "id": 208,
-      "term": "Anger Hides Grief",
-      "length_score": 7.2,
-      "em_dash": 0,
-      "hw": 11,
-      "pw": 34,
-      "aw": 32,
-      "flags": [
-        "analogy 32w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 245,
-      "term": "Performative Vulnerability",
-      "length_score": 7.2,
-      "em_dash": 0,
-      "hw": 9,
-      "pw": 38,
-      "aw": 32,
-      "flags": [
-        "analogy 32w"
-      ]
-    },
-    {
-      "id": 250,
-      "term": "The Zero-Sum Spin",
-      "length_score": 7.2,
-      "em_dash": 0,
-      "hw": 9,
-      "pw": 38,
-      "aw": 32,
-      "flags": [
-        "analogy 32w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 253,
-      "term": "Simulation Substitution",
-      "length_score": 7.2,
-      "em_dash": 0,
-      "hw": 13,
-      "pw": 49,
-      "aw": 32,
-      "flags": [
-        "analogy 32w"
-      ]
-    },
-    {
-      "id": 254,
-      "term": "Bound by Hatred, Not Love",
-      "length_score": 7.2,
-      "em_dash": 0,
-      "hw": 13,
-      "pw": 44,
-      "aw": 32,
-      "flags": [
-        "analogy 32w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 308,
-      "term": "Looks-maxing",
-      "length_score": 7.2,
-      "em_dash": 0,
-      "hw": 12,
-      "pw": 45,
-      "aw": 32,
-      "flags": [
-        "analogy 32w"
-      ]
-    },
-    {
-      "id": 316,
-      "term": "Outrun Death Point",
-      "length_score": 7.2,
-      "em_dash": 0,
-      "hw": 11,
-      "pw": 53,
-      "aw": 32,
-      "flags": [
-        "analogy 32w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 320,
-      "term": "Capability-safety Gap",
-      "length_score": 7.2,
-      "em_dash": 0,
-      "hw": 12,
-      "pw": 46,
-      "aw": 32,
-      "flags": [
-        "analogy 32w",
-        "hook 3 sentences (must be 1)"
-      ]
-    },
     {
       "id": 376,
       "term": "Goal Gravity",
@@ -1416,6 +1301,132 @@
       "flags": [
         "analogy 29w",
         "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 159,
+      "term": "Lindy Effect",
+      "length_score": 5.4,
+      "em_dash": 0,
+      "hw": 11,
+      "pw": 30,
+      "aw": 29,
+      "flags": [
+        "analogy 29w"
+      ]
+    },
+    {
+      "id": 203,
+      "term": "Feelings Don't Care About Facts",
+      "length_score": 5.4,
+      "em_dash": 0,
+      "hw": 13,
+      "pw": 32,
+      "aw": 29,
+      "flags": [
+        "analogy 29w"
+      ]
+    },
+    {
+      "id": 206,
+      "term": "Conversation Within a Conversation",
+      "length_score": 5.4,
+      "em_dash": 0,
+      "hw": 11,
+      "pw": 43,
+      "aw": 29,
+      "flags": [
+        "analogy 29w"
+      ]
+    },
+    {
+      "id": 215,
+      "term": "The No-first Framework",
+      "length_score": 5.4,
+      "em_dash": 0,
+      "hw": 8,
+      "pw": 45,
+      "aw": 29,
+      "flags": [
+        "analogy 29w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 248,
+      "term": "Self-love as Marketing Strategy",
+      "length_score": 5.4,
+      "em_dash": 0,
+      "hw": 11,
+      "pw": 39,
+      "aw": 29,
+      "flags": [
+        "analogy 29w"
+      ]
+    },
+    {
+      "id": 265,
+      "term": "California Wealth Tax",
+      "length_score": 5.4,
+      "em_dash": 0,
+      "hw": 11,
+      "pw": 54,
+      "aw": 29,
+      "flags": [
+        "analogy 29w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 294,
+      "term": "Error Management Theory",
+      "length_score": 5.4,
+      "em_dash": 0,
+      "hw": 10,
+      "pw": 49,
+      "aw": 29,
+      "flags": [
+        "analogy 29w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 295,
+      "term": "Pathologizing Preferences",
+      "length_score": 5.4,
+      "em_dash": 0,
+      "hw": 11,
+      "pw": 40,
+      "aw": 29,
+      "flags": [
+        "analogy 29w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 300,
+      "term": "Supernormal Stimuli",
+      "length_score": 5.4,
+      "em_dash": 0,
+      "hw": 10,
+      "pw": 46,
+      "aw": 29,
+      "flags": [
+        "analogy 29w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 342,
+      "term": "Micro SaaS with Soul",
+      "length_score": 5.4,
+      "em_dash": 0,
+      "hw": 11,
+      "pw": 58,
+      "aw": 27,
+      "flags": [
+        "plain 58w",
+        "analogy 27w"
       ]
     }
   ]

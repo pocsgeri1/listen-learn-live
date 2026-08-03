@@ -2,66 +2,6 @@
   "_note": "Rolling log of the last 50 approved concepts' analogy openers and core images, for the cross-batch repetition check in autonomous-batch-mode.md. Trim to last 50 as new entries are appended.",
   "log": [
     {
-      "id": 298,
-      "batch": 11,
-      "opener": "Friends agree to",
-      "image": "friends agree casual party dress code, freeze out person in blazer"
-    },
-    {
-      "id": 382,
-      "batch": 11,
-      "opener": "A mediocre guitarist",
-      "image": "mediocre guitarist sounds passable with AI, virtuoso loses unique edge"
-    },
-    {
-      "id": 629,
-      "batch": 11,
-      "opener": "A car seat",
-      "image": "car seat inflating around corners, test pilot feeling"
-    },
-    {
-      "id": 637,
-      "batch": 11,
-      "opener": "Solving a client's",
-      "image": "consultant solves in 15 minutes, junior takes 3 days, hourly earns less"
-    },
-    {
-      "id": 162,
-      "batch": 11,
-      "opener": "You see the",
-      "image": "rockets and fortune visible, mind that never stops hidden"
-    },
-    {
-      "id": 239,
-      "batch": 11,
-      "opener": "A startup wouldn't",
-      "image": "startup skips messy unpredictable no-exit projects, treating own life as pitch deck"
-    },
-    {
-      "id": 241,
-      "batch": 11,
-      "opener": "Spending years in",
-      "image": "flight simulator with restart button, then real keys at real runway"
-    },
-    {
-      "id": 228,
-      "batch": 11,
-      "opener": "A photographer with",
-      "image": "photographer unlimited shots vs single roll of film, constraint forces seeing"
-    },
-    {
-      "id": 565,
-      "batch": 11,
-      "opener": "Low-fuel flying means",
-      "image": "low-fuel plane watching two gauges: drop rate and distance remaining"
-    },
-    {
-      "id": 26,
-      "batch": 11,
-      "opener": "A fitness influencer",
-      "image": "influencer selling diet plan he skips vs coach who eats what she prescribes"
-    },
-    {
       "id": 122,
       "batch": 12,
       "opener": "An oak planted",
@@ -300,6 +240,66 @@
       "batch": 15,
       "opener": "A teenager getting",
       "image": "teenager ten times stronger every month, house rules unchanged"
+    },
+    {
+      "id": 376,
+      "batch": 16,
+      "opener": "Weeds bother you",
+      "image": "weeds in garden only bother after a month of daily tending"
+    },
+    {
+      "id": 390,
+      "batch": 16,
+      "opener": "Two candidates apply",
+      "image": "job candidates: one leads with suffering, other leads with what suffering built"
+    },
+    {
+      "id": 391,
+      "batch": 16,
+      "opener": "Someone who ranks",
+      "image": "person ranked fourth behind school training and work, cannot negotiate to first"
+    },
+    {
+      "id": 408,
+      "batch": 16,
+      "opener": "Free samples disappear",
+      "image": "free samples gone in seconds, jar saved-for stays on shelf for years"
+    },
+    {
+      "id": 478,
+      "batch": 16,
+      "opener": "A poker player",
+      "image": "poker player folds winning hand because bet size feels threatening"
+    },
+    {
+      "id": 517,
+      "batch": 16,
+      "opener": "Morse code unlocks",
+      "image": "morse code to telegraphy to undersea cables to Reuters, each unlocking the next"
+    },
+    {
+      "id": 590,
+      "batch": 16,
+      "opener": "A seed germinates",
+      "image": "seed germinates underground for weeks, gardeners who dig to check kill it"
+    },
+    {
+      "id": 594,
+      "batch": 16,
+      "opener": "Travelers pick the",
+      "image": "traveler picks recognizable airport hotel over charming unknown inn nearby"
+    },
+    {
+      "id": 598,
+      "batch": 16,
+      "opener": "3M's Post-it came",
+      "image": "Post-it note from failed adhesive experiment outside approved project brief"
+    },
+    {
+      "id": 622,
+      "batch": 16,
+      "opener": "The original Volkswagen",
+      "image": "Volkswagen Beetle sold millions looking friendly and round in era of fins and chrome"
     }
   ]
 }
