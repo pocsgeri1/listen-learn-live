@@ -6,6 +6,26 @@
 
 ---
 
+## v2.68 — 2026-08-03 · SEO Session 1 — static concept pages, sitemap, GSC, deep-link CTA
+
+### tools/generate-static-pages.js (new)
+- **Static page generator:** Reads `concepts.json`, outputs `/concepts/[id]-[slug].html` for every concept. Fully Epistemic-branded — dark bg, Playfair term, category color accent stripe and pill, analogy + prompt blocks, related concept chips. Skips `duplicate_of` concepts.
+- **Sitemap:** Writes `sitemap.xml` at repo root with all concept URLs + homepage.
+- **Robots.txt:** Writes `robots.txt` pointing to sitemap.
+
+### tools/setup-hooks.sh (new)
+- **Pre-push hook installer:** Run once from Terminal (`chmod +x tools/setup-hooks.sh && ./tools/setup-hooks.sh`). Installs `.git/hooks/pre-push` that auto-regenerates all static pages on every push — zero chance of stale pages deploying.
+
+### package.json (new)
+- Added `"build:seo": "node tools/generate-static-pages.js"` npm script for manual runs.
+
+### vercel.json
+- **SPA fallback rewrite added:** `{ "source": "/(.*)", "destination": "/index.html" }` — ensures all unmatched routes serve the SPA while static files in `/concepts/` are served correctly first (Vercel checks static files before rewrites).
+
+### index.html
+- **GSC verification tag:** Added `<meta name="google-site-verification">` to `<head>` (getepistemic.app@gmail.com account).
+- **Deep-link hash handler:** After `render()` + grid paint, checks `window.location.hash` for `#open=[id]`. If present, scrolls to the card and calls `toggleCard(id)`. Used by concept static pages' primary CTA so visitors land directly on the right card.
+
 ## v2.67 — 2026-07-31 · Constellation Clusters view + Collect animation, pull quote flash fix + drag smooth
 
 ### index.html — Pull quote: flash fix

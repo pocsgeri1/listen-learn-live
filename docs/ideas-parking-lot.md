@@ -8,6 +8,13 @@
 
 ## Deferred ideas
 
+### `hreflang` / multilingual SEO
+**What it is:** HTML tags telling Google which language/region each page targets. Enables showing Hungarian (or other language) versions of concept pages to users in those regions.
+**Why deferred:** Epistemic is English-only. Relevant only if a multilingual version is ever built.
+**When to revisit:** If Epistemic launches a translated version of the concept library.
+
+---
+
 ### Next.js migration
 **What it is:** Migrating epistemic.live from a vanilla HTML/JS SPA to Next.js for server-side rendering (SSR), which would solve the SEO crawlability problem natively — every page would be pre-rendered HTML, no static build step needed.
 

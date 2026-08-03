@@ -26,6 +26,7 @@
 <meta name="twitter:description" content="Turn podcast ideas into concept cards you actually keep. Plain definitions, real analogies, Spark prompts to use them in conversation." />
 <meta name="twitter:image" content="https://epistemic.live/og-image.png" />
 <meta name="theme-color" content="#0d0d0d" id="themeColorMeta">
+<meta name="google-site-verification" content="AsMIpquI-8CtsrdyL_yEDVkQMUaFL3CSaCpxtL4u-HQ" />
 <script>
   (function(){
     var t = localStorage.getItem('lll_theme');
@@ -11900,6 +11901,20 @@ async function loadConcepts() {
     });
     // #1 Init reading progress observer after first grid render — v1.92
     setTimeout(_initReadingProgress, 400);
+    // SEO deep-link: #open=ID from concept static pages → open card — v2.68
+    (function() {
+      var hash = window.location.hash;
+      if (!hash || hash.indexOf('#open=') !== 0) return;
+      var targetId = parseInt(hash.replace('#open=', ''), 10);
+      if (!targetId || isNaN(targetId)) return;
+      setTimeout(function() {
+        var el = document.getElementById('cc' + targetId);
+        if (el && typeof toggleCard === 'function') {
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          setTimeout(function() { toggleCard(targetId); }, 300);
+        }
+      }, 150);
+    })();
 
   } catch (error) {
     console.error('Failed to load concepts:', error);
