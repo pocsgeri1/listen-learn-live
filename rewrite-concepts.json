@@ -1,6 +1,6 @@
 {
   "_note": "Running patch doc \u2014 editorial rewrites, approved 1-by-1. Each entry lists ONLY changed fields + id. Merge into concepts.json by id once batch of 10 is approved.",
-  "batch": 9,
+  "batch": 10,
   "history": [
     {
       "batch": 1,
@@ -128,6 +128,22 @@
         377,
         110,
         292
+      ]
+    },
+    {
+      "batch": 9,
+      "status": "patched_locally",
+      "ids": [
+        307,
+        319,
+        328,
+        330,
+        476,
+        615,
+        528,
+        633,
+        411,
+        23
       ]
     }
   ],

@@ -2,54 +2,6 @@
   "_note": "Rolling log of the last 50 approved concepts' analogy openers and core images, for the cross-batch repetition check in autonomous-batch-mode.md. Trim to last 50 as new entries are appended.",
   "log": [
     {
-      "id": 184,
-      "batch": 4,
-      "opener": "A gym ad",
-      "image": "gym ad copy skipping the objection, tired parent"
-    },
-    {
-      "id": 210,
-      "batch": 4,
-      "opener": "Your coworker",
-      "image": "coworker explaining her reasoning on a merger call"
-    },
-    {
-      "id": 310,
-      "batch": 4,
-      "opener": "Edison",
-      "image": "Edison / self-improving light bulb machine"
-    },
-    {
-      "id": 317,
-      "batch": 4,
-      "opener": "Blink,",
-      "image": "phone in hand already outdated after a blink"
-    },
-    {
-      "id": 403,
-      "batch": 4,
-      "opener": "Dentists",
-      "image": "dentist reminder postcard every six months, forgot to floss"
-    },
-    {
-      "id": 483,
-      "batch": 4,
-      "opener": "Three generations",
-      "image": "three generations taking the same disliked accounting job"
-    },
-    {
-      "id": 486,
-      "batch": 4,
-      "opener": "Meryl Streep",
-      "image": "actress plays a killer on stage, walks the dog after"
-    },
-    {
-      "id": 638,
-      "batch": 4,
-      "opener": "The agency",
-      "image": "million-dollar pricing fix buried in a slide deck"
-    },
-    {
       "id": 599,
       "batch": 4,
       "opener": "Tap",
@@ -288,6 +240,66 @@
       "batch": 8,
       "opener": "Some video game",
       "image": "video game character with +5 charisma, NPCs friendlier, quests easier"
+    },
+    {
+      "id": 307,
+      "batch": 9,
+      "opener": "Hiring a contractor",
+      "image": "contractor through national app, takes deposit, moves to next city"
+    },
+    {
+      "id": 319,
+      "batch": 9,
+      "opener": "Childproofing a house",
+      "image": "childproofing for kid who gets smarter each week, locks cracked before windows bolted"
+    },
+    {
+      "id": 328,
+      "batch": 9,
+      "opener": "Selling lemonade for",
+      "image": "lemonade at $5 when lemons cost $6, needs rule to survive"
+    },
+    {
+      "id": 330,
+      "batch": 9,
+      "opener": "Sonar pinging a",
+      "image": "sonar on unmapped sea floor, echo reveals presence not identity"
+    },
+    {
+      "id": 476,
+      "batch": 9,
+      "opener": "A runner with",
+      "image": "runner with no goal race, sprints to avoid becoming person who stopped"
+    },
+    {
+      "id": 615,
+      "batch": 9,
+      "opener": "Two watches:",
+      "image": "two watches, accurate one vs Rolex losing two minutes, status wins"
+    },
+    {
+      "id": 528,
+      "batch": 9,
+      "opener": "A new photographer",
+      "image": "photographer's eye catching flaws before hands can fix them"
+    },
+    {
+      "id": 633,
+      "batch": 9,
+      "opener": "A waiter brings",
+      "image": "waiter brings food, tip logged as proof seating arrangement drove satisfaction"
+    },
+    {
+      "id": 411,
+      "batch": 9,
+      "opener": "Your friend went",
+      "image": "friend cycling band lore to CrossFit coaching to pottery studio"
+    },
+    {
+      "id": 23,
+      "batch": 9,
+      "opener": "Writing a book",
+      "image": "book at 200 hours, flops lose time, hits shift career permanently"
     }
   ]
 }

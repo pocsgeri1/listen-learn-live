@@ -1,5 +1,5 @@
 # Epistemic — Build & Editorial Session Protocol
-# v1.4 — 2026-07-27
+# v1.5 — 2026-08-03
 # Invocation: "Use cowork-default-instructions.md." — unchanged.
 # Project Knowledge copy may be stale — always read the live repo file when folder is connected.
 ---
@@ -82,6 +82,30 @@ Read ONLY: `docs/concept-rewrite-prompt.md` (full) + `rewrite-concepts.json` + `
 Do NOT read changelog, roadmap, build-journal, or the 5 style guides — they add nothing to editorial output.
 `docs/autonomous-batch-mode.md` is opt-in only — pull it when Gergely says "run autonomous batches," not before.
 State in one line: batch # + approved count + candidates remaining. Skip Steps 2–4 below.
+
+**Editorial session — SEO integration (mandatory, every batch):**
+
+- **Session start (before any rewrite):** Claude runs via bash:
+  ```bash
+  cp /sessions/.../mnt/listen-learn-live/concepts.json /sessions/.../mnt/listen-learn-live/tools/concepts-backup.json
+  ```
+  This must happen before concepts.json is touched. If the session starts mid-batch (backup already exists from same session), skip.
+
+- **After batch is patched into concepts.json:** Claude runs via bash:
+  ```bash
+  node tools/generate-static-pages.js
+  node tools/update-seo-redirects.js tools/concepts-backup.json
+  ```
+  `generate-static-pages.js` regenerates all concept HTML pages (picks up rewritten hook/plain/analogy/prompt).
+  `update-seo-redirects.js` adds 301 redirects to vercel.json only when a term was renamed.
+
+- **Then tell Gergely to run ONE commit covering everything:**
+  ```bash
+  cd ~/Documents/GitHub/listen-learn-live && ./ep-commit.sh "vX.XX - concept rewrites + SEO update (batch N, IDs: ...)"
+  ```
+  Then Push origin in GitHub Desktop.
+
+- **Why the backup matters:** The SEO script diffs old vs. new concepts.json to find renames. If the backup is taken after any rewrites are patched, those concepts won't get redirect entries. Take it first, every time, no exceptions.
 
 ---
 
