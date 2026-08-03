@@ -8,6 +8,7 @@
     121,
     122,
     123,
+    138,
     161,
     162,
     168,
@@ -45,6 +46,7 @@
     228,
     229,
     230,
+    235,
     239,
     240,
     241,
@@ -65,6 +67,7 @@
     317,
     318,
     319,
+    321,
     324,
     328,
     330,
@@ -83,30 +86,37 @@
     403,
     406,
     411,
+    412,
     467,
     468,
     472,
     473,
+    474,
     476,
     477,
     483,
     485,
     486,
     487,
+    488,
     489,
     490,
     491,
     518,
     519,
+    524,
+    527,
     528,
     535,
     565,
     593,
     599,
     600,
+    603,
     604,
     605,
     607,
+    608,
     609,
     612,
     615,
@@ -125,136 +135,6 @@
   "excludes_in_flight_ids": [],
   "sort": "length_score desc, then em_dash desc",
   "candidates": [
-    {
-      "id": 412,
-      "term": "State vs Trait Confidence",
-      "length_score": 7.8,
-      "em_dash": 0,
-      "hw": 9,
-      "pw": 47,
-      "aw": 33,
-      "flags": [
-        "analogy 33w"
-      ]
-    },
-    {
-      "id": 474,
-      "term": "Act the Part Before You Get the Part",
-      "length_score": 7.8,
-      "em_dash": 0,
-      "hw": 11,
-      "pw": 43,
-      "aw": 33,
-      "flags": [
-        "analogy 33w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 488,
-      "term": "Conformist Stage",
-      "length_score": 7.8,
-      "em_dash": 0,
-      "hw": 10,
-      "pw": 41,
-      "aw": 33,
-      "flags": [
-        "analogy 33w"
-      ]
-    },
-    {
-      "id": 524,
-      "term": "Steal Like an Artist",
-      "length_score": 7.8,
-      "em_dash": 0,
-      "hw": 8,
-      "pw": 35,
-      "aw": 33,
-      "flags": [
-        "analogy 33w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 527,
-      "term": "Your Old Work Is a Quarry",
-      "length_score": 7.8,
-      "em_dash": 0,
-      "hw": 10,
-      "pw": 45,
-      "aw": 33,
-      "flags": [
-        "analogy 33w",
-        "term/hook overlap: old, work"
-      ]
-    },
-    {
-      "id": 603,
-      "term": "Expectation Gap",
-      "length_score": 7.8,
-      "em_dash": 0,
-      "hw": 8,
-      "pw": 49,
-      "aw": 33,
-      "flags": [
-        "analogy 33w"
-      ]
-    },
-    {
-      "id": 608,
-      "term": "Explore vs Exploit",
-      "length_score": 7.8,
-      "em_dash": 0,
-      "hw": 8,
-      "pw": 43,
-      "aw": 33,
-      "flags": [
-        "analogy 33w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 138,
-      "term": "Minimum Viable Offer",
-      "length_score": 7.6,
-      "em_dash": 2,
-      "hw": 15,
-      "pw": 22,
-      "aw": 31,
-      "flags": [
-        "em-dash x2",
-        "hook 15w",
-        "analogy 31w"
-      ]
-    },
-    {
-      "id": 235,
-      "term": "Anxiously Attached to Experts",
-      "length_score": 7.6,
-      "em_dash": 1,
-      "hw": 10,
-      "pw": 56,
-      "aw": 32,
-      "flags": [
-        "em-dash x1",
-        "plain 56w",
-        "analogy 32w",
-        "hook 2 sentences (must be 1)"
-      ]
-    },
-    {
-      "id": 321,
-      "term": "Retroactive Simulation Commitment",
-      "length_score": 7.6,
-      "em_dash": 0,
-      "hw": 15,
-      "pw": 44,
-      "aw": 31,
-      "flags": [
-        "hook 15w",
-        "analogy 31w"
-      ]
-    },
     {
       "id": 592,
       "term": "Horsepower as Marketing Metric",
@@ -1401,6 +1281,140 @@
       "flags": [
         "analogy 30w",
         "term/hook overlap: brand, like"
+      ]
+    },
+    {
+      "id": 631,
+      "term": "Pay for the Result",
+      "length_score": 6,
+      "em_dash": 0,
+      "hw": 12,
+      "pw": 50,
+      "aw": 30,
+      "flags": [
+        "analogy 30w"
+      ]
+    },
+    {
+      "id": 94,
+      "term": "The Status Game",
+      "length_score": 5.6,
+      "em_dash": 0,
+      "hw": 16,
+      "pw": 31,
+      "aw": 26,
+      "flags": [
+        "hook 16w",
+        "analogy 26w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 234,
+      "term": "Language That Hides THE Problem",
+      "length_score": 5.4,
+      "em_dash": 2,
+      "hw": 14,
+      "pw": 42,
+      "aw": 29,
+      "flags": [
+        "em-dash x2",
+        "analogy 29w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 61,
+      "term": "Locus of Control",
+      "length_score": 5.4,
+      "em_dash": 1,
+      "hw": 4,
+      "pw": 29,
+      "aw": 29,
+      "flags": [
+        "em-dash x1",
+        "analogy 29w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 126,
+      "term": "The One-Person Business",
+      "length_score": 5.4,
+      "em_dash": 1,
+      "hw": 12,
+      "pw": 29,
+      "aw": 29,
+      "flags": [
+        "em-dash x1",
+        "analogy 29w",
+        "plain jargon: leverage"
+      ]
+    },
+    {
+      "id": 130,
+      "term": "Niche of One",
+      "length_score": 5.4,
+      "em_dash": 1,
+      "hw": 13,
+      "pw": 27,
+      "aw": 29,
+      "flags": [
+        "em-dash x1",
+        "analogy 29w",
+        "hook 2 sentences (must be 1)"
+      ]
+    },
+    {
+      "id": 422,
+      "term": "Stage 3: Retroactive Realization",
+      "length_score": 5.4,
+      "em_dash": 1,
+      "hw": 9,
+      "pw": 47,
+      "aw": 29,
+      "flags": [
+        "em-dash x1",
+        "analogy 29w"
+      ]
+    },
+    {
+      "id": 556,
+      "term": "Burden of Proof",
+      "length_score": 5.4,
+      "em_dash": 1,
+      "hw": 11,
+      "pw": 36,
+      "aw": 29,
+      "flags": [
+        "em-dash x1",
+        "analogy 29w"
+      ]
+    },
+    {
+      "id": 564,
+      "term": "A Euro Today Beats a Euro Tomorrow",
+      "length_score": 5.4,
+      "em_dash": 1,
+      "hw": 10,
+      "pw": 33,
+      "aw": 29,
+      "flags": [
+        "em-dash x1",
+        "analogy 29w"
+      ]
+    },
+    {
+      "id": 569,
+      "term": "Mental Accounting",
+      "length_score": 5.4,
+      "em_dash": 1,
+      "hw": 10,
+      "pw": 41,
+      "aw": 29,
+      "flags": [
+        "em-dash x1",
+        "analogy 29w"
       ]
     }
   ]

@@ -1,6 +1,6 @@
 {
-  "_note": "Running patch doc — editorial rewrites, approved 1-by-1. Each entry lists ONLY changed fields + id. Merge into concepts.json by id once batch of 10 is approved.",
-  "batch": 14,
+  "_note": "Running patch doc \u2014 editorial rewrites, approved 1-by-1. Each entry lists ONLY changed fields + id. Merge into concepts.json by id once batch of 10 is approved.",
+  "batch": 15,
   "history": [
     {
       "batch": 1,
@@ -52,7 +52,7 @@
     },
     {
       "batch": 4,
-      "status": "patched_locally, reviewed and revised by Gergely (638 term reverted, 310 plain edited, analogy ceiling 25->20 + hook 1-sentence rule applied retroactively, 486 jargon fix), verified with tools/check-fields.js, 0 hard-rule failures — ready to push. See rewrite-reports/batch-4-diff.md",
+      "status": "patched_locally, reviewed and revised by Gergely (638 term reverted, 310 plain edited, analogy ceiling 25->20 + hook 1-sentence rule applied retroactively, 486 jargon fix), verified with tools/check-fields.js, 0 hard-rule failures \u2014 ready to push. See rewrite-reports/batch-4-diff.md",
       "ids": [
         184,
         210,
@@ -294,6 +294,69 @@
         ],
         "608": [
           "hook",
+          "analogy"
+        ]
+      }
+    },
+    {
+      "batch": 14,
+      "status": "patched_locally",
+      "ids": [
+        592,
+        231,
+        48,
+        237,
+        238,
+        396,
+        516,
+        28,
+        46,
+        127
+      ],
+      "fields_changed_per_id": {
+        "592": [
+          "hook",
+          "analogy"
+        ],
+        "231": [
+          "hook",
+          "plain",
+          "analogy"
+        ],
+        "48": [
+          "hook",
+          "analogy"
+        ],
+        "237": [
+          "hook",
+          "plain",
+          "analogy"
+        ],
+        "238": [
+          "hook",
+          "analogy"
+        ],
+        "396": [
+          "hook",
+          "analogy"
+        ],
+        "516": [
+          "hook",
+          "plain",
+          "analogy"
+        ],
+        "28": [
+          "plain",
+          "analogy"
+        ],
+        "46": [
+          "plain",
+          "analogy",
+          "prompt"
+        ],
+        "127": [
+          "hook",
+          "plain",
           "analogy"
         ]
       }
