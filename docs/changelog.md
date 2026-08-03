@@ -6,6 +6,16 @@
 
 ---
 
+## v2.69 — 2026-08-03 · SEO Session 3 — 14 category hub pages + deep-link fix
+
+### tools/generate-static-pages.js
+- **Category pages:** Added `buildCategoryPages()` — generates `/category/[name].html` for all 14 categories. Each page: breadcrumb, category accent bar, concept count pill, full concept list as linked rows with term + hook, CTA to SPA filtered by category.
+- **Sitemap updated:** Category URLs now included at `priority: 0.8` (above concept pages at 0.7, below homepage at 1.0).
+- **Duplicate `buildSitemap` removed** — old function replaced by new one that includes both concept and category URLs.
+
+### index.html
+- **Deep-link fix (v2.68b):** Handler now calls `setCat(concept.category)` before attempting to find the card — guarantees card is in DOM even if it was filtered. Skips `duplicate_of` concepts gracefully. Delay increased to 400ms + 350ms stagger for reliable DOM settlement.
+
 ## v2.68 — 2026-08-03 · SEO Session 1 — static concept pages, sitemap, GSC, deep-link CTA
 
 ### tools/generate-static-pages.js (new)

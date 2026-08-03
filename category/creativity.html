@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Creativity Concepts | Epistemic</title>
+<meta name="description" content="30 creativity concepts explained in plain English — with real analogies and prompts to use them.">
+<link rel="canonical" href="https://epistemic.live/category/creativity">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://epistemic.live/category/creativity">
+<meta property="og:title" content="Creativity Concepts | Epistemic">
+<meta property="og:description" content="30 creativity concepts explained in plain English.">
+<meta property="og:image" content="https://epistemic.live/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Creativity Concepts | Epistemic">
+<meta name="twitter:image" content="https://epistemic.live/og-image.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"Creativity Concepts | Epistemic","description":"30 creativity concepts explained in plain English — with analogies and reflection prompts.","url":"https://epistemic.live/category/creativity","breadcrumb":{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Epistemic","item":"https://epistemic.live"},{"@type":"ListItem","position":2,"name":"Creativity","item":"https://epistemic.live/category/creativity"}]}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d0d0d;
+    --surface: #141414;
+    --surface2: #1c1c1c;
+    --border: rgba(255,255,255,0.07);
+    --border-hover: rgba(255,255,255,0.15);
+    --text: #f0ede8;
+    --muted: #6b6b6b;
+    --muted2: #9a9a9a;
+    --accent: #e8d5a3;
+    --cat: #d4a574;
+  }
+
+  html, body { min-height: 100%; background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; -webkit-font-smoothing: antialiased; }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    pointer-events: none; z-index: 0; opacity: 0.35;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .ep-nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 10;
+    padding: 18px 32px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(13,13,13,0.94);
+  }
+  .ep-nav-logo { font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); text-decoration: none; }
+  .ep-nav-back { font-family: 'DM Sans', sans-serif; font-size: 0.72rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.15s; }
+  .ep-nav-back:hover { color: var(--text); }
+
+  .ep-page { position: relative; z-index: 1; max-width: 760px; margin: 0 auto; padding: 110px 24px 80px; }
+
+  /* Header */
+  .cat-header { margin-bottom: 48px; }
+  .cat-breadcrumb { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; }
+  .cat-breadcrumb a { color: var(--muted); text-decoration: none; }
+  .cat-breadcrumb a:hover { color: var(--text); }
+  .cat-breadcrumb span { margin: 0 6px; opacity: 0.4; }
+  .cat-accent-bar { width: 32px; height: 3px; background: var(--cat); border-radius: 2px; margin-bottom: 16px; }
+  h1.cat-title { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 2.4rem; color: var(--text); line-height: 1.1; margin-bottom: 10px; }
+  .cat-subtitle { font-family: 'DM Sans', sans-serif; font-weight: 300; font-size: 0.93rem; color: var(--muted2); line-height: 1.6; }
+  .cat-count { display: inline-block; font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cat); background: #d4a5741a; border: 1px solid #d4a57433; border-radius: 999px; padding: 3px 10px; margin-left: 10px; vertical-align: middle; }
+
+  /* Divider */
+  .cat-divider { height: 1px; background: var(--border); margin-bottom: 32px; }
+
+  /* Concept list */
+  .cat-concept-list { display: flex; flex-direction: column; gap: 2px; }
+
+  .cat-concept-row {
+    display: grid;
+    grid-template-columns: 44px 1fr auto 20px;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px 14px 18px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    text-decoration: none;
+    transition: border-color 0.15s, background 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+  .cat-concept-row::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 2px;
+    background: var(--cat);
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .cat-concept-row:hover { border-color: var(--border-hover); background: var(--surface2); }
+  .cat-concept-row:hover::before { opacity: 1; }
+
+  .cat-concept-id { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.12em; color: var(--muted); }
+  .cat-concept-term { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 0.95rem; color: var(--text); }
+  .cat-concept-hook { font-family: 'DM Sans', sans-serif; font-weight: 300; font-size: 0.8rem; color: var(--muted2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cat-concept-arrow { font-family: 'DM Sans', sans-serif; font-size: 0.8rem; color: var(--muted); transition: color 0.15s, transform 0.15s; }
+  .cat-concept-row:hover .cat-concept-arrow { color: var(--cat); transform: translateX(2px); }
+
+  /* CTA */
+  .cat-cta { margin-top: 48px; text-align: center; }
+  .ep-cta-btn { display: inline-block; background: var(--accent); color: #0d0d0d; font-family: 'DM Sans', sans-serif; font-size: 0.8rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; border-radius: 999px; padding: 13px 36px; text-decoration: none; transition: background 0.15s, transform 0.15s; }
+  .ep-cta-btn:hover { background: #f0e0b0; transform: translateY(-1px); }
+  .cat-cta-sub { font-family: 'DM Sans', sans-serif; font-size: 0.72rem; font-weight: 300; color: var(--muted); margin-top: 12px; }
+
+  /* Footer */
+  .ep-footer { margin-top: 40px; font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase; color: #3a3a3a; text-align: center; }
+
+  /* Mobile */
+  @media (max-width: 600px) {
+    .ep-nav { padding: 16px 20px; }
+    .ep-page { padding: 90px 16px 60px; }
+    h1.cat-title { font-size: 1.8rem; }
+    .cat-concept-row { grid-template-columns: 36px 1fr 16px; }
+    .cat-concept-hook { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="ep-nav">
+  <a class="ep-nav-logo" href="/">Epistemic</a>
+  <a class="ep-nav-back" href="/">← Back to library</a>
+</nav>
+
+<main class="ep-page">
+
+  <header class="cat-header">
+    <p class="cat-breadcrumb"><a href="/">Epistemic</a><span>›</span>Creativity</p>
+    <div class="cat-accent-bar"></div>
+    <h1 class="cat-title">Creativity <span class="cat-count">30 concepts</span></h1>
+    <p class="cat-subtitle">Creativity concepts explained in plain English — with real analogies and prompts to use them in conversation.</p>
+  </header>
+
+  <div class="cat-divider"></div>
+
+  <div class="cat-concept-list">
+
+        <a class="cat-concept-row" href="/concepts/685-first-iteration-will-suck">
+          <span class="cat-concept-id">#685</span>
+          <span class="cat-concept-term">First Iteration Will Suck</span>
+          <span class="cat-concept-hook">You can&#39;t improve what doesn&#39;t exist. Perfection is a procrastination costume.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/682-spotting-whats-almost-right">
+          <span class="cat-concept-id">#682</span>
+          <span class="cat-concept-term">Spotting What&#39;s Almost Right</span>
+          <span class="cat-concept-hook">Taste is seeing the one thing that&#39;s off when everyone else calls it done.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/678-excavating-raw-material">
+          <span class="cat-concept-id">#678</span>
+          <span class="cat-concept-term">Excavating Raw Material</span>
+          <span class="cat-concept-hook">Your most valuable ideas are buried under years of being told to specialize.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/652-beauty-is-right-brained">
+          <span class="cat-concept-id">#652</span>
+          <span class="cat-concept-term">Beauty is Right-brained</span>
+          <span class="cat-concept-hook">You haven&#39;t felt genuinely moved by anything in months. That&#39;s a left-brain takeover.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/629-easter-egg-thinking">
+          <span class="cat-concept-id">#629</span>
+          <span class="cat-concept-term">Easter Egg Thinking</span>
+          <span class="cat-concept-hook">Small unexpected details multiply loyalty at low cost.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/622-maya-principle">
+          <span class="cat-concept-id">#622</span>
+          <span class="cat-concept-term">Maya Principle</span>
+          <span class="cat-concept-hook">Most Advanced Yet Acceptable: too far ahead and nobody buys.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/618-go-watch-it-get-made">
+          <span class="cat-concept-id">#618</span>
+          <span class="cat-concept-term">Go Watch It Get Made</span>
+          <span class="cat-concept-hook">Great campaigns start where the product is actually built, not in meetings.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/615-function-vs-feeling">
+          <span class="cat-concept-id">#615</span>
+          <span class="cat-concept-term">Function vs Feeling</span>
+          <span class="cat-concept-hook">Technical people optimize for function; customers optimize for feeling. The gap is profit.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/592-horsepower-as-marketing-metric">
+          <span class="cat-concept-id">#592</span>
+          <span class="cat-concept-term">Horsepower as Marketing Metric</span>
+          <span class="cat-concept-hook">Matthew Boulton invented horsepower to sell steam engines. The metric wasn&#39;t science, it was persuasion.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/530-productive-procrastination">
+          <span class="cat-concept-id">#530</span>
+          <span class="cat-concept-term">Productive Procrastination</span>
+          <span class="cat-concept-hook">Procrastinating into something useful is still procrastinating. But it&#39;s the good kind.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/529-cross-pollination">
+          <span class="cat-concept-id">#529</span>
+          <span class="cat-concept-term">Cross-Pollination</span>
+          <span class="cat-concept-hook">The answer to your stuck problem already exists in a field you ignore.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/528-taste-gap">
+          <span class="cat-concept-id">#528</span>
+          <span class="cat-concept-term">Taste Gap</span>
+          <span class="cat-concept-hook">Your taste is sharp before your hands catch up. That gap is why most quit.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/527-your-old-work-is-a-quarry">
+          <span class="cat-concept-id">#527</span>
+          <span class="cat-concept-term">Your Old Work Is a Quarry</span>
+          <span class="cat-concept-hook">Your old work is raw material, not a finished museum.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/526-premature-optimization">
+          <span class="cat-concept-id">#526</span>
+          <span class="cat-concept-term">Premature Optimization</span>
+          <span class="cat-concept-hook">Polishing too early kills the thing before it can grow.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/525-beginners-mind">
+          <span class="cat-concept-id">#525</span>
+          <span class="cat-concept-term">Beginner&#39;s Mind</span>
+          <span class="cat-concept-hook">The expert sees one option; the beginner sees ten.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/524-steal-like-an-artist">
+          <span class="cat-concept-id">#524</span>
+          <span class="cat-concept-term">Steal Like an Artist</span>
+          <span class="cat-concept-hook">Nothing is original. Take well and transform it.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/523-the-curse-of-the-blank-page">
+          <span class="cat-concept-id">#523</span>
+          <span class="cat-concept-term">The Curse of the Blank Page</span>
+          <span class="cat-concept-hook">Total freedom is the hardest place to start.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/522-remix-dont-re-invent">
+          <span class="cat-concept-id">#522</span>
+          <span class="cat-concept-term">Remix, Don&#39;t (Re)invent</span>
+          <span class="cat-concept-hook">Original ideas are old ideas in a new arrangement.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/521-quantity-breeds-quality">
+          <span class="cat-concept-id">#521</span>
+          <span class="cat-concept-term">Quantity Breeds Quality</span>
+          <span class="cat-concept-hook">The people who make the most also make the best.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/520-creative-incubation">
+          <span class="cat-concept-id">#520</span>
+          <span class="cat-concept-term">Creative Incubation</span>
+          <span class="cat-concept-hook">The answer arrives in the shower because you finally stopped chasing it.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/519-divergent-thinking">
+          <span class="cat-concept-id">#519</span>
+          <span class="cat-concept-term">Divergent Thinking</span>
+          <span class="cat-concept-hook">Generate the bad ideas first. Judge them later.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/518-functional-fixedness">
+          <span class="cat-concept-id">#518</span>
+          <span class="cat-concept-term">Functional Fixedness</span>
+          <span class="cat-concept-hook">Once you know what something&#39;s for, you stop seeing what else it could be.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/517-adjacent-possible">
+          <span class="cat-concept-id">#517</span>
+          <span class="cat-concept-term">Adjacent Possible</span>
+          <span class="cat-concept-hook">You can only reach the ideas standing next to the ones you have.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/481-fewer-options-better-ideas">
+          <span class="cat-concept-id">#481</span>
+          <span class="cat-concept-term">Fewer Options, Better Ideas</span>
+          <span class="cat-concept-hook">Infinite options freeze you. Tight rules make you dangerous.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/407-outcome-vs-process-satisfaction">
+          <span class="cat-concept-id">#407</span>
+          <span class="cat-concept-term">Outcome vs Process Satisfaction</span>
+          <span class="cat-concept-hook">If the journey didn&#39;t feel hard, the result won&#39;t feel real.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/405-practicing-until-its-impossible-to-get-wrong">
+          <span class="cat-concept-id">#405</span>
+          <span class="cat-concept-term">Practicing Until It&#39;s Impossible to Get Wrong</span>
+          <span class="cat-concept-hook">100 reps to do it once. 1,000 reps to never fail it.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/344-wide-beats-narrow">
+          <span class="cat-concept-id">#344</span>
+          <span class="cat-concept-term">Wide Beats Narrow</span>
+          <span class="cat-concept-hook">Innovation comes from combining distant ideas, not drilling deeper in one.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/176-opinionated-creative-work">
+          <span class="cat-concept-id">#176</span>
+          <span class="cat-concept-term">Opinionated Creative Work</span>
+          <span class="cat-concept-hook">AI creates information. Humans create perspective. Perspective is what people follow.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/168-performance-vs-excitement-matrix">
+          <span class="cat-concept-id">#168</span>
+          <span class="cat-concept-term">Performance Vs. Excitement Matrix</span>
+          <span class="cat-concept-hook">Passion with no audience is a diary. Audience with no passion is a trap.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/167-idea-museum">
+          <span class="cat-concept-id">#167</span>
+          <span class="cat-concept-term">Idea Museum</span>
+          <span class="cat-concept-hook">Stop losing great ideas, curate them in one place and remix forever.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+  </div>
+
+  <div class="cat-cta">
+    <a class="ep-cta-btn" href="/#open-cat=creativity">Explore Creativity in Epistemic →</a>
+    <p class="cat-cta-sub">epistemic.live — 715 concepts from the podcasts you already listen to</p>
+  </div>
+
+  <footer class="ep-footer">epistemic.live &nbsp;·&nbsp; vol. i</footer>
+
+</main>
+
+</body>
+</html>

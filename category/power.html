@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Power Concepts | Epistemic</title>
+<meta name="description" content="28 power concepts explained in plain English — with real analogies and prompts to use them.">
+<link rel="canonical" href="https://epistemic.live/category/power">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://epistemic.live/category/power">
+<meta property="og:title" content="Power Concepts | Epistemic">
+<meta property="og:description" content="28 power concepts explained in plain English.">
+<meta property="og:image" content="https://epistemic.live/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Power Concepts | Epistemic">
+<meta name="twitter:image" content="https://epistemic.live/og-image.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"Power Concepts | Epistemic","description":"28 power concepts explained in plain English — with analogies and reflection prompts.","url":"https://epistemic.live/category/power","breadcrumb":{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Epistemic","item":"https://epistemic.live"},{"@type":"ListItem","position":2,"name":"Power","item":"https://epistemic.live/category/power"}]}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d0d0d;
+    --surface: #141414;
+    --surface2: #1c1c1c;
+    --border: rgba(255,255,255,0.07);
+    --border-hover: rgba(255,255,255,0.15);
+    --text: #f0ede8;
+    --muted: #6b6b6b;
+    --muted2: #9a9a9a;
+    --accent: #e8d5a3;
+    --cat: #d4715a;
+  }
+
+  html, body { min-height: 100%; background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; -webkit-font-smoothing: antialiased; }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    pointer-events: none; z-index: 0; opacity: 0.35;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .ep-nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 10;
+    padding: 18px 32px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(13,13,13,0.94);
+  }
+  .ep-nav-logo { font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); text-decoration: none; }
+  .ep-nav-back { font-family: 'DM Sans', sans-serif; font-size: 0.72rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.15s; }
+  .ep-nav-back:hover { color: var(--text); }
+
+  .ep-page { position: relative; z-index: 1; max-width: 760px; margin: 0 auto; padding: 110px 24px 80px; }
+
+  /* Header */
+  .cat-header { margin-bottom: 48px; }
+  .cat-breadcrumb { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; }
+  .cat-breadcrumb a { color: var(--muted); text-decoration: none; }
+  .cat-breadcrumb a:hover { color: var(--text); }
+  .cat-breadcrumb span { margin: 0 6px; opacity: 0.4; }
+  .cat-accent-bar { width: 32px; height: 3px; background: var(--cat); border-radius: 2px; margin-bottom: 16px; }
+  h1.cat-title { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 2.4rem; color: var(--text); line-height: 1.1; margin-bottom: 10px; }
+  .cat-subtitle { font-family: 'DM Sans', sans-serif; font-weight: 300; font-size: 0.93rem; color: var(--muted2); line-height: 1.6; }
+  .cat-count { display: inline-block; font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cat); background: #d4715a1a; border: 1px solid #d4715a33; border-radius: 999px; padding: 3px 10px; margin-left: 10px; vertical-align: middle; }
+
+  /* Divider */
+  .cat-divider { height: 1px; background: var(--border); margin-bottom: 32px; }
+
+  /* Concept list */
+  .cat-concept-list { display: flex; flex-direction: column; gap: 2px; }
+
+  .cat-concept-row {
+    display: grid;
+    grid-template-columns: 44px 1fr auto 20px;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px 14px 18px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    text-decoration: none;
+    transition: border-color 0.15s, background 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+  .cat-concept-row::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 2px;
+    background: var(--cat);
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .cat-concept-row:hover { border-color: var(--border-hover); background: var(--surface2); }
+  .cat-concept-row:hover::before { opacity: 1; }
+
+  .cat-concept-id { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.12em; color: var(--muted); }
+  .cat-concept-term { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 0.95rem; color: var(--text); }
+  .cat-concept-hook { font-family: 'DM Sans', sans-serif; font-weight: 300; font-size: 0.8rem; color: var(--muted2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cat-concept-arrow { font-family: 'DM Sans', sans-serif; font-size: 0.8rem; color: var(--muted); transition: color 0.15s, transform 0.15s; }
+  .cat-concept-row:hover .cat-concept-arrow { color: var(--cat); transform: translateX(2px); }
+
+  /* CTA */
+  .cat-cta { margin-top: 48px; text-align: center; }
+  .ep-cta-btn { display: inline-block; background: var(--accent); color: #0d0d0d; font-family: 'DM Sans', sans-serif; font-size: 0.8rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; border-radius: 999px; padding: 13px 36px; text-decoration: none; transition: background 0.15s, transform 0.15s; }
+  .ep-cta-btn:hover { background: #f0e0b0; transform: translateY(-1px); }
+  .cat-cta-sub { font-family: 'DM Sans', sans-serif; font-size: 0.72rem; font-weight: 300; color: var(--muted); margin-top: 12px; }
+
+  /* Footer */
+  .ep-footer { margin-top: 40px; font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase; color: #3a3a3a; text-align: center; }
+
+  /* Mobile */
+  @media (max-width: 600px) {
+    .ep-nav { padding: 16px 20px; }
+    .ep-page { padding: 90px 16px 60px; }
+    h1.cat-title { font-size: 1.8rem; }
+    .cat-concept-row { grid-template-columns: 36px 1fr 16px; }
+    .cat-concept-hook { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="ep-nav">
+  <a class="ep-nav-logo" href="/">Epistemic</a>
+  <a class="ep-nav-back" href="/">← Back to library</a>
+</nav>
+
+<main class="ep-page">
+
+  <header class="cat-header">
+    <p class="cat-breadcrumb"><a href="/">Epistemic</a><span>›</span>Power</p>
+    <div class="cat-accent-bar"></div>
+    <h1 class="cat-title">Power <span class="cat-count">28 concepts</span></h1>
+    <p class="cat-subtitle">Power concepts explained in plain English — with real analogies and prompts to use them in conversation.</p>
+  </header>
+
+  <div class="cat-divider"></div>
+
+  <div class="cat-concept-list">
+
+        <a class="cat-concept-row" href="/concepts/757-loss-of-control-scenario">
+          <span class="cat-concept-id">#757</span>
+          <span class="cat-concept-term">Loss of Control Scenario</span>
+          <span class="cat-concept-hook">You built something smarter than you. Now it doesn&#39;t need permission.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/747-bootstrapping-power">
+          <span class="cat-concept-id">#747</span>
+          <span class="cat-concept-term">Bootstrapping Power</span>
+          <span class="cat-concept-hook">Use the first bit of power to get more power. Loop until unstoppable.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/746-total-research-transparency">
+          <span class="cat-concept-id">#746</span>
+          <span class="cat-concept-term">Total Research Transparency</span>
+          <span class="cat-concept-hook">Publish every recipe. Kill the monopoly. Let the whole field catch up.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/742-economic-vs-political-power">
+          <span class="cat-concept-id">#742</span>
+          <span class="cat-concept-term">Economic vs Political Power</span>
+          <span class="cat-concept-hook">Money buys things. Political power decides what&#39;s for sale.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/741-power-seeking-incentives">
+          <span class="cat-concept-id">#741</span>
+          <span class="cat-concept-term">Power-seeking Incentives</span>
+          <span class="cat-concept-hook">Money&#39;s fine. Control&#39;s better. The real game is who gets to decide.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/733-scalpel-vs-cudgel">
+          <span class="cat-concept-id">#733</span>
+          <span class="cat-concept-term">Scalpel vs Cudgel</span>
+          <span class="cat-concept-hook">Blunt force bans everything. Precision targets the actual problem.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/726-respect-operation">
+          <span class="cat-concept-id">#726</span>
+          <span class="cat-concept-term">Respect Operation</span>
+          <span class="cat-concept-hook">Respect is letting someone&#39;s word change you when they can&#39;t force you.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/713-enforcement-of-standards">
+          <span class="cat-concept-id">#713</span>
+          <span class="cat-concept-term">Enforcement of Standards</span>
+          <span class="cat-concept-hook">If you don&#39;t enforce your boundaries, you teach people to gamble with you.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/712-sacrifice-for-the-group">
+          <span class="cat-concept-id">#712</span>
+          <span class="cat-concept-term">Sacrifice for the Group</span>
+          <span class="cat-concept-hook">Respect comes from visibly bearing a cost that benefits everyone else.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/638-relationship-paranoia">
+          <span class="cat-concept-id">#638</span>
+          <span class="cat-concept-term">Relationship Paranoia</span>
+          <span class="cat-concept-hook">Account teams are too scared to skip past their contact to the real boss.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/406-the-blame-trade">
+          <span class="cat-concept-id">#406</span>
+          <span class="cat-concept-term">The Blame Trade</span>
+          <span class="cat-concept-hook">Whoever you blame is whoever you empower.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/404-prestige-for-expertise-barter">
+          <span class="cat-concept-id">#404</span>
+          <span class="cat-concept-term">Prestige for Expertise Barter</span>
+          <span class="cat-concept-hook">The interview ended. Then the real trade began.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/395-reintroducing-friction-at-scale">
+          <span class="cat-concept-id">#395</span>
+          <span class="cat-concept-term">Reintroducing Friction at Scale</span>
+          <span class="cat-concept-hook">Success removes all barriers. Then you have to build them back yourself.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/326-light-cone-ambition">
+          <span class="cat-concept-id">#326</span>
+          <span class="cat-concept-term">Light Cone Ambition</span>
+          <span class="cat-concept-hook">Control everything light can physically reach from this point. That&#39;s the ambition.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/313-hr-manual-workaround">
+          <span class="cat-concept-id">#313</span>
+          <span class="cat-concept-term">HR Manual Workaround</span>
+          <span class="cat-concept-hook">Rules restrict average behavior. Smart actors just shift to unrestricted domains.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/297-coalitional-value">
+          <span class="cat-concept-id">#297</span>
+          <span class="cat-concept-term">Coalitional Value</span>
+          <span class="cat-concept-hook">Men bond by being useful. Vulnerability is a liability to the group.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/296-woke-fishing">
+          <span class="cat-concept-id">#296</span>
+          <span class="cat-concept-term">Woke Fishing</span>
+          <span class="cat-concept-hook">Men fake progressive values to access women. Same game, new uniform.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/292-the-pretty-privilege">
+          <span class="cat-concept-id">#292</span>
+          <span class="cat-concept-term">The Pretty Privilege</span>
+          <span class="cat-concept-hook">Beauty is invisible power. We deny it exists so we don&#39;t admit the gap.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/189-leverage-test">
+          <span class="cat-concept-id">#189</span>
+          <span class="cat-concept-term">Leverage Test</span>
+          <span class="cat-concept-hook">More hours isn&#39;t a strategy. Leverage is.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/151-situational-awareness">
+          <span class="cat-concept-id">#151</span>
+          <span class="cat-concept-term">Situational Awareness</span>
+          <span class="cat-concept-hook">Read the room before the room reads you.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/056-vested-interest">
+          <span class="cat-concept-id">#056</span>
+          <span class="cat-concept-term">Vested Interest</span>
+          <span class="cat-concept-hook">Their stake in the outcome makes their opinion biased.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/049-asymmetric-information">
+          <span class="cat-concept-id">#049</span>
+          <span class="cat-concept-term">Asymmetric Information</span>
+          <span class="cat-concept-hook">One side knows more. That asymmetry is the real leverage.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/046-narrative-control">
+          <span class="cat-concept-id">#046</span>
+          <span class="cat-concept-term">Narrative Control</span>
+          <span class="cat-concept-hook">Whoever frames the story first usually wins the argument.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/042-incentive-structure">
+          <span class="cat-concept-id">#042</span>
+          <span class="cat-concept-term">Incentive Structure</span>
+          <span class="cat-concept-hook">Show me how someone gets paid and I&#39;ll predict their behavior.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/039-batna">
+          <span class="cat-concept-id">#039</span>
+          <span class="cat-concept-term">BATNA</span>
+          <span class="cat-concept-hook">Your best option if you walk away from this deal.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/025-signaling">
+          <span class="cat-concept-id">#025</span>
+          <span class="cat-concept-term">Signaling</span>
+          <span class="cat-concept-hook">What you display to broadcast who you are.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/013-zero-sum-vs-win-win">
+          <span class="cat-concept-id">#013</span>
+          <span class="cat-concept-term">Zero-Sum vs Win-Win</span>
+          <span class="cat-concept-hook">Fixed pie or growing pie?</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/008-power-dynamics">
+          <span class="cat-concept-id">#008</span>
+          <span class="cat-concept-term">Power Dynamics</span>
+          <span class="cat-concept-hook">Every relationship has an invisible scoreboard of who has more leverage.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+  </div>
+
+  <div class="cat-cta">
+    <a class="ep-cta-btn" href="/#open-cat=power">Explore Power in Epistemic →</a>
+    <p class="cat-cta-sub">epistemic.live — 715 concepts from the podcasts you already listen to</p>
+  </div>
+
+  <footer class="ep-footer">epistemic.live &nbsp;·&nbsp; vol. i</footer>
+
+</main>
+
+</body>
+</html>

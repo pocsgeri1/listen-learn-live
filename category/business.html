@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Business Concepts | Epistemic</title>
+<meta name="description" content="95 business concepts explained in plain English — with real analogies and prompts to use them.">
+<link rel="canonical" href="https://epistemic.live/category/business">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://epistemic.live/category/business">
+<meta property="og:title" content="Business Concepts | Epistemic">
+<meta property="og:description" content="95 business concepts explained in plain English.">
+<meta property="og:image" content="https://epistemic.live/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Business Concepts | Epistemic">
+<meta name="twitter:image" content="https://epistemic.live/og-image.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"Business Concepts | Epistemic","description":"95 business concepts explained in plain English — with analogies and reflection prompts.","url":"https://epistemic.live/category/business","breadcrumb":{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Epistemic","item":"https://epistemic.live"},{"@type":"ListItem","position":2,"name":"Business","item":"https://epistemic.live/category/business"}]}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d0d0d;
+    --surface: #141414;
+    --surface2: #1c1c1c;
+    --border: rgba(255,255,255,0.07);
+    --border-hover: rgba(255,255,255,0.15);
+    --text: #f0ede8;
+    --muted: #6b6b6b;
+    --muted2: #9a9a9a;
+    --accent: #e8d5a3;
+    --cat: #e0a060;
+  }
+
+  html, body { min-height: 100%; background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; -webkit-font-smoothing: antialiased; }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    pointer-events: none; z-index: 0; opacity: 0.35;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .ep-nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 10;
+    padding: 18px 32px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(13,13,13,0.94);
+  }
+  .ep-nav-logo { font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); text-decoration: none; }
+  .ep-nav-back { font-family: 'DM Sans', sans-serif; font-size: 0.72rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.15s; }
+  .ep-nav-back:hover { color: var(--text); }
+
+  .ep-page { position: relative; z-index: 1; max-width: 760px; margin: 0 auto; padding: 110px 24px 80px; }
+
+  /* Header */
+  .cat-header { margin-bottom: 48px; }
+  .cat-breadcrumb { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; }
+  .cat-breadcrumb a { color: var(--muted); text-decoration: none; }
+  .cat-breadcrumb a:hover { color: var(--text); }
+  .cat-breadcrumb span { margin: 0 6px; opacity: 0.4; }
+  .cat-accent-bar { width: 32px; height: 3px; background: var(--cat); border-radius: 2px; margin-bottom: 16px; }
+  h1.cat-title { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 2.4rem; color: var(--text); line-height: 1.1; margin-bottom: 10px; }
+  .cat-subtitle { font-family: 'DM Sans', sans-serif; font-weight: 300; font-size: 0.93rem; color: var(--muted2); line-height: 1.6; }
+  .cat-count { display: inline-block; font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cat); background: #e0a0601a; border: 1px solid #e0a06033; border-radius: 999px; padding: 3px 10px; margin-left: 10px; vertical-align: middle; }
+
+  /* Divider */
+  .cat-divider { height: 1px; background: var(--border); margin-bottom: 32px; }
+
+  /* Concept list */
+  .cat-concept-list { display: flex; flex-direction: column; gap: 2px; }
+
+  .cat-concept-row {
+    display: grid;
+    grid-template-columns: 44px 1fr auto 20px;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px 14px 18px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    text-decoration: none;
+    transition: border-color 0.15s, background 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+  .cat-concept-row::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 2px;
+    background: var(--cat);
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .cat-concept-row:hover { border-color: var(--border-hover); background: var(--surface2); }
+  .cat-concept-row:hover::before { opacity: 1; }
+
+  .cat-concept-id { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.12em; color: var(--muted); }
+  .cat-concept-term { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 0.95rem; color: var(--text); }
+  .cat-concept-hook { font-family: 'DM Sans', sans-serif; font-weight: 300; font-size: 0.8rem; color: var(--muted2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cat-concept-arrow { font-family: 'DM Sans', sans-serif; font-size: 0.8rem; color: var(--muted); transition: color 0.15s, transform 0.15s; }
+  .cat-concept-row:hover .cat-concept-arrow { color: var(--cat); transform: translateX(2px); }
+
+  /* CTA */
+  .cat-cta { margin-top: 48px; text-align: center; }
+  .ep-cta-btn { display: inline-block; background: var(--accent); color: #0d0d0d; font-family: 'DM Sans', sans-serif; font-size: 0.8rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; border-radius: 999px; padding: 13px 36px; text-decoration: none; transition: background 0.15s, transform 0.15s; }
+  .ep-cta-btn:hover { background: #f0e0b0; transform: translateY(-1px); }
+  .cat-cta-sub { font-family: 'DM Sans', sans-serif; font-size: 0.72rem; font-weight: 300; color: var(--muted); margin-top: 12px; }
+
+  /* Footer */
+  .ep-footer { margin-top: 40px; font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase; color: #3a3a3a; text-align: center; }
+
+  /* Mobile */
+  @media (max-width: 600px) {
+    .ep-nav { padding: 16px 20px; }
+    .ep-page { padding: 90px 16px 60px; }
+    h1.cat-title { font-size: 1.8rem; }
+    .cat-concept-row { grid-template-columns: 36px 1fr 16px; }
+    .cat-concept-hook { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="ep-nav">
+  <a class="ep-nav-logo" href="/">Epistemic</a>
+  <a class="ep-nav-back" href="/">← Back to library</a>
+</nav>
+
+<main class="ep-page">
+
+  <header class="cat-header">
+    <p class="cat-breadcrumb"><a href="/">Epistemic</a><span>›</span>Business</p>
+    <div class="cat-accent-bar"></div>
+    <h1 class="cat-title">Business <span class="cat-count">95 concepts</span></h1>
+    <p class="cat-subtitle">Business concepts explained in plain English — with real analogies and prompts to use them in conversation.</p>
+  </header>
+
+  <div class="cat-divider"></div>
+
+  <div class="cat-concept-list">
+
+        <a class="cat-concept-row" href="/concepts/758-talent-density">
+          <span class="cat-concept-id">#758</span>
+          <span class="cat-concept-term">Talent Density</span>
+          <span class="cat-concept-hook">Anthropic beat OpenAI with less money. Difference was talent per person, not headcount.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/749-commoditize-vs-monopolize">
+          <span class="cat-concept-id">#749</span>
+          <span class="cat-concept-term">Commoditize vs Monopolize</span>
+          <span class="cat-concept-hook">Transparency makes competitors equal. Secrecy creates winners.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/730-anti-fragile-setup">
+          <span class="cat-concept-id">#730</span>
+          <span class="cat-concept-term">Anti-Fragile Setup</span>
+          <span class="cat-concept-hook">Build four different ways to win so one failure doesn&#39;t kill you.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/729-volume-negates-luck">
+          <span class="cat-concept-id">#729</span>
+          <span class="cat-concept-term">Volume Negates Luck</span>
+          <span class="cat-concept-hook">Do so much work it becomes unreasonable that you fail.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/715-misaligned-risk-appetite">
+          <span class="cat-concept-id">#715</span>
+          <span class="cat-concept-term">Misaligned Risk Appetite</span>
+          <span class="cat-concept-hook">Your business grew but your guts didn&#39;t.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/706-half-measures-null-outcomes">
+          <span class="cat-concept-id">#706</span>
+          <span class="cat-concept-term">Half Measures = Null Outcomes</span>
+          <span class="cat-concept-hook">Learning Spanish, guitar, coding, and painting on weekends gets you nowhere in any.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/695-distribution-over-creation">
+          <span class="cat-concept-id">#695</span>
+          <span class="cat-concept-term">Distribution Over Creation</span>
+          <span class="cat-concept-hook">Building things is easy now. Getting people to care is still nearly impossible.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/684-barrier-to-entry-barrier-to-success">
+          <span class="cat-concept-id">#684</span>
+          <span class="cat-concept-term">Barrier to Entry ≠ Barrier to Success</span>
+          <span class="cat-concept-hook">Anyone can build an app now. Almost nobody can make one people actually use.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/680-permissionless-leverage">
+          <span class="cat-concept-id">#680</span>
+          <span class="cat-concept-term">Permissionless Leverage</span>
+          <span class="cat-concept-hook">Code and media work for you while you sleep. Nobody can stop you from using them.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/675-content-code-for-longevity">
+          <span class="cat-concept-id">#675</span>
+          <span class="cat-concept-term">Content &gt; Code for Longevity</span>
+          <span class="cat-concept-hook">Code has right answers, but content doesn&#39;t. That&#39;s why the skill cap stays high.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/666-earned-success">
+          <span class="cat-concept-id">#666</span>
+          <span class="cat-concept-term">Earned Success</span>
+          <span class="cat-concept-hook">Are you creating real value, or are you just good at looking like you are?</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/659-spiral-career-pattern">
+          <span class="cat-concept-id">#659</span>
+          <span class="cat-concept-term">Spiral Career Pattern</span>
+          <span class="cat-concept-hook">Every 7-12 years, great entrepreneurs burn their career to the studs and start again.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/647-counterfeit-achievement">
+          <span class="cat-concept-id">#647</span>
+          <span class="cat-concept-term">Counterfeit Achievement</span>
+          <span class="cat-concept-hook">You got 10,000 steps but can&#39;t run a mile.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/637-time-cost-perversity">
+          <span class="cat-concept-id">#637</span>
+          <span class="cat-concept-term">Time-Cost Perversity</span>
+          <span class="cat-concept-hook">Billing hourly means being brilliant fast earns you less. Perverse.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/633-attribution-illusion">
+          <span class="cat-concept-id">#633</span>
+          <span class="cat-concept-term">Attribution Illusion</span>
+          <span class="cat-concept-hook">The ad platform claims it drove the sale. You were buying anyway.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/632-more-doors-more-sales">
+          <span class="cat-concept-id">#632</span>
+          <span class="cat-concept-term">More Doors, More Sales</span>
+          <span class="cat-concept-hook">More ways to buy means more people buy; forcing one channel kills revenue.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/631-pay-for-the-result">
+          <span class="cat-concept-id">#631</span>
+          <span class="cat-concept-term">Pay for the Result</span>
+          <span class="cat-concept-hook">Shift payment from upfront cost to shared savings; removes buyer&#39;s risk entirely.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/626-short-term-trap">
+          <span class="cat-concept-id">#626</span>
+          <span class="cat-concept-term">Short-Term Trap</span>
+          <span class="cat-concept-hook">Long-term pays after you&#39;re fired.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/625-founder-led-premium">
+          <span class="cat-concept-id">#625</span>
+          <span class="cat-concept-term">Founder-Led Premium</span>
+          <span class="cat-concept-hook">The person who built the company still signs off on where every dollar goes.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/624-brand-compounds-like-interest">
+          <span class="cat-concept-id">#624</span>
+          <span class="cat-concept-term">Brand Compounds Like Interest</span>
+          <span class="cat-concept-hook">Brand equity accumulates like interest; judging it quarterly guarantees underinvestment.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/623-commercial-innovation">
+          <span class="cat-concept-id">#623</span>
+          <span class="cat-concept-term">Commercial Innovation</span>
+          <span class="cat-concept-hook">Change how you sell, not what you sell.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/620-think-like-a-marketer">
+          <span class="cat-concept-id">#620</span>
+          <span class="cat-concept-term">Think Like a Marketer</span>
+          <span class="cat-concept-hook">Marketing is a worldview, not a department.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/613-panic-button">
+          <span class="cat-concept-id">#613</span>
+          <span class="cat-concept-term">Panic Button</span>
+          <span class="cat-concept-hook">One-click default orders eliminate decision fatigue at peak stress.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/611-make-it-easy-to-say-yes">
+          <span class="cat-concept-id">#611</span>
+          <span class="cat-concept-term">Make It Easy to Say Yes</span>
+          <span class="cat-concept-hook">More ways to buy equals more total buyers. Reducing channels optimizes cost, kills sales.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/609-director-of-trivia">
+          <span class="cat-concept-id">#609</span>
+          <span class="cat-concept-term">Director of Trivia</span>
+          <span class="cat-concept-hook">The annoying part of any product is the one nobody&#39;s paid to fix.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/604-outgrowing-the-playbook">
+          <span class="cat-concept-id">#604</span>
+          <span class="cat-concept-term">Outgrowing the Playbook</span>
+          <span class="cat-concept-hook">What works for startups destroys value at scale.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/602-fat-tailed-marketing">
+          <span class="cat-concept-id">#602</span>
+          <span class="cat-concept-term">Fat-Tailed Marketing</span>
+          <span class="cat-concept-hook">10% of marketing delivers 95% of the value. You can&#39;t predict which 10%.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/599-famous-orders">
+          <span class="cat-concept-id">#599</span>
+          <span class="cat-concept-term">Famous Orders</span>
+          <span class="cat-concept-hook">Mariah Carey&#39;s actual McDonald&#39;s order became a permanent menu item.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/596-marketing-lives-outside-marketing">
+          <span class="cat-concept-id">#596</span>
+          <span class="cat-concept-term">Marketing Lives Outside Marketing</span>
+          <span class="cat-concept-hook">Best marketing emerges from culture, not campaigns.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/594-brands-as-insurance">
+          <span class="cat-concept-id">#594</span>
+          <span class="cat-concept-term">Brands as Insurance</span>
+          <span class="cat-concept-hook">Brands reduce risk, not increase excitement.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/591-build-then-see-who-buys">
+          <span class="cat-concept-id">#591</span>
+          <span class="cat-concept-term">Build, Then See Who Buys</span>
+          <span class="cat-concept-hook">Make the thing first, sell it second. Flips the agency model entirely.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/515-leverage-through-audience">
+          <span class="cat-concept-id">#515</span>
+          <span class="cat-concept-term">Leverage Through Audience</span>
+          <span class="cat-concept-hook">Freelancers rent attention. Audience builders own the room.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/514-generalist-vs-specialist">
+          <span class="cat-concept-id">#514</span>
+          <span class="cat-concept-term">Generalist vs Specialist</span>
+          <span class="cat-concept-hook">Specialists get automated. Generalists hire the robots.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/513-value-creator-vs-entertainer">
+          <span class="cat-concept-id">#513</span>
+          <span class="cat-concept-term">Value Creator vs Entertainer</span>
+          <span class="cat-concept-hook">Entertainers rent attention. Educators own it.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/511-consulting-before-productizing">
+          <span class="cat-concept-id">#511</span>
+          <span class="cat-concept-term">Consulting Before Productizing</span>
+          <span class="cat-concept-hook">Sell four coaching calls before you write a single lesson.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/510-brand-as-mission">
+          <span class="cat-concept-id">#510</span>
+          <span class="cat-concept-term">Brand as Mission</span>
+          <span class="cat-concept-hook">Your goal is your brand. Tactics are just the vehicle.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/505-skill-stacking">
+          <span class="cat-concept-id">#505</span>
+          <span class="cat-concept-term">Skill-Stacking</span>
+          <span class="cat-concept-hook">Three decent skills beat one world-class skill.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/504-you-are-your-customer-avatar">
+          <span class="cat-concept-id">#504</span>
+          <span class="cat-concept-term">You Are Your Customer Avatar</span>
+          <span class="cat-concept-hook">Your ideal customer is you, eighteen months ago.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/502-evolve-past-saturation">
+          <span class="cat-concept-id">#502</span>
+          <span class="cat-concept-term">Evolve Past Saturation</span>
+          <span class="cat-concept-hook">Markets saturate when everyone stands still. You win by moving.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/493-eternal-markets">
+          <span class="cat-concept-id">#493</span>
+          <span class="cat-concept-term">Eternal Markets</span>
+          <span class="cat-concept-hook">Health, wealth, relationships, happiness. Four problems that never go away.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/484-needle-moving-levers">
+          <span class="cat-concept-id">#484</span>
+          <span class="cat-concept-term">Needle-Moving Levers</span>
+          <span class="cat-concept-hook">Fifteen tasks on your list. Two actually matter. The rest is theater.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/418-starting-vs-having-a-business">
+          <span class="cat-concept-id">#418</span>
+          <span class="cat-concept-term">Starting vs Having a Business</span>
+          <span class="cat-concept-hook">Most entrepreneurs are just rearranging paperwork instead of selling.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/417-speed-to-lead-obsession">
+          <span class="cat-concept-id">#417</span>
+          <span class="cat-concept-term">Speed to Lead Obsession</span>
+          <span class="cat-concept-hook">One person, one task: call leads instantly.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/380-flavor-of-the-day-validation">
+          <span class="cat-concept-id">#380</span>
+          <span class="cat-concept-term">Flavor-Of-The-Day Validation</span>
+          <span class="cat-concept-hook">If a business model floods YouTube, it works. Saturation is proof.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/378-third-of-life-tax">
+          <span class="cat-concept-id">#378</span>
+          <span class="cat-concept-term">Third-of-Life Tax</span>
+          <span class="cat-concept-hook">A job takes a third of your time, then drains the next third recovering.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/363-invisible-competition">
+          <span class="cat-concept-id">#363</span>
+          <span class="cat-concept-term">Invisible Competition</span>
+          <span class="cat-concept-hook">The internet tricks you into thinking everyone is building. They&#39;re not.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/354-6-step-value-creation-loop">
+          <span class="cat-concept-id">#354</span>
+          <span class="cat-concept-term">6-Step Value Creation Loop</span>
+          <span class="cat-concept-hook">Entrepreneurs follow six steps, then repeat. Not one big bet.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/353-entrepreneurial-skill-set-over-employment">
+          <span class="cat-concept-id">#353</span>
+          <span class="cat-concept-term">Entrepreneurial Skill Set Over Employment</span>
+          <span class="cat-concept-hook">Big companies will pay a fortune for people who think like founders.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/350-the-ai-fog-analogy">
+          <span class="cat-concept-id">#350</span>
+          <span class="cat-concept-term">The AI-Fog Analogy</span>
+          <span class="cat-concept-hook">Already flying? You&#39;re above the fog. Still on the runway? Good luck.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/347-product-service-ecosystem">
+          <span class="cat-concept-id">#347</span>
+          <span class="cat-concept-term">Product - Service Ecosystem</span>
+          <span class="cat-concept-hook">You can&#39;t make money from one thing anymore. Build the bundle.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/345-founder-problem-match">
+          <span class="cat-concept-id">#345</span>
+          <span class="cat-concept-term">Founder-Problem Match</span>
+          <span class="cat-concept-hook">Not every opportunity suits you. Match matters more than market size.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/342-micro-saas-with-soul">
+          <span class="cat-concept-id">#342</span>
+          <span class="cat-concept-term">Micro SaaS with Soul</span>
+          <span class="cat-concept-hook">You can now build profitable software with 500 customers, not 10,000.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/335-the-subway-test">
+          <span class="cat-concept-id">#335</span>
+          <span class="cat-concept-term">The Subway Test</span>
+          <span class="cat-concept-hook">Would you hold the full cover facing out in public?</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/334-the-r-d-edge">
+          <span class="cat-concept-id">#334</span>
+          <span class="cat-concept-term">The R&amp;D Edge</span>
+          <span class="cat-concept-hook">Gym Launch was the only licensing company with an R&amp;D department.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/329-ai-mass-job-loss">
+          <span class="cat-concept-id">#329</span>
+          <span class="cat-concept-term">AI = Mass Job Loss</span>
+          <span class="cat-concept-hook">Before: one job automated, retrain elsewhere. Now: all jobs automate, no Plan B.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/318-infinite-0-labor">
+          <span class="cat-concept-id">#318</span>
+          <span class="cat-concept-term">Infinite $0 Labor</span>
+          <span class="cat-concept-hook">When AI works for $20/month, hiring humans stops making math sense.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/311-bullsh-t-job-layer">
+          <span class="cat-concept-id">#311</span>
+          <span class="cat-concept-term">Bullsh*t Job Layer</span>
+          <span class="cat-concept-hook">Half of all jobs produce nothing; they&#39;re pure performance.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/262-technology-diffusion">
+          <span class="cat-concept-id">#262</span>
+          <span class="cat-concept-term">Technology Diffusion</span>
+          <span class="cat-concept-hook">New tech starts centralized, then becomes cheap and everywhere. Monopolies break.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/248-self-love-as-marketing-strategy">
+          <span class="cat-concept-id">#248</span>
+          <span class="cat-concept-term">Self-love as Marketing Strategy</span>
+          <span class="cat-concept-hook">Empowerment campaigns sell you the tools that made you insecure first.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/196-performance-business">
+          <span class="cat-concept-id">#196</span>
+          <span class="cat-concept-term">Performance Business</span>
+          <span class="cat-concept-hook">A tech-enabled team built for one goal: an eight-to-nine-figure exit.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/195-lifestyle-boutique">
+          <span class="cat-concept-id">#195</span>
+          <span class="cat-concept-term">Lifestyle Boutique</span>
+          <span class="cat-concept-hook">Eight people, three million revenue, sixty percent margin. Total control, zero stress.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/192-entrepreneur-sweet-spot">
+          <span class="cat-concept-id">#192</span>
+          <span class="cat-concept-term">Entrepreneur Sweet Spot</span>
+          <span class="cat-concept-hook">Passion, problem, payment: you need all three or the business dies.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/191-top-10-monetization">
+          <span class="cat-concept-id">#191</span>
+          <span class="cat-concept-term">Top 10% Monetization</span>
+          <span class="cat-concept-hook">Give free content to ninety percent. Charge the top ten premium.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/188-entrepreneurial-pyramid">
+          <span class="cat-concept-id">#188</span>
+          <span class="cat-concept-term">Entrepreneurial Pyramid</span>
+          <span class="cat-concept-hook">Level 1 is selling your time. Most people retire there.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/187-official-capacity">
+          <span class="cat-concept-id">#187</span>
+          <span class="cat-concept-term">Official Capacity</span>
+          <span class="cat-concept-hook">Set the number that means you won. Then stop chasing more.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/184-situational-model">
+          <span class="cat-concept-id">#184</span>
+          <span class="cat-concept-term">Situational Model</span>
+          <span class="cat-concept-hook">Four buyer questions decide the sale; miss one and you lose it.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/183-entrepreneurial-apprenticeship">
+          <span class="cat-concept-id">#183</span>
+          <span class="cat-concept-term">Entrepreneurial Apprenticeship</span>
+          <span class="cat-concept-hook">Twelve people or fewer, direct access to the founder. That&#39;s where you learn.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/182-side-hustle-doctrine">
+          <span class="cat-concept-id">#182</span>
+          <span class="cat-concept-term">Side Hustle Doctrine</span>
+          <span class="cat-concept-hook">Open and shut in 90 days: start, learn, finish, reflect, repeat.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/180-productize-the-demo">
+          <span class="cat-concept-id">#180</span>
+          <span class="cat-concept-term">Productize the Demo</span>
+          <span class="cat-concept-hook">A pitch deck can replace 10,000 units of inventory.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/173-systems-economy">
+          <span class="cat-concept-id">#173</span>
+          <span class="cat-concept-term">Systems Economy</span>
+          <span class="cat-concept-hook">People don&#39;t want solutions anymore. They want your specific, opinionated process.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/172-the-thing-ai-cant-fake">
+          <span class="cat-concept-id">#172</span>
+          <span class="cat-concept-term">The Thing AI Can&#39;t Fake</span>
+          <span class="cat-concept-hook">AI can build anything. It can&#39;t make people care about what you built.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/171-hyperspecific-system">
+          <span class="cat-concept-id">#171</span>
+          <span class="cat-concept-term">Hyperspecific System</span>
+          <span class="cat-concept-hook">Generic solutions are commodities. Systems built exactly how you needed them are premium.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/145-the-4-hour-workday">
+          <span class="cat-concept-id">#145</span>
+          <span class="cat-concept-term">The 4-Hour Workday</span>
+          <span class="cat-concept-hook">Four hours of focus beats ten hours of presence.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/142-done-beats-perfect">
+          <span class="cat-concept-id">#142</span>
+          <span class="cat-concept-term">Done Beats Perfect</span>
+          <span class="cat-concept-hook">Version two built on real feedback beats perfect version one that never ships.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/141-inbound-vs-outbound">
+          <span class="cat-concept-id">#141</span>
+          <span class="cat-concept-term">Inbound vs Outbound</span>
+          <span class="cat-concept-hook">Chase customers, or build something that pulls them to you.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/140-build-the-audience-first">
+          <span class="cat-concept-id">#140</span>
+          <span class="cat-concept-term">Build the Audience First</span>
+          <span class="cat-concept-hook">Products expire. Trust compounds.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/139-value-creation-vs-time-trading">
+          <span class="cat-concept-id">#139</span>
+          <span class="cat-concept-term">Value Creation vs Time Trading</span>
+          <span class="cat-concept-hook">Hours have a ceiling. Systems don&#39;t.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/138-minimum-viable-offer">
+          <span class="cat-concept-id">#138</span>
+          <span class="cat-concept-term">Minimum Viable Offer</span>
+          <span class="cat-concept-hook">Real buyers tell you more in 10 minutes than 6 months of planning ever will.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/134-build-in-public">
+          <span class="cat-concept-id">#134</span>
+          <span class="cat-concept-term">Build in Public</span>
+          <span class="cat-concept-hook">Share the messy process, not just the polished result.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/130-niche-of-one">
+          <span class="cat-concept-id">#130</span>
+          <span class="cat-concept-term">Niche of One</span>
+          <span class="cat-concept-hook">You are the niche. Your weird combination of interests IS your unfair advantage.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/129-the-eternal-markets">
+          <span class="cat-concept-id">#129</span>
+          <span class="cat-concept-term">The Eternal Markets</span>
+          <span class="cat-concept-hook">Health, wealth, relationships. Every product traces back to one of these three.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/128-digital-leverage">
+          <span class="cat-concept-id">#128</span>
+          <span class="cat-concept-term">Digital Leverage</span>
+          <span class="cat-concept-hook">One hour of work today can keep earning for years without you.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/126-the-one-person-business">
+          <span class="cat-concept-id">#126</span>
+          <span class="cat-concept-term">The One-Person Business</span>
+          <span class="cat-concept-hook">One person with the right audience beats a 20-people team without one.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/125-productize-yourself">
+          <span class="cat-concept-id">#125</span>
+          <span class="cat-concept-term">Productize Yourself</span>
+          <span class="cat-concept-hook">Stop trading hours for money. Package what you know and sell it while you sleep.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/121-first-mover-edge">
+          <span class="cat-concept-id">#121</span>
+          <span class="cat-concept-term">First Mover Edge</span>
+          <span class="cat-concept-hook">Ideas are worthless. Execution is everything, and speed decides who wins.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/120-solve-the-right-problem">
+          <span class="cat-concept-id">#120</span>
+          <span class="cat-concept-term">Solve the Right Problem</span>
+          <span class="cat-concept-hook">People don&#39;t want what they&#39;re asking for. They want what it gives them.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/119-category-of-one">
+          <span class="cat-concept-id">#119</span>
+          <span class="cat-concept-term">Category of One</span>
+          <span class="cat-concept-hook">Stop competing. Build something with no direct comparison.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/117-niche-down-to-scale-up">
+          <span class="cat-concept-id">#117</span>
+          <span class="cat-concept-term">Niche Down to Scale Up</span>
+          <span class="cat-concept-hook">The more specific the problem you solve, the more people will pay.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/116-premium-pricing">
+          <span class="cat-concept-id">#116</span>
+          <span class="cat-concept-term">Premium Pricing</span>
+          <span class="cat-concept-hook">Charging more makes your product more valuable, not less attractive.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/115-ship-it-ugly">
+          <span class="cat-concept-id">#115</span>
+          <span class="cat-concept-term">Ship It Ugly</span>
+          <span class="cat-concept-hook">Ship 100 imperfect things. One will hit. Ship one perfect thing. Nothing will.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/114-risk-reversal">
+          <span class="cat-concept-id">#114</span>
+          <span class="cat-concept-term">Risk Reversal</span>
+          <span class="cat-concept-hook">Carry all the risk yourself and watch conversion skyrocket.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/113-pain-is-the-pitch">
+          <span class="cat-concept-id">#113</span>
+          <span class="cat-concept-term">Pain is the Pitch</span>
+          <span class="cat-concept-hook">Describe their pain better than they can, and they&#39;ll trust you to fix it.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/112-starving-crowd">
+          <span class="cat-concept-id">#112</span>
+          <span class="cat-concept-term">Starving Crowd</span>
+          <span class="cat-concept-hook">Sell to desperate buyers and everything else becomes easier.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/111-value-equation">
+          <span class="cat-concept-id">#111</span>
+          <span class="cat-concept-term">Value Equation</span>
+          <span class="cat-concept-hook">People pay for fast, certain results. Make the effort invisible.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/110-grand-slam-offer">
+          <span class="cat-concept-id">#110</span>
+          <span class="cat-concept-term">Grand Slam Offer</span>
+          <span class="cat-concept-hook">The product can be average. The offer cannot.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+  </div>
+
+  <div class="cat-cta">
+    <a class="ep-cta-btn" href="/#open-cat=business">Explore Business in Epistemic →</a>
+    <p class="cat-cta-sub">epistemic.live — 715 concepts from the podcasts you already listen to</p>
+  </div>
+
+  <footer class="ep-footer">epistemic.live &nbsp;·&nbsp; vol. i</footer>
+
+</main>
+
+</body>
+</html>

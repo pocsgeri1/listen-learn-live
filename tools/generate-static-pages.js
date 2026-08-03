@@ -481,12 +481,234 @@ ${relatedHtml}
 </html>`;
 }
 
+
+
+// Human-readable category display names
+const CAT_DISPLAY = {
+  finance: 'Finance',
+  psychology: 'Psychology',
+  thinking: 'Thinking',
+  power: 'Power',
+  relationships: 'Relationships',
+  language: 'Language',
+  business: 'Business',
+  identity: 'Identity',
+  health: 'Health',
+  philosophy: 'Philosophy',
+  society: 'Society',
+  creativity: 'Creativity',
+  science: 'Science',
+  'tech-ai': 'Tech & AI',
+};
+
+function buildCategoryPage(categoryId, concepts, totalCount) {
+  const color = CAT_COLOR[categoryId] || '#e8d5a3';
+  const colorAlpha10 = color + '1a';
+  const colorAlpha20 = color + '33';
+  const displayName = CAT_DISPLAY[categoryId] || categoryId;
+  const canonicalUrl = `${BASE_URL}/category/${categoryId}`;
+
+  const catConcepts = concepts
+    .filter(c => c.category === categoryId && !c.duplicate_of)
+    .reverse(); // newest first, matches SPA order
+
+  const conceptListHtml = catConcepts.map(c => {
+    const slug = conceptFilename(c);
+    return `
+        <a class="cat-concept-row" href="/concepts/${slug}">
+          <span class="cat-concept-id">#${zeroPad(c.id)}</span>
+          <span class="cat-concept-term">${escapeHtml(c.term)}</span>
+          <span class="cat-concept-hook">${escapeHtml(c.hook)}</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>`;
+  }).join('\n');
+
+  const jsonLd = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: `${displayName} Concepts | Epistemic`,
+    description: `${catConcepts.length} ${displayName.toLowerCase()} concepts explained in plain English — with analogies and reflection prompts.`,
+    url: canonicalUrl,
+    breadcrumb: {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Epistemic', item: BASE_URL },
+        { '@type': 'ListItem', position: 2, name: displayName, item: canonicalUrl },
+      ],
+    },
+  });
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${displayName} Concepts | Epistemic</title>
+<meta name="description" content="${catConcepts.length} ${displayName.toLowerCase()} concepts explained in plain English — with real analogies and prompts to use them.">
+<link rel="canonical" href="${canonicalUrl}">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:url" content="${canonicalUrl}">
+<meta property="og:title" content="${displayName} Concepts | Epistemic">
+<meta property="og:description" content="${catConcepts.length} ${displayName.toLowerCase()} concepts explained in plain English.">
+<meta property="og:image" content="${BASE_URL}/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${displayName} Concepts | Epistemic">
+<meta name="twitter:image" content="${BASE_URL}/og-image.png">
+<script type="application/ld+json">${jsonLd}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d0d0d;
+    --surface: #141414;
+    --surface2: #1c1c1c;
+    --border: rgba(255,255,255,0.07);
+    --border-hover: rgba(255,255,255,0.15);
+    --text: #f0ede8;
+    --muted: #6b6b6b;
+    --muted2: #9a9a9a;
+    --accent: #e8d5a3;
+    --cat: ${color};
+  }
+
+  html, body { min-height: 100%; background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; -webkit-font-smoothing: antialiased; }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    pointer-events: none; z-index: 0; opacity: 0.35;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .ep-nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 10;
+    padding: 18px 32px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(13,13,13,0.94);
+  }
+  .ep-nav-logo { font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); text-decoration: none; }
+  .ep-nav-back { font-family: 'DM Sans', sans-serif; font-size: 0.72rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.15s; }
+  .ep-nav-back:hover { color: var(--text); }
+
+  .ep-page { position: relative; z-index: 1; max-width: 760px; margin: 0 auto; padding: 110px 24px 80px; }
+
+  /* Header */
+  .cat-header { margin-bottom: 48px; }
+  .cat-breadcrumb { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; }
+  .cat-breadcrumb a { color: var(--muted); text-decoration: none; }
+  .cat-breadcrumb a:hover { color: var(--text); }
+  .cat-breadcrumb span { margin: 0 6px; opacity: 0.4; }
+  .cat-accent-bar { width: 32px; height: 3px; background: var(--cat); border-radius: 2px; margin-bottom: 16px; }
+  h1.cat-title { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 2.4rem; color: var(--text); line-height: 1.1; margin-bottom: 10px; }
+  .cat-subtitle { font-family: 'DM Sans', sans-serif; font-weight: 300; font-size: 0.93rem; color: var(--muted2); line-height: 1.6; }
+  .cat-count { display: inline-block; font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cat); background: ${colorAlpha10}; border: 1px solid ${colorAlpha20}; border-radius: 999px; padding: 3px 10px; margin-left: 10px; vertical-align: middle; }
+
+  /* Divider */
+  .cat-divider { height: 1px; background: var(--border); margin-bottom: 32px; }
+
+  /* Concept list */
+  .cat-concept-list { display: flex; flex-direction: column; gap: 2px; }
+
+  .cat-concept-row {
+    display: grid;
+    grid-template-columns: 44px 1fr auto 20px;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px 14px 18px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    text-decoration: none;
+    transition: border-color 0.15s, background 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+  .cat-concept-row::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 2px;
+    background: var(--cat);
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .cat-concept-row:hover { border-color: var(--border-hover); background: var(--surface2); }
+  .cat-concept-row:hover::before { opacity: 1; }
+
+  .cat-concept-id { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.12em; color: var(--muted); }
+  .cat-concept-term { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 0.95rem; color: var(--text); }
+  .cat-concept-hook { font-family: 'DM Sans', sans-serif; font-weight: 300; font-size: 0.8rem; color: var(--muted2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cat-concept-arrow { font-family: 'DM Sans', sans-serif; font-size: 0.8rem; color: var(--muted); transition: color 0.15s, transform 0.15s; }
+  .cat-concept-row:hover .cat-concept-arrow { color: var(--cat); transform: translateX(2px); }
+
+  /* CTA */
+  .cat-cta { margin-top: 48px; text-align: center; }
+  .ep-cta-btn { display: inline-block; background: var(--accent); color: #0d0d0d; font-family: 'DM Sans', sans-serif; font-size: 0.8rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; border-radius: 999px; padding: 13px 36px; text-decoration: none; transition: background 0.15s, transform 0.15s; }
+  .ep-cta-btn:hover { background: #f0e0b0; transform: translateY(-1px); }
+  .cat-cta-sub { font-family: 'DM Sans', sans-serif; font-size: 0.72rem; font-weight: 300; color: var(--muted); margin-top: 12px; }
+
+  /* Footer */
+  .ep-footer { margin-top: 40px; font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase; color: #3a3a3a; text-align: center; }
+
+  /* Mobile */
+  @media (max-width: 600px) {
+    .ep-nav { padding: 16px 20px; }
+    .ep-page { padding: 90px 16px 60px; }
+    h1.cat-title { font-size: 1.8rem; }
+    .cat-concept-row { grid-template-columns: 36px 1fr 16px; }
+    .cat-concept-hook { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="ep-nav">
+  <a class="ep-nav-logo" href="/">Epistemic</a>
+  <a class="ep-nav-back" href="/">← Back to library</a>
+</nav>
+
+<main class="ep-page">
+
+  <header class="cat-header">
+    <p class="cat-breadcrumb"><a href="/">Epistemic</a><span>›</span>${escapeHtml(displayName)}</p>
+    <div class="cat-accent-bar"></div>
+    <h1 class="cat-title">${escapeHtml(displayName)} <span class="cat-count">${catConcepts.length} concepts</span></h1>
+    <p class="cat-subtitle">${escapeHtml(displayName)} concepts explained in plain English — with real analogies and prompts to use them in conversation.</p>
+  </header>
+
+  <div class="cat-divider"></div>
+
+  <div class="cat-concept-list">
+${conceptListHtml}
+  </div>
+
+  <div class="cat-cta">
+    <a class="ep-cta-btn" href="/#open-cat=${categoryId}">Explore ${escapeHtml(displayName)} in Epistemic →</a>
+    <p class="cat-cta-sub">epistemic.live — ${totalCount} concepts from the podcasts you already listen to</p>
+  </div>
+
+  <footer class="ep-footer">epistemic.live &nbsp;·&nbsp; vol. i</footer>
+
+</main>
+
+</body>
+</html>`;
+}
+
 function buildSitemap(concepts, allConcepts) {
-  const urls = concepts
+  const conceptUrls = concepts
     .map(c => {
       const slug = conceptFilename(c);
       return `  <url>\n    <loc>${BASE_URL}/concepts/${slug}</loc>\n    <changefreq>monthly</changefreq>\n    <priority>0.7</priority>\n  </url>`;
     })
+    .join('\n');
+
+  const categoryUrls = Object.keys(CAT_COLOR)
+    .map(cat => `  <url>\n    <loc>${BASE_URL}/category/${cat}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>`)
     .join('\n');
 
   return `<?xml version="1.0" encoding="UTF-8"?>
@@ -496,7 +718,8 @@ function buildSitemap(concepts, allConcepts) {
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
-${urls}
+${categoryUrls}
+${conceptUrls}
 </urlset>`;
 }
 
@@ -512,25 +735,30 @@ function main() {
   const concepts = JSON.parse(fs.readFileSync(CONCEPTS_FILE, 'utf8'));
   const totalCount = concepts.length;
 
-  // Ensure output dir exists
-  if (!fs.existsSync(CONCEPTS_OUT_DIR)) {
-    fs.mkdirSync(CONCEPTS_OUT_DIR, { recursive: true });
-  }
+  // Ensure output dirs exist
+  const CATEGORY_OUT_DIR = path.join(ROOT, 'category');
+  if (!fs.existsSync(CONCEPTS_OUT_DIR)) fs.mkdirSync(CONCEPTS_OUT_DIR, { recursive: true });
+  if (!fs.existsSync(CATEGORY_OUT_DIR)) fs.mkdirSync(CATEGORY_OUT_DIR, { recursive: true });
 
   let generated = 0;
   let skipped = 0;
 
   for (const concept of concepts) {
-    // Skip concepts that are duplicates
     if (concept.duplicate_of) { skipped++; continue; }
-
     const html = buildPage(concept, concepts, totalCount);
     const filename = conceptFilename(concept) + '.html';
     fs.writeFileSync(path.join(CONCEPTS_OUT_DIR, filename), html, 'utf8');
     generated++;
   }
 
-  // Sitemap
+  // Category pages
+  const categories = Object.keys(CAT_COLOR);
+  for (const cat of categories) {
+    const html = buildCategoryPage(cat, concepts, totalCount);
+    fs.writeFileSync(path.join(CATEGORY_OUT_DIR, cat + '.html'), html, 'utf8');
+  }
+
+  // Sitemap (now includes category URLs)
   const sitemap = buildSitemap(concepts.filter(c => !c.duplicate_of), concepts);
   fs.writeFileSync(SITEMAP_OUT, sitemap, 'utf8');
 
@@ -539,7 +767,8 @@ function main() {
 
   console.log(`✓ Generated ${generated} concept pages → /concepts/`);
   console.log(`✓ Skipped ${skipped} duplicate concepts`);
-  console.log(`✓ sitemap.xml written`);
+  console.log(`✓ Generated ${categories.length} category pages → /category/`);
+  console.log(`✓ sitemap.xml updated (concepts + categories)`);
   console.log(`✓ robots.txt written`);
 }
 

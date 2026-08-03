@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tech & AI Concepts | Epistemic</title>
+<meta name="description" content="45 tech & ai concepts explained in plain English — with real analogies and prompts to use them.">
+<link rel="canonical" href="https://epistemic.live/category/tech-ai">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://epistemic.live/category/tech-ai">
+<meta property="og:title" content="Tech & AI Concepts | Epistemic">
+<meta property="og:description" content="45 tech & ai concepts explained in plain English.">
+<meta property="og:image" content="https://epistemic.live/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Tech & AI Concepts | Epistemic">
+<meta name="twitter:image" content="https://epistemic.live/og-image.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"Tech & AI Concepts | Epistemic","description":"45 tech & ai concepts explained in plain English — with analogies and reflection prompts.","url":"https://epistemic.live/category/tech-ai","breadcrumb":{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Epistemic","item":"https://epistemic.live"},{"@type":"ListItem","position":2,"name":"Tech & AI","item":"https://epistemic.live/category/tech-ai"}]}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d0d0d;
+    --surface: #141414;
+    --surface2: #1c1c1c;
+    --border: rgba(255,255,255,0.07);
+    --border-hover: rgba(255,255,255,0.15);
+    --text: #f0ede8;
+    --muted: #6b6b6b;
+    --muted2: #9a9a9a;
+    --accent: #e8d5a3;
+    --cat: #b8a07a;
+  }
+
+  html, body { min-height: 100%; background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; -webkit-font-smoothing: antialiased; }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    pointer-events: none; z-index: 0; opacity: 0.35;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .ep-nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 10;
+    padding: 18px 32px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(13,13,13,0.94);
+  }
+  .ep-nav-logo { font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); text-decoration: none; }
+  .ep-nav-back { font-family: 'DM Sans', sans-serif; font-size: 0.72rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.15s; }
+  .ep-nav-back:hover { color: var(--text); }
+
+  .ep-page { position: relative; z-index: 1; max-width: 760px; margin: 0 auto; padding: 110px 24px 80px; }
+
+  /* Header */
+  .cat-header { margin-bottom: 48px; }
+  .cat-breadcrumb { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; }
+  .cat-breadcrumb a { color: var(--muted); text-decoration: none; }
+  .cat-breadcrumb a:hover { color: var(--text); }
+  .cat-breadcrumb span { margin: 0 6px; opacity: 0.4; }
+  .cat-accent-bar { width: 32px; height: 3px; background: var(--cat); border-radius: 2px; margin-bottom: 16px; }
+  h1.cat-title { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 2.4rem; color: var(--text); line-height: 1.1; margin-bottom: 10px; }
+  .cat-subtitle { font-family: 'DM Sans', sans-serif; font-weight: 300; font-size: 0.93rem; color: var(--muted2); line-height: 1.6; }
+  .cat-count { display: inline-block; font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cat); background: #b8a07a1a; border: 1px solid #b8a07a33; border-radius: 999px; padding: 3px 10px; margin-left: 10px; vertical-align: middle; }
+
+  /* Divider */
+  .cat-divider { height: 1px; background: var(--border); margin-bottom: 32px; }
+
+  /* Concept list */
+  .cat-concept-list { display: flex; flex-direction: column; gap: 2px; }
+
+  .cat-concept-row {
+    display: grid;
+    grid-template-columns: 44px 1fr auto 20px;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px 14px 18px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    text-decoration: none;
+    transition: border-color 0.15s, background 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+  .cat-concept-row::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 2px;
+    background: var(--cat);
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .cat-concept-row:hover { border-color: var(--border-hover); background: var(--surface2); }
+  .cat-concept-row:hover::before { opacity: 1; }
+
+  .cat-concept-id { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.12em; color: var(--muted); }
+  .cat-concept-term { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 0.95rem; color: var(--text); }
+  .cat-concept-hook { font-family: 'DM Sans', sans-serif; font-weight: 300; font-size: 0.8rem; color: var(--muted2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cat-concept-arrow { font-family: 'DM Sans', sans-serif; font-size: 0.8rem; color: var(--muted); transition: color 0.15s, transform 0.15s; }
+  .cat-concept-row:hover .cat-concept-arrow { color: var(--cat); transform: translateX(2px); }
+
+  /* CTA */
+  .cat-cta { margin-top: 48px; text-align: center; }
+  .ep-cta-btn { display: inline-block; background: var(--accent); color: #0d0d0d; font-family: 'DM Sans', sans-serif; font-size: 0.8rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; border-radius: 999px; padding: 13px 36px; text-decoration: none; transition: background 0.15s, transform 0.15s; }
+  .ep-cta-btn:hover { background: #f0e0b0; transform: translateY(-1px); }
+  .cat-cta-sub { font-family: 'DM Sans', sans-serif; font-size: 0.72rem; font-weight: 300; color: var(--muted); margin-top: 12px; }
+
+  /* Footer */
+  .ep-footer { margin-top: 40px; font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase; color: #3a3a3a; text-align: center; }
+
+  /* Mobile */
+  @media (max-width: 600px) {
+    .ep-nav { padding: 16px 20px; }
+    .ep-page { padding: 90px 16px 60px; }
+    h1.cat-title { font-size: 1.8rem; }
+    .cat-concept-row { grid-template-columns: 36px 1fr 16px; }
+    .cat-concept-hook { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="ep-nav">
+  <a class="ep-nav-logo" href="/">Epistemic</a>
+  <a class="ep-nav-back" href="/">← Back to library</a>
+</nav>
+
+<main class="ep-page">
+
+  <header class="cat-header">
+    <p class="cat-breadcrumb"><a href="/">Epistemic</a><span>›</span>Tech &amp; AI</p>
+    <div class="cat-accent-bar"></div>
+    <h1 class="cat-title">Tech &amp; AI <span class="cat-count">45 concepts</span></h1>
+    <p class="cat-subtitle">Tech &amp; AI concepts explained in plain English — with real analogies and prompts to use them in conversation.</p>
+  </header>
+
+  <div class="cat-divider"></div>
+
+  <div class="cat-concept-list">
+
+        <a class="cat-concept-row" href="/concepts/755-inference-vs-training">
+          <span class="cat-concept-id">#755</span>
+          <span class="cat-concept-term">Inference vs Training</span>
+          <span class="cat-concept-hook">Using AI is inference. Building better AI is training. One&#39;s allowed, one&#39;s banned.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/754-intelligence-explosion">
+          <span class="cat-concept-id">#754</span>
+          <span class="cat-concept-term">Intelligence Explosion</span>
+          <span class="cat-concept-hook">Once AI can improve itself, progress stops being gradual and starts being sudden.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/752-recursive-self-improvement">
+          <span class="cat-concept-id">#752</span>
+          <span class="cat-concept-term">Recursive Self-improvement</span>
+          <span class="cat-concept-hook">The scariest loop starts when the thing building itself becomes what it&#39;s building.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/751-neural-net-vs-code">
+          <span class="cat-concept-id">#751</span>
+          <span class="cat-concept-term">Neural Net vs Code</span>
+          <span class="cat-concept-hook">Software you can read. Neural nets you can only run and hope.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/744-mechanistic-interpretability">
+          <span class="cat-concept-id">#744</span>
+          <span class="cat-concept-term">Mechanistic Interpretability</span>
+          <span class="cat-concept-hook">Opening the black box to see how AI makes decisions, connection by connection.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/743-automation-of-ai-research">
+          <span class="cat-concept-id">#743</span>
+          <span class="cat-concept-term">Automation of Ai Research</span>
+          <span class="cat-concept-hook">The milestone that changes everything: AI building the next AI.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/737-pre-training-vs-fine-tuning">
+          <span class="cat-concept-id">#737</span>
+          <span class="cat-concept-term">Pre-training vs Fine-tuning</span>
+          <span class="cat-concept-hook">Pre-training builds the brain, fine-tuning teaches the skill.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/731-truth-seeking-ai">
+          <span class="cat-concept-id">#731</span>
+          <span class="cat-concept-term">Truth-seeking Ai</span>
+          <span class="cat-concept-hook">An assistant trained for honesty versus one with a hidden agenda.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/671-vibe-coding">
+          <span class="cat-concept-id">#671</span>
+          <span class="cat-concept-term">Vibe Coding</span>
+          <span class="cat-concept-hook">You&#39;re building an app by arguing with a chatbot until it stops breaking.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/665-phone-free-zones">
+          <span class="cat-concept-id">#665</span>
+          <span class="cat-concept-term">Phone-Free Zones</span>
+          <span class="cat-concept-hook">Your phone shouldn&#39;t be in your bedroom. Or the classroom. Or the cafeteria. Anywhere that matters.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/661-the-technology-doom-loop">
+          <span class="cat-concept-id">#661</span>
+          <span class="cat-concept-term">The Technology Doom Loop</span>
+          <span class="cat-concept-hook">Scrolling makes you lonely, loneliness makes you scroll. A deadly cycle.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/660-the-zoom-problem">
+          <span class="cat-concept-id">#660</span>
+          <span class="cat-concept-term">The &quot;Zoom&quot; Problem</span>
+          <span class="cat-concept-hook">Zoom keeps you in the me self. You&#39;re always looking at yourself instead of the other person.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/657-phone-fasts">
+          <span class="cat-concept-id">#657</span>
+          <span class="cat-concept-term">Phone Fasts</span>
+          <span class="cat-concept-hook">You check your phone more than your kid checks if you&#39;re watching them at the park.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/639-the-matrix-simulation-trap">
+          <span class="cat-concept-id">#639</span>
+          <span class="cat-concept-term">The Matrix Simulation Trap</span>
+          <span class="cat-concept-hook">Algorithms keep you just satisfied enough to stay, never enough to stop.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/606-free-trial-forced-buy">
+          <span class="cat-concept-id">#606</span>
+          <span class="cat-concept-term">Free Trial, Forced Buy</span>
+          <span class="cat-concept-hook">What arrives as choice becomes mandatory. Hostility grows when convenience turns compulsory.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/586-attention-algorithm">
+          <span class="cat-concept-id">#586</span>
+          <span class="cat-concept-term">Attention Algorithm</span>
+          <span class="cat-concept-hook">It isn&#39;t built to inform you. It&#39;s built to keep you.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/585-dark-patterns">
+          <span class="cat-concept-id">#585</span>
+          <span class="cat-concept-term">Dark Patterns</span>
+          <span class="cat-concept-hook">Designed not to help you, but to trick you into what they want.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/584-emergent-behavior">
+          <span class="cat-concept-id">#584</span>
+          <span class="cat-concept-term">Emergent Behavior</span>
+          <span class="cat-concept-hook">Simple parts following simple rules can produce something nobody designed.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/583-brute-force">
+          <span class="cat-concept-id">#583</span>
+          <span class="cat-concept-term">Brute Force</span>
+          <span class="cat-concept-hook">If you can&#39;t be clever, try every possibility until one works.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/582-single-point-of-failure">
+          <span class="cat-concept-id">#582</span>
+          <span class="cat-concept-term">Single Point of Failure</span>
+          <span class="cat-concept-hook">One part breaks and the whole thing goes down with it.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/581-technical-debt">
+          <span class="cat-concept-id">#581</span>
+          <span class="cat-concept-term">Technical Debt</span>
+          <span class="cat-concept-hook">Every shortcut taken now is a bill that arrives later, with interest.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/580-latency-vs-bandwidth">
+          <span class="cat-concept-id">#580</span>
+          <span class="cat-concept-term">Latency vs Bandwidth</span>
+          <span class="cat-concept-hook">How fast it starts and how much it carries aren&#39;t the same.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/579-switching-costs">
+          <span class="cat-concept-id">#579</span>
+          <span class="cat-concept-term">Switching Costs</span>
+          <span class="cat-concept-hook">They keep you not because it&#39;s best, but because leaving hurts.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/578-default-effect">
+          <span class="cat-concept-id">#578</span>
+          <span class="cat-concept-term">Default Effect</span>
+          <span class="cat-concept-hook">Most people never change the setting they were given.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/577-training-data-bias">
+          <span class="cat-concept-id">#577</span>
+          <span class="cat-concept-term">Training Data Bias</span>
+          <span class="cat-concept-hook">AI inherits every blind spot baked into its training diet.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/576-ai-hallucination">
+          <span class="cat-concept-id">#576</span>
+          <span class="cat-concept-term">AI Hallucination</span>
+          <span class="cat-concept-hook">It sounds just as confident whether it&#39;s right or inventing.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/575-the-rabbit-hole-machine">
+          <span class="cat-concept-id">#575</span>
+          <span class="cat-concept-term">The Rabbit Hole Machine</span>
+          <span class="cat-concept-hook">It shows you what you clicked, you click more, it shows more.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/574-black-box-problem">
+          <span class="cat-concept-id">#574</span>
+          <span class="cat-concept-term">Black Box Problem</span>
+          <span class="cat-concept-hook">It gives the right answer and nobody can explain why.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/573-network-effect">
+          <span class="cat-concept-id">#573</span>
+          <span class="cat-concept-term">Network Effect</span>
+          <span class="cat-concept-hook">The product gets better every time someone else joins.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/572-garbage-in-garbage-out">
+          <span class="cat-concept-id">#572</span>
+          <span class="cat-concept-term">Garbage In, Garbage Out</span>
+          <span class="cat-concept-hook">Perfect code can&#39;t fix rotten data.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/498-no-code-leverage">
+          <span class="cat-concept-id">#498</span>
+          <span class="cat-concept-term">No-Code Leverage</span>
+          <span class="cat-concept-hook">Software handles repetition. You handle creation.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/382-ai-race-to-mediocrity">
+          <span class="cat-concept-id">#382</span>
+          <span class="cat-concept-term">AI = Race to Mediocrity</span>
+          <span class="cat-concept-hook">AI makes bad people better and great people worse.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/352-algorithmic-media">
+          <span class="cat-concept-id">#352</span>
+          <span class="cat-concept-term">Algorithmic Media</span>
+          <span class="cat-concept-hook">Follower count is dead. Daily talent show rules now.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/330-black-box-intelligence">
+          <span class="cat-concept-id">#330</span>
+          <span class="cat-concept-term">Black Box Intelligence</span>
+          <span class="cat-concept-hook">Even the people who built it run experiments to learn what it does.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/327-silicon-substrate-advantage">
+          <span class="cat-concept-id">#327</span>
+          <span class="cat-concept-term">Silicon Substrate Advantage</span>
+          <span class="cat-concept-hook">Silicon runs intelligence faster, cheaper, and tougher than biology ever will.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/323-endless-capability-discovery">
+          <span class="cat-concept-id">#323</span>
+          <span class="cat-concept-term">Endless Capability Discovery</span>
+          <span class="cat-concept-hook">Builders don&#39;t program capabilities. They train a system, then test to see what appeared.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/320-capability-safety-gap">
+          <span class="cat-concept-id">#320</span>
+          <span class="cat-concept-term">Capability-safety Gap</span>
+          <span class="cat-concept-hook">AI gets exponentially smarter. Safety research grows linearly. The gap widens daily.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/319-perpetual-safety-paradox">
+          <span class="cat-concept-id">#319</span>
+          <span class="cat-concept-term">Perpetual Safety Paradox</span>
+          <span class="cat-concept-hook">You can&#39;t permanently control something smarter than you. By definition.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/317-singularity-event-horizon">
+          <span class="cat-concept-id">#317</span>
+          <span class="cat-concept-term">Singularity Event Horizon</span>
+          <span class="cat-concept-hook">Progress moves so fast that every concept goes obsolete in seconds.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/274-auto-research-agents">
+          <span class="cat-concept-id">#274</span>
+          <span class="cat-concept-term">Auto Research Agents</span>
+          <span class="cat-concept-hook">AI agents trained better models than ChatGPT in one weekend, no humans required.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/271-human-machine-interface">
+          <span class="cat-concept-id">#271</span>
+          <span class="cat-concept-term">Human-machine Interface</span>
+          <span class="cat-concept-hook">Soft neural connection, no brain surgery. Tap AI like Neo learning helicopters.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/267-robot-employee-revolution">
+          <span class="cat-concept-id">#267</span>
+          <span class="cat-concept-term">Robot Employee Revolution</span>
+          <span class="cat-concept-hook">Everyone gets a robot employee. Individuals build businesses, not just corporations.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/259-arm-farms">
+          <span class="cat-concept-id">#259</span>
+          <span class="cat-concept-term">Arm Farms</span>
+          <span class="cat-concept-hook">Humans train robots by doing chores on camera. GoPros teaching folding.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/258-edge-ai">
+          <span class="cat-concept-id">#258</span>
+          <span class="cat-concept-term">Edge AI</span>
+          <span class="cat-concept-hook">AI runs on your laptop now. Data centers aren&#39;t the chokepoint anymore.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/252-everything-drags-to-its-extreme">
+          <span class="cat-concept-id">#252</span>
+          <span class="cat-concept-term">Everything Drags to Its Extreme</span>
+          <span class="cat-concept-hook">Algorithms don&#39;t show you balance. They show you the most unhinged version.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+  </div>
+
+  <div class="cat-cta">
+    <a class="ep-cta-btn" href="/#open-cat=tech-ai">Explore Tech &amp; AI in Epistemic →</a>
+    <p class="cat-cta-sub">epistemic.live — 715 concepts from the podcasts you already listen to</p>
+  </div>
+
+  <footer class="ep-footer">epistemic.live &nbsp;·&nbsp; vol. i</footer>
+
+</main>
+
+</body>
+</html>

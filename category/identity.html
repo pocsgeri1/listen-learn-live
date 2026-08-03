@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Identity Concepts | Epistemic</title>
+<meta name="description" content="38 identity concepts explained in plain English — with real analogies and prompts to use them.">
+<link rel="canonical" href="https://epistemic.live/category/identity">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://epistemic.live/category/identity">
+<meta property="og:title" content="Identity Concepts | Epistemic">
+<meta property="og:description" content="38 identity concepts explained in plain English.">
+<meta property="og:image" content="https://epistemic.live/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Identity Concepts | Epistemic">
+<meta name="twitter:image" content="https://epistemic.live/og-image.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"Identity Concepts | Epistemic","description":"38 identity concepts explained in plain English — with analogies and reflection prompts.","url":"https://epistemic.live/category/identity","breadcrumb":{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Epistemic","item":"https://epistemic.live"},{"@type":"ListItem","position":2,"name":"Identity","item":"https://epistemic.live/category/identity"}]}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d0d0d;
+    --surface: #141414;
+    --surface2: #1c1c1c;
+    --border: rgba(255,255,255,0.07);
+    --border-hover: rgba(255,255,255,0.15);
+    --text: #f0ede8;
+    --muted: #6b6b6b;
+    --muted2: #9a9a9a;
+    --accent: #e8d5a3;
+    --cat: #b89878;
+  }
+
+  html, body { min-height: 100%; background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; -webkit-font-smoothing: antialiased; }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    pointer-events: none; z-index: 0; opacity: 0.35;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .ep-nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 10;
+    padding: 18px 32px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(13,13,13,0.94);
+  }
+  .ep-nav-logo { font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); text-decoration: none; }
+  .ep-nav-back { font-family: 'DM Sans', sans-serif; font-size: 0.72rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.15s; }
+  .ep-nav-back:hover { color: var(--text); }
+
+  .ep-page { position: relative; z-index: 1; max-width: 760px; margin: 0 auto; padding: 110px 24px 80px; }
+
+  /* Header */
+  .cat-header { margin-bottom: 48px; }
+  .cat-breadcrumb { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; }
+  .cat-breadcrumb a { color: var(--muted); text-decoration: none; }
+  .cat-breadcrumb a:hover { color: var(--text); }
+  .cat-breadcrumb span { margin: 0 6px; opacity: 0.4; }
+  .cat-accent-bar { width: 32px; height: 3px; background: var(--cat); border-radius: 2px; margin-bottom: 16px; }
+  h1.cat-title { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 2.4rem; color: var(--text); line-height: 1.1; margin-bottom: 10px; }
+  .cat-subtitle { font-family: 'DM Sans', sans-serif; font-weight: 300; font-size: 0.93rem; color: var(--muted2); line-height: 1.6; }
+  .cat-count { display: inline-block; font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cat); background: #b898781a; border: 1px solid #b8987833; border-radius: 999px; padding: 3px 10px; margin-left: 10px; vertical-align: middle; }
+
+  /* Divider */
+  .cat-divider { height: 1px; background: var(--border); margin-bottom: 32px; }
+
+  /* Concept list */
+  .cat-concept-list { display: flex; flex-direction: column; gap: 2px; }
+
+  .cat-concept-row {
+    display: grid;
+    grid-template-columns: 44px 1fr auto 20px;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px 14px 18px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    text-decoration: none;
+    transition: border-color 0.15s, background 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+  .cat-concept-row::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 2px;
+    background: var(--cat);
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .cat-concept-row:hover { border-color: var(--border-hover); background: var(--surface2); }
+  .cat-concept-row:hover::before { opacity: 1; }
+
+  .cat-concept-id { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.12em; color: var(--muted); }
+  .cat-concept-term { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 0.95rem; color: var(--text); }
+  .cat-concept-hook { font-family: 'DM Sans', sans-serif; font-weight: 300; font-size: 0.8rem; color: var(--muted2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cat-concept-arrow { font-family: 'DM Sans', sans-serif; font-size: 0.8rem; color: var(--muted); transition: color 0.15s, transform 0.15s; }
+  .cat-concept-row:hover .cat-concept-arrow { color: var(--cat); transform: translateX(2px); }
+
+  /* CTA */
+  .cat-cta { margin-top: 48px; text-align: center; }
+  .ep-cta-btn { display: inline-block; background: var(--accent); color: #0d0d0d; font-family: 'DM Sans', sans-serif; font-size: 0.8rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; border-radius: 999px; padding: 13px 36px; text-decoration: none; transition: background 0.15s, transform 0.15s; }
+  .ep-cta-btn:hover { background: #f0e0b0; transform: translateY(-1px); }
+  .cat-cta-sub { font-family: 'DM Sans', sans-serif; font-size: 0.72rem; font-weight: 300; color: var(--muted); margin-top: 12px; }
+
+  /* Footer */
+  .ep-footer { margin-top: 40px; font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase; color: #3a3a3a; text-align: center; }
+
+  /* Mobile */
+  @media (max-width: 600px) {
+    .ep-nav { padding: 16px 20px; }
+    .ep-page { padding: 90px 16px 60px; }
+    h1.cat-title { font-size: 1.8rem; }
+    .cat-concept-row { grid-template-columns: 36px 1fr 16px; }
+    .cat-concept-hook { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="ep-nav">
+  <a class="ep-nav-logo" href="/">Epistemic</a>
+  <a class="ep-nav-back" href="/">← Back to library</a>
+</nav>
+
+<main class="ep-page">
+
+  <header class="cat-header">
+    <p class="cat-breadcrumb"><a href="/">Epistemic</a><span>›</span>Identity</p>
+    <div class="cat-accent-bar"></div>
+    <h1 class="cat-title">Identity <span class="cat-count">38 concepts</span></h1>
+    <p class="cat-subtitle">Identity concepts explained in plain English — with real analogies and prompts to use them in conversation.</p>
+  </header>
+
+  <div class="cat-divider"></div>
+
+  <div class="cat-concept-list">
+
+        <a class="cat-concept-row" href="/concepts/722-no-one-is-coming-to-save-you">
+          <span class="cat-concept-id">#722</span>
+          <span class="cat-concept-term">No One is Coming to Save You</span>
+          <span class="cat-concept-hook">Waiting for rescue is giving someone else control of your outcomes.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/721-the-lonely-chapter">
+          <span class="cat-concept-id">#721</span>
+          <span class="cat-concept-term">The Lonely Chapter</span>
+          <span class="cat-concept-hook">Success requires isolation nobody warns you about.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/693-becoming-unemployable">
+          <span class="cat-concept-id">#693</span>
+          <span class="cat-concept-term">Becoming Unemployable</span>
+          <span class="cat-concept-hook">The first dollar you earn yourself makes accepting a job feel impossible afterward.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/688-lifes-work-vs-personal-brand">
+          <span class="cat-concept-id">#688</span>
+          <span class="cat-concept-term">Life&#39;s Work vs Personal Brand</span>
+          <span class="cat-concept-hook">Peterson and Huberman don&#39;t have brands. They have missions with brands attached.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/670-wage-slavery">
+          <span class="cat-concept-id">#670</span>
+          <span class="cat-concept-term">Wage Slavery</span>
+          <span class="cat-concept-hook">Doing grind work you didn&#39;t choose just to survive is slavery with extra steps.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/655-the-me-self-vs-the-i-self">
+          <span class="cat-concept-id">#655</span>
+          <span class="cat-concept-term">The Me Self vs the I Self</span>
+          <span class="cat-concept-hook">You spend all day as the star of your own internal drama. That&#39;s why you&#39;re exhausted.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/654-specialness-vs-happiness">
+          <span class="cat-concept-id">#654</span>
+          <span class="cat-concept-term">Specialness vs Happiness</span>
+          <span class="cat-concept-hook">You picked the impressive life over the good one, and now you&#39;re both impressive and miserable.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/495-self-reliance-advantage">
+          <span class="cat-concept-id">#495</span>
+          <span class="cat-concept-term">Self-Reliance Advantage</span>
+          <span class="cat-concept-hook">People who solve their own problems outpace those waiting for help.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/474-act-the-part-before-you-get-the-part">
+          <span class="cat-concept-id">#474</span>
+          <span class="cat-concept-term">Act the Part Before You Get the Part</span>
+          <span class="cat-concept-hook">The outcome doesn&#39;t unlock the lifestyle. The lifestyle creates the outcome.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/467-identity-first-change">
+          <span class="cat-concept-id">#467</span>
+          <span class="cat-concept-term">Identity-First Change</span>
+          <span class="cat-concept-hook">You keep building habits onto the wrong identity instead of changing it first.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/424-loose-self-definition">
+          <span class="cat-concept-id">#424</span>
+          <span class="cat-concept-term">Loose Self-definition</span>
+          <span class="cat-concept-hook">Admitting you don&#39;t know yourself unlocks who you could become.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/414-sacrifice-exceptionalism">
+          <span class="cat-concept-id">#414</span>
+          <span class="cat-concept-term">Sacrifice Exceptionalism</span>
+          <span class="cat-concept-hook">The hidden belief that keeps you from starting small.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/411-serial-obsessive">
+          <span class="cat-concept-id">#411</span>
+          <span class="cat-concept-term">Serial Obsessive</span>
+          <span class="cat-concept-hook">Cricket at 14. Startups at 25. Philosophy at 32. Same person, different fire.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/383-disposition-for-fame">
+          <span class="cat-concept-id">#383</span>
+          <span class="cat-concept-term">Disposition for Fame</span>
+          <span class="cat-concept-hook">Some people have the skill for fame but not the wiring to survive it.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/375-emotional-maturity-lag">
+          <span class="cat-concept-id">#375</span>
+          <span class="cat-concept-term">Emotional Maturity Lag</span>
+          <span class="cat-concept-hook">Most 40-year-olds react like teenagers. They just have mortgages now.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/361-six-month-loop">
+          <span class="cat-concept-id">#361</span>
+          <span class="cat-concept-term">Six-Month Loop</span>
+          <span class="cat-concept-hook">Most people plateau at 23. They repeat the same six months forever.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/358-what-data-cant-hold">
+          <span class="cat-concept-id">#358</span>
+          <span class="cat-concept-term">What Data Can&#39;t Hold</span>
+          <span class="cat-concept-hook">AI has every fact. Only you have the feeling.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/357-personal-intellectual-property">
+          <span class="cat-concept-id">#357</span>
+          <span class="cat-concept-term">Personal Intellectual Property</span>
+          <span class="cat-concept-hook">Your disasters are worth more than someone else&#39;s textbook.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/325-terminal-biological-clock">
+          <span class="cat-concept-id">#325</span>
+          <span class="cat-concept-term">Terminal Biological Clock</span>
+          <span class="cat-concept-hook">You rush to have kids because you die. Remove the deadline, remove the urgency.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/314-your-irreplaceable-edge">
+          <span class="cat-concept-id">#314</span>
+          <span class="cat-concept-term">Your Irreplaceable Edge</span>
+          <span class="cat-concept-hook">When everything&#39;s abundant, all that&#39;s left is what it&#39;s like to be you.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/308-looks-maxing">
+          <span class="cat-concept-id">#308</span>
+          <span class="cat-concept-term">Looks-maxing</span>
+          <span class="cat-concept-hook">Men optimize appearance for dating apps but solve for the wrong audience.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/290-tonic-masculinity">
+          <span class="cat-concept-id">#290</span>
+          <span class="cat-concept-term">Tonic Masculinity</span>
+          <span class="cat-concept-hook">Harsh motivation saves lives. &#39;You fat pig&#39; worked when empathy didn&#39;t.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/288-therapeutic-self-actualization">
+          <span class="cat-concept-id">#288</span>
+          <span class="cat-concept-term">Therapeutic Self-actualization</span>
+          <span class="cat-concept-hook">Self-actualization culture tells women that relationships compete with becoming themselves.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/239-product-not-person">
+          <span class="cat-concept-id">#239</span>
+          <span class="cat-concept-term">Product, Not Person</span>
+          <span class="cat-concept-hook">Motherhood doesn&#39;t scale, so it didn&#39;t make the plan.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/237-trapped-in-the-story">
+          <span class="cat-concept-id">#237</span>
+          <span class="cat-concept-term">Trapped in the Story</span>
+          <span class="cat-concept-hook">The diagnosis was supposed to help. Now you can&#39;t imagine life without it.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/231-reputation-management">
+          <span class="cat-concept-id">#231</span>
+          <span class="cat-concept-term">Reputation Management</span>
+          <span class="cat-concept-hook">Living for the imaginary audience that&#39;s barely watching.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/224-nice-guy-vs-good-man">
+          <span class="cat-concept-id">#224</span>
+          <span class="cat-concept-term">Nice Guy vs Good Man</span>
+          <span class="cat-concept-hook">Nice guys chase being liked, good men chase being worthy.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/200-the-life-lifestyle-mismatch">
+          <span class="cat-concept-id">#200</span>
+          <span class="cat-concept-term">The Life-Lifestyle Mismatch</span>
+          <span class="cat-concept-hook">Want the body but hate the gym? You&#39;ll lose either way.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/199-the-exception-conformity-paradox">
+          <span class="cat-concept-id">#199</span>
+          <span class="cat-concept-term">The Exception-Conformity Paradox</span>
+          <span class="cat-concept-hook">Extraordinary results demand ordinary people find your habits weird.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/147-ego-vs-self-esteem">
+          <span class="cat-concept-id">#147</span>
+          <span class="cat-concept-term">Ego vs Self-Esteem</span>
+          <span class="cat-concept-hook">Ego crumbles when someone passes you. Self-esteem doesn&#39;t move.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/124-the-discipline-paradox">
+          <span class="cat-concept-id">#124</span>
+          <span class="cat-concept-term">The Discipline Paradox</span>
+          <span class="cat-concept-hook">Discipline stops feeling hard when it&#39;s who you are, not what you force.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/105-identity-based-habits">
+          <span class="cat-concept-id">#105</span>
+          <span class="cat-concept-term">Identity-Based Habits</span>
+          <span class="cat-concept-hook">Don&#39;t chase outcomes. Become the person who does the thing.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/087-performative-authenticity">
+          <span class="cat-concept-id">#087</span>
+          <span class="cat-concept-term">Performative Authenticity</span>
+          <span class="cat-concept-hook">Appearing raw and real, but it&#39;s all engineered.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/086-modern-bravery">
+          <span class="cat-concept-id">#086</span>
+          <span class="cat-concept-term">Modern Bravery</span>
+          <span class="cat-concept-hook">Being sincere in a world that rewards irony.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/085-toxic-stoicism">
+          <span class="cat-concept-id">#085</span>
+          <span class="cat-concept-term">Toxic Stoicism</span>
+          <span class="cat-concept-hook">Congratulations. You&#39;ve suppressed every emotion so thoroughly you can&#39;t feel the good ones either.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/082-atlas-complex">
+          <span class="cat-concept-id">#082</span>
+          <span class="cat-concept-term">Atlas Complex</span>
+          <span class="cat-concept-hook">Apologising for things that weren&#39;t your fault is a (bad) habit, not kindness.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/081-parental-attribution-error">
+          <span class="cat-concept-id">#081</span>
+          <span class="cat-concept-term">Parental Attribution Error</span>
+          <span class="cat-concept-hook">Your parents get blamed for your flaws but not credited for your strengths.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/071-narrative-identity">
+          <span class="cat-concept-id">#071</span>
+          <span class="cat-concept-term">Narrative Identity</span>
+          <span class="cat-concept-hook">The story you tell yourself about who you are becomes who you are.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+  </div>
+
+  <div class="cat-cta">
+    <a class="ep-cta-btn" href="/#open-cat=identity">Explore Identity in Epistemic →</a>
+    <p class="cat-cta-sub">epistemic.live — 715 concepts from the podcasts you already listen to</p>
+  </div>
+
+  <footer class="ep-footer">epistemic.live &nbsp;·&nbsp; vol. i</footer>
+
+</main>
+
+</body>
+</html>

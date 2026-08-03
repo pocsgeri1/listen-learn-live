@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Psychology Concepts | Epistemic</title>
+<meta name="description" content="121 psychology concepts explained in plain English — with real analogies and prompts to use them.">
+<link rel="canonical" href="https://epistemic.live/category/psychology">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://epistemic.live/category/psychology">
+<meta property="og:title" content="Psychology Concepts | Epistemic">
+<meta property="og:description" content="121 psychology concepts explained in plain English.">
+<meta property="og:image" content="https://epistemic.live/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Psychology Concepts | Epistemic">
+<meta name="twitter:image" content="https://epistemic.live/og-image.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"Psychology Concepts | Epistemic","description":"121 psychology concepts explained in plain English — with analogies and reflection prompts.","url":"https://epistemic.live/category/psychology","breadcrumb":{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Epistemic","item":"https://epistemic.live"},{"@type":"ListItem","position":2,"name":"Psychology","item":"https://epistemic.live/category/psychology"}]}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d0d0d;
+    --surface: #141414;
+    --surface2: #1c1c1c;
+    --border: rgba(255,255,255,0.07);
+    --border-hover: rgba(255,255,255,0.15);
+    --text: #f0ede8;
+    --muted: #6b6b6b;
+    --muted2: #9a9a9a;
+    --accent: #e8d5a3;
+    --cat: #a08fd4;
+  }
+
+  html, body { min-height: 100%; background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; -webkit-font-smoothing: antialiased; }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    pointer-events: none; z-index: 0; opacity: 0.35;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .ep-nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 10;
+    padding: 18px 32px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(13,13,13,0.94);
+  }
+  .ep-nav-logo { font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); text-decoration: none; }
+  .ep-nav-back { font-family: 'DM Sans', sans-serif; font-size: 0.72rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.15s; }
+  .ep-nav-back:hover { color: var(--text); }
+
+  .ep-page { position: relative; z-index: 1; max-width: 760px; margin: 0 auto; padding: 110px 24px 80px; }
+
+  /* Header */
+  .cat-header { margin-bottom: 48px; }
+  .cat-breadcrumb { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; }
+  .cat-breadcrumb a { color: var(--muted); text-decoration: none; }
+  .cat-breadcrumb a:hover { color: var(--text); }
+  .cat-breadcrumb span { margin: 0 6px; opacity: 0.4; }
+  .cat-accent-bar { width: 32px; height: 3px; background: var(--cat); border-radius: 2px; margin-bottom: 16px; }
+  h1.cat-title { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 2.4rem; color: var(--text); line-height: 1.1; margin-bottom: 10px; }
+  .cat-subtitle { font-family: 'DM Sans', sans-serif; font-weight: 300; font-size: 0.93rem; color: var(--muted2); line-height: 1.6; }
+  .cat-count { display: inline-block; font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cat); background: #a08fd41a; border: 1px solid #a08fd433; border-radius: 999px; padding: 3px 10px; margin-left: 10px; vertical-align: middle; }
+
+  /* Divider */
+  .cat-divider { height: 1px; background: var(--border); margin-bottom: 32px; }
+
+  /* Concept list */
+  .cat-concept-list { display: flex; flex-direction: column; gap: 2px; }
+
+  .cat-concept-row {
+    display: grid;
+    grid-template-columns: 44px 1fr auto 20px;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px 14px 18px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    text-decoration: none;
+    transition: border-color 0.15s, background 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+  .cat-concept-row::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 2px;
+    background: var(--cat);
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .cat-concept-row:hover { border-color: var(--border-hover); background: var(--surface2); }
+  .cat-concept-row:hover::before { opacity: 1; }
+
+  .cat-concept-id { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.12em; color: var(--muted); }
+  .cat-concept-term { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 0.95rem; color: var(--text); }
+  .cat-concept-hook { font-family: 'DM Sans', sans-serif; font-weight: 300; font-size: 0.8rem; color: var(--muted2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cat-concept-arrow { font-family: 'DM Sans', sans-serif; font-size: 0.8rem; color: var(--muted); transition: color 0.15s, transform 0.15s; }
+  .cat-concept-row:hover .cat-concept-arrow { color: var(--cat); transform: translateX(2px); }
+
+  /* CTA */
+  .cat-cta { margin-top: 48px; text-align: center; }
+  .ep-cta-btn { display: inline-block; background: var(--accent); color: #0d0d0d; font-family: 'DM Sans', sans-serif; font-size: 0.8rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; border-radius: 999px; padding: 13px 36px; text-decoration: none; transition: background 0.15s, transform 0.15s; }
+  .ep-cta-btn:hover { background: #f0e0b0; transform: translateY(-1px); }
+  .cat-cta-sub { font-family: 'DM Sans', sans-serif; font-size: 0.72rem; font-weight: 300; color: var(--muted); margin-top: 12px; }
+
+  /* Footer */
+  .ep-footer { margin-top: 40px; font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase; color: #3a3a3a; text-align: center; }
+
+  /* Mobile */
+  @media (max-width: 600px) {
+    .ep-nav { padding: 16px 20px; }
+    .ep-page { padding: 90px 16px 60px; }
+    h1.cat-title { font-size: 1.8rem; }
+    .cat-concept-row { grid-template-columns: 36px 1fr 16px; }
+    .cat-concept-hook { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="ep-nav">
+  <a class="ep-nav-logo" href="/">Epistemic</a>
+  <a class="ep-nav-back" href="/">← Back to library</a>
+</nav>
+
+<main class="ep-page">
+
+  <header class="cat-header">
+    <p class="cat-breadcrumb"><a href="/">Epistemic</a><span>›</span>Psychology</p>
+    <div class="cat-accent-bar"></div>
+    <h1 class="cat-title">Psychology <span class="cat-count">121 concepts</span></h1>
+    <p class="cat-subtitle">Psychology concepts explained in plain English — with real analogies and prompts to use them in conversation.</p>
+  </header>
+
+  <div class="cat-divider"></div>
+
+  <div class="cat-concept-list">
+
+        <a class="cat-concept-row" href="/concepts/727-cost-of-switching-desires">
+          <span class="cat-concept-id">#727</span>
+          <span class="cat-concept-term">Cost of Switching Desires</span>
+          <span class="cat-concept-hook">Changing what you want wastes more time than bad execution.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/720-simplicity-vs-complexity">
+          <span class="cat-concept-id">#720</span>
+          <span class="cat-concept-term">Simplicity vs Complexity</span>
+          <span class="cat-concept-hook">Your system handles hard well. It breaks under messy.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/718-tragedy-time-comedy">
+          <span class="cat-concept-id">#718</span>
+          <span class="cat-concept-term">Tragedy + Time = Comedy</span>
+          <span class="cat-concept-hook">It&#39;ll be funny later. Why not make it funny now?</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/717-desensitization-through-volume">
+          <span class="cat-concept-id">#717</span>
+          <span class="cat-concept-term">Desensitization Through Volume</span>
+          <span class="cat-concept-hook">Do it so many times you become bored of being nervous.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/711-mastering-the-middle">
+          <span class="cat-concept-id">#711</span>
+          <span class="cat-concept-term">Mastering the Middle</span>
+          <span class="cat-concept-hook">Marathons are won in the boring miles between the start and finish.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/709-known-cost-delayed-benefit">
+          <span class="cat-concept-id">#709</span>
+          <span class="cat-concept-term">Known Cost, Delayed Benefit</span>
+          <span class="cat-concept-hook">Courage is accepting certain pain for uncertain payoff.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/707-fluid-vs-crystallized-intelligence">
+          <span class="cat-concept-id">#707</span>
+          <span class="cat-concept-term">Fluid vs Crystallized Intelligence</span>
+          <span class="cat-concept-hook">Raw processing speed peaks at 40. Wisdom keeps climbing.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/702-domain-specificity">
+          <span class="cat-concept-id">#702</span>
+          <span class="cat-concept-term">Domain Specificity</span>
+          <span class="cat-concept-hook">Running marathons won&#39;t help you talk to your wife.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/701-environment-change-behavior-change">
+          <span class="cat-concept-id">#701</span>
+          <span class="cat-concept-term">Environment Change = Behavior Change</span>
+          <span class="cat-concept-hook">Your current environment created your current loops. Change it.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/700-fading-affect-bias-fab">
+          <span class="cat-concept-id">#700</span>
+          <span class="cat-concept-term">Fading Affect Bias (fab)</span>
+          <span class="cat-concept-hook">Bad memories fade. Good ones stick. That&#39;s the trap.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/699-extinction-curve">
+          <span class="cat-concept-id">#699</span>
+          <span class="cat-concept-term">Extinction Curve</span>
+          <span class="cat-concept-hook">How long you tolerate bad behavior depends on the history of good behavior.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/691-behavior-change-identity-change">
+          <span class="cat-concept-id">#691</span>
+          <span class="cat-concept-term">Behavior Change → Identity Change</span>
+          <span class="cat-concept-hook">Diets fail because you&#39;re still the person who doesn&#39;t value health.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/690-learning-by-copying">
+          <span class="cat-concept-id">#690</span>
+          <span class="cat-concept-term">Learning by Copying</span>
+          <span class="cat-concept-hook">You picked up that sarcastic laugh from your college roommate without meaning to.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/689-slaves-dont-know-theyre-slaves">
+          <span class="cat-concept-id">#689</span>
+          <span class="cat-concept-term">Slaves Don&#39;t Know They&#39;re Slaves</span>
+          <span class="cat-concept-hook">The strongest chains are the ones you can&#39;t see or feel.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/687-environment-reconditioning">
+          <span class="cat-concept-id">#687</span>
+          <span class="cat-concept-term">Environment Reconditioning</span>
+          <span class="cat-concept-hook">Change your life by ripping yourself out of every familiar input overnight.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/681-stress-narrows-the-mind">
+          <span class="cat-concept-id">#681</span>
+          <span class="cat-concept-term">Stress Narrows the Mind</span>
+          <span class="cat-concept-hook">Financial stress makes imagining alternatives biologically harder.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/673-low-agency-signaling">
+          <span class="cat-concept-id">#673</span>
+          <span class="cat-concept-term">Low Agency Signaling</span>
+          <span class="cat-concept-hook">Copying advice about high agency proves you don&#39;t have it.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/672-flow-state-trigger">
+          <span class="cat-concept-id">#672</span>
+          <span class="cat-concept-term">Flow State Trigger</span>
+          <span class="cat-concept-hook">Enjoyment comes from tasks slightly harder than your current skill level.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/663-the-arrival-fallacy">
+          <span class="cat-concept-id">#663</span>
+          <span class="cat-concept-term">The Arrival Fallacy</span>
+          <span class="cat-concept-hook">Gold medalists get depressed after winning. You think your goal will fix you, but it won&#39;t.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/651-enjoyment-pleasure-people-memory">
+          <span class="cat-concept-id">#651</span>
+          <span class="cat-concept-term">Enjoyment = Pleasure + People + Memory</span>
+          <span class="cat-concept-hook">Pleasure fades in minutes. Enjoyment compounds for years.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/649-frankls-inverse-law">
+          <span class="cat-concept-id">#649</span>
+          <span class="cat-concept-term">Frankl&#39;s Inverse Law</span>
+          <span class="cat-concept-hook">You prioritize meaning over happiness because happiness doesn&#39;t come easily to you.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/643-strengths-are-weaknesses">
+          <span class="cat-concept-id">#643</span>
+          <span class="cat-concept-term">Strengths Are Weaknesses</span>
+          <span class="cat-concept-hook">The boardroom calls it resilience, your dinner table calls it emotional unavailability.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/641-the-parental-attribution-error">
+          <span class="cat-concept-id">#641</span>
+          <span class="cat-concept-term">The Parental Attribution Error</span>
+          <span class="cat-concept-hook">You blame your parents for your wounds but not for your strengths. That&#39;s selective accounting.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/635-copycat-buying">
+          <span class="cat-concept-id">#635</span>
+          <span class="cat-concept-term">Copycat Buying</span>
+          <span class="cat-concept-hook">You didn&#39;t decide to buy it; you saw someone else buy it first.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/621-solve-the-fear-not-the-fact">
+          <span class="cat-concept-id">#621</span>
+          <span class="cat-concept-term">Solve the Fear, Not the Fact</span>
+          <span class="cat-concept-hook">Addressing the worry is often cheaper than fixing the limitation.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/619-the-cost-of-not-knowing">
+          <span class="cat-concept-id">#619</span>
+          <span class="cat-concept-term">The Cost of Not Knowing</span>
+          <span class="cat-concept-hook">Not knowing when costs more than waiting longer.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/614-arbitrary-surprise">
+          <span class="cat-concept-id">#614</span>
+          <span class="cat-concept-term">Arbitrary Surprise</span>
+          <span class="cat-concept-hook">Rational surprise is an oxymoron. Just do something weird.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/612-belief-changes-the-taste">
+          <span class="cat-concept-id">#612</span>
+          <span class="cat-concept-term">Belief Changes the Taste</span>
+          <span class="cat-concept-hook">Identical products perform differently based on the badge. Your brain writes the review.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/610-cluster-copying">
+          <span class="cat-concept-id">#610</span>
+          <span class="cat-concept-term">Cluster Copying</span>
+          <span class="cat-concept-hook">Concentrated proximity beats broad distribution. Five neighbors trump fifteen strangers.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/603-expectation-gap">
+          <span class="cat-concept-id">#603</span>
+          <span class="cat-concept-term">Expectation Gap</span>
+          <span class="cat-concept-hook">People judge experience against prediction, not absolute quality.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/593-reward-prediction-error">
+          <span class="cat-concept-id">#593</span>
+          <span class="cat-concept-term">Reward Prediction Error</span>
+          <span class="cat-concept-hook">Certainty is the fastest way to kill your own dopamine.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/497-imposter-syndrome-is-a-good-sign">
+          <span class="cat-concept-id">#497</span>
+          <span class="cat-concept-term">Imposter Syndrome Is a Good Sign</span>
+          <span class="cat-concept-hook">If you can teach a friend, you&#39;re qualified to teach online.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/491-gamification-of-life">
+          <span class="cat-concept-id">#491</span>
+          <span class="cat-concept-term">Gamification of Life</span>
+          <span class="cat-concept-hook">Games hook you because they have what your real life is missing.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/488-conformist-stage">
+          <span class="cat-concept-id">#488</span>
+          <span class="cat-concept-term">Conformist Stage</span>
+          <span class="cat-concept-hook">Your group&#39;s rules feel like reality itself, not just preferences.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/487-identity-protection">
+          <span class="cat-concept-id">#487</span>
+          <span class="cat-concept-term">Identity Protection</span>
+          <span class="cat-concept-hook">Staying busy is the most socially acceptable form of self-sabotage.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/482-psychological-excavation">
+          <span class="cat-concept-id">#482</span>
+          <span class="cat-concept-term">Psychological Excavation</span>
+          <span class="cat-concept-hook">You can&#39;t fix what you refuse to examine.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/480-identity-loop">
+          <span class="cat-concept-id">#480</span>
+          <span class="cat-concept-term">Identity Loop</span>
+          <span class="cat-concept-hook">Your personality is just childhood autopilot you forgot to question.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/479-the-real-reason-youre-stuck">
+          <span class="cat-concept-id">#479</span>
+          <span class="cat-concept-term">The Real Reason You&#39;re Stuck</span>
+          <span class="cat-concept-hook">Procrastination has a 100% success rate at keeping you safe from judgment.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/478-conceptual-survival">
+          <span class="cat-concept-id">#478</span>
+          <span class="cat-concept-term">Conceptual Survival</span>
+          <span class="cat-concept-hook">You&#39;re no longer protecting your genes. You&#39;re protecting your opinions like offspring.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/476-anti-vision">
+          <span class="cat-concept-id">#476</span>
+          <span class="cat-concept-term">Anti-Vision</span>
+          <span class="cat-concept-hook">You can&#39;t name your dream. But you know exactly what hell looks like.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/475-pressure-peels-you-back">
+          <span class="cat-concept-id">#475</span>
+          <span class="cat-concept-term">Pressure Peels You Back</span>
+          <span class="cat-concept-hook">Pressure doesn&#39;t show who you are. It shows who you used to be.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/473-dissonance-uncertainty-discovery">
+          <span class="cat-concept-id">#473</span>
+          <span class="cat-concept-term">Dissonance ➜ Uncertainty ➜ Discovery</span>
+          <span class="cat-concept-hook">Transformation begins in disgust and ends in obsession, with some confusion in between.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/471-the-disgust-threshold">
+          <span class="cat-concept-id">#471</span>
+          <span class="cat-concept-term">The Disgust Threshold</span>
+          <span class="cat-concept-hook">Real change starts when you can&#39;t tolerate yourself anymore.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/469-behaviour-follows-identity">
+          <span class="cat-concept-id">#469</span>
+          <span class="cat-concept-term">Behaviour Follows Identity</span>
+          <span class="cat-concept-hook">Willpower is for tourists. Identity is for residents.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/423-mansons-law-of-avoidance">
+          <span class="cat-concept-id">#423</span>
+          <span class="cat-concept-term">Manson&#39;s Law of Avoidance</span>
+          <span class="cat-concept-hook">You dodge exactly what could change you most.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/422-stage-3-retroactive-realization">
+          <span class="cat-concept-id">#422</span>
+          <span class="cat-concept-term">Stage 3: Retroactive Realization</span>
+          <span class="cat-concept-hook">The worst betrayal is learning the beginning was fake.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/421-stage-2-devaluation">
+          <span class="cat-concept-id">#421</span>
+          <span class="cat-concept-term">Stage 2: Devaluation</span>
+          <span class="cat-concept-hook">When inconsistency becomes the control mechanism.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/419-blue-dot-effect">
+          <span class="cat-concept-id">#419</span>
+          <span class="cat-concept-term">Blue Dot Effect</span>
+          <span class="cat-concept-hook">Solving problems can make you invent new ones.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/415-meaning-as-survival-mechanism">
+          <span class="cat-concept-id">#415</span>
+          <span class="cat-concept-term">Meaning as Survival Mechanism</span>
+          <span class="cat-concept-hook">Purpose didn&#39;t just help prisoners cope. It predicted who lived.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/412-state-vs-trait-confidence">
+          <span class="cat-concept-id">#412</span>
+          <span class="cat-concept-term">State vs Trait Confidence</span>
+          <span class="cat-concept-hook">Mastery in one area doesn&#39;t mean confidence in chaos.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/396-worst-case-is-a-safe-place">
+          <span class="cat-concept-id">#396</span>
+          <span class="cat-concept-term">Worst-Case Is a Safe Place</span>
+          <span class="cat-concept-hook">Imagining catastrophe feels safer than admitting you don&#39;t know.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/394-permission-you-give-yourself">
+          <span class="cat-concept-id">#394</span>
+          <span class="cat-concept-term">Permission You Give Yourself</span>
+          <span class="cat-concept-hook">You already know. You just want someone else to say it first.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/393-critic-lock-in">
+          <span class="cat-concept-id">#393</span>
+          <span class="cat-concept-term">Critic Lock-in</span>
+          <span class="cat-concept-hook">You&#39;re shaped more by your critics than your fans.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/385-borrowed-self-worth">
+          <span class="cat-concept-id">#385</span>
+          <span class="cat-concept-term">Borrowed Self-Worth</span>
+          <span class="cat-concept-hook">Neediness means caring more about their opinion of you than your own.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/377-peak-experience-trap">
+          <span class="cat-concept-id">#377</span>
+          <span class="cat-concept-term">Peak Experience Trap</span>
+          <span class="cat-concept-hook">Your best day at 20 should be your worst peak for life.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/374-myopic-pleasure-focus">
+          <span class="cat-concept-id">#374</span>
+          <span class="cat-concept-term">Myopic Pleasure Focus</span>
+          <span class="cat-concept-hook">Short-term comfort compounds into catastrophe. You just don&#39;t notice for years.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/373-challenge-plateau">
+          <span class="cat-concept-id">#373</span>
+          <span class="cat-concept-term">Challenge Plateau</span>
+          <span class="cat-concept-hook">Most jobs stop teaching you after six months. Then they rot you.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/371-psychological-money-relationship">
+          <span class="cat-concept-id">#371</span>
+          <span class="cat-concept-term">Psychological Money Relationship</span>
+          <span class="cat-concept-hook">Broken money psychology corrupts every decision you make.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/364-mental-weightlifting">
+          <span class="cat-concept-id">#364</span>
+          <span class="cat-concept-term">Mental Weightlifting</span>
+          <span class="cat-concept-hook">Business forces you to handle weight meditation never will.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/362-hole-digging-effect">
+          <span class="cat-concept-id">#362</span>
+          <span class="cat-concept-term">Hole-Digging Effect</span>
+          <span class="cat-concept-hook">You think you&#39;re staying in place. You&#39;re actually going backwards.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/343-boom-bust-entrepreneurship">
+          <span class="cat-concept-id">#343</span>
+          <span class="cat-concept-term">Boom-bust Entrepreneurship</span>
+          <span class="cat-concept-hook">Most founders cycle through failure repeatedly. Success isn&#39;t linear.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/339-choose-your-discomfort">
+          <span class="cat-concept-id">#339</span>
+          <span class="cat-concept-term">Choose Your Discomfort</span>
+          <span class="cat-concept-hook">Conform and resent yourself, or stand out and unsettle everyone else.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/338-micro-rebellion-against-yourself">
+          <span class="cat-concept-id">#338</span>
+          <span class="cat-concept-term">Micro Rebellion Against Yourself</span>
+          <span class="cat-concept-hook">Wearing uncomfortable boots to fit an image is daily self-betrayal.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/337-unapologetic-passion">
+          <span class="cat-concept-id">#337</span>
+          <span class="cat-concept-term">Unapologetic Passion</span>
+          <span class="cat-concept-hook">Watching someone love anything with purity is contagious.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/336-100-days-of-rejection">
+          <span class="cat-concept-id">#336</span>
+          <span class="cat-concept-term">100 Days of Rejection</span>
+          <span class="cat-concept-hook">Ask for free coffee 100 times. Embarrassment fades, courage compounds.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/332-man-in-the-car-paradox">
+          <span class="cat-concept-id">#332</span>
+          <span class="cat-concept-term">Man in the Car Paradox</span>
+          <span class="cat-concept-hook">They&#39;re not admiring you. They&#39;re imagining being you. Big difference.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/331-the-backwards-law">
+          <span class="cat-concept-id">#331</span>
+          <span class="cat-concept-term">The Backwards Law</span>
+          <span class="cat-concept-hook">Trying not to feel something makes it louder, not quieter.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/300-supernormal-stimuli">
+          <span class="cat-concept-id">#300</span>
+          <span class="cat-concept-term">Supernormal Stimuli</span>
+          <span class="cat-concept-hook">Exaggerated fake triggers hijack instincts. Beetles mate with beer bottles.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/295-pathologizing-preferences">
+          <span class="cat-concept-id">#295</span>
+          <span class="cat-concept-term">Pathologizing Preferences</span>
+          <span class="cat-concept-hook">Some &#39;progressive&#39; research penalises women for having traditional preferences. Funny that.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/286-women-are-wonderful-effect">
+          <span class="cat-concept-id">#286</span>
+          <span class="cat-concept-term">Women Are Wonderful Effect</span>
+          <span class="cat-concept-hook">People inherently favor women, then frame that advantage as oppression.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/283-middle-class-hay-fever">
+          <span class="cat-concept-id">#283</span>
+          <span class="cat-concept-term">Middle-Class Hay Fever</span>
+          <span class="cat-concept-hook">No real dangers left, so your brain flags trivial things as catastrophic.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/280-vulnerability-signaling">
+          <span class="cat-concept-id">#280</span>
+          <span class="cat-concept-term">Vulnerability Signaling</span>
+          <span class="cat-concept-hook">Communicating need once ensured survival, but now it fires with no threat in sight.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/279-caring-paradox">
+          <span class="cat-concept-id">#279</span>
+          <span class="cat-concept-term">Caring Paradox</span>
+          <span class="cat-concept-hook">Chasing confidence makes you self-conscious. Stop chasing, start moving.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/278-criticism-source-filter">
+          <span class="cat-concept-id">#278</span>
+          <span class="cat-concept-term">Criticism Source Filter</span>
+          <span class="cat-concept-hook">Their opinion only counts if you&#39;d actually trade lives with them.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/269-agency-crisis">
+          <span class="cat-concept-id">#269</span>
+          <span class="cat-concept-term">Agency Crisis</span>
+          <span class="cat-concept-hook">Social systems told you what&#39;s next. Automation forces self-direction, most can&#39;t.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/255-existential-threat-bias">
+          <span class="cat-concept-id">#255</span>
+          <span class="cat-concept-term">Existential Threat Bias</span>
+          <span class="cat-concept-hook">Humans are wired to see predators. Every generation invents its own apocalypse.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/253-simulation-substitution">
+          <span class="cat-concept-id">#253</span>
+          <span class="cat-concept-term">Simulation Substitution</span>
+          <span class="cat-concept-hook">YouTube friends feel real enough to stop you getting lonely enough to act.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/246-the-vanity-paradox">
+          <span class="cat-concept-id">#246</span>
+          <span class="cat-concept-term">The Vanity Paradox</span>
+          <span class="cat-concept-hook">You obsess over your look but panic when someone snaps a candid photo.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/245-performative-vulnerability">
+          <span class="cat-concept-id">#245</span>
+          <span class="cat-concept-term">Performative Vulnerability</span>
+          <span class="cat-concept-hook">Posting your pain for engagement is therapy in reverse.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/241-control-addiction">
+          <span class="cat-concept-id">#241</span>
+          <span class="cat-concept-term">Control Addiction</span>
+          <span class="cat-concept-hook">You facetune every photo. Now real life feels unbearably out of control.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/240-anticipation-of-audience">
+          <span class="cat-concept-id">#240</span>
+          <span class="cat-concept-term">Anticipation of Audience</span>
+          <span class="cat-concept-hook">Every moment pre-edited for strangers you&#39;ll never meet. Exhausting.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/238-radicalization-through-empathy">
+          <span class="cat-concept-id">#238</span>
+          <span class="cat-concept-term">Radicalization Through Empathy</span>
+          <span class="cat-concept-hook">The algorithm weaponizes your compassion. You can&#39;t out-care the feed.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/232-optimized-for-the-wrong-life">
+          <span class="cat-concept-id">#232</span>
+          <span class="cat-concept-term">Optimized for the Wrong Life</span>
+          <span class="cat-concept-hook">You built the perfect life on paper. You&#39;re starving in real time.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/229-type-one-vs-type-two-empathy">
+          <span class="cat-concept-id">#229</span>
+          <span class="cat-concept-term">Type One Vs. Type Two Empathy</span>
+          <span class="cat-concept-hook">You feel their pain, yet still have no idea why they did it.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/226-20-minute-reset-rule">
+          <span class="cat-concept-id">#226</span>
+          <span class="cat-concept-term">20-Minute Reset Rule</span>
+          <span class="cat-concept-hook">Your nervous system needs 20 minutes to calm down, not 2.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/219-the-open-loop-anxiety">
+          <span class="cat-concept-id">#219</span>
+          <span class="cat-concept-term">The Open Loop Anxiety</span>
+          <span class="cat-concept-hook">Ambiguity breeds terror. &#39;We need to talk&#39; is psychological torture.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/213-emotional-yelling-takes-zero-effort">
+          <span class="cat-concept-id">#213</span>
+          <span class="cat-concept-term">Emotional Yelling Takes Zero Effort</span>
+          <span class="cat-concept-hook">Anger requires zero skill. Calm is the uphill climb.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/209-social-pain-is-real-pain">
+          <span class="cat-concept-id">#209</span>
+          <span class="cat-concept-term">Social Pain Is Real Pain</span>
+          <span class="cat-concept-hook">Your body can&#39;t tell rejection from a bear attack.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/208-anger-hides-grief">
+          <span class="cat-concept-id">#208</span>
+          <span class="cat-concept-term">Anger Hides Grief</span>
+          <span class="cat-concept-hook">Rage is the mask. Underneath it&#39;s almost always grief or fear.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/204-vagal-authority">
+          <span class="cat-concept-id">#204</span>
+          <span class="cat-concept-term">Vagal Authority</span>
+          <span class="cat-concept-hook">Whoever stays calm when everyone panics owns the room.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/203-feelings-dont-care-about-facts">
+          <span class="cat-concept-id">#203</span>
+          <span class="cat-concept-term">Feelings Don&#39;t Care About Facts</span>
+          <span class="cat-concept-hook">Show someone proof and they&#39;ll reject it if it makes them feel stupid.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/198-meta-emotions">
+          <span class="cat-concept-id">#198</span>
+          <span class="cat-concept-term">Meta-Emotions</span>
+          <span class="cat-concept-hook">You can feel guilty about feeling angry, anxious about feeling happy.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/197-mental-masturbation">
+          <span class="cat-concept-id">#197</span>
+          <span class="cat-concept-term">Mental Masturbation</span>
+          <span class="cat-concept-hook">Listening to podcasts about productivity is not the same as being productive.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/190-friction-creates-value">
+          <span class="cat-concept-id">#190</span>
+          <span class="cat-concept-term">Friction Creates Value</span>
+          <span class="cat-concept-hook">Free access feels worthless; forcing people to apply makes them value it.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/179-the-five-triggers">
+          <span class="cat-concept-id">#179</span>
+          <span class="cat-concept-term">The Five Triggers</span>
+          <span class="cat-concept-hook">Your brain deletes everything except scary, strange, sexy, free, or familiar.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/178-parasocial-relationships">
+          <span class="cat-concept-id">#178</span>
+          <span class="cat-concept-term">Parasocial Relationships</span>
+          <span class="cat-concept-hook">People think they know celebrities. You can manufacture that feeling at scale.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/174-mechanical-living">
+          <span class="cat-concept-id">#174</span>
+          <span class="cat-concept-term">Mechanical Living</span>
+          <span class="cat-concept-hook">Do the same thing long enough and your brain clocks out permanently.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/165-comparison-group-fallacy">
+          <span class="cat-concept-id">#165</span>
+          <span class="cat-concept-term">Comparison Group Fallacy</span>
+          <span class="cat-concept-hook">You compare yourself to the best globally, but you&#39;re not competing globally.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/162-thin-slice-jealousy">
+          <span class="cat-concept-id">#162</span>
+          <span class="cat-concept-term">Thin Slice Jealousy</span>
+          <span class="cat-concept-hook">You envy someone&#39;s highlight reel, you ignore their horror show.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/156-availability-heuristic">
+          <span class="cat-concept-id">#156</span>
+          <span class="cat-concept-term">Availability Heuristic</span>
+          <span class="cat-concept-hook">What comes to mind easily feels more likely than it is.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/153-social-desirability-bias">
+          <span class="cat-concept-id">#153</span>
+          <span class="cat-concept-term">Social Desirability Bias</span>
+          <span class="cat-concept-hook">People tell you what sounds good, not what&#39;s true.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/143-the-comparison-trap">
+          <span class="cat-concept-id">#143</span>
+          <span class="cat-concept-term">The Comparison Trap</span>
+          <span class="cat-concept-hook">You&#39;re watching their highlight reel with your behind-the-scenes commentary playing.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/098-rejection-sensitivity">
+          <span class="cat-concept-id">#098</span>
+          <span class="cat-concept-term">Rejection Sensitivity</span>
+          <span class="cat-concept-hook">You lose before you try because the rejection already happened in your head.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/091-evolved-mismatch">
+          <span class="cat-concept-id">#091</span>
+          <span class="cat-concept-term">Evolved Mismatch</span>
+          <span class="cat-concept-hook">Your ancient brain is running in a modern world it wasn&#39;t built for.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/090-comfort-addiction">
+          <span class="cat-concept-id">#090</span>
+          <span class="cat-concept-term">Comfort Addiction</span>
+          <span class="cat-concept-hook">Your nervous system becomes addicted to avoiding discomfort.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/084-advice-hyper-responder">
+          <span class="cat-concept-id">#084</span>
+          <span class="cat-concept-term">Advice Hyper-Responder</span>
+          <span class="cat-concept-hook">Telling a workaholic to hustle harder isn&#39;t advice. It&#39;s petrol on a fire.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/063-priming">
+          <span class="cat-concept-id">#063</span>
+          <span class="cat-concept-term">Priming</span>
+          <span class="cat-concept-hook">The first thing you see quietly reshapes what you decide next.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/061-locus-of-control">
+          <span class="cat-concept-id">#061</span>
+          <span class="cat-concept-term">Locus of Control</span>
+          <span class="cat-concept-hook">Victims explain. Agents decide.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/058-cognitive-reframing">
+          <span class="cat-concept-id">#058</span>
+          <span class="cat-concept-term">Cognitive Reframing</span>
+          <span class="cat-concept-hook">Same facts. Different frame. Completely different emotional outcome.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/053-status-quo-bias">
+          <span class="cat-concept-id">#053</span>
+          <span class="cat-concept-term">Status Quo Bias</span>
+          <span class="cat-concept-hook">Familiarity feels safe even when it&#39;s clearly costing you.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/044-cognitive-load">
+          <span class="cat-concept-id">#044</span>
+          <span class="cat-concept-term">Cognitive Load</span>
+          <span class="cat-concept-hook">Your brain maxes out faster than you think.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/040-anchoring">
+          <span class="cat-concept-id">#040</span>
+          <span class="cat-concept-term">Anchoring</span>
+          <span class="cat-concept-hook">The first number warps everything that follows.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/035-hedonic-adaptation">
+          <span class="cat-concept-id">#035</span>
+          <span class="cat-concept-term">Hedonic Adaptation</span>
+          <span class="cat-concept-hook">You adapt to everything. Joy fades. So does pain.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/030-dunning-kruger-effect">
+          <span class="cat-concept-id">#030</span>
+          <span class="cat-concept-term">Dunning-Kruger Effect</span>
+          <span class="cat-concept-hook">The most dangerous expert in the room took a weekend course.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/029-halo-effect">
+          <span class="cat-concept-id">#029</span>
+          <span class="cat-concept-term">Halo Effect</span>
+          <span class="cat-concept-hook">He&#39;s attractive so he&#39;s probably smart too. Your brain just decided that.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/019-cognitive-dissonance">
+          <span class="cat-concept-id">#019</span>
+          <span class="cat-concept-term">Cognitive Dissonance</span>
+          <span class="cat-concept-hook">Your actions clash with your beliefs. Your brain rewrites the story.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/015-loss-aversion">
+          <span class="cat-concept-id">#015</span>
+          <span class="cat-concept-term">Loss Aversion</span>
+          <span class="cat-concept-hook">Losing stings twice as hard as winning feels good.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/009-framing-effect">
+          <span class="cat-concept-id">#009</span>
+          <span class="cat-concept-term">Framing Effect</span>
+          <span class="cat-concept-hook">Change the wrapper, change the reaction.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/007-ego-depletion">
+          <span class="cat-concept-id">#007</span>
+          <span class="cat-concept-term">Ego Depletion</span>
+          <span class="cat-concept-hook">Discipline drains throughout the day like a battery.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/006-social-proof">
+          <span class="cat-concept-id">#006</span>
+          <span class="cat-concept-term">Social Proof</span>
+          <span class="cat-concept-hook">If everyone&#39;s doing it, it must be right.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/003-confirmation-bias">
+          <span class="cat-concept-id">#003</span>
+          <span class="cat-concept-term">Confirmation Bias</span>
+          <span class="cat-concept-hook">Your brain only lets in evidence that agrees with you.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+  </div>
+
+  <div class="cat-cta">
+    <a class="ep-cta-btn" href="/#open-cat=psychology">Explore Psychology in Epistemic →</a>
+    <p class="cat-cta-sub">epistemic.live — 715 concepts from the podcasts you already listen to</p>
+  </div>
+
+  <footer class="ep-footer">epistemic.live &nbsp;·&nbsp; vol. i</footer>
+
+</main>
+
+</body>
+</html>

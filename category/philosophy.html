@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Philosophy Concepts | Epistemic</title>
+<meta name="description" content="33 philosophy concepts explained in plain English — with real analogies and prompts to use them.">
+<link rel="canonical" href="https://epistemic.live/category/philosophy">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://epistemic.live/category/philosophy">
+<meta property="og:title" content="Philosophy Concepts | Epistemic">
+<meta property="og:description" content="33 philosophy concepts explained in plain English.">
+<meta property="og:image" content="https://epistemic.live/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Philosophy Concepts | Epistemic">
+<meta name="twitter:image" content="https://epistemic.live/og-image.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"Philosophy Concepts | Epistemic","description":"33 philosophy concepts explained in plain English — with analogies and reflection prompts.","url":"https://epistemic.live/category/philosophy","breadcrumb":{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Epistemic","item":"https://epistemic.live"},{"@type":"ListItem","position":2,"name":"Philosophy","item":"https://epistemic.live/category/philosophy"}]}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d0d0d;
+    --surface: #141414;
+    --surface2: #1c1c1c;
+    --border: rgba(255,255,255,0.07);
+    --border-hover: rgba(255,255,255,0.15);
+    --text: #f0ede8;
+    --muted: #6b6b6b;
+    --muted2: #9a9a9a;
+    --accent: #e8d5a3;
+    --cat: #9a8fb8;
+  }
+
+  html, body { min-height: 100%; background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; -webkit-font-smoothing: antialiased; }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    pointer-events: none; z-index: 0; opacity: 0.35;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .ep-nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 10;
+    padding: 18px 32px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(13,13,13,0.94);
+  }
+  .ep-nav-logo { font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); text-decoration: none; }
+  .ep-nav-back { font-family: 'DM Sans', sans-serif; font-size: 0.72rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.15s; }
+  .ep-nav-back:hover { color: var(--text); }
+
+  .ep-page { position: relative; z-index: 1; max-width: 760px; margin: 0 auto; padding: 110px 24px 80px; }
+
+  /* Header */
+  .cat-header { margin-bottom: 48px; }
+  .cat-breadcrumb { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; }
+  .cat-breadcrumb a { color: var(--muted); text-decoration: none; }
+  .cat-breadcrumb a:hover { color: var(--text); }
+  .cat-breadcrumb span { margin: 0 6px; opacity: 0.4; }
+  .cat-accent-bar { width: 32px; height: 3px; background: var(--cat); border-radius: 2px; margin-bottom: 16px; }
+  h1.cat-title { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 2.4rem; color: var(--text); line-height: 1.1; margin-bottom: 10px; }
+  .cat-subtitle { font-family: 'DM Sans', sans-serif; font-weight: 300; font-size: 0.93rem; color: var(--muted2); line-height: 1.6; }
+  .cat-count { display: inline-block; font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cat); background: #9a8fb81a; border: 1px solid #9a8fb833; border-radius: 999px; padding: 3px 10px; margin-left: 10px; vertical-align: middle; }
+
+  /* Divider */
+  .cat-divider { height: 1px; background: var(--border); margin-bottom: 32px; }
+
+  /* Concept list */
+  .cat-concept-list { display: flex; flex-direction: column; gap: 2px; }
+
+  .cat-concept-row {
+    display: grid;
+    grid-template-columns: 44px 1fr auto 20px;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px 14px 18px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    text-decoration: none;
+    transition: border-color 0.15s, background 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+  .cat-concept-row::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 2px;
+    background: var(--cat);
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .cat-concept-row:hover { border-color: var(--border-hover); background: var(--surface2); }
+  .cat-concept-row:hover::before { opacity: 1; }
+
+  .cat-concept-id { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.12em; color: var(--muted); }
+  .cat-concept-term { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 0.95rem; color: var(--text); }
+  .cat-concept-hook { font-family: 'DM Sans', sans-serif; font-weight: 300; font-size: 0.8rem; color: var(--muted2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cat-concept-arrow { font-family: 'DM Sans', sans-serif; font-size: 0.8rem; color: var(--muted); transition: color 0.15s, transform 0.15s; }
+  .cat-concept-row:hover .cat-concept-arrow { color: var(--cat); transform: translateX(2px); }
+
+  /* CTA */
+  .cat-cta { margin-top: 48px; text-align: center; }
+  .ep-cta-btn { display: inline-block; background: var(--accent); color: #0d0d0d; font-family: 'DM Sans', sans-serif; font-size: 0.8rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; border-radius: 999px; padding: 13px 36px; text-decoration: none; transition: background 0.15s, transform 0.15s; }
+  .ep-cta-btn:hover { background: #f0e0b0; transform: translateY(-1px); }
+  .cat-cta-sub { font-family: 'DM Sans', sans-serif; font-size: 0.72rem; font-weight: 300; color: var(--muted); margin-top: 12px; }
+
+  /* Footer */
+  .ep-footer { margin-top: 40px; font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase; color: #3a3a3a; text-align: center; }
+
+  /* Mobile */
+  @media (max-width: 600px) {
+    .ep-nav { padding: 16px 20px; }
+    .ep-page { padding: 90px 16px 60px; }
+    h1.cat-title { font-size: 1.8rem; }
+    .cat-concept-row { grid-template-columns: 36px 1fr 16px; }
+    .cat-concept-hook { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="ep-nav">
+  <a class="ep-nav-logo" href="/">Epistemic</a>
+  <a class="ep-nav-back" href="/">← Back to library</a>
+</nav>
+
+<main class="ep-page">
+
+  <header class="cat-header">
+    <p class="cat-breadcrumb"><a href="/">Epistemic</a><span>›</span>Philosophy</p>
+    <div class="cat-accent-bar"></div>
+    <h1 class="cat-title">Philosophy <span class="cat-count">33 concepts</span></h1>
+    <p class="cat-subtitle">Philosophy concepts explained in plain English — with real analogies and prompts to use them in conversation.</p>
+  </header>
+
+  <div class="cat-divider"></div>
+
+  <div class="cat-concept-list">
+
+        <a class="cat-concept-row" href="/concepts/732-posterity-vs-present">
+          <span class="cat-concept-id">#732</span>
+          <span class="cat-concept-term">Posterity vs Present</span>
+          <span class="cat-concept-hook">Future lives sound noble until you realize they risk everyone alive now.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/725-proximity-to-death">
+          <span class="cat-concept-id">#725</span>
+          <span class="cat-concept-term">Proximity to Death</span>
+          <span class="cat-concept-hook">Old people stop competing because they&#39;ve seen everyone die the same.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/704-commitment-as-elimination">
+          <span class="cat-concept-id">#704</span>
+          <span class="cat-concept-term">Commitment as Elimination</span>
+          <span class="cat-concept-hook">Commitment doesn&#39;t mean choosing one thing. It means killing the rest.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/674-the-hot-stove-test">
+          <span class="cat-concept-id">#674</span>
+          <span class="cat-concept-term">The Hot Stove Test</span>
+          <span class="cat-concept-hook">Reality is the only teacher that never lies to you.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/656-coherence-purpose-significance">
+          <span class="cat-concept-id">#656</span>
+          <span class="cat-concept-term">Coherence, Purpose, Significance</span>
+          <span class="cat-concept-hook">You don&#39;t need more things to do. You need to question why anything matters.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/653-aporia">
+          <span class="cat-concept-id">#653</span>
+          <span class="cat-concept-term">Aporia</span>
+          <span class="cat-concept-hook">Ancient Greeks had a word for sitting with unanswerable questions. We&#39;ve lost the habit entirely.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/648-my-suffering-is-sacred">
+          <span class="cat-concept-id">#648</span>
+          <span class="cat-concept-term">My Suffering is Sacred</span>
+          <span class="cat-concept-hook">Your worst day is doing more for you than your best one ever did.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/640-the-crisis-of-meaning">
+          <span class="cat-concept-id">#640</span>
+          <span class="cat-concept-term">The Crisis of Meaning</span>
+          <span class="cat-concept-hook">Depression tripled since 2008. We shifted from Sunday dinners to scrolling alone at midnight.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/597-austrian-vs-chicago-economics">
+          <span class="cat-concept-id">#597</span>
+          <span class="cat-concept-term">Austrian vs Chicago Economics</span>
+          <span class="cat-concept-hook">Chicago says lower prices; Austria says explore possibilities. One optimizes, one creates.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/507-sustainable-pace">
+          <span class="cat-concept-id">#507</span>
+          <span class="cat-concept-term">Sustainable Pace</span>
+          <span class="cat-concept-hook">Extreme routines are sprints. You need a pace for decades.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/503-lifestyle-design">
+          <span class="cat-concept-id">#503</span>
+          <span class="cat-concept-term">Lifestyle Design</span>
+          <span class="cat-concept-hook">A $200K job you hate isn&#39;t a goal, it&#39;s a cage.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/499-constraint-breeds-efficiency">
+          <span class="cat-concept-id">#499</span>
+          <span class="cat-concept-term">Constraint Breeds Efficiency</span>
+          <span class="cat-concept-hook">Four focused hours beat twelve distracted ones.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/496-business-as-self-actualization">
+          <span class="cat-concept-id">#496</span>
+          <span class="cat-concept-term">Business as Self-Actualization</span>
+          <span class="cat-concept-hook">Money is the byproduct. Becoming who you want to be is the point.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/486-construct-aware-stage">
+          <span class="cat-concept-id">#486</span>
+          <span class="cat-concept-term">Construct-Aware Stage</span>
+          <span class="cat-concept-hook">You can commit to a role fully without believing it defines you.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/416-meaning-makes-pain-matter">
+          <span class="cat-concept-id">#416</span>
+          <span class="cat-concept-term">Meaning Makes Pain Matter</span>
+          <span class="cat-concept-hook">Pain without purpose is unbearable. Pain with purpose transforms.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/408-inverse-relationship-convenience-and-significance">
+          <span class="cat-concept-id">#408</span>
+          <span class="cat-concept-term">Inverse Relationship: Convenience and Significance</span>
+          <span class="cat-concept-hook">Effort-free wins feel hollow. Struggle builds meaning.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/403-the-re-exposure-effect">
+          <span class="cat-concept-id">#403</span>
+          <span class="cat-concept-term">The Re-Exposure Effect</span>
+          <span class="cat-concept-hook">Every self-help book says something you already knew and forgot.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/402-releasing-the-desire">
+          <span class="cat-concept-id">#402</span>
+          <span class="cat-concept-term">Releasing the Desire</span>
+          <span class="cat-concept-hook">Want the life but not the lifestyle? Let it go.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/400-only-envy-invisible-sacrifices">
+          <span class="cat-concept-id">#400</span>
+          <span class="cat-concept-term">Only Envy Invisible Sacrifices</span>
+          <span class="cat-concept-hook">You want the result but can&#39;t see the cost.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/389-death-awareness-filter-stop-scrolling">
+          <span class="cat-concept-id">#389</span>
+          <span class="cat-concept-term">Death Awareness Filter (STOP Scrolling!)</span>
+          <span class="cat-concept-hook">Your time is limited. Is this what you&#39;d choose?</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/372-self-actualization-default">
+          <span class="cat-concept-id">#372</span>
+          <span class="cat-concept-term">Self-Actualization Default</span>
+          <span class="cat-concept-hook">Every choice builds the best version of you or erodes it. No middle.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/356-know-when-enough-is-enough">
+          <span class="cat-concept-id">#356</span>
+          <span class="cat-concept-term">Know When Enough Is Enough</span>
+          <span class="cat-concept-hook">Bigger isn&#39;t better. Most founders optimize themselves into misery.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/322-consent-without-comprehension">
+          <span class="cat-concept-id">#322</span>
+          <span class="cat-concept-term">Consent Without Comprehension</span>
+          <span class="cat-concept-hook">You can&#39;t consent to what you can&#39;t comprehend. Full stop.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/321-retroactive-simulation-commitment">
+          <span class="cat-concept-id">#321</span>
+          <span class="cat-concept-term">Retroactive Simulation Commitment</span>
+          <span class="cat-concept-hook">If I run a billion sims of this moment later, you&#39;re statistically in one now.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/154-negative-visualization">
+          <span class="cat-concept-id">#154</span>
+          <span class="cat-concept-term">Negative Visualization</span>
+          <span class="cat-concept-hook">Imagine losing what you have, then appreciate it properly.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/131-sovereign-individual">
+          <span class="cat-concept-id">#131</span>
+          <span class="cat-concept-term">Sovereign Individual</span>
+          <span class="cat-concept-hook">The person who can&#39;t be fired because nobody hired them in the first place.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/127-self-actualize-self-monetize-self-transcend">
+          <span class="cat-concept-id">#127</span>
+          <span class="cat-concept-term">Self-Actualize → Self-Monetize → Self-Transcend</span>
+          <span class="cat-concept-hook">Master something real. Make money from it. Then use it to serve beyond yourself.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/104-radical-acceptance">
+          <span class="cat-concept-id">#104</span>
+          <span class="cat-concept-term">Radical Acceptance</span>
+          <span class="cat-concept-hook">The event already happened. Fighting it is the second disaster.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/097-intentional-living">
+          <span class="cat-concept-id">#097</span>
+          <span class="cat-concept-term">Intentional Living</span>
+          <span class="cat-concept-hook">Design your life or you&#39;ll be assigned one.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/089-meaning-vs-happiness">
+          <span class="cat-concept-id">#089</span>
+          <span class="cat-concept-term">Meaning vs Happiness</span>
+          <span class="cat-concept-hook">Happy is fleeting. Meaningful is the one you&#39;ll actually remember.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/066-epistemic-humility">
+          <span class="cat-concept-id">#066</span>
+          <span class="cat-concept-term">Epistemic Humility</span>
+          <span class="cat-concept-hook">Admitting you might be wrong and meaning it.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/032-agency">
+          <span class="cat-concept-id">#032</span>
+          <span class="cat-concept-term">Agency</span>
+          <span class="cat-concept-hook">Nobody&#39;s coming to hand you the wheel.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/026-skin-in-the-game">
+          <span class="cat-concept-id">#026</span>
+          <span class="cat-concept-term">Skin in the Game</span>
+          <span class="cat-concept-hook">Your advice is worthless if you don&#39;t share the downside.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+  </div>
+
+  <div class="cat-cta">
+    <a class="ep-cta-btn" href="/#open-cat=philosophy">Explore Philosophy in Epistemic →</a>
+    <p class="cat-cta-sub">epistemic.live — 715 concepts from the podcasts you already listen to</p>
+  </div>
+
+  <footer class="ep-footer">epistemic.live &nbsp;·&nbsp; vol. i</footer>
+
+</main>
+
+</body>
+</html>

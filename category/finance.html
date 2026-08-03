@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Finance Concepts | Epistemic</title>
+<meta name="description" content="31 finance concepts explained in plain English — with real analogies and prompts to use them.">
+<link rel="canonical" href="https://epistemic.live/category/finance">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://epistemic.live/category/finance">
+<meta property="og:title" content="Finance Concepts | Epistemic">
+<meta property="og:description" content="31 finance concepts explained in plain English.">
+<meta property="og:image" content="https://epistemic.live/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Finance Concepts | Epistemic">
+<meta name="twitter:image" content="https://epistemic.live/og-image.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"Finance Concepts | Epistemic","description":"31 finance concepts explained in plain English — with analogies and reflection prompts.","url":"https://epistemic.live/category/finance","breadcrumb":{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Epistemic","item":"https://epistemic.live"},{"@type":"ListItem","position":2,"name":"Finance","item":"https://epistemic.live/category/finance"}]}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d0d0d;
+    --surface: #141414;
+    --surface2: #1c1c1c;
+    --border: rgba(255,255,255,0.07);
+    --border-hover: rgba(255,255,255,0.15);
+    --text: #f0ede8;
+    --muted: #6b6b6b;
+    --muted2: #9a9a9a;
+    --accent: #e8d5a3;
+    --cat: #6b9fc4;
+  }
+
+  html, body { min-height: 100%; background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; -webkit-font-smoothing: antialiased; }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    pointer-events: none; z-index: 0; opacity: 0.35;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .ep-nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 10;
+    padding: 18px 32px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(13,13,13,0.94);
+  }
+  .ep-nav-logo { font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); text-decoration: none; }
+  .ep-nav-back { font-family: 'DM Sans', sans-serif; font-size: 0.72rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.15s; }
+  .ep-nav-back:hover { color: var(--text); }
+
+  .ep-page { position: relative; z-index: 1; max-width: 760px; margin: 0 auto; padding: 110px 24px 80px; }
+
+  /* Header */
+  .cat-header { margin-bottom: 48px; }
+  .cat-breadcrumb { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; }
+  .cat-breadcrumb a { color: var(--muted); text-decoration: none; }
+  .cat-breadcrumb a:hover { color: var(--text); }
+  .cat-breadcrumb span { margin: 0 6px; opacity: 0.4; }
+  .cat-accent-bar { width: 32px; height: 3px; background: var(--cat); border-radius: 2px; margin-bottom: 16px; }
+  h1.cat-title { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 2.4rem; color: var(--text); line-height: 1.1; margin-bottom: 10px; }
+  .cat-subtitle { font-family: 'DM Sans', sans-serif; font-weight: 300; font-size: 0.93rem; color: var(--muted2); line-height: 1.6; }
+  .cat-count { display: inline-block; font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cat); background: #6b9fc41a; border: 1px solid #6b9fc433; border-radius: 999px; padding: 3px 10px; margin-left: 10px; vertical-align: middle; }
+
+  /* Divider */
+  .cat-divider { height: 1px; background: var(--border); margin-bottom: 32px; }
+
+  /* Concept list */
+  .cat-concept-list { display: flex; flex-direction: column; gap: 2px; }
+
+  .cat-concept-row {
+    display: grid;
+    grid-template-columns: 44px 1fr auto 20px;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px 14px 18px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    text-decoration: none;
+    transition: border-color 0.15s, background 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+  .cat-concept-row::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 2px;
+    background: var(--cat);
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .cat-concept-row:hover { border-color: var(--border-hover); background: var(--surface2); }
+  .cat-concept-row:hover::before { opacity: 1; }
+
+  .cat-concept-id { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.12em; color: var(--muted); }
+  .cat-concept-term { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 0.95rem; color: var(--text); }
+  .cat-concept-hook { font-family: 'DM Sans', sans-serif; font-weight: 300; font-size: 0.8rem; color: var(--muted2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cat-concept-arrow { font-family: 'DM Sans', sans-serif; font-size: 0.8rem; color: var(--muted); transition: color 0.15s, transform 0.15s; }
+  .cat-concept-row:hover .cat-concept-arrow { color: var(--cat); transform: translateX(2px); }
+
+  /* CTA */
+  .cat-cta { margin-top: 48px; text-align: center; }
+  .ep-cta-btn { display: inline-block; background: var(--accent); color: #0d0d0d; font-family: 'DM Sans', sans-serif; font-size: 0.8rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; border-radius: 999px; padding: 13px 36px; text-decoration: none; transition: background 0.15s, transform 0.15s; }
+  .ep-cta-btn:hover { background: #f0e0b0; transform: translateY(-1px); }
+  .cat-cta-sub { font-family: 'DM Sans', sans-serif; font-size: 0.72rem; font-weight: 300; color: var(--muted); margin-top: 12px; }
+
+  /* Footer */
+  .ep-footer { margin-top: 40px; font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase; color: #3a3a3a; text-align: center; }
+
+  /* Mobile */
+  @media (max-width: 600px) {
+    .ep-nav { padding: 16px 20px; }
+    .ep-page { padding: 90px 16px 60px; }
+    h1.cat-title { font-size: 1.8rem; }
+    .cat-concept-row { grid-template-columns: 36px 1fr 16px; }
+    .cat-concept-hook { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="ep-nav">
+  <a class="ep-nav-logo" href="/">Epistemic</a>
+  <a class="ep-nav-back" href="/">← Back to library</a>
+</nav>
+
+<main class="ep-page">
+
+  <header class="cat-header">
+    <p class="cat-breadcrumb"><a href="/">Epistemic</a><span>›</span>Finance</p>
+    <div class="cat-accent-bar"></div>
+    <h1 class="cat-title">Finance <span class="cat-count">31 concepts</span></h1>
+    <p class="cat-subtitle">Finance concepts explained in plain English — with real analogies and prompts to use them in conversation.</p>
+  </header>
+
+  <div class="cat-divider"></div>
+
+  <div class="cat-concept-list">
+
+        <a class="cat-concept-row" href="/concepts/736-citizens-dividend">
+          <span class="cat-concept-id">#736</span>
+          <span class="cat-concept-term">Citizens Dividend</span>
+          <span class="cat-concept-hook">When robots take the jobs, everyone gets paid from taxing the robots.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/696-the-buy-nothing-challenge">
+          <span class="cat-concept-id">#696</span>
+          <span class="cat-concept-term">The Buy Nothing Challenge</span>
+          <span class="cat-concept-hook">Spend zero for 30 days. You&#39;ll realize how little you actually need.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/636-margin-beats-volume">
+          <span class="cat-concept-id">#636</span>
+          <span class="cat-concept-term">Margin Beats Volume</span>
+          <span class="cat-concept-hook">Charging 30% more beats doubling customers. Margins matter more than growth teams admit.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/571-the-second-slice-never-hits-the-same">
+          <span class="cat-concept-id">#571</span>
+          <span class="cat-concept-term">The Second Slice Never Hits the Same</span>
+          <span class="cat-concept-hook">The first one changes your life. The tenth one barely registers.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/570-anchoring">
+          <span class="cat-concept-id">#570</span>
+          <span class="cat-concept-term">Anchoring</span>
+          <span class="cat-concept-hook">The first number said out loud controls the entire negotiation.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/569-mental-accounting">
+          <span class="cat-concept-id">#569</span>
+          <span class="cat-concept-term">Mental Accounting</span>
+          <span class="cat-concept-hook">You guard your savings while paying 18% interest on debt.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/568-the-pull-of-right-now">
+          <span class="cat-concept-id">#568</span>
+          <span class="cat-concept-term">The Pull of Right Now</span>
+          <span class="cat-concept-hook">We&#39;ll wait a year for an extra $10, but not one day.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/567-fixed-vs-variable-costs">
+          <span class="cat-concept-id">#567</span>
+          <span class="cat-concept-term">Fixed vs Variable Costs</span>
+          <span class="cat-concept-hook">Fixed costs arrive whether you sell anything or not.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/566-the-house-money-effect">
+          <span class="cat-concept-id">#566</span>
+          <span class="cat-concept-term">The House Money Effect</span>
+          <span class="cat-concept-hook">Winnings feel like play money, so you bet them stupidly.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/565-burn-rate-runway">
+          <span class="cat-concept-id">#565</span>
+          <span class="cat-concept-term">Burn Rate &amp; Runway</span>
+          <span class="cat-concept-hook">How fast you bleed cash, and how many months till empty.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/564-a-euro-today-beats-a-euro-tomorrow">
+          <span class="cat-concept-id">#564</span>
+          <span class="cat-concept-term">A Euro Today Beats a Euro Tomorrow</span>
+          <span class="cat-concept-hook">Money now beats the same money later, every single time.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/563-the-latte-factor">
+          <span class="cat-concept-id">#563</span>
+          <span class="cat-concept-term">The Latte Factor</span>
+          <span class="cat-concept-hook">The daily coffee isn&#39;t expensive. Doing it for ten years is.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/562-lifestyle-creep">
+          <span class="cat-concept-id">#562</span>
+          <span class="cat-concept-term">Lifestyle Creep</span>
+          <span class="cat-concept-hook">Earn 20% more, save exactly the same amount.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/561-dollar-cost-averaging">
+          <span class="cat-concept-id">#561</span>
+          <span class="cat-concept-term">Dollar-Cost Averaging</span>
+          <span class="cat-concept-hook">Same amount, same schedule, stop trying to guess the bottom.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/379-your-20s-are-compounding">
+          <span class="cat-concept-id">#379</span>
+          <span class="cat-concept-term">Your 20s Are Compounding</span>
+          <span class="cat-concept-hook">Your twenties are seed capital. Most people spend them like cash.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/369-learn-to-earn">
+          <span class="cat-concept-id">#369</span>
+          <span class="cat-concept-term">Learn to Earn</span>
+          <span class="cat-concept-hook">Earning money is learnable. Your feelings about it are the problem.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/355-baby-boomer-business-buyouts">
+          <span class="cat-concept-id">#355</span>
+          <span class="cat-concept-term">Baby Boomer Business Buyouts</span>
+          <span class="cat-concept-hook">Two-thirds of businesses must change hands soon. Massive opportunity.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/349-the-ai-infra-bubble">
+          <span class="cat-concept-id">#349</span>
+          <span class="cat-concept-term">The AI Infra Bubble</span>
+          <span class="cat-concept-hook">Data centers cost billions, last three years. The math doesn&#39;t work.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/348-market-distortion">
+          <span class="cat-concept-id">#348</span>
+          <span class="cat-concept-term">Market Distortion</span>
+          <span class="cat-concept-hook">Government money floods a market. Nobody knows what&#39;s actually scarce anymore.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/273-federal-student-loan-trap">
+          <span class="cat-concept-id">#273</span>
+          <span class="cat-concept-term">Federal Student Loan Trap</span>
+          <span class="cat-concept-hook">Lend infinite money with zero underwriting, watch prices explode overnight.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/265-california-wealth-tax">
+          <span class="cat-concept-id">#265</span>
+          <span class="cat-concept-term">California Wealth Tax</span>
+          <span class="cat-concept-hook">Tax private property annually. Precedent breaks, 51% can vote for 49%.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/194-innovation-creates-wealth">
+          <span class="cat-concept-id">#194</span>
+          <span class="cat-concept-term">Innovation Creates Wealth</span>
+          <span class="cat-concept-hook">The rich don&#39;t steal wealth; they invent it from intellectual property.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/072-hedging">
+          <span class="cat-concept-id">#072</span>
+          <span class="cat-concept-term">Hedging</span>
+          <span class="cat-concept-hook">Trading some upside to survive the downside.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/037-liquidity">
+          <span class="cat-concept-id">#037</span>
+          <span class="cat-concept-term">Liquidity</span>
+          <span class="cat-concept-hook">How fast can you turn it into cash?</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/028-moral-hazard">
+          <span class="cat-concept-id">#028</span>
+          <span class="cat-concept-term">Moral Hazard</span>
+          <span class="cat-concept-hook">Shield someone from consequences and they&#39;ll take reckless risk.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/023-asymmetric-risk">
+          <span class="cat-concept-id">#023</span>
+          <span class="cat-concept-term">Asymmetric Risk</span>
+          <span class="cat-concept-hook">Tiny downside, massive upside. Or massive downside, tiny upside.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/017-risk-vs-reward">
+          <span class="cat-concept-id">#017</span>
+          <span class="cat-concept-term">Risk vs Reward</span>
+          <span class="cat-concept-hook">Big wins require real downside. Small bets stay small.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/014-inflation">
+          <span class="cat-concept-id">#014</span>
+          <span class="cat-concept-term">Inflation</span>
+          <span class="cat-concept-hook">Your money buys less every year.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/010-net-worth">
+          <span class="cat-concept-id">#010</span>
+          <span class="cat-concept-term">Net Worth</span>
+          <span class="cat-concept-hook">What you own minus what you owe.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/005-leverage">
+          <span class="cat-concept-id">#005</span>
+          <span class="cat-concept-term">Leverage</span>
+          <span class="cat-concept-hook">Borrow someone else&#39;s resources to multiply your output.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/001-compound-interest">
+          <span class="cat-concept-id">#001</span>
+          <span class="cat-concept-term">Compound Interest</span>
+          <span class="cat-concept-hook">Money that makes money while you sleep.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+  </div>
+
+  <div class="cat-cta">
+    <a class="ep-cta-btn" href="/#open-cat=finance">Explore Finance in Epistemic →</a>
+    <p class="cat-cta-sub">epistemic.live — 715 concepts from the podcasts you already listen to</p>
+  </div>
+
+  <footer class="ep-footer">epistemic.live &nbsp;·&nbsp; vol. i</footer>
+
+</main>
+
+</body>
+</html>

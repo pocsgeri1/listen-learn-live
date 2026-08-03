@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thinking Concepts | Epistemic</title>
+<meta name="description" content="130 thinking concepts explained in plain English — with real analogies and prompts to use them.">
+<link rel="canonical" href="https://epistemic.live/category/thinking">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://epistemic.live/category/thinking">
+<meta property="og:title" content="Thinking Concepts | Epistemic">
+<meta property="og:description" content="130 thinking concepts explained in plain English.">
+<meta property="og:image" content="https://epistemic.live/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Thinking Concepts | Epistemic">
+<meta name="twitter:image" content="https://epistemic.live/og-image.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"Thinking Concepts | Epistemic","description":"130 thinking concepts explained in plain English — with analogies and reflection prompts.","url":"https://epistemic.live/category/thinking","breadcrumb":{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Epistemic","item":"https://epistemic.live"},{"@type":"ListItem","position":2,"name":"Thinking","item":"https://epistemic.live/category/thinking"}]}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d0d0d;
+    --surface: #141414;
+    --surface2: #1c1c1c;
+    --border: rgba(255,255,255,0.07);
+    --border-hover: rgba(255,255,255,0.15);
+    --text: #f0ede8;
+    --muted: #6b6b6b;
+    --muted2: #9a9a9a;
+    --accent: #e8d5a3;
+    --cat: #7aaf8a;
+  }
+
+  html, body { min-height: 100%; background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; -webkit-font-smoothing: antialiased; }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    pointer-events: none; z-index: 0; opacity: 0.35;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .ep-nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 10;
+    padding: 18px 32px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(13,13,13,0.94);
+  }
+  .ep-nav-logo { font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); text-decoration: none; }
+  .ep-nav-back { font-family: 'DM Sans', sans-serif; font-size: 0.72rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.15s; }
+  .ep-nav-back:hover { color: var(--text); }
+
+  .ep-page { position: relative; z-index: 1; max-width: 760px; margin: 0 auto; padding: 110px 24px 80px; }
+
+  /* Header */
+  .cat-header { margin-bottom: 48px; }
+  .cat-breadcrumb { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; }
+  .cat-breadcrumb a { color: var(--muted); text-decoration: none; }
+  .cat-breadcrumb a:hover { color: var(--text); }
+  .cat-breadcrumb span { margin: 0 6px; opacity: 0.4; }
+  .cat-accent-bar { width: 32px; height: 3px; background: var(--cat); border-radius: 2px; margin-bottom: 16px; }
+  h1.cat-title { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 2.4rem; color: var(--text); line-height: 1.1; margin-bottom: 10px; }
+  .cat-subtitle { font-family: 'DM Sans', sans-serif; font-weight: 300; font-size: 0.93rem; color: var(--muted2); line-height: 1.6; }
+  .cat-count { display: inline-block; font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cat); background: #7aaf8a1a; border: 1px solid #7aaf8a33; border-radius: 999px; padding: 3px 10px; margin-left: 10px; vertical-align: middle; }
+
+  /* Divider */
+  .cat-divider { height: 1px; background: var(--border); margin-bottom: 32px; }
+
+  /* Concept list */
+  .cat-concept-list { display: flex; flex-direction: column; gap: 2px; }
+
+  .cat-concept-row {
+    display: grid;
+    grid-template-columns: 44px 1fr auto 20px;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px 14px 18px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    text-decoration: none;
+    transition: border-color 0.15s, background 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+  .cat-concept-row::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 2px;
+    background: var(--cat);
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .cat-concept-row:hover { border-color: var(--border-hover); background: var(--surface2); }
+  .cat-concept-row:hover::before { opacity: 1; }
+
+  .cat-concept-id { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.12em; color: var(--muted); }
+  .cat-concept-term { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 0.95rem; color: var(--text); }
+  .cat-concept-hook { font-family: 'DM Sans', sans-serif; font-weight: 300; font-size: 0.8rem; color: var(--muted2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cat-concept-arrow { font-family: 'DM Sans', sans-serif; font-size: 0.8rem; color: var(--muted); transition: color 0.15s, transform 0.15s; }
+  .cat-concept-row:hover .cat-concept-arrow { color: var(--cat); transform: translateX(2px); }
+
+  /* CTA */
+  .cat-cta { margin-top: 48px; text-align: center; }
+  .ep-cta-btn { display: inline-block; background: var(--accent); color: #0d0d0d; font-family: 'DM Sans', sans-serif; font-size: 0.8rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; border-radius: 999px; padding: 13px 36px; text-decoration: none; transition: background 0.15s, transform 0.15s; }
+  .ep-cta-btn:hover { background: #f0e0b0; transform: translateY(-1px); }
+  .cat-cta-sub { font-family: 'DM Sans', sans-serif; font-size: 0.72rem; font-weight: 300; color: var(--muted); margin-top: 12px; }
+
+  /* Footer */
+  .ep-footer { margin-top: 40px; font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase; color: #3a3a3a; text-align: center; }
+
+  /* Mobile */
+  @media (max-width: 600px) {
+    .ep-nav { padding: 16px 20px; }
+    .ep-page { padding: 90px 16px 60px; }
+    h1.cat-title { font-size: 1.8rem; }
+    .cat-concept-row { grid-template-columns: 36px 1fr 16px; }
+    .cat-concept-hook { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="ep-nav">
+  <a class="ep-nav-logo" href="/">Epistemic</a>
+  <a class="ep-nav-back" href="/">← Back to library</a>
+</nav>
+
+<main class="ep-page">
+
+  <header class="cat-header">
+    <p class="cat-breadcrumb"><a href="/">Epistemic</a><span>›</span>Thinking</p>
+    <div class="cat-accent-bar"></div>
+    <h1 class="cat-title">Thinking <span class="cat-count">130 concepts</span></h1>
+    <p class="cat-subtitle">Thinking concepts explained in plain English — with real analogies and prompts to use them in conversation.</p>
+  </header>
+
+  <div class="cat-divider"></div>
+
+  <div class="cat-concept-list">
+
+        <a class="cat-concept-row" href="/concepts/759-smeared-probability">
+          <span class="cat-concept-id">#759</span>
+          <span class="cat-concept-term">Smeared Probability</span>
+          <span class="cat-concept-hook">A forecast isn&#39;t one date. It&#39;s uncertainty spread across a range.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/756-default-trajectory">
+          <span class="cat-concept-id">#756</span>
+          <span class="cat-concept-term">Default Trajectory</span>
+          <span class="cat-concept-hook">Most futures aren&#39;t chosen. They&#39;re what happens when no one intervenes.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/753-the-button-question">
+          <span class="cat-concept-id">#753</span>
+          <span class="cat-concept-term">The Button Question</span>
+          <span class="cat-concept-hook">If you could stop something forever, would you? The answer reveals your real priorities.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/750-alignment-problem">
+          <span class="cat-concept-id">#750</span>
+          <span class="cat-concept-term">Alignment Problem</span>
+          <span class="cat-concept-hook">Making something smarter than you want the same things you want.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/748-political-vs-technical-question">
+          <span class="cat-concept-id">#748</span>
+          <span class="cat-concept-term">Political vs Technical Question</span>
+          <span class="cat-concept-hook">Some problems have solutions. Others have stakeholders.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/745-timelines-ai-forecasting">
+          <span class="cat-concept-id">#745</span>
+          <span class="cat-concept-term">Timelines (ai Forecasting)</span>
+          <span class="cat-concept-hook">Not when it happens. When you think it happens. The forecast itself.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/740-post-hoc-principles">
+          <span class="cat-concept-id">#740</span>
+          <span class="cat-concept-term">Post-hoc Principles</span>
+          <span class="cat-concept-hook">Every organization claims principles. Most just justify what they already wanted.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/739-warning-shot">
+          <span class="cat-concept-id">#739</span>
+          <span class="cat-concept-term">Warning Shot</span>
+          <span class="cat-concept-hook">The disaster that scares people into fixing the system before the real one hits.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/738-safety-vs-capabilities">
+          <span class="cat-concept-id">#738</span>
+          <span class="cat-concept-term">Safety vs Capabilities</span>
+          <span class="cat-concept-hook">Racing to make it powerful versus pausing to make it safe.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/735-safety-case">
+          <span class="cat-concept-id">#735</span>
+          <span class="cat-concept-term">Safety Case</span>
+          <span class="cat-concept-hook">Every high-stakes move needs documented proof it won&#39;t fail.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/734-spillover-effects">
+          <span class="cat-concept-id">#734</span>
+          <span class="cat-concept-term">Spillover Effects</span>
+          <span class="cat-concept-hook">Getting better at one thing makes you better at things you weren&#39;t even practicing.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/728-indecision-as-investment">
+          <span class="cat-concept-id">#728</span>
+          <span class="cat-concept-term">Indecision as Investment</span>
+          <span class="cat-concept-hook">Every time you delay choosing, you practice being indecisive.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/724-inversion-for-decision-making">
+          <span class="cat-concept-id">#724</span>
+          <span class="cat-concept-term">Inversion for Decision-making</span>
+          <span class="cat-concept-hook">List every way you could fail, then do the opposite.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/723-the-you-with-a-mustache-test">
+          <span class="cat-concept-id">#723</span>
+          <span class="cat-concept-term">The &#39;You With a Mustache&#39; Test</span>
+          <span class="cat-concept-hook">Imagine a version of you trying to beat you. Do what they&#39;d do.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/719-options-without-action-are-worthless">
+          <span class="cat-concept-id">#719</span>
+          <span class="cat-concept-term">Options Without Action Are Worthless</span>
+          <span class="cat-concept-hook">Maximizing choices is how you guarantee choosing nothing.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/716-the-20-hour-competence-rule">
+          <span class="cat-concept-id">#716</span>
+          <span class="cat-concept-term">The 20-hour Competence Rule</span>
+          <span class="cat-concept-hook">You can get competent at nearly anything in 20 focused hours.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/714-description-vs-explanation">
+          <span class="cat-concept-id">#714</span>
+          <span class="cat-concept-term">Description vs Explanation</span>
+          <span class="cat-concept-hook">Calling someone dishonest explains nothing about why they stole.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/710-malicious-benefit">
+          <span class="cat-concept-id">#710</span>
+          <span class="cat-concept-term">Malicious Benefit</span>
+          <span class="cat-concept-hook">Your haters work for you for free if they&#39;re incompetent.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/708-borrowed-authority-from-past-self">
+          <span class="cat-concept-id">#708</span>
+          <span class="cat-concept-term">Borrowed Authority (from Past Self)</span>
+          <span class="cat-concept-hook">Write down why you made a decision so future-you can&#39;t forget.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/698-local-vs-global-maxima">
+          <span class="cat-concept-id">#698</span>
+          <span class="cat-concept-term">Local vs Global Maxima</span>
+          <span class="cat-concept-hook">The peak you&#39;re on blocks the view of taller mountains.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/697-risk-mispricing">
+          <span class="cat-concept-id">#697</span>
+          <span class="cat-concept-term">Risk Mispricing</span>
+          <span class="cat-concept-hook">The downside of trying is nothing. Your brain just thinks it&#39;s everything.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/694-the-five-ingredients">
+          <span class="cat-concept-id">#694</span>
+          <span class="cat-concept-term">The Five Ingredients</span>
+          <span class="cat-concept-hook">Future-proof work requires five things most jobs never teach you.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/686-error-correction-intelligence">
+          <span class="cat-concept-id">#686</span>
+          <span class="cat-concept-term">Error Correction = Intelligence</span>
+          <span class="cat-concept-hook">Smart systems don&#39;t avoid failure. They course-correct based on what breaks.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/683-feedback-drift">
+          <span class="cat-concept-id">#683</span>
+          <span class="cat-concept-term">Feedback Drift</span>
+          <span class="cat-concept-hook">The most dangerous lifestyle is one removed from continuous trial and error.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/676-contrarian-spine">
+          <span class="cat-concept-id">#676</span>
+          <span class="cat-concept-term">Contrarian Spine</span>
+          <span class="cat-concept-hook">You&#39;ve been serving reheated TED Talks and wondering why nobody&#39;s listening.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/669-atelic-vs-telic">
+          <span class="cat-concept-id">#669</span>
+          <span class="cat-concept-term">Atelic vs Telic</span>
+          <span class="cat-concept-hook">You speed-read 100 books in a year, but can&#39;t recite a single idea.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/662-left-brain-vs-right-brain">
+          <span class="cat-concept-id">#662</span>
+          <span class="cat-concept-term">Left Brain vs Right Brain</span>
+          <span class="cat-concept-hook">Two modes: spreadsheets vs. sunsets. Most of us have been living in spreadsheet mode for years.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/658-leisure-laziness">
+          <span class="cat-concept-id">#658</span>
+          <span class="cat-concept-term">Leisure ≠ Laziness</span>
+          <span class="cat-concept-hook">Netflix doesn&#39;t count as philosophy. Your friend&#39;s couch does.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/634-local-maximum-trap">
+          <span class="cat-concept-id">#634</span>
+          <span class="cat-concept-term">Local Maximum Trap</span>
+          <span class="cat-concept-hook">Logic traps you on a decent peak. Creativity leaps to a better one.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/630-the-logical-15">
+          <span class="cat-concept-id">#630</span>
+          <span class="cat-concept-term">The Logical 15%</span>
+          <span class="cat-concept-hook">Insisting everything make sense in advance restricts you to 15% of possible solutions.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/627-loss-aversion">
+          <span class="cat-concept-id">#627</span>
+          <span class="cat-concept-term">Loss Aversion</span>
+          <span class="cat-concept-hook">People fear missing out more than they value gaining the same thing.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/616-slow-slow-then-all-at-once">
+          <span class="cat-concept-id">#616</span>
+          <span class="cat-concept-term">Slow, Slow, Then All at Once</span>
+          <span class="cat-concept-hook">Business uses addition when it needs sigmoid curves. Adoption isn&#39;t linear, it&#39;s social.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/608-explore-vs-exploit">
+          <span class="cat-concept-id">#608</span>
+          <span class="cat-concept-term">Explore vs Exploit</span>
+          <span class="cat-concept-hook">Exploitation funds exploration. Exploration directs what to exploit.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/607-doorman-fallacy">
+          <span class="cat-concept-id">#607</span>
+          <span class="cat-concept-term">Doorman Fallacy</span>
+          <span class="cat-concept-hook">Optimizing for efficiency kills value you never quantified.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/601-heuristics-for-complexity">
+          <span class="cat-concept-id">#601</span>
+          <span class="cat-concept-term">Heuristics for Complexity</span>
+          <span class="cat-concept-hook">When a decision is too complex to calculate, compress it into a simple rule.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/600-choice-paralysis">
+          <span class="cat-concept-id">#600</span>
+          <span class="cat-concept-term">Choice Paralysis</span>
+          <span class="cat-concept-hook">More options make confident decisions harder, not easier.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/598-process-fetishism">
+          <span class="cat-concept-id">#598</span>
+          <span class="cat-concept-term">Process Fetishism</span>
+          <span class="cat-concept-hook">Requiring that everything make sense in advance limits you to the obvious 15%.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/590-the-long-flat-start">
+          <span class="cat-concept-id">#590</span>
+          <span class="cat-concept-term">The Long Flat Start</span>
+          <span class="cat-concept-hook">Adoption is slow, then explosive, then flat. Most ideas die during slow.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/589-three-prices-one-decoy">
+          <span class="cat-concept-id">#589</span>
+          <span class="cat-concept-term">Three Prices, One Decoy</span>
+          <span class="cat-concept-hook">Three tiers kill choice paralysis faster than 27 options.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/588-post-rationalization">
+          <span class="cat-concept-id">#588</span>
+          <span class="cat-concept-term">Post-rationalization</span>
+          <span class="cat-concept-hook">Breakthrough ideas get built backward: do it, then explain it.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/512-trial-error-is-the-plan">
+          <span class="cat-concept-id">#512</span>
+          <span class="cat-concept-term">Trial-Error Is THE Plan</span>
+          <span class="cat-concept-hook">You can&#39;t know what you want until you try it.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/501-writing-clarifies-thinking">
+          <span class="cat-concept-id">#501</span>
+          <span class="cat-concept-term">Writing Clarifies Thinking</span>
+          <span class="cat-concept-hook">Fuzzy thoughts collapse when forced into sentences.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/494-4-hour-workday-constraint">
+          <span class="cat-concept-id">#494</span>
+          <span class="cat-concept-term">4-Hour Workday Constraint</span>
+          <span class="cat-concept-hook">Cut your hours in half. Quality will force itself up.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/490-actions-over-words">
+          <span class="cat-concept-id">#490</span>
+          <span class="cat-concept-term">Actions Over Words</span>
+          <span class="cat-concept-hook">Words reveal intention, actions reveal priority.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/489-goals-inside-goals">
+          <span class="cat-concept-id">#489</span>
+          <span class="cat-concept-term">Goals Inside Goals</span>
+          <span class="cat-concept-hook">Your goals should nest like Russian dolls.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/485-minimum-viable-vision">
+          <span class="cat-concept-id">#485</span>
+          <span class="cat-concept-term">Minimum Viable Vision</span>
+          <span class="cat-concept-hook">Your vision doesn&#39;t need to be perfect. It needs to be started.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/483-the-certainty-trap">
+          <span class="cat-concept-id">#483</span>
+          <span class="cat-concept-term">The Certainty Trap</span>
+          <span class="cat-concept-hook">The known path doesn&#39;t work, but at least you know it.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/477-goal-as-lens">
+          <span class="cat-concept-id">#477</span>
+          <span class="cat-concept-term">Goal as Lens</span>
+          <span class="cat-concept-hook">Setting a specific goal instantly changes what your mind notices around you.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/472-failing-forward-faster">
+          <span class="cat-concept-id">#472</span>
+          <span class="cat-concept-term">Failing Forward, Faster</span>
+          <span class="cat-concept-hook">Winning just means running more experiments than everyone else.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/470-deep-generalist">
+          <span class="cat-concept-id">#470</span>
+          <span class="cat-concept-term">Deep Generalist</span>
+          <span class="cat-concept-hook">Specialists know one answer. Generalists recognize the same question everywhere.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/468-cybernetic-feedback-loop">
+          <span class="cat-concept-id">#468</span>
+          <span class="cat-concept-term">Cybernetic Feedback Loop</span>
+          <span class="cat-concept-hook">Action without feedback is just repetition wearing a progress costume.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/413-protected-hour-strategy">
+          <span class="cat-concept-id">#413</span>
+          <span class="cat-concept-term">Protected Hour Strategy</span>
+          <span class="cat-concept-hook">365 hours beats 80-hour weeks for building what matters.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/410-aperture-of-confidence">
+          <span class="cat-concept-id">#410</span>
+          <span class="cat-concept-term">Aperture of Confidence</span>
+          <span class="cat-concept-hook">Zoom out until you find certainty. Micro predictions fail, macro patterns hold.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/398-study-paralysis">
+          <span class="cat-concept-id">#398</span>
+          <span class="cat-concept-term">Study Paralysis</span>
+          <span class="cat-concept-hook">Smart people delay action by consuming more information.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/381-mental-adaptability">
+          <span class="cat-concept-id">#381</span>
+          <span class="cat-concept-term">Mental Adaptability</span>
+          <span class="cat-concept-hook">Certainty is disappearing, and living with ambiguity is the new skill.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/376-goal-gravity">
+          <span class="cat-concept-id">#376</span>
+          <span class="cat-concept-term">Goal Gravity</span>
+          <span class="cat-concept-hook">Goals only pull you after you&#39;ve invested real work into them.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/370-tutorial-phase">
+          <span class="cat-concept-id">#370</span>
+          <span class="cat-concept-term">Tutorial Phase</span>
+          <span class="cat-concept-hook">Your 20s are the tutorial. The real game starts later.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/368-conscious-decision-rarity">
+          <span class="cat-concept-id">#368</span>
+          <span class="cat-concept-term">Conscious Decision Rarity</span>
+          <span class="cat-concept-hook">Most people never make a single conscious decision in their life.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/367-deliberate-ignorance">
+          <span class="cat-concept-id">#367</span>
+          <span class="cat-concept-term">Deliberate Ignorance</span>
+          <span class="cat-concept-hook">Stop taking navigation advice from people who are lost.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/366-parkinsons-law-for-goals">
+          <span class="cat-concept-id">#366</span>
+          <span class="cat-concept-term">Parkinson&#39;s Law for Goals</span>
+          <span class="cat-concept-hook">Your mind expands to fill whatever target you give it.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/360-the-clarity-test">
+          <span class="cat-concept-id">#360</span>
+          <span class="cat-concept-term">The Clarity Test</span>
+          <span class="cat-concept-hook">Can&#39;t explain it simply? You don&#39;t actually understand it.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/341-pause-reflect-document">
+          <span class="cat-concept-id">#341</span>
+          <span class="cat-concept-term">Pause → Reflect → Document</span>
+          <span class="cat-concept-hook">Creativity requires boredom: pen, paper, nature, no screens.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/340-jevons-paradox">
+          <span class="cat-concept-id">#340</span>
+          <span class="cat-concept-term">Jevons Paradox</span>
+          <span class="cat-concept-hook">Disruption creates more opportunities than it destroys, not fewer.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/315-unpredictability-barrier">
+          <span class="cat-concept-id">#315</span>
+          <span class="cat-concept-term">Unpredictability Barrier</span>
+          <span class="cat-concept-hook">Predicting a smarter agent&#39;s next move would make you just as smart.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/310-meta-invention">
+          <span class="cat-concept-id">#310</span>
+          <span class="cat-concept-term">Meta-Invention</span>
+          <span class="cat-concept-hook">Inventing intelligence is the last thing we&#39;ll ever invent, because it invents everything else.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/294-error-management-theory">
+          <span class="cat-concept-id">#294</span>
+          <span class="cat-concept-term">Error Management Theory</span>
+          <span class="cat-concept-hook">Evolution wired us for predictable mistakes. Better safe than sorry.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/277-the-100-year-filter">
+          <span class="cat-concept-id">#277</span>
+          <span class="cat-concept-term">The 100-year Filter</span>
+          <span class="cat-concept-hook">Check if it matters in 100 years. Most of your stress just failed.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/251-recursive-red-pill-learning">
+          <span class="cat-concept-id">#251</span>
+          <span class="cat-concept-term">Recursive Red Pill Learning</span>
+          <span class="cat-concept-hook">Algorithms feed you the rarest disasters until you think they&#39;re normal.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/242-right-but-early">
+          <span class="cat-concept-id">#242</span>
+          <span class="cat-concept-term">Right but Early</span>
+          <span class="cat-concept-hook">You were right before it was safe. They&#39;ll remember you were annoying.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/233-criticism-creation-balance-sheet">
+          <span class="cat-concept-id">#233</span>
+          <span class="cat-concept-term">Criticism-creation Balance Sheet</span>
+          <span class="cat-concept-hook">If you criticize more than you create, you&#39;re a parasite.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/228-selective-productivity">
+          <span class="cat-concept-id">#228</span>
+          <span class="cat-concept-term">Selective Productivity</span>
+          <span class="cat-concept-hook">Your to-do list is a liability. Focus is what you refuse to do.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/225-liars-fear-calm">
+          <span class="cat-concept-id">#225</span>
+          <span class="cat-concept-term">Liars Fear Calm</span>
+          <span class="cat-concept-hook">Silence is the only thing a liar can&#39;t out-argue.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/222-breath-as-the-first-word">
+          <span class="cat-concept-id">#222</span>
+          <span class="cat-concept-term">Breath as the First Word</span>
+          <span class="cat-concept-hook">Pausing before you speak instantly shifts the entire power dynamic.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/220-hidden-metrics">
+          <span class="cat-concept-id">#220</span>
+          <span class="cat-concept-term">Hidden Metrics</span>
+          <span class="cat-concept-hook">You&#39;ll trade invisible peace for visible trophies, then wonder why you&#39;re miserable.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/214-schedule-worry-time">
+          <span class="cat-concept-id">#214</span>
+          <span class="cat-concept-term">Schedule Worry Time</span>
+          <span class="cat-concept-hook">Worry on a schedule, not on demand.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/210-perspective-seeking">
+          <span class="cat-concept-id">#210</span>
+          <span class="cat-concept-term">Perspective Seeking</span>
+          <span class="cat-concept-hook">Ask how they got there instead of arguing that they&#39;re wrong.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/206-conversation-within-a-conversation">
+          <span class="cat-concept-id">#206</span>
+          <span class="cat-concept-term">Conversation Within a Conversation</span>
+          <span class="cat-concept-hook">Tone, pauses, and posture communicate more than the words you choose.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/202-radical-objectivity">
+          <span class="cat-concept-id">#202</span>
+          <span class="cat-concept-term">Radical Objectivity</span>
+          <span class="cat-concept-hook">Strip yourself out of the equation and see what&#39;s actually there.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/186-bell-curve-vs-power-law">
+          <span class="cat-concept-id">#186</span>
+          <span class="cat-concept-term">Bell Curve Vs. Power Law</span>
+          <span class="cat-concept-hook">Bell curves cap you. Power laws remove the ceiling entirely.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/185-demand-vs-supply-thinking">
+          <span class="cat-concept-id">#185</span>
+          <span class="cat-concept-term">Demand Vs. Supply Thinking</span>
+          <span class="cat-concept-hook">Test if anyone will buy before you build a single thing.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/166-self-education-self-interest-self-sufficiency-triad">
+          <span class="cat-concept-id">#166</span>
+          <span class="cat-concept-term">Self-education, Self-interest, Self-sufficiency Triad</span>
+          <span class="cat-concept-hook">Industrial systems need obedient specialists, sovereign individuals need these three.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/164-matthew-principle">
+          <span class="cat-concept-id">#164</span>
+          <span class="cat-concept-term">Matthew Principle</span>
+          <span class="cat-concept-hook">Upward momentum compounds, downward spirals accelerate catastrophically.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/163-stupidity-debt-repayment">
+          <span class="cat-concept-id">#163</span>
+          <span class="cat-concept-term">Stupidity Debt Repayment</span>
+          <span class="cat-concept-hook">Ask 1000 dumb questions, you&#39;re not ignorant anymore.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/160-the-writing-habit">
+          <span class="cat-concept-id">#160</span>
+          <span class="cat-concept-term">The Writing Habit</span>
+          <span class="cat-concept-hook">Writing daily is the highest-leverage skill in the knowledge economy.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/159-lindy-effect">
+          <span class="cat-concept-id">#159</span>
+          <span class="cat-concept-term">Lindy Effect</span>
+          <span class="cat-concept-hook">The longer something has survived, the longer it will likely last.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/157-hanlons-razor">
+          <span class="cat-concept-id">#157</span>
+          <span class="cat-concept-term">Hanlon&#39;s Razor</span>
+          <span class="cat-concept-hook">Never attribute to malice what can be explained by incompetence.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/155-second-order-thinking">
+          <span class="cat-concept-id">#155</span>
+          <span class="cat-concept-term">Second-Order Thinking</span>
+          <span class="cat-concept-hook">What happens after what happens next?</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/152-domain-specific-knowledge">
+          <span class="cat-concept-id">#152</span>
+          <span class="cat-concept-term">Domain-Specific Knowledge</span>
+          <span class="cat-concept-hook">The best surgeon in the country is a mediocre geopolitics analyst.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/150-defensive-pessimism">
+          <span class="cat-concept-id">#150</span>
+          <span class="cat-concept-term">Defensive Pessimism</span>
+          <span class="cat-concept-hook">Rehearse disaster in detail. Then it can&#39;t surprise you.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/149-self-education-advantage">
+          <span class="cat-concept-id">#149</span>
+          <span class="cat-concept-term">Self-Education Advantage</span>
+          <span class="cat-concept-hook">Credentials teach you what mattered decades ago. Self-teaching lets you master what matters now.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/137-reinvention-capital">
+          <span class="cat-concept-id">#137</span>
+          <span class="cat-concept-term">Reinvention Capital</span>
+          <span class="cat-concept-hook">Your past skills don&#39;t vanish when you pivot. They compound into the new thing.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/136-domain-of-mastery">
+          <span class="cat-concept-id">#136</span>
+          <span class="cat-concept-term">Domain of Mastery</span>
+          <span class="cat-concept-hook">Your unreplicable expertise lives at the intersection of your deepest skills.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/135-build-from-genuine-curiosity">
+          <span class="cat-concept-id">#135</span>
+          <span class="cat-concept-term">Build From Genuine Curiosity</span>
+          <span class="cat-concept-hook">Authentic obsession beats manufactured trend-chasing every single time.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/133-write-to-think">
+          <span class="cat-concept-id">#133</span>
+          <span class="cat-concept-term">Write to Think</span>
+          <span class="cat-concept-hook">You don&#39;t know what you think until you try writing it down.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/132-shiny-object-syndrome">
+          <span class="cat-concept-id">#132</span>
+          <span class="cat-concept-term">Shiny Object Syndrome</span>
+          <span class="cat-concept-hook">You keep planting seeds, then digging them up before anything grows.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/123-earned-confidence">
+          <span class="cat-concept-id">#123</span>
+          <span class="cat-concept-term">Earned Confidence</span>
+          <span class="cat-concept-hook">Fake confidence breaks under pressure. Earned confidence was built by pressure.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/122-the-long-game">
+          <span class="cat-concept-id">#122</span>
+          <span class="cat-concept-term">The Long Game</span>
+          <span class="cat-concept-hook">People overestimate one year and underestimate ten.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/118-outwork-your-self-doubt">
+          <span class="cat-concept-id">#118</span>
+          <span class="cat-concept-term">Outwork Your Self-Doubt</span>
+          <span class="cat-concept-hook">Confidence isn&#39;t built by affirmations. It&#39;s built by evidence.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/107-pre-mortem">
+          <span class="cat-concept-id">#107</span>
+          <span class="cat-concept-term">Pre-Mortem</span>
+          <span class="cat-concept-hook">Imagine it already failed. Now work backwards to figure out why.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/103-cognitive-flexibility">
+          <span class="cat-concept-id">#103</span>
+          <span class="cat-concept-term">Cognitive Flexibility</span>
+          <span class="cat-concept-hook">Holding two opposite views without your brain catching fire.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/101-anti-fragility">
+          <span class="cat-concept-id">#101</span>
+          <span class="cat-concept-term">Anti-Fragility</span>
+          <span class="cat-concept-hook">Immune systems need exposure to germs. Businesses need near-death experiences. Same principle.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/100-barbell-strategy">
+          <span class="cat-concept-id">#100</span>
+          <span class="cat-concept-term">Barbell Strategy</span>
+          <span class="cat-concept-hook">Extreme on both ends. Nothing in the mushy middle.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/096-comfort-zone-creep">
+          <span class="cat-concept-id">#096</span>
+          <span class="cat-concept-term">Comfort Zone Creep</span>
+          <span class="cat-concept-hook">What used to scare you now bores you. That&#39;s not progress, it&#39;s stalling.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/093-luck-surface-area">
+          <span class="cat-concept-id">#093</span>
+          <span class="cat-concept-term">Luck Surface Area</span>
+          <span class="cat-concept-hook">Opportunities can&#39;t find you if nobody knows you exist.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/083-input-output-delusion">
+          <span class="cat-concept-id">#083</span>
+          <span class="cat-concept-term">Input-Output Delusion</span>
+          <span class="cat-concept-hook">Confusing being busy with actually getting results.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/080-counterfactual-thinking">
+          <span class="cat-concept-id">#080</span>
+          <span class="cat-concept-term">Counterfactual Thinking</span>
+          <span class="cat-concept-hook">What would have happened if things had gone differently?</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/078-steelmanning">
+          <span class="cat-concept-id">#078</span>
+          <span class="cat-concept-term">Steelmanning</span>
+          <span class="cat-concept-hook">Destroy the best version of their argument. Not the weakest.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/077-tipping-point">
+          <span class="cat-concept-id">#077</span>
+          <span class="cat-concept-term">Tipping Point</span>
+          <span class="cat-concept-hook">The moment slow buildup becomes unstoppable momentum.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/076-abstraction">
+          <span class="cat-concept-id">#076</span>
+          <span class="cat-concept-term">Abstraction</span>
+          <span class="cat-concept-hook">Zooming out from the specific to the universal pattern.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/074-path-dependency">
+          <span class="cat-concept-id">#074</span>
+          <span class="cat-concept-term">Path Dependency</span>
+          <span class="cat-concept-hook">That city you picked at 22 is still deciding your options.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/064-optionality">
+          <span class="cat-concept-id">#064</span>
+          <span class="cat-concept-term">Optionality</span>
+          <span class="cat-concept-hook">Keep doors open until you have to close them.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/062-paradigm-shift">
+          <span class="cat-concept-id">#062</span>
+          <span class="cat-concept-term">Paradigm Shift</span>
+          <span class="cat-concept-hook">Every &#39;obvious truth&#39; was once heresy. And vice versa.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/059-latent-potential">
+          <span class="cat-concept-id">#059</span>
+          <span class="cat-concept-term">Latent Potential</span>
+          <span class="cat-concept-hook">Nothing seems to happen. Then suddenly everything does.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/052-diminishing-returns">
+          <span class="cat-concept-id">#052</span>
+          <span class="cat-concept-term">Diminishing Returns</span>
+          <span class="cat-concept-hook">More input eventually stops producing more output.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/051-survivorship-bias">
+          <span class="cat-concept-id">#051</span>
+          <span class="cat-concept-term">Survivorship Bias</span>
+          <span class="cat-concept-hook">The failures disappeared quietly. You only see the winners.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/050-systems-thinking">
+          <span class="cat-concept-id">#050</span>
+          <span class="cat-concept-term">Systems Thinking</span>
+          <span class="cat-concept-hook">See the whole machine, not just the broken part.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/048-reversion-to-the-mean">
+          <span class="cat-concept-id">#048</span>
+          <span class="cat-concept-term">Reversion to the Mean</span>
+          <span class="cat-concept-hook">Extreme results rarely repeat. Average always comes back.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/047-entropy">
+          <span class="cat-concept-id">#047</span>
+          <span class="cat-concept-term">Entropy</span>
+          <span class="cat-concept-hook">Everything tends toward disorder without energy.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/045-delayed-gratification">
+          <span class="cat-concept-id">#045</span>
+          <span class="cat-concept-term">Delayed Gratification</span>
+          <span class="cat-concept-hook">Resist the cookie now. Get the whole cake later.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/041-compound-effect">
+          <span class="cat-concept-id">#041</span>
+          <span class="cat-concept-term">Compound Effect</span>
+          <span class="cat-concept-hook">Read ten pages a day. In a year you&#39;ve read fifteen books, without trying.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/036-black-swan">
+          <span class="cat-concept-id">#036</span>
+          <span class="cat-concept-term">Black Swan</span>
+          <span class="cat-concept-hook">A rare, unpredictable event that changes everything.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/033-inversion">
+          <span class="cat-concept-id">#033</span>
+          <span class="cat-concept-term">Inversion</span>
+          <span class="cat-concept-hook">Don&#39;t ask how to win. Ask what guarantees losing, and then avoid that.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/031-median-vs-mean">
+          <span class="cat-concept-id">#031</span>
+          <span class="cat-concept-term">Median vs Mean</span>
+          <span class="cat-concept-hook">Averages hide reality. The middle value reveals it.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/027-pareto-principle-80-20">
+          <span class="cat-concept-id">#027</span>
+          <span class="cat-concept-term">Pareto Principle (80/20)</span>
+          <span class="cat-concept-hook">20% of effort drives 80% of results. Find which 20%.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/024-narrative-fallacy">
+          <span class="cat-concept-id">#024</span>
+          <span class="cat-concept-term">Narrative Fallacy</span>
+          <span class="cat-concept-hook">Every success story makes sense in hindsight. Almost none was planned.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/022-non-zero-impact">
+          <span class="cat-concept-id">#022</span>
+          <span class="cat-concept-term">Non-Zero Impact</span>
+          <span class="cat-concept-hook">It&#39;s small, but it&#39;s genuinely not nothing.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/018-first-principles-thinking">
+          <span class="cat-concept-id">#018</span>
+          <span class="cat-concept-term">First Principles Thinking</span>
+          <span class="cat-concept-hook">Question every assumption. Rebuild from the ground up.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/011-scarcity-mindset">
+          <span class="cat-concept-id">#011</span>
+          <span class="cat-concept-term">Scarcity Mindset</span>
+          <span class="cat-concept-hook">Acting like there&#39;s not enough, even when there is.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/004-sunk-cost-fallacy">
+          <span class="cat-concept-id">#004</span>
+          <span class="cat-concept-term">Sunk Cost Fallacy</span>
+          <span class="cat-concept-hook">Finishing something bad because you already started it.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/002-opportunity-cost">
+          <span class="cat-concept-id">#002</span>
+          <span class="cat-concept-term">Opportunity Cost</span>
+          <span class="cat-concept-hook">Every choice costs you the thing you didn&#39;t choose.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+  </div>
+
+  <div class="cat-cta">
+    <a class="ep-cta-btn" href="/#open-cat=thinking">Explore Thinking in Epistemic →</a>
+    <p class="cat-cta-sub">epistemic.live — 715 concepts from the podcasts you already listen to</p>
+  </div>
+
+  <footer class="ep-footer">epistemic.live &nbsp;·&nbsp; vol. i</footer>
+
+</main>
+
+</body>
+</html>

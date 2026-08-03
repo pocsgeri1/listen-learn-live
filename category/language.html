@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Language Concepts | Epistemic</title>
+<meta name="description" content="30 language concepts explained in plain English — with real analogies and prompts to use them.">
+<link rel="canonical" href="https://epistemic.live/category/language">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://epistemic.live/category/language">
+<meta property="og:title" content="Language Concepts | Epistemic">
+<meta property="og:description" content="30 language concepts explained in plain English.">
+<meta property="og:image" content="https://epistemic.live/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Language Concepts | Epistemic">
+<meta name="twitter:image" content="https://epistemic.live/og-image.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"Language Concepts | Epistemic","description":"30 language concepts explained in plain English — with analogies and reflection prompts.","url":"https://epistemic.live/category/language","breadcrumb":{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Epistemic","item":"https://epistemic.live"},{"@type":"ListItem","position":2,"name":"Language","item":"https://epistemic.live/category/language"}]}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d0d0d;
+    --surface: #141414;
+    --surface2: #1c1c1c;
+    --border: rgba(255,255,255,0.07);
+    --border-hover: rgba(255,255,255,0.15);
+    --text: #f0ede8;
+    --muted: #6b6b6b;
+    --muted2: #9a9a9a;
+    --accent: #e8d5a3;
+    --cat: #5abfaf;
+  }
+
+  html, body { min-height: 100%; background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; -webkit-font-smoothing: antialiased; }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    pointer-events: none; z-index: 0; opacity: 0.35;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .ep-nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 10;
+    padding: 18px 32px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(13,13,13,0.94);
+  }
+  .ep-nav-logo { font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); text-decoration: none; }
+  .ep-nav-back { font-family: 'DM Sans', sans-serif; font-size: 0.72rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.15s; }
+  .ep-nav-back:hover { color: var(--text); }
+
+  .ep-page { position: relative; z-index: 1; max-width: 760px; margin: 0 auto; padding: 110px 24px 80px; }
+
+  /* Header */
+  .cat-header { margin-bottom: 48px; }
+  .cat-breadcrumb { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; }
+  .cat-breadcrumb a { color: var(--muted); text-decoration: none; }
+  .cat-breadcrumb a:hover { color: var(--text); }
+  .cat-breadcrumb span { margin: 0 6px; opacity: 0.4; }
+  .cat-accent-bar { width: 32px; height: 3px; background: var(--cat); border-radius: 2px; margin-bottom: 16px; }
+  h1.cat-title { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 2.4rem; color: var(--text); line-height: 1.1; margin-bottom: 10px; }
+  .cat-subtitle { font-family: 'DM Sans', sans-serif; font-weight: 300; font-size: 0.93rem; color: var(--muted2); line-height: 1.6; }
+  .cat-count { display: inline-block; font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cat); background: #5abfaf1a; border: 1px solid #5abfaf33; border-radius: 999px; padding: 3px 10px; margin-left: 10px; vertical-align: middle; }
+
+  /* Divider */
+  .cat-divider { height: 1px; background: var(--border); margin-bottom: 32px; }
+
+  /* Concept list */
+  .cat-concept-list { display: flex; flex-direction: column; gap: 2px; }
+
+  .cat-concept-row {
+    display: grid;
+    grid-template-columns: 44px 1fr auto 20px;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px 14px 18px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    text-decoration: none;
+    transition: border-color 0.15s, background 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+  .cat-concept-row::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 2px;
+    background: var(--cat);
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .cat-concept-row:hover { border-color: var(--border-hover); background: var(--surface2); }
+  .cat-concept-row:hover::before { opacity: 1; }
+
+  .cat-concept-id { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.12em; color: var(--muted); }
+  .cat-concept-term { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 0.95rem; color: var(--text); }
+  .cat-concept-hook { font-family: 'DM Sans', sans-serif; font-weight: 300; font-size: 0.8rem; color: var(--muted2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cat-concept-arrow { font-family: 'DM Sans', sans-serif; font-size: 0.8rem; color: var(--muted); transition: color 0.15s, transform 0.15s; }
+  .cat-concept-row:hover .cat-concept-arrow { color: var(--cat); transform: translateX(2px); }
+
+  /* CTA */
+  .cat-cta { margin-top: 48px; text-align: center; }
+  .ep-cta-btn { display: inline-block; background: var(--accent); color: #0d0d0d; font-family: 'DM Sans', sans-serif; font-size: 0.8rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; border-radius: 999px; padding: 13px 36px; text-decoration: none; transition: background 0.15s, transform 0.15s; }
+  .ep-cta-btn:hover { background: #f0e0b0; transform: translateY(-1px); }
+  .cat-cta-sub { font-family: 'DM Sans', sans-serif; font-size: 0.72rem; font-weight: 300; color: var(--muted); margin-top: 12px; }
+
+  /* Footer */
+  .ep-footer { margin-top: 40px; font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase; color: #3a3a3a; text-align: center; }
+
+  /* Mobile */
+  @media (max-width: 600px) {
+    .ep-nav { padding: 16px 20px; }
+    .ep-page { padding: 90px 16px 60px; }
+    h1.cat-title { font-size: 1.8rem; }
+    .cat-concept-row { grid-template-columns: 36px 1fr 16px; }
+    .cat-concept-hook { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="ep-nav">
+  <a class="ep-nav-logo" href="/">Epistemic</a>
+  <a class="ep-nav-back" href="/">← Back to library</a>
+</nav>
+
+<main class="ep-page">
+
+  <header class="cat-header">
+    <p class="cat-breadcrumb"><a href="/">Epistemic</a><span>›</span>Language</p>
+    <div class="cat-accent-bar"></div>
+    <h1 class="cat-title">Language <span class="cat-count">30 concepts</span></h1>
+    <p class="cat-subtitle">Language concepts explained in plain English — with real analogies and prompts to use them in conversation.</p>
+  </header>
+
+  <div class="cat-divider"></div>
+
+  <div class="cat-concept-list">
+
+        <a class="cat-concept-row" href="/concepts/628-exchange-imposition">
+          <span class="cat-concept-id">#628</span>
+          <span class="cat-concept-term">Exchange &gt; Imposition</span>
+          <span class="cat-concept-hook">People hate being told what to do; reframe it as a trade and resistance disappears.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/560-aphorism-vs-argument">
+          <span class="cat-concept-id">#560</span>
+          <span class="cat-concept-term">Aphorism vs Argument</span>
+          <span class="cat-concept-hook">A catchy line isn&#39;t proof, no matter how good it sounds.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/559-im-not-saying-but">
+          <span class="cat-concept-id">#559</span>
+          <span class="cat-concept-term">&quot;I&#39;m Not Saying... But&quot;</span>
+          <span class="cat-concept-hook">Say you won&#39;t mention it, then mention it anyway.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/558-loss-framing-vs-gain-framing">
+          <span class="cat-concept-id">#558</span>
+          <span class="cat-concept-term">Loss Framing vs Gain Framing</span>
+          <span class="cat-concept-hook">Say &#39;avoid losing $50&#39; instead of &#39;save $50&#39; and watch behavior flip.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/557-bikeshedding">
+          <span class="cat-concept-id">#557</span>
+          <span class="cat-concept-term">Bikeshedding</span>
+          <span class="cat-concept-hook">Teams spend the most time on whatever&#39;s easiest to have an opinion about.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/556-burden-of-proof">
+          <span class="cat-concept-id">#556</span>
+          <span class="cat-concept-term">Burden of Proof</span>
+          <span class="cat-concept-hook">The one claiming it owes the proof, not the one doubting.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/555-say-less-land-harder">
+          <span class="cat-concept-id">#555</span>
+          <span class="cat-concept-term">Say Less, Land Harder</span>
+          <span class="cat-concept-hook">Fewer words make you sound like you know what you mean.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/554-the-curse-of-knowledge">
+          <span class="cat-concept-id">#554</span>
+          <span class="cat-concept-term">The Curse of Knowledge</span>
+          <span class="cat-concept-hook">Expertise makes you forget what not knowing feels like.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/553-weasel-words">
+          <span class="cat-concept-id">#553</span>
+          <span class="cat-concept-term">Weasel Words</span>
+          <span class="cat-concept-hook">Words that sound like a promise but commit to nothing.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/552-connotation-vs-denotation">
+          <span class="cat-concept-id">#552</span>
+          <span class="cat-concept-term">Connotation vs Denotation</span>
+          <span class="cat-concept-hook">Dictionary definition versus the feeling it triggers.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/551-equivocation">
+          <span class="cat-concept-id">#551</span>
+          <span class="cat-concept-term">Equivocation</span>
+          <span class="cat-concept-hook">Same word, two meanings, swapped mid-argument.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/550-motte-and-bailey">
+          <span class="cat-concept-id">#550</span>
+          <span class="cat-concept-term">Motte and Bailey</span>
+          <span class="cat-concept-hook">Defend the wild claim, retreat to the safe one, sneak back when no one&#39;s watching.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/549-euphemism-treadmill">
+          <span class="cat-concept-id">#549</span>
+          <span class="cat-concept-term">Euphemism Treadmill</span>
+          <span class="cat-concept-hook">Every polite word eventually soaks up the awkwardness it was meant to dodge.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/548-loaded-question">
+          <span class="cat-concept-id">#548</span>
+          <span class="cat-concept-term">Loaded Question</span>
+          <span class="cat-concept-hook">The trap is in the question, not the answer.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/547-strawmanning">
+          <span class="cat-concept-id">#547</span>
+          <span class="cat-concept-term">Strawmanning</span>
+          <span class="cat-concept-hook">Win the argument you invented, ignore the one they made.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/500-sell-the-so-what">
+          <span class="cat-concept-id">#500</span>
+          <span class="cat-concept-term">Sell the &quot;So What&quot;</span>
+          <span class="cat-concept-hook">Features describe. Benefits transform.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/351-relatable-beats-impressive">
+          <span class="cat-concept-id">#351</span>
+          <span class="cat-concept-term">Relatable Beats Impressive</span>
+          <span class="cat-concept-hook">People bond over struggle, not achievement. Vulnerability beats trophies.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/250-the-zero-sum-spin">
+          <span class="cat-concept-id">#250</span>
+          <span class="cat-concept-term">The Zero-Sum Spin</span>
+          <span class="cat-concept-hook">&#39;Helping them&#39; becomes &#39;hurting us.&#39; Same policy, different spin.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/234-language-that-hides-the-problem">
+          <span class="cat-concept-id">#234</span>
+          <span class="cat-concept-term">Language That Hides THE Problem</span>
+          <span class="cat-concept-hook">You&#39;ve learned to say &#39;attachment style.&#39; You still can&#39;t say &#39;he&#39;s mean to me.&#39;</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/218-tell-me-what-im-missing">
+          <span class="cat-concept-id">#218</span>
+          <span class="cat-concept-term">Tell Me What I&#39;m Missing</span>
+          <span class="cat-concept-hook">Admit you might be wrong. Watch the tension vanish.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/217-hedging-language">
+          <span class="cat-concept-id">#217</span>
+          <span class="cat-concept-term">Hedging Language</span>
+          <span class="cat-concept-hook">Every hedge makes you sound weaker. Just say it.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/216-labeling-the-difficult-conversation">
+          <span class="cat-concept-id">#216</span>
+          <span class="cat-concept-term">Labeling the Difficult Conversation</span>
+          <span class="cat-concept-hook">Name the difficulty before delivering it. Readiness beats ambush.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/215-the-no-first-framework">
+          <span class="cat-concept-id">#215</span>
+          <span class="cat-concept-term">The No-first Framework</span>
+          <span class="cat-concept-hook">Say no before you soften it. Gratitude second.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/181-name-same-fame-aim-game">
+          <span class="cat-concept-id">#181</span>
+          <span class="cat-concept-term">Name → Same → Fame → Aim → Game</span>
+          <span class="cat-concept-hook">A five-part script gets your whole story across in 30 seconds.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/175-idea-density">
+          <span class="cat-concept-id">#175</span>
+          <span class="cat-concept-term">Idea Density</span>
+          <span class="cat-concept-hook">Quality content isn&#39;t clever writing. It&#39;s high-value insights per sentence.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/170-learning-in-public">
+          <span class="cat-concept-id">#170</span>
+          <span class="cat-concept-term">Learning in Public</span>
+          <span class="cat-concept-hook">Treat learning as research, then share your notes as if they were original ideas.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/169-the-frame-is-the-point">
+          <span class="cat-concept-id">#169</span>
+          <span class="cat-concept-term">The Frame Is the Point</span>
+          <span class="cat-concept-hook">The idea is cheap. The structure is what makes people remember it or share it.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/073-slippery-slope">
+          <span class="cat-concept-id">#073</span>
+          <span class="cat-concept-term">Slippery Slope</span>
+          <span class="cat-concept-hook">One small step leads to disaster. Or does it?</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/057-false-dichotomy">
+          <span class="cat-concept-id">#057</span>
+          <span class="cat-concept-term">False Dichotomy</span>
+          <span class="cat-concept-hook">Two choices presented. Ten choices actually available.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/021-memetic">
+          <span class="cat-concept-id">#021</span>
+          <span class="cat-concept-term">Memetic</span>
+          <span class="cat-concept-hook">Ideas that spread like infections, person to person.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+  </div>
+
+  <div class="cat-cta">
+    <a class="ep-cta-btn" href="/#open-cat=language">Explore Language in Epistemic →</a>
+    <p class="cat-cta-sub">epistemic.live — 715 concepts from the podcasts you already listen to</p>
+  </div>
+
+  <footer class="ep-footer">epistemic.live &nbsp;·&nbsp; vol. i</footer>
+
+</main>
+
+</body>
+</html>

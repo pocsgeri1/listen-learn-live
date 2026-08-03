@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Society Concepts | Epistemic</title>
+<meta name="description" content="45 society concepts explained in plain English — with real analogies and prompts to use them.">
+<link rel="canonical" href="https://epistemic.live/category/society">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://epistemic.live/category/society">
+<meta property="og:title" content="Society Concepts | Epistemic">
+<meta property="og:description" content="45 society concepts explained in plain English.">
+<meta property="og:image" content="https://epistemic.live/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Society Concepts | Epistemic">
+<meta name="twitter:image" content="https://epistemic.live/og-image.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"Society Concepts | Epistemic","description":"45 society concepts explained in plain English — with analogies and reflection prompts.","url":"https://epistemic.live/category/society","breadcrumb":{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Epistemic","item":"https://epistemic.live"},{"@type":"ListItem","position":2,"name":"Society","item":"https://epistemic.live/category/society"}]}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d0d0d;
+    --surface: #141414;
+    --surface2: #1c1c1c;
+    --border: rgba(255,255,255,0.07);
+    --border-hover: rgba(255,255,255,0.15);
+    --text: #f0ede8;
+    --muted: #6b6b6b;
+    --muted2: #9a9a9a;
+    --accent: #e8d5a3;
+    --cat: #7090a8;
+  }
+
+  html, body { min-height: 100%; background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; -webkit-font-smoothing: antialiased; }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    pointer-events: none; z-index: 0; opacity: 0.35;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .ep-nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 10;
+    padding: 18px 32px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(13,13,13,0.94);
+  }
+  .ep-nav-logo { font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); text-decoration: none; }
+  .ep-nav-back { font-family: 'DM Sans', sans-serif; font-size: 0.72rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.15s; }
+  .ep-nav-back:hover { color: var(--text); }
+
+  .ep-page { position: relative; z-index: 1; max-width: 760px; margin: 0 auto; padding: 110px 24px 80px; }
+
+  /* Header */
+  .cat-header { margin-bottom: 48px; }
+  .cat-breadcrumb { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; }
+  .cat-breadcrumb a { color: var(--muted); text-decoration: none; }
+  .cat-breadcrumb a:hover { color: var(--text); }
+  .cat-breadcrumb span { margin: 0 6px; opacity: 0.4; }
+  .cat-accent-bar { width: 32px; height: 3px; background: var(--cat); border-radius: 2px; margin-bottom: 16px; }
+  h1.cat-title { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 2.4rem; color: var(--text); line-height: 1.1; margin-bottom: 10px; }
+  .cat-subtitle { font-family: 'DM Sans', sans-serif; font-weight: 300; font-size: 0.93rem; color: var(--muted2); line-height: 1.6; }
+  .cat-count { display: inline-block; font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cat); background: #7090a81a; border: 1px solid #7090a833; border-radius: 999px; padding: 3px 10px; margin-left: 10px; vertical-align: middle; }
+
+  /* Divider */
+  .cat-divider { height: 1px; background: var(--border); margin-bottom: 32px; }
+
+  /* Concept list */
+  .cat-concept-list { display: flex; flex-direction: column; gap: 2px; }
+
+  .cat-concept-row {
+    display: grid;
+    grid-template-columns: 44px 1fr auto 20px;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px 14px 18px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    text-decoration: none;
+    transition: border-color 0.15s, background 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+  .cat-concept-row::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 2px;
+    background: var(--cat);
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .cat-concept-row:hover { border-color: var(--border-hover); background: var(--surface2); }
+  .cat-concept-row:hover::before { opacity: 1; }
+
+  .cat-concept-id { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.12em; color: var(--muted); }
+  .cat-concept-term { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 0.95rem; color: var(--text); }
+  .cat-concept-hook { font-family: 'DM Sans', sans-serif; font-weight: 300; font-size: 0.8rem; color: var(--muted2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cat-concept-arrow { font-family: 'DM Sans', sans-serif; font-size: 0.8rem; color: var(--muted); transition: color 0.15s, transform 0.15s; }
+  .cat-concept-row:hover .cat-concept-arrow { color: var(--cat); transform: translateX(2px); }
+
+  /* CTA */
+  .cat-cta { margin-top: 48px; text-align: center; }
+  .ep-cta-btn { display: inline-block; background: var(--accent); color: #0d0d0d; font-family: 'DM Sans', sans-serif; font-size: 0.8rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; border-radius: 999px; padding: 13px 36px; text-decoration: none; transition: background 0.15s, transform 0.15s; }
+  .ep-cta-btn:hover { background: #f0e0b0; transform: translateY(-1px); }
+  .cat-cta-sub { font-family: 'DM Sans', sans-serif; font-size: 0.72rem; font-weight: 300; color: var(--muted); margin-top: 12px; }
+
+  /* Footer */
+  .ep-footer { margin-top: 40px; font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase; color: #3a3a3a; text-align: center; }
+
+  /* Mobile */
+  @media (max-width: 600px) {
+    .ep-nav { padding: 16px 20px; }
+    .ep-page { padding: 90px 16px 60px; }
+    h1.cat-title { font-size: 1.8rem; }
+    .cat-concept-row { grid-template-columns: 36px 1fr 16px; }
+    .cat-concept-hook { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="ep-nav">
+  <a class="ep-nav-logo" href="/">Epistemic</a>
+  <a class="ep-nav-back" href="/">← Back to library</a>
+</nav>
+
+<main class="ep-page">
+
+  <header class="cat-header">
+    <p class="cat-breadcrumb"><a href="/">Epistemic</a><span>›</span>Society</p>
+    <div class="cat-accent-bar"></div>
+    <h1 class="cat-title">Society <span class="cat-count">45 concepts</span></h1>
+    <p class="cat-subtitle">Society concepts explained in plain English — with real analogies and prompts to use them in conversation.</p>
+  </header>
+
+  <div class="cat-divider"></div>
+
+  <div class="cat-concept-list">
+
+        <a class="cat-concept-row" href="/concepts/703-tilting-at-windmills">
+          <span class="cat-concept-id">#703</span>
+          <span class="cat-concept-term">Tilting at Windmills</span>
+          <span class="cat-concept-hook">Online strangers attack a version of you that exists only in their head.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/692-industrial-standards-conditioning">
+          <span class="cat-concept-id">#692</span>
+          <span class="cat-concept-term">Industrial Standards Conditioning</span>
+          <span class="cat-concept-hook">Become a specialist. Study one domain. Get a high-paying job your parents can brag about.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/679-the-one-third-problem">
+          <span class="cat-concept-id">#679</span>
+          <span class="cat-concept-term">The One-third Problem</span>
+          <span class="cat-concept-hook">One-third asleep, one-third working, one-third too exhausted to matter. 40 years.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/677-pyramid-scheme-of-employment">
+          <span class="cat-concept-id">#677</span>
+          <span class="cat-concept-term">Pyramid Scheme of Employment</span>
+          <span class="cat-concept-hook">One boss needs ten workers, but ten workers don&#39;t need ten bosses.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/645-culture-of-grievance">
+          <span class="cat-concept-id">#645</span>
+          <span class="cat-concept-term">Culture of Grievance</span>
+          <span class="cat-concept-hook">The unhappiest people are the ones whose identity revolves around being a victim.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/617-built-for-the-wild-living-online">
+          <span class="cat-concept-id">#617</span>
+          <span class="cat-concept-term">Built for the Wild, Living Online</span>
+          <span class="cat-concept-hook">We&#39;re biological creatures forced to navigate systems designed by engineers who hate ambiguity.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/595-every-trend-has-a-backlash">
+          <span class="cat-concept-id">#595</span>
+          <span class="cat-concept-term">Every Trend Has a Backlash</span>
+          <span class="cat-concept-hook">Automation creates hunger for the human. Every vector has an opposite.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/587-selling-without-a-brand">
+          <span class="cat-concept-id">#587</span>
+          <span class="cat-concept-term">Selling Without a Brand</span>
+          <span class="cat-concept-hook">Governments spend 45% of GDP but have no way to sell themselves.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/508-internet-is-the-new-school">
+          <span class="cat-concept-id">#508</span>
+          <span class="cat-concept-term">Internet Is THE New School</span>
+          <span class="cat-concept-hook">Formal institutions can&#39;t update curricula faster than YouTube uploads.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/399-true-equality-as-identical-standards">
+          <span class="cat-concept-id">#399</span>
+          <span class="cat-concept-term">True Equality as Identical Standards</span>
+          <span class="cat-concept-hook">Kid gloves aren&#39;t inclusion.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/390-victimhood-as-entitlement-currency">
+          <span class="cat-concept-id">#390</span>
+          <span class="cat-concept-term">Victimhood as Entitlement Currency</span>
+          <span class="cat-concept-hook">Measuring your pain earns you nothing but more pain.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/387-authority-and-credibility-renaissance">
+          <span class="cat-concept-id">#387</span>
+          <span class="cat-concept-term">Authority and Credibility Renaissance</span>
+          <span class="cat-concept-hook">When AI floods the zone with slop, expertise will matter again.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/365-virtue-signaling-filter">
+          <span class="cat-concept-id">#365</span>
+          <span class="cat-concept-term">Virtue Signaling Filter</span>
+          <span class="cat-concept-hook">Few people see beyond virtue signaling to form their own opinion on money.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/359-blue-collar-renaissance">
+          <span class="cat-concept-id">#359</span>
+          <span class="cat-concept-term">Blue Collar Renaissance</span>
+          <span class="cat-concept-hook">AI disrupts screens first. Hands-on work becomes premium.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/333-looksmaxing">
+          <span class="cat-concept-id">#333</span>
+          <span class="cat-concept-term">Looksmaxing</span>
+          <span class="cat-concept-hook">When you can&#39;t compete on status, appearance becomes the rational play.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/328-minimum-wage-as-admission">
+          <span class="cat-concept-id">#328</span>
+          <span class="cat-concept-term">Minimum Wage as Admission</span>
+          <span class="cat-concept-hook">Wage floors exist because some people don&#39;t produce enough value to get hired otherwise.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/324-intellectual-necessity-threshold">
+          <span class="cat-concept-id">#324</span>
+          <span class="cat-concept-term">Intellectual Necessity Threshold</span>
+          <span class="cat-concept-hook">Automation took the hands. Now it&#39;s raising the bar for thinking.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/312-99-unemployment-horizon">
+          <span class="cat-concept-id">#312</span>
+          <span class="cat-concept-term">99% Unemployment Horizon</span>
+          <span class="cat-concept-hook">Not 10% jobless. 99%. Because AI does everything.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/303-the-instagram-partner">
+          <span class="cat-concept-id">#303</span>
+          <span class="cat-concept-term">The Instagram Partner</span>
+          <span class="cat-concept-hook">Your relationship isn&#39;t intimate. It&#39;s content.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/302-the-masculine-default">
+          <span class="cat-concept-id">#302</span>
+          <span class="cat-concept-term">The Masculine Default</span>
+          <span class="cat-concept-hook">Lionizing male behavior in women devalues everything feminine.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/291-niche-construction">
+          <span class="cat-concept-id">#291</span>
+          <span class="cat-concept-term">Niche Construction</span>
+          <span class="cat-concept-hook">We don&#39;t just adapt to the world. We reshape it to favor us.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/289-the-price-of-sex">
+          <span class="cat-concept-id">#289</span>
+          <span class="cat-concept-term">The Price of Sex</span>
+          <span class="cat-concept-hook">Women police each other&#39;s sexual access to keep the price high.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/287-gender-egalitarian-paradox">
+          <span class="cat-concept-id">#287</span>
+          <span class="cat-concept-term">Gender Egalitarian Paradox</span>
+          <span class="cat-concept-hook">More gender equality leads to bigger sex differences, not smaller ones.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/284-intersectional-neurosis">
+          <span class="cat-concept-id">#284</span>
+          <span class="cat-concept-term">Intersectional Neurosis</span>
+          <span class="cat-concept-hook">Marginalized identity has become a competition over who can claim the most layers.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/282-benevolent-sexism">
+          <span class="cat-concept-id">#282</span>
+          <span class="cat-concept-term">Benevolent Sexism</span>
+          <span class="cat-concept-hook">Wanting to protect women is sexist, unless you ask them what they actually want.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/270-luxury-belief">
+          <span class="cat-concept-id">#270</span>
+          <span class="cat-concept-term">Luxury Belief</span>
+          <span class="cat-concept-hook">Rich people oppose tech that would help poor people. Costs them nothing.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/263-promise-inflation-trap">
+          <span class="cat-concept-id">#263</span>
+          <span class="cat-concept-term">Promise Inflation Trap</span>
+          <span class="cat-concept-hook">Politicians promise more each cycle. Delivery lags, resentment builds, system breaks.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/247-platform-feminization">
+          <span class="cat-concept-id">#247</span>
+          <span class="cat-concept-term">Platform Feminization</span>
+          <span class="cat-concept-hook">Online platforms turn everyone into gossiping teenagers, even grown men.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/243-morality-made-measurable">
+          <span class="cat-concept-id">#243</span>
+          <span class="cat-concept-term">Morality Made Measurable</span>
+          <span class="cat-concept-hook">Your Instagram became your moral report card the day silence turned criminal.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/193-geography-arbitrage">
+          <span class="cat-concept-id">#193</span>
+          <span class="cat-concept-term">Geography Arbitrage</span>
+          <span class="cat-concept-hook">Tax the top earners too hard and they leave with a laptop.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/161-limbic-capitalism">
+          <span class="cat-concept-id">#161</span>
+          <span class="cat-concept-term">Limbic Capitalism</span>
+          <span class="cat-concept-hook">Your brain is the product they&#39;re selling to itself.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/158-overton-window">
+          <span class="cat-concept-id">#158</span>
+          <span class="cat-concept-term">Overton Window</span>
+          <span class="cat-concept-hook">The range of ideas a society currently considers acceptable.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/146-ingroup-favoritism">
+          <span class="cat-concept-id">#146</span>
+          <span class="cat-concept-term">Ingroup Favoritism</span>
+          <span class="cat-concept-hook">Favoring your group means disadvantaging everyone else, whether you realize it or not.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/144-manufactured-consent">
+          <span class="cat-concept-id">#144</span>
+          <span class="cat-concept-term">Manufactured Consent</span>
+          <span class="cat-concept-hook">The illusion of free choice inside a system designed to guide you.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/102-attention-economy">
+          <span class="cat-concept-id">#102</span>
+          <span class="cat-concept-term">Attention Economy</span>
+          <span class="cat-concept-hook">The product is free because you are the product.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/095-male-loneliness-epidemic">
+          <span class="cat-concept-id">#095</span>
+          <span class="cat-concept-term">Male Loneliness Epidemic</span>
+          <span class="cat-concept-hook">Men are lonelier than any generation before, and least likely to admit it.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/094-the-status-game">
+          <span class="cat-concept-id">#094</span>
+          <span class="cat-concept-term">The Status Game</span>
+          <span class="cat-concept-hook">People don&#39;t buy a Porsche for the engineering. Neither do they argue politics for the truth.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/092-status-anxiety">
+          <span class="cat-concept-id">#092</span>
+          <span class="cat-concept-term">Status Anxiety</span>
+          <span class="cat-concept-hook">The constant low-grade fear of being judged as unsuccessful.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/088-civilizational-anxiety">
+          <span class="cat-concept-id">#088</span>
+          <span class="cat-concept-term">Civilizational Anxiety</span>
+          <span class="cat-concept-hook">A vague dread that the world is deteriorating and you can&#39;t stop it.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/070-regulatory-capture">
+          <span class="cat-concept-id">#070</span>
+          <span class="cat-concept-term">Regulatory Capture</span>
+          <span class="cat-concept-hook">Every regulator ends up working for the industry they regulate.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/067-groupthink">
+          <span class="cat-concept-id">#067</span>
+          <span class="cat-concept-term">Groupthink</span>
+          <span class="cat-concept-hook">Nobody wanted to cut the budget. Everyone nodded anyway. That&#39;s the whole story.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/065-externalities">
+          <span class="cat-concept-id">#065</span>
+          <span class="cat-concept-term">Externalities</span>
+          <span class="cat-concept-hook">The costs you don&#39;t pay but someone else does.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/060-meritocracy-myth-of">
+          <span class="cat-concept-id">#060</span>
+          <span class="cat-concept-term">Meritocracy (myth of)</span>
+          <span class="cat-concept-hook">Hard work matters. So do inherited advantages nobody mentions.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/043-polarization">
+          <span class="cat-concept-id">#043</span>
+          <span class="cat-concept-term">Polarization</span>
+          <span class="cat-concept-hook">The middle collapses. Extremes harden. Nuance dies.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+
+        <a class="cat-concept-row" href="/concepts/038-tribalism">
+          <span class="cat-concept-id">#038</span>
+          <span class="cat-concept-term">Tribalism</span>
+          <span class="cat-concept-hook">Humans instinctively split into us versus them.</span>
+          <span class="cat-concept-arrow">→</span>
+        </a>
+  </div>
+
+  <div class="cat-cta">
+    <a class="ep-cta-btn" href="/#open-cat=society">Explore Society in Epistemic →</a>
+    <p class="cat-cta-sub">epistemic.live — 715 concepts from the podcasts you already listen to</p>
+  </div>
+
+  <footer class="ep-footer">epistemic.live &nbsp;·&nbsp; vol. i</footer>
+
+</main>
+
+</body>
+</html>
