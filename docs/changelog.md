@@ -6,6 +6,20 @@
 
 ---
 
+## v2.96 — 2026-08-04 · Mobile nav fix · Word Map overhaul · Picks/Recent cards
+
+### index.html
+
+- **Mobile nav — Read + theme toggle added:** `navMobRead` button added (📚). Theme toggle now shown on mobile (was `display:none`). All nav action buttons at `30px`. `nav-right` uses `flex-end` + `gap:2px`. Mode buttons get subtle `border-radius:8px` border on tap.
+- **Word Map header restructured:** Header is now 3 stacked rows: (1) title `WORD MAP` + view mode pills (✦ Free / ◉ Clusters / ⬡ Nebula) + close/list buttons; (2) category filter pills (horizontally scrollable, `flex-wrap:nowrap; overflow-x:auto`); (3) alphabet search bar.
+- **Word Map alphabet search bar:** A–Z row below category pills. Letters with matching words = bright/clickable. Letters with no words = muted/disabled. Click to filter by first letter. Resets on category change. `_wcBuildAlphaBar()` built from global vocab words. `_wcFilterAlpha()` respects both active category and active letter simultaneously.
+- **Word Map — Nebula spread tightened:** `spread` reduced from `0.2 * min(W,H)` to `0.13 * min(W,H)`. Zone positions spread further apart to reduce inter-cluster bleeding.
+- **Word Map — Clusters spacing:** `ROW_H` increased `24→28px`, `PAD` increased `10→14px`, `MAX_W` reduced `230→210px` to keep zones tighter and prevent row bleed across zone boundaries.
+- **Collect grid row height:** `ROW_H` increased `30→42px` — eliminates overlapping words in collected grid view.
+- **Picks & Recent card design:** `★ Picks` card: gold border, gold count/name, star glyph `::after`, subtle gold background tint. `⟳ Recent` card: green-accent border (`#7aaf8a`), matching count/name color, `⟳` glyph `::after`, green accent bar.
+
+---
+
 ## v2.95 — 2026-08-04 · Read panel redesign + curation layer
 
 ### index.html

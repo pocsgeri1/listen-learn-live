@@ -6,6 +6,14 @@
 
 ---
 
+## 2026-08-04 — Mobile nav + Word Map overhaul (v2.96)
+
+**Alphabet filter must use `dataset.word`, not `textContent`.** The `.wc-word` spans on the canvas have both a `dataset.word` (set when built) and `textContent` (the word string). `textContent` can include whitespace or invisible chars if the span was built with innerHTML. Always read `dataset.word` for filtering logic.
+
+**`flex-wrap: wrap` on filter pills breaks Word Map header layout.** Category pills wrapped to multiple rows, pushing view mode buttons and close button out of frame. Fix: two-row header structure — top row for controls (title + view modes + close), separate row for category pills with `flex-wrap: nowrap; overflow-x: auto`. The close button is always visible in the top row now regardless of category count.
+
+**CSS `::after` on `.gv-cat-card` requires `overflow: hidden` to stay within card bounds.** Added `overflow: hidden` to `.gv-cat-card` so the star/arrow glyphs on Picks/Recent cards don't bleed outside the border-radius.
+
 ## 2026-08-04 — Read panel redesign + curation layer (v2.95)
 
 **CSS grid word rows need `display:none` for hidden items, not height-collapse.** The previous `.gv-word-row.gv-hidden` used `height:0; padding:0; overflow:hidden; border:none` — fine for a flex column but wrong for CSS grid. In a grid, collapsing height to 0 collapses the row's size but keeps the grid slot occupied, leaving phantom empty cells. Switch to `display:none` so the grid reflows correctly.

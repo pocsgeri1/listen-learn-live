@@ -4772,58 +4772,80 @@
 
   @media (max-width: 768px) {
     /* Logo column = max-content so it never clips; buttons fill the rest */
-    nav { grid-template-columns: max-content 1fr; padding: 0 1rem; height: 56px; }
+    nav { grid-template-columns: max-content 1fr; padding: 0 12px; height: 52px; }
     .nav-island { display: none; }
-    /* nav-right fills 1fr and spreads 4 buttons evenly */
+    /* nav-right: right-aligned, gap between buttons */
     .nav-right {
       grid-column: 2;
       grid-row: 1;
       display: flex;
-      justify-content: space-evenly;
+      justify-content: flex-end;
       align-items: center;
+      gap: 2px;
     }
     .nav-pill { display: none; }
     .nav-mobile-toggle { display: none; }
     .hiw-trigger { display: none; }
-    /* Logo: full name, accent colour, slightly smaller on mobile */
-    .nav-logo { white-space: nowrap; overflow: visible; font-size: 1.1rem; }
+    /* Logo: full name, slightly smaller on mobile */
+    .nav-logo { white-space: nowrap; overflow: visible; font-size: 1.05rem; }
     .nav-eyebrow { display: none; }
-    /* Theme toggle hidden on mobile */
-    .theme-toggle { display: none; }
-    /* All nav action buttons: 35px square, no padding */
+    /* Theme toggle — show on mobile, sized consistently */
+    .theme-toggle {
+      display: flex !important;
+      width: 30px !important;
+      height: 30px !important;
+      min-width: unset !important;
+      font-size: 0.88rem !important;
+      padding: 0 !important;
+      border-radius: 50% !important;
+      flex-shrink: 0;
+    }
+    /* All nav action buttons: 30px square */
     .nav-mob-action,
     .nav-signup-btn {
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 35px;
-      height: 35px;
+      width: 30px;
+      height: 30px;
       min-width: unset;
       min-height: unset;
       padding: 0;
       flex-shrink: 0;
       -webkit-tap-highlight-color: transparent;
     }
-    /* Lexi / Speak / Apply icons — muted, accent on tap */
+    /* Mode icons — subtle pill border, accent on tap */
     .nav-mob-action {
       background: none;
-      border: none;
+      border: 0.5px solid transparent;
+      border-radius: 8px;
       cursor: pointer;
-      font-size: 0.95rem;
+      font-size: 0.85rem;
       color: var(--muted2);
-      transition: color 0.15s;
+      transition: color 0.12s, background 0.12s, border-color 0.12s;
     }
-    .nav-mob-action:active { color: var(--accent); transform: scale(0.9); }
+    .nav-mob-action:active {
+      color: var(--accent);
+      background: rgba(232,213,163,0.1);
+      border-color: rgba(232,213,163,0.3);
+      transform: scale(0.88);
+    }
+    /* Write button — Playfair script feel */
     #navMobLexi { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1rem; }
-    /* Signup — pulsing ✺ star, gold, attention-demanding */
+    /* Thin divider before theme toggle */
+    .theme-toggle {
+      margin-left: 4px;
+    }
+    /* Signup — pulsing ✺ star, gold */
     .nav-signup-btn {
       background: none;
       border: none;
       box-shadow: none;
       color: var(--accent);
-      font-size: 1.15rem;
+      font-size: 1.1rem;
       transform: none;
       animation: navSignupPulse 2.4s ease-in-out infinite;
+      margin-left: 2px;
     }
     .nav-signup-btn::before, .nav-signup-btn::after { display: none; }
     .nav-signup-btn:active { animation: none; transform: scale(0.88); opacity: 0.7; }
@@ -9796,9 +9818,10 @@
   <div class="nav-right">
     <!-- v1.71: epic button lives in nav-right, hidden until nav hover -->
     <a class="nav-epic-standalone" id="navEpicBtn" onclick="openEgg();playNavSFX()" title="I feel epic!">😎 I feel epic!</a>
-    <!-- v2.50: mobile-only action icons (Lexi / Speak / Apply) — replaces bottom tab bar -->
-    <button class="nav-mob-action" id="navMobLexi" onclick="openLexiconPanel();playNavSFX()" aria-label="Lexi">Aa</button>
-    <button class="nav-mob-action" id="navMobSpeak" onclick="openSparkPanel();playNavSFX()" aria-label="Speak">💬</button>
+    <!-- v2.95: mobile action icons — Read · Write · Speak + theme toggle -->
+    <button class="nav-mob-action nav-mob-read"  id="navMobRead"  onclick="_openGlobalVocabView();playNavSFX()" aria-label="Read">📚</button>
+    <button class="nav-mob-action nav-mob-write" id="navMobLexi"  onclick="openLexiconPanel();playNavSFX()"    aria-label="Write">ℒ</button>
+    <button class="nav-mob-action nav-mob-speak" id="navMobSpeak" onclick="openSparkPanel();playNavSFX()"      aria-label="Speak">💬</button>
     <button class="nav-mob-action" id="navMobApply" onclick="enterCornerMode();playNavSFX()" aria-label="Apply" style="display:none">🥊</button>
     <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode" onclick="toggleTheme()">☽</button>
     <div class="nav-pill">
@@ -29546,7 +29569,8 @@ function _gvRenderCatGrid(words) {
 
     var card = document.createElement('div');
     card.className = 'gv-cat-card';
-    if (cat === '★ Picks') card.dataset.cat = 'picks';
+    if (cat === '★ Picks')  card.dataset.cat = 'picks';
+    if (cat === '⟳ Recent') card.dataset.cat = 'recent';
     card.setAttribute('role', 'button');
     card.setAttribute('tabindex', '0');
     card.innerHTML =
@@ -29987,7 +30011,8 @@ function _gvEsc(str) {
   cursor: pointer;
   transition: transform 0.18s ease, border-color 0.2s ease, background 0.2s ease;
   display: flex; flex-direction: column; gap: 4px;
-  position: relative; overflow: hidden;
+  position: relative;
+  overflow: hidden; /* clips ::before accent bar and ::after glyph */
 }
 .gv-cat-card::before {
   content: '';
@@ -30111,11 +30136,37 @@ function _gvEsc(str) {
 }
 .gv-src-btn:hover { opacity: 1; color: var(--accent); }
 
-/* Picks card — subtle gold tint */
-.gv-cat-card[data-cat="picks"] .gv-cat-name,
+/* ★ Picks card — gold accent, star glyph in corner */
+.gv-cat-card[data-cat="picks"] {
+  border-color: rgba(232,213,163,0.3);
+  background: rgba(232,213,163,0.04);
+}
+.gv-cat-card[data-cat="picks"]::before { opacity: 0.5; }
+.gv-cat-card[data-cat="picks"]::after {
+  content: '★';
+  position: absolute; top: 10px; right: 12px;
+  font-size: 0.7rem; color: var(--accent); opacity: 0.5;
+  pointer-events: none;
+}
+.gv-cat-card[data-cat="picks"] .gv-cat-name { color: var(--accent); opacity: 0.85; }
 .gv-cat-card[data-cat="picks"] .gv-cat-count { color: var(--accent); }
-.gv-cat-card[data-cat="picks"] { border-color: rgba(232,213,163,0.25); }
-.gv-cat-card[data-cat="picks"]::before { opacity: 0.4; }
+
+/* ⟳ Recent card — cool-toned, pulse accent */
+.gv-cat-card[data-cat="recent"] {
+  border-color: rgba(122,175,138,0.3);
+}
+.gv-cat-card[data-cat="recent"]::before {
+  background: #7aaf8a;
+  opacity: 0.45;
+}
+.gv-cat-card[data-cat="recent"]::after {
+  content: '⟳';
+  position: absolute; top: 9px; right: 11px;
+  font-size: 0.72rem; color: #7aaf8a; opacity: 0.55;
+  pointer-events: none;
+}
+.gv-cat-card[data-cat="recent"] .gv-cat-name { color: #7aaf8a; opacity: 0.85; }
+.gv-cat-card[data-cat="recent"] .gv-cat-count { color: #7aaf8a; }
 
 /* Light mode */
 [data-theme="light"] .gv-overlay.open { background: rgba(0,0,0,0.25); }
@@ -30204,8 +30255,10 @@ function _openConstellationView(source) {
   _loadEpisodeMeta().then(function() {
     _wcWords = _buildGlobalVocabIndex();
     _wcActiveCat = 'All';
+    _wcActiveLetter = null;
     _wcViewMode  = 'free';
     _wcBuildFilterPills();
+    _wcBuildAlphaBar(_wcWords);
     _wcDetectAndRender();
   }).catch(function() {
     var stage = document.getElementById('wcStage');
@@ -30319,16 +30372,16 @@ var _WC_CAT_ZONES = {
 };
 
 function _wcNebulaLayout(words, W, H) {
-  // 5 zone centers — pentagon-ish spread
-  var pad = 0.15;
+  // 5 zone centers — well-spread across the canvas
   var zones = [
-    { cx: W * 0.22, cy: H * 0.28 }, // top-left
-    { cx: W * 0.75, cy: H * 0.22 }, // top-right
-    { cx: W * 0.50, cy: H * 0.55 }, // center
-    { cx: W * 0.18, cy: H * 0.72 }, // bottom-left
-    { cx: W * 0.78, cy: H * 0.72 }, // bottom-right
+    { cx: W * 0.20, cy: H * 0.25 }, // top-left
+    { cx: W * 0.78, cy: H * 0.20 }, // top-right
+    { cx: W * 0.50, cy: H * 0.56 }, // center
+    { cx: W * 0.15, cy: H * 0.76 }, // bottom-left
+    { cx: W * 0.82, cy: H * 0.76 }, // bottom-right
   ];
-  var spread = Math.min(W, H) * 0.2; // how wide each nebula spreads
+  // Tighter spread per zone so nebulas don't bleed into each other
+  var spread = Math.min(W, H) * 0.13;
   return words.map(function(w, i) {
     var zoneIdx = _WC_CAT_ZONES[w.category] != null ? _WC_CAT_ZONES[w.category] : (i % 5);
     var z = zones[zoneIdx];
@@ -30337,8 +30390,8 @@ function _wcNebulaLayout(words, W, H) {
     // Gaussian-ish: sum two uniforms for bell curve feel
     var dx = (r1 + _wcRandom(i * 3 + 9) - 1) * spread;
     var dy = (r2 + _wcRandom(i * 3 + 7) - 1) * spread;
-    var x  = Math.max(8, Math.min(W - 90, z.cx + dx));
-    var y  = Math.max(8, Math.min(H - 24, z.cy + dy));
+    var x  = Math.max(8, Math.min(W - 100, z.cx + dx));
+    var y  = Math.max(8, Math.min(H - 28, z.cy + dy));
     return { x: x, y: y, zoneIdx: zoneIdx };
   });
 }
@@ -30346,16 +30399,16 @@ function _wcNebulaLayout(words, W, H) {
 // ── Clusters layout: row-packed zones, no overlap ─────────────
 function _wcClustersLayout(words, W, H) {
   var zones = [
-    { cx: W*0.19, cy: H*0.30 }, // top-left
-    { cx: W*0.76, cy: H*0.24 }, // top-right
-    { cx: W*0.50, cy: H*0.54 }, // center
-    { cx: W*0.17, cy: H*0.74 }, // bottom-left
-    { cx: W*0.79, cy: H*0.74 }, // bottom-right
+    { cx: W*0.18, cy: H*0.26 }, // top-left
+    { cx: W*0.78, cy: H*0.22 }, // top-right
+    { cx: W*0.50, cy: H*0.55 }, // center
+    { cx: W*0.15, cy: H*0.76 }, // bottom-left
+    { cx: W*0.82, cy: H*0.76 }, // bottom-right
   ];
-  var ROW_H   = 24;   // px between rows
-  var CHAR_W  = 7.2;  // estimated px per char at ~0.75rem
-  var PAD     = 10;   // padding between words on same row
-  var MAX_W   = Math.min(W * 0.26, 230); // max zone width
+  var ROW_H   = 28;   // px between rows — more breathing room
+  var CHAR_W  = 7.4;  // estimated px per char at ~0.75rem
+  var PAD     = 14;   // padding between words on same row
+  var MAX_W   = Math.min(W * 0.24, 210); // max zone width — tighter to avoid overflow
 
   // Group words by zone index
   var buckets = [[], [], [], [], []];
@@ -30396,8 +30449,8 @@ function _wcClustersLayout(words, W, H) {
         var jx = (_wcRandom(idx * 7 + 11) - 0.5) * 4;
         var jy = (_wcRandom(idx * 7 + 13) - 0.5) * 3;
         positions[idx] = {
-          x: Math.max(8, Math.min(W - 90, cx + jx)),
-          y: Math.max(8, Math.min(H - 24, startY + ri * ROW_H + jy))
+          x: Math.max(8, Math.min(W - 100, cx + jx)),
+          y: Math.max(8, Math.min(H - 28, startY + ri * ROW_H + jy))
         };
         cx += ww;
       });
@@ -30433,8 +30486,8 @@ function _wcCollect() {
   var W    = stage.clientWidth  || window.innerWidth;
   var H    = stage.clientHeight || window.innerHeight - 60;
   var cols = Math.ceil(Math.sqrt(active.length * 1.8));
-  var ROW_H = 30;
-  var COL_W = Math.min(170, (W * 0.72) / cols);
+  var ROW_H = 42;    // increased from 30 — prevents overlap between rows
+  var COL_W = Math.min(170, (W * 0.76) / cols);
   var rows  = Math.ceil(active.length / cols);
   var startX = (W - cols * COL_W) / 2;
   var startY = (H - rows * ROW_H) / 2;
@@ -30704,7 +30757,67 @@ function _wcBuildFilterPills() {
   });
 }
 
+// ── Alphabet search bar ───────────────────────────────────────
+var _wcActiveLetter = null; // null = no letter filter
+
+function _wcBuildAlphaBar(words) {
+  var row = document.getElementById('wcAlphaRow');
+  if (!row) return;
+  row.innerHTML = '';
+
+  // Which letters have words?
+  var letterSet = {};
+  words.forEach(function(w) {
+    var c = w.word.charAt(0).toUpperCase();
+    if (c >= 'A' && c <= 'Z') letterSet[c] = true;
+  });
+
+  'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach(function(letter) {
+    var btn = document.createElement('button');
+    btn.className = 'wc-alpha-btn' + (letterSet[letter] ? ' has-words' : '');
+    btn.textContent = letter;
+    btn.setAttribute('aria-label', 'Filter words starting with ' + letter);
+    if (!letterSet[letter]) {
+      btn.disabled = true;
+    } else {
+      btn.addEventListener('click', function() {
+        var isActive = _wcActiveLetter === letter;
+        _wcActiveLetter = isActive ? null : letter;
+        row.querySelectorAll('.wc-alpha-btn').forEach(function(b) { b.classList.remove('active'); });
+        if (!isActive) btn.classList.add('active');
+        _wcFilterAlpha(_wcActiveLetter);
+      });
+    }
+    row.appendChild(btn);
+  });
+}
+
+function _wcFilterAlpha(letter) {
+  _wcCollected = false;
+  document.querySelectorAll('#wcStage .wc-word').forEach(function(s) {
+    var catMatch  = _wcActiveCat === 'All' || s.dataset.category === _wcActiveCat;
+    var alphaMatch = !letter || s.dataset.word.charAt(0).toUpperCase() === letter;
+    var match = catMatch && alphaMatch;
+    var baseOp = parseFloat(s.dataset.baseOpacity) || 0.75;
+    s.style.opacity = match ? String(baseOp) : '0.07';
+    if (s.dataset.origLeft) s.style.left = s.dataset.origLeft;
+    if (s.dataset.origTop)  s.style.top  = s.dataset.origTop;
+    s.classList.toggle('wc-dimmed',  !match);
+    s.classList.toggle('wc-visible',  match);
+  });
+  document.querySelectorAll('#wcMobileGrid .wc-mobile-pill').forEach(function(p) {
+    var catMatch  = _wcActiveCat === 'All' || p.dataset.category === _wcActiveCat;
+    var alphaMatch = !letter || (p.textContent || '').charAt(0).toUpperCase() === letter;
+    p.style.display = (catMatch && alphaMatch) ? '' : 'none';
+  });
+}
+
 function _wcFilterCat(cat) {
+  _wcActiveLetter = null; // reset alpha filter when changing category
+  // Clear alpha bar active state
+  var alphaRow = document.getElementById('wcAlphaRow');
+  if (alphaRow) alphaRow.querySelectorAll('.wc-alpha-btn').forEach(function(b) { b.classList.remove('active'); });
+
   _wcCollected = false;
   document.querySelectorAll('#wcStage .wc-word').forEach(function(s) {
     var match = cat === 'All' || s.dataset.category === cat;
@@ -30772,17 +30885,24 @@ function _wcRenderMobileGrid(words) {
 
 <div class="wc-overlay" id="wcOverlay" style="display:none" role="dialog" aria-modal="true" aria-label="Word Map">
   <div class="wc-header" id="wcHeader">
+    <!-- Row 1: title + view modes + actions -->
+    <div class="wc-header-top">
+      <span class="wc-header-title">Word Map</span>
+      <div class="wc-view-row" id="wcViewRow">
+        <button class="wc-view-btn active"  id="wcViewFree"     onclick="_wcSetView('free')"     title="Scattered layout">✦ Free</button>
+        <button class="wc-view-btn"         id="wcViewClusters" onclick="_wcSetView('clusters')" title="Category clusters, no overlap">◉ Clusters</button>
+        <button class="wc-view-btn"         id="wcViewNebula"   onclick="_wcSetView('nebula')"   title="Category clusters with drift">⬡ Nebula</button>
+        <button class="wc-collect-btn" id="wcCollectBtn" onclick="_wcCollect()" style="display:none" title="Animate active words into a grid">⊹ Collect</button>
+      </div>
+      <div class="wc-header-right">
+        <button class="wc-list-btn" onclick="_switchToVocabList()" title="Switch to list">⊞ List</button>
+        <button class="wc-close-btn" onclick="_closeConstellationView()" aria-label="Close Word Map">✕</button>
+      </div>
+    </div>
+    <!-- Row 2: category filter pills (horizontally scrollable) -->
     <div class="wc-filter-row" id="wcFilterRow"></div>
-    <div class="wc-view-row" id="wcViewRow">
-      <button class="wc-view-btn active"  id="wcViewFree"     onclick="_wcSetView('free')"     title="Scattered layout">✦ Free</button>
-      <button class="wc-view-btn"         id="wcViewClusters" onclick="_wcSetView('clusters')" title="Category clusters, no overlap">◉ Clusters</button>
-      <button class="wc-view-btn"         id="wcViewNebula"   onclick="_wcSetView('nebula')"   title="Category clusters with drift">⬡ Nebula</button>
-      <button class="wc-collect-btn" id="wcCollectBtn" onclick="_wcCollect()" style="display:none" title="Animate active words into a grid">⊹ Collect</button>
-    </div>
-    <div class="wc-header-right">
-      <button class="wc-list-btn" onclick="_switchToVocabList()" title="Switch to list">⊞ List</button>
-      <button class="wc-close-btn" onclick="_closeConstellationView()" aria-label="Close">✕</button>
-    </div>
+    <!-- Row 3: alphabet search bar (built by JS) -->
+    <div class="wc-alpha-row" id="wcAlphaRow"></div>
   </div>
   <div class="wc-stage" id="wcStage"></div>
   <div class="wc-mobile-grid" id="wcMobileGrid" style="display:none"></div>
@@ -30809,13 +30929,34 @@ function _wcRenderMobileGrid(words) {
 .wc-overlay.open { opacity: 1; pointer-events: all; }
 
 .wc-header {
-  display: flex; align-items: center;
-  padding: 14px 20px 12px;
+  display: flex; flex-direction: column;
   border-bottom: 0.5px solid var(--border);
-  flex-shrink: 0; gap: 12px;
+  flex-shrink: 0;
 }
-.wc-filter-row { display: flex; flex-wrap: wrap; gap: 6px; flex: 1; }
-.wc-view-row { display: flex; gap: 4px; padding: 6px 16px 8px; flex-shrink: 0; }
+
+/* Row 1: title · view modes · actions */
+.wc-header-top {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 16px 8px;
+  border-bottom: 0.5px solid rgba(255,255,255,0.04);
+}
+.wc-header-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.55rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted); flex-shrink: 0;
+}
+
+/* Row 2: category filter pills — single horizontal scroll row */
+.wc-filter-row {
+  display: flex; flex-wrap: nowrap;
+  gap: 6px; padding: 8px 16px;
+  overflow-x: auto; scrollbar-width: none;
+  border-bottom: 0.5px solid rgba(255,255,255,0.04);
+}
+.wc-filter-row::-webkit-scrollbar { display: none; }
+
+/* View mode pills row — compact, same row as title */
+.wc-view-row { display: flex; gap: 4px; flex-shrink: 0; }
 .wc-view-btn {
   font-family: 'DM Mono', monospace;
   font-size: 0.55rem; letter-spacing: 0.08em; text-transform: uppercase;
@@ -30849,7 +30990,40 @@ function _wcRenderMobileGrid(words) {
 .wc-filter-pill:not(.active):hover {
   background: rgba(232,213,163,0.08); color: var(--muted2); border-color: var(--border-hover);
 }
-.wc-header-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.wc-header-right { display: flex; align-items: center; gap: 6px; flex-shrink: 0; margin-left: auto; }
+
+/* Row 3: alphabet search */
+.wc-alpha-row {
+  display: flex; gap: 2px; padding: 6px 16px 8px;
+  overflow-x: auto; scrollbar-width: none;
+  align-items: center;
+}
+.wc-alpha-row::-webkit-scrollbar { display: none; }
+.wc-alpha-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.56rem; letter-spacing: 0.04em; text-transform: uppercase;
+  width: 22px; height: 22px; border: none; border-radius: 4px;
+  background: none; cursor: pointer; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: color 0.12s, background 0.12s;
+  padding: 0;
+}
+.wc-alpha-btn.has-words {
+  color: var(--muted2);
+}
+.wc-alpha-btn.has-words:hover {
+  color: var(--text);
+  background: rgba(255,255,255,0.06);
+}
+.wc-alpha-btn.active {
+  color: var(--accent);
+  background: rgba(232,213,163,0.12);
+}
+.wc-alpha-btn:not(.has-words) {
+  color: var(--border);
+  cursor: default;
+  opacity: 0.4;
+}
 .wc-list-btn {
   font-family: 'DM Mono', monospace;
   font-size: 0.6rem; letter-spacing: 0.06em; text-transform: uppercase;
