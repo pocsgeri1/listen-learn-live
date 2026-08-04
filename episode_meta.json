@@ -3856,6 +3856,282 @@
       "actionability_score": 1,
       "evergreen": false,
       "controversy_flag": true
+    },
+    "523": {
+      "collection_id": 523,
+      "dna": {},
+      "summary_style": "B",
+      "summary": "Scarcity doesn't disappear when production becomes free. It migrates.\n\nFor a century the advantage belonged to whoever controlled distribution, then whoever controlled attention, then whoever controlled output volume. The swap test breaks all three: does your work lose value if someone else's name goes on it? If not, you've already been replaced by the next wave. What the automation era actually surfaces is that care, mortality, and the willingness to shift taste the moment you see your own output are the only inputs that can't be copied at zero marginal cost.\n\nThe humans who thrive won't be the ones who produce the most. They'll be the ones the work could only have come from.",
+      "sharpest_line": "If you can swap the creator and the creation without it losing value, AI can replace it.",
+      "tension": "AI automation vs. human meaning generation",
+      "verdict_listen": [
+        "you've ever felt your job is busy work and wondered what happens when it vanishes",
+        "you work in anything creative and panic every time a new AI tool drops"
+      ],
+      "verdict_skip": [
+        "you're convinced the creator economy is saturated and nobody new can break in"
+      ],
+      "vocab_vault": [
+        {
+          "word": "permutation",
+          "definition": "every possible arrangement of elements",
+          "timestamp_seconds": null,
+          "category": "Smartypants",
+          "category_alt": null
+        },
+        {
+          "word": "curation",
+          "definition": "selecting and organizing what deserves attention",
+          "timestamp_seconds": null,
+          "category": "Business",
+          "category_alt": null
+        },
+        {
+          "word": "trajectory",
+          "definition": "path of development over time",
+          "timestamp_seconds": null,
+          "category": "Smartypants",
+          "category_alt": null
+        },
+        {
+          "word": "iteration",
+          "definition": "repeating process with improvements each cycle",
+          "timestamp_seconds": null,
+          "category": "Business",
+          "category_alt": null
+        },
+        {
+          "word": "discernment",
+          "definition": "ability to judge quality or importance",
+          "timestamp_seconds": null,
+          "category": "Smartypants",
+          "category_alt": null
+        },
+        {
+          "word": "dogmatic",
+          "definition": "rigidly holding beliefs without questioning",
+          "timestamp_seconds": null,
+          "category": "Mind & People",
+          "category_alt": null
+        },
+        {
+          "word": "moat",
+          "definition": "defensible competitive advantage",
+          "timestamp_seconds": null,
+          "category": "Business",
+          "category_alt": null
+        },
+        {
+          "word": "stakes",
+          "definition": "what you stand to lose or gain",
+          "timestamp_seconds": null,
+          "category": "Small Talk",
+          "category_alt": null
+        },
+        {
+          "word": "temporal compression",
+          "definition": "pressure from limited time",
+          "timestamp_seconds": null,
+          "category": "Smartypants",
+          "category_alt": null
+        },
+        {
+          "word": "abstraction",
+          "definition": "pulling away from details to higher concepts",
+          "timestamp_seconds": null,
+          "category": "Smartypants",
+          "category_alt": null
+        },
+        {
+          "word": "vessel",
+          "definition": "container or means of carrying something",
+          "timestamp_seconds": null,
+          "category": "Small Talk",
+          "category_alt": null
+        },
+        {
+          "word": "agency",
+          "definition": "power to act independently and make choices",
+          "timestamp_seconds": null,
+          "category": "Mind & People",
+          "category_alt": null
+        },
+        {
+          "word": "commodity",
+          "definition": "basic good with no differentiation",
+          "timestamp_seconds": null,
+          "category": "Business",
+          "category_alt": null
+        },
+        {
+          "word": "nuance",
+          "definition": "subtle differences in meaning",
+          "timestamp_seconds": null,
+          "category": "Smartypants",
+          "category_alt": null
+        },
+        {
+          "word": "mundane",
+          "definition": "ordinary and repetitive",
+          "timestamp_seconds": null,
+          "category": "Small Talk",
+          "category_alt": null
+        },
+        {
+          "word": "synthesize",
+          "definition": "combine elements into unified whole",
+          "timestamp_seconds": null,
+          "category": "Smartypants",
+          "category_alt": null
+        },
+        {
+          "word": "postmodernism",
+          "definition": "philosophy rejecting single truth",
+          "timestamp_seconds": null,
+          "category": "Smartypants",
+          "category_alt": null
+        },
+        {
+          "word": "assembly line",
+          "definition": "sequential production process",
+          "timestamp_seconds": null,
+          "category": "Business",
+          "category_alt": null
+        },
+        {
+          "word": "crave",
+          "definition": "intensely want something",
+          "timestamp_seconds": null,
+          "category": "Small Talk",
+          "category_alt": null
+        },
+        {
+          "word": "savoring",
+          "definition": "enjoying slowly and deliberately",
+          "timestamp_seconds": null,
+          "category": "Small Talk",
+          "category_alt": null
+        },
+        {
+          "word": "forge",
+          "definition": "create through effort",
+          "timestamp_seconds": null,
+          "category": "Small Talk",
+          "category_alt": null
+        },
+        {
+          "word": "signaling",
+          "definition": "communicating status or value indirectly",
+          "timestamp_seconds": null,
+          "category": "Mind & People",
+          "category_alt": null
+        },
+        {
+          "word": "premium",
+          "definition": "higher price for added value",
+          "timestamp_seconds": null,
+          "category": "Business",
+          "category_alt": null
+        },
+        {
+          "word": "vantage point",
+          "definition": "position from which you view something",
+          "timestamp_seconds": null,
+          "category": "Smartypants",
+          "category_alt": null
+        },
+        {
+          "word": "proximity",
+          "definition": "closeness or nearness",
+          "timestamp_seconds": null,
+          "category": "Small Talk",
+          "category_alt": null
+        },
+        {
+          "word": "recursive",
+          "definition": "repeating process that references itself",
+          "timestamp_seconds": null,
+          "category": "Smartypants",
+          "category_alt": null
+        },
+        {
+          "word": "architect",
+          "definition": "designer of complex systems",
+          "timestamp_seconds": null,
+          "category": "Business",
+          "category_alt": null
+        },
+        {
+          "word": "framing",
+          "definition": "how you present or structure information",
+          "timestamp_seconds": null,
+          "category": "Business",
+          "category_alt": null
+        },
+        {
+          "word": "arbitrary",
+          "definition": "based on choice rather than logic",
+          "timestamp_seconds": null,
+          "category": "Smartypants",
+          "category_alt": null
+        },
+        {
+          "word": "rhetoric",
+          "definition": "art of persuasive speaking or writing",
+          "timestamp_seconds": null,
+          "category": "Smartypants",
+          "category_alt": null
+        },
+        {
+          "word": "asymmetric",
+          "definition": "one side has advantage other lacks",
+          "timestamp_seconds": null,
+          "category": "Smartypants",
+          "category_alt": null
+        },
+        {
+          "word": "capital participation",
+          "definition": "ownership in income-generating assets",
+          "timestamp_seconds": null,
+          "category": "Business",
+          "category_alt": null
+        },
+        {
+          "word": "statutory",
+          "definition": "required by law",
+          "timestamp_seconds": null,
+          "category": "Smartypants",
+          "category_alt": null
+        },
+        {
+          "word": "liability",
+          "definition": "legal responsibility for outcomes",
+          "timestamp_seconds": null,
+          "category": "Business",
+          "category_alt": null
+        },
+        {
+          "word": "articulate",
+          "definition": "express ideas clearly",
+          "timestamp_seconds": null,
+          "category": "Small Talk",
+          "category_alt": null
+        },
+        {
+          "word": "infrastructure",
+          "definition": "foundational systems enabling activity",
+          "timestamp_seconds": null,
+          "category": "Business",
+          "category_alt": null
+        },
+        {
+          "word": "lens",
+          "definition": "perspective through which you see something",
+          "timestamp_seconds": null,
+          "category": "Smartypants",
+          "category_alt": null
+        }
+      ]
     }
   }
 }
