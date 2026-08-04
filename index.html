@@ -7489,9 +7489,13 @@
       flex-direction: column;
       gap: 10px;
     }
-    
+    .newsletter-input {
+      font-size: 16px; /* prevents iOS viewport zoom on focus */
+    }
     .newsletter-btn {
-      justify-content: center;
+      align-self: center;
+      width: auto;
+      padding: 13px 28px;
     }
   }
 
@@ -8650,62 +8654,79 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 34px;
-    height: 34px;
-    border-radius: 8px;
-    border: 1px solid var(--border);
+    width: 28px;
+    height: 28px;
+    border-radius: 7px;
+    border: none;
     background: transparent;
     cursor: pointer;
-    font-size: 1rem;
+    font-size: 0.9rem;
     line-height: 1;
-    transition: background 0.15s, border-color 0.15s, transform 0.12s;
+    transition: background 0.13s, color 0.13s, transform 0.1s;
     flex-shrink: 0;
     text-decoration: none;
-    color: inherit;
+    color: var(--muted);
     padding: 0;
   }
-  .btn-icon:hover { background: var(--surface2); border-color: var(--border-hover); transform: scale(1.08); }
-  .btn-icon:active { transform: scale(0.94); }
+  .btn-icon:hover { background: rgba(255,255,255,0.07); color: var(--text); transform: scale(1.08); }
+  .btn-icon:active { transform: scale(0.92); }
 
-  /* ★ Master/Save — gold star, green when saved */
-  .btn-icon.btn-master { color: var(--muted2); font-size: 1.1rem; }
-  .btn-icon.btn-master:hover { border-color: var(--green); color: var(--green); }
-  .btn-icon.btn-master.mastered-active {
-    border-color: var(--green);
-    color: var(--green);
-    background: rgba(122,175,138,0.12);
-  }
-  .concept-card.mastered .btn-icon.btn-master {
-    border-color: var(--green);
-    color: var(--green);
-    background: rgba(122,175,138,0.12);
-  }
+  /* ★ Master/Save */
+  .btn-icon.btn-master:hover { color: var(--green); background: rgba(122,175,138,0.1); }
+  .btn-icon.btn-master.mastered-active { color: var(--green); background: rgba(122,175,138,0.1); }
+  .concept-card.mastered .btn-icon.btn-master { color: var(--green); background: rgba(122,175,138,0.1); }
 
   /* 🔗 Share */
-  .btn-icon.btn-share { color: var(--muted2); }
   .btn-icon.btn-share:hover { color: var(--text); }
 
   /* 🎧 Listen */
-  .btn-icon.btn-listen {
-    border-color: rgba(232,213,163,0.3);
-    color: var(--accent);
-  }
-  .btn-icon.btn-listen:hover { border-color: var(--accent); background: rgba(232,213,163,0.08); }
+  .btn-icon.btn-listen { color: var(--accent); }
+  .btn-icon.btn-listen:hover { color: var(--accent2); background: rgba(232,213,163,0.08); }
 
   /* 💬 Chat */
-  .btn-icon.btn-chat {
-    border-color: rgba(196,122,122,0.35);
-    color: #c47a7a;
-  }
-  .btn-icon.btn-chat:hover { border-color: #c47a7a; background: rgba(196,122,122,0.08); }
-  .btn-icon.btn-chat.saved { border-color: #c47a7a; background: rgba(196,122,122,0.12); }
+  .btn-icon.btn-chat { color: var(--muted); }
+  .btn-icon.btn-chat:hover { color: #c47a7a; background: rgba(196,122,122,0.08); }
+  .btn-icon.btn-chat.saved { color: #c47a7a; background: rgba(196,122,122,0.1); }
 
-  /* Light mode icon button adjustments */
-  [data-theme="light"] .btn-icon { border-color: var(--border); }
-  [data-theme="light"] .btn-icon:hover { background: var(--surface2); }
-  [data-theme="light"] .btn-icon.btn-master.mastered-active { color: #2a7a4a; border-color: #2a7a4a; background: rgba(42,122,74,0.1); }
-  [data-theme="light"] .btn-icon.btn-listen { color: var(--accent2); border-color: rgba(154,112,10,0.35); }
-  [data-theme="light"] .btn-icon.btn-chat { color: #a03040; border-color: rgba(160,48,64,0.3); }
+  /* ⟡ Related */
+  .btn-icon.btn-related:hover { color: #9a8fb8; background: rgba(154,143,184,0.1); }
+
+  /* ✎ Note */
+  .btn-icon.btn-note:hover { color: var(--accent); background: rgba(232,213,163,0.08); }
+  .btn-icon.btn-note.has-note { color: var(--accent); }
+
+  /* Toolbar row */
+  .card-actions.card-actions-top {
+    display: flex; gap: 4px;
+    padding: 6px 10px;
+    border-top: 0.5px solid var(--border);
+  }
+  .card-actions-divider { display: none; }
+
+  /* Light mode */
+  [data-theme="light"] .btn-icon:hover { background: rgba(0,0,0,0.06); }
+  [data-theme="light"] .btn-icon.btn-master.mastered-active { color: #2a7a4a; background: rgba(42,122,74,0.1); }
+  [data-theme="light"] .btn-icon.btn-listen { color: var(--accent2); }
+  [data-theme="light"] .btn-icon.btn-chat.saved { color: #a03040; background: rgba(160,48,64,0.08); }
+
+  /* Note input under card body */
+  .card-note-wrap {
+    padding: 0 14px 10px;
+    border-top: 0.5px solid var(--border);
+    display: none;
+  }
+  .card-note-wrap.open { display: block; }
+  .card-note-input {
+    width: 100%; background: none; border: none; border-bottom: 0.5px solid var(--border);
+    color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 0.72rem;
+    font-style: italic; padding: 6px 0; outline: none; resize: none;
+  }
+  .card-note-input::placeholder { color: var(--muted2); opacity: 0.6; }
+  .card-note-saved {
+    font-family: 'DM Sans', sans-serif; font-size: 0.72rem; font-style: italic;
+    color: var(--muted); padding: 6px 14px 10px; border-top: 0.5px solid var(--border);
+    white-space: pre-wrap;
+  }
 
   /* Backwards compat — old btn-master/btn-share/btn-listen/btn-chat without btn-icon still work */
   .btn-master, .btn-share, .btn-listen, .btn-chat {
@@ -8730,6 +8751,53 @@
   .btn-chat { border-color: rgba(196,122,122,0.35); color: #c47a7a; }
   .btn-chat:hover { border-color: #c47a7a; background: rgba(196,122,122,0.08); }
   .btn-chat.saved { border-color: #c47a7a; background: rgba(196,122,122,0.12); }
+
+/* ── Related concepts overlay ── */
+.cc-related-overlay {
+  position: fixed; inset: 0; z-index: 8500;
+  background: rgba(0,0,0,0.7);
+  display: flex; align-items: flex-end; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+.cc-related-overlay.open { opacity: 1; pointer-events: all; }
+.cc-related-panel {
+  width: 100%; max-width: 540px;
+  background: var(--surface);
+  border-radius: 14px 14px 0 0;
+  padding: 0 0 env(safe-area-inset-bottom,16px);
+  transform: translateY(20px);
+  transition: transform 0.2s ease;
+}
+.cc-related-overlay.open .cc-related-panel { transform: translateY(0); }
+.cc-related-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 18px 10px;
+  border-bottom: 0.5px solid var(--border);
+}
+.cc-related-title {
+  font-family: 'DM Mono', monospace; font-size: 0.65rem;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
+}
+.cc-related-close {
+  background: none; border: none; cursor: pointer;
+  color: var(--muted); font-size: 0.75rem; padding: 4px 6px;
+}
+.cc-related-cards { padding: 12px 16px; display: flex; flex-direction: column; gap: 10px; }
+.cc-related-card {
+  padding: 12px 14px; background: var(--surface2);
+  border-radius: 8px; border: 0.5px solid var(--border);
+}
+.cc-related-card-term {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.88rem; font-style: italic; margin-bottom: 5px;
+}
+.cc-related-card-plain {
+  font-family: 'DM Sans', sans-serif; font-size: 0.72rem;
+  color: var(--muted); line-height: 1.5;
+}
+[data-theme="light"] .cc-related-panel { background: #f5f0e8; }
+[data-theme="light"] .cc-related-card { background: #ede8e0; }
 
 .share-modal-overlay {
   display: none;
@@ -13169,6 +13237,8 @@ function buildGrid() {
                         if (!url) return '';
                         return `<a class="btn-icon btn-listen" href="${url}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="Listen">🎧</a>`;
                       })()}
+                      ${c.related_ids && c.related_ids.length ? `<button class="btn-icon btn-related" onclick="event.stopPropagation();_ccOpenRelated(${c.id})" title="Related">⟡</button>` : ''}
+                      <button class="btn-icon btn-note${localStorage.getItem('cc_note_'+c.id)?' has-note':''}" onclick="event.stopPropagation();_ccToggleNote(${c.id},this)" title="Note">✎</button>
                     </div>
                     <div class="card-actions-divider"></div>
                     ${(() => {
@@ -14043,6 +14113,8 @@ function _buildEpColumnHtml(catKey, catConcepts, col) {
               if (!url) return '';
               return `<a class="btn-icon btn-listen" href="${url}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="Listen">🎧</a>`;
             })()}
+            ${c.related_ids && c.related_ids.length ? `<button class="btn-icon btn-related" onclick="event.stopPropagation();_ccOpenRelated(${c.id})" title="Related">⟡</button>` : ''}
+            <button class="btn-icon btn-note${localStorage.getItem('cc_note_'+c.id)?' has-note':''}" onclick="event.stopPropagation();_ccToggleNote(${c.id},this)" title="Note">✎</button>
           </div>
           <div class="card-actions-divider"></div>
           <div class="back-section-label">What it means</div>
@@ -14519,6 +14591,8 @@ function _renderThemeCard(c, prefix, col) {
           <button class="btn-icon btn-share" onclick="event.stopPropagation();shareCard(event,${c.id})" title="Share">🔗</button>
           <button class="btn-icon btn-master${mastered.has(c.id)?' mastered-active':''}" onclick="event.stopPropagation();toggleMaster(event,${c.id})" id="btnMasterTh${c.id}" title="Save to Mastered">★</button>
           <button class="btn-icon btn-chat${_csIsSaved(c.id)?' saved':''}" onclick="event.stopPropagation();toggleChatSave(${c.id})" id="btnChat${prefix}${c.id}" title="Save to Conversations">💬</button>
+          ${c.related_ids && c.related_ids.length ? `<button class="btn-icon btn-related" onclick="event.stopPropagation();_ccOpenRelated(${c.id})" title="Related">⟡</button>` : ''}
+          <button class="btn-icon btn-note${localStorage.getItem('cc_note_'+c.id)?' has-note':''}" onclick="event.stopPropagation();_ccToggleNote(${c.id},this)" title="Note">✎</button>
         </div>
         <div class="card-actions-divider"></div>
         <div class="back-section-label">What it means</div>
@@ -15584,6 +15658,8 @@ function setDrawerView(prefix, view, btn) {
           '<button class="btn-icon btn-master' + (isMC?' mastered-active':'') + '" onclick="event.stopPropagation();toggleMaster(event,' + c.id + ')" id="btnMasterAll' + c.id + '" title="Save">★</button>',
           '<button class="btn-icon btn-chat' + (isSv?' saved':'') + '" onclick="event.stopPropagation();toggleChatSave(' + c.id + ')" id="btnChatAll' + c.id + '" title="Chat">💬</button>',
           listenBtn,
+          (c.related_ids && c.related_ids.length ? '<button class="btn-icon btn-related" onclick="event.stopPropagation();_ccOpenRelated(' + c.id + ')" title="Related">⟡</button>' : ''),
+          '<button class="btn-icon btn-note' + (localStorage.getItem('cc_note_'+c.id)?' has-note':'') + '" onclick="event.stopPropagation();_ccToggleNote(' + c.id + ',this)" title="Note">✎</button>',
           '</div>',
           '<div class="card-actions-divider"></div>',
           '<div class="back-section-label">What it means</div>',
@@ -15814,6 +15890,8 @@ function _spRenderFilteredGrid(pool) {
                         if (!url) return '';
                         return `<a class="btn-icon btn-listen" href="${url}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="Listen">🎧</a>`;
                       })()}
+                      ${c.related_ids && c.related_ids.length ? `<button class="btn-icon btn-related" onclick="event.stopPropagation();_ccOpenRelated(${c.id})" title="Related">⟡</button>` : ''}
+                      <button class="btn-icon btn-note${localStorage.getItem('cc_note_'+c.id)?' has-note':''}" onclick="event.stopPropagation();_ccToggleNote(${c.id},this)" title="Note">✎</button>
                     </div>
                     <div class="card-actions-divider"></div>
                     ${(() => {
@@ -21435,6 +21513,94 @@ function toggleChatSave(id) {
 // ============================================
 // END CONVERSATION STARTER MODAL
 // ============================================
+
+// ── Related concepts mini-overlay ─────────────────────────────
+function _ccOpenRelated(id) {
+  var concept = CONCEPTS.find(function(c) { return c.id === id; });
+  if (!concept || !concept.related_ids || !concept.related_ids.length) return;
+
+  var overlay = document.getElementById('ccRelatedOverlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'ccRelatedOverlay';
+    overlay.className = 'cc-related-overlay';
+    overlay.innerHTML =
+      '<div class="cc-related-panel">' +
+        '<div class="cc-related-header">' +
+          '<span class="cc-related-title">Related</span>' +
+          '<button class="cc-related-close" onclick="_ccCloseRelated()">✕</button>' +
+        '</div>' +
+        '<div class="cc-related-cards" id="ccRelatedCards"></div>' +
+      '</div>';
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) _ccCloseRelated();
+    });
+    document.body.appendChild(overlay);
+  }
+
+  var cards = document.getElementById('ccRelatedCards');
+  cards.innerHTML = '';
+  var relIds = concept.related_ids.slice(0, 3);
+  relIds.forEach(function(rid) {
+    var r = CONCEPTS.find(function(c) { return c.id === rid; });
+    if (!r) return;
+    var card = document.createElement('div');
+    card.className = 'cc-related-card';
+    card.innerHTML =
+      '<div class="cc-related-card-term">' + (r.term || '') + '</div>' +
+      '<div class="cc-related-card-plain">' + (r.plain || '') + '</div>';
+    cards.appendChild(card);
+  });
+
+  requestAnimationFrame(function() { overlay.classList.add('open'); });
+}
+
+function _ccCloseRelated() {
+  var overlay = document.getElementById('ccRelatedOverlay');
+  if (overlay) overlay.classList.remove('open');
+}
+
+// ── Note per concept ──────────────────────────────────────────
+function _ccToggleNote(id, btn) {
+  // Find or create note wrap inside the same card-back
+  var cardBack = btn.closest('.card-back');
+  if (!cardBack) return;
+  var wrap = cardBack.querySelector('.card-note-wrap');
+  if (!wrap) {
+    wrap = document.createElement('div');
+    wrap.className = 'card-note-wrap';
+    var saved = localStorage.getItem('cc_note_' + id) || '';
+    wrap.innerHTML = '<textarea class="card-note-input" placeholder="Add a note…" rows="1">' +
+      saved.replace(/</g,'&lt;') + '</textarea>';
+    var ta = wrap.querySelector('textarea');
+    ta.addEventListener('input', function() {
+      // Auto-resize
+      ta.style.height = 'auto';
+      ta.style.height = ta.scrollHeight + 'px';
+    });
+    ta.addEventListener('blur', function() {
+      var val = ta.value.trim();
+      if (val) {
+        localStorage.setItem('cc_note_' + id, val);
+        btn.classList.add('has-note');
+      } else {
+        localStorage.removeItem('cc_note_' + id);
+        btn.classList.remove('has-note');
+      }
+    });
+    ta.addEventListener('click', function(e) { e.stopPropagation(); });
+    cardBack.appendChild(wrap);
+  }
+
+  var isOpen = wrap.classList.contains('open');
+  wrap.classList.toggle('open', !isOpen);
+  if (!isOpen) {
+    setTimeout(function() {
+      var ta = wrap.querySelector('textarea');
+      if (ta) { ta.focus(); ta.style.height = 'auto'; ta.style.height = ta.scrollHeight + 'px'; }
+    }, 10);
+  }
+}
 
 // ============================================
 // END CONCEPT OF THE DAY
@@ -30735,7 +30901,11 @@ function _wcRenderStars(words) {
 
   words.forEach(function(w, i) {
     var color    = GV_CAT_COLORS[w.category] || '#6b6b6b';
-    var isDimmed = _wcActiveCat !== 'All' && w.category !== _wcActiveCat;
+    var isDimmed;
+    if (_wcActiveCat === 'All') isDimmed = false;
+    else if (_wcActiveCat === '★ Picks') isDimmed = !w.isEditorsPick;
+    else if (_wcActiveCat === '⟳ Recent') isDimmed = !w.isRecent;
+    else isDimmed = w.category !== _wcActiveCat;
 
     // Seeded visual variation — rotation, size tier, opacity depth
     var r1 = _wcRandom(i * 7 + 3);
@@ -30761,7 +30931,9 @@ function _wcRenderStars(words) {
     span.dataset.def      = w.definition;
     span.dataset.category = w.category || '';
     span.dataset.colId    = w.colId != null ? String(w.colId) : '';
-    span.dataset.catAlt   = w.category_alt || '';
+    span.dataset.catAlt      = w.category_alt || '';
+    span.dataset.editorspick = w.isEditorsPick ? 'true' : 'false';
+    span.dataset.recent      = w.isRecent      ? 'true' : 'false';
     span.style.transform  = 'rotate(' + rotation + 'deg)';
     span.dataset.baseRot  = String(rotation);
 
@@ -30829,36 +31001,21 @@ function _wcRenderLanes(words) {
 
     catWords.forEach(function(w) {
       var isSaved = !!_lexiconGetSaved(w.word);
+      // Dim chip for pseudo-cat filters
+      var chipDimmed = false;
+      if (_wcActiveCat === '★ Picks') chipDimmed = !w.isEditorsPick;
+      else if (_wcActiveCat === '⟳ Recent') chipDimmed = !w.isRecent;
       var chip = document.createElement('span');
-      chip.className = 'wc-lane-chip' + (isSaved ? ' wc-lane-chip-saved' : '');
+      chip.className = 'wc-lane-chip' +
+        (isSaved ? ' wc-lane-chip-saved' : '') +
+        (chipDimmed ? ' wc-lane-chip-dimmed' : '');
       chip.textContent = w.word;
       chip.style.setProperty('--chip-color', color);
       chip.title = w.definition;
+      chip.dataset.word = w.word;
       chip.addEventListener('click', function(e) {
-        // Toggle inline definition
-        var existing = lane.querySelector('.wc-lane-def[data-for="' + CSS.escape(w.word) + '"]');
-        if (existing) { existing.remove(); chip.classList.remove('wc-lane-chip-open'); return; }
-        lane.querySelectorAll('.wc-lane-def').forEach(function(d) { d.remove(); });
-        lane.querySelectorAll('.wc-lane-chip-open').forEach(function(c) { c.classList.remove('wc-lane-chip-open'); });
-        chip.classList.add('wc-lane-chip-open');
-        var def = document.createElement('div');
-        def.className = 'wc-lane-def';
-        def.dataset.for = w.word;
-        var addCls = isSaved ? 'saved' : '';
-        def.innerHTML = '<span class="wc-lane-def-word">' + _gvEsc(w.word) + '</span>' +
-          '<span class="wc-lane-def-text">' + _gvEsc(w.definition) + '</span>' +
-          '<button class="wc-tt-add ' + addCls + '" data-word="' + _gvEsc(w.word) + '">' +
-          (isSaved ? '✓ In Lexi' : '+ Add to Lexi') + '</button>';
-        var addBtn = def.querySelector('.wc-tt-add');
-        if (!isSaved && addBtn) {
-          addBtn.addEventListener('click', function(ev) {
-            ev.stopPropagation();
-            _gvAddWordToLexi(w.word, w.definition, w.category, w.colId, addBtn);
-            chip.classList.add('wc-lane-chip-saved');
-            addBtn.textContent = '✓ In Lexi'; addBtn.classList.add('saved');
-          });
-        }
-        lane.appendChild(def);
+        e.stopPropagation();
+        _wcShowLaneDef(chip, w, color);
       });
       chips.appendChild(chip);
     });
@@ -30868,6 +31025,83 @@ function _wcRenderLanes(words) {
   });
 
   container.appendChild(frag);
+}
+
+// ── Lane floating def popover ─────────────────────────────────
+var _wcLaneDefChip = null; // currently open chip
+
+function _wcShowLaneDef(chip, w, color) {
+  // Toggle: same chip again = close
+  if (_wcLaneDefChip === chip) { _wcHideLaneDef(); return; }
+  _wcHideLaneDef();
+
+  var isSaved = !!_lexiconGetSaved(w.word);
+  var pop = document.getElementById('wcLaneDef');
+  if (!pop) {
+    pop = document.createElement('div');
+    pop.id = 'wcLaneDef';
+    pop.className = 'wc-lane-popover';
+    document.body.appendChild(pop);
+  }
+
+  pop.innerHTML =
+    '<button class="wc-lane-pop-close" aria-label="Close">✕</button>' +
+    '<span class="wc-lane-pop-word" style="color:' + color + '">' + _gvEsc(w.word) + '</span>' +
+    '<span class="wc-lane-pop-def">' + _gvEsc(w.definition) + '</span>' +
+    '<button class="wc-tt-add' + (isSaved ? ' saved' : '') + '">' +
+    (isSaved ? '✓ In Lexi' : '+ Add to Lexi') + '</button>';
+
+  var closeBtn = pop.querySelector('.wc-lane-pop-close');
+  if (closeBtn) closeBtn.addEventListener('click', function(e) { e.stopPropagation(); _wcHideLaneDef(); });
+
+  var addBtn = pop.querySelector('.wc-tt-add');
+  if (!isSaved && addBtn) {
+    addBtn.addEventListener('click', function(ev) {
+      ev.stopPropagation();
+      _gvAddWordToLexi(w.word, w.definition, w.category, w.colId, addBtn);
+      chip.classList.add('wc-lane-chip-saved');
+      addBtn.textContent = '✓ In Lexi'; addBtn.classList.add('saved');
+    });
+  }
+
+  // Position below chip, clamped to viewport
+  var rect = chip.getBoundingClientRect();
+  var popW = 280;
+  var left = Math.min(rect.left, window.innerWidth - popW - 12);
+  left = Math.max(left, 12);
+  var top = rect.bottom + 8;
+  // If too close to bottom, flip above
+  if (top + 140 > window.innerHeight) top = rect.top - 148;
+
+  pop.style.left = left + 'px';
+  pop.style.top  = top  + 'px';
+  pop.style.display = '';
+  requestAnimationFrame(function() { pop.classList.add('wc-lane-popover-open'); });
+
+  chip.classList.add('wc-lane-chip-open');
+  _wcLaneDefChip = chip;
+
+  // Outside click to dismiss (capture, once)
+  setTimeout(function() {
+    document.addEventListener('click', _wcLaneDefOutside, { capture: true, once: true });
+  }, 0);
+}
+
+function _wcHideLaneDef() {
+  var pop = document.getElementById('wcLaneDef');
+  if (pop) {
+    pop.classList.remove('wc-lane-popover-open');
+    // No need to hide display — opacity:0 + pointer-events:none handles it
+  }
+  if (_wcLaneDefChip) { _wcLaneDefChip.classList.remove('wc-lane-chip-open'); _wcLaneDefChip = null; }
+  document.removeEventListener('click', _wcLaneDefOutside, { capture: true });
+}
+
+function _wcLaneDefOutside(e) {
+  var pop = document.getElementById('wcLaneDef');
+  if (pop && pop.contains(e.target)) return;
+  if (_wcLaneDefChip && _wcLaneDefChip.contains(e.target)) return;
+  _wcHideLaneDef();
 }
 
 // ── Word events ───────────────────────────────────────────────
@@ -31061,7 +31295,11 @@ function _wcFilterCat(cat) {
 
   _wcCollected = false;
   document.querySelectorAll('#wcStage .wc-word').forEach(function(s) {
-    var match = cat === 'All' || s.dataset.category === cat;
+    var match;
+    if (cat === 'All') match = true;
+    else if (cat === '★ Picks') match = s.dataset.editorspick === 'true';
+    else if (cat === '⟳ Recent') match = s.dataset.recent === 'true';
+    else match = s.dataset.category === cat;
     var baseOp = parseFloat(s.dataset.baseOpacity) || 0.75;
     s.style.transition = '';
     s.style.opacity = match ? String(baseOp) : '0.07';
@@ -31084,13 +31322,20 @@ function _wcFilterCat(cat) {
     if (next && next.classList.contains('wc-mobile-def')) next.style.display = 'none';
     p.classList.remove('expanded');
   });
+  // Close floating lane def on category change
+  _wcHideLaneDef();
   // Dim non-matching lanes in lanes view
   document.querySelectorAll('#wcLanes .wc-lane').forEach(function(lane) {
-    var match = cat === 'All' || lane.dataset.category === cat;
+    var match;
+    if (cat === 'All') match = true;
+    else if (cat === '★ Picks' || cat === '⟳ Recent') match = true; // pseudo-cats show all lanes, chips dimmed via _wcRenderLanes
+    else match = lane.dataset.category === cat;
     lane.classList.toggle('wc-lane-dimmed', !match);
-    // Clear open definitions when switching category
-    if (!match) lane.querySelectorAll('.wc-lane-def').forEach(function(d) { d.remove(); });
   });
+  // For pseudo-cat filters in lanes, re-render with dim per-chip
+  if (cat === '★ Picks' || cat === '⟳ Recent') {
+    _wcRenderLanes(_wcWords);
+  }
 }
 
 // ── Mobile grid ───────────────────────────────────────────────
@@ -31412,27 +31657,43 @@ function _wcRenderMobileGrid(words) {
   opacity: 0.5;
 }
 
-.wc-lane-def {
-  width: 100%; margin: 0 0 10px 94px;
-  padding: 12px 16px;
+/* Floating lane def popover (replaces inline .wc-lane-def) */
+.wc-lane-popover {
+  position: fixed; z-index: 3100;
+  width: 280px;
+  padding: 14px 16px 12px;
   background: var(--surface);
   border: 0.5px solid var(--border);
-  border-radius: 8px;
-  display: flex; flex-direction: column; gap: 6px;
-  animation: wcLaneDefIn 0.16s ease;
+  border-radius: 10px;
+  display: flex; flex-direction: column; gap: 7px;
+  opacity: 0; transform: translateY(-6px) scale(0.97);
+  transition: opacity 0.16s ease, transform 0.16s ease;
+  pointer-events: none;
 }
-@keyframes wcLaneDefIn {
-  from { opacity: 0; transform: translateY(-4px); }
-  to   { opacity: 1; transform: translateY(0); }
+.wc-lane-popover.wc-lane-popover-open {
+  opacity: 1; transform: translateY(0) scale(1);
+  pointer-events: all;
 }
-.wc-lane-def-word {
+.wc-lane-pop-close {
+  position: absolute; top: 8px; right: 10px;
+  background: none; border: none; cursor: pointer;
+  color: var(--muted); font-size: 0.7rem; padding: 2px 4px;
+  opacity: 0.6; line-height: 1;
+}
+.wc-lane-pop-close:hover { opacity: 1; }
+.wc-lane-pop-word {
   font-family: 'Playfair Display', serif;
-  font-size: 0.9rem; font-style: italic; color: var(--text);
+  font-size: 0.92rem; font-style: italic;
+  padding-right: 20px;
 }
-.wc-lane-def-text {
+.wc-lane-pop-def {
   font-family: 'DM Sans', sans-serif;
   font-size: 0.72rem; color: var(--muted); line-height: 1.5;
 }
+.wc-lane-chip-dimmed {
+  opacity: 0.2; pointer-events: none;
+}
+[data-theme="light"] .wc-lane-popover { background: #f0ebe2; border-color: rgba(0,0,0,0.1); }
 
 /* Collect button is irrelevant in lanes mode */
 .wc-overlay[data-view="lanes"] .wc-collect-btn { display: none !important; }

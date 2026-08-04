@@ -6,6 +6,19 @@
 
 ---
 
+## v2.98 — 2026-08-04 · Lanes popover · Picks/Recent Word Map fix · Card toolbar + Related + Note · Signup mobile
+
+### index.html
+
+- **Lanes def popup — floating popover:** Replaced full-width inline `.wc-lane-def` with a `#wcLaneDef` element positioned at the clicked chip via `getBoundingClientRect()`. Compact (280px), no dead space, smooth `opacity + translateY + scale` animation. Click same chip or outside to dismiss. `_wcShowLaneDef()` / `_wcHideLaneDef()` / `_wcLaneDefOutside()`.
+- **Picks/Recent filter in Word Map — fixed:** Stage spans in `_wcRenderStars` now carry `data-editorspick` and `data-recent` dataset attrs. `_wcFilterCat` handles `★ Picks` and `⟳ Recent` pseudo-categories by checking those attrs. `_wcRenderLanes` dims chips individually for pseudo-cat filters (`.wc-lane-chip-dimmed`). Lanes view re-renders on pseudo-cat filter change.
+- **Card toolbar redesign:** `.btn-icon` reduced to `28×28px`, `border:none`, `color:var(--muted)`, accent on hover (no border). `.card-actions-top` is now `display:flex; gap:4px; padding:6px 10px; border-top:0.5px solid var(--border)`. `.card-actions-divider` hidden via `display:none`. Applied to all 5 card instances.
+- **5th card button ⟡ Related:** Appears when `related_ids` non-empty. Triggers `_ccOpenRelated(id)` — builds a bottom-sheet overlay with up to 3 related concept mini-cards (term + plain). Dismissable by close button or backdrop tap.
+- **6th card button ✎ Note:** Triggers `_ccToggleNote(id, btn)` — toggles a `.card-note-wrap` div appended to the card-back. Textarea auto-resizes, saves to `localStorage('cc_note_${id}')` on blur. Button shows accent color when note exists (`.has-note`).
+- **Signup — mobile not full-width:** Newsletter button gains `align-self: center; width: auto` on mobile — no longer stretches to full row width. Email input gets `font-size: 16px` on mobile to prevent iOS viewport zoom on focus.
+
+---
+
 ## v2.97 — 2026-08-04 · Mobile nav centre · ←→ shortcut · Podcast filter · Lanes view
 
 ### index.html
