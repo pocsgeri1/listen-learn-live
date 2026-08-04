@@ -6,6 +6,16 @@
 
 ---
 
+## 2026-08-04 — Read panel redesign + curation layer (v2.95)
+
+**CSS grid word rows need `display:none` for hidden items, not height-collapse.** The previous `.gv-word-row.gv-hidden` used `height:0; padding:0; overflow:hidden; border:none` — fine for a flex column but wrong for CSS grid. In a grid, collapsing height to 0 collapses the row's size but keeps the grid slot occupied, leaving phantom empty cells. Switch to `display:none` so the grid reflows correctly.
+
+**Centered fixed panel needs `translateX(-50%)` in both hidden and open transforms.** When centering with `left:50%`, the `transform` property carries both the centering offset and the slide animation. Hidden state: `translateX(-50%) translateY(-100%)`. Open state: `translateX(-50%) translateY(0)`. If you only write `translateY(0)` for open, the panel jumps to the right (loses the `-50%` offset). Both states must include the X component.
+
+**`pointer-events: all` on overlay backdrop blocks sibling panels.** `gv-overlay.open` had `pointer-events: all` which blocked all clicks on the z-index-lower Lexi panel. Fix: remove from overlay, keep only on `.gv-overlay.open .gv-panel`. Use a capture-phase `document.mousedown` listener for outside-click-to-close, checking both `gvPanel.contains(e.target)` and `lexiPanelInner.contains(e.target)` before closing.
+
+**`isEditorsPick` links vocab words to concept picks via collection_id.** `editors_pick` lives on CONCEPTS (concept cards), not on vocab words. Vocab words have a `colId`. To flag a word as an editor's pick, build a set of colIds where any CONCEPT has `editors_pick === true`, then check `editorPickColIds[word.colId]`. Zero schema changes, zero API calls.
+
 ## 2026-08-04 — Nav restructure: Read · Write · Speak (v2.94)
 
 **Keep legacy nav-link stubs when old selectors are referenced elsewhere.** The tour, corner mode CSS (`body.corner-mode #mainNav .nav-island`), and any Plausible event tracking referenced `.nav-spark-btn` and `.nav-corner-nav-btn`. Rather than hunting every reference, left zero-size hidden `<a>` stubs in the nav island so old selectors still resolve without errors.

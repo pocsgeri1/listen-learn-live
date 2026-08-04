@@ -27308,8 +27308,14 @@ function _lexiFlyParticle(fromEl) {
   // Respect prefers-reduced-motion — skip animation entirely
   if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-  // Target: pull tab (preferred) or nav btn (fallback)
-  var navBtn = document.getElementById('lexiPullTab') || document.querySelector('.nav-lexicon-btn');
+  // Target: lexiPanelCount (inside open panel) → pull tab → nav btn
+  var lexiPanel = document.getElementById('lexiPanel');
+  var lexiOpen = lexiPanel && lexiPanel.classList.contains('open');
+  var navBtn;
+  if (lexiOpen) {
+    navBtn = document.getElementById('lexiPanelCount');
+  }
+  if (!navBtn) navBtn = document.getElementById('lexiPullTab') || document.querySelector('.nav-lexicon-btn');
   if (!navBtn) return;
 
   var fromRect = fromEl.getBoundingClientRect();
@@ -27332,14 +27338,18 @@ function _lexiFlyParticle(fromEl) {
       particle.style.transform = 'translate(' + dx + 'px, ' + dy + 'px) scale(0.25)';
       particle.style.opacity   = '0';
 
-      // Badge pulse timed to land as particle arrives
+      // Badge/count pulse timed to land as particle arrives
       setTimeout(function() {
-        var badge = document.getElementById('lexiPullBadge') || document.getElementById('navLexiBadge');
+        var lPanel = document.getElementById('lexiPanel');
+        var lOpen  = lPanel && lPanel.classList.contains('open');
+        var badge  = lOpen
+          ? document.getElementById('lexiPanelCount')
+          : (document.getElementById('lexiPullBadge') || document.getElementById('navLexiBadge'));
         if (badge) {
           badge.style.animation = 'none';
           requestAnimationFrame(function() {
-            badge.style.animation = 'lexiBadgePulse 240ms ease-out';
-            setTimeout(function() { badge.style.animation = ''; }, 240);
+            badge.style.animation = 'gvBump 280ms ease-out';
+            setTimeout(function() { badge.style.animation = ''; }, 280);
           });
         }
       }, 370);
@@ -29382,7 +29392,9 @@ var _globalVocabCache = null;
 var _globalVocabCacheLen = 0; // tracks EPISODE_META length for invalidation
 var _gvActiveCat = 'All';     // current filter in word list view
 
-var GV_CATS = ['All', 'Small Talk', 'Smartypants', 'Business', 'Science', 'Mind & People'];
+var GV_CATS = ['All', '★ Picks', '⟳ Recent', 'Small Talk', 'Smartypants', 'Business', 'Science', 'Mind & People'];
+// Special pseudo-category keys (not real vocab categories — handled separately)
+var _GV_SPECIAL = { 'All': true, '★ Picks': true, '⟳ Recent': true };
 
 // ── Build / cache the global index ──────────────────────────
 function _buildGlobalVocabIndex() {
@@ -29392,12 +29404,38 @@ function _buildGlobalVocabIndex() {
   // Invalidate cache if episode list has grown
   if (_globalVocabCache && keys.length === _globalVocabCacheLen) return _globalVocabCache;
 
+  // Build set of colIds that contain at least one editors_pick concept
+  var editorPickColIds = {};
+  if (typeof CONCEPTS !== 'undefined') {
+    CONCEPTS.forEach(function(c) {
+      if (c.editors_pick === true && c.collection_id != null) {
+        editorPickColIds[c.collection_id] = true;
+      }
+    });
+  }
+
+  // Build set of the 3 most recently aired/created colIds
+  var recentColIds = {};
+  if (typeof COLLECTIONS_BY_ID !== 'undefined') {
+    var colsSorted = Object.values(COLLECTIONS_BY_ID)
+      .filter(function(c) { return c && (c.aired_date || c.created_date); })
+      .sort(function(a, b) {
+        var da = a.aired_date || a.created_date || 0;
+        var db = b.aired_date || b.created_date || 0;
+        return db > da ? 1 : db < da ? -1 : 0;
+      })
+      .slice(0, 3);
+    colsSorted.forEach(function(c) { recentColIds[c.id] = true; });
+  }
+
   var seen = {};
   var result = [];
   keys.forEach(function(k) {
     var ep = episodes[k];
     if (!ep || !Array.isArray(ep.vocab_vault)) return;
     var colId = ep.collection_id != null ? ep.collection_id : null;
+    var podcast = (colId != null && typeof COLLECTIONS_BY_ID !== 'undefined' && COLLECTIONS_BY_ID[colId])
+      ? (COLLECTIONS_BY_ID[colId].podcast || null) : null;
     ep.vocab_vault.forEach(function(v) {
       if (!v || !v.word) return;
       var key = v.word.toLowerCase().trim();
@@ -29408,7 +29446,10 @@ function _buildGlobalVocabIndex() {
         definition: v.definition || '',
         category: v.category || null,
         category_alt: v.category_alt || null,
-        colId: colId
+        colId: colId,
+        podcast: podcast,
+        isEditorsPick: !!(colId != null && editorPickColIds[colId]),
+        isRecent: !!(colId != null && recentColIds[colId])
       });
     });
   });
@@ -29431,6 +29472,10 @@ function _openGlobalVocabView() {
     requestAnimationFrame(function() { overlay.classList.add('open'); });
   });
 
+  // Outside-click: close if mousedown lands outside gvPanel and outside lexiPanel
+  // (use capture so it fires before any stopPropagation inside panels)
+  document.addEventListener('mousedown', _gvOutsideClickHandler, true);
+
   // Load EPISODE_META if not yet available, then render
   _loadEpisodeMeta().then(function() {
     var words = _buildGlobalVocabIndex();
@@ -29441,6 +29486,16 @@ function _openGlobalVocabView() {
   });
 }
 
+function _gvOutsideClickHandler(e) {
+  var panel = document.getElementById('gvPanel');
+  var lexiPanel = document.getElementById('lexiPanelInner');
+  if (!panel) return;
+  // If click is inside the Read panel or inside the open Lexi panel — don't close
+  if (panel.contains(e.target)) return;
+  if (lexiPanel && lexiPanel.contains(e.target)) return;
+  _closeGlobalVocabView();
+}
+
 function _closeGlobalVocabView() {
   var overlay = document.getElementById('gvOverlay');
   if (!overlay) return;
@@ -29448,6 +29503,7 @@ function _closeGlobalVocabView() {
   var panel = document.getElementById('gvPanel');
   if (panel) panel.classList.remove('expanded');
   _spUnlockBodyScroll();
+  document.removeEventListener('mousedown', _gvOutsideClickHandler, true);
   setTimeout(function() { overlay.style.display = 'none'; }, 320);
 }
 
@@ -29468,18 +29524,35 @@ function _gvRenderCatGrid(words) {
   grid.id = 'gvCatGrid';
 
   GV_CATS.forEach(function(cat) {
-    var filtered = cat === 'All' ? words : words.filter(function(w) { return w.category === cat; });
-    if (cat !== 'All' && filtered.length === 0) return;
+    var filtered;
+    if (cat === 'All') {
+      filtered = words;
+    } else if (cat === '★ Picks') {
+      filtered = words.filter(function(w) { return w.isEditorsPick; });
+    } else if (cat === '⟳ Recent') {
+      filtered = words.filter(function(w) { return w.isRecent; });
+    } else {
+      filtered = words.filter(function(w) { return w.category === cat; });
+    }
+    if (!_GV_SPECIAL[cat] && filtered.length === 0) return;
 
     var preview = filtered.slice(0, 3).map(function(w) { return w.word; }).join(', ');
 
+    // Episode count for this category
+    var epColIds = {};
+    filtered.forEach(function(w) { if (w.colId != null) epColIds[w.colId] = true; });
+    var epCount = Object.keys(epColIds).length;
+    var epLabel = epCount > 0 ? epCount + (epCount === 1 ? ' episode' : ' episodes') : '';
+
     var card = document.createElement('div');
     card.className = 'gv-cat-card';
+    if (cat === '★ Picks') card.dataset.cat = 'picks';
     card.setAttribute('role', 'button');
     card.setAttribute('tabindex', '0');
     card.innerHTML =
       '<div class="gv-cat-name">' + _gvEsc(cat) + '</div>' +
       '<div class="gv-cat-count">' + filtered.length + '</div>' +
+      (epLabel ? '<div class="gv-cat-ep-count">' + _gvEsc(epLabel) + '</div>' : '') +
       '<div class="gv-cat-preview">' + _gvEsc(preview) + '</div>';
 
     card.addEventListener('click', function() {
@@ -29504,7 +29577,16 @@ function _gvRenderWordList(words, selectedCat) {
   if (!body) return;
 
   _gvActiveCat = selectedCat || 'All';
-  var listWords = _gvActiveCat === 'All' ? words : words.filter(function(w) { return w.category === _gvActiveCat; });
+  var listWords;
+  if (_gvActiveCat === 'All') {
+    listWords = words;
+  } else if (_gvActiveCat === '★ Picks') {
+    listWords = words.filter(function(w) { return w.isEditorsPick; });
+  } else if (_gvActiveCat === '⟳ Recent') {
+    listWords = words.filter(function(w) { return w.isRecent; });
+  } else {
+    listWords = words.filter(function(w) { return w.category === _gvActiveCat; });
+  }
 
   if (title) title.textContent = _gvActiveCat === 'All' ? 'All Words' : _gvActiveCat;
   if (count) count.textContent = listWords.length + ' words';
@@ -29542,15 +29624,39 @@ function _gvRenderWordList(words, selectedCat) {
 
   words.forEach(function(w) {
     var isSaved = !!_lexiconGetSaved(w.word);
-    var hidden  = _gvActiveCat !== 'All' && w.category !== _gvActiveCat;
+    var hidden;
+    if (_gvActiveCat === 'All') {
+      hidden = false;
+    } else if (_gvActiveCat === '★ Picks') {
+      hidden = !w.isEditorsPick;
+    } else if (_gvActiveCat === '⟳ Recent') {
+      hidden = !w.isRecent;
+    } else {
+      hidden = w.category !== _gvActiveCat;
+    }
 
     var row = document.createElement('div');
     row.className = 'gv-word-row' + (hidden ? ' gv-hidden' : '');
-    row.dataset.category = w.category || '';
+    row.dataset.category    = w.category || '';
+    row.dataset.editorspick = w.isEditorsPick ? 'true' : 'false';
+    row.dataset.recent      = w.isRecent      ? 'true' : 'false';
 
     var wordEl = document.createElement('div');
     wordEl.className = 'gv-word-text';
     wordEl.textContent = w.word;
+
+    // Podcast attribution label
+    var podcast = (w.colId && typeof COLLECTIONS_BY_ID !== 'undefined' && COLLECTIONS_BY_ID[w.colId])
+      ? (COLLECTIONS_BY_ID[w.colId].podcast || null) : null;
+    if (podcast) {
+      var srcLabel = document.createElement('div');
+      srcLabel.className = 'gv-word-source';
+      srcLabel.textContent = podcast;
+      row.appendChild(wordEl);
+      row.appendChild(srcLabel);
+    } else {
+      row.appendChild(wordEl);
+    }
 
     var defEl = document.createElement('div');
     defEl.className = 'gv-word-def';
@@ -29566,9 +29672,9 @@ function _gvRenderWordList(words, selectedCat) {
     }
 
     // Source link — small ↗ to open the episode drawer
-    var bottomRow = document.createElement('div');
-    bottomRow.style.cssText = 'display:flex;align-items:center;gap:10px;';
-    bottomRow.appendChild(addBtn);
+    var actionsRow = document.createElement('div');
+    actionsRow.className = 'gv-word-actions';
+    actionsRow.appendChild(addBtn);
     if (w.colId) {
       var srcBtn = document.createElement('button');
       srcBtn.className = 'gv-src-btn';
@@ -29578,12 +29684,11 @@ function _gvRenderWordList(words, selectedCat) {
       srcBtn.addEventListener('click', (function(colId) {
         return function(e) { e.stopPropagation(); _openSourceEpisode(colId); };
       })(w.colId));
-      bottomRow.appendChild(srcBtn);
+      actionsRow.appendChild(srcBtn);
     }
 
-    row.appendChild(wordEl);
     row.appendChild(defEl);
-    row.appendChild(bottomRow);
+    row.appendChild(actionsRow);
     rowsContainer.appendChild(row);
   });
 
@@ -29596,8 +29701,16 @@ function _gvRenderWordList(words, selectedCat) {
 function _gvFilterWordRows(cat) {
   var rows = document.querySelectorAll('#gvWordRows .gv-word-row');
   rows.forEach(function(row) {
-    var rowCat = row.dataset.category;
-    var hide   = cat !== 'All' && rowCat !== cat;
+    var hide;
+    if (cat === 'All') {
+      hide = false;
+    } else if (cat === '★ Picks') {
+      hide = row.dataset.editorspick !== 'true';
+    } else if (cat === '⟳ Recent') {
+      hide = row.dataset.recent !== 'true';
+    } else {
+      hide = row.dataset.category !== cat;
+    }
     row.classList.toggle('gv-hidden', hide);
   });
 }
@@ -29792,27 +29905,31 @@ function _gvEsc(str) {
   transition: background 0.3s ease;
 }
 .gv-overlay.open {
-  background: rgba(0,0,0,0.28);
-  pointer-events: all;
+  background: rgba(0,0,0,0.22);
+  /* pointer-events intentionally NOT set here — panel handles its own clicks.
+     Backdrop stays pointer-events:none so Lexi panel remains interactive. */
 }
 .gv-overlay.open .gv-panel {
   pointer-events: all;
 }
 .gv-panel {
-  position: fixed; top: 0; left: 0; right: 0;
-  width: 100%; max-height: 42vh;
+  position: fixed; top: 0;
+  left: 50%;
+  width: 62%; max-width: 920px; min-width: 480px;
+  max-height: 42vh;
   background: var(--surface);
-  border-left: none; border-right: none;
-  border-bottom: 0.5px solid var(--border);
+  border: 0.5px solid var(--border); border-top: none;
+  border-radius: 0 0 14px 14px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.28), 0 2px 8px rgba(0,0,0,0.12);
   display: flex; flex-direction: column;
-  transform: translateY(-100%);
+  transform: translateX(-50%) translateY(-100%);
   transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
               max-height 0.3s cubic-bezier(0.22, 1, 0.36, 1);
   overflow: hidden;
 }
-.gv-overlay.open .gv-panel { transform: translateY(0); }
+.gv-overlay.open .gv-panel { transform: translateX(-50%) translateY(0); }
 /* Expanded state — when a category is selected */
-.gv-panel.expanded { max-height: 72vh; }
+.gv-panel.expanded { max-height: 74vh; }
 
 .gv-header {
   display: flex; align-items: center; gap: 8px;
@@ -29866,27 +29983,44 @@ function _gvEsc(str) {
 }
 .gv-cat-card {
   border: 0.5px solid var(--border);
-  border-radius: 8px; padding: 16px 14px;
-  cursor: pointer; transition: transform 0.18s ease, border-color 0.18s ease;
-  display: flex; flex-direction: column; gap: 6px;
+  border-radius: 8px; padding: 16px 16px 14px;
+  cursor: pointer;
+  transition: transform 0.18s ease, border-color 0.2s ease, background 0.2s ease;
+  display: flex; flex-direction: column; gap: 4px;
+  position: relative; overflow: hidden;
+}
+.gv-cat-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: var(--accent); opacity: 0;
+  transition: opacity 0.2s ease;
 }
 .gv-cat-card:hover {
-  transform: scale(1.02);
-  border-color: var(--accent);
+  transform: translateY(-2px);
+  border-color: rgba(232,213,163,0.35);
+  background: rgba(232,213,163,0.03);
 }
+.gv-cat-card:hover::before { opacity: 0.6; }
 .gv-cat-name {
   font-family: 'DM Mono', monospace;
-  font-size: 0.62rem; letter-spacing: 0.08em;
+  font-size: 0.58rem; letter-spacing: 0.09em;
   text-transform: uppercase; color: var(--muted);
+  margin-bottom: 2px;
 }
 .gv-cat-count {
   font-family: 'Playfair Display', serif;
-  font-size: 1.4rem; color: var(--text);
+  font-size: 1.6rem; color: var(--text); line-height: 1;
+}
+.gv-cat-ep-count {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.52rem; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--muted); opacity: 0.55;
+  margin-bottom: 4px;
 }
 .gv-cat-preview {
   font-family: 'DM Sans', sans-serif;
   font-size: 0.68rem; color: var(--muted);
-  line-height: 1.4;
+  line-height: 1.4; opacity: 0.8;
 }
 
 /* Word list */
@@ -29913,53 +30047,94 @@ function _gvEsc(str) {
   background: rgba(232,213,163,0.12);
   color: var(--accent); border-color: var(--accent);
 }
-.gv-word-rows { flex: 1; overflow-y: auto; }
-.gv-word-row {
-  display: flex; flex-direction: column; gap: 4px;
-  padding: 12px 20px;
-  border-bottom: 0.5px solid var(--border);
-  transition: opacity 0.15s, transform 0.15s;
+.gv-word-rows {
+  flex: 1; overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  padding: 16px 20px 20px;
+  align-content: start;
 }
-.gv-word-row.gv-hidden { opacity: 0; transform: translateY(-4px); pointer-events: none; height: 0; padding: 0; overflow: hidden; border: none; }
+.gv-word-row {
+  display: flex; flex-direction: column; gap: 0;
+  padding: 14px 16px 12px;
+  border: 0.5px solid var(--border);
+  border-radius: 8px;
+  transition: border-color 0.18s ease, background 0.18s ease;
+  position: relative;
+}
+.gv-word-row:hover { border-color: rgba(232,213,163,0.35); background: rgba(232,213,163,0.03); }
+.gv-word-row.gv-hidden { display: none; }
 .gv-word-text {
   font-family: 'Playfair Display', serif;
-  font-size: 0.88rem; color: var(--text);
+  font-size: 0.9rem; font-style: italic;
+  color: var(--text);
+  margin-bottom: 6px;
+  line-height: 1.3;
+}
+.gv-word-source {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.55rem; letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--accent); opacity: 0.7;
+  margin-bottom: 6px;
 }
 .gv-word-def {
   font-family: 'DM Sans', sans-serif;
-  font-size: 0.73rem; color: var(--muted);
-  line-height: 1.45;
+  font-size: 0.71rem; color: var(--muted);
+  line-height: 1.48;
+  flex: 1;
+  margin-bottom: 10px;
+}
+.gv-word-actions {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: auto;
 }
 .gv-add-btn {
   font-family: 'DM Mono', monospace;
-  font-size: 0.58rem; letter-spacing: 0.06em;
-  text-transform: uppercase; margin-top: 4px;
-  background: none; border: none; cursor: pointer;
-  color: var(--muted); padding: 0; text-align: left;
-  transition: color 0.15s;
+  font-size: 0.56rem; letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: none; border: 0.5px solid var(--border);
+  border-radius: 20px; cursor: pointer;
+  color: var(--muted); padding: 4px 10px;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
 }
-.gv-add-btn:hover { color: var(--accent); }
-.gv-add-btn.saved { color: var(--accent); }
+.gv-add-btn:hover { color: var(--accent); border-color: var(--accent); }
+.gv-add-btn.saved { color: var(--accent); border-color: rgba(232,213,163,0.4); background: rgba(232,213,163,0.08); }
 .gv-add-btn.saved::before { content: '✓ '; }
 .gv-add-btn:not(.saved)::before { content: '+ '; }
 .gv-src-btn {
-  background: none; border: none; cursor: pointer; padding: 0;
-  font-size: 0.6rem; color: var(--muted); opacity: 0.5;
+  background: none; border: none; cursor: pointer; padding: 4px 6px;
+  font-size: 0.62rem; color: var(--muted); opacity: 0.4;
   transition: opacity 0.15s, color 0.15s;
-  line-height: 1; margin-top: 2px; flex-shrink: 0;
+  line-height: 1; flex-shrink: 0;
 }
 .gv-src-btn:hover { opacity: 1; color: var(--accent); }
+
+/* Picks card — subtle gold tint */
+.gv-cat-card[data-cat="picks"] .gv-cat-name,
+.gv-cat-card[data-cat="picks"] .gv-cat-count { color: var(--accent); }
+.gv-cat-card[data-cat="picks"] { border-color: rgba(232,213,163,0.25); }
+.gv-cat-card[data-cat="picks"]::before { opacity: 0.4; }
 
 /* Light mode */
 [data-theme="light"] .gv-overlay.open { background: rgba(0,0,0,0.25); }
 [data-theme="light"] .gv-panel { background: #faf8f3; }
 [data-theme="light"] .gv-cat-card { border-color: rgba(0,0,0,0.1); }
+[data-theme="light"] .gv-word-row { border-color: rgba(0,0,0,0.09); }
 
-/* Mobile — taller compact shade since screen is smaller */
+/* Mobile — full-width panel, taller height */
 @media (max-width: 768px) {
+  .gv-panel {
+    width: 100%; min-width: 0; left: 0;
+    transform: translateY(-100%);
+    border-radius: 0 0 10px 10px;
+  }
+  .gv-overlay.open .gv-panel { transform: translateY(0); }
   .gv-panel { max-height: 55vh; }
   .gv-panel.expanded { max-height: 90vh; }
   .gv-cat-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 16px; }
+  .gv-word-rows { grid-template-columns: repeat(2, 1fr); gap: 8px; padding: 12px 14px 16px; }
   .gv-header { padding: calc(env(safe-area-inset-top, 0px) + 60px) 16px 12px; }
 }
 

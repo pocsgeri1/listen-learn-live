@@ -6,6 +6,27 @@
 
 ---
 
+## v2.95 — 2026-08-04 · Read panel redesign + curation layer
+
+### index.html
+
+- **Read panel — 62% centered width:** `.gv-panel` changed from full-width (`left:0; right:0; width:100%`) to centered (`left:50%; width:62%; max-width:920px; min-width:480px`). Transform updated from `translateY(-100%)` to `translateX(-50%) translateY(-100%)` (open: `translateX(-50%) translateY(0)`). Border-radius `0 0 14px 14px`, box-shadow added. Doesn't cover left Lexi panel.
+- **Overlay pointer-events fixed:** `gv-overlay.open` no longer sets `pointer-events: all` (was blocking Lexi interaction). Only `.gv-overlay.open .gv-panel` has `pointer-events: all`. Lexi panel stays fully interactive with Read panel open simultaneously.
+- **Click-outside-to-close:** `_gvOutsideClickHandler` added (capture-phase `mousedown`). Attached in `_openGlobalVocabView`, removed in `_closeGlobalVocabView`. Ignores clicks inside `gvPanel` and `lexiPanelInner` — both panels can coexist.
+- **Word list — 3-column grid:** `.gv-word-rows` changed from flex column to `display:grid; grid-template-columns:repeat(3,1fr)`. Each `.gv-word-row` is now a card (`border`, `border-radius: 8px`, hover state). `.gv-word-row.gv-hidden` changed from height-collapse to `display:none` (correct for grid). Mobile: 2-column grid.
+- **Word card redesign:** Word in Playfair italic, podcast source label in DM Mono accent, definition in DM Sans muted, actions row (pill add button + ↗ source). `.gv-word-source` new element showing `COLLECTIONS_BY_ID[colId].podcast`.
+- **Category card polish:** Top accent bar `::before`, `translateY(-2px)` hover lift, episode count label (`gv-cat-ep-count`), larger count number (`1.6rem`).
+- **Flying animation — Lexi open target:** `_lexiFlyParticle` now targets `lexiPanelCount` (panel header word count) when `lexiPanel.classList.contains('open')`, falls back to `lexiPullTab` otherwise. Badge pulse also targets `lexiPanelCount` when open (uses `gvBump` animation).
+- **Curation layer — Phase 7:**
+  - `_buildGlobalVocabIndex` now computes `isEditorsPick` (word's episode has ≥1 editors_pick concept in CONCEPTS), `isRecent` (word's episode is in top-3 most recently aired), `podcast` (from `COLLECTIONS_BY_ID[colId].podcast`) per word.
+  - `GV_CATS` extended with `★ Picks` and `⟳ Recent` pseudo-categories (before the real vocab categories).
+  - `_GV_SPECIAL` map added for special-category handling in filter/render logic.
+  - `_gvRenderCatGrid` + `_gvRenderWordList` + `_gvFilterWordRows` all updated to handle special categories.
+  - Word rows store `data-editorspick` and `data-recent` attributes for client-side filtering.
+  - Picks card gets gold tint via `[data-cat="picks"]` CSS.
+
+---
+
 ## v2.94 — 2026-08-04 · Nav restructure: Read · Write · Speak
 
 ### index.html
