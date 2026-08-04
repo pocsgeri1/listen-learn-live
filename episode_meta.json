@@ -4131,7 +4131,23 @@
           "category": "Smartypants",
           "category_alt": null
         }
-      ]
+      ],
+      "guest_return": true,
+      "concept_density": 29,
+      "episode_length_minutes": null,
+      "difficulty_level": 2,
+      "tone": "philosophical",
+      "guest_field": "digital entrepreneurship",
+      "key_quotes": [
+        "Gods gave it, jobs earned it, now nobody hands it out.",
+        "When nearly 8 billion people exist, nearly 8 billion companies become possible.",
+        "You have a past, present, future. AI has none, so it creates without stakes."
+      ],
+      "core_claim": "As AI automates labor and wages collapse, meaning and status shift from employment to personal agency—building taste, perspective, and attention as the irreplaceable human skill stack.",
+      "episode_type": "solo",
+      "actionability_score": 2,
+      "evergreen": true,
+      "controversy_flag": true
     }
   }
 }
