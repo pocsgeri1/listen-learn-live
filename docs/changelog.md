@@ -6,6 +6,19 @@
 
 ---
 
+## v2.97 — 2026-08-04 · Mobile nav centre · ←→ shortcut · Podcast filter · Lanes view
+
+### index.html
+
+- **Mobile nav — 3 modes centred:** New `nav-mob-modes` div extracted from `nav-right`. Nav grid on mobile: `max-content 1fr max-content` (logo | centred modes | right actions). Mode buttons spaced `gap: 20px`. Theme toggle + signup stay right.
+- **Corner mode shortcut → ←→×3:** `Cmd+Shift+C` removed (conflicted with Chrome DevTools). Replaced with IIFE sequence detector: `ArrowLeft ArrowRight × 3` within 1.5s triggers `enterCornerMode()`. Ignores when cursor is inside `INPUT`/`TEXTAREA`/`contentEditable`.
+- **Read panel — podcast filter row:** New `gv-podcast-row` element above category grid. Populated from `_gvGetPodcasts(allWords)` (unique podcasts from vocab index). Active pill filters words fed to `_gvBuildCatGrid`. Reset on panel close. Hidden when only one podcast present.
+- **Read panel — Picks + Recent first in grid:** `GV_CATS` reordered: `['★ Picks', '⟳ Recent', 'All', ...]`. On mobile 2-col grid, both special cards land in row 1 together.
+- **Read panel — Picks + Recent filter pills styled:** `data-special="picks"` (gold border/bg) and `data-special="recent"` (green border/bg). Thin `gv-filter-divider` `<div>` inserted between special pills and regular category pills.
+- **Word Map — Lanes view replaces Clusters + Nebula:** ◉ Clusters and ⬡ Nebula buttons removed. New `≡ Lanes` button + `_wcRenderLanes()`. Each category gets a horizontal swim lane: DM Mono label on left (94px), word chips scrollable right. Chips are colour-coded per category via `--chip-color` CSS variable + `color-mix()`. Clicking a chip expands an inline definition row with Add to Lexi button. Category filter dims non-matching lanes with `wc-lane-dimmed`. Nebula drift animation removed.
+
+---
+
 ## v2.96 — 2026-08-04 · Mobile nav fix · Word Map overhaul · Picks/Recent cards
 
 ### index.html

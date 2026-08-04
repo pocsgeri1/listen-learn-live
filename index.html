@@ -4763,6 +4763,7 @@
   .nav-mob-action {
     display: none;
   }
+  .nav-mob-modes { display: none; }
 
   /* Mobile signup pulse animation */
   @keyframes navSignupPulse {
@@ -4771,51 +4772,25 @@
   }
 
   @media (max-width: 768px) {
-    /* Logo column = max-content so it never clips; buttons fill the rest */
-    nav { grid-template-columns: max-content 1fr; padding: 0 12px; height: 52px; }
+    /* 3-col grid: logo | modes (centered) | right actions */
+    nav { grid-template-columns: max-content 1fr max-content; padding: 0 10px; height: 52px; }
     .nav-island { display: none; }
-    /* nav-right: right-aligned, gap between buttons */
-    .nav-right {
-      grid-column: 2;
-      grid-row: 1;
+
+    /* Centered mode buttons */
+    .nav-mob-modes {
       display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      gap: 2px;
-    }
-    .nav-pill { display: none; }
-    .nav-mobile-toggle { display: none; }
-    .hiw-trigger { display: none; }
-    /* Logo: full name, slightly smaller on mobile */
-    .nav-logo { white-space: nowrap; overflow: visible; font-size: 1.05rem; }
-    .nav-eyebrow { display: none; }
-    /* Theme toggle — show on mobile, sized consistently */
-    .theme-toggle {
-      display: flex !important;
-      width: 30px !important;
-      height: 30px !important;
-      min-width: unset !important;
-      font-size: 0.88rem !important;
-      padding: 0 !important;
-      border-radius: 50% !important;
-      flex-shrink: 0;
-    }
-    /* All nav action buttons: 30px square */
-    .nav-mob-action,
-    .nav-signup-btn {
-      display: flex;
-      align-items: center;
       justify-content: center;
-      width: 30px;
-      height: 30px;
-      min-width: unset;
-      min-height: unset;
-      padding: 0;
-      flex-shrink: 0;
-      -webkit-tap-highlight-color: transparent;
+      align-items: center;
+      gap: 20px;
+      grid-column: 2; grid-row: 1;
     }
-    /* Mode icons — subtle pill border, accent on tap */
     .nav-mob-action {
+      display: flex;
+      align-items: center; justify-content: center;
+      width: 30px; height: 30px;
+      min-width: unset; min-height: unset;
+      padding: 0; flex-shrink: 0;
+      -webkit-tap-highlight-color: transparent;
       background: none;
       border: 0.5px solid transparent;
       border-radius: 8px;
@@ -4830,22 +4805,40 @@
       border-color: rgba(232,213,163,0.3);
       transform: scale(0.88);
     }
-    /* Write button — Playfair script feel */
     #navMobLexi { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1rem; }
-    /* Thin divider before theme toggle */
+
+    /* Right side: theme + signup */
+    .nav-right {
+      grid-column: 3;
+      grid-row: 1;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 4px;
+    }
+    .nav-pill { display: none; }
+    .nav-mobile-toggle { display: none; }
+    .hiw-trigger { display: none; }
+    /* Logo: full name, slightly smaller on mobile */
+    .nav-logo { white-space: nowrap; overflow: visible; font-size: 1.05rem; }
+    .nav-eyebrow { display: none; }
+    /* Theme toggle — show on mobile, sized consistently */
     .theme-toggle {
-      margin-left: 4px;
+      display: flex !important;
+      width: 30px !important; height: 30px !important;
+      min-width: unset !important; font-size: 0.88rem !important;
+      padding: 0 !important; border-radius: 50% !important;
+      flex-shrink: 0;
     }
     /* Signup — pulsing ✺ star, gold */
     .nav-signup-btn {
-      background: none;
-      border: none;
-      box-shadow: none;
-      color: var(--accent);
-      font-size: 1.1rem;
-      transform: none;
+      display: flex; align-items: center; justify-content: center;
+      width: 30px; height: 30px;
+      min-width: unset; min-height: unset; padding: 0; flex-shrink: 0;
+      background: none; border: none; box-shadow: none;
+      color: var(--accent); font-size: 1.1rem;
       animation: navSignupPulse 2.4s ease-in-out infinite;
-      margin-left: 2px;
+      -webkit-tap-highlight-color: transparent;
     }
     .nav-signup-btn::before, .nav-signup-btn::after { display: none; }
     .nav-signup-btn:active { animation: none; transform: scale(0.88); opacity: 0.7; }
@@ -9815,13 +9808,17 @@
   </div>
   <!-- v1.71: epic button is now inside nav-right -->
 
-  <div class="nav-right">
-    <!-- v1.71: epic button lives in nav-right, hidden until nav hover -->
-    <a class="nav-epic-standalone" id="navEpicBtn" onclick="openEgg();playNavSFX()" title="I feel epic!">😎 I feel epic!</a>
-    <!-- v2.95: mobile action icons — Read · Write · Speak + theme toggle -->
+  <!-- v2.96: mobile mode buttons — centered on mobile, hidden on desktop -->
+  <div class="nav-mob-modes" id="navMobModes">
     <button class="nav-mob-action nav-mob-read"  id="navMobRead"  onclick="_openGlobalVocabView();playNavSFX()" aria-label="Read">📚</button>
     <button class="nav-mob-action nav-mob-write" id="navMobLexi"  onclick="openLexiconPanel();playNavSFX()"    aria-label="Write">ℒ</button>
     <button class="nav-mob-action nav-mob-speak" id="navMobSpeak" onclick="openSparkPanel();playNavSFX()"      aria-label="Speak">💬</button>
+  </div>
+
+  <div class="nav-right">
+    <!-- v1.71: epic button lives in nav-right, hidden until nav hover -->
+    <a class="nav-epic-standalone" id="navEpicBtn" onclick="openEgg();playNavSFX()" title="I feel epic!">😎 I feel epic!</a>
+    <!-- Apply: hidden, accessible via ←→ sequence -->
     <button class="nav-mob-action" id="navMobApply" onclick="enterCornerMode();playNavSFX()" aria-label="Apply" style="display:none">🥊</button>
     <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode" onclick="toggleTheme()">☽</button>
     <div class="nav-pill">
@@ -11749,9 +11746,28 @@ document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') closeHiw();
 });
 // v2.94: Corner mode dev shortcut — Cmd+Shift+C (hidden feature, not in UI)
-document.addEventListener('keydown', function(e) {
-  if (e.metaKey && e.shiftKey && e.key === 'C') { e.preventDefault(); enterCornerMode(); }
-});
+// v2.97: Corner mode — ←→←→←→ sequence (3× left-right within 1.5s)
+// Replaces Cmd+Shift+C which conflicted with Chrome DevTools shortcut
+;(function() {
+  var SEQ = ['ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight'];
+  var buf = [];
+  var timer = null;
+  document.addEventListener('keydown', function(e) {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    // Don't fire if user is typing in an input
+    var tag = (e.target || {}).tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || (e.target || {}).isContentEditable) return;
+    buf.push(e.key);
+    clearTimeout(timer);
+    timer = setTimeout(function() { buf = []; }, 1500);
+    if (buf.length === SEQ.length) {
+      var match = SEQ.every(function(k, i) { return k === buf[i]; });
+      if (match) { buf = []; clearTimeout(timer); enterCornerMode(); }
+    }
+    // Trim buffer to SEQ length to prevent growing indefinitely
+    if (buf.length > SEQ.length) buf = buf.slice(-SEQ.length);
+  });
+})();
 const CATEGORIES = [
   { id:'all',           name:'All',           icon:'◈', color:'#e8d5a3' },
   { id:'business',      name:'Business',      icon:'◈', color:'#e0a060' },
@@ -29415,9 +29431,12 @@ var _globalVocabCache = null;
 var _globalVocabCacheLen = 0; // tracks EPISODE_META length for invalidation
 var _gvActiveCat = 'All';     // current filter in word list view
 
-var GV_CATS = ['All', '★ Picks', '⟳ Recent', 'Small Talk', 'Smartypants', 'Business', 'Science', 'Mind & People'];
+// Picks + Recent first so they land together in top row on mobile 2-col grid
+var GV_CATS = ['★ Picks', '⟳ Recent', 'All', 'Small Talk', 'Smartypants', 'Business', 'Science', 'Mind & People'];
 // Special pseudo-category keys (not real vocab categories — handled separately)
 var _GV_SPECIAL = { 'All': true, '★ Picks': true, '⟳ Recent': true };
+// Active podcast filter (null = all podcasts)
+var _gvActivePodcast = null;
 
 // ── Build / cache the global index ──────────────────────────
 function _buildGlobalVocabIndex() {
@@ -29527,7 +29546,82 @@ function _closeGlobalVocabView() {
   if (panel) panel.classList.remove('expanded');
   _spUnlockBodyScroll();
   document.removeEventListener('mousedown', _gvOutsideClickHandler, true);
+  _gvActivePodcast = null; // reset podcast filter on close
   setTimeout(function() { overlay.style.display = 'none'; }, 320);
+}
+
+// ── Podcast filter helper ─────────────────────────────────────
+function _gvGetPodcastFilteredWords(allWords) {
+  if (!_gvActivePodcast) return allWords;
+  return allWords.filter(function(w) { return w.podcast === _gvActivePodcast; });
+}
+
+// ── Build podcast list from vocab index ───────────────────────
+function _gvGetPodcasts(allWords) {
+  var seen = {};
+  var pods = [];
+  allWords.forEach(function(w) {
+    if (w.podcast && !seen[w.podcast]) { seen[w.podcast] = true; pods.push(w.podcast); }
+  });
+  return pods.sort();
+}
+
+// ── Render: podcast filter row ────────────────────────────────
+function _gvRenderPodcastRow(allWords) {
+  var body = document.getElementById('gvBody');
+  if (!body) return;
+  var pods = _gvGetPodcasts(allWords);
+  if (pods.length < 2) return; // don't show if only 1 podcast
+
+  var row = document.createElement('div');
+  row.className = 'gv-podcast-row';
+  row.id = 'gvPodcastRow';
+
+  // "All" pill
+  var allBtn = document.createElement('button');
+  allBtn.className = 'gv-podcast-pill' + (!_gvActivePodcast ? ' active' : '');
+  allBtn.textContent = 'All shows';
+  allBtn.addEventListener('click', function() {
+    _gvActivePodcast = null;
+    _gvRefreshCatGrid(allWords);
+  });
+  row.appendChild(allBtn);
+
+  pods.forEach(function(pod) {
+    var btn = document.createElement('button');
+    btn.className = 'gv-podcast-pill' + (_gvActivePodcast === pod ? ' active' : '');
+    btn.textContent = pod;
+    btn.addEventListener('click', function() {
+      _gvActivePodcast = pod;
+      _gvRefreshCatGrid(allWords);
+    });
+    row.appendChild(btn);
+  });
+
+  body.insertBefore(row, body.firstChild);
+}
+
+function _gvRefreshCatGrid(allWords) {
+  // Re-render cat grid with podcast filter applied, preserving podcast row
+  var podRow = document.getElementById('gvPodcastRow');
+  var body = document.getElementById('gvBody');
+  if (!body) return;
+  // Remove old cat grid
+  var oldGrid = document.getElementById('gvCatGrid');
+  if (oldGrid) oldGrid.remove();
+  // Rebuild with filtered words
+  var filtered = _gvGetPodcastFilteredWords(allWords);
+  // Update podcast pill active states
+  if (podRow) {
+    podRow.querySelectorAll('.gv-podcast-pill').forEach(function(p) {
+      var isAll = p.textContent === 'All shows';
+      p.classList.toggle('active', isAll ? !_gvActivePodcast : p.textContent === _gvActivePodcast);
+    });
+  }
+  // Rebuild cat grid
+  var cnt = document.getElementById('gvCount');
+  if (cnt) cnt.textContent = filtered.length + ' words';
+  _gvBuildCatGrid(filtered, allWords, body);
 }
 
 // ── Render: category grid ─────────────────────────────────────
@@ -29542,6 +29636,17 @@ function _gvRenderCatGrid(words) {
   if (count) count.textContent = words.length + ' words';
   if (back)  back.style.display = 'none';
 
+  body.innerHTML = '';
+
+  // Podcast filter row (above category grid)
+  _gvRenderPodcastRow(words);
+
+  // Apply active podcast filter
+  var filteredWords = _gvGetPodcastFilteredWords(words);
+  _gvBuildCatGrid(filteredWords, words, body);
+}
+
+function _gvBuildCatGrid(words, allWords, body) {
   var grid = document.createElement('div');
   grid.className = 'gv-cat-grid';
   grid.id = 'gvCatGrid';
@@ -29579,16 +29684,15 @@ function _gvRenderCatGrid(words) {
       (epLabel ? '<div class="gv-cat-ep-count">' + _gvEsc(epLabel) + '</div>' : '') +
       '<div class="gv-cat-preview">' + _gvEsc(preview) + '</div>';
 
-    card.addEventListener('click', function() {
-      _gvAnimateCatToList(words, cat);
-    });
-    card.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); _gvAnimateCatToList(words, cat); }
-    });
+    card.addEventListener('click', (function(c) {
+      return function() { _gvAnimateCatToList(words, c); };
+    })(cat));
+    card.addEventListener('keydown', (function(c) {
+      return function(e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); _gvAnimateCatToList(words, c); } };
+    })(cat));
     grid.appendChild(card);
   });
 
-  body.innerHTML = '';
   body.appendChild(grid);
 }
 
@@ -29619,24 +29723,36 @@ function _gvRenderWordList(words, selectedCat) {
   var wrap = document.createElement('div');
   wrap.className = 'gv-word-list';
 
-  // Filter pills
+  // Filter pills — Picks + Recent get special styling + divider before regular cats
   var filterRow = document.createElement('div');
   filterRow.className = 'gv-filter-row';
+  var dividerInserted = false;
   GV_CATS.forEach(function(cat) {
+    // Insert divider between special pseudo-cats and regular cats
+    if (!dividerInserted && !_GV_SPECIAL[cat]) {
+      var div = document.createElement('div');
+      div.className = 'gv-filter-divider';
+      filterRow.appendChild(div);
+      dividerInserted = true;
+    }
     var btn = document.createElement('button');
     btn.className = 'gv-filter-pill' + (cat === _gvActiveCat ? ' active' : '');
+    if (cat === '★ Picks')  btn.dataset.special = 'picks';
+    if (cat === '⟳ Recent') btn.dataset.special = 'recent';
     btn.textContent = cat;
-    btn.addEventListener('click', function() {
-      _gvActiveCat = cat;
-      _gvFilterWordRows(cat);
-      filterRow.querySelectorAll('.gv-filter-pill').forEach(function(p) { p.classList.remove('active'); });
-      btn.classList.add('active');
-      var cnt = document.getElementById('gvCount');
-      if (cnt) {
-        var vis = wrap.querySelectorAll('.gv-word-row:not(.gv-hidden)').length;
-        cnt.textContent = vis + ' words';
-      }
-    });
+    btn.addEventListener('click', (function(c) {
+      return function() {
+        _gvActiveCat = c;
+        _gvFilterWordRows(c);
+        filterRow.querySelectorAll('.gv-filter-pill').forEach(function(p) { p.classList.remove('active'); });
+        btn.classList.add('active');
+        var cnt = document.getElementById('gvCount');
+        if (cnt) {
+          var vis = wrap.querySelectorAll('.gv-word-row:not(.gv-hidden)').length;
+          cnt.textContent = vis + ' words';
+        }
+      };
+    })(cat));
     filterRow.appendChild(btn);
   });
   wrap.appendChild(filterRow);
@@ -29998,6 +30114,29 @@ function _gvEsc(str) {
 
 .gv-body { flex: 1; overflow-y: auto; position: relative; }
 
+/* Podcast filter row */
+.gv-podcast-row {
+  display: flex; flex-wrap: nowrap; gap: 6px;
+  padding: 10px 20px 8px;
+  overflow-x: auto; scrollbar-width: none;
+  border-bottom: 0.5px solid var(--border);
+  flex-shrink: 0;
+}
+.gv-podcast-row::-webkit-scrollbar { display: none; }
+.gv-podcast-pill {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.56rem; letter-spacing: 0.07em; text-transform: uppercase;
+  padding: 5px 14px; border-radius: 20px; cursor: pointer;
+  border: 0.5px solid var(--border); background: none; color: var(--muted);
+  white-space: nowrap; flex-shrink: 0; min-height: 28px;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.gv-podcast-pill:hover { color: var(--text); border-color: var(--border-hover); }
+.gv-podcast-pill.active {
+  background: rgba(232,213,163,0.1);
+  color: var(--accent); border-color: rgba(232,213,163,0.4);
+}
+
 /* Category grid */
 .gv-cat-grid {
   display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
@@ -30071,6 +30210,28 @@ function _gvEsc(str) {
 .gv-filter-pill.active, .gv-filter-pill:hover {
   background: rgba(232,213,163,0.12);
   color: var(--accent); border-color: var(--accent);
+}
+/* Picks + Recent pills — visually elevated, come before a thin divider */
+.gv-filter-pill[data-special="picks"] {
+  color: var(--accent); border-color: rgba(232,213,163,0.35);
+  background: rgba(232,213,163,0.05);
+}
+.gv-filter-pill[data-special="recent"] {
+  color: #7aaf8a; border-color: rgba(122,175,138,0.35);
+  background: rgba(122,175,138,0.05);
+}
+.gv-filter-pill[data-special="picks"].active,
+.gv-filter-pill[data-special="picks"]:hover {
+  background: rgba(232,213,163,0.18); border-color: var(--accent);
+}
+.gv-filter-pill[data-special="recent"].active,
+.gv-filter-pill[data-special="recent"]:hover {
+  background: rgba(122,175,138,0.18); border-color: #7aaf8a; color: #7aaf8a;
+}
+/* Thin separator between special pills and regular categories */
+.gv-filter-divider {
+  width: 0.5px; background: var(--border); align-self: stretch;
+  flex-shrink: 0; margin: 0 4px;
 }
 .gv-word-rows {
   flex: 1; overflow-y: auto;
@@ -30294,16 +30455,23 @@ function _switchToVocabList() {
 // ── Detect mobile vs desktop ──────────────────────────────────
 function _wcDetectAndRender() {
   var isMobile = window.innerWidth <= 600;
-  var stage = document.getElementById('wcStage');
-  var mgrid = document.getElementById('wcMobileGrid');
+  var stage  = document.getElementById('wcStage');
+  var lanes  = document.getElementById('wcLanes');
+  var mgrid  = document.getElementById('wcMobileGrid');
   if (!stage || !mgrid) return;
 
-  if (isMobile) {
+  if (_wcViewMode === 'lanes') {
+    stage.style.display  = 'none';
+    mgrid.style.display  = 'none';
+    if (lanes) { lanes.style.display = ''; _wcRenderLanes(_wcWords); }
+  } else if (isMobile) {
     stage.style.display = 'none';
+    if (lanes) lanes.style.display = 'none';
     mgrid.style.display = 'flex';
     _wcRenderMobileGrid(_wcWords);
   } else {
     stage.style.display = '';
+    if (lanes) lanes.style.display = 'none';
     mgrid.style.display = 'none';
     _wcRenderStars(_wcWords);
   }
@@ -30351,10 +30519,10 @@ function _wcSetView(mode) {
   _wcViewMode   = mode;
   _wcCollected  = false;
   document.querySelectorAll('.wc-view-btn').forEach(function(b) { b.classList.remove('active'); });
-  var idMap = { free: 'wcViewFree', clusters: 'wcViewClusters', nebula: 'wcViewNebula' };
+  var idMap = { free: 'wcViewFree', lanes: 'wcViewLanes' };
   var activeBtn = document.getElementById(idMap[mode] || 'wcViewFree');
   if (activeBtn) activeBtn.classList.add('active');
-  // Collect button only available in Free mode when a cat is selected
+  // Collect button: only in Free mode when a specific cat is active
   var collectBtn = document.getElementById('wcCollectBtn');
   if (collectBtn) { collectBtn.style.display = 'none'; collectBtn.textContent = '⊹ Collect'; }
   _wcStopDrift();
@@ -30562,9 +30730,7 @@ function _wcRenderStars(words) {
   _wcStopDrift();
   var W = stage.clientWidth  || window.innerWidth;
   var H = stage.clientHeight || (window.innerHeight - 60);
-  var positions = _wcViewMode === 'nebula'    ? _wcNebulaLayout(words, W, H)
-               : _wcViewMode === 'clusters'  ? _wcClustersLayout(words, W, H)
-               : _wcLayout(words.length, W, H);
+  var positions = _wcLayout(words.length, W, H);
   var frag = document.createDocumentFragment();
 
   words.forEach(function(w, i) {
@@ -30622,11 +30788,86 @@ function _wcRenderStars(words) {
         }
       }, delay);
     });
-    // Start drift after bloom completes (nebula mode only)
-    if (_wcViewMode === 'nebula') {
-      setTimeout(_wcStartDrift, maxDelay + 400);
-    }
+    // (Drift removed — was nebula-only, nebula view retired)
   });
+}
+
+// ── Lanes view ────────────────────────────────────────────────
+// Renders a typographic swim-lane layout: one row per category,
+// category label on the left, words flowing right as styled chips.
+// Scrollable vertically; each row scrolls horizontally independently.
+function _wcRenderLanes(words) {
+  var container = document.getElementById('wcLanes');
+  if (!container) return;
+  container.innerHTML = '';
+
+  // Only real categories (not special pseudo-cats)
+  var cats = GV_CATS.filter(function(c) { return !_GV_SPECIAL[c]; });
+  var frag = document.createDocumentFragment();
+
+  cats.forEach(function(cat) {
+    var catWords = words.filter(function(w) { return w.category === cat; });
+    if (catWords.length === 0) return;
+
+    var isDimmed = _wcActiveCat !== 'All' && _wcActiveCat !== cat;
+    var color = GV_CAT_COLORS[cat] || '#e8d5a3';
+
+    var lane = document.createElement('div');
+    lane.className = 'wc-lane' + (isDimmed ? ' wc-lane-dimmed' : '');
+    lane.dataset.category = cat;
+
+    // Category label
+    var label = document.createElement('div');
+    label.className = 'wc-lane-label';
+    label.textContent = cat;
+    label.style.color = color;
+    lane.appendChild(label);
+
+    // Word chips row
+    var chips = document.createElement('div');
+    chips.className = 'wc-lane-chips';
+
+    catWords.forEach(function(w) {
+      var isSaved = !!_lexiconGetSaved(w.word);
+      var chip = document.createElement('span');
+      chip.className = 'wc-lane-chip' + (isSaved ? ' wc-lane-chip-saved' : '');
+      chip.textContent = w.word;
+      chip.style.setProperty('--chip-color', color);
+      chip.title = w.definition;
+      chip.addEventListener('click', function(e) {
+        // Toggle inline definition
+        var existing = lane.querySelector('.wc-lane-def[data-for="' + CSS.escape(w.word) + '"]');
+        if (existing) { existing.remove(); chip.classList.remove('wc-lane-chip-open'); return; }
+        lane.querySelectorAll('.wc-lane-def').forEach(function(d) { d.remove(); });
+        lane.querySelectorAll('.wc-lane-chip-open').forEach(function(c) { c.classList.remove('wc-lane-chip-open'); });
+        chip.classList.add('wc-lane-chip-open');
+        var def = document.createElement('div');
+        def.className = 'wc-lane-def';
+        def.dataset.for = w.word;
+        var addCls = isSaved ? 'saved' : '';
+        def.innerHTML = '<span class="wc-lane-def-word">' + _gvEsc(w.word) + '</span>' +
+          '<span class="wc-lane-def-text">' + _gvEsc(w.definition) + '</span>' +
+          '<button class="wc-tt-add ' + addCls + '" data-word="' + _gvEsc(w.word) + '">' +
+          (isSaved ? '✓ In Lexi' : '+ Add to Lexi') + '</button>';
+        var addBtn = def.querySelector('.wc-tt-add');
+        if (!isSaved && addBtn) {
+          addBtn.addEventListener('click', function(ev) {
+            ev.stopPropagation();
+            _gvAddWordToLexi(w.word, w.definition, w.category, w.colId, addBtn);
+            chip.classList.add('wc-lane-chip-saved');
+            addBtn.textContent = '✓ In Lexi'; addBtn.classList.add('saved');
+          });
+        }
+        lane.appendChild(def);
+      });
+      chips.appendChild(chip);
+    });
+
+    lane.appendChild(chips);
+    frag.appendChild(lane);
+  });
+
+  container.appendChild(frag);
 }
 
 // ── Word events ───────────────────────────────────────────────
@@ -30843,6 +31084,13 @@ function _wcFilterCat(cat) {
     if (next && next.classList.contains('wc-mobile-def')) next.style.display = 'none';
     p.classList.remove('expanded');
   });
+  // Dim non-matching lanes in lanes view
+  document.querySelectorAll('#wcLanes .wc-lane').forEach(function(lane) {
+    var match = cat === 'All' || lane.dataset.category === cat;
+    lane.classList.toggle('wc-lane-dimmed', !match);
+    // Clear open definitions when switching category
+    if (!match) lane.querySelectorAll('.wc-lane-def').forEach(function(d) { d.remove(); });
+  });
 }
 
 // ── Mobile grid ───────────────────────────────────────────────
@@ -30889,9 +31137,8 @@ function _wcRenderMobileGrid(words) {
     <div class="wc-header-top">
       <span class="wc-header-title">Word Map</span>
       <div class="wc-view-row" id="wcViewRow">
-        <button class="wc-view-btn active"  id="wcViewFree"     onclick="_wcSetView('free')"     title="Scattered layout">✦ Free</button>
-        <button class="wc-view-btn"         id="wcViewClusters" onclick="_wcSetView('clusters')" title="Category clusters, no overlap">◉ Clusters</button>
-        <button class="wc-view-btn"         id="wcViewNebula"   onclick="_wcSetView('nebula')"   title="Category clusters with drift">⬡ Nebula</button>
+        <button class="wc-view-btn active" id="wcViewFree"  onclick="_wcSetView('free')"  title="Scattered layout">✦ Free</button>
+        <button class="wc-view-btn"        id="wcViewLanes" onclick="_wcSetView('lanes')" title="Horizontal swim lanes by category">≡ Lanes</button>
         <button class="wc-collect-btn" id="wcCollectBtn" onclick="_wcCollect()" style="display:none" title="Animate active words into a grid">⊹ Collect</button>
       </div>
       <div class="wc-header-right">
@@ -30905,6 +31152,7 @@ function _wcRenderMobileGrid(words) {
     <div class="wc-alpha-row" id="wcAlphaRow"></div>
   </div>
   <div class="wc-stage" id="wcStage"></div>
+  <div class="wc-lanes" id="wcLanes" style="display:none"></div>
   <div class="wc-mobile-grid" id="wcMobileGrid" style="display:none"></div>
 </div>
 
@@ -31109,8 +31357,90 @@ function _wcRenderMobileGrid(words) {
 }
 .wc-mobile-pill.expanded + .wc-mobile-def { display: block; }
 
+/* ── Lanes view ─────────────────────────────────────────────── */
+.wc-lanes {
+  flex: 1; overflow-y: auto; padding: 12px 0 24px;
+  scrollbar-width: none;
+}
+.wc-lanes::-webkit-scrollbar { display: none; }
+
+.wc-lane {
+  display: flex; align-items: flex-start;
+  padding: 0 20px;
+  min-height: 48px;
+  border-bottom: 0.5px solid rgba(255,255,255,0.05);
+  transition: opacity 0.2s ease;
+}
+.wc-lane:last-child { border-bottom: none; }
+.wc-lane-dimmed { opacity: 0.12; pointer-events: none; }
+
+.wc-lane-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.52rem; letter-spacing: 0.1em; text-transform: uppercase;
+  width: 94px; flex-shrink: 0;
+  padding-top: 14px;
+  opacity: 0.85; line-height: 1;
+}
+
+.wc-lane-chips {
+  flex: 1; display: flex; flex-wrap: wrap; gap: 6px 8px;
+  padding: 10px 0 12px;
+  overflow: hidden;
+}
+
+.wc-lane-chip {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.76rem; line-height: 1;
+  padding: 5px 11px; border-radius: 20px;
+  border: 0.5px solid color-mix(in srgb, var(--chip-color) 30%, transparent);
+  color: color-mix(in srgb, var(--chip-color) 80%, var(--text));
+  cursor: pointer; white-space: nowrap;
+  background: color-mix(in srgb, var(--chip-color) 6%, transparent);
+  transition: background 0.14s, border-color 0.14s, transform 0.1s;
+  user-select: none;
+}
+.wc-lane-chip:hover {
+  background: color-mix(in srgb, var(--chip-color) 16%, transparent);
+  border-color: color-mix(in srgb, var(--chip-color) 55%, transparent);
+  transform: translateY(-1px);
+}
+.wc-lane-chip-open {
+  background: color-mix(in srgb, var(--chip-color) 18%, transparent);
+  border-color: color-mix(in srgb, var(--chip-color) 60%, transparent);
+}
+.wc-lane-chip-saved {
+  opacity: 0.5;
+}
+
+.wc-lane-def {
+  width: 100%; margin: 0 0 10px 94px;
+  padding: 12px 16px;
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: 8px;
+  display: flex; flex-direction: column; gap: 6px;
+  animation: wcLaneDefIn 0.16s ease;
+}
+@keyframes wcLaneDefIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.wc-lane-def-word {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.9rem; font-style: italic; color: var(--text);
+}
+.wc-lane-def-text {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.72rem; color: var(--muted); line-height: 1.5;
+}
+
+/* Collect button is irrelevant in lanes mode */
+.wc-overlay[data-view="lanes"] .wc-collect-btn { display: none !important; }
+
 [data-theme="light"] .wc-overlay { background: #f5f0e8; }
 [data-theme="light"] .wc-tooltip { background: #eee8db; box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
+[data-theme="light"] .wc-lane { border-bottom-color: rgba(0,0,0,0.06); }
+[data-theme="light"] .wc-lane-def { background: #f0ebe2; border-color: rgba(0,0,0,0.1); }
 
 @media (prefers-reduced-motion: reduce) {
   .wc-overlay, .wc-word, .wc-tooltip { transition: none; animation: none; }

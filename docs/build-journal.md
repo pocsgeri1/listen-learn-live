@@ -6,6 +6,16 @@
 
 ---
 
+## 2026-08-04 — Mobile nav centre · ←→ shortcut · Podcast filter · Lanes view (v2.97)
+
+**Keyboard sequence detector must trim buffer to prevent infinite growth.** After each `ArrowLeft`/`ArrowRight` keydown, push to buf. When `buf.length > SEQ.length`, trim via `buf.slice(-SEQ.length)` so rapid arrow presses don't prevent the detector from ever matching.
+
+**`_gvRenderCatGrid` had to split into `_gvRenderCatGrid` + `_gvBuildCatGrid` to support podcast filter.** The podcast row needs to persist while only the cat grid re-renders on filter change. Keep podcast row in DOM; `_gvRefreshCatGrid` removes old `gvCatGrid` and calls `_gvBuildCatGrid` to append a new one below the podcast row.
+
+**`color-mix()` in CSS for lane chip tints is clean but requires modern browsers.** All target browsers support it (Chrome 111+, Safari 16.2+, Firefox 113+). No fallback needed for this product's audience.
+
+**Lanes view needs `CSS.escape(w.word)` for the inline definition toggle.** Words with apostrophes (e.g. "devil's advocate") would break `querySelector('[data-for="..."]')` without escaping. `CSS.escape()` handles this.
+
 ## 2026-08-04 — Mobile nav + Word Map overhaul (v2.96)
 
 **Alphabet filter must use `dataset.word`, not `textContent`.** The `.wc-word` spans on the canvas have both a `dataset.word` (set when built) and `textContent` (the word string). `textContent` can include whitespace or invisible chars if the span was built with innerHTML. Always read `dataset.word` for filtering logic.
