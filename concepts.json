@@ -15564,5 +15564,945 @@
     "airtable_id": "rec4iSMWIO1kUDqy3",
     "published_at": "2026-07-27T09:50:55.453Z",
     "extraction_prompt_version": null
+  },
+  {
+    "id": 777,
+    "term": "Meaning From Within",
+    "category": "philosophy",
+    "source": "dk",
+    "hook": "Gods gave it, jobs earned it, now nobody hands it out.",
+    "plain": "Meaning shifted from being assigned by religion (up there) to earned through work (out there) to deconstructed by postmodernism (nowhere) to self-generated (within you). If external structures no longer provide purpose, creating your own meaning becomes mandatory.",
+    "analogy": "Your great-grandparents were told what mattered. Your grandparents worked for it. You build it yourself.",
+    "prompt": "What would you do if no job, religion, or social norm told you what was meaningful?",
+    "collection_id": 523,
+    "timestamp": 166,
+    "editors_pick": false,
+    "related_ids": [
+      89,
+      97,
+      127,
+      131,
+      372
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 9,
+      "actionability": 6,
+      "novelty": 7,
+      "conversation_value": 8,
+      "composite": 7.5
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recbLojjc5vXIXrvo",
+    "published_at": "2026-08-04T08:36:43.150Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 768,
+    "term": "Meaning's Two Killers",
+    "category": "psychology",
+    "source": "core",
+    "hook": "Stagnation robs forward movement. Isolation robs mattering beyond yourself.",
+    "plain": "Two forces that create meaninglessness: stagnation (no progress, feeling stuck) and isolation (no connection to something greater, feeling like you don't matter). Modern life delivers both through infinite scrolling with zero contribution or forward movement in your actual life.",
+    "analogy": "Sitting on a treadmill in an empty room. You're moving but going nowhere, and nobody sees it anyway.",
+    "prompt": "Which emptiness hits harder for you this week: feeling stuck or feeling like what you do doesn't matter?",
+    "collection_id": 523,
+    "timestamp": 229,
+    "editors_pick": false,
+    "related_ids": [
+      89,
+      90,
+      174,
+      232,
+      640
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 9,
+      "actionability": 7,
+      "novelty": 7,
+      "conversation_value": 8,
+      "composite": 7.8
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recM6T8OaHqKSe4dV",
+    "published_at": "2026-08-04T08:36:43.150Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 769,
+    "term": "Struggle You Choose",
+    "category": "philosophy",
+    "source": "core",
+    "hook": "What you consciously struggle for defines what your purpose becomes.",
+    "plain": "Purpose isn't the struggle imposed on you by survival or circumstance. It's the struggle you deliberately select. The creative who chooses to master a craft, build an audience, or articulate an idea they can't stop thinking about. That chosen friction generates meaning.",
+    "analogy": "Sisyphus pushing the boulder is torture. Michelangelo chipping marble for four years is devotion. Same effort, different choice.",
+    "prompt": "What would you struggle through even if nobody paid you or noticed?",
+    "collection_id": 523,
+    "timestamp": 240,
+    "editors_pick": false,
+    "related_ids": [
+      32,
+      97,
+      135,
+      339,
+      416
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 9,
+      "actionability": 7,
+      "novelty": 8,
+      "conversation_value": 9,
+      "composite": 8.3
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "recPSBsv88ZyP2K14",
+    "published_at": "2026-08-04T08:36:43.150Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 761,
+    "term": "Progress Over Arrival",
+    "category": "philosophy",
+    "source": "core",
+    "hook": "Hitting the goal then stopping creates the emptiness you tried to escape.",
+    "plain": "Humans need to feel like they're going somewhere, not that they've arrived and stopped. The founder who builds a $100 million company and retires into meaninglessness didn't lose purpose at the finish line. They mistook arrival for the point; while forward movement is the point.",
+    "analogy": "Climbers who summit Everest often feel emptiest the week after. The mountain was never the goal.",
+    "prompt": "What would you do the day after you hit your biggest goal if nobody was watching?",
+    "collection_id": 523,
+    "timestamp": 240,
+    "editors_pick": false,
+    "related_ids": [
+      122,
+      89,
+      663,
+      356,
+      376
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 9,
+      "actionability": 7,
+      "novelty": 7,
+      "conversation_value": 9,
+      "composite": 8
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "rec0UsWJcd9nz8Zkb",
+    "published_at": "2026-08-04T08:36:43.150Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 785,
+    "term": "Curiosity = Non-linear Advantage",
+    "category": "thinking",
+    "source": "dk",
+    "hook": "Following threads that don't make sense yet is how you find what nobody else sees.",
+    "plain": "Curiosity is following what interests you without knowing where it leads. Two people reading the same book highlight different lines because curiosity works from your unique vantage point in life. That non-linear selection is your edge. Nobody else thinks the same threads matter.",
+    "analogy": "Five people walk through a museum. One stops at the exit signs, one at the frames, one at the lighting. Same room, different treasure.",
+    "prompt": "What did you read this month that made zero sense to anyone else you'd recommend it to?",
+    "collection_id": 523,
+    "timestamp": 248,
+    "editors_pick": false,
+    "related_ids": [
+      135,
+      167,
+      344,
+      517,
+      529
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 7,
+      "novelty": 8,
+      "conversation_value": 8,
+      "composite": 7.8
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recwJDqDF8vrs2zoZ",
+    "published_at": "2026-08-04T08:36:43.150Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 772,
+    "term": "Status as Recognition",
+    "category": "psychology",
+    "source": "core",
+    "hook": "Status signals that your struggle mattered to someone beyond yourself.",
+    "plain": "Status gets dismissed as shallow, but it's really recognition that your work contributed to something larger. It's proof you're not alone in a void. The struggle generates meaning only when it lands somewhere. Status is the feedback that it did.",
+    "analogy": "A tree falling in an empty forest still falls, but a tree someone carved their name into decades ago becomes a landmark.",
+    "prompt": "When was the last time someone told you something you made mattered to them?",
+    "collection_id": 523,
+    "timestamp": 252,
+    "editors_pick": false,
+    "related_ids": [
+      94,
+      92,
+      25,
+      231,
+      337
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 6,
+      "novelty": 7,
+      "conversation_value": 8,
+      "composite": 7.3
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recU83rRYa5bB5Pa0",
+    "published_at": "2026-08-04T08:36:43.150Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 764,
+    "term": "Post-labor Economics",
+    "category": "society",
+    "source": "dk",
+    "hook": "When AI does the jobs, wages collapse, spending collapses, loop breaks.",
+    "plain": "The traditional cycle is work creates wages, wages create spending, spending creates more jobs. AI threatens this by automating labor, which tanks wages, which kills spending, which breaks the entire economic system. The solution requires shifting from wage income to capital income or transfers.",
+    "analogy": "A factory where robots build everything but nobody has money to buy what the robots made.",
+    "prompt": "If you couldn't trade time for money starting next year, how would you generate income?",
+    "collection_id": 523,
+    "timestamp": 280,
+    "editors_pick": false,
+    "related_ids": [
+      312,
+      318,
+      329,
+      359,
+      677
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 6,
+      "novelty": 8,
+      "conversation_value": 9,
+      "composite": 7.8
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recDtaR2Ishp3SwBb",
+    "published_at": "2026-08-04T08:36:43.150Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 782,
+    "term": "Capital Income Future",
+    "category": "finance",
+    "source": "dk",
+    "hook": "Owning income-generating assets beats trading hours when wages collapse from AI.",
+    "plain": "Post-labor economics requires shifting from wage income (trading time) to capital income (owning assets that produce money). The future isn't everyone on UBI. It's regular people owning pieces of businesses, content, or systems that generate income without hourly labor.",
+    "analogy": "Royalty checks for a song you wrote once versus clocking in daily at a factory for the same monthly total.",
+    "prompt": "What's one asset you could build this year that might pay you in five years without more work?",
+    "collection_id": 523,
+    "timestamp": 365,
+    "editors_pick": false,
+    "related_ids": [
+      1,
+      5,
+      194,
+      379,
+      506
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 8,
+      "novelty": 7,
+      "conversation_value": 8,
+      "composite": 7.8
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recoEYcwcnuThCfNp",
+    "published_at": "2026-08-04T08:36:43.150Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 786,
+    "term": "The Human as Product",
+    "category": "business",
+    "source": "dk",
+    "hook": "Jobs survive when you are the value, not what you produce.",
+    "plain": "The jobs that survive AI are ones where the human is the product: bartenders, artists, therapists, diplomats. What matters isn't output quality but presence, trust, relationship, or lived experience. These can't be automated because the person doing it is the point.",
+    "analogy": "You pay $200 for dinner at a chef's table not because the food is better, but because the chef walks out with a fun story.",
+    "prompt": "In your current work, could someone else do the exact task and deliver the same value?",
+    "collection_id": 523,
+    "timestamp": 428,
+    "editors_pick": false,
+    "related_ids": [
+      125,
+      239,
+      314,
+      357,
+      506
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 8,
+      "novelty": 8,
+      "conversation_value": 8,
+      "composite": 8
+    },
+    "curated_collection_ids": [
+      201
+    ],
+    "airtable_id": "recx2m8xGvi9B6tz9",
+    "published_at": "2026-08-04T08:36:43.150Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 787,
+    "term": "Seven Billion Companies Vision",
+    "category": "business",
+    "source": "dk",
+    "hook": "When nearly 8 billion people exist, nearly 8 billion companies become possible.",
+    "plain": "The future allows every person to become their own company. With AI, you can learn anything, build anything, distribute globally. Not everyone will take this path, but the infrastructure now exists for individuals to become self-sustaining enterprises without traditional employment.",
+    "analogy": "Farmers went from working land owned by lords to owning their own plots. Same shift, new domain.",
+    "prompt": "If you had to generate $1,000/month without a job starting Monday, what would you try first?",
+    "collection_id": 523,
+    "timestamp": 452,
+    "editors_pick": false,
+    "related_ids": [
+      126,
+      131,
+      353,
+      495,
+      680
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 7,
+      "actionability": 7,
+      "novelty": 8,
+      "conversation_value": 8,
+      "composite": 7.5
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recxtTr8GojnrUyDR",
+    "published_at": "2026-08-04T08:36:43.150Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 788,
+    "term": "Option Capital",
+    "category": "finance",
+    "source": "dk",
+    "hook": "Money stops being a productivity metric and becomes fuel for doing what matters.",
+    "plain": "In a post-labor world, money shifts from measuring how hard you worked to unlocking what you couldn't do before. It's no longer about how hard you worked but about what you can now do that you couldn't before. Money becomes the physical representation of expanded capability and choice.",
+    "analogy": "A bus pass gets you to the job. A paid-off mortgage gets you to the life.",
+    "prompt": "What would you do next month if money only unlocked options instead of proving effort?",
+    "collection_id": 523,
+    "timestamp": 694,
+    "editors_pick": false,
+    "related_ids": [
+      32,
+      64,
+      137,
+      194,
+      379
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 7,
+      "novelty": 7,
+      "conversation_value": 8,
+      "composite": 7.5
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recyOs7XZjmoTCo9z",
+    "published_at": "2026-08-04T08:36:43.150Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 766,
+    "term": "Narrative Gravity",
+    "category": "psychology",
+    "source": "core",
+    "hook": "Humans crave novelty, drama, myth, and meaning. Facts alone don't stick.",
+    "plain": "Your brain is wired to find patterns and build narratives. We remember stories, not data. When basic needs are met and survival isn't the focus, people seek meaning through narrative: who struggled, what changed, why it mattered. That's what creatives provide.",
+    "analogy": "You forget a statistic five minutes after reading it. You remember a stranger's story from a dinner party years ago.",
+    "prompt": "What story stuck with you this month that you've already retold to someone else?",
+    "collection_id": 523,
+    "timestamp": 814,
+    "editors_pick": false,
+    "related_ids": [
+      24,
+      71,
+      169,
+      351,
+      500
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 9,
+      "actionability": 7,
+      "novelty": 6,
+      "conversation_value": 8,
+      "composite": 7.5
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recFBwddtXpvUOVfI",
+    "published_at": "2026-08-04T08:36:43.150Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 775,
+    "term": "Pay Premium for Savoring",
+    "category": "business",
+    "source": "dk",
+    "hook": "People pay to escape bad experiences fast and pay more to extend good ones.",
+    "plain": "Humans pay for speed when escaping pain (DMV wait times, bureaucracy, wrong orders). But they pay a premium for experiences they want to savor (Michelin dinners, live theater, handcrafted goods). AI handles friction, humans handle the things worth lingering in.",
+    "analogy": "A microwave dinner costs $4. A chef's tasting menu costs $400. Same food category, opposite intent.",
+    "prompt": "What's one thing you paid more for specifically because you wanted it to last longer?",
+    "collection_id": 523,
+    "timestamp": 858,
+    "editors_pick": false,
+    "related_ids": [
+      116,
+      397,
+      615,
+      651,
+      658
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 7,
+      "novelty": 7,
+      "conversation_value": 7,
+      "composite": 7.3
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recXpproMW2A67mnA",
+    "published_at": "2026-08-04T08:36:43.150Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 778,
+    "term": "Attention = Leverage Multiplier",
+    "category": "business",
+    "source": "dk",
+    "hook": "Elon's tweets shift markets. MrBeast's attention funds cities. Attention is power.",
+    "plain": "Attention attracts capital, talent, and resources. The more attention you command, the more you can demand, build, or shift. It's not about followers for vanity—it's about the concentrated focus of others amplifying what you can do beyond individual capacity.",
+    "analogy": "A megaphone in an empty field is useless. A megaphone in Times Square starts movements.",
+    "prompt": "If 10,000 people genuinely cared about your next project, what would you build?",
+    "collection_id": 523,
+    "timestamp": 997,
+    "editors_pick": false,
+    "related_ids": [
+      102,
+      128,
+      140,
+      515,
+      624
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 7,
+      "novelty": 7,
+      "conversation_value": 8,
+      "composite": 7.5
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recbWU1LypJM6Cg5g",
+    "published_at": "2026-08-04T08:36:43.150Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 762,
+    "term": "Winner-Takes-All Myth",
+    "category": "thinking",
+    "source": "dk",
+    "hook": "Saturation is a story non-creators tell themselves to avoid trying.",
+    "plain": "The creator economy isn't winner-takes-all. Attention rotates, new people go viral daily, small audiences charge premium prices, and many high-follower accounts earn less than focused niche creators. Saturation is just urban legend non-creators tell themselves to avoid trying.",
+    "analogy": "One restaurant being packed doesn't mean every other restaurant in the city goes bankrupt.",
+    "prompt": "Name one creator with under 5,000 followers you'd pay money to learn from.",
+    "collection_id": 523,
+    "timestamp": 1098,
+    "editors_pick": true,
+    "related_ids": [
+      117,
+      130,
+      191,
+      195,
+      363
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 8,
+      "novelty": 7,
+      "conversation_value": 8,
+      "composite": 7.8
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "rec2Bjvpt8945bLug",
+    "published_at": "2026-08-04T08:36:43.150Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 774,
+    "term": "Institutional Trust Collapse",
+    "category": "society",
+    "source": "dk",
+    "hook": "People trust individual creators more than centralized institutions for news now.",
+    "plain": "Social media creators are replacing traditional news and education as the primary source of information. Trust shifted from institutions to individuals with genuine expertise or unique perspectives. This creates massive opportunity for people who can articulate ideas clearly.",
+    "analogy": "You trust a YouTuber's take on the election more than CNN's entire panel.",
+    "prompt": "Who's one creator you trust more than any news outlet, and why?",
+    "collection_id": 523,
+    "timestamp": 1230,
+    "editors_pick": false,
+    "related_ids": [
+      144,
+      387,
+      404,
+      170,
+      509
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 9,
+      "actionability": 6,
+      "novelty": 7,
+      "conversation_value": 8,
+      "composite": 7.5
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recWx20NMGOgAkXXm",
+    "published_at": "2026-08-04T08:36:43.150Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 773,
+    "term": "Skills Abstracting Upward",
+    "category": "thinking",
+    "source": "dk",
+    "hook": "Every generation's highest skill becomes the next generation's commodity. Move up or get replaced.",
+    "plain": "Skills continuously abstract to a higher level. Physical labor went to animals, then machines, then AI. You don't need to know how to use a typewriter anymore. The layer that matters now is ideas, taste, judgment. All things that sit above execution.",
+    "analogy": "Drivers don't need to know how engines work, only need to know where they're going.",
+    "prompt": "What technical skill are you still holding onto that automation could handle for you?",
+    "collection_id": 523,
+    "timestamp": 1254,
+    "editors_pick": false,
+    "related_ids": [
+      76,
+      310,
+      315,
+      470,
+      505
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 7,
+      "novelty": 7,
+      "conversation_value": 7,
+      "composite": 7.3
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recV2oeJIkJODsCpS",
+    "published_at": "2026-08-04T08:36:43.150Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 783,
+    "term": "AI Adopting Human Language",
+    "category": "tech-ai",
+    "source": "dk",
+    "hook": "Did AI learn our patterns, or did it just make our existing patterns visible?",
+    "plain": "AI-generated text has recognizable patterns (like it's not X, it's Y), but those patterns existed in human writing first. The question is whether AI is teaching us new language habits or just amplifying the ones we already had (and making them intolerably visible).",
+    "analogy": "You never noticed everyone saying \"literally\" until your friend overused it in one conversation. Now you hear it everywhere.",
+    "prompt": "What phrase have you started noticing everywhere online that you think came from AI training data?",
+    "collection_id": 523,
+    "timestamp": 1291,
+    "editors_pick": false,
+    "related_ids": [
+      577,
+      584,
+      664,
+      671,
+      690
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 7,
+      "actionability": 6,
+      "novelty": 7,
+      "conversation_value": 8,
+      "composite": 7
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recozuTzoPNHgfkuL",
+    "published_at": "2026-08-04T08:36:43.150Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 780,
+    "term": "The Swap Test",
+    "category": "thinking",
+    "source": "dk",
+    "hook": "If you swap creator for creation and value holds, AI wins.",
+    "plain": "Test whether your work is defensible by asking: if someone else made this exact thing, would it lose value? If yes, your identity is the moat; if no, you're producing commodities. The value must come from who you are, not just what you produced.",
+    "analogy": "A stock photo loses nothing if you learn it came from a different photographer. An Annie Leibovitz portrait loses everything.",
+    "prompt": "Pick one thing you made this month. Would it matter less if your name wasn't on it?",
+    "collection_id": 523,
+    "timestamp": 1365,
+    "editors_pick": false,
+    "related_ids": [
+      119,
+      125,
+      172,
+      357,
+      358
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 8,
+      "novelty": 8,
+      "conversation_value": 8,
+      "composite": 8
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "recldV0eDzXjc8lb0",
+    "published_at": "2026-08-04T08:36:43.150Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 770,
+    "term": "Perspective Shaped by Stakes",
+    "category": "identity",
+    "source": "core",
+    "hook": "AI analyzes what it means to be you but cannot be you.",
+    "plain": "Your perspective is shaped by beliefs, wounds, wins, and lived experience. AI can simulate what it's like to be a first-generation immigrant building a career, but it cannot have stakes in the outcome. That gap is where genuine perspective lives: having something to lose.",
+    "analogy": "A war documentary narrated by someone who was never in combat versus a veteran telling the same story. Same facts, different weight.",
+    "prompt": "What experience in your past six months could AI describe but never actually understand?",
+    "collection_id": 523,
+    "timestamp": 1382,
+    "editors_pick": false,
+    "related_ids": [
+      71,
+      169,
+      237,
+      314,
+      357
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 7,
+      "novelty": 8,
+      "conversation_value": 8,
+      "composite": 7.8
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recRLnt5SuSiLnrmD",
+    "published_at": "2026-08-04T08:36:43.150Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 767,
+    "term": "Energy Signature",
+    "category": "identity",
+    "source": "dk",
+    "hook": "AI mimics style but cannot fake caring about something.",
+    "plain": "What you choose to focus on, and why it matters to you personally, is your energy signature. Two people covering the same topic feel completely different because energy signature is shaped by stakes. AI can replicate format but not the human motivation underneath.",
+    "analogy": "Two chefs cook the same recipe. One is feeding their family, one is proving something to a parent. You taste the difference.",
+    "prompt": "Scroll back through what you saved this month. What pattern in your selections would nobody else have?",
+    "collection_id": 523,
+    "timestamp": 1398,
+    "editors_pick": false,
+    "related_ids": [
+      71,
+      135,
+      357,
+      169,
+      172
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 7,
+      "actionability": 7,
+      "novelty": 8,
+      "conversation_value": 8,
+      "composite": 7.5
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recHPdmNSqLe6mYEq",
+    "published_at": "2026-08-04T08:36:43.150Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 771,
+    "term": "The Mortal Edge",
+    "category": "philosophy",
+    "source": "dk",
+    "hook": "You have a past, present, future. AI has none, so it creates without stakes.",
+    "plain": "Humans work from a life story with mortality and time limits. Every moment passes and cannot be redone. AI doesn't die, doesn't age, doesn't feel time running out. Creating from that pressure—knowing this version of you disappears—shapes work AI can't replicate.",
+    "analogy": "Writing a letter to someone you'll never see again versus writing a grocery list you'll reuse tomorrow.",
+    "prompt": "If you had to create one thing before you turned 40 (or your next milestone), what would it be?",
+    "collection_id": 523,
+    "timestamp": 1405,
+    "editors_pick": false,
+    "related_ids": [
+      325,
+      316,
+      389,
+      725,
+      732
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 7,
+      "actionability": 7,
+      "novelty": 8,
+      "conversation_value": 8,
+      "composite": 7.5
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recTXET9KeNLNylS8",
+    "published_at": "2026-08-04T08:36:43.150Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 765,
+    "term": "Sense-making Requires Stakes",
+    "category": "thinking",
+    "source": "dk",
+    "hook": "AI processes information but cannot decide what information means to someone mortal.",
+    "plain": "Sense-making is framing, prioritizing, saying this matters and this doesn't. AI lacks the ability to decide meaning because it has no mortality, no risk, no consequences. What matters to you is shaped by what you stand to lose, which AI never experiences.",
+    "analogy": "A doctor ordering tests on a stranger versus ordering tests on their own child. Same data, different urgency.",
+    "prompt": "What information did you ignore this month that others thought was critical, and why?",
+    "collection_id": 523,
+    "timestamp": 1433,
+    "editors_pick": false,
+    "related_ids": [
+      220,
+      360,
+      169,
+      210,
+      315
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 7,
+      "novelty": 8,
+      "conversation_value": 8,
+      "composite": 7.8
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recFA7rsAH4hBGiFV",
+    "published_at": "2026-08-04T08:36:43.150Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 760,
+    "term": "Evolving Taste",
+    "category": "creativity",
+    "source": "dk",
+    "hook": "Tell AI to write like you. Read it. Instantly want something different.",
+    "plain": "Your taste shifts as you create. The moment you see AI mimic your style, you no longer want that style; you've already moved on. This recursive self-improvement loop is uniquely human because growth changes what you find worth making in real time.",
+    "analogy": "You buy clothes you think look good, wear them once, and immediately see them differently in the mirror.",
+    "prompt": "What project from six months ago embarrasses you now because your taste outgrew it?",
+    "collection_id": 523,
+    "timestamp": 1452,
+    "editors_pick": false,
+    "related_ids": [
+      528,
+      176,
+      344,
+      405,
+      652
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 7,
+      "novelty": 8,
+      "conversation_value": 8,
+      "composite": 7.8
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "rec0Mmq8i4xrjZSM3",
+    "published_at": "2026-08-04T08:36:43.150Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 781,
+    "term": "Agency = Meta-skill",
+    "category": "identity",
+    "source": "dk",
+    "hook": "Acting without permission or prompting unlocks every other skill you learn.",
+    "plain": "Agency is the ability to create your own story and set your own trajectory without waiting for approval. It's the foundation skill because without it, you're following paths being automated. Agency lets you choose problems, reject defaults, and develop everything else.",
+    "analogy": "Two kids in a playground. One waits to be told which game to play. The other invents a new one.",
+    "prompt": "What's one thing you've been waiting for permission to try that nobody will ever give you?",
+    "collection_id": 523,
+    "timestamp": 1566,
+    "editors_pick": true,
+    "related_ids": [
+      32,
+      61,
+      131,
+      314,
+      394
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 9,
+      "actionability": 8,
+      "novelty": 7,
+      "conversation_value": 8,
+      "composite": 8
+    },
+    "curated_collection_ids": [
+      203
+    ],
+    "airtable_id": "reclg2bwzsVdvHNb8",
+    "published_at": "2026-08-04T08:36:43.150Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 779,
+    "term": "Infinite Library Problem",
+    "category": "thinking",
+    "source": "dk",
+    "hook": "A library with every possible sentence ever written is completely worthless.",
+    "plain": "If a library contained every permutation of words ever, it would be meaningless. There'd be no curation, no judgment, no selection because the value comes from someone choosing what deserves attention. When everything exists, nothing matters until someone says this does.",
+    "analogy": "Every song ever recorded exists on Spotify, yet you still need someone to build the playlist.",
+    "prompt": "Look at your reading list. What made you add each item instead of the million other options?",
+    "collection_id": 523,
+    "timestamp": 1680,
+    "editors_pick": true,
+    "related_ids": [
+      600,
+      167,
+      344,
+      527,
+      601
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 7,
+      "actionability": 7,
+      "novelty": 8,
+      "conversation_value": 8,
+      "composite": 7.5
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recbmCEH2Q7dLAzz8",
+    "published_at": "2026-08-04T08:36:43.150Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 763,
+    "term": "Curation Over Creation",
+    "category": "creativity",
+    "source": "dk",
+    "hook": "When anyone can make anything, selecting what matters becomes the scarcity.",
+    "plain": "AI floods the world with content, but attention remains finite. The scarce resource isn't creation, but curation. Your ability to filter signal from noise, select what deserves focus, and frame why it matters is what people pay for when everything else is free.",
+    "analogy": "A library with every book ever written vs Chris Williamson handing you a list of 5 books to read this year.",
+    "prompt": "Open your bookmarks or saved posts. What pattern in what you kept reveals something AI couldn't select?",
+    "collection_id": 523,
+    "timestamp": 1729,
+    "editors_pick": true,
+    "related_ids": [
+      167,
+      175,
+      344,
+      527,
+      601
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 8,
+      "novelty": 8,
+      "conversation_value": 9,
+      "composite": 8.3
+    },
+    "curated_collection_ids": [
+      206
+    ],
+    "airtable_id": "rec4jKLMwqPO6TkQy",
+    "published_at": "2026-08-04T08:36:43.150Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 776,
+    "term": "Taste Develops Through Failure",
+    "category": "creativity",
+    "source": "core",
+    "hook": "You build taste by making things, not by studying what good looks like.",
+    "plain": "Taste isn't innate. It's developed by making things, seeing what works, and correcting what doesn't. You curate by creating, not by studying curation. The more decisions you make about what deserves to exist, the sharper your eye becomes.",
+    "analogy": "A chef doesn't learn seasoning from a book. They burn 100 dishes first.",
+    "prompt": "What's something you made that failed so badly it clarified what you actually wanted?",
+    "collection_id": 523,
+    "timestamp": 1748,
+    "editors_pick": false,
+    "related_ids": [
+      472,
+      512,
+      528,
+      685,
+      686
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 8,
+      "novelty": 7,
+      "conversation_value": 8,
+      "composite": 7.8
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recYwSpR0BmsfM5Ax",
+    "published_at": "2026-08-04T08:36:43.150Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 784,
+    "term": "Perspective Development Levels",
+    "category": "thinking",
+    "source": "dk",
+    "hook": "Your mind expands from conformist to ideological to able to hold contradiction.",
+    "plain": "Perspective develops in stages. Early levels are conformist and dogmatic, with one right answer. Higher levels hold complexity, nuance, and contradiction without collapsing. This expansion allows genuine agency and sophisticated curation because a narrow mind can only see narrow opportunities.",
+    "analogy": "A child sees good guys and bad guys. An adult sees people making trade-offs under pressure.",
+    "prompt": "What's one belief you held five years ago that now feels cartoonishly simple?",
+    "collection_id": 523,
+    "timestamp": 1786,
+    "editors_pick": false,
+    "related_ids": [
+      103,
+      210,
+      486,
+      488,
+      676
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 7,
+      "novelty": 7,
+      "conversation_value": 8,
+      "composite": 7.5
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "rectWReo52HfwkJ4M",
+    "published_at": "2026-08-04T08:36:43.150Z",
+    "extraction_prompt_version": null
   }
 ]
