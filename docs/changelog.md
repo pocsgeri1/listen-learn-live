@@ -6,6 +6,22 @@
 
 ---
 
+## v2.94 — 2026-08-04 · Nav restructure: Read · Write · Speak
+
+### index.html
+
+- **Nav island replaced:** Old "Speak + Apply" buttons removed. New three-mode nav: Read (`_openGlobalVocabView`) · Write (`openLexiconPanel`) · Speak (`openSparkPanel`). Each has a hover-reveal emoji (📚 / ✍️ / 💬) using the existing nav emoji pattern.
+- **Apply hidden everywhere:** `nav-corner-nav-btn`, `navMobApply`, `mobTabApply`, mobile menu Apply button all set to `display:none`. Corner mode accessible via `Cmd+Shift+C` keyboard shortcut only.
+- **Lexi tab removed from Spark panel:** `panelTabLexicon` hidden, `lexicon` removed from `panelSwitchTab` sections map and forEach array.
+- **Mobile tab bar:** Replaced Apply tab with Read tab. Order: Read · Write · Speak. `mobTabRead` → `_openGlobalVocabView()`. `mobTabLexi` label updated to "Write".
+- **Mobile nav menu:** Restructured to Read · Write · Speak (removed Apply, removed Lexi as separate entry).
+- **Lexi panel tagline:** Updated to "Practice your saved words. Write, get feedback, make them yours."
+- **First-visit tour:** Updated to 3 steps — Read nav button · Lexi pull tab · Speak nav button. Removed Apply step.
+- **Read panel (Global Vocab) — top-slide:** `.gv-panel` changed from right-slide (420px fixed width, `translateX`) to full-width top-slide (`translateY(-100%) → translateY(0)`). Compact at `max-height: 42vh` (category grid), expands to `72vh` when a category is selected. `.gv-panel.expanded` class toggled in `_gvAnimateCatToList` / `_gvAnimateListToCat` / `_closeGlobalVocabView`. Backdrop added to `gv-overlay.open`. Category grid: 3-col on desktop, 2-col on mobile. `gv-body` changed to `overflow-y: auto`. Header padding clears nav bar.
+- **Right Speak pull tab:** New `right-tabs-group` div + `speak-pull-tab` button mirrors left Write (Lexi) tab design. Right-anchored, slides right, hides via `body.cs-panel-open` CSS rule. Desktop only.
+
+---
+
 ## v2.93 — 2026-08-04 · Enrichment button in extract.html + vocab vault prompt revert
 
 ### extract.html (epistemic-tools repo)

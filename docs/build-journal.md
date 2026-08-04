@@ -6,6 +6,14 @@
 
 ---
 
+## 2026-08-04 — Nav restructure: Read · Write · Speak (v2.94)
+
+**Keep legacy nav-link stubs when old selectors are referenced elsewhere.** The tour, corner mode CSS (`body.corner-mode #mainNav .nav-island`), and any Plausible event tracking referenced `.nav-spark-btn` and `.nav-corner-nav-btn`. Rather than hunting every reference, left zero-size hidden `<a>` stubs in the nav island so old selectors still resolve without errors.
+
+**gv-panel top-slide needs `position:fixed` not `position:absolute`.** The overlay is `position:fixed; inset:0`. An `absolute` child inside it placed at `top:0; left:0; right:0` works visually but clips on iOS Safari when the URL bar shrinks. Using `position:fixed` on the panel directly avoids that.
+
+**right-tabs-group `body.cs-panel-open` hide uses CSS not JS.** The Speak panel open/close touches `body.classList` — no need to wire JS in `openCS` / `closeConversations`. CSS selector `body.cs-panel-open .speak-pull-tab` handles it cleanly with opacity+pointer-events, same pattern used elsewhere in the codebase.
+
 ## 2026-08-04 — Enrichment button + vocab prompt revert (v2.93)
 
 **Vocab Tier system caused quality drift.** Tier 1/2/3 language added in v2.46 made the prompt longer and introduced ambiguity — model started over-including internet slang and under-including the clean academic vocabulary that defines Epistemic's voice. Reverted to single-instruction format. Kept only the New Yorker/Atlantic test from the Tier 3 rule.
