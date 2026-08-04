@@ -6,6 +6,19 @@
 
 ---
 
+## v2.93 — 2026-08-04 · Enrichment button in extract.html + vocab vault prompt revert
+
+### extract.html (epistemic-tools repo)
+- **Enrichment button added:** "Generate enrichment" button appears below the intel save row after intel is generated. Calls Claude Haiku using concept cards only (no transcript re-read). Writes `difficulty_level`, `tone`, `guest_field`, `key_quotes`, `core_claim`, `episode_type`, `actionability_score`, `evergreen`, `controversy_flag` directly to `episode_meta.json` on GitHub. Replaces the terminal command `node tools/generate-episode-enrichment.js --id [ID]`.
+- **Vocab vault prompt reverted:** Removed Tier 1 / Tier 2 / Tier 3 language (introduced in v2.46). Reverted to single clean instruction: "Raw vocabulary only: Latin phrases, academic terms, expressions that compress a complex idea." Added one new filter from the Tier system: New Yorker / Atlantic test for informal expressions. Chronological sort and 35–40 word target preserved.
+
+### Pipeline clarification
+- Concept extraction + intel + vocab: one API call in extract.html (unchanged)
+- Enrichment (profile + quotes fields): separate button in extract.html, runs after intel is saved
+- Terminal command `generate-episode-enrichment.js` still works for backfill; browser button is the new default
+
+---
+
 ## v2.92 — 2026-08-03 · Editorial rewrite batches 8–28 + surgical em-dash pass
 
 ### concepts.json

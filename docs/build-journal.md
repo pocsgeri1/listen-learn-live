@@ -6,6 +6,18 @@
 
 ---
 
+## 2026-08-04 — Enrichment button + vocab prompt revert (v2.93)
+
+**Vocab Tier system caused quality drift.** Tier 1/2/3 language added in v2.46 made the prompt longer and introduced ambiguity — model started over-including internet slang and under-including the clean academic vocabulary that defines Epistemic's voice. Reverted to single-instruction format. Kept only the New Yorker/Atlantic test from the Tier 3 rule.
+
+**Enrichment was impossible to run from the browser.** The terminal-only `generate-episode-enrichment.js` was the only path to get `key_quotes`, `core_claim`, `difficulty_level` etc. into `episode_meta.json`. Built a browser button that replicates the same API call using concept cards already in memory — no second transcript read, no terminal. Appears after intel is saved.
+
+**`git restore` discards uncommitted changes permanently.** No git recovery possible. If enrichment data is generated but not committed, force-quitting the terminal or running `git restore` will lose it. Lesson: commit immediately after any enrichment run, even if messy.
+
+**`generate-episode-enrichment.js` uses `--id` flag, not `--only`.** Common mistake — `--only` does nothing; `--id [N]` is the correct flag to target a single collection.
+
+---
+
 ## 2026-08-03 — Editorial rewrite session (v2.79–v2.92, batches 17–28)
 
 **Backup timing is critical for SEO redirects.** `concepts-backup.json` must be taken at session start before any concept is touched. If taken after interactive patches, those term renames won't get redirect entries in vercel.json. Baked into cowork-default-instructions.md v1.5.
