@@ -6,6 +6,19 @@
 
 ---
 
+## v3.01 — 2026-08-05 · Toolbar: 18px glyphs, uniform colors, group layout, Related always visible
+### index.html
+- **Glyph size:** CSS controls SVG size (`width/height: 18px` on `.btn-icon svg`). Removed `width`/`height` attrs from `CC_G` constants. No dead-space padding.
+- **No hover backgrounds:** Removed all `background` from `.btn-icon` hover/active states. Color-only transitions.
+- **Uniform default color:** All 6 buttons start at `var(--muted)`. Removed `color: var(--accent)` default from `.btn-icon.btn-listen`. Removed individual per-button default colors.
+- **Active states (color-only):** Master green, Spark purple, Note gold — no background fill.
+- **No border-radius:** `border-radius: 0` — no rounded rectangle shape.
+- **Border-bottom removed** from toolbar. Border-top only.
+- **btn-group layout:** Left group (Share/Listen/Master) left-aligned, `.btn-toolbar-div` (`flex:1` + `::after` pseudo line) centers the divider, right group (Related/Spark/Note) right-aligned. `gap: 6px` within each group.
+- **Related always rendered:** Conditionally adds `.btn-icon-empty` (opacity 0.22, no pointer-events) so toolbar shape is consistent across all cards.
+- **Backwards-compat scoped:** All old `.btn-chat`, `.btn-listen` etc. rules now `:not(.btn-icon)` — eliminates red bleed from `#c47a7a` border-color onto new icon buttons.
+- **Applied to all 5 card templates + ep-drawer column builder.**
+
 ## v3.00 — 2026-08-05 · Card toolbar fixes: 30×30, animation groups, divider, order, no red
 ### index.html
 - **Button size:** Reverted to 30×30 total (padding: 0, box-sizing: border-box) — explicit Gergely override of 44×44 mobile rule for toolbar density.
