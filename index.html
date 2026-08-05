@@ -2926,18 +2926,18 @@
     background: rgba(0,0,0,0.018);
   }
   [data-theme="light"] .lexi-remove-x:hover { color: var(--red); }
-  /* Mobile: full-width bottom sheet */
+  /* Mobile: left slide-in (matches desktop direction, full-height) */
   @media (max-width: 700px) {
     .lexi-panel-inner {
-      top: auto; bottom: 0; left: 0;
-      width: 100%;
-      height: 92vh;
-      border-right: none;
-      border-top: 0.5px solid var(--border);
-      border-radius: 14px 14px 0 0;
-      transform: translateY(100%);
+      top: 0; bottom: 0; left: 0;
+      width: min(340px, 88vw);
+      height: 100vh;
+      border-right: 0.5px solid var(--border);
+      border-top: none;
+      border-radius: 0;
+      transform: translateX(-100%);
     }
-    .lexi-panel.open .lexi-panel-inner { transform: translateY(0); }
+    .lexi-panel.open .lexi-panel-inner { transform: translateX(0); }
     .lexi-remove-x { opacity: 0.35; }
   }
   /* Reduced motion */
@@ -4518,6 +4518,51 @@
     white-space: nowrap;
   }
 
+  /* MY LIBRARY — distinct 4th nav button */
+  .nav-library-btn {
+    display: none; /* hidden on mobile; shown on desktop below */
+    align-items: center;
+    gap: 6px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    background: none;
+    border: 0.5px solid var(--border-hover);
+    border-radius: 999px;
+    padding: 6px 14px;
+    color: var(--muted);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color 0.18s, border-color 0.18s, background 0.18s;
+    margin-left: 10px; /* gap from island */
+    position: relative;
+    overflow: hidden;
+  }
+  .nav-library-btn:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+    background: rgba(232,213,163,0.06);
+  }
+  .nav-library-glyph {
+    font-size: 0.85rem;
+    transition: transform 0.22s cubic-bezier(0.22,1,0.36,1), opacity 0.18s;
+    display: inline-block;
+    opacity: 0.6;
+  }
+  .nav-library-btn:hover .nav-library-glyph {
+    transform: scale(1.3) translateY(-1px);
+    opacity: 1;
+  }
+  .nav-library-label {
+    transition: letter-spacing 0.18s;
+  }
+  .nav-library-btn:hover .nav-library-label { letter-spacing: 0.12em; }
+  @media (min-width: 769px) {
+    .nav-library-btn { display: flex; }
+  }
+  [data-theme="light"] .nav-library-btn:hover { background: rgba(150,120,40,0.06); }
+
   /* CENTER ISLAND */
   .nav-island {
     display: flex;
@@ -4866,14 +4911,10 @@
     /* Logo: full name, slightly smaller on mobile */
     .nav-logo { white-space: nowrap; overflow: visible; font-size: 1.05rem; }
     .nav-eyebrow { display: none; }
-    /* Theme toggle — show on mobile, sized consistently */
-    .theme-toggle {
-      display: flex !important;
-      width: 30px !important; height: 30px !important;
-      min-width: unset !important; font-size: 0.88rem !important;
-      padding: 0 !important; border-radius: 50% !important;
-      flex-shrink: 0;
-    }
+    /* Theme toggle — moved to hamburger menu on mobile */
+    .theme-toggle { display: none !important; }
+    /* Center mode buttons also hidden — bottom tab bar handles them */
+    .nav-mob-modes { display: none !important; }
     /* Signup — pulsing ✺ star, gold */
     .nav-signup-btn {
       display: flex; align-items: center; justify-content: center;
@@ -4936,15 +4977,61 @@
       font-size: 1.1rem;
       color: inherit;
     }
+    .mob-tab-glyph {
+      font-size: 1.05rem;
+      line-height: 1;
+      display: block;
+      font-style: normal;
+    }
+    .mob-hamburger-glyph { font-size: 1.2rem; }
     .mob-tab-label {
       font-family: 'DM Mono', monospace;
-      font-size: 0.5rem;
+      font-size: 0.46rem;
       letter-spacing: 0.1em;
       text-transform: uppercase;
     }
+    /* Hairline divider between Speak and Library */
+    .mob-tab-divider {
+      width: 0.5px;
+      align-self: stretch;
+      background: var(--border);
+      margin: 10px 0;
+      flex-shrink: 0;
+    }
+    /* Library tab — slightly accented */
+    .mob-tab-lib { color: var(--accent); opacity: 0.75; }
+    .mob-tab-lib:active, .mob-tab-lib.active { opacity: 1; }
+    /* Sign up tab — subtle gold */
+    .mob-tab-signup { font-size: 0.7rem; }
     /* Push page content above tab bar */
     body { padding-bottom: calc(60px + env(safe-area-inset-bottom, 0)); }
   }
+  /* Hamburger theme row */
+  .nav-mobile-theme-row {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+  .nav-mob-theme-toggle {
+    width: 32px; height: 18px;
+    border-radius: 9px;
+    background: var(--border);
+    position: relative;
+    flex-shrink: 0;
+    transition: background 0.2s;
+  }
+  .nav-mob-theme-toggle::after {
+    content: '';
+    position: absolute;
+    top: 3px; left: 3px;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: var(--muted);
+    transition: transform 0.2s, background 0.2s;
+  }
+  [data-theme="light"] .nav-mob-theme-toggle { background: rgba(150,120,40,0.3); }
+  [data-theme="light"] .nav-mob-theme-toggle::after { transform: translateX(14px); background: var(--accent); }
 
   /* HERO */
   .hero {
@@ -9317,6 +9404,13 @@
   margin-bottom: 6px; display: none;
 }
 .lib-note-ta.active { display: block; }
+/* iOS zoom prevention — any input/textarea < 16px causes auto-zoom on focus */
+@media (max-width: 768px) {
+  .lib-note-ta,
+  .lib-detail-note-ta,
+  .sp-search-input,
+  .spark-search-input { font-size: 16px !important; }
+}
 /* Char count footer — only shown during edit */
 .lib-note-meta-row {
   display: flex; align-items: center; gap: 6px;
@@ -10465,6 +10559,12 @@
     <a class="nav-link nav-spark-btn"       style="display:none"></a>
     <a class="nav-link nav-corner-nav-btn"  style="display:none"></a>
   </div>
+
+  <!-- My Library — distinct 4th nav button, separated from the island -->
+  <button class="nav-library-btn" id="navLibraryBtn" onclick="openLibrary();playNavSFX()" aria-label="My Library">
+    <span class="nav-library-glyph">◱</span>
+    <span class="nav-library-label">My Library</span>
+  </button>
   <!-- v1.71: epic button is now inside nav-right -->
 
   <!-- v2.96: mobile mode buttons — centered on mobile, hidden on desktop -->
@@ -10489,32 +10589,54 @@
   </div>
 </nav>
 
-<!-- MOBILE NAV MENU -->
+<!-- MOBILE NAV MENU (hamburger) — v3.11 -->
 <div class="nav-mobile-menu" id="navMobileMenu">
-  <!-- v1.73b: epic button first in mobile menu -->
+  <!-- Modes -->
+  <button class="nav-mobile-link nav-mobile-no-border" onclick="playNavSFX();_openGlobalVocabView();closeMobileNav()">◫ Read</button>
+  <button class="nav-mobile-link nav-mobile-no-border" onclick="playNavSFX();openLexiconPanel();closeMobileNav()">✦ Lexi</button>
+  <button class="nav-mobile-link nav-mobile-no-border" onclick="playNavSFX();openSparkPanel();closeMobileNav()">◉ Speak</button>
+  <div class="nav-mobile-divider"></div>
+  <!-- Library + Quiz -->
+  <button class="nav-mobile-link nav-mobile-no-border" onclick="playNavSFX();openLibrary();closeMobileNav()">◱ My Library</button>
+  <button class="nav-mobile-link nav-mobile-no-border" onclick="playNavSFX();openQuiz();closeMobileNav()">◈ Quiz mode</button>
+  <div class="nav-mobile-divider"></div>
+  <!-- Settings -->
+  <button class="nav-mobile-link nav-mobile-no-border nav-mobile-theme-row" onclick="toggleTheme()">
+    <span id="navMobThemeLabel">☽ Dark mode</span>
+    <span class="nav-mob-theme-toggle" id="navMobThemeToggle"></span>
+  </button>
+  <div class="nav-mobile-divider"></div>
+  <!-- Sign up + epic -->
+  <button class="nav-mobile-link nav-mobile-signup" onclick="playNavSFX();scrollToSection('signup');closeMobileNav()">✦ Sign up free — Founding Access</button>
   <button class="nav-mobile-link nav-mobile-epic nav-mobile-no-border" onclick="openEgg();playNavSFX();closeMobileNav()">😎 I feel epic!</button>
-  <div class="nav-mobile-divider"></div>
-  <!-- v2.94: Read · Write · Speak -->
-  <button class="nav-mobile-link nav-mobile-cs" onclick="playNavSFX();_openGlobalVocabView();closeMobileNav()">📚 Read</button>
-  <button class="nav-mobile-link nav-mobile-no-border" onclick="playNavSFX();openLexiconPanel();closeMobileNav()">ℒ Write</button>
-  <button class="nav-mobile-link nav-mobile-no-border" onclick="playNavSFX();openSparkPanel();closeMobileNav()">💬 Speak</button>
-  <div class="nav-mobile-divider"></div>
-  <button class="nav-mobile-link nav-mobile-signup" onclick="playNavSFX();scrollToSection('signup');closeMobileNav()">◉ Sign Up 🎁 — Free Founding Access</button>
 </div>
 
-<!-- MOBILE BOTTOM TAB BAR — v2.94: Read · Write · Speak -->
+<!-- MOBILE BOTTOM TAB BAR — v3.11 -->
 <nav class="mobile-tab-bar" id="mobileTabBar" aria-label="Main navigation">
   <button class="mob-tab" id="mobTabRead" onclick="playNavSFX();_openGlobalVocabView();closeMobileNav()" aria-label="Read — vocabulary library">
-    <span class="mob-tab-icon">📚</span>
+    <span class="mob-tab-icon mob-tab-glyph">◫</span>
     <span class="mob-tab-label">Read</span>
   </button>
-  <button class="mob-tab" id="mobTabLexi" onclick="playNavSFX();openLexiconPanel();closeMobileNav()" aria-label="Write — practice space">
-    <span class="mob-tab-icon mob-tab-aa">ℒ</span>
-    <span class="mob-tab-label">Write</span>
+  <button class="mob-tab" id="mobTabLexi" onclick="playNavSFX();openLexiconPanel();closeMobileNav()" aria-label="Lexi — your vocabulary">
+    <span class="mob-tab-icon mob-tab-glyph">✦</span>
+    <span class="mob-tab-label">Lexi</span>
   </button>
-  <button class="mob-tab" id="mobTabSpeak" onclick="playNavSFX();openSparkPanel();closeMobileNav()" aria-label="Speak practice">
-    <span class="mob-tab-icon">💬</span>
+  <button class="mob-tab" id="mobTabSpeak" onclick="playNavSFX();openSparkPanel();closeMobileNav()" aria-label="Speak — conversation practice">
+    <span class="mob-tab-icon mob-tab-glyph">◉</span>
     <span class="mob-tab-label">Speak</span>
+  </button>
+  <div class="mob-tab-divider" aria-hidden="true"></div>
+  <button class="mob-tab mob-tab-lib" id="mobTabLib" onclick="playNavSFX();openLibrary();closeMobileNav()" aria-label="My Library">
+    <span class="mob-tab-icon mob-tab-glyph">◱</span>
+    <span class="mob-tab-label">Library</span>
+  </button>
+  <button class="mob-tab mob-tab-signup" id="mobTabSignup" onclick="playNavSFX();document.getElementById('signup')?.scrollIntoView({behavior:'smooth'})" aria-label="Sign up free">
+    <span class="mob-tab-icon mob-tab-glyph">✦</span>
+    <span class="mob-tab-label">Join</span>
+  </button>
+  <button class="mob-tab mob-tab-hamburger" id="mobTabHamburger" onclick="toggleMobileNav()" aria-label="Menu">
+    <span class="mob-tab-icon mob-tab-glyph mob-hamburger-glyph">≡</span>
+    <span class="mob-tab-label">More</span>
   </button>
 </nav>
 
@@ -23843,6 +23965,10 @@ function toggleTheme() {
   // Update button icon
   const btn = document.getElementById('themeToggle');
   if (btn) btn.textContent = next === 'light' ? '☀' : '☽';
+
+  // Update hamburger theme label
+  const mobLabel = document.getElementById('navMobThemeLabel');
+  if (mobLabel) mobLabel.textContent = next === 'light' ? '☀ Light mode' : '☽ Dark mode';
 
   // Update meta theme-color for mobile browser chrome
   const meta = document.getElementById('themeColorMeta');

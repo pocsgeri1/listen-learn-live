@@ -6,6 +6,15 @@
 
 ---
 
+## v3.11 — 2026-08-05 · Nav redesign (mobile + desktop), Lexi left-slide, 16px zoom fix
+### index.html
+- **Mobile Lexi panel — left slide:** Changed from bottom-sheet (`translateY(100%)`) to left slide-in (`translateX(-100%)`), matching the desktop behavior. Width `min(340px, 88vw)`, full height, no rounded corners.
+- **Mobile bottom tab bar — full redesign:** New order: Read (◫) → Lexi (✦) → Speak (◉) | hairline divider | Library (◱) → Join (✦) → More (≡ hamburger). Replaced 📚/💬 emojis with DM Mono–compatible glyphs. My Library button is lightly gold-tinted and separated by a vertical hairline divider from the 3 mode tabs.
+- **Mobile hamburger menu — redesign:** Dark/light mode toggle moved here from the top nav. New items: all 3 modes + My Library + Quiz mode + theme toggle (with pill indicator) + Sign up + Easter egg. Clean horizontal dividers between groups.
+- **Dark mode confirmed default:** No `data-theme` attribute = dark. Only `lll_theme === 'light'` stored in localStorage switches to light. No system-preference fallback; dark is always the cold-start default.
+- **Desktop Nav — My Library button:** Distinct 4th button (`.nav-library-btn`) that sits right of the island, separated by a 10px margin + hairline border pill. Glyph ◱ scales up and shifts on hover; label letter-spacing expands. Not connected to the island — clearly a different type of action.
+- **iOS 16px zoom fix:** Added `@media (max-width: 768px)` rule setting `font-size: 16px !important` on `.lib-note-ta`, `.lib-detail-note-ta`, `.sp-search-input`, and `.spark-search-input` — prevents iOS Safari from auto-zooming when focusing any of these inputs.
+
 ## v3.10 — 2026-08-05 · Notes tab redesign, Lexi panel overhaul
 ### index.html
 - **Notes tab — full design upgrade:** Note tiles now carry a category-coloured left accent border (`--note-cat-color`). Each tile has a new `.lib-note-header` row: bigger `i` button (20×20, coloured border matching category) placed LEFT of the term; term shown in Playfair Display; category chip in coloured monospace pill; date on the right. The body text and char count remain but layout is cleaner.
