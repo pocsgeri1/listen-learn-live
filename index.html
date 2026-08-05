@@ -8129,7 +8129,18 @@
     color: var(--muted2);
   }
   .card-front .people-pills { display: none; }
-  .card-back .people-pills { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 0.75rem; }
+  .card-back .people-pills { display: none; }
+  .card-person {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    border-radius: 3px;
+    border: 0.5px solid var(--border);
+    background: transparent;
+    color: var(--muted2);
+  }
 
   /* ── SCAN MODE — 2-col fixed tile grid ── */
   #netflixRows.scan-mode .nf-section { margin-bottom: 0; }
@@ -8754,14 +8765,25 @@
 
   /* Note input ABOVE toolbar (inserted as first child of card-back) */
   .card-note-wrap {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    padding: 0 14px;
+    border-bottom: 0.5px solid transparent;
+    transition: max-height 0.28s ease, opacity 0.22s ease, padding 0.2s ease, border-color 0.2s ease;
+  }
+  .card-note-wrap.open {
+    max-height: 140px;
+    opacity: 1;
     padding: 8px 14px;
     border-bottom: 0.5px solid var(--border);
-    display: none;
   }
-  .card-note-wrap.open { display: block; }
+  @media (prefers-reduced-motion: reduce) {
+    .card-note-wrap { transition: none; }
+  }
   .card-note-input {
     width: 100%; background: none; border: none; border-bottom: 0.5px solid var(--border);
-    color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 0.72rem;
+    color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.72rem;
     font-style: italic; padding: 6px 0; outline: none; resize: none;
   }
   .card-note-input::placeholder { color: var(--muted2); opacity: 0.6; }
@@ -8827,6 +8849,15 @@
   background: none; border: none; cursor: pointer;
   color: var(--muted); font-size: 0.75rem; padding: 4px 6px;
 }
+.cc-related-ep-btn {
+  display: block; width: calc(100% - 32px); margin: 10px 16px 0;
+  padding: 9px 14px; background: none;
+  border: 0.5px solid var(--border); border-radius: 6px;
+  color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.72rem;
+  text-align: left; cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+.cc-related-ep-btn:hover { border-color: var(--border-hover); color: var(--accent); }
 .cc-related-cards { padding: 12px 16px; display: flex; flex-direction: column; gap: 10px; }
 .cc-related-card {
   padding: 12px 14px; background: var(--surface2);
@@ -13262,7 +13293,7 @@ function buildGrid() {
                       <span class="card-num">#${String(c.id).padStart(3,'0')}</span>
                       <span class="card-cat" onclick="event.stopPropagation();setCat('${c.category}');closeEpisodeDrawer()">${(CATEGORIES.find(x => x.id === c.category)||{}).name||c.category}</span>
                       ${c.editors_pick===true ? '<span class="pick-badge"><span class="pick-star">★</span>PICK</span>' : ''}
-                      
+                      ${(() => { const col = c.collection_id != null ? COLLECTIONS_BY_ID[c.collection_id] : null; return (col && Array.isArray(col.people) && col.people.length) ? `<span class="card-person">${col.people[0]}</span>` : ''; })()}
                     </div>
                     <div class="card-term">${c.term}</div>
                     <div class="card-hook">${c.hook}</div>
@@ -13290,12 +13321,6 @@ function buildGrid() {
                       </div>
                     </div>
                     <div class="card-actions-divider"></div>
-                    ${(() => {
-                      if (c.collection_id == null) return '';
-                      const col = COLLECTIONS_BY_ID[c.collection_id];
-                      if (!col || !Array.isArray(col.people) || col.people.length === 0) return '';
-                      return '<div class="people-pills">' + col.people.map(p => `<span class="people-pill">${p}</span>`).join('') + '</div>';
-                    })()}
                     <div class="back-section-label">What it means</div>
                     <div class="back-text">${c.plain}</div>
                     <div class="back-section-label">Analogy</div>
@@ -14164,7 +14189,7 @@ function _buildEpColumnHtml(catKey, catConcepts, col) {
           <div class="card-meta">
             <span class="card-num">#${String(c.id).padStart(3,'0')}</span>
             ${c.editors_pick===true ? '<span class="pick-badge"><span class="pick-star">★</span>PICK</span>' : ''}
-
+            ${(col && Array.isArray(col.people) && col.people.length) ? `<span class="card-person">${col.people[0]}</span>` : ''}
           </div>
           <div class="card-term">${c.term}</div>
           <div class="card-hook">${c.hook}</div>
@@ -14653,7 +14678,7 @@ function _renderThemeCard(c, prefix, col) {
           <span class="card-num">#${String(c.id).padStart(3,'0')}</span>
           <span class="card-cat" onclick="event.stopPropagation();setCat('${c.category}');closeThemeDrawer();closeEpisodeDrawer()">${(CATEGORIES.find(x => x.id === c.category)||{}).name||c.category}</span>
           ${c.editors_pick===true ? '<span class="pick-badge"><span class="pick-star">★</span>PICK</span>' : ''}
-          
+          ${(col && Array.isArray(col.people) && col.people.length) ? `<span class="card-person">${col.people[0]}</span>` : ''}
         </div>
         <div class="card-term">${c.term}</div>
         <div class="card-hook">${c.hook}</div>
@@ -15725,6 +15750,7 @@ function setDrawerView(prefix, view, btn) {
           '<span class="card-num">#' + String(c.id).padStart(3,'0') + '</span>',
           '<span class="card-cat">' + (catInfo.name||catKey) + '</span>',
           (c.editors_pick===true ? '<span class="pick-badge"><span class="pick-star">★</span>PICK</span>' : ''),
+          (col2 && Array.isArray(col2.people) && col2.people.length ? '<span class="card-person">' + col2.people[0] + '</span>' : ''),
           '</div>',
           '<div class="card-term">' + (c.term||'') + '</div>',
           '<div class="card-hook">' + (c.hook||'') + '</div>',
@@ -15954,7 +15980,7 @@ function _spRenderFilteredGrid(pool) {
                       <span class="card-num">#${String(c.id).padStart(3,'0')}</span>
                       <span class="card-cat" onclick="event.stopPropagation();setCat('${c.category}');closeEpisodeDrawer()">${(CATEGORIES.find(x => x.id === c.category)||{}).name||c.category}</span>
                       ${c.editors_pick===true ? '<span class="pick-badge"><span class="pick-star">★</span>PICK</span>' : ''}
-                      
+                      ${(() => { const col = c.collection_id != null ? COLLECTIONS_BY_ID[c.collection_id] : null; return (col && Array.isArray(col.people) && col.people.length) ? `<span class="card-person">${col.people[0]}</span>` : ''; })()}
                     </div>
                     <div class="card-term">${c.term}</div>
                     <div class="card-hook">${c.hook}</div>
@@ -15982,12 +16008,6 @@ function _spRenderFilteredGrid(pool) {
                       </div>
                     </div>
                     <div class="card-actions-divider"></div>
-                    ${(() => {
-                      if (c.collection_id == null) return '';
-                      const col = COLLECTIONS_BY_ID[c.collection_id];
-                      if (!col || !Array.isArray(col.people) || col.people.length === 0) return '';
-                      return '<div class="people-pills">' + col.people.map(p => `<span class="people-pill">${p}</span>`).join('') + '</div>';
-                    })()}
                     <div class="back-section-label">What it means</div>
                     <div class="back-text">${c.plain}</div>
                     <div class="back-section-label">Analogy</div>
@@ -21618,6 +21638,7 @@ function _ccOpenRelated(id) {
           '<span class="cc-related-title">Related</span>' +
           '<button class="cc-related-close" onclick="_ccCloseRelated()">✕</button>' +
         '</div>' +
+        '<div id="ccRelatedEpBtn"></div>' +
         '<div class="cc-related-cards" id="ccRelatedCards"></div>' +
       '</div>';
     overlay.addEventListener('click', function(e) {
@@ -21626,19 +21647,37 @@ function _ccOpenRelated(id) {
     document.body.appendChild(overlay);
   }
 
+  // Episode button — rebuild each call since it's concept-specific
+  var epBtnWrap = document.getElementById('ccRelatedEpBtn');
+  if (epBtnWrap) {
+    epBtnWrap.innerHTML = '';
+    if (concept.collection_id != null && typeof openEpisodeDrawer === 'function') {
+      var col = COLLECTIONS_BY_ID && COLLECTIONS_BY_ID[concept.collection_id];
+      if (col && (col.type === 'episode' || col.type === 'short')) {
+        var epBtn = document.createElement('button');
+        epBtn.className = 'cc-related-ep-btn';
+        epBtn.textContent = (col.title || 'Open episode') + ' →';
+        epBtn.onclick = function() { _ccCloseRelated(); openEpisodeDrawer(concept.collection_id); };
+        epBtnWrap.appendChild(epBtn);
+      }
+    }
+  }
+
   var cards = document.getElementById('ccRelatedCards');
-  cards.innerHTML = '';
-  var relIds = concept.related_ids.slice(0, 3);
-  relIds.forEach(function(rid) {
-    var r = CONCEPTS.find(function(c) { return c.id === rid; });
-    if (!r) return;
-    var card = document.createElement('div');
-    card.className = 'cc-related-card';
-    card.innerHTML =
-      '<div class="cc-related-card-term">' + (r.term || '') + '</div>' +
-      '<div class="cc-related-card-plain">' + (r.plain || '') + '</div>';
-    cards.appendChild(card);
-  });
+  if (cards) {
+    cards.innerHTML = '';
+    var relIds = concept.related_ids.slice(0, 3);
+    relIds.forEach(function(rid) {
+      var r = CONCEPTS.find(function(c) { return c.id === rid; });
+      if (!r) return;
+      var card = document.createElement('div');
+      card.className = 'cc-related-card';
+      card.innerHTML =
+        '<div class="cc-related-card-term">' + (r.term || '') + '</div>' +
+        '<div class="cc-related-card-plain">' + (r.plain || '') + '</div>';
+      cards.appendChild(card);
+    });
+  }
 
   requestAnimationFrame(function() { overlay.classList.add('open'); });
 }
@@ -21681,17 +21720,24 @@ function _ccToggleNote(id, btn) {
   }
 
   var isOpen = wrap.classList.contains('open');
-  wrap.classList.toggle('open', !isOpen);
   if (!isOpen) {
-    // Tilt-pop on note button (Group B)
-    btn.classList.remove('btn-tilt-pop');
-    void btn.offsetWidth;
-    btn.classList.add('btn-tilt-pop');
-    setTimeout(function() { btn.classList.remove('btn-tilt-pop'); }, 420);
-    setTimeout(function() {
-      var ta = wrap.querySelector('textarea');
-      if (ta) { ta.focus(); ta.style.height = 'auto'; ta.style.height = ta.scrollHeight + 'px'; }
-    }, 10);
+    // Two-frame rAF: display is already block (max-height:0), add .open next frame
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        wrap.classList.add('open');
+        // Tilt-pop on note button (Group B)
+        btn.classList.remove('btn-tilt-pop');
+        void btn.offsetWidth;
+        btn.classList.add('btn-tilt-pop');
+        setTimeout(function() { btn.classList.remove('btn-tilt-pop'); }, 420);
+        setTimeout(function() {
+          var ta = wrap.querySelector('textarea');
+          if (ta) { ta.focus(); ta.style.height = 'auto'; ta.style.height = ta.scrollHeight + 'px'; }
+        }, 30);
+      });
+    });
+  } else {
+    wrap.classList.remove('open');
   }
 }
 

@@ -6,6 +6,13 @@
 
 ---
 
+## v3.02 — 2026-08-05 · Note animation, card-person pill, Related episode button
+### index.html
+- **Note textarea smooth expand:** Replaced `display:none/block` toggle with `max-height` + `opacity` + `padding` transition (0.28s ease). Two-frame rAF pattern on open; CSS handles collapse. Added `@media (prefers-reduced-motion)` override.
+- **Note text color:** Changed `.card-note-input` color from `var(--muted)` to `var(--text)` so typed notes are clearly readable.
+- **Card-person pill on card front:** Added `.card-person` element in card-meta row (next to category pill) showing only the first person (host). Applied across all 5 card template locations (sp-hero, filter/flow, theme `_renderThemeCard`, all-browse, ep-drawer). People-pills hidden on card-back via CSS (`display:none`).
+- **Related panel — Open episode button:** `_ccOpenRelated` now rebuilds an episode button each call (concept-specific). Shows episode title + → arrow; clicking closes Related panel and calls `openEpisodeDrawer(collectionId)`. Only shown when concept has a `collection_id` pointing to an episode or short collection.
+
 ## v3.01 — 2026-08-05 · Toolbar: 18px glyphs, uniform colors, group layout, Related always visible
 ### index.html
 - **Glyph size:** CSS controls SVG size (`width/height: 18px` on `.btn-icon svg`). Removed `width`/`height` attrs from `CC_G` constants. No dead-space padding.
