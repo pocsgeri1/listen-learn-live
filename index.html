@@ -9073,6 +9073,152 @@
 .lib-open-btn svg { width: 12px; height: 12px; flex-shrink: 0; }
 [data-theme="light"] .lib-drawer { background: #f0e9da; }
 
+/* ── Library: category bar, tile expansion, notes distinct style ── */
+.lib-header-meta {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 20px 0;
+  flex-shrink: 0;
+}
+.lib-cat-bar {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  padding: 10px 20px 0;
+  flex-shrink: 0;
+}
+.lib-cat-chip {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.55rem; letter-spacing: 0.07em; text-transform: uppercase;
+  color: var(--muted2);
+  padding: 2px 7px;
+  border-left: 2px solid var(--cat-color, var(--accent));
+  background: none;
+}
+.lib-cat-chip em { font-style: normal; color: var(--muted); margin-left: 3px; }
+.lib-tab-count {
+  font-size: 0.6rem; opacity: 0.6; margin-left: 4px;
+}
+
+/* Saved tile inline expand */
+.lib-tile-open {
+  grid-column: 1 / -1;
+}
+.lib-tile-detail {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, opacity 0.25s ease;
+  opacity: 0;
+}
+.lib-tile-detail.open {
+  opacity: 1;
+}
+.lib-tile-detail-inner {
+  padding-top: 10px;
+  border-top: 0.5px solid var(--border);
+  margin-top: 10px;
+}
+.lib-detail-section {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.72rem; color: var(--muted);
+  line-height: 1.5; margin-bottom: 8px;
+}
+.lib-detail-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.52rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted2); margin-bottom: 3px;
+}
+.lib-detail-note {
+  font-family: 'DM Sans', sans-serif; font-style: italic;
+  font-size: 0.72rem; color: var(--text);
+  line-height: 1.5; margin-bottom: 8px;
+  padding: 6px 10px;
+  border-left: 2px solid var(--accent);
+  background: rgba(232,213,163,0.06);
+}
+.lib-detail-actions {
+  display: flex; gap: 8px; flex-wrap: wrap;
+  margin-top: 10px;
+}
+.lib-detail-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.58rem; letter-spacing: 0.06em; text-transform: uppercase;
+  background: none; border: 0.5px solid var(--border);
+  border-radius: 4px; padding: 5px 10px;
+  color: var(--muted); cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+.lib-detail-btn:hover { color: var(--text); border-color: var(--border-hover); }
+
+/* Notes panel — visually distinct */
+.lib-panel-notes .lib-grid { grid-template-columns: 1fr; }
+.lib-note-tile {
+  padding: 14px 16px;
+  background: none;
+  border: 0.5px solid var(--border);
+  border-left: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+  min-width: 0;
+  position: relative;
+}
+.lib-note-tile:hover { border-color: var(--border-hover); }
+.lib-note-text {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem; color: var(--text);
+  line-height: 1.55;
+  margin-bottom: 8px;
+}
+.lib-note-text.editing {
+  display: none;
+}
+.lib-note-ta {
+  width: 100%; background: none;
+  border: none; border-bottom: 0.5px solid var(--border);
+  color: var(--text); font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem; line-height: 1.55;
+  resize: none; outline: none; padding: 2px 0 6px;
+  margin-bottom: 8px; display: none;
+}
+.lib-note-ta.active { display: block; }
+.lib-note-concept {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.54rem; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--muted2);
+}
+.lib-note-meta-row {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 6px;
+}
+.lib-note-chars {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.5rem; color: var(--muted2);
+}
+.lib-note-delete {
+  background: none; border: none; cursor: pointer;
+  color: var(--muted2); font-size: 0.7rem; padding: 2px 4px;
+  opacity: 0.6; transition: opacity 0.15s, color 0.15s;
+}
+.lib-note-delete:hover { opacity: 1; color: #c47a7a; }
+.lib-notes-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 0 4px;
+}
+.lib-notes-count {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.58rem; letter-spacing: 0.07em; text-transform: uppercase;
+  color: var(--muted2);
+}
+.lib-export-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.56rem; letter-spacing: 0.06em; text-transform: uppercase;
+  background: none; border: 0.5px solid var(--border);
+  border-radius: 4px; padding: 4px 9px;
+  color: var(--muted); cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+.lib-export-btn:hover { color: var(--text); border-color: var(--border-hover); }
+/* Read panel tagline spacing */
+.gv-tagline { margin: 0; border-radius: 0; }
+
 .share-modal-overlay {
   display: none;
   position: fixed;
@@ -11233,15 +11379,14 @@
     <span class="lib-title">My Library</span>
     <button class="lib-close" onclick="closeLibrary()">✕</button>
   </div>
+  <div class="panel-tagline" style="margin: 0; border-radius: 0;">Your saved concepts and personal notes.</div>
   <div class="lib-tabs">
     <button class="lib-tab lib-tab-active" id="libTab-saved" onclick="_libSwitchTab('saved')">Saved</button>
-    <button class="lib-tab" id="libTab-sparks" onclick="_libSwitchTab('sparks')">Sparks</button>
     <button class="lib-tab" id="libTab-notes" onclick="_libSwitchTab('notes')">Notes</button>
   </div>
   <div class="lib-panels">
     <div class="lib-panel lib-panel-active" id="libPanel-saved"></div>
-    <div class="lib-panel" id="libPanel-sparks"></div>
-    <div class="lib-panel" id="libPanel-notes"></div>
+    <div class="lib-panel lib-panel-notes" id="libPanel-notes"></div>
   </div>
 </div>
 
@@ -13541,7 +13686,7 @@ function buildGrid() {
                       <span class="btn-toolbar-div"></span>
                       <div class="btn-group">
                         <button class="btn-icon btn-related${(!c.related_ids||!c.related_ids.length)?' btn-icon-empty':''}" onclick="event.stopPropagation();_ccOpenRelated(${c.id})" title="Related">${CC_G.related}</button>
-                        <button class="btn-icon btn-chat${_csIsSaved(c.id)?' saved':''}" onclick="event.stopPropagation();toggleChatSave(${c.id})" id="btnChat${c.id}" title="Spark">${CC_G.chat}</button>
+                        <button class="btn-icon btn-chat" onclick="event.stopPropagation();openSparkPanel(${c.id})" id="btnChat${c.id}" title="Spark">${CC_G.chat}</button>
                         <button class="btn-icon btn-note${localStorage.getItem('cc_note_'+c.id)?' has-note':''}" onclick="event.stopPropagation();_ccToggleNote(${c.id},this)" title="Note">${CC_G.note}</button>
                       </div>
                     </div>
@@ -14443,7 +14588,7 @@ function _buildEpColumnHtml(catKey, catConcepts, col) {
             <span class="btn-toolbar-div"></span>
             <div class="btn-group">
               <button class="btn-icon btn-related${(!c.related_ids||!c.related_ids.length)?' btn-icon-empty':''}" onclick="event.stopPropagation();_ccOpenRelated(${c.id})" title="Related">${CC_G.related}</button>
-              <button class="btn-icon btn-chat${_csIsSaved(c.id)?' saved':''}" onclick="event.stopPropagation();toggleChatSave(${c.id})" id="btnChatEp${c.id}" title="Spark">${CC_G.chat}</button>
+              <button class="btn-icon btn-chat" onclick="event.stopPropagation();openSparkPanel(${c.id})" id="btnChatEp${c.id}" title="Spark">${CC_G.chat}</button>
               <button class="btn-icon btn-note${localStorage.getItem('cc_note_'+c.id)?' has-note':''}" onclick="event.stopPropagation();_ccToggleNote(${c.id},this)" title="Note">${CC_G.note}</button>
             </div>
           </div>
@@ -14926,7 +15071,7 @@ function _renderThemeCard(c, prefix, col) {
           <span class="btn-toolbar-div"></span>
           <div class="btn-group">
             <button class="btn-icon btn-related${(!c.related_ids||!c.related_ids.length)?' btn-icon-empty':''}" onclick="event.stopPropagation();_ccOpenRelated(${c.id})" title="Related">${CC_G.related}</button>
-            <button class="btn-icon btn-chat${_csIsSaved(c.id)?' saved':''}" onclick="event.stopPropagation();toggleChatSave(${c.id})" id="btnChat${prefix}${c.id}" title="Spark">${CC_G.chat}</button>
+            <button class="btn-icon btn-chat" onclick="event.stopPropagation();openSparkPanel(${c.id})" id="btnChat${prefix}${c.id}" title="Spark">${CC_G.chat}</button>
             <button class="btn-icon btn-note${localStorage.getItem('cc_note_'+c.id)?' has-note':''}" onclick="event.stopPropagation();_ccToggleNote(${c.id},this)" title="Note">${CC_G.note}</button>
           </div>
         </div>
@@ -15999,7 +16144,7 @@ function setDrawerView(prefix, view, btn) {
           '<span class="btn-toolbar-div"></span>',
           '<div class="btn-group">',
           '<button class="btn-icon btn-related' + ((!c.related_ids||!c.related_ids.length)?' btn-icon-empty':'') + '" onclick="event.stopPropagation();_ccOpenRelated(' + c.id + ')" title="Related">' + CC_G.related + '</button>',
-          '<button class="btn-icon btn-chat' + (isSv?' saved':'') + '" onclick="event.stopPropagation();toggleChatSave(' + c.id + ')" id="btnChatAll' + c.id + '" title="Spark">' + CC_G.chat + '</button>',
+          '<button class="btn-icon btn-chat" onclick="event.stopPropagation();openSparkPanel(' + c.id + ')" id="btnChatAll' + c.id + '" title="Spark">' + CC_G.chat + '</button>',
           '<button class="btn-icon btn-note' + (localStorage.getItem('cc_note_'+c.id)?' has-note':'') + '" onclick="event.stopPropagation();_ccToggleNote(' + c.id + ',this)" title="Note">' + CC_G.note + '</button>',
           '</div>',
           '</div>',
@@ -16236,7 +16381,7 @@ function _spRenderFilteredGrid(pool) {
                       <span class="btn-toolbar-div"></span>
                       <div class="btn-group">
                         <button class="btn-icon btn-related${(!c.related_ids||!c.related_ids.length)?' btn-icon-empty':''}" onclick="event.stopPropagation();_ccOpenRelated(${c.id})" title="Related">${CC_G.related}</button>
-                        <button class="btn-icon btn-chat${_csIsSaved(c.id)?' saved':''}" onclick="event.stopPropagation();toggleChatSave(${c.id})" id="btnChat${c.id}" title="Spark">${CC_G.chat}</button>
+                        <button class="btn-icon btn-chat" onclick="event.stopPropagation();openSparkPanel(${c.id})" id="btnChat${c.id}" title="Spark">${CC_G.chat}</button>
                         <button class="btn-icon btn-note${localStorage.getItem('cc_note_'+c.id)?' has-note':''}" onclick="event.stopPropagation();_ccToggleNote(${c.id},this)" title="Note">${CC_G.note}</button>
                       </div>
                     </div>
@@ -21928,8 +22073,8 @@ function openLibrary(tab) {
   var backdrop = document.getElementById('libBackdrop');
   var drawer = document.getElementById('libDrawer');
   if (!backdrop || !drawer) return;
-  // Set tab state without animation (drawer is still hidden)
-  ['saved','sparks','notes'].forEach(function(t) {
+  // Set tab state without animation (drawer is still off-screen)
+  ['saved','notes'].forEach(function(t) {
     var btn = document.getElementById('libTab-' + t);
     var panel = document.getElementById('libPanel-' + t);
     if (btn) btn.classList.toggle('lib-tab-active', t === tab);
@@ -21940,9 +22085,8 @@ function openLibrary(tab) {
   });
   _libActiveTab = tab;
   _libRender(tab);
-  // Re-enable transitions after paint
   requestAnimationFrame(function() {
-    ['saved','sparks','notes'].forEach(function(t) {
+    ['saved','notes'].forEach(function(t) {
       var panel = document.getElementById('libPanel-' + t);
       if (panel) panel.style.transition = '';
     });
@@ -21950,9 +22094,7 @@ function openLibrary(tab) {
   _spLockBodyScroll();
   backdrop.classList.add('open');
   requestAnimationFrame(function() {
-    requestAnimationFrame(function() {
-      drawer.classList.add('open');
-    });
+    requestAnimationFrame(function() { drawer.classList.add('open'); });
   });
 }
 
@@ -21979,16 +22121,13 @@ function _libSwitchTab(tab) {
   if (panel) {
     _libRender(tab);
     requestAnimationFrame(function() {
-      requestAnimationFrame(function() {
-        panel.classList.add('lib-panel-active');
-      });
+      requestAnimationFrame(function() { panel.classList.add('lib-panel-active'); });
     });
   }
 }
 
 function _libRender(tab) {
   if (tab === 'saved') _libRenderSaved();
-  else if (tab === 'sparks') _libRenderSparks();
   else if (tab === 'notes') _libRenderNotes();
 }
 
@@ -22026,54 +22165,101 @@ function _libRenderSaved() {
   var tsMap = {};
   try { tsMap = JSON.parse(localStorage.getItem('lll_mastered_ts_v1') || '{}'); } catch(e) {}
   var ids = typeof mastered !== 'undefined' ? Array.from(mastered) : [];
-  ids.sort(function(a, b) {
-    return (tsMap[b] || 0) - (tsMap[a] || 0) || b - a;
-  });
+  ids.sort(function(a, b) { return (tsMap[b] || 0) - (tsMap[a] || 0) || b - a; });
+
+  // Update tab badge
+  var savedTab = document.getElementById('libTab-saved');
+  if (savedTab) {
+    savedTab.innerHTML = 'Saved' + (ids.length ? '<span class="lib-tab-count">' + ids.length + '</span>' : '');
+  }
+
   if (!ids.length) {
     panel.innerHTML = '<div class="lib-empty"><span class="lib-empty-icon">◈</span>No mastered concepts yet.<br>Tap ◈ on any card to save it here.</div>';
     return;
   }
+
+  // Category breakdown bar
+  var catCounts = {};
+  ids.forEach(function(id) {
+    var c = CONCEPTS && CONCEPTS.find(function(x) { return x.id === id; });
+    if (c) catCounts[c.category] = (catCounts[c.category] || 0) + 1;
+  });
+  var catBar = '<div class="lib-cat-bar">' + Object.keys(catCounts)
+    .sort(function(a, b) { return catCounts[b] - catCounts[a]; })
+    .slice(0, 6)
+    .map(function(cat) {
+      var name = (CATEGORIES && CATEGORIES.find(function(x) { return x.id === cat; }) || {}).name || cat;
+      var color = (typeof CAT_COLOR !== 'undefined' && CAT_COLOR[cat]) || 'var(--accent)';
+      return '<span class="lib-cat-chip" style="--cat-color:' + color + '">' + name + '<em>' + catCounts[cat] + '</em></span>';
+    }).join('') + '</div>';
+
   var tiles = ids.map(function(id) {
     var c = CONCEPTS && CONCEPTS.find(function(x) { return x.id === id; });
     if (!c) return '';
     var catName = (CATEGORIES && CATEGORIES.find(function(x) { return x.id === c.category; }) || {}).name || c.category;
     var catColor = (typeof CAT_COLOR !== 'undefined' && CAT_COLOR[c.category]) || 'var(--accent)';
     var dateStr = tsMap[id] ? '<span class="lib-tile-date">' + _libFmtDate(tsMap[id]) + '</span>' : '';
-    return '<div class="lib-tile" style="--cat-color:' + catColor + '" onclick="_libNavToCard(' + id + ')">' +
+    var hasNote = !!localStorage.getItem('cc_note_' + id);
+    return '<div class="lib-tile" id="libTile-' + id + '" style="--cat-color:' + catColor + '" onclick="_libToggleSaved(' + id + ', this)">' +
       '<div class="lib-tile-term">' + (c.term || '') + '</div>' +
       '<div class="lib-tile-meta">' +
         '<span class="lib-tile-cat">' + catName + '</span>' +
         '<span class="lib-tile-num">#' + String(id).padStart(3,'0') + '</span>' +
         dateStr +
+        (hasNote ? '<span class="lib-tile-num">✏</span>' : '') +
       '</div>' +
     '</div>';
   }).join('');
-  panel.innerHTML = '<div class="lib-grid">' + tiles + '</div>';
+  panel.innerHTML = catBar + '<div class="lib-grid">' + tiles + '</div>';
 }
 
-function _libRenderSparks() {
-  var panel = document.getElementById('libPanel-sparks');
-  if (!panel) return;
-  var saved = [];
-  try { saved = JSON.parse(localStorage.getItem('lll_cs_saved_v1') || '[]'); } catch(e) {}
-  saved.sort(function(a, b) { return (b.savedAt || 0) - (a.savedAt || 0); });
-  if (!saved.length) {
-    panel.innerHTML = '<div class="lib-empty"><span class="lib-empty-icon">✦</span>No Sparks saved yet.<br>Open any concept and spark a prompt to save it here.</div>';
-    return;
+function _libToggleSaved(id, el) {
+  var isOpen = el.classList.contains('lib-tile-open');
+  // Close all open tiles first
+  document.querySelectorAll('#libPanel-saved .lib-tile-open').forEach(function(t) {
+    t.classList.remove('lib-tile-open');
+    var d = t.querySelector('.lib-tile-detail');
+    if (d) { d.classList.remove('open'); d.style.maxHeight = '0'; setTimeout(function() { if (d.parentNode) d.parentNode.removeChild(d); }, 300); }
+  });
+  if (isOpen) return;
+
+  el.classList.add('lib-tile-open');
+  var c = CONCEPTS && CONCEPTS.find(function(x) { return x.id === id; });
+  if (!c) return;
+  var col = c.collection_id != null && COLLECTIONS_BY_ID ? COLLECTIONS_BY_ID[c.collection_id] : null;
+  var noteText = localStorage.getItem('cc_note_' + id) || '';
+  var safeNote = noteText.replace(/[<>&"]/g, function(ch) { return {'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[ch]; });
+
+  var episodeBtn = '';
+  if (col && (col.type === 'episode' || col.type === 'short') && typeof openEpisodeDrawer === 'function') {
+    episodeBtn = '<button class="lib-detail-btn" onclick="closeLibrary();openEpisodeDrawer(' + c.collection_id + ')">↗ Episode</button>';
   }
-  var tiles = saved.map(function(s) {
-    var catName = (CATEGORIES && CATEGORIES.find(function(x) { return x.id === s.category; }) || {}).name || s.category;
-    var catColor = (typeof CAT_COLOR !== 'undefined' && CAT_COLOR[s.category]) || 'var(--accent)';
-    var dateStr = s.savedAt ? '<span class="lib-tile-date">' + _libFmtDate(s.savedAt) + '</span>' : '';
-    return '<div class="lib-tile" style="--cat-color:' + catColor + '" onclick="_libNavToCard(' + s.id + ')">' +
-      '<div class="lib-tile-term">' + (s.term || '') + '</div>' +
-      '<div class="lib-tile-meta">' +
-        '<span class="lib-tile-cat">' + catName + '</span>' +
-        dateStr +
+
+  var detail = document.createElement('div');
+  detail.className = 'lib-tile-detail';
+  detail.style.maxHeight = '0';
+  detail.style.overflow = 'hidden';
+  detail.style.transition = 'max-height 0.3s ease, opacity 0.25s ease';
+  detail.style.opacity = '0';
+  detail.innerHTML =
+    '<div class="lib-tile-detail-inner">' +
+      '<div class="lib-detail-label">What it means</div>' +
+      '<div class="lib-detail-section">' + (c.plain || '') + '</div>' +
+      '<div class="lib-detail-label">Analogy</div>' +
+      '<div class="lib-detail-section">' + (c.analogy || '') + '</div>' +
+      (noteText ? '<div class="lib-detail-label">Your note</div><div class="lib-detail-note">' + safeNote + '</div>' : '') +
+      '<div class="lib-detail-actions">' +
+        '<button class="lib-detail-btn" onclick="closeLibrary();openSparkPanel(' + id + ')">✦ Spark it</button>' +
+        episodeBtn +
       '</div>' +
     '</div>';
-  }).join('');
-  panel.innerHTML = '<div class="lib-grid">' + tiles + '</div>';
+  el.appendChild(detail);
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
+      detail.classList.add('open');
+      detail.style.maxHeight = '500px';
+    });
+  });
 }
 
 function _libRenderNotes() {
@@ -22082,7 +22268,7 @@ function _libRenderNotes() {
   var notes = [];
   for (var i = 0; i < localStorage.length; i++) {
     var key = localStorage.key(i);
-    if (!key || !key.startsWith('cc_note_') || key.indexOf('cc_note_meta_') === 0) continue;
+    if (!key || !key.startsWith('cc_note_') || key.startsWith('cc_note_meta_')) continue;
     var idStr = key.replace('cc_note_', '');
     var id = parseInt(idStr, 10);
     if (isNaN(id)) continue;
@@ -22093,30 +22279,115 @@ function _libRenderNotes() {
     notes.push({ id: id, text: text.trim(), ts: meta.ts || 0 });
   }
   notes.sort(function(a, b) { return b.ts - a.ts || b.id - a.id; });
+
+  // Update tab badge
+  var notesTab = document.getElementById('libTab-notes');
+  if (notesTab) {
+    notesTab.innerHTML = 'Notes' + (notes.length ? '<span class="lib-tab-count">' + notes.length + '</span>' : '');
+  }
+
   if (!notes.length) {
-    panel.innerHTML = '<div class="lib-empty"><span class="lib-empty-icon">✏</span>No notes yet.<br>Tap ✏ on any card to add a personal note.</div>';
+    panel.innerHTML = '<div class="lib-empty"><span class="lib-empty-icon">✏</span>No notes yet.<br>Tap ✏ on any card back to add a personal note.</div>';
     return;
   }
+
+  var header = '<div class="lib-notes-header">' +
+    '<span class="lib-notes-count">' + notes.length + ' note' + (notes.length !== 1 ? 's' : '') + '</span>' +
+    '<button class="lib-export-btn" onclick="_libExportNotes()">↓ Export all</button>' +
+  '</div>';
+
   var tiles = notes.map(function(n) {
     var c = CONCEPTS && CONCEPTS.find(function(x) { return x.id === n.id; });
     if (!c) return '';
     var catName = (CATEGORIES && CATEGORIES.find(function(x) { return x.id === c.category; }) || {}).name || c.category;
-    var catColor = (typeof CAT_COLOR !== 'undefined' && CAT_COLOR[c.category]) || 'var(--accent)';
-    var snippet = n.text.length > 100 ? n.text.slice(0, 100) + '…' : n.text;
-    var dateStr = n.ts ? '<span class="lib-tile-date">' + _libFmtDate(n.ts) + '</span>' : '';
-    var safeSnippet = snippet.replace(/[<>&"]/g, function(ch) {
-      return {'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[ch];
-    });
-    return '<div class="lib-tile" style="--cat-color:' + catColor + '" onclick="_libNavToCard(' + n.id + ')">' +
-      '<div class="lib-tile-term">' + (c.term || '') + '</div>' +
-      '<div class="lib-tile-meta">' +
-        '<span class="lib-tile-cat">' + catName + '</span>' +
-        dateStr +
+    var safeText = n.text.replace(/[<>&"]/g, function(ch) { return {'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[ch]; });
+    var dateStr = n.ts ? _libFmtDate(n.ts) : '';
+    return '<div class="lib-note-tile" id="libNoteTile-' + n.id + '">' +
+      '<div class="lib-note-text" onclick="_libNoteEdit(' + n.id + ', this)">' + safeText + '</div>' +
+      '<textarea class="lib-note-ta" rows="3" onblur="_libNoteSave(' + n.id + ', this)"></textarea>' +
+      '<div class="lib-note-meta-row">' +
+        '<span class="lib-note-concept">' + (c.term || '') + ' · ' + catName + '</span>' +
+        '<span class="lib-note-chars" id="libNoteChars-' + n.id + '">' + n.text.length + ' chars' + (dateStr ? ' · ' + dateStr : '') + '</span>' +
       '</div>' +
-      '<div class="lib-tile-snippet">' + safeSnippet + '</div>' +
+      '<button class="lib-note-delete" onclick="_libNoteDelete(' + n.id + ', event)" title="Delete note">✕</button>' +
     '</div>';
   }).join('');
-  panel.innerHTML = '<div class="lib-grid">' + tiles + '</div>';
+  panel.innerHTML = header + '<div style="padding: 4px 0;">' + tiles + '</div>';
+}
+
+function _libNoteEdit(id, textEl) {
+  var tile = textEl.closest('.lib-note-tile');
+  if (!tile) return;
+  var ta = tile.querySelector('.lib-note-ta');
+  if (!ta) return;
+  var rawText = localStorage.getItem('cc_note_' + id) || '';
+  ta.value = rawText;
+  textEl.style.display = 'none';
+  ta.classList.add('active');
+  ta.style.height = 'auto';
+  ta.style.height = ta.scrollHeight + 'px';
+  ta.focus();
+}
+
+function _libNoteSave(id, ta) {
+  var val = ta.value.trim();
+  var tile = ta.closest('.lib-note-tile');
+  var textEl = tile ? tile.querySelector('.lib-note-text') : null;
+  if (val) {
+    localStorage.setItem('cc_note_' + id, val);
+    try { localStorage.setItem('cc_note_meta_' + id, JSON.stringify({ts: Date.now()})); } catch(e) {}
+    if (textEl) {
+      textEl.innerHTML = val.replace(/[<>&"]/g, function(ch) { return {'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[ch]; });
+      textEl.style.display = '';
+    }
+    var charsEl = document.getElementById('libNoteChars-' + id);
+    if (charsEl) charsEl.textContent = val.length + ' chars · just now';
+  } else {
+    localStorage.removeItem('cc_note_' + id);
+    localStorage.removeItem('cc_note_meta_' + id);
+    _libRenderNotes();
+    return;
+  }
+  ta.classList.remove('active');
+  if (textEl) textEl.style.display = '';
+}
+
+function _libNoteDelete(id, e) {
+  e.stopPropagation();
+  localStorage.removeItem('cc_note_' + id);
+  localStorage.removeItem('cc_note_meta_' + id);
+  // Also update the card button state
+  var btn = document.getElementById('btnChat' + id) || document.querySelector('[id^="btnNote"][id$="' + id + '"]');
+  document.querySelectorAll('.btn-note[onclick*="_ccToggleNote(' + id + '"]').forEach(function(b) { b.classList.remove('has-note'); });
+  _libRenderNotes();
+}
+
+function _libExportNotes() {
+  var notes = [];
+  for (var i = 0; i < localStorage.length; i++) {
+    var key = localStorage.key(i);
+    if (!key || !key.startsWith('cc_note_') || key.startsWith('cc_note_meta_')) continue;
+    var id = parseInt(key.replace('cc_note_', ''), 10);
+    if (isNaN(id)) continue;
+    var text = localStorage.getItem(key) || '';
+    if (!text.trim()) continue;
+    var c = CONCEPTS && CONCEPTS.find(function(x) { return x.id === id; });
+    var term = c ? c.term : '#' + id;
+    notes.push(term + '\n' + text.trim());
+  }
+  if (!notes.length) return;
+  var out = notes.join('\n\n---\n\n');
+  try {
+    navigator.clipboard.writeText(out).then(function() {
+      var btn = document.querySelector('.lib-export-btn');
+      if (btn) { btn.textContent = '✓ Copied'; setTimeout(function() { btn.textContent = '↓ Export all'; }, 2000); }
+    });
+  } catch(e) {
+    var ta = document.createElement('textarea');
+    ta.value = out; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+  }
 }
 
 // ── Note per concept ──────────────────────────────────────────
@@ -27127,7 +27398,7 @@ body.corner-panel-open .stories-panel {
       <button class="lexi-map-btn" id="lexiMapBtn" onclick="_openConstellationView('lexi')" aria-label="Word Map" title="Word Map">◎</button>
       <button class="lexi-panel-close" onclick="closeLexiPanel()" aria-label="Close">✕</button>
     </div>
-    <div class="lexi-panel-tagline panel-tagline">Practice your saved words. Write, get feedback, make them yours.</div>
+    <div class="lexi-panel-tagline panel-tagline">Save words that stayed with you, then practise using them.</div>
 
     <div class="vocab-cat-pill-row" id="lexiCatPills" style="padding: 4px 0 10px 8px;margin-top:4px"></div>
 
@@ -27171,7 +27442,7 @@ body.corner-panel-open .stories-panel {
       <button class="conv-close" id="convClose" aria-label="Close">✕</button>
     </div>
     <!-- Per-tab taglines — shown/hidden by panelSwitchTab -->
-    <div class="panel-tagline" id="panelTaglineSpark">Turn any concept into your next great conversation.</div>
+    <div class="panel-tagline" id="panelTaglineSpark">Pick a concept. Get a prompt that takes it into real conversation.</div>
     <div class="panel-tagline" id="panelTaglineStash" style="display:none">Your saved sparks. Revisit them anytime.</div>
 
     <!-- SPARK TAB — CS panel content lives here -->
@@ -30769,6 +31040,7 @@ function _gvEsc(str) {
       <button class="gv-map-btn" onclick="_openConstellationView('vocab')" aria-label="Word Map" title="Word Map">◎</button>
       <button class="gv-close" onclick="_closeGlobalVocabView()" aria-label="Close">✕</button>
     </div>
+    <div class="panel-tagline gv-tagline">Browse the full concept and vocabulary library by category.</div>
     <div class="gv-body" id="gvBody">
       <!-- JS renders category grid or word list here -->
     </div>

@@ -6,6 +6,16 @@
 
 ---
 
+## v3.05 — 2026-08-05 · Library UX: Saved inline expand, Notes redesign, Spark button, panel taglines
+### index.html
+- **Sparks tab removed:** My Library is now 2 tabs only — Saved and Notes. All `_libRenderSparks()` logic removed. `openLibrary()` and `_libSwitchTab()` updated accordingly.
+- **Spark/Speak button on cards:** `btn-chat` now calls `openSparkPanel(id)` on all 5 card templates instead of `toggleChatSave(id)`. Removed saved-state class toggle from button.
+- **Saved tab — category bar:** Concept tiles now grouped/sorted by category. A `.lib-cat-bar` strip shows active category chips with `--cat-color` left-border accents above the grid.
+- **Saved tab — inline expansion:** Clicking a tile expands it to full grid width (`grid-column: 1 / -1`) with concept detail (plain, analogy, note snippet, Spark button, Open Episode button). Only one tile open at a time. Double-rAF pattern; `max-height + opacity` transition; no `display:none` flash.
+- **Notes tab — note-text-first design:** Single-column layout; note text is primary (large, DM Sans); concept term is secondary (DM Mono, tiny, uppercase). No cat-color left border. Includes: char count, inline edit (click text → textarea, blur to save), per-tile delete, sticky count header with export button.
+- **Notes export:** Copies all notes to clipboard as "Term\nnote\n\n---\n\n" blocks. Button shows ✓ Copied feedback.
+- **Panel taglines:** All 4 main panels now have a `.panel-tagline` subtext strip directly below their header, identically styled. Copy: Lexi — "Save words that stayed with you, then practise using them."; Spark — "Pick a concept. Get a prompt that takes it into real conversation."; Read — "Browse the full concept and vocabulary library by category."; My Library — "Your saved concepts and personal notes."
+
 ## v3.04 — 2026-08-05 · Library layout, My Library width + 2-col, mobile scan fix
 ### index.html
 - **Library header restructure:** "My Library" button moved from sort pills row to a new `.app-title-row` next to "The Library" heading — visible on same line on both mobile and desktop. Button sized up to match header visual weight.
