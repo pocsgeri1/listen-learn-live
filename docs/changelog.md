@@ -6,6 +6,16 @@
 
 ---
 
+## v3.07 — 2026-08-05 · Scroll fix (root cause), preview toolbar, vocab re-render, word map pills
+### index.html
+- **Scroll jump — root cause fixed:** Replaced `position:fixed + scrollY restore` with `overflow:hidden` on `<html>` + `touch-action:none` on body. Scroll position is never changed, so there is nothing to restore and no flash. Added reference-counting so nested lock/unlock calls don't break each other. Affects every panel: library, scan preview, episode drawer, word map, spark panel.
+- **Notes tab layout fix:** `.lib-note-meta-row` is now a 3-zone flex row (term | i-button | char-count). Delete `✕` is `position:absolute` top-right of tile — never wraps.
+- **Saved tile expansion — inline note editor:** Detail row now contains a `textarea` for notes instead of read-only text. Typing and blurring saves to localStorage; tile updates ✏ indicator live.
+- **"With Notes" filter chip:** Category bar in Saved tab now includes a `✏ Notes · N` chip that filters to concepts that have notes.
+- **Scan preview — 6-button toolbar:** Removed "Talk about this" button. Footer now shows the same 6 `btn-icon` buttons (listen, master, note, related, spark, share) in a bordered toolbar row — identical design to the concept card toolbar. State (mastered, has-note) is reflected at render time.
+- **Ep drawer vocab cat filter — re-render from top:** `buildVocabCatPills` now rebuilds the grid DOM on category switch (fade out → clear → rebuild → fade in) instead of hiding rows in-place. Filtered words always flow from the top.
+- **Word Map category pills — single row:** Added `white-space:nowrap; flex-shrink:0` to `.wc-filter-pill`. Picks/Recent/category names no longer wrap to a second line; row scrolls horizontally.
+
 ## v3.06 — 2026-08-05 · Library polish: cat filter, tile expansion, notes preview, scroll fix
 ### index.html
 - **Close scroll jump fixed:** `_spUnlockBodyScroll` now uses synchronous `scrollTop` assignment instead of `window.scrollTo`, eliminating the flash-to-top on panel close. Affects all panels sharing the lock pattern.

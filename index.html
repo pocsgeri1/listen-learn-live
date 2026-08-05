@@ -9165,6 +9165,19 @@
   border-left: 2px solid var(--accent);
   background: rgba(232,213,163,0.06);
 }
+/* Inline note editor inside tile detail row */
+.lib-detail-note-wrap { margin-top: 10px; margin-bottom: 4px; }
+.lib-detail-note-ta {
+  width: 100%; background: rgba(232,213,163,0.04);
+  border: 0.5px solid var(--border); border-radius: 5px;
+  color: var(--text); font-family: 'DM Sans', sans-serif;
+  font-size: 0.72rem; line-height: 1.5;
+  resize: none; outline: none;
+  padding: 7px 10px; min-height: 52px;
+  transition: border-color 0.15s;
+}
+.lib-detail-note-ta:focus { border-color: var(--accent); }
+.lib-detail-note-ta::placeholder { color: var(--muted2); font-style: italic; }
 .lib-detail-actions {
   display: flex; gap: 8px; flex-wrap: wrap;
   margin-top: 10px;
@@ -9216,18 +9229,22 @@
   font-size: 0.54rem; letter-spacing: 0.08em; text-transform: uppercase;
   color: var(--muted2);
 }
+.lib-note-tile { position: relative; }
 .lib-note-meta-row {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-top: 6px;
+  display: flex; align-items: center; gap: 6px;
+  margin-top: 6px; flex-wrap: nowrap;
 }
+.lib-note-concept { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .lib-note-chars {
   font-family: 'DM Mono', monospace;
   font-size: 0.5rem; color: var(--muted2);
+  flex-shrink: 0; white-space: nowrap;
 }
 .lib-note-delete {
+  position: absolute; top: 10px; right: 10px;
   background: none; border: none; cursor: pointer;
-  color: var(--muted2); font-size: 0.7rem; padding: 2px 4px;
-  opacity: 0.6; transition: opacity 0.15s, color 0.15s;
+  color: var(--muted2); font-size: 0.65rem; padding: 3px 5px;
+  opacity: 0.45; transition: opacity 0.15s, color 0.15s; line-height: 1;
 }
 .lib-note-delete:hover { opacity: 1; color: #c47a7a; }
 .lib-notes-header {
@@ -12786,8 +12803,8 @@ function _renderIntelRow(pillsEl, collectionId, liveDna) {
       return grid;
     }
 
-    // Build a scrollable category pill row that filters the given gridEl in place.
-    // allWords: full vocab array. gridEl: the .ep-intel-vocab-grid DOM node.
+    // Build a scrollable category pill row that re-renders the grid on filter change.
+    // allWords: full vocab array. gridContainer: parent of the .ep-intel-vocab-grid node.
     function buildVocabCatPills(allWords, gridEl, panelMode) {
       var CATS = ['All','Small Talk','Smartypants','Business','Science','Mind & People'];
       var counts = {};
@@ -12798,6 +12815,25 @@ function _renderIntelRow(pillsEl, collectionId, liveDna) {
       var activeFilter = 'All';
       var row = document.createElement('div');
       row.className = 'vocab-cat-pill-row';
+
+      function reRenderGrid(cat) {
+        var filtered = cat === 'All'
+          ? allWords
+          : allWords.filter(function(w) { return w.category === cat || w.category_alt === cat; });
+        // Fade out current grid
+        gridEl.style.transition = 'opacity 0.15s ease';
+        gridEl.style.opacity = '0';
+        setTimeout(function() {
+          // Rebuild grid in-place
+          while (gridEl.firstChild) gridEl.removeChild(gridEl.firstChild);
+          filtered.forEach(function(v) { gridEl.appendChild(buildVocabCell(v)); });
+          // Fade in
+          requestAnimationFrame(function() {
+            gridEl.style.opacity = '1';
+          });
+        }, 150);
+      }
+
       CATS.forEach(function(cat) {
         var btn = document.createElement('button');
         btn.type = 'button';
@@ -12809,17 +12845,7 @@ function _renderIntelRow(pillsEl, collectionId, liveDna) {
           activeFilter = cat;
           row.querySelectorAll('.vocab-cat-pill').forEach(function(p) { p.classList.remove('active'); });
           btn.classList.add('active');
-          // Animate: dissolve non-matching rows, show matching rows
-          gridEl.querySelectorAll('.ep-intel-vocab-row').forEach(function(cell) {
-            var cellCat = cell.dataset.lexCategory || '';
-            var cellCatAlt = cell.dataset.lexCategoryAlt || '';
-            var matches = cat === 'All' || cellCat === cat || cellCatAlt === cat;
-            if (matches) {
-              cell.classList.remove('vocab-row--hidden');
-            } else {
-              cell.classList.add('vocab-row--hidden');
-            }
-          });
+          reRenderGrid(cat);
         });
         row.appendChild(btn);
       });
@@ -17177,7 +17203,16 @@ function _spOpenMobilePreview(id, opts) {
       <p>${_spEsc(concept.prompt || '')}</p>
     </div>
     <div class="sp-mp-footer">
-      <button class="sp-mp-talk-btn" onclick="spDismissMobilePreview(true);_spSelectConcept(${id})">💬 Talk about this →</button>
+      <div class="sp-mp-toolbar">
+        <button class="btn-icon btn-listen" title="Listen" onclick="event.stopPropagation();if(typeof _playConceptAudio==='function')_playConceptAudio(${id})">${CC_G.listen}</button>
+        <div class="btn-divider"></div>
+        <button class="btn-icon btn-master ${mastered.has(id) ? 'mastered-active' : ''}" id="spMpMaster${id}" title="${mastered.has(id) ? 'Saved ✓' : 'Save to Mastered'}" onclick="event.stopPropagation();toggleMaster(event,${id})">${CC_G.master}</button>
+        <button class="btn-icon btn-note ${localStorage.getItem('cc_note_'+id) ? 'has-note' : ''}" id="spMpNote${id}" title="Note" onclick="event.stopPropagation();spDismissMobilePreview();setTimeout(function(){var el=document.getElementById('cc${id}');if(el&&!el.classList.contains('flipped'))toggleCard(${id});setTimeout(function(){var btn=el&&el.querySelector('.btn-note');if(btn)_ccToggleNote(${id},btn);},120);},80)">${CC_G.note}</button>
+        <div class="btn-divider"></div>
+        <button class="btn-icon btn-related" title="Related" onclick="event.stopPropagation();spDismissMobilePreview();setTimeout(function(){_ccOpenRelated(${id});},80)">${CC_G.related}</button>
+        <button class="btn-icon btn-chat" title="Spark" onclick="event.stopPropagation();spDismissMobilePreview();setTimeout(function(){openSparkPanel(${id});},80)">${CC_G.chat}</button>
+        <button class="btn-icon btn-share" title="Share" onclick="event.stopPropagation();if(typeof openShareModal==='function')openShareModal(${id})">${CC_G.share}</button>
+      </div>
     </div>`;
 
   // Remember where this was opened from so closing restores the right state
@@ -17190,29 +17225,28 @@ function _spOpenMobilePreview(id, opts) {
 }
 
 // Robust scroll-lock pattern (position:fixed + saved scrollY) instead of plain
-// overflow:hidden toggling — iOS Safari can leave the page un-scrollable after
-// an overflow:hidden body is paired with an inner overflow-y:auto element that
-// was itself scrolled. Pinning the body's actual position and restoring the
-// exact scrollY on unlock avoids that class of stuck-scroll bug entirely.
+// Scroll-lock: clip the document without moving it.
+// We use overflow:hidden on <html> + touch-action:none on body so the page
+// scroll position is NEVER changed — no restore needed, no flash on close.
+// Previously used position:fixed+scrollY-restore but that caused a visible
+// jump-to-top whenever a panel closed (position:fixed reset scroll to 0
+// before scrollTop could restore it). The overflow approach avoids that
+// entirely; the stuck-scroll iOS Safari risk is mitigated by touch-action.
 let _spScrollLockY = 0;
+let _spScrollLockCount = 0; // reference-count so nested locks don't break each other
 function _spLockBodyScroll() {
   _spScrollLockY = window.scrollY || window.pageYOffset || 0;
-  document.body.style.position = 'fixed';
-  document.body.style.top = (-_spScrollLockY) + 'px';
-  document.body.style.left = '0';
-  document.body.style.right = '0';
-  document.body.style.width = '100%';
+  _spScrollLockCount++;
+  if (_spScrollLockCount > 1) return; // already locked
+  document.documentElement.style.overflow = 'hidden';
+  document.body.style.touchAction = 'none';
 }
 function _spUnlockBodyScroll() {
-  var sy = _spScrollLockY;
-  document.body.style.position = '';
-  document.body.style.top = '';
-  document.body.style.left = '';
-  document.body.style.right = '';
-  document.body.style.width = '';
-  // Synchronous — avoids the flash-to-top that window.scrollTo causes
-  document.documentElement.scrollTop = sy;
-  document.body.scrollTop = sy; // Safari
+  _spScrollLockCount = Math.max(0, _spScrollLockCount - 1);
+  if (_spScrollLockCount > 0) return; // still locked by another panel
+  document.documentElement.style.overflow = '';
+  document.body.style.touchAction = '';
+  // Scroll position was never changed, nothing to restore.
 }
 
 function spDismissMobilePreview(goingToCS) {
@@ -22270,25 +22304,36 @@ function _libRenderSaved() {
     var c = CONCEPTS && CONCEPTS.find(function(x) { return x.id === id; });
     if (c) catCounts[c.category] = (catCounts[c.category] || 0) + 1;
   });
-  // Validate active filter still exists
-  if (_libActiveCat && !catCounts[_libActiveCat]) _libActiveCat = null;
+  // Count concepts with notes
+  var noteIds = ids.filter(function(id) { return !!localStorage.getItem('cc_note_' + id); });
+  var notesCount = noteIds.length;
 
-  var catBar = '<div class="lib-cat-bar">' + Object.keys(catCounts)
+  // Validate active filter still exists
+  if (_libActiveCat && _libActiveCat !== '__notes__' && !catCounts[_libActiveCat]) _libActiveCat = null;
+
+  var catBar = '<div class="lib-cat-bar">' +
+    // Regular category chips
+    Object.keys(catCounts)
     .sort(function(a, b) { return catCounts[b] - catCounts[a]; })
     .map(function(cat) {
       var name = (CATEGORIES && CATEGORIES.find(function(x) { return x.id === cat; }) || {}).name || cat;
       var color = (typeof CAT_COLOR !== 'undefined' && CAT_COLOR[cat]) || 'var(--accent)';
       var isActive = cat === _libActiveCat;
       return '<button class="lib-cat-chip' + (isActive ? ' active' : '') + '" style="--cat-color:' + color + '" onclick="_libFilterCat(\'' + cat + '\')">' + name + '<em>' + catCounts[cat] + '</em></button>';
-    }).join('') + '</div><hr class="lib-cat-divider">';
+    }).join('') +
+    // "With Notes" special chip
+    (notesCount ? '<button class="lib-cat-chip' + (_libActiveCat === '__notes__' ? ' active' : '') + '" style="--cat-color:var(--accent)" onclick="_libFilterCat(\'__notes__\')">✏ Notes<em>' + notesCount + '</em></button>' : '') +
+    '</div><hr class="lib-cat-divider">';
 
   // Filter by active category
-  var visibleIds = _libActiveCat
-    ? ids.filter(function(id) {
-        var c = CONCEPTS && CONCEPTS.find(function(x) { return x.id === id; });
-        return c && c.category === _libActiveCat;
-      })
-    : ids;
+  var visibleIds = _libActiveCat === '__notes__'
+    ? noteIds
+    : _libActiveCat
+      ? ids.filter(function(id) {
+          var c = CONCEPTS && CONCEPTS.find(function(x) { return x.id === id; });
+          return c && c.category === _libActiveCat;
+        })
+      : ids;
 
   var tiles = visibleIds.map(function(id) {
     var c = CONCEPTS && CONCEPTS.find(function(x) { return x.id === id; });
@@ -22360,7 +22405,10 @@ function _libToggleSaved(id, el) {
         '<div class="lib-detail-section">' + _esc(c.analogy) + '</div>' +
       '</div>' +
     '</div>' +
-    (noteText ? '<div class="lib-detail-note" style="margin-bottom:10px;">' + _esc(noteText) + '</div>' : '') +
+    '<div class="lib-detail-note-wrap">' +
+      '<div class="lib-detail-label">Your note</div>' +
+      '<textarea class="lib-detail-note-ta" id="libDetailNoteTA-' + id + '" placeholder="Add a note…" rows="2">' + _esc(noteText) + '</textarea>' +
+    '</div>' +
     '<div class="lib-detail-actions">' +
       '<button class="lib-detail-btn" onclick="closeLibrary();openSparkPanel(' + id + ')">✦ Spark it</button>' +
       episodeBtn +
@@ -22368,6 +22416,43 @@ function _libToggleSaved(id, el) {
 
   // Insert after the tile (as grid sibling)
   el.parentNode.insertBefore(row, el.nextSibling);
+
+  // Wire up note textarea save/autogrow
+  var ta = row.querySelector('.lib-detail-note-ta');
+  if (ta) {
+    ta.addEventListener('input', function() {
+      ta.style.height = 'auto';
+      ta.style.height = ta.scrollHeight + 'px';
+    });
+    ta.addEventListener('blur', function() {
+      var val = ta.value.trim();
+      if (val) {
+        localStorage.setItem('cc_note_' + id, val);
+        try { localStorage.setItem('cc_note_meta_' + id, JSON.stringify({ts: Date.now()})); } catch(e2) {}
+      } else {
+        localStorage.removeItem('cc_note_' + id);
+        localStorage.removeItem('cc_note_meta_' + id);
+      }
+      // Update tile ✏ indicator
+      var tile = document.getElementById('libTile-' + id);
+      if (tile) {
+        var metaRow = tile.querySelector('.lib-tile-meta');
+        var existingNote = metaRow && metaRow.querySelector('.lib-tile-num[title="Has note"]');
+        if (val && !existingNote && metaRow) {
+          var noteSpan = document.createElement('span');
+          noteSpan.className = 'lib-tile-num';
+          noteSpan.title = 'Has note';
+          noteSpan.textContent = '✏';
+          metaRow.appendChild(noteSpan);
+        } else if (!val && existingNote) {
+          existingNote.remove();
+        }
+      }
+    });
+    ta.addEventListener('click', function(e) { e.stopPropagation(); });
+    // Auto-resize if pre-filled
+    if (noteText) { ta.style.height = 'auto'; ta.style.height = ta.scrollHeight + 'px'; }
+  }
 
   requestAnimationFrame(function() {
     requestAnimationFrame(function() {
@@ -26046,24 +26131,31 @@ body.sp2-panel-open .sp-pull-quote-left { opacity: 0 !important; transition: opa
 .sp-mp-footer {
   margin-top: 15px;
   padding-top: 12px;
-  border-top: 1px solid var(--border);
+  border-top: 0.5px solid var(--border);
   display: flex;
   justify-content: center;
 }
-.sp-mp-talk-btn {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.64rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--accent);
-  background: rgba(232,213,163,0.10);
-  border: 1px solid rgba(232,213,163,0.3);
-  border-radius: 999px;
-  padding: 9px 18px;
-  cursor: pointer;
+/* 6-button toolbar in the preview footer — same visual as card toolbar */
+.sp-mp-toolbar {
+  display: flex; align-items: center; gap: 0;
+  background: var(--surface2, var(--surface));
+  border: 0.5px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
   width: 100%;
 }
-.sp-mp-talk-btn:active { opacity: 0.7; }
+.sp-mp-toolbar .btn-icon {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  width: auto; height: 38px; padding: 0;
+  border-radius: 0; background: none; border: none;
+  color: var(--muted); cursor: pointer;
+  transition: color 0.15s ease, transform 0.15s ease;
+}
+.sp-mp-toolbar .btn-icon:hover { color: var(--muted2); }
+.sp-mp-toolbar .btn-icon svg { width: 16px; height: 16px; display: block; }
+.sp-mp-toolbar .btn-divider { width: 0.5px; background: var(--border); align-self: stretch; flex-shrink: 0; }
+.sp-mp-toolbar .btn-icon.btn-master.mastered-active { color: var(--green); }
+.sp-mp-toolbar .btn-icon.btn-note.has-note { color: var(--accent); }
 
 /* Light mode: the low-alpha gold tint that works on dark backgrounds nearly
    disappears against the light card — give the prompt + CTA a distinct,
@@ -26076,16 +26168,7 @@ body.sp2-panel-open .sp-pull-quote-left { opacity: 0 !important; transition: opa
 [data-theme="light"] .sp-mobile-preview-content .back-prompt p {
   color: #8a6207;
 }
-[data-theme="light"] .sp-mp-talk-btn {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: #fff8ec;
-  box-shadow: 0 4px 14px rgba(184,134,11,0.35);
-}
-[data-theme="light"] .sp-mp-talk-btn:active {
-  opacity: 0.85;
-  box-shadow: 0 2px 8px rgba(184,134,11,0.3);
-}
+[data-theme="light"] .sp-mp-toolbar { background: var(--surface2); }
 
 /* Only render this modal on mobile/tablet — desktop keeps the floating .sp-preview-card */
 @media (min-width: 1025px) {
@@ -32491,6 +32574,7 @@ function _wcRenderMobileGrid(words) {
   padding: 5px 12px; border-radius: 20px; cursor: pointer;
   border: 0.5px solid var(--border); background: none; color: var(--muted);
   transition: background 0.18s, color 0.18s, border-color 0.18s; min-height: 30px;
+  white-space: nowrap; flex-shrink: 0;
 }
 .wc-filter-pill.active { color: var(--bg); border-color: transparent; }
 .wc-filter-pill:not(.active):hover {
