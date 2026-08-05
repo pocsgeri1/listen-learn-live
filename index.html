@@ -7792,7 +7792,13 @@
     padding-bottom: 1.5rem;
     border-bottom: 1px solid var(--border);
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: 0.75rem 1rem;
+  }
+
+  .app-title-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
   }
 
   .app-title {
@@ -8162,11 +8168,13 @@
     margin-left: auto;
     margin-right: auto;
     box-sizing: border-box;
+    touch-action: pan-y;
   }
   @media (max-width: 600px) {
     #netflixRows.scan-mode .nf-row {
       grid-template-columns: 1fr;
       padding: 0 1rem 1rem;
+      touch-action: pan-y;
     }
   }
   /* Hide full card, show a lightweight tile div injected by JS */
@@ -8899,7 +8907,8 @@
 .lib-drawer.open { transform: translateY(0); }
 @media (min-width: 700px) {
   .lib-drawer {
-    left: 50%; right: auto; width: 680px;
+    left: 50%; right: auto;
+    width: 62%; max-width: 920px; min-width: 480px;
     transform: translateX(-50%) translateY(100%);
   }
   .lib-drawer.open { transform: translateX(-50%) translateY(0); }
@@ -8976,50 +8985,65 @@
 @media (prefers-reduced-motion: reduce) {
   .lib-drawer, .lib-backdrop, .lib-tab::after, .lib-panel { transition: none; }
 }
-.lib-row {
-  display: flex; align-items: center; gap: 10px;
-  padding: 12px 0;
-  border-bottom: 0.5px solid var(--border);
-  cursor: pointer;
+.lib-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding: 12px 0 4px;
+  align-items: start;
 }
-.lib-row:last-child { border-bottom: none; }
-.lib-row-main { flex: 1; min-width: 0; }
-.lib-row-term {
+@media (max-width: 420px) {
+  .lib-grid { grid-template-columns: 1fr; }
+}
+.lib-tile {
+  padding: 11px 13px;
+  background: var(--surface2, var(--surface));
+  border: 0.5px solid var(--border);
+  border-left: 3px solid var(--cat-color, var(--accent));
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+  align-self: start;
+  min-width: 0;
+}
+.lib-tile:hover { border-color: var(--border-hover); }
+.lib-tile:hover .lib-tile-term { color: var(--accent); }
+.lib-tile-term {
   font-family: 'Playfair Display', serif;
-  font-size: 0.88rem; font-style: italic;
+  font-size: 0.84rem; font-style: italic;
   color: var(--text);
   transition: color 0.14s ease;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  line-height: 1.3;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; -webkit-box-orient: vertical;
 }
-.lib-row:hover .lib-row-term { color: var(--accent); }
-.lib-row-meta {
-  display: flex; align-items: center; gap: 7px;
-  margin-top: 4px;
+.lib-tile-meta {
+  display: flex; align-items: center; gap: 6px;
+  margin-top: 5px; flex-wrap: wrap;
 }
-.lib-row-cat {
+.lib-tile-cat {
   font-family: 'DM Mono', monospace;
-  font-size: 0.55rem; letter-spacing: 0.08em; text-transform: uppercase;
-  color: var(--muted2); padding: 1px 5px;
+  font-size: 0.52rem; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--muted2); padding: 1px 4px;
   border: 0.5px solid var(--border); border-radius: 2px;
 }
-.lib-row-num {
+.lib-tile-num {
   font-family: 'DM Mono', monospace;
-  font-size: 0.55rem; color: var(--muted2);
+  font-size: 0.52rem; color: var(--muted2);
 }
-.lib-row-date {
+.lib-tile-date {
   font-family: 'DM Mono', monospace;
-  font-size: 0.55rem; color: var(--muted2);
+  font-size: 0.52rem; color: var(--muted2);
+  margin-left: auto;
 }
-.lib-row-snippet {
+.lib-tile-snippet {
   font-family: 'DM Sans', sans-serif;
-  font-size: 0.7rem; color: var(--muted);
-  margin-top: 5px; line-height: 1.45;
+  font-size: 0.68rem; color: var(--muted);
+  margin-top: 6px; line-height: 1.45;
   display: -webkit-box;
   -webkit-line-clamp: 2; -webkit-box-orient: vertical;
   overflow: hidden;
-}
-.lib-row-arrow {
-  color: var(--muted2); font-size: 0.75rem; flex-shrink: 0;
 }
 .lib-empty {
   text-align: center; padding: 52px 16px;
@@ -9032,20 +9056,21 @@
   margin-bottom: 12px; opacity: 0.45;
 }
 .lib-open-btn {
-  display: flex; align-items: center; gap: 5px;
+  display: flex; align-items: center; gap: 6px;
   background: none;
   border: 0.5px solid var(--border);
-  border-radius: 4px;
+  border-radius: 5px;
   color: var(--muted);
   font-family: 'DM Mono', monospace;
-  font-size: 0.58rem; letter-spacing: 0.06em; text-transform: uppercase;
-  padding: 4px 9px;
+  font-size: 0.62rem; letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 5px 11px;
   cursor: pointer;
   transition: color 0.15s ease, border-color 0.15s ease;
   flex-shrink: 0;
+  white-space: nowrap;
 }
 .lib-open-btn:hover { color: var(--text); border-color: var(--border-hover); }
-.lib-open-btn svg { width: 11px; height: 11px; flex-shrink: 0; }
+.lib-open-btn svg { width: 12px; height: 12px; flex-shrink: 0; }
 [data-theme="light"] .lib-drawer { background: #f0e9da; }
 
 .share-modal-overlay {
@@ -11085,7 +11110,13 @@
 <section class="app" id="app">
   <div class="app-controls">
   <div class="app-header">
-    <div class="app-title">The <em>Library</em></div>
+    <div class="app-title-row">
+      <div class="app-title">The <em>Library</em></div>
+      <button class="lib-open-btn" onclick="openLibrary('saved')" title="My Library">
+        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 1.5h10v10.5L7 9.5l-5 2.5V1.5z"/></svg>
+        My Library
+      </button>
+    </div>
     <!-- Sort pills — spark.html v1.76 -->
     <div class="sp-sort-pills" id="spSortPills">
       <div class="sp-sort-group">
@@ -11097,10 +11128,6 @@
         <button class="sp-scan-toggle active" id="spViewGrid" onclick="spSetScanMode(false)" title="Grid view">◫</button>
         <button class="sp-scan-toggle" id="spViewScan" onclick="spSetScanMode(true)" title="Scan view">⊞</button>
       </div>
-      <button class="lib-open-btn" onclick="openLibrary('saved')" title="My Library">
-        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 1.5h10v10.5L7 9.5l-5 2.5V1.5z"/></svg>
-        Library
-      </button>
     </div>
     <div class="search-wrap">
       <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M10 10l3.5 3.5"/></svg>
@@ -22006,23 +22033,22 @@ function _libRenderSaved() {
     panel.innerHTML = '<div class="lib-empty"><span class="lib-empty-icon">◈</span>No mastered concepts yet.<br>Tap ◈ on any card to save it here.</div>';
     return;
   }
-  panel.innerHTML = ids.map(function(id) {
+  var tiles = ids.map(function(id) {
     var c = CONCEPTS && CONCEPTS.find(function(x) { return x.id === id; });
     if (!c) return '';
     var catName = (CATEGORIES && CATEGORIES.find(function(x) { return x.id === c.category; }) || {}).name || c.category;
-    var dateStr = tsMap[id] ? '<span class="lib-row-date">' + _libFmtDate(tsMap[id]) + '</span>' : '';
-    return '<div class="lib-row" onclick="_libNavToCard(' + id + ')">' +
-      '<div class="lib-row-main">' +
-        '<div class="lib-row-term">' + (c.term || '') + '</div>' +
-        '<div class="lib-row-meta">' +
-          '<span class="lib-row-cat">' + catName + '</span>' +
-          '<span class="lib-row-num">#' + String(id).padStart(3,'0') + '</span>' +
-          dateStr +
-        '</div>' +
+    var catColor = (typeof CAT_COLOR !== 'undefined' && CAT_COLOR[c.category]) || 'var(--accent)';
+    var dateStr = tsMap[id] ? '<span class="lib-tile-date">' + _libFmtDate(tsMap[id]) + '</span>' : '';
+    return '<div class="lib-tile" style="--cat-color:' + catColor + '" onclick="_libNavToCard(' + id + ')">' +
+      '<div class="lib-tile-term">' + (c.term || '') + '</div>' +
+      '<div class="lib-tile-meta">' +
+        '<span class="lib-tile-cat">' + catName + '</span>' +
+        '<span class="lib-tile-num">#' + String(id).padStart(3,'0') + '</span>' +
+        dateStr +
       '</div>' +
-      '<span class="lib-row-arrow">›</span>' +
     '</div>';
   }).join('');
+  panel.innerHTML = '<div class="lib-grid">' + tiles + '</div>';
 }
 
 function _libRenderSparks() {
@@ -22035,20 +22061,19 @@ function _libRenderSparks() {
     panel.innerHTML = '<div class="lib-empty"><span class="lib-empty-icon">✦</span>No Sparks saved yet.<br>Open any concept and spark a prompt to save it here.</div>';
     return;
   }
-  panel.innerHTML = saved.map(function(s) {
+  var tiles = saved.map(function(s) {
     var catName = (CATEGORIES && CATEGORIES.find(function(x) { return x.id === s.category; }) || {}).name || s.category;
-    var dateStr = s.savedAt ? '<span class="lib-row-date">' + _libFmtDate(s.savedAt) + '</span>' : '';
-    return '<div class="lib-row" onclick="_libNavToCard(' + s.id + ')">' +
-      '<div class="lib-row-main">' +
-        '<div class="lib-row-term">' + (s.term || '') + '</div>' +
-        '<div class="lib-row-meta">' +
-          '<span class="lib-row-cat">' + catName + '</span>' +
-          dateStr +
-        '</div>' +
+    var catColor = (typeof CAT_COLOR !== 'undefined' && CAT_COLOR[s.category]) || 'var(--accent)';
+    var dateStr = s.savedAt ? '<span class="lib-tile-date">' + _libFmtDate(s.savedAt) + '</span>' : '';
+    return '<div class="lib-tile" style="--cat-color:' + catColor + '" onclick="_libNavToCard(' + s.id + ')">' +
+      '<div class="lib-tile-term">' + (s.term || '') + '</div>' +
+      '<div class="lib-tile-meta">' +
+        '<span class="lib-tile-cat">' + catName + '</span>' +
+        dateStr +
       '</div>' +
-      '<span class="lib-row-arrow">›</span>' +
     '</div>';
   }).join('');
+  panel.innerHTML = '<div class="lib-grid">' + tiles + '</div>';
 }
 
 function _libRenderNotes() {
@@ -22072,26 +22097,26 @@ function _libRenderNotes() {
     panel.innerHTML = '<div class="lib-empty"><span class="lib-empty-icon">✏</span>No notes yet.<br>Tap ✏ on any card to add a personal note.</div>';
     return;
   }
-  panel.innerHTML = notes.map(function(n) {
+  var tiles = notes.map(function(n) {
     var c = CONCEPTS && CONCEPTS.find(function(x) { return x.id === n.id; });
     if (!c) return '';
     var catName = (CATEGORIES && CATEGORIES.find(function(x) { return x.id === c.category; }) || {}).name || c.category;
-    var snippet = n.text.length > 90 ? n.text.slice(0, 90) + '…' : n.text;
-    var dateStr = n.ts ? '<span class="lib-row-date">' + _libFmtDate(n.ts) + '</span>' : '';
-    return '<div class="lib-row" onclick="_libNavToCard(' + n.id + ')">' +
-      '<div class="lib-row-main">' +
-        '<div class="lib-row-term">' + (c.term || '') + '</div>' +
-        '<div class="lib-row-meta">' +
-          '<span class="lib-row-cat">' + catName + '</span>' +
-          dateStr +
-        '</div>' +
-        '<div class="lib-row-snippet">' + snippet.replace(/[<>&"]/g, function(c) {
-          return {'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c];
-        }) + '</div>' +
+    var catColor = (typeof CAT_COLOR !== 'undefined' && CAT_COLOR[c.category]) || 'var(--accent)';
+    var snippet = n.text.length > 100 ? n.text.slice(0, 100) + '…' : n.text;
+    var dateStr = n.ts ? '<span class="lib-tile-date">' + _libFmtDate(n.ts) + '</span>' : '';
+    var safeSnippet = snippet.replace(/[<>&"]/g, function(ch) {
+      return {'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[ch];
+    });
+    return '<div class="lib-tile" style="--cat-color:' + catColor + '" onclick="_libNavToCard(' + n.id + ')">' +
+      '<div class="lib-tile-term">' + (c.term || '') + '</div>' +
+      '<div class="lib-tile-meta">' +
+        '<span class="lib-tile-cat">' + catName + '</span>' +
+        dateStr +
       '</div>' +
-      '<span class="lib-row-arrow">›</span>' +
+      '<div class="lib-tile-snippet">' + safeSnippet + '</div>' +
     '</div>';
   }).join('');
+  panel.innerHTML = '<div class="lib-grid">' + tiles + '</div>';
 }
 
 // ── Note per concept ──────────────────────────────────────────

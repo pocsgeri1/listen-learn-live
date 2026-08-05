@@ -6,6 +6,13 @@
 
 ---
 
+## v3.04 — 2026-08-05 · Library layout, My Library width + 2-col, mobile scan fix
+### index.html
+- **Library header restructure:** "My Library" button moved from sort pills row to a new `.app-title-row` next to "The Library" heading — visible on same line on both mobile and desktop. Button sized up to match header visual weight.
+- **My Library drawer width:** Changed desktop constraint from fixed 680px to `width: 62%; max-width: 920px; min-width: 480px` — matches the Read (Vocab) panel proportions exactly.
+- **My Library 2-column grid:** Replaced single-column `.lib-row` list with a 2-col `.lib-grid` / `.lib-tile` layout. Tiles use `--cat-color` left-border accent (matches sc-tile pattern). Collapses to 1-col below 420px. All 3 render functions updated.
+- **Mobile scan fix:** Added `touch-action: pan-y` to `#netflixRows.scan-mode .nf-row` at all widths (including mobile `@media (max-width: 600px)` override). Vertical scroll no longer hijacked by tile click handlers on touch devices.
+
 ## v3.03 — 2026-08-05 · My Library drawer
 ### index.html
 - **My Library drawer:** Full bottom drawer (88vh mobile, 680px desktop centered). Entry button added to sort pills row. 3 tabs — Saved, Sparks, Notes — with gold `::after` underline indicator (CSS-only, no layout measurement). Tab switch uses double-rAF pattern so outgoing panel fades out and incoming fades in without `display:none` flash.
