@@ -3918,7 +3918,7 @@
     position: relative;
   }
   @media (max-width: 600px) {
-    .browse-toggle-wrap { margin-top: 1.5rem; gap: 1.1rem; }
+    .browse-toggle-wrap { margin-top: calc(1.5rem - 20px); gap: 1.1rem; }
   }
   /* v2.3f: reverted to Playfair italic, matching "The Library" app-title
      typography — gold animated underline on the active label is the
@@ -4774,18 +4774,54 @@
   .nav-mobile-toggle:hover { color: var(--text); border-color: var(--border-hover); }
 
   .nav-mobile-menu {
-    display: none;
     position: fixed;
-    top: 76px;
+    top: 52px;
     left: 0; right: 0;
     background: rgba(13,13,13,0.99); /* overridden by [data-theme="light"] */
     border-bottom: 1px solid var(--border);
-    padding: 1rem 2rem 1.5rem;
+    padding: 0 2rem;
     z-index: 99;
+    display: flex;
     flex-direction: column;
     gap: 0.25rem;
+    /* closed state */
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-6px);
+    transition: max-height 0.38s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.28s ease,
+                transform 0.32s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.38s ease;
   }
-  .nav-mobile-menu.open { display: flex; }
+  .nav-mobile-menu.open {
+    max-height: 600px;
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+    padding: 1rem 2rem 1.5rem;
+  }
+
+  /* Stagger-in animation for menu items */
+  @keyframes mobNavItemIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .nav-mobile-menu.open > * {
+    animation: mobNavItemIn 0.3s ease both;
+  }
+  .nav-mobile-menu.open > *:nth-child(1)  { animation-delay: 0.04s; }
+  .nav-mobile-menu.open > *:nth-child(2)  { animation-delay: 0.08s; }
+  .nav-mobile-menu.open > *:nth-child(3)  { animation-delay: 0.12s; }
+  .nav-mobile-menu.open > *:nth-child(4)  { animation-delay: 0.14s; }
+  .nav-mobile-menu.open > *:nth-child(5)  { animation-delay: 0.17s; }
+  .nav-mobile-menu.open > *:nth-child(6)  { animation-delay: 0.20s; }
+  .nav-mobile-menu.open > *:nth-child(7)  { animation-delay: 0.22s; }
+  .nav-mobile-menu.open > *:nth-child(8)  { animation-delay: 0.25s; }
+  .nav-mobile-menu.open > *:nth-child(9)  { animation-delay: 0.27s; }
+  .nav-mobile-menu.open > *:nth-child(10) { animation-delay: 0.30s; }
+  .nav-mobile-menu.open > *:nth-child(11) { animation-delay: 0.33s; }
 
   .nav-mobile-link {
     font-family: 'DM Mono', monospace;
@@ -4925,6 +4961,53 @@
     }
     .nav-signup-btn::before, .nav-signup-btn::after { display: none; }
     .nav-signup-btn:active { animation: none; transform: scale(0.88); opacity: 0.7; }
+  }
+
+  /* ── MOBILE SCROLL-REVEAL LOGO ROW — v3.12 ─────────────────── */
+  .mob-logo-reveal {
+    display: none; /* desktop: hidden */
+  }
+  @media (max-width: 768px) {
+    .mob-logo-reveal {
+      display: block;
+      position: sticky;
+      top: 52px; /* just below nav bar */
+      z-index: 890;
+      background: var(--bg);
+      border-bottom: 0.5px solid var(--border);
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-height 0.38s cubic-bezier(0.4, 0, 0.2, 1),
+                  opacity 0.32s ease,
+                  transform 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+      transform: translateY(-6px);
+    }
+    .mob-logo-reveal.visible {
+      max-height: 52px;
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .mob-logo-reveal-inner {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      padding: 8px 16px;
+    }
+    .mob-logo-reveal-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-style: italic;
+      color: var(--accent);
+      letter-spacing: 0.02em;
+    }
+    .mob-logo-reveal-eyebrow {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.5rem;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
   }
 
   /* ── MOBILE BOTTOM TAB BAR ─────────────────────────────────── */
@@ -9056,6 +9139,21 @@
   font-size: 1.1rem; font-style: italic;
   color: var(--text);
 }
+.lib-shortcut-hint {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  border: 0.5px solid var(--border);
+  border-radius: 4px;
+  padding: 2px 5px;
+  margin-left: auto;
+  margin-right: 8px;
+  opacity: 0.6;
+}
+@media (max-width: 768px) {
+  .lib-shortcut-hint { display: none; }
+}
 .lib-close {
   background: none; border: none; cursor: pointer;
   color: var(--muted); font-size: 0.85rem;
@@ -9244,11 +9342,21 @@
 .lib-tile-open { outline: 0.5px solid var(--border-hover); }
 .lib-detail-row {
   grid-column: 1 / -1;
-  padding: 14px 16px 12px;
+  padding: 0 16px;
   background: var(--surface2, var(--surface));
   border: 0.5px solid var(--border);
   border-radius: 8px;
-  transition: opacity 0.22s ease, transform 0.22s ease;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.36s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.24s ease,
+              padding 0.36s ease;
+}
+.lib-detail-row.lib-detail-open {
+  max-height: 700px;
+  opacity: 1;
+  padding: 14px 16px 12px;
 }
 .lib-detail-hook {
   font-family: 'DM Sans', sans-serif;
@@ -9277,6 +9385,29 @@
   font-family: 'DM Sans', sans-serif;
   font-size: 0.72rem; color: var(--muted);
   line-height: 1.5; margin-bottom: 8px;
+}
+/* v3.12: Plain text is softer opacity */
+.lib-detail-plain {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.72rem; color: var(--muted2);
+  line-height: 1.52; margin-bottom: 8px;
+}
+/* v3.12: Analogy is Playfair italic */
+.lib-detail-analogy {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 0.73rem; color: var(--muted);
+  line-height: 1.52; margin-bottom: 8px;
+}
+/* v3.12: Prompt is distinct — muted border, slightly warm */
+.lib-detail-prompt {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.7rem; color: var(--text);
+  line-height: 1.5;
+  border-left: 2px solid var(--accent);
+  padding-left: 8px;
+  opacity: 0.75;
+  margin-top: 6px;
 }
 .lib-detail-label {
   font-family: 'DM Mono', monospace;
@@ -10584,11 +10715,19 @@
   </div>
 </nav>
 
+<!-- MOBILE SCROLL-REVEAL LOGO ROW — v3.12 -->
+<div class="mob-logo-reveal" id="mobLogoReveal" aria-hidden="true">
+  <div class="mob-logo-reveal-inner">
+    <span class="mob-logo-reveal-name"><em>Epistemic.</em></span>
+    <span class="mob-logo-reveal-eyebrow">Ideas worth saying out loud</span>
+  </div>
+</div>
+
 <!-- MOBILE NAV MENU (hamburger) — v3.11 -->
 <div class="nav-mobile-menu" id="navMobileMenu">
   <!-- Modes -->
   <button class="nav-mobile-link nav-mobile-no-border" onclick="playNavSFX();_openGlobalVocabView();closeMobileNav()">◫ Read</button>
-  <button class="nav-mobile-link nav-mobile-no-border" onclick="playNavSFX();openLexiconPanel();closeMobileNav()">✦ Lexi</button>
+  <button class="nav-mobile-link nav-mobile-no-border" onclick="playNavSFX();openLexiconPanel();closeMobileNav()">✏ Write</button>
   <button class="nav-mobile-link nav-mobile-no-border" onclick="playNavSFX();openSparkPanel();closeMobileNav()">◉ Speak</button>
   <div class="nav-mobile-divider"></div>
   <!-- Library + Quiz -->
@@ -10612,9 +10751,9 @@
     <span class="mob-tab-icon mob-tab-glyph">◫</span>
     <span class="mob-tab-label">Read</span>
   </button>
-  <button class="mob-tab" id="mobTabLexi" onclick="playNavSFX();openLexiconPanel();closeMobileNav()" aria-label="Lexi — your vocabulary">
-    <span class="mob-tab-icon mob-tab-glyph">✦</span>
-    <span class="mob-tab-label">Lexi</span>
+  <button class="mob-tab" id="mobTabLexi" onclick="playNavSFX();openLexiconPanel();closeMobileNav()" aria-label="Write — your vocabulary">
+    <span class="mob-tab-icon mob-tab-glyph">✏</span>
+    <span class="mob-tab-label">Write</span>
   </button>
   <button class="mob-tab" id="mobTabSpeak" onclick="playNavSFX();openSparkPanel();closeMobileNav()" aria-label="Speak — conversation practice">
     <span class="mob-tab-icon mob-tab-glyph">◉</span>
@@ -11665,6 +11804,7 @@
   <div class="lib-handle"></div>
   <div class="lib-header">
     <span class="lib-title">My Library</span>
+    <span class="lib-shortcut-hint" title="Keyboard shortcut">⌘⇧L</span>
     <button class="lib-close" onclick="closeLibrary()">✕</button>
   </div>
   <div class="panel-tagline" style="margin: 0; border-radius: 0;">Your saved concepts and personal notes.</div>
@@ -12479,9 +12619,14 @@ function closeMobileNav() {
   document.body.style.overflow = '';
 }
 
-// Shrink nav on scroll
+// Shrink nav on scroll + mobile logo reveal
 window.addEventListener('scroll', function() {
   document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 40);
+  // Mobile scroll-reveal logo row — v3.12
+  const logoReveal = document.getElementById('mobLogoReveal');
+  if (logoReveal) {
+    logoReveal.classList.toggle('visible', window.scrollY > 60);
+  }
 }, { passive: true });
 
 // Magnetic effect on nav island links
@@ -12545,6 +12690,13 @@ function closeHiwOnBackdrop(e) {
 }
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') closeHiw();
+});
+// v3.12: Cmd+Shift+L — open My Library
+document.addEventListener('keydown', function(e) {
+  if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key === 'L') {
+    e.preventDefault();
+    if (typeof openLibrary === 'function') openLibrary();
+  }
 });
 // v2.94: Corner mode dev shortcut — Cmd+Shift+C (hidden feature, not in UI)
 // v2.97: Corner mode — ←→←→←→ sequence (3× left-right within 1.5s)
@@ -22588,9 +22740,8 @@ function _libToggleSaved(id, el) {
   // Close all open tiles and remove their detail rows
   document.querySelectorAll('#libPanel-saved .lib-tile-open').forEach(function(t) { t.classList.remove('lib-tile-open'); });
   document.querySelectorAll('#libPanel-saved .lib-detail-row').forEach(function(r) {
-    r.style.opacity = '0';
-    r.style.transform = 'translateY(-4px)';
-    setTimeout(function() { if (r.parentNode) r.parentNode.removeChild(r); }, 240);
+    r.classList.remove('lib-detail-open');
+    setTimeout(function() { if (r.parentNode) r.parentNode.removeChild(r); }, 380);
   });
   if (isOpen) return;
 
@@ -22612,17 +22763,17 @@ function _libToggleSaved(id, el) {
   // Build detail as a SIBLING row in the grid (not inside the tile)
   var row = document.createElement('div');
   row.className = 'lib-detail-row';
-  row.style.cssText = 'opacity:0;transform:translateY(-4px);transition:opacity 0.22s ease,transform 0.22s ease;';
   row.innerHTML =
     '<div class="lib-detail-hook" style="border-left-color:' + catColor + '">' + _esc(c.hook) + '</div>' +
     '<div class="lib-detail-cols">' +
       '<div>' +
-        '<div class="lib-detail-label">What it means</div>' +
-        '<div class="lib-detail-section">' + _esc(c.plain) + '</div>' +
+        '<div class="lib-detail-label">Plain English</div>' +
+        '<div class="lib-detail-plain">' + _esc(c.plain) + '</div>' +
       '</div>' +
       '<div>' +
         '<div class="lib-detail-label">Analogy</div>' +
-        '<div class="lib-detail-section">' + _esc(c.analogy) + '</div>' +
+        '<div class="lib-detail-analogy">' + _esc(c.analogy) + '</div>' +
+        (c.prompt ? '<div class="lib-detail-label" style="margin-top:8px">Prompt</div><div class="lib-detail-prompt">' + _esc(c.prompt) + '</div>' : '') +
       '</div>' +
     '</div>' +
     '<div class="lib-detail-note-wrap">' +
@@ -22676,8 +22827,7 @@ function _libToggleSaved(id, el) {
 
   requestAnimationFrame(function() {
     requestAnimationFrame(function() {
-      row.style.opacity = '1';
-      row.style.transform = 'translateY(0)';
+      row.classList.add('lib-detail-open');
     });
   });
 }

@@ -6,6 +6,17 @@
 
 ---
 
+## v3.12 — 2026-08-05 · Mobile scroll-reveal logo, hamburger animation, Library saved tile upgrades
+### index.html
+- **Mobile scroll-reveal logo row:** A sticky banner (`#mobLogoReveal`) sits just below the nav bar. Hidden at page top (max-height:0, opacity:0). When user scrolls >60px, it smoothly expands in (0.38s cubic-bezier) showing "Epistemic." in Playfair italic + the "Ideas worth saying out loud" eyebrow in DM Mono uppercase. Reverses on scroll back to top.
+- **Mobile hamburger menu — smooth animation:** Replaced `display:none`/`display:flex` toggle with CSS `max-height` + `opacity` + `transform` transitions (0.38s ease). Menu items stagger in with `@keyframes mobNavItemIn` (each child delayed 40ms apart, 0.3s duration). Top corrected from 76px → 52px (actual mobile nav height).
+- **Mobile nav — Lexi → Write rename:** Bottom tab bar glyph changed from `✦` → `✏` (pencil), label changed to "Write". Hamburger menu item updated from "✦ Lexi" to "✏ Write". Pencil glyph is visually distinct from the `✎` used on concept card Notes.
+- **Mobile episode/theme section 20px up:** `.browse-toggle-wrap` `margin-top` reduced by 20px at `max-width: 600px` breakpoint — tightens the gap between search bar and the browse section.
+- **Desktop Cmd+Shift+L shortcut:** Global `keydown` listener opens My Library (`openLibrary()`) on `metaKey/ctrlKey + Shift + L`. Shortcut hint `⌘⇧L` displayed in the library panel header as a small bordered monospace badge (hidden on mobile).
+- **Library saved tile — Prompt section added:** Right column of the detail row now shows Analogy + Prompt (with distinct styling). Prompt has a gold left-border accent.
+- **Library saved tile — Plain/Analogy restyled:** "What it means" renamed to "Plain English", uses `.lib-detail-plain` (softer opacity, DM Sans). Analogy uses `.lib-detail-analogy` (Playfair Display italic).
+- **Library saved tile — smooth expand/collapse animation:** Detail row now animates via `max-height` transition (0 → 700px, 0.36s cubic-bezier) + `padding` transition. Collapse removes `lib-detail-open` class and removes the DOM element after 380ms. No more instant pop-in.
+
 ## v3.11 — 2026-08-05 · Nav redesign (mobile + desktop), Lexi left-slide, 16px zoom fix
 ### index.html
 - **Mobile Lexi panel — left slide:** Changed from bottom-sheet (`translateY(100%)`) to left slide-in (`translateX(-100%)`), matching the desktop behavior. Width `min(340px, 88vw)`, full height, no rounded corners.
