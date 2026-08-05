@@ -6,6 +6,16 @@
 
 ---
 
+## v3.00 — 2026-08-05 · Card toolbar fixes: 30×30, animation groups, divider, order, no red
+### index.html
+- **Button size:** Reverted to 30×30 total (padding: 0, box-sizing: border-box) — explicit Gergely override of 44×44 mobile rule for toolbar density.
+- **Animation groups unified:** Group A (Share, Listen, Master) → `scale(1.15)` hover + `btn-scale-pop` on trigger. Group B (Related, Chat, Note) → `scale(1.1) rotate(-8deg)` hover + `btn-tilt-pop` on trigger. Removed per-button divergent transforms.
+- **Chat/Spark color:** Removed `#c47a7a` red. Saved state now `var(--purple)`. Hover neutral.
+- **Button order:** Share → Listen → Master | divider | Related → Chat(Spark) → Note(Pencil).
+- **Divider:** `.btn-toolbar-div` — 0.5px × 12px `var(--border-hover)` rule between groups.
+- **No full borders:** Removed background highlight on all hover states except master (green tint) and group B (very subtle). border-radius reduced to 5px.
+- **Toolbar padding:** tightened to 3px 6px so all 6 buttons fit without overflow.
+
 ## v2.99 — 2026-08-05 · Card toolbar redesign — SVG glyphs, reorder, animations, note position
 ### index.html
 - **SVG glyphs:** Replaced all emoji characters (🔗★💬🎧⟡✎) with inline SVG paths across all 5 card-render locations (sp-hero, episode, theme, all-browse, filter). `CC_G` constant object holds all 6 glyphs, referenced in templates.
