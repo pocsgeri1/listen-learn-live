@@ -6,6 +6,21 @@
 
 ---
 
+## v3.10 — 2026-08-05 · Notes tab redesign, Lexi panel overhaul
+### index.html
+- **Notes tab — full design upgrade:** Note tiles now carry a category-coloured left accent border (`--note-cat-color`). Each tile has a new `.lib-note-header` row: bigger `i` button (20×20, coloured border matching category) placed LEFT of the term; term shown in Playfair Display; category chip in coloured monospace pill; date on the right. The body text and char count remain but layout is cleaner.
+- **Note sync (Saved → Notes):** Notes saved via the Saved tab inline textarea write to the same localStorage key (`cc_note_${id}`) that the Notes tab reads. No additional sync needed — switching to the Notes tab re-renders from localStorage and picks up the note automatically.
+- **Lexi panel — row swap:** Actions row (All Words / Practice N Words buttons) now appears FIRST above the category filter pills. Filter pills moved below with a "Filter by category" micro-label above them to visually distinguish the two rows.
+- **Lexi panel — collapsible podcast + episode headers:** Podcast name and episode title headers are now toggleable. Click to collapse/expand the words beneath. Chevron (▸) rotates 90° when open. All sections start expanded. Episode titles inside podcast groups are also individually collapsible.
+- **Lexi panel — episode arrow moved:** The ↗ source episode button now appears between the practice state badge and the ♥ heart button (was far left, before the chevron).
+- **Desktop preview cards — prompt removed:** Kept plain + analogy only on desktop preview cards (no "Reflect & use it" section). Mobile preview still shows the full prompt section.
+
+## v3.09 — 2026-08-05 · Preview toolbar bug fixes, scan view filter fix
+### index.html
+- **Listen button fixed:** `_spPreviewToolbar` no longer calls the non-existent `_playConceptAudio`. It now computes the timestamped YouTube URL at render time via `buildTimestampedUrl` and renders a proper `<a>` tag (same pattern as main card listen buttons). If no timestamp/URL exists for a concept, the button is shown dimmed and disabled.
+- **Share button fixed:** Was calling `openShareModal(id)` which doesn't exist. Fixed to `shareCard(event, id)`.
+- **Scan view — Picks / Mastered filter carried through:** `_spReinjectScanTiles` now reads `spActiveSort` and applies picks/mastered filtering identically to `buildGrid`. Switching to scan view while Picks or Mastered sort is active now shows only those filtered tiles.
+
 ## v3.08 — 2026-08-05 · Unified preview toolbar everywhere, prompt layout, note action fix
 ### index.html
 - **Shared preview toolbar:** Extracted `_spPreviewToolbar(id, dismissFn)` helper that builds the 6-button toolbar (share / listen / master | divider | related / spark / note) as reusable HTML. Used by all 4 preview surfaces: mobile scan modal, desktop library preview, panel hover preview, corner stories preview.

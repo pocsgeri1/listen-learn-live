@@ -2581,6 +2581,25 @@
     transition: color 0.15s, border-color 0.15s;
   }
   .lexi-action-secondary:hover { color: var(--accent); border-color: var(--accent); }
+  /* Category filter row — visually distinct from the action buttons above */
+  .lexi-cat-filter-wrap {
+    padding: 10px 22px 8px;
+    border-bottom: 0.5px solid var(--border);
+    flex-shrink: 0;
+  }
+  .lexi-cat-filter-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.46rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted2);
+    margin-bottom: 7px;
+    opacity: 0.7;
+  }
+  .lexi-cat-filter-wrap .vocab-cat-pill-row {
+    padding: 0;
+    margin: 0;
+  }
   .lexi-map-btn {
     flex-shrink: 0;
     background: none; border: 0.5px solid var(--border);
@@ -2614,9 +2633,12 @@
     letter-spacing: 0.16em;
     text-transform: uppercase;
     color: var(--accent);
-    padding: 22px 22px 0;
+    padding: 22px 22px 8px;
     opacity: 0.8;
+    display: flex; align-items: center; gap: 7px;
+    cursor: pointer; user-select: none;
   }
+  .lexi-podcast-header:hover { opacity: 1; }
   /* Episode group (second-level) */
   .lexi-ep-group { padding: 10px 0 0; }
   .lexi-ep-group-label {
@@ -2631,6 +2653,28 @@
     margin-bottom: 0;
     line-height: 1.45;
     opacity: 0.72;
+    display: flex; align-items: center; gap: 7px;
+    cursor: pointer; user-select: none;
+  }
+  .lexi-ep-group-label:hover { opacity: 1; }
+  /* Collapse chevron inside headers */
+  .lexi-collapse-chevron {
+    font-size: 0.55rem;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+    display: inline-block;
+  }
+  .lexi-ep-chevron { font-size: 0.52rem; }
+  /* Collapsible body — hidden when parent has .lexi-collapsed */
+  .lexi-collapsible-body {
+    overflow: hidden;
+    transition: max-height 0.3s cubic-bezier(0.4,0,0.2,1), opacity 0.25s ease;
+    max-height: 9999px;
+    opacity: 1;
+  }
+  .lexi-collapsed > .lexi-collapsible-body {
+    max-height: 0 !important;
+    opacity: 0;
   }
   /* Word row */
   .lexi-word-row {
@@ -9195,58 +9239,95 @@
 /* Notes panel — visually distinct */
 .lib-panel-notes .lib-grid { grid-template-columns: 1fr; }
 .lib-note-tile {
-  padding: 14px 16px;
-  background: none;
+  padding: 14px 16px 12px 16px;
+  background: rgba(255,255,255,0.015);
   border: 0.5px solid var(--border);
-  border-left: none;
+  border-left: 3px solid var(--note-cat-color, var(--accent));
   border-radius: 6px;
   cursor: pointer;
-  transition: border-color 0.15s ease;
+  transition: border-color 0.15s ease, background 0.15s ease;
   min-width: 0;
   position: relative;
 }
-.lib-note-tile:hover { border-color: var(--border-hover); }
+.lib-note-tile:hover {
+  background: rgba(255,255,255,0.03);
+  border-color: var(--border-hover);
+  border-left-color: var(--note-cat-color, var(--accent));
+}
+/* Top header row: i · term · cat chip · date · delete */
+.lib-note-header {
+  display: flex; align-items: center; gap: 7px;
+  margin-bottom: 9px;
+}
+.lib-note-info {
+  background: none;
+  border: 1px solid var(--note-cat-color, var(--accent));
+  border-radius: 50%;
+  cursor: pointer;
+  color: var(--note-cat-color, var(--accent));
+  font-family: 'DM Mono', monospace; font-size: 0.62rem;
+  width: 20px; height: 20px; line-height: 1;
+  display: inline-flex; align-items: center; justify-content: center;
+  opacity: 0.7; transition: opacity 0.14s;
+  flex-shrink: 0;
+}
+.lib-note-info:hover { opacity: 1; }
+.lib-note-term {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.88rem; font-weight: 600;
+  color: var(--text);
+  flex: 1; min-width: 0;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.lib-note-cat-chip {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.48rem; letter-spacing: 0.07em; text-transform: uppercase;
+  color: var(--note-cat-color, var(--accent));
+  background: color-mix(in srgb, var(--note-cat-color, var(--accent)) 12%, transparent);
+  border-radius: 3px; padding: 2px 5px;
+  flex-shrink: 0; white-space: nowrap;
+}
+.lib-note-date {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.47rem; color: var(--muted2);
+  flex-shrink: 0; white-space: nowrap;
+}
+.lib-note-delete {
+  background: none; border: none; cursor: pointer;
+  color: var(--muted2); font-size: 0.65rem; padding: 3px 4px;
+  opacity: 0.35; transition: opacity 0.15s, color 0.15s; line-height: 1;
+  flex-shrink: 0;
+}
+.lib-note-delete:hover { opacity: 1; color: #c47a7a; }
+/* Note body text */
 .lib-note-text {
   font-family: 'DM Sans', sans-serif;
   font-size: 0.82rem; color: var(--text);
-  line-height: 1.55;
-  margin-bottom: 8px;
+  line-height: 1.58;
+  margin-bottom: 0;
+  opacity: 0.85;
 }
-.lib-note-text.editing {
-  display: none;
-}
+.lib-note-text.editing { display: none; }
 .lib-note-ta {
   width: 100%; background: none;
   border: none; border-bottom: 0.5px solid var(--border);
   color: var(--text); font-family: 'DM Sans', sans-serif;
   font-size: 0.82rem; line-height: 1.55;
   resize: none; outline: none; padding: 2px 0 6px;
-  margin-bottom: 8px; display: none;
+  margin-bottom: 6px; display: none;
 }
 .lib-note-ta.active { display: block; }
-.lib-note-concept {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.54rem; letter-spacing: 0.08em; text-transform: uppercase;
-  color: var(--muted2);
-}
-.lib-note-tile { position: relative; }
+/* Char count footer — only shown during edit */
 .lib-note-meta-row {
   display: flex; align-items: center; gap: 6px;
   margin-top: 6px; flex-wrap: nowrap;
 }
-.lib-note-concept { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lib-note-concept { display: none; } /* replaced by header */
 .lib-note-chars {
   font-family: 'DM Mono', monospace;
-  font-size: 0.5rem; color: var(--muted2);
+  font-size: 0.47rem; color: var(--muted2);
   flex-shrink: 0; white-space: nowrap;
 }
-.lib-note-delete {
-  position: absolute; top: 10px; right: 10px;
-  background: none; border: none; cursor: pointer;
-  color: var(--muted2); font-size: 0.65rem; padding: 3px 5px;
-  opacity: 0.45; transition: opacity 0.15s, color 0.15s; line-height: 1;
-}
-.lib-note-delete:hover { opacity: 1; color: #c47a7a; }
 .lib-notes-header {
   display: flex; align-items: center; justify-content: space-between;
   padding: 10px 0 4px;
@@ -9265,17 +9346,9 @@
   transition: color 0.15s, border-color 0.15s;
 }
 .lib-export-btn:hover { color: var(--text); border-color: var(--border-hover); }
-/* Notes info button + concept preview popup */
-.lib-note-info {
-  background: none; border: 0.5px solid var(--border); border-radius: 50%;
-  cursor: pointer; color: var(--muted2);
-  font-family: 'DM Mono', monospace; font-size: 0.55rem;
-  width: 16px; height: 16px; line-height: 1;
-  display: inline-flex; align-items: center; justify-content: center;
-  opacity: 0.55; transition: opacity 0.14s, border-color 0.14s;
-  flex-shrink: 0;
-}
-.lib-note-info:hover { opacity: 1; border-color: var(--border-hover); }
+/* light mode tweaks */
+[data-theme="light"] .lib-note-tile { background: rgba(0,0,0,0.015); }
+[data-theme="light"] .lib-note-tile:hover { background: rgba(0,0,0,0.035); }
 .lib-note-popover {
   position: fixed; z-index: 3200;
   width: 260px;
@@ -16368,7 +16441,6 @@ function _spScanPreview(id, anchorEl) {
     <div class="sp-preview-plain">${_spEsc(concept.plain || '')}</div>
     <div class="sp-preview-section-label">Analogy</div>
     <div class="sp-preview-analogy" style="border-left-color:${color}">${_spEsc(concept.analogy || '')}</div>
-    ${concept.prompt ? `<div class="sp-preview-section-label">Reflect &amp; use it</div><div class="sp-preview-plain">${_spEsc(concept.prompt)}</div>` : ''}
     <div class="sp-preview-footer">${_pvToolbar1}</div>`;
 
   // Position: fixed, anchored to the side of the tile that matches its column —
@@ -17122,7 +17194,6 @@ function _spPreviewCard(id, anchorEl, opts) {
       <div class="sp-preview-plain">${_spEsc(concept.plain || '')}</div>
       <div class="sp-preview-section-label">Analogy</div>
       <div class="sp-preview-analogy" style="border-left-color:${color}">${_spEsc(concept.analogy || '')}</div>
-      ${concept.prompt ? `<div class="sp-preview-section-label">Reflect &amp; use it</div><div class="sp-preview-plain">${_spEsc(concept.prompt)}</div>` : ''}
       <div class="sp-preview-footer">${_pvToolbar2}</div>`;
   }
 
@@ -22532,17 +22603,23 @@ function _libRenderNotes() {
     var c = CONCEPTS && CONCEPTS.find(function(x) { return x.id === n.id; });
     if (!c) return '';
     var catName = (CATEGORIES && CATEGORIES.find(function(x) { return x.id === c.category; }) || {}).name || c.category;
+    var catColor = (typeof CAT_COLOR !== 'undefined' && CAT_COLOR[c.category]) || '#e8d5a3';
     var safeText = n.text.replace(/[<>&"]/g, function(ch) { return {'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[ch]; });
+    var safeTerm = (c.term || '').replace(/[<>&"]/g, function(ch) { return {'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[ch]; });
     var dateStr = n.ts ? _libFmtDate(n.ts) : '';
-    return '<div class="lib-note-tile" id="libNoteTile-' + n.id + '">' +
+    return '<div class="lib-note-tile" id="libNoteTile-' + n.id + '" style="--note-cat-color:' + catColor + '">' +
+      '<div class="lib-note-header">' +
+        '<button class="lib-note-info" onclick="event.stopPropagation();_libNotePreview(' + n.id + ', this)" title="Preview concept">i</button>' +
+        '<span class="lib-note-term">' + safeTerm + '</span>' +
+        '<span class="lib-note-cat-chip">' + catName + '</span>' +
+        (dateStr ? '<span class="lib-note-date">' + dateStr + '</span>' : '') +
+        '<button class="lib-note-delete" onclick="_libNoteDelete(' + n.id + ', event)" title="Delete note">✕</button>' +
+      '</div>' +
       '<div class="lib-note-text" onclick="_libNoteEdit(' + n.id + ', this)">' + safeText + '</div>' +
       '<textarea class="lib-note-ta" rows="3" onblur="_libNoteSave(' + n.id + ', this)"></textarea>' +
       '<div class="lib-note-meta-row">' +
-        '<span class="lib-note-concept">' + (c.term || '') + ' · ' + catName + '</span>' +
-        '<button class="lib-note-info" onclick="event.stopPropagation();_libNotePreview(' + n.id + ', this)" title="Preview concept">i</button>' +
-        '<span class="lib-note-chars" id="libNoteChars-' + n.id + '">' + n.text.length + ' chars' + (dateStr ? ' · ' + dateStr : '') + '</span>' +
+        '<span class="lib-note-chars" id="libNoteChars-' + n.id + '">' + n.text.length + ' chars</span>' +
       '</div>' +
-      '<button class="lib-note-delete" onclick="_libNoteDelete(' + n.id + ', event)" title="Delete note">✕</button>' +
     '</div>';
   }).join('');
   panel.innerHTML = header + '<div style="padding: 4px 0;">' + tiles + '</div>';
@@ -27669,8 +27746,6 @@ body.corner-panel-open .stories-panel {
     </div>
     <div class="lexi-panel-tagline panel-tagline">Save words that stayed with you, then practise using them.</div>
 
-    <div class="vocab-cat-pill-row" id="lexiCatPills" style="padding: 4px 0 10px 8px;margin-top:4px"></div>
-
     <div class="lexi-panel-actions" id="lexiPanelActions">
       <button class="lexi-action-secondary" id="lexiAllWordsBtn" onclick="_openGlobalVocabView()">
         ☰ All Words
@@ -27678,6 +27753,11 @@ body.corner-panel-open .stories-panel {
       <button class="lexi-action-primary" id="lexiPracticeBtn" onclick="_lexiStartSession()" style="display:none">
         ▶ Practice <span id="lexiPracticeCount">0</span> words
       </button>
+    </div>
+
+    <div class="lexi-cat-filter-wrap">
+      <div class="lexi-cat-filter-label">Filter by category</div>
+      <div class="vocab-cat-pill-row" id="lexiCatPills"></div>
     </div>
 
     <div class="lexi-panel-list" id="lexiPanelList">
@@ -28221,33 +28301,80 @@ function _lexiRenderPanel() {
 
     if (pod.label) {
       var podHeader = document.createElement('div');
-      podHeader.className = 'lexi-podcast-header';
-      podHeader.textContent = pod.label;
-      podEl.appendChild(podHeader);
-    }
-
-    pod.order.forEach(function(epKey) {
-      var ep = pod.episodes[epKey];
-      var epEl = document.createElement('div');
-      epEl.className = 'lexi-ep-group';
-
-      if (ep.label) {
-        var epHeader = document.createElement('div');
-        epHeader.className = 'lexi-ep-group-label';
-        epHeader.textContent = ep.label;
-        epEl.appendChild(epHeader);
-      } else if (!pod.label) {
-        var epHeader2 = document.createElement('div');
-        epHeader2.className = 'lexi-ep-group-label';
-        epHeader2.textContent = 'Free search';
-        epEl.appendChild(epHeader2);
-      }
-
-      ep.words.forEach(function(entry) {
-        epEl.appendChild(_lexiBuildWordRow(entry));
+      podHeader.className = 'lexi-podcast-header lexi-collapsible';
+      podHeader.innerHTML = '<span class="lexi-collapse-chevron">▸</span><span class="lexi-collapse-label">' +
+        pod.label.replace(/[<>&"]/g, function(ch) { return {'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[ch]; }) + '</span>';
+      var podBody = document.createElement('div');
+      podBody.className = 'lexi-collapsible-body';
+      // Collapse toggle
+      podHeader.addEventListener('click', function() {
+        var collapsed = podEl.classList.toggle('lexi-collapsed');
+        podHeader.querySelector('.lexi-collapse-chevron').style.transform = collapsed ? '' : 'rotate(90deg)';
       });
-      podEl.appendChild(epEl);
-    });
+      // Start expanded
+      podHeader.querySelector('.lexi-collapse-chevron').style.transform = 'rotate(90deg)';
+      podEl.appendChild(podHeader);
+
+      pod.order.forEach(function(epKey) {
+        var ep = pod.episodes[epKey];
+        var epEl = document.createElement('div');
+        epEl.className = 'lexi-ep-group';
+
+        if (ep.label) {
+          var epHeader = document.createElement('div');
+          epHeader.className = 'lexi-ep-group-label lexi-collapsible';
+          epHeader.innerHTML = '<span class="lexi-collapse-chevron lexi-ep-chevron">▸</span><span class="lexi-collapse-label">' +
+            ep.label.replace(/[<>&"]/g, function(ch) { return {'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[ch]; }) + '</span>';
+          var epBody = document.createElement('div');
+          epBody.className = 'lexi-collapsible-body';
+          epHeader.addEventListener('click', function() {
+            var collapsed = epEl.classList.toggle('lexi-collapsed');
+            epHeader.querySelector('.lexi-ep-chevron').style.transform = collapsed ? '' : 'rotate(90deg)';
+          });
+          epHeader.querySelector('.lexi-ep-chevron').style.transform = 'rotate(90deg)';
+          epEl.appendChild(epHeader);
+          ep.words.forEach(function(entry) { epBody.appendChild(_lexiBuildWordRow(entry)); });
+          epEl.appendChild(epBody);
+        } else {
+          ep.words.forEach(function(entry) { epEl.appendChild(_lexiBuildWordRow(entry)); });
+        }
+
+        podBody.appendChild(epEl);
+      });
+      podEl.appendChild(podBody);
+    } else {
+      // No podcast label — render episode groups directly
+      pod.order.forEach(function(epKey) {
+        var ep = pod.episodes[epKey];
+        var epEl = document.createElement('div');
+        epEl.className = 'lexi-ep-group';
+
+        if (ep.label) {
+          var epHeader = document.createElement('div');
+          epHeader.className = 'lexi-ep-group-label lexi-collapsible';
+          epHeader.innerHTML = '<span class="lexi-collapse-chevron lexi-ep-chevron">▸</span><span class="lexi-collapse-label">' +
+            ep.label.replace(/[<>&"]/g, function(ch) { return {'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[ch]; }) + '</span>';
+          var epBody2 = document.createElement('div');
+          epBody2.className = 'lexi-collapsible-body';
+          epHeader.addEventListener('click', function() {
+            var collapsed = epEl.classList.toggle('lexi-collapsed');
+            epHeader.querySelector('.lexi-ep-chevron').style.transform = collapsed ? '' : 'rotate(90deg)';
+          });
+          epHeader.querySelector('.lexi-ep-chevron').style.transform = 'rotate(90deg)';
+          epEl.appendChild(epHeader);
+          ep.words.forEach(function(entry) { epBody2.appendChild(_lexiBuildWordRow(entry)); });
+          epEl.appendChild(epBody2);
+        } else {
+          var freeLabel = document.createElement('div');
+          freeLabel.className = 'lexi-ep-group-label';
+          freeLabel.textContent = 'Free search';
+          epEl.appendChild(freeLabel);
+          ep.words.forEach(function(entry) { epEl.appendChild(_lexiBuildWordRow(entry)); });
+        }
+
+        podEl.appendChild(epEl);
+      });
+    }
 
     listEl.appendChild(podEl);
   });
@@ -28316,21 +28443,6 @@ function _lexiBuildWordRow(entry) {
     }
   });
 
-  // Source link — only when collectionId is known
-  if (entry.collectionId) {
-    var srcBtn = document.createElement('button');
-    srcBtn.type = 'button';
-    srcBtn.className = 'lexi-src-btn';
-    srcBtn.textContent = '↗';
-    srcBtn.title = 'Open source episode';
-    srcBtn.setAttribute('aria-label', 'Open source episode for ' + (entry.word || ''));
-    srcBtn.addEventListener('click', function(e) {
-      e.stopPropagation();
-      _openSourceEpisode(entry.collectionId);
-    });
-    top.appendChild(srcBtn);
-  }
-
   var removeBtn = document.createElement('button');
   removeBtn.type = 'button';
   removeBtn.className = 'lexi-remove-x';
@@ -28365,6 +28477,22 @@ function _lexiBuildWordRow(entry) {
   top.appendChild(chevron);
   top.appendChild(nameEl);
   top.appendChild(badge);
+
+  // Source link — between badge and heart, only when collectionId is known
+  if (entry.collectionId) {
+    var srcBtn = document.createElement('button');
+    srcBtn.type = 'button';
+    srcBtn.className = 'lexi-src-btn';
+    srcBtn.textContent = '↗';
+    srcBtn.title = 'Open source episode';
+    srcBtn.setAttribute('aria-label', 'Open source episode for ' + (entry.word || ''));
+    srcBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      _openSourceEpisode(entry.collectionId);
+    });
+    top.appendChild(srcBtn);
+  }
+
   top.appendChild(favBtn);
   top.appendChild(removeBtn);
 
