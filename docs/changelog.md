@@ -6,6 +6,16 @@
 
 ---
 
+## v3.06 — 2026-08-05 · Library polish: cat filter, tile expansion, notes preview, scroll fix
+### index.html
+- **Close scroll jump fixed:** `_spUnlockBodyScroll` now uses synchronous `scrollTop` assignment instead of `window.scrollTo`, eliminating the flash-to-top on panel close. Affects all panels sharing the lock pattern.
+- **Category chips — filterable:** Chips in the Saved tab are now `<button>` elements. Clicking a chip filters the grid to that category; clicking again clears. Active chip gets a highlight. All categories shown (no `slice(6)` cap).
+- **Divider between category bar and grid:** `<hr class="lib-cat-divider">` separates chips from tiles.
+- **Card ID hidden:** `.lib-tile-id { display: none }` — `#110` label removed from tile UI. Note indicator ✏ kept.
+- **Saved tab scrollbar hidden:** `.lib-panel { scrollbar-width: none }` applied.
+- **Tile expansion redesigned:** Expanded detail is now a separate grid-sibling `.lib-detail-row` (not inside the tile), so the 2-col layout is never disrupted. Contains: hook (italic, cat-color left border), 2-col plain+analogy layout, note quote if present, Spark + Episode action buttons. Animates in with opacity + translateY.
+- **Notes tab — concept preview popup:** Small `i` button on each note tile opens a fixed `lib-note-popover` showing the concept's hook, term (in category color), and plain definition — styled like the Word Map lane popover. Clicking the same concept or clicking outside closes it.
+
 ## v3.05 — 2026-08-05 · Library UX: Saved inline expand, Notes redesign, Spark button, panel taglines
 ### index.html
 - **Sparks tab removed:** My Library is now 2 tabs only — Saved and Notes. All `_libRenderSparks()` logic removed. `openLibrary()` and `_libSwitchTab()` updated accordingly.

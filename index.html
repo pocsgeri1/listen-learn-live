@@ -9093,23 +9093,55 @@
   background: none;
 }
 .lib-cat-chip em { font-style: normal; color: var(--muted); margin-left: 3px; }
+/* Cat chips are interactive buttons */
+.lib-cat-chip {
+  cursor: pointer; border-radius: 3px;
+  transition: color 0.14s, background 0.14s;
+  border: none;
+}
+.lib-cat-chip:hover { color: var(--text); }
+.lib-cat-chip.active { color: var(--text); background: rgba(232,213,163,0.1); }
+.lib-cat-divider {
+  border: none; border-top: 0.5px solid var(--border);
+  margin: 10px 0 0; flex-shrink: 0;
+}
+/* Hide numeric card ID */
+.lib-tile-id { display: none; }
 .lib-tab-count {
   font-size: 0.6rem; opacity: 0.6; margin-left: 4px;
 }
+/* Hide lib panel scrollbar */
+.lib-panel { scrollbar-width: none; }
+.lib-panel::-webkit-scrollbar { display: none; }
 
-/* Saved tile inline expand */
-.lib-tile-open {
+/* Saved tile inline expand — detail row is a grid sibling, not inside tile */
+.lib-tile-open { outline: 0.5px solid var(--border-hover); }
+.lib-detail-row {
   grid-column: 1 / -1;
+  padding: 14px 16px 12px;
+  background: var(--surface2, var(--surface));
+  border: 0.5px solid var(--border);
+  border-radius: 8px;
+  transition: opacity 0.22s ease, transform 0.22s ease;
 }
+.lib-detail-hook {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.8rem; font-style: italic;
+  color: var(--text); line-height: 1.45;
+  border-left: 2px solid var(--accent);
+  padding-left: 10px; margin-bottom: 12px;
+}
+.lib-detail-cols {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+  margin-bottom: 10px;
+}
+@media (max-width: 520px) { .lib-detail-cols { grid-template-columns: 1fr; } }
+/* Keep old .lib-tile-detail for compat, but we no longer use it */
 .lib-tile-detail {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s ease, opacity 0.25s ease;
-  opacity: 0;
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.3s ease, opacity 0.25s ease; opacity: 0;
 }
-.lib-tile-detail.open {
-  opacity: 1;
-}
+.lib-tile-detail.open { opacity: 1; }
 .lib-tile-detail-inner {
   padding-top: 10px;
   border-top: 0.5px solid var(--border);
@@ -9216,6 +9248,55 @@
   transition: color 0.15s, border-color 0.15s;
 }
 .lib-export-btn:hover { color: var(--text); border-color: var(--border-hover); }
+/* Notes info button + concept preview popup */
+.lib-note-info {
+  background: none; border: 0.5px solid var(--border); border-radius: 50%;
+  cursor: pointer; color: var(--muted2);
+  font-family: 'DM Mono', monospace; font-size: 0.55rem;
+  width: 16px; height: 16px; line-height: 1;
+  display: inline-flex; align-items: center; justify-content: center;
+  opacity: 0.55; transition: opacity 0.14s, border-color 0.14s;
+  flex-shrink: 0;
+}
+.lib-note-info:hover { opacity: 1; border-color: var(--border-hover); }
+.lib-note-popover {
+  position: fixed; z-index: 3200;
+  width: 260px;
+  padding: 14px 16px 12px;
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: 10px;
+  display: flex; flex-direction: column; gap: 5px;
+  opacity: 0; transform: translateY(-5px) scale(0.97);
+  transition: opacity 0.16s ease, transform 0.16s ease;
+  pointer-events: none;
+}
+.lib-note-popover.open {
+  opacity: 1; transform: translateY(0) scale(1);
+  pointer-events: all;
+}
+.lib-note-pop-close {
+  position: absolute; top: 8px; right: 10px;
+  background: none; border: none; cursor: pointer;
+  color: var(--muted); font-size: 0.7rem; padding: 2px 4px;
+  opacity: 0.6; line-height: 1;
+}
+.lib-note-pop-close:hover { opacity: 1; }
+.lib-note-pop-hook {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.58rem; letter-spacing: 0.04em;
+  color: var(--muted2); line-height: 1.4;
+  padding-right: 18px;
+}
+.lib-note-pop-term {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.88rem; font-style: italic;
+}
+.lib-note-pop-plain {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.7rem; color: var(--muted); line-height: 1.5;
+}
+[data-theme="light"] .lib-note-popover { background: #f0ebe2; border-color: rgba(0,0,0,0.1); }
 /* Read panel tagline spacing */
 .gv-tagline { margin: 0; border-radius: 0; }
 
@@ -17123,12 +17204,15 @@ function _spLockBodyScroll() {
   document.body.style.width = '100%';
 }
 function _spUnlockBodyScroll() {
+  var sy = _spScrollLockY;
   document.body.style.position = '';
   document.body.style.top = '';
   document.body.style.left = '';
   document.body.style.right = '';
   document.body.style.width = '';
-  window.scrollTo(0, _spScrollLockY);
+  // Synchronous — avoids the flash-to-top that window.scrollTo causes
+  document.documentElement.scrollTop = sy;
+  document.body.scrollTop = sy; // Safari
 }
 
 function spDismissMobilePreview(goingToCS) {
@@ -22067,6 +22151,7 @@ function _ccCloseRelated() {
 
 // ── My Library Drawer ─────────────────────────────────────────
 var _libActiveTab = 'saved';
+var _libActiveCat = null; // active category filter in Saved tab
 
 function openLibrary(tab) {
   tab = tab || _libActiveTab || 'saved';
@@ -22174,26 +22259,38 @@ function _libRenderSaved() {
   }
 
   if (!ids.length) {
+    _libActiveCat = null;
     panel.innerHTML = '<div class="lib-empty"><span class="lib-empty-icon">◈</span>No mastered concepts yet.<br>Tap ◈ on any card to save it here.</div>';
     return;
   }
 
-  // Category breakdown bar
+  // Category breakdown — clickable filter chips
   var catCounts = {};
   ids.forEach(function(id) {
     var c = CONCEPTS && CONCEPTS.find(function(x) { return x.id === id; });
     if (c) catCounts[c.category] = (catCounts[c.category] || 0) + 1;
   });
+  // Validate active filter still exists
+  if (_libActiveCat && !catCounts[_libActiveCat]) _libActiveCat = null;
+
   var catBar = '<div class="lib-cat-bar">' + Object.keys(catCounts)
     .sort(function(a, b) { return catCounts[b] - catCounts[a]; })
-    .slice(0, 6)
     .map(function(cat) {
       var name = (CATEGORIES && CATEGORIES.find(function(x) { return x.id === cat; }) || {}).name || cat;
       var color = (typeof CAT_COLOR !== 'undefined' && CAT_COLOR[cat]) || 'var(--accent)';
-      return '<span class="lib-cat-chip" style="--cat-color:' + color + '">' + name + '<em>' + catCounts[cat] + '</em></span>';
-    }).join('') + '</div>';
+      var isActive = cat === _libActiveCat;
+      return '<button class="lib-cat-chip' + (isActive ? ' active' : '') + '" style="--cat-color:' + color + '" onclick="_libFilterCat(\'' + cat + '\')">' + name + '<em>' + catCounts[cat] + '</em></button>';
+    }).join('') + '</div><hr class="lib-cat-divider">';
 
-  var tiles = ids.map(function(id) {
+  // Filter by active category
+  var visibleIds = _libActiveCat
+    ? ids.filter(function(id) {
+        var c = CONCEPTS && CONCEPTS.find(function(x) { return x.id === id; });
+        return c && c.category === _libActiveCat;
+      })
+    : ids;
+
+  var tiles = visibleIds.map(function(id) {
     var c = CONCEPTS && CONCEPTS.find(function(x) { return x.id === id; });
     if (!c) return '';
     var catName = (CATEGORIES && CATEGORIES.find(function(x) { return x.id === c.category; }) || {}).name || c.category;
@@ -22204,60 +22301,78 @@ function _libRenderSaved() {
       '<div class="lib-tile-term">' + (c.term || '') + '</div>' +
       '<div class="lib-tile-meta">' +
         '<span class="lib-tile-cat">' + catName + '</span>' +
-        '<span class="lib-tile-num">#' + String(id).padStart(3,'0') + '</span>' +
+        '<span class="lib-tile-id">#' + String(id).padStart(3,'0') + '</span>' +
         dateStr +
-        (hasNote ? '<span class="lib-tile-num">✏</span>' : '') +
+        (hasNote ? '<span class="lib-tile-num" title="Has note">✏</span>' : '') +
       '</div>' +
     '</div>';
   }).join('');
   panel.innerHTML = catBar + '<div class="lib-grid">' + tiles + '</div>';
 }
 
+function _libFilterCat(cat) {
+  _libActiveCat = (_libActiveCat === cat) ? null : cat;
+  // Close any open detail rows before re-rendering
+  document.querySelectorAll('#libPanel-saved .lib-detail-row').forEach(function(r) { r.remove(); });
+  document.querySelectorAll('#libPanel-saved .lib-tile-open').forEach(function(t) { t.classList.remove('lib-tile-open'); });
+  _libRenderSaved();
+}
+
 function _libToggleSaved(id, el) {
   var isOpen = el.classList.contains('lib-tile-open');
-  // Close all open tiles first
-  document.querySelectorAll('#libPanel-saved .lib-tile-open').forEach(function(t) {
-    t.classList.remove('lib-tile-open');
-    var d = t.querySelector('.lib-tile-detail');
-    if (d) { d.classList.remove('open'); d.style.maxHeight = '0'; setTimeout(function() { if (d.parentNode) d.parentNode.removeChild(d); }, 300); }
+  // Close all open tiles and remove their detail rows
+  document.querySelectorAll('#libPanel-saved .lib-tile-open').forEach(function(t) { t.classList.remove('lib-tile-open'); });
+  document.querySelectorAll('#libPanel-saved .lib-detail-row').forEach(function(r) {
+    r.style.opacity = '0';
+    r.style.transform = 'translateY(-4px)';
+    setTimeout(function() { if (r.parentNode) r.parentNode.removeChild(r); }, 240);
   });
   if (isOpen) return;
 
-  el.classList.add('lib-tile-open');
   var c = CONCEPTS && CONCEPTS.find(function(x) { return x.id === id; });
   if (!c) return;
+
+  el.classList.add('lib-tile-open');
+
   var col = c.collection_id != null && COLLECTIONS_BY_ID ? COLLECTIONS_BY_ID[c.collection_id] : null;
   var noteText = localStorage.getItem('cc_note_' + id) || '';
-  var safeNote = noteText.replace(/[<>&"]/g, function(ch) { return {'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[ch]; });
+  var _esc = function(s) { return (s||'').replace(/[<>&"]/g, function(ch) { return {'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[ch]; }); };
+  var catColor = (typeof CAT_COLOR !== 'undefined' && CAT_COLOR[c.category]) || 'var(--accent)';
 
   var episodeBtn = '';
   if (col && (col.type === 'episode' || col.type === 'short') && typeof openEpisodeDrawer === 'function') {
     episodeBtn = '<button class="lib-detail-btn" onclick="closeLibrary();openEpisodeDrawer(' + c.collection_id + ')">↗ Episode</button>';
   }
 
-  var detail = document.createElement('div');
-  detail.className = 'lib-tile-detail';
-  detail.style.maxHeight = '0';
-  detail.style.overflow = 'hidden';
-  detail.style.transition = 'max-height 0.3s ease, opacity 0.25s ease';
-  detail.style.opacity = '0';
-  detail.innerHTML =
-    '<div class="lib-tile-detail-inner">' +
-      '<div class="lib-detail-label">What it means</div>' +
-      '<div class="lib-detail-section">' + (c.plain || '') + '</div>' +
-      '<div class="lib-detail-label">Analogy</div>' +
-      '<div class="lib-detail-section">' + (c.analogy || '') + '</div>' +
-      (noteText ? '<div class="lib-detail-label">Your note</div><div class="lib-detail-note">' + safeNote + '</div>' : '') +
-      '<div class="lib-detail-actions">' +
-        '<button class="lib-detail-btn" onclick="closeLibrary();openSparkPanel(' + id + ')">✦ Spark it</button>' +
-        episodeBtn +
+  // Build detail as a SIBLING row in the grid (not inside the tile)
+  var row = document.createElement('div');
+  row.className = 'lib-detail-row';
+  row.style.cssText = 'opacity:0;transform:translateY(-4px);transition:opacity 0.22s ease,transform 0.22s ease;';
+  row.innerHTML =
+    '<div class="lib-detail-hook" style="border-left-color:' + catColor + '">' + _esc(c.hook) + '</div>' +
+    '<div class="lib-detail-cols">' +
+      '<div>' +
+        '<div class="lib-detail-label">What it means</div>' +
+        '<div class="lib-detail-section">' + _esc(c.plain) + '</div>' +
       '</div>' +
+      '<div>' +
+        '<div class="lib-detail-label">Analogy</div>' +
+        '<div class="lib-detail-section">' + _esc(c.analogy) + '</div>' +
+      '</div>' +
+    '</div>' +
+    (noteText ? '<div class="lib-detail-note" style="margin-bottom:10px;">' + _esc(noteText) + '</div>' : '') +
+    '<div class="lib-detail-actions">' +
+      '<button class="lib-detail-btn" onclick="closeLibrary();openSparkPanel(' + id + ')">✦ Spark it</button>' +
+      episodeBtn +
     '</div>';
-  el.appendChild(detail);
+
+  // Insert after the tile (as grid sibling)
+  el.parentNode.insertBefore(row, el.nextSibling);
+
   requestAnimationFrame(function() {
     requestAnimationFrame(function() {
-      detail.classList.add('open');
-      detail.style.maxHeight = '500px';
+      row.style.opacity = '1';
+      row.style.transform = 'translateY(0)';
     });
   });
 }
@@ -22307,6 +22422,7 @@ function _libRenderNotes() {
       '<textarea class="lib-note-ta" rows="3" onblur="_libNoteSave(' + n.id + ', this)"></textarea>' +
       '<div class="lib-note-meta-row">' +
         '<span class="lib-note-concept">' + (c.term || '') + ' · ' + catName + '</span>' +
+        '<button class="lib-note-info" onclick="event.stopPropagation();_libNotePreview(' + n.id + ', this)" title="Preview concept">i</button>' +
         '<span class="lib-note-chars" id="libNoteChars-' + n.id + '">' + n.text.length + ' chars' + (dateStr ? ' · ' + dateStr : '') + '</span>' +
       '</div>' +
       '<button class="lib-note-delete" onclick="_libNoteDelete(' + n.id + ', event)" title="Delete note">✕</button>' +
@@ -22388,6 +22504,58 @@ function _libExportNotes() {
     document.body.appendChild(ta); ta.select(); document.execCommand('copy');
     document.body.removeChild(ta);
   }
+}
+
+function _libNotePreview(id, btn) {
+  // Remove any existing popover
+  var existing = document.querySelector('.lib-note-popover');
+  if (existing) {
+    var wasId = existing._libSrcId;
+    existing.style.opacity = '0';
+    existing.style.transform = 'translateY(-4px) scale(0.97)';
+    setTimeout(function() { if (existing.parentNode) existing.parentNode.removeChild(existing); }, 180);
+    if (wasId === id) return; // toggle off same concept
+  }
+
+  var c = CONCEPTS && CONCEPTS.find(function(x) { return x.id === id; });
+  if (!c) return;
+  var color = (typeof CAT_COLOR !== 'undefined' && CAT_COLOR[c.category]) || 'var(--accent)';
+  var _esc = function(s) { return (s||'').replace(/[<>&"]/g, function(ch) { return {'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[ch]; }); };
+
+  var pop = document.createElement('div');
+  pop.className = 'lib-note-popover';
+  pop._libSrcId = id;
+  pop.innerHTML =
+    '<button class="lib-note-pop-close" onclick="var p=this.closest(\'.lib-note-popover\');p.style.opacity=\'0\';p.style.transform=\'translateY(-4px) scale(0.97)\';setTimeout(function(){if(p.parentNode)p.parentNode.removeChild(p);},180)">✕</button>' +
+    '<span class="lib-note-pop-hook">' + _esc(c.hook) + '</span>' +
+    '<span class="lib-note-pop-term" style="color:' + color + '">' + _esc(c.term) + '</span>' +
+    '<span class="lib-note-pop-plain">' + _esc(c.plain) + '</span>';
+
+  document.body.appendChild(pop);
+
+  // Position relative to the button
+  var rect = btn.getBoundingClientRect();
+  var popW = 260;
+  var left = Math.min(rect.left, window.innerWidth - popW - 12);
+  var top = rect.bottom + 8;
+  if (top + 170 > window.innerHeight) top = rect.top - 170;
+  pop.style.left = Math.max(12, left) + 'px';
+  pop.style.top = Math.max(12, top) + 'px';
+
+  requestAnimationFrame(function() { pop.classList.add('open'); });
+
+  // Close on outside click
+  setTimeout(function() {
+    function _popOutside(e) {
+      if (!pop.contains(e.target) && e.target !== btn) {
+        pop.style.opacity = '0';
+        pop.style.transform = 'translateY(-4px) scale(0.97)';
+        setTimeout(function() { if (pop.parentNode) pop.parentNode.removeChild(pop); }, 180);
+        document.removeEventListener('click', _popOutside, true);
+      }
+    }
+    document.addEventListener('click', _popOutside, true);
+  }, 60);
 }
 
 // ── Note per concept ──────────────────────────────────────────
