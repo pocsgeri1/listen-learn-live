@@ -2708,9 +2708,8 @@
     color: var(--accent);
     flex: 1;
     min-width: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    word-break: break-word;
+    overflow-wrap: break-word;
   }
   .lexi-state-badge {
     font-family: 'DM Mono', monospace;
@@ -4491,6 +4490,10 @@
     border-bottom: 1px solid var(--border);
     background: rgba(13,13,13,0.96);
     transition: height 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+    /* iOS Safari: GPU compositing prevents nav from jumping when URL bar shows/hides */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
   }
 
   nav.scrolled {
@@ -4775,7 +4778,7 @@
 
   .nav-mobile-menu {
     position: fixed;
-    top: 52px;
+    top: 88px; /* nav 52px + logo-reveal bar 36px */
     left: 0; right: 0;
     background: rgba(13,13,13,0.99); /* overridden by [data-theme="light"] */
     border-bottom: 1px solid var(--border);
@@ -4970,9 +4973,10 @@
   @media (max-width: 768px) {
     .mob-logo-reveal {
       display: block;
-      position: sticky;
+      position: fixed;
       top: 52px; /* just below nav bar */
-      z-index: 890;
+      left: 0; right: 0;
+      z-index: 99; /* below nav (100) but above content */
       background: var(--bg);
       border-bottom: 0.5px solid var(--border);
     }
@@ -5534,7 +5538,7 @@
     .hero {
       display: flex;
       flex-direction: column;
-      padding: 56px 0 0 0;
+      padding: 92px 0 0 0; /* 52px nav + 36px mob-logo-reveal + 4px gap — v3.13 */
     }
 
     /* Hero-copy becomes a flex column so we can reorder its children */
@@ -5661,9 +5665,9 @@
     .hero-copy { padding: 0 1.5rem 0 1.5rem; }
     .hero-card-col { padding: 0 1.5rem 1.25rem 1.5rem; }
   }
-  /* v2.51: hero padding = mobile nav height (56px) so content clears the nav */
+  /* v3.13: hero padding = nav (52px) + logo reveal bar (36px) + gap (4px) */
   @media (max-width: 390px) {
-    .hero { padding: 56px 0 0 0; }
+    .hero { padding: 92px 0 0 0; }
     .hero-cta { margin-bottom: 1rem; }
     .hero-card-col { padding-bottom: 1rem; }
     .hero-stats { padding: 0.75rem 1.5rem; }
@@ -11493,7 +11497,7 @@
     <!-- Actions: Copy · New concept · Prev/Next -->
     <div class="cs-actions cs-post-prompt cs-hidden" id="csActions">
       <button class="cs-btn cs-btn--primary" id="csShareBtn">↑ Copy</button>
-      <button class="cs-btn cs-btn--new" id="csNewConceptBtn" onclick="_csRollNewConcept()">↺ concept</button>
+      <button class="cs-btn cs-btn--new" id="csNewConceptBtn" onclick="_csRollNewConcept()">↺ New</button>
       <div style="display:flex;gap:6px;margin-left:auto">
         <button class="cs-nav-btn" id="csPrevBtn" title="Previous concept" disabled>⤺</button>
         <button class="cs-nav-btn" id="csNextBtn" title="Next concept">⤻</button>
@@ -11793,7 +11797,7 @@
   <div class="lib-handle"></div>
   <div class="lib-header">
     <span class="lib-title">My Library</span>
-    <span class="lib-shortcut-hint" title="Keyboard shortcut">⌘⇧L</span>
+    <span class="lib-shortcut-hint" title="Keyboard shortcut">⌘⌥L</span>
     <button class="lib-close" onclick="closeLibrary()">✕</button>
   </div>
   <div class="panel-tagline" style="margin: 0; border-radius: 0;">Your saved concepts and personal notes.</div>
@@ -12678,13 +12682,13 @@ function closeHiwOnBackdrop(e) {
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') closeHiw();
 });
-// v3.12: Cmd+Shift+L — open My Library
+// v3.13: Cmd+Alt+L (⌘⌥L) — open My Library. Using Alt instead of Shift avoids password-manager conflicts.
 document.addEventListener('keydown', function(e) {
-  if ((e.metaKey || e.ctrlKey) && e.shiftKey && (e.code === 'KeyL' || e.key === 'L' || e.key === 'l')) {
+  if ((e.metaKey || e.ctrlKey) && e.altKey && e.code === 'KeyL') {
     e.preventDefault();
     if (typeof openLibrary === 'function') openLibrary();
   }
-}, true); // capture:true so it fires even if a focused input calls stopPropagation
+}, true);
 // v2.94: Corner mode dev shortcut — Cmd+Shift+C (hidden feature, not in UI)
 // v2.97: Corner mode — ←→←→←→ sequence (3× left-right within 1.5s)
 // Replaces Cmd+Shift+C which conflicted with Chrome DevTools shortcut
@@ -21816,29 +21820,23 @@ function _csRollNewConcept() {
   const btn = document.getElementById('csNewConceptBtn');
   if (btn) { btn.disabled = true; btn.textContent = '↺ Rolling…'; }
 
-  // Lock scroll container height to prevent action row jumping up during collapse
-  const scrollEl = document.querySelector('.cs-card-inner-scroll');
-  if (scrollEl) { scrollEl.style.minHeight = scrollEl.offsetHeight + 'px'; }
-
-  // Collapse prompt + coaching smoothly
+  // Collapse prompt + coaching smoothly — keep in flow (no display:none) to prevent action row jumping
   const block = document.getElementById('csPromptBlock');
   const coaching = document.getElementById('csCoaching');
   const divider = document.getElementById('csDivider');
   const feedbackRow = document.getElementById('csFeedbackRow');
 
-  function _collapseEl(el) {
+  // Fade out in-place (preserve layout space so cs-actions doesn't jump up)
+  [coaching, divider, feedbackRow].forEach(function(el) {
     if (!el) return;
-    el.style.transition = 'opacity 0.18s ease, transform 0.18s ease';
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(-4px)';
-    setTimeout(function() {
-      el.style.display = 'none';
-      el.style.opacity = '';
-      el.style.transform = '';
-      el.style.transition = '';
-    }, 200);
+    el.classList.add('cs-hidden');
+    el.classList.remove('cs-visible');
+  });
+  if (block) {
+    block.style.transition = 'opacity 0.18s ease';
+    block.style.opacity = '0';
+    block.style.pointerEvents = 'none';
   }
-  [block, coaching, divider, feedbackRow].forEach(_collapseEl);
 
   // Also reset coaching visible states
   setTimeout(function() {
@@ -21849,7 +21847,7 @@ function _csRollNewConcept() {
 
   // Roll after collapse settles
   setTimeout(function() {
-    if (!termEl) { _csLoadNewConcept(target); if (btn) { btn.disabled = false; btn.textContent = '↺ concept'; } if (scrollEl) scrollEl.style.minHeight = ''; return; }
+    if (!termEl) { _csLoadNewConcept(target); if (btn) { btn.disabled = false; btn.textContent = '↺ New'; } return; }
 
     const shuffled = pool.slice().sort(() => Math.random() - 0.5).slice(0, 12);
     const rollTerms = shuffled.map(c => c.term);
@@ -21873,9 +21871,7 @@ function _csRollNewConcept() {
         termEl.style.transform = 'translateY(-3px)';
         setTimeout(function() { termEl.style.transform = ''; }, 100);
         _csLoadNewConcept(target);
-        if (btn) { btn.disabled = false; btn.textContent = '↺ concept'; }
-        // Release height lock
-        if (scrollEl) { setTimeout(function() { scrollEl.style.minHeight = ''; }, 100); }
+        if (btn) { btn.disabled = false; btn.textContent = '↺ New'; }
       }
     }
     rollStep();

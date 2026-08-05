@@ -6,6 +6,17 @@
 
 ---
 
+## v3.14 — 2026-08-05 · Mobile nav scroll fix, shortcut change, Spark/Lexi polish
+### index.html
+- **"↺ New" button label:** Was changed to "↺ concept" in error; corrected to "↺ New" (keep symbol + New, remove "concept").
+- **Spark button jump fixed (properly):** Replaced `_collapseEl` (which set `display:none` on coaching/divider/feedbackRow, collapsing layout and making cs-actions jump up) with opacity-only fade using `.cs-hidden` class. Elements stay in document flow but become invisible — the action row no longer moves during the 1-2s roll animation.
+- **Lexi word names no longer cut off:** `.lexi-word-name` changed from `white-space: nowrap; overflow: hidden; text-overflow: ellipsis` to `word-break: break-word; overflow-wrap: break-word`. Long terms like "well-intentioned harm" now wrap to two lines instead of being truncated.
+- **Keyboard shortcut changed to ⌘⌥L:** `Cmd+Shift+L` was being consumed by password manager extensions (1Password, LastPass) before reaching the page. Changed to `Cmd+Alt+L` (metaKey + altKey + KeyL) — not used by Chrome, macOS, or common extensions. Panel header hint updated to `⌘⌥L`.
+- **Mobile nav scroll fixed:** `#mobLogoReveal` changed from `position: sticky` to `position: fixed; top: 52px; z-index: 99`. Sticky was placing the element at 0px in document flow (under the fixed nav), causing layout interference and triggering iOS URL-bar scroll artifacts. Fixed element stays below the nav without touching document flow.
+- **Nav iOS compositing:** Added `-webkit-transform: translateZ(0)` and `-webkit-backface-visibility: hidden` to `nav` — forces GPU compositing layer on iOS Safari/Chrome, preventing nav from jumping when the browser URL bar shows/hides on scroll.
+- **Hero padding corrected:** Mobile hero `padding-top` updated from 56px → 92px to clear both the fixed nav (52px) and the fixed logo reveal bar (36px). Both the `max-width: 900px` and `max-width: 390px` breakpoints updated.
+- **Hamburger menu `top` corrected:** Updated from 52px → 88px so the menu opens below both the nav and the logo reveal bar.
+
 ## v3.13 — 2026-08-05 · Nav polish, Spark panel fixes, Cmd+Shift+L fix
 ### index.html
 - **Mobile tab bar ✏ glyph fix:** Added `font-family: 'DM Mono', monospace` to `.mob-tab-glyph` — prevents ✏ from rendering as emoji (system font fallback). Now matches the text glyph used in the hamburger menu.
