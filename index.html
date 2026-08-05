@@ -4520,7 +4520,7 @@
 
   /* MY LIBRARY — distinct 4th nav button */
   .nav-library-btn {
-    display: none; /* hidden on mobile; shown on desktop below */
+    display: flex;
     align-items: center;
     gap: 6px;
     font-family: 'DM Mono', monospace;
@@ -4535,7 +4535,6 @@
     cursor: pointer;
     white-space: nowrap;
     transition: color 0.18s, border-color 0.18s, background 0.18s;
-    margin-left: 10px; /* gap from island */
     position: relative;
     overflow: hidden;
   }
@@ -4558,9 +4557,8 @@
     transition: letter-spacing 0.18s;
   }
   .nav-library-btn:hover .nav-library-label { letter-spacing: 0.12em; }
-  @media (min-width: 769px) {
-    .nav-library-btn { display: flex; }
-  }
+  /* Hide on mobile — nav-right is already hidden on mobile */
+  @media (max-width: 768px) { .nav-library-btn { display: none !important; } }
   [data-theme="light"] .nav-library-btn:hover { background: rgba(150,120,40,0.06); }
 
   /* CENTER ISLAND */
@@ -10560,21 +10558,21 @@
     <a class="nav-link nav-corner-nav-btn"  style="display:none"></a>
   </div>
 
-  <!-- My Library — distinct 4th nav button, separated from the island -->
-  <button class="nav-library-btn" id="navLibraryBtn" onclick="openLibrary();playNavSFX()" aria-label="My Library">
-    <span class="nav-library-glyph">◱</span>
-    <span class="nav-library-label">My Library</span>
-  </button>
   <!-- v1.71: epic button is now inside nav-right -->
 
   <!-- v2.96: mobile mode buttons — centered on mobile, hidden on desktop -->
   <div class="nav-mob-modes" id="navMobModes">
-    <button class="nav-mob-action nav-mob-read"  id="navMobRead"  onclick="_openGlobalVocabView();playNavSFX()" aria-label="Read">📚</button>
-    <button class="nav-mob-action nav-mob-write" id="navMobLexi"  onclick="openLexiconPanel();playNavSFX()"    aria-label="Write">ℒ</button>
-    <button class="nav-mob-action nav-mob-speak" id="navMobSpeak" onclick="openSparkPanel();playNavSFX()"      aria-label="Speak">💬</button>
+    <button class="nav-mob-action nav-mob-read"  id="navMobRead"  onclick="_openGlobalVocabView();playNavSFX()" aria-label="Read">◫</button>
+    <button class="nav-mob-action nav-mob-write" id="navMobLexi"  onclick="openLexiconPanel();playNavSFX()"    aria-label="Lexi">✦</button>
+    <button class="nav-mob-action nav-mob-speak" id="navMobSpeak" onclick="openSparkPanel();playNavSFX()"      aria-label="Speak">◉</button>
   </div>
 
   <div class="nav-right">
+    <!-- My Library — distinct desktop-only button, lives inside nav-right so it stays in grid column 3 -->
+    <button class="nav-library-btn" id="navLibraryBtn" onclick="openLibrary();playNavSFX()" aria-label="My Library">
+      <span class="nav-library-glyph">◱</span>
+      <span class="nav-library-label">My Library</span>
+    </button>
     <!-- v1.71: epic button lives in nav-right, hidden until nav hover -->
     <a class="nav-epic-standalone" id="navEpicBtn" onclick="openEgg();playNavSFX()" title="I feel epic!">😎 I feel epic!</a>
     <!-- Apply: hidden, accessible via ←→ sequence -->
