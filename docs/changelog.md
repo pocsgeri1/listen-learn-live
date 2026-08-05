@@ -6,6 +6,18 @@
 
 ---
 
+## v3.03 — 2026-08-05 · My Library drawer
+### index.html
+- **My Library drawer:** Full bottom drawer (88vh mobile, 680px desktop centered). Entry button added to sort pills row. 3 tabs — Saved, Sparks, Notes — with gold `::after` underline indicator (CSS-only, no layout measurement). Tab switch uses double-rAF pattern so outgoing panel fades out and incoming fades in without `display:none` flash.
+- **Saved tab:** Lists all mastered concepts sorted by mastered timestamp (most recent first). Each row shows term, category pill, concept #, and relative date. Clicking navigates to and flips open the card.
+- **Sparks tab:** Lists `lll_cs_saved_v1` sorted by `savedAt` desc. Shows term, category, relative date.
+- **Notes tab:** Scans localStorage for `cc_note_*` keys, sorts by `cc_note_meta_${id}.ts` desc. Shows term, category, relative date, and a 90-char snippet of the note text.
+- **Mastered timestamps:** `toggleMaster()` now writes `lll_mastered_ts_v1` JSON map on each master action.
+- **Note timestamps:** `_ccToggleNote` blur handler now writes `cc_note_meta_${id}` `{ts}` on save; removes it on clear.
+- **No GPU-heavy properties:** drawer uses `translateY` (same pattern as ep-drawer). No `backdrop-filter`, no `box-shadow` on large surfaces, no `filter`. `@media (prefers-reduced-motion)` overrides included.
+### docs/architecture.md
+- Documented `lll_mastered_ts_v1`, `cc_note_${id}`, `cc_note_meta_${id}` localStorage keys.
+
 ## v3.02 — 2026-08-05 · Note animation, card-person pill, Related episode button
 ### index.html
 - **Note textarea smooth expand:** Replaced `display:none/block` toggle with `max-height` + `opacity` + `padding` transition (0.28s ease). Two-frame rAF pattern on open; CSS handles collapse. Added `@media (prefers-reduced-motion)` override.

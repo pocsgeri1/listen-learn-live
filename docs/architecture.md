@@ -168,6 +168,9 @@ for all 165 concepts.
 ## localStorage
 - `lll_cs_history_v1` — Array (max 50, ring buffer). Each entry: `{ id, term, category, ctx, promptText, ts }`. Written ONLY by `_csLogHistoryWithPrompt()` after successful API response — never on concept render. `promptText` field added v1.72.
 - `lll_cs_saved_v1` — Array (soft cap 100). Each entry: `{ id, term, category, savedAt, aiData }`. `aiData` is keyed by ctx: `{ partner, friend, colleague, meeting }` — each slot holds `{ prompt, openers[], coaching, pitfall }`. Written by `_csSaveConcept()` (upsert-on-ID, deep-merge per-ctx). Auto-saved on every successful `_applyAIToCtx` call (v1.74d — manual Save button retired). Also written by `_convGenerateCtx` (Stash inline generate) and `_csPickerGenerate` (Change Topic picker). Read by: Conversations overlay Saved tab, `_csRestoreOrLoad`, `_csUpdateScenarioBadges`.
+- `lll_mastered_ts_v1` — JSON object `{ [conceptId]: timestamp_ms }`. Written by `toggleMaster()` on each master action (not on un-master). Read by My Library Saved tab to sort by recency. *Added v3.02.*
+- `cc_note_${id}` — plain text string. The note content for concept `id`. Written and read by `_ccToggleNote()`. Removed when note is cleared.
+- `cc_note_meta_${id}` — JSON `{ ts: timestamp_ms }`. Written on blur by `_ccToggleNote()`. Read by My Library Notes tab to sort by recency. Removed when note is cleared. *Added v3.02.*
 - `lll_badge_count_v1` — **Orphaned. Do not use.** Badge reads directly from `lll_cs_saved_v1`.
 - `lll_theme` — `"dark"` or `"light"`. Set by theme toggle.
 - `lll_theme_filter` — last selected theme category (string, e.g. `"psychology"`). Restored into `_themeActiveFilterCat` on next load. Written by `themeFilterClick()`. *Added v2.2.*

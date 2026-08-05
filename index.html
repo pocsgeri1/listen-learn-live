@@ -8874,6 +8874,180 @@
 [data-theme="light"] .cc-related-panel { background: #f5f0e8; }
 [data-theme="light"] .cc-related-card { background: #ede8e0; }
 
+/* ── My Library Drawer ──────────────────────────────────────── */
+.lib-backdrop {
+  position: fixed; inset: 0; z-index: 210;
+  background: rgba(0,0,0,0);
+  pointer-events: none;
+  transition: background 0.3s ease;
+}
+.lib-backdrop.open { background: rgba(0,0,0,0.72); pointer-events: all; }
+.lib-drawer {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  height: 88vh;
+  background: var(--surface);
+  border-top: 0.5px solid var(--border-hover);
+  border-radius: 16px 16px 0 0;
+  z-index: 211;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(100%);
+  transition: transform 0.35s cubic-bezier(0.32,0.72,0,1);
+  will-change: transform;
+}
+.lib-drawer.open { transform: translateY(0); }
+@media (min-width: 700px) {
+  .lib-drawer {
+    left: 50%; right: auto; width: 680px;
+    transform: translateX(-50%) translateY(100%);
+  }
+  .lib-drawer.open { transform: translateX(-50%) translateY(0); }
+}
+.lib-handle {
+  width: 36px; height: 4px;
+  background: var(--border-hover);
+  border-radius: 2px;
+  margin: 12px auto 0;
+  flex-shrink: 0;
+}
+.lib-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 20px 0;
+  flex-shrink: 0;
+}
+.lib-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem; font-style: italic;
+  color: var(--text);
+}
+.lib-close {
+  background: none; border: none; cursor: pointer;
+  color: var(--muted); font-size: 0.85rem;
+  padding: 6px 8px; line-height: 1;
+  border-radius: 4px;
+}
+.lib-tabs {
+  display: flex;
+  padding: 12px 20px 0;
+  border-bottom: 0.5px solid var(--border);
+  flex-shrink: 0;
+}
+.lib-tab {
+  background: none; border: none; cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.75rem; letter-spacing: 0.03em;
+  color: var(--muted);
+  padding: 6px 14px 10px;
+  position: relative;
+  transition: color 0.18s ease;
+}
+.lib-tab::after {
+  content: '';
+  position: absolute;
+  left: 14px; right: 14px; bottom: -1px;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 1px;
+  opacity: 0;
+  transform: scaleX(0.5);
+  transition: opacity 0.18s ease, transform 0.22s cubic-bezier(0.34,1.56,0.64,1);
+}
+.lib-tab.lib-tab-active { color: var(--text); }
+.lib-tab.lib-tab-active::after { opacity: 1; transform: scaleX(1); }
+.lib-panels {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+.lib-panel {
+  position: absolute; inset: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 12px 20px calc(20px + env(safe-area-inset-bottom));
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.22s ease;
+}
+.lib-panel.lib-panel-active {
+  opacity: 1; transform: translateY(0); pointer-events: all;
+}
+@media (prefers-reduced-motion: reduce) {
+  .lib-drawer, .lib-backdrop, .lib-tab::after, .lib-panel { transition: none; }
+}
+.lib-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 0;
+  border-bottom: 0.5px solid var(--border);
+  cursor: pointer;
+}
+.lib-row:last-child { border-bottom: none; }
+.lib-row-main { flex: 1; min-width: 0; }
+.lib-row-term {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.88rem; font-style: italic;
+  color: var(--text);
+  transition: color 0.14s ease;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.lib-row:hover .lib-row-term { color: var(--accent); }
+.lib-row-meta {
+  display: flex; align-items: center; gap: 7px;
+  margin-top: 4px;
+}
+.lib-row-cat {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.55rem; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--muted2); padding: 1px 5px;
+  border: 0.5px solid var(--border); border-radius: 2px;
+}
+.lib-row-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.55rem; color: var(--muted2);
+}
+.lib-row-date {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.55rem; color: var(--muted2);
+}
+.lib-row-snippet {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.7rem; color: var(--muted);
+  margin-top: 5px; line-height: 1.45;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.lib-row-arrow {
+  color: var(--muted2); font-size: 0.75rem; flex-shrink: 0;
+}
+.lib-empty {
+  text-align: center; padding: 52px 16px;
+  color: var(--muted);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.78rem; line-height: 1.65;
+}
+.lib-empty-icon {
+  display: block; font-size: 1.3rem;
+  margin-bottom: 12px; opacity: 0.45;
+}
+.lib-open-btn {
+  display: flex; align-items: center; gap: 5px;
+  background: none;
+  border: 0.5px solid var(--border);
+  border-radius: 4px;
+  color: var(--muted);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.58rem; letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 4px 9px;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+  flex-shrink: 0;
+}
+.lib-open-btn:hover { color: var(--text); border-color: var(--border-hover); }
+.lib-open-btn svg { width: 11px; height: 11px; flex-shrink: 0; }
+[data-theme="light"] .lib-drawer { background: #f0e9da; }
+
 .share-modal-overlay {
   display: none;
   position: fixed;
@@ -10923,6 +11097,10 @@
         <button class="sp-scan-toggle active" id="spViewGrid" onclick="spSetScanMode(false)" title="Grid view">◫</button>
         <button class="sp-scan-toggle" id="spViewScan" onclick="spSetScanMode(true)" title="Scan view">⊞</button>
       </div>
+      <button class="lib-open-btn" onclick="openLibrary('saved')" title="My Library">
+        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 1.5h10v10.5L7 9.5l-5 2.5V1.5z"/></svg>
+        Library
+      </button>
     </div>
     <div class="search-wrap">
       <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M10 10l3.5 3.5"/></svg>
@@ -11018,6 +11196,26 @@
     <div class="ep-drawer-grid" id="themeDrawerGrid"></div>
   </div>
   <div class="ep-drawer-vocab-view" id="themeDrawerVocabView"></div>
+</div>
+
+<!-- MY LIBRARY DRAWER -->
+<div class="lib-backdrop" id="libBackdrop" onclick="closeLibrary()"></div>
+<div class="lib-drawer" id="libDrawer">
+  <div class="lib-handle"></div>
+  <div class="lib-header">
+    <span class="lib-title">My Library</span>
+    <button class="lib-close" onclick="closeLibrary()">✕</button>
+  </div>
+  <div class="lib-tabs">
+    <button class="lib-tab lib-tab-active" id="libTab-saved" onclick="_libSwitchTab('saved')">Saved</button>
+    <button class="lib-tab" id="libTab-sparks" onclick="_libSwitchTab('sparks')">Sparks</button>
+    <button class="lib-tab" id="libTab-notes" onclick="_libSwitchTab('notes')">Notes</button>
+  </div>
+  <div class="lib-panels">
+    <div class="lib-panel lib-panel-active" id="libPanel-saved"></div>
+    <div class="lib-panel" id="libPanel-sparks"></div>
+    <div class="lib-panel" id="libPanel-notes"></div>
+  </div>
 </div>
 
 <!-- NEWSLETTER CAPTURE -->
@@ -13526,8 +13724,16 @@ function toggleMaster(e, id) {
   e.stopPropagation();
   e.preventDefault();
   const isMastering = !mastered.has(id);
-  if (isMastering) { mastered.add(id); playVaultSFX(); track('concept_mastered', { id: id }); }
-  else { mastered.delete(id); playVaultRemoveSFX(); }
+  if (isMastering) {
+    mastered.add(id);
+    playVaultSFX();
+    track('concept_mastered', { id: id });
+    try {
+      var _mts = JSON.parse(localStorage.getItem('lll_mastered_ts_v1') || '{}');
+      _mts[id] = Date.now();
+      localStorage.setItem('lll_mastered_ts_v1', JSON.stringify(_mts));
+    } catch(e) {}
+  } else { mastered.delete(id); playVaultRemoveSFX(); }
   saveMastered();
   updateProgress();
 
@@ -21687,6 +21893,207 @@ function _ccCloseRelated() {
   if (overlay) overlay.classList.remove('open');
 }
 
+// ── My Library Drawer ─────────────────────────────────────────
+var _libActiveTab = 'saved';
+
+function openLibrary(tab) {
+  tab = tab || _libActiveTab || 'saved';
+  var backdrop = document.getElementById('libBackdrop');
+  var drawer = document.getElementById('libDrawer');
+  if (!backdrop || !drawer) return;
+  // Set tab state without animation (drawer is still hidden)
+  ['saved','sparks','notes'].forEach(function(t) {
+    var btn = document.getElementById('libTab-' + t);
+    var panel = document.getElementById('libPanel-' + t);
+    if (btn) btn.classList.toggle('lib-tab-active', t === tab);
+    if (panel) {
+      panel.style.transition = 'none';
+      panel.classList.toggle('lib-panel-active', t === tab);
+    }
+  });
+  _libActiveTab = tab;
+  _libRender(tab);
+  // Re-enable transitions after paint
+  requestAnimationFrame(function() {
+    ['saved','sparks','notes'].forEach(function(t) {
+      var panel = document.getElementById('libPanel-' + t);
+      if (panel) panel.style.transition = '';
+    });
+  });
+  _spLockBodyScroll();
+  backdrop.classList.add('open');
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
+      drawer.classList.add('open');
+    });
+  });
+}
+
+function closeLibrary() {
+  var backdrop = document.getElementById('libBackdrop');
+  var drawer = document.getElementById('libDrawer');
+  if (!backdrop || !drawer) return;
+  drawer.classList.remove('open');
+  backdrop.classList.remove('open');
+  _spUnlockBodyScroll();
+}
+
+function _libSwitchTab(tab) {
+  if (_libActiveTab === tab) return;
+  var prev = _libActiveTab;
+  _libActiveTab = tab;
+  var prevPanel = document.getElementById('libPanel-' + prev);
+  var prevBtn = document.getElementById('libTab-' + prev);
+  if (prevPanel) prevPanel.classList.remove('lib-panel-active');
+  if (prevBtn) prevBtn.classList.remove('lib-tab-active');
+  var panel = document.getElementById('libPanel-' + tab);
+  var tabBtn = document.getElementById('libTab-' + tab);
+  if (tabBtn) tabBtn.classList.add('lib-tab-active');
+  if (panel) {
+    _libRender(tab);
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        panel.classList.add('lib-panel-active');
+      });
+    });
+  }
+}
+
+function _libRender(tab) {
+  if (tab === 'saved') _libRenderSaved();
+  else if (tab === 'sparks') _libRenderSparks();
+  else if (tab === 'notes') _libRenderNotes();
+}
+
+function _libNavToCard(id) {
+  closeLibrary();
+  var c = CONCEPTS.find(function(x) { return x.id === id; });
+  if (!c) return;
+  setTimeout(function() {
+    if (typeof setCat === 'function') setCat(c.category);
+    setTimeout(function() {
+      var el = document.getElementById('cc' + id);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        if (!el.classList.contains('flipped')) {
+          setTimeout(function() { toggleCard(id); }, 120);
+        }
+      }
+    }, 200);
+  }, 80);
+}
+
+function _libFmtDate(ts) {
+  if (!ts) return '';
+  var d = new Date(ts);
+  var diff = Math.floor((Date.now() - ts) / 86400000);
+  if (diff === 0) return 'today';
+  if (diff === 1) return 'yesterday';
+  if (diff < 7) return diff + 'd ago';
+  return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+}
+
+function _libRenderSaved() {
+  var panel = document.getElementById('libPanel-saved');
+  if (!panel) return;
+  var tsMap = {};
+  try { tsMap = JSON.parse(localStorage.getItem('lll_mastered_ts_v1') || '{}'); } catch(e) {}
+  var ids = typeof mastered !== 'undefined' ? Array.from(mastered) : [];
+  ids.sort(function(a, b) {
+    return (tsMap[b] || 0) - (tsMap[a] || 0) || b - a;
+  });
+  if (!ids.length) {
+    panel.innerHTML = '<div class="lib-empty"><span class="lib-empty-icon">◈</span>No mastered concepts yet.<br>Tap ◈ on any card to save it here.</div>';
+    return;
+  }
+  panel.innerHTML = ids.map(function(id) {
+    var c = CONCEPTS && CONCEPTS.find(function(x) { return x.id === id; });
+    if (!c) return '';
+    var catName = (CATEGORIES && CATEGORIES.find(function(x) { return x.id === c.category; }) || {}).name || c.category;
+    var dateStr = tsMap[id] ? '<span class="lib-row-date">' + _libFmtDate(tsMap[id]) + '</span>' : '';
+    return '<div class="lib-row" onclick="_libNavToCard(' + id + ')">' +
+      '<div class="lib-row-main">' +
+        '<div class="lib-row-term">' + (c.term || '') + '</div>' +
+        '<div class="lib-row-meta">' +
+          '<span class="lib-row-cat">' + catName + '</span>' +
+          '<span class="lib-row-num">#' + String(id).padStart(3,'0') + '</span>' +
+          dateStr +
+        '</div>' +
+      '</div>' +
+      '<span class="lib-row-arrow">›</span>' +
+    '</div>';
+  }).join('');
+}
+
+function _libRenderSparks() {
+  var panel = document.getElementById('libPanel-sparks');
+  if (!panel) return;
+  var saved = [];
+  try { saved = JSON.parse(localStorage.getItem('lll_cs_saved_v1') || '[]'); } catch(e) {}
+  saved.sort(function(a, b) { return (b.savedAt || 0) - (a.savedAt || 0); });
+  if (!saved.length) {
+    panel.innerHTML = '<div class="lib-empty"><span class="lib-empty-icon">✦</span>No Sparks saved yet.<br>Open any concept and spark a prompt to save it here.</div>';
+    return;
+  }
+  panel.innerHTML = saved.map(function(s) {
+    var catName = (CATEGORIES && CATEGORIES.find(function(x) { return x.id === s.category; }) || {}).name || s.category;
+    var dateStr = s.savedAt ? '<span class="lib-row-date">' + _libFmtDate(s.savedAt) + '</span>' : '';
+    return '<div class="lib-row" onclick="_libNavToCard(' + s.id + ')">' +
+      '<div class="lib-row-main">' +
+        '<div class="lib-row-term">' + (s.term || '') + '</div>' +
+        '<div class="lib-row-meta">' +
+          '<span class="lib-row-cat">' + catName + '</span>' +
+          dateStr +
+        '</div>' +
+      '</div>' +
+      '<span class="lib-row-arrow">›</span>' +
+    '</div>';
+  }).join('');
+}
+
+function _libRenderNotes() {
+  var panel = document.getElementById('libPanel-notes');
+  if (!panel) return;
+  var notes = [];
+  for (var i = 0; i < localStorage.length; i++) {
+    var key = localStorage.key(i);
+    if (!key || !key.startsWith('cc_note_') || key.indexOf('cc_note_meta_') === 0) continue;
+    var idStr = key.replace('cc_note_', '');
+    var id = parseInt(idStr, 10);
+    if (isNaN(id)) continue;
+    var text = localStorage.getItem(key) || '';
+    if (!text.trim()) continue;
+    var meta = {};
+    try { meta = JSON.parse(localStorage.getItem('cc_note_meta_' + id) || '{}'); } catch(e) {}
+    notes.push({ id: id, text: text.trim(), ts: meta.ts || 0 });
+  }
+  notes.sort(function(a, b) { return b.ts - a.ts || b.id - a.id; });
+  if (!notes.length) {
+    panel.innerHTML = '<div class="lib-empty"><span class="lib-empty-icon">✏</span>No notes yet.<br>Tap ✏ on any card to add a personal note.</div>';
+    return;
+  }
+  panel.innerHTML = notes.map(function(n) {
+    var c = CONCEPTS && CONCEPTS.find(function(x) { return x.id === n.id; });
+    if (!c) return '';
+    var catName = (CATEGORIES && CATEGORIES.find(function(x) { return x.id === c.category; }) || {}).name || c.category;
+    var snippet = n.text.length > 90 ? n.text.slice(0, 90) + '…' : n.text;
+    var dateStr = n.ts ? '<span class="lib-row-date">' + _libFmtDate(n.ts) + '</span>' : '';
+    return '<div class="lib-row" onclick="_libNavToCard(' + n.id + ')">' +
+      '<div class="lib-row-main">' +
+        '<div class="lib-row-term">' + (c.term || '') + '</div>' +
+        '<div class="lib-row-meta">' +
+          '<span class="lib-row-cat">' + catName + '</span>' +
+          dateStr +
+        '</div>' +
+        '<div class="lib-row-snippet">' + snippet.replace(/[<>&"]/g, function(c) {
+          return {'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c];
+        }) + '</div>' +
+      '</div>' +
+      '<span class="lib-row-arrow">›</span>' +
+    '</div>';
+  }).join('');
+}
+
 // ── Note per concept ──────────────────────────────────────────
 function _ccToggleNote(id, btn) {
   // Find or create note wrap inside the same card-back
@@ -21708,9 +22115,11 @@ function _ccToggleNote(id, btn) {
       var val = ta.value.trim();
       if (val) {
         localStorage.setItem('cc_note_' + id, val);
+        try { localStorage.setItem('cc_note_meta_' + id, JSON.stringify({ts: Date.now()})); } catch(e) {}
         btn.classList.add('has-note');
       } else {
         localStorage.removeItem('cc_note_' + id);
+        localStorage.removeItem('cc_note_meta_' + id);
         btn.classList.remove('has-note');
       }
     });
