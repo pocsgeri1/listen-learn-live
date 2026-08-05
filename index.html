@@ -16357,6 +16357,7 @@ function _spScanPreview(id, anchorEl) {
 
   card.dataset.previewId = id;
   card.style.setProperty('--preview-color', color);
+  const _pvToolbar1 = _spPreviewToolbar(id, 'spDismissPreview()');
   card.innerHTML = `
     <div class="sp-preview-cat" style="color:${color}">${_spEsc(catName)}</div>
     <div class="sp-preview-term">${_spEsc(concept.term)}</div>
@@ -16364,9 +16365,7 @@ function _spScanPreview(id, anchorEl) {
     <div class="sp-preview-plain">${_spEsc(concept.plain || '')}</div>
     <div class="sp-preview-section-label">Analogy</div>
     <div class="sp-preview-analogy" style="border-left-color:${color}">${_spEsc(concept.analogy || '')}</div>
-    <div class="sp-preview-footer">
-      <button class="sp-preview-talk-btn" onclick="event.stopPropagation();spDismissPreview();_spSelectConcept(${id})">💬 Talk about this →</button>
-    </div>`;
+    <div class="sp-preview-footer">${_pvToolbar1}</div>`;
 
   // Position: fixed, anchored to the side of the tile that matches its column —
   // left-column tiles preview to the left, right-column tiles preview to the
@@ -17024,7 +17023,7 @@ function _spShowResults(q) {
             <div class="sp-drop-hook">${_spEsc(c.hook)}</div>
           </div>
           <div class="sp-drop-divider"></div>
-          <button class="sp-drop-cta-btn" onclick="event.stopPropagation();_spSelectConcept(${c.id})">Talk about this →</button>
+          <button class="sp-drop-cta-btn" onclick="event.stopPropagation();openSparkPanel(${c.id})">✦ Spark it →</button>
         </div>`;
       }).join('');
     }
@@ -17099,6 +17098,7 @@ function _spPreviewCard(id, anchorEl, opts) {
   const panelMode = opts && opts.panelMode;
 
   card.style.setProperty('--preview-color', color);
+  const _pvToolbar2 = _spPreviewToolbar(id, 'spDismissPreview()');
 
   if (panelMode) {
     // Panel hover: term + hook + plain only — no analogy (quicker read)
@@ -17108,9 +17108,7 @@ function _spPreviewCard(id, anchorEl, opts) {
       ${concept.hook ? `<div class="sp-preview-section-label">In one line</div><div class="sp-preview-plain" style="font-style:italic;color:var(--accent)">${_spEsc(concept.hook)}</div>` : ''}
       <div class="sp-preview-section-label">What it means</div>
       <div class="sp-preview-plain">${_spEsc(concept.plain || '')}</div>
-      <div class="sp-preview-footer">
-        <button class="sp-preview-talk-btn" onclick="event.stopPropagation();spDismissPreview();">✕ Close</button>
-      </div>`;
+      <div class="sp-preview-footer">${_pvToolbar2}</div>`;
   } else {
     // Standard preview: plain + analogy
     card.innerHTML = `
@@ -17120,9 +17118,7 @@ function _spPreviewCard(id, anchorEl, opts) {
       <div class="sp-preview-plain">${_spEsc(concept.plain || '')}</div>
       <div class="sp-preview-section-label">Analogy</div>
       <div class="sp-preview-analogy" style="border-left-color:${color}">${_spEsc(concept.analogy || '')}</div>
-      <div class="sp-preview-footer">
-        <button class="sp-preview-talk-btn" onclick="event.stopPropagation();spDismissPreview();_spSelectConcept(${id})">💬 Talk about this →</button>
-      </div>`;
+      <div class="sp-preview-footer">${_pvToolbar2}</div>`;
   }
 
   // Position: anchor to element if provided, else left of search bar
@@ -17171,6 +17167,42 @@ function spDismissPreview() {
   card._hideTimeout = setTimeout(() => { card.style.display = 'none'; card._hideTimeout = null; }, 260);
 }
 
+// ── Shared preview toolbar (6 buttons, used in mobile modal + all desktop preview cards) ──
+// dismissFn: JS expression string to call when dismissing before navigating, e.g. 'spDismissPreview()'
+function _spPreviewToolbar(id, dismissFn) {
+  var isMastered = typeof mastered !== 'undefined' && mastered.has(id);
+  var hasNote = !!localStorage.getItem('cc_note_' + id);
+  var g = typeof CC_G !== 'undefined' ? CC_G : {};
+  return '<div class="sp-pv-toolbar">' +
+    '<button class="btn-icon btn-share sp-pv-btn" title="Share" onclick="event.stopPropagation();if(typeof openShareModal===\'function\')openShareModal(' + id + ')">' + (g.share||'↑') + '</button>' +
+    '<button class="btn-icon btn-listen sp-pv-btn" title="Listen" onclick="event.stopPropagation();if(typeof _playConceptAudio===\'function\')_playConceptAudio(' + id + ')">' + (g.listen||'♪') + '</button>' +
+    '<button class="btn-icon btn-master sp-pv-btn' + (isMastered ? ' mastered-active' : '') + '" title="' + (isMastered ? 'Saved ✓' : 'Save') + '" onclick="event.stopPropagation();toggleMaster(event,' + id + ')">' + (g.master||'★') + '</button>' +
+    '<div class="sp-pv-divider"></div>' +
+    '<button class="btn-icon btn-related sp-pv-btn" title="Related" onclick="event.stopPropagation();' + dismissFn + ';setTimeout(function(){_ccOpenRelated(' + id + ');},80)">' + (g.related||'⋮') + '</button>' +
+    '<button class="btn-icon btn-chat sp-pv-btn" title="Spark" onclick="event.stopPropagation();' + dismissFn + ';setTimeout(function(){openSparkPanel(' + id + ');},80)">' + (g.chat||'✦') + '</button>' +
+    '<button class="btn-icon btn-note sp-pv-btn' + (hasNote ? ' has-note' : '') + '" title="Note" onclick="event.stopPropagation();' + dismissFn + ';setTimeout(function(){_openConceptNote(' + id + ');},100)">' + (g.note||'✎') + '</button>' +
+  '</div>';
+}
+
+// Navigate to a concept's card and open the note panel.
+function _openConceptNote(id) {
+  var c = CONCEPTS && CONCEPTS.find(function(x) { return x.id === id; });
+  if (!c) return;
+  if (typeof setCat === 'function') setCat(c.category);
+  setTimeout(function() {
+    var el = document.getElementById('cc' + id);
+    if (!el) return;
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (!el.classList.contains('flipped')) toggleCard(id);
+    setTimeout(function() {
+      var cardBack = el.querySelector('.card-back');
+      if (!cardBack) return;
+      var noteBtn = cardBack.querySelector('.btn-note');
+      if (noteBtn && typeof _ccToggleNote === 'function') _ccToggleNote(id, noteBtn);
+    }, 280);
+  }, 100);
+}
+
 // --- Mobile full-screen concept preview modal ---
 // Used in place of the floating .sp-preview-card on small screens (no room there),
 // and in place of opening the full CS panel when tapping a search result on mobile.
@@ -17189,6 +17221,7 @@ function _spOpenMobilePreview(id, opts) {
   const catName = (CATEGORIES.find(x => x.id === concept.category) || {}).name || concept.category;
 
   backdrop.querySelector('.sp-mobile-preview-card').style.setProperty('--cat-color', color);
+  const toolbar = _spPreviewToolbar(id, 'spDismissMobilePreview()');
   content.innerHTML = `
     <div class="sp-mp-cat" style="color:${color}">${_spEsc(catName)}</div>
     <div class="sp-mp-term">${_spEsc(concept.term)}</div>
@@ -17198,22 +17231,11 @@ function _spOpenMobilePreview(id, opts) {
     <div class="back-section-label">Analogy</div>
     <div class="back-analogy">${_spEsc(concept.analogy || '')}</div>
     <div class="back-section-label">Reflect &amp; use it</div>
-    <div class="back-prompt">
-      <div class="prompt-icon">💬</div>
-      <p>${_spEsc(concept.prompt || '')}</p>
+    <div class="back-prompt sp-mp-prompt">
+      <span class="sp-mp-prompt-icon">💬</span>
+      <span class="sp-mp-prompt-text">${_spEsc(concept.prompt || '')}</span>
     </div>
-    <div class="sp-mp-footer">
-      <div class="sp-mp-toolbar">
-        <button class="btn-icon btn-listen" title="Listen" onclick="event.stopPropagation();if(typeof _playConceptAudio==='function')_playConceptAudio(${id})">${CC_G.listen}</button>
-        <div class="btn-divider"></div>
-        <button class="btn-icon btn-master ${mastered.has(id) ? 'mastered-active' : ''}" id="spMpMaster${id}" title="${mastered.has(id) ? 'Saved ✓' : 'Save to Mastered'}" onclick="event.stopPropagation();toggleMaster(event,${id})">${CC_G.master}</button>
-        <button class="btn-icon btn-note ${localStorage.getItem('cc_note_'+id) ? 'has-note' : ''}" id="spMpNote${id}" title="Note" onclick="event.stopPropagation();spDismissMobilePreview();setTimeout(function(){var el=document.getElementById('cc${id}');if(el&&!el.classList.contains('flipped'))toggleCard(${id});setTimeout(function(){var btn=el&&el.querySelector('.btn-note');if(btn)_ccToggleNote(${id},btn);},120);},80)">${CC_G.note}</button>
-        <div class="btn-divider"></div>
-        <button class="btn-icon btn-related" title="Related" onclick="event.stopPropagation();spDismissMobilePreview();setTimeout(function(){_ccOpenRelated(${id});},80)">${CC_G.related}</button>
-        <button class="btn-icon btn-chat" title="Spark" onclick="event.stopPropagation();spDismissMobilePreview();setTimeout(function(){openSparkPanel(${id});},80)">${CC_G.chat}</button>
-        <button class="btn-icon btn-share" title="Share" onclick="event.stopPropagation();if(typeof openShareModal==='function')openShareModal(${id})">${CC_G.share}</button>
-      </div>
-    </div>`;
+    <div class="sp-mp-footer">${toolbar}</div>`;
 
   // Remember where this was opened from so closing restores the right state
   _spMobilePreviewSource = opts.fromSearch ? 'search' : 'scan';
@@ -18654,9 +18676,7 @@ function _cornerShowPreview(id, anchorEl) {
     '<div class="sp-preview-plain" style="font-style:italic;color:var(--accent)">' + _escHtml(concept.hook || '') + '</div>' +
     '<div class="sp-preview-section-label">What it means</div>' +
     '<div class="sp-preview-plain">' + _escHtml(concept.plain || '') + '</div>' +
-    '<div class="sp-preview-footer">' +
-      '<button class="sp-preview-talk-btn" onclick="event.stopPropagation();spDismissPreview()">✕ Close</button>' +
-    '</div>';
+    '<div class="sp-preview-footer">' + _spPreviewToolbar(id, 'spDismissPreview()') + '</div>';
 
   // Position: left of the Corner panel
   var panel = document.getElementById('storiesPanel');
@@ -25963,21 +25983,8 @@ body.sp2-panel-open .sp-pull-quote-left { opacity: 0 !important; transition: opa
 .sp-preview-footer {
   margin-top: 14px;
   padding-top: 10px;
-  border-top: 1px solid var(--border);
+  border-top: 0.5px solid var(--border);
 }
-.sp-preview-talk-btn {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.62rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--accent);
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  transition: opacity 0.15s;
-}
-.sp-preview-talk-btn:hover { opacity: 0.7; }
 
 /* Hide on small screens — no space */
 @media (max-width: 1024px) {
@@ -26114,48 +26121,47 @@ body.sp2-panel-open .sp-pull-quote-left { opacity: 0 !important; transition: opa
   border-left: 2px solid color-mix(in srgb, var(--cat-color, var(--accent)) 50%, transparent);
   padding-left: 9px;
 }
-.sp-mobile-preview-content .back-prompt {
+/* Inline prompt: 💬 + text on same row */
+.sp-mp-prompt {
+  display: flex; align-items: flex-start; gap: 7px;
   background: rgba(232,213,163,0.06);
   border: 1px solid rgba(232,213,163,0.15);
   border-radius: 8px;
-  padding: 10px 12px;
+  padding: 9px 12px;
   margin-top: 12px;
 }
-.sp-mobile-preview-content .back-prompt p {
-  font-size: 0.75rem;
-  color: var(--accent);
-  line-height: 1.55;
-  margin: 0;
+.sp-mp-prompt-icon { font-size: 0.82rem; flex-shrink: 0; line-height: 1.5; }
+.sp-mp-prompt-text {
+  font-size: 0.75rem; color: var(--accent);
+  line-height: 1.55; margin: 0;
 }
-.sp-mobile-preview-content .prompt-icon { font-size: 0.8rem; margin-bottom: 3px; }
 .sp-mp-footer {
   margin-top: 15px;
   padding-top: 12px;
   border-top: 0.5px solid var(--border);
-  display: flex;
-  justify-content: center;
 }
-/* 6-button toolbar in the preview footer — same visual as card toolbar */
-.sp-mp-toolbar {
-  display: flex; align-items: center; gap: 0;
+/* Shared 6-button preview toolbar (mobile modal + all desktop preview cards) */
+.sp-pv-toolbar {
+  display: flex; align-items: center;
   background: var(--surface2, var(--surface));
   border: 0.5px solid var(--border);
   border-radius: 8px;
   overflow: hidden;
   width: 100%;
 }
-.sp-mp-toolbar .btn-icon {
+.sp-pv-btn {
   flex: 1; display: flex; align-items: center; justify-content: center;
-  width: auto; height: 38px; padding: 0;
+  height: 36px; padding: 0;
   border-radius: 0; background: none; border: none;
   color: var(--muted); cursor: pointer;
   transition: color 0.15s ease, transform 0.15s ease;
+  min-width: 0;
 }
-.sp-mp-toolbar .btn-icon:hover { color: var(--muted2); }
-.sp-mp-toolbar .btn-icon svg { width: 16px; height: 16px; display: block; }
-.sp-mp-toolbar .btn-divider { width: 0.5px; background: var(--border); align-self: stretch; flex-shrink: 0; }
-.sp-mp-toolbar .btn-icon.btn-master.mastered-active { color: var(--green); }
-.sp-mp-toolbar .btn-icon.btn-note.has-note { color: var(--accent); }
+.sp-pv-btn:hover { color: var(--muted2); }
+.sp-pv-btn svg { width: 15px; height: 15px; display: block; }
+.sp-pv-divider { width: 0.5px; background: var(--border); align-self: stretch; flex-shrink: 0; }
+.sp-pv-btn.btn-master.mastered-active { color: var(--green); }
+.sp-pv-btn.btn-note.has-note { color: var(--accent); }
 
 /* Light mode: the low-alpha gold tint that works on dark backgrounds nearly
    disappears against the light card — give the prompt + CTA a distinct,

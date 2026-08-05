@@ -6,6 +6,16 @@
 
 ---
 
+## v3.08 — 2026-08-05 · Unified preview toolbar everywhere, prompt layout, note action fix
+### index.html
+- **Shared preview toolbar:** Extracted `_spPreviewToolbar(id, dismissFn)` helper that builds the 6-button toolbar (share / listen / master | divider | related / spark / note) as reusable HTML. Used by all 4 preview surfaces: mobile scan modal, desktop library preview, panel hover preview, corner stories preview.
+- **Button order unified:** All toolbars now follow the same order: share → listen → master | divider | related → spark → note. Matches the concept card toolbar order.
+- **Note button fixed:** Tapping Note in any preview now calls `_openConceptNote(id)` — a dedicated helper that navigates to the concept category, scrolls the card into view, flips it, and opens the note textarea. The preview is dismissed first with appropriate delay.
+- **Prompt layout:** The "Reflect & use it" section in the mobile preview now renders `💬` and the prompt text inline in a flex row (`sp-mp-prompt`), saving a full row of vertical space.
+- **Desktop previews — "Talk about this" removed everywhere:** All 3 desktop preview card variants (library scan, panel hover, corner stories) now show the shared toolbar instead of the Talk button.
+- **Search dropdown CTA:** "Talk about this →" changed to "✦ Spark it →" which calls `openSparkPanel` directly.
+- **Old `.sp-mp-toolbar` / `.sp-preview-talk-btn` CSS removed:** Replaced by `.sp-pv-toolbar` / `.sp-pv-btn` / `.sp-pv-divider` shared classes used across all preview surfaces.
+
 ## v3.07 — 2026-08-05 · Scroll fix (root cause), preview toolbar, vocab re-render, word map pills
 ### index.html
 - **Scroll jump — root cause fixed:** Replaced `position:fixed + scrollY restore` with `overflow:hidden` on `<html>` + `touch-action:none` on body. Scroll position is never changed, so there is nothing to restore and no flash. Added reference-counting so nested lock/unlock calls don't break each other. Affects every panel: library, scan preview, episode drawer, word map, spark panel.
