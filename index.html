@@ -16021,10 +16021,13 @@ function _spReinjectScanTiles(grid, matchIds, isVault) {
     grid.removeEventListener('click', grid._scanDelegate, true);
     grid._scanDelegate = null;
   }
+  // Read the active sort mode so Picks / Mastered filter carries through to scan tiles
+  const _scanSortMode = typeof spActiveSort !== 'undefined' ? spActiveSort : 'latest';
   grid.querySelectorAll('.nf-row').forEach(row => {
     const rowId = row.id.replace('nf-drag-', '');
     let catConcepts = CONCEPTS.filter(c => c.category === rowId && !c.duplicate_of);
-    if (isVault) catConcepts = catConcepts.filter(c => mastered.has(c.id));
+    if (isVault || _scanSortMode === 'mastered') catConcepts = catConcepts.filter(c => mastered.has(c.id));
+    if (_scanSortMode === 'picks') catConcepts = catConcepts.filter(c => c.editors_pick === true);
     if (matchIds) catConcepts = catConcepts.filter(c => matchIds.has(c.id));
     const color = CAT_COLOR[rowId] || '#e8d5a3';
     const frag = document.createDocumentFragment();
@@ -16365,6 +16368,7 @@ function _spScanPreview(id, anchorEl) {
     <div class="sp-preview-plain">${_spEsc(concept.plain || '')}</div>
     <div class="sp-preview-section-label">Analogy</div>
     <div class="sp-preview-analogy" style="border-left-color:${color}">${_spEsc(concept.analogy || '')}</div>
+    ${concept.prompt ? `<div class="sp-preview-section-label">Reflect &amp; use it</div><div class="sp-preview-plain">${_spEsc(concept.prompt)}</div>` : ''}
     <div class="sp-preview-footer">${_pvToolbar1}</div>`;
 
   // Position: fixed, anchored to the side of the tile that matches its column —
@@ -17118,6 +17122,7 @@ function _spPreviewCard(id, anchorEl, opts) {
       <div class="sp-preview-plain">${_spEsc(concept.plain || '')}</div>
       <div class="sp-preview-section-label">Analogy</div>
       <div class="sp-preview-analogy" style="border-left-color:${color}">${_spEsc(concept.analogy || '')}</div>
+      ${concept.prompt ? `<div class="sp-preview-section-label">Reflect &amp; use it</div><div class="sp-preview-plain">${_spEsc(concept.prompt)}</div>` : ''}
       <div class="sp-preview-footer">${_pvToolbar2}</div>`;
   }
 
@@ -17173,9 +17178,16 @@ function _spPreviewToolbar(id, dismissFn) {
   var isMastered = typeof mastered !== 'undefined' && mastered.has(id);
   var hasNote = !!localStorage.getItem('cc_note_' + id);
   var g = typeof CC_G !== 'undefined' ? CC_G : {};
+  // Build listen URL the same way the main card does
+  var _ptC = typeof CONCEPTS !== 'undefined' && CONCEPTS ? CONCEPTS.find(function(x) { return x.id === id; }) : null;
+  var _ptCol = _ptC && _ptC.collection_id != null && typeof COLLECTIONS_BY_ID !== 'undefined' ? COLLECTIONS_BY_ID[_ptC.collection_id] : null;
+  var _ptUrl = _ptCol && _ptCol.episode_url && typeof _ptC.timestamp === 'number' && typeof buildTimestampedUrl === 'function' ? buildTimestampedUrl(_ptCol.episode_url, _ptC.timestamp) : null;
+  var listenBtn = _ptUrl
+    ? '<a class="btn-icon btn-listen sp-pv-btn" href="' + _ptUrl + '" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="Listen">' + (g.listen||'♪') + '</a>'
+    : '<button class="btn-icon btn-listen sp-pv-btn" title="Listen" disabled style="opacity:.35;cursor:default">' + (g.listen||'♪') + '</button>';
   return '<div class="sp-pv-toolbar">' +
-    '<button class="btn-icon btn-share sp-pv-btn" title="Share" onclick="event.stopPropagation();if(typeof openShareModal===\'function\')openShareModal(' + id + ')">' + (g.share||'↑') + '</button>' +
-    '<button class="btn-icon btn-listen sp-pv-btn" title="Listen" onclick="event.stopPropagation();if(typeof _playConceptAudio===\'function\')_playConceptAudio(' + id + ')">' + (g.listen||'♪') + '</button>' +
+    '<button class="btn-icon btn-share sp-pv-btn" title="Share" onclick="event.stopPropagation();if(typeof shareCard===\'function\')shareCard(event,' + id + ')">' + (g.share||'↑') + '</button>' +
+    listenBtn +
     '<button class="btn-icon btn-master sp-pv-btn' + (isMastered ? ' mastered-active' : '') + '" title="' + (isMastered ? 'Saved ✓' : 'Save') + '" onclick="event.stopPropagation();toggleMaster(event,' + id + ')">' + (g.master||'★') + '</button>' +
     '<div class="sp-pv-divider"></div>' +
     '<button class="btn-icon btn-related sp-pv-btn" title="Related" onclick="event.stopPropagation();' + dismissFn + ';setTimeout(function(){_ccOpenRelated(' + id + ');},80)">' + (g.related||'⋮') + '</button>' +
