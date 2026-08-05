@@ -4975,18 +4975,6 @@
       z-index: 890;
       background: var(--bg);
       border-bottom: 0.5px solid var(--border);
-      max-height: 0;
-      overflow: hidden;
-      opacity: 0;
-      transition: max-height 0.38s cubic-bezier(0.4, 0, 0.2, 1),
-                  opacity 0.32s ease,
-                  transform 0.38s cubic-bezier(0.4, 0, 0.2, 1);
-      transform: translateY(-6px);
-    }
-    .mob-logo-reveal.visible {
-      max-height: 52px;
-      opacity: 1;
-      transform: translateY(0);
     }
     .mob-logo-reveal-inner {
       display: flex;
@@ -5060,6 +5048,7 @@
       line-height: 1;
       display: block;
       font-style: normal;
+      font-family: 'DM Mono', monospace;
     }
     .mob-hamburger-glyph { font-size: 1.2rem; }
     .mob-tab-label {
@@ -11504,7 +11493,7 @@
     <!-- Actions: Copy · New concept · Prev/Next -->
     <div class="cs-actions cs-post-prompt cs-hidden" id="csActions">
       <button class="cs-btn cs-btn--primary" id="csShareBtn">↑ Copy</button>
-      <button class="cs-btn cs-btn--new" id="csNewConceptBtn" onclick="_csRollNewConcept()">↺ New concept</button>
+      <button class="cs-btn cs-btn--new" id="csNewConceptBtn" onclick="_csRollNewConcept()">↺ concept</button>
       <div style="display:flex;gap:6px;margin-left:auto">
         <button class="cs-nav-btn" id="csPrevBtn" title="Previous concept" disabled>⤺</button>
         <button class="cs-nav-btn" id="csNextBtn" title="Next concept">⤻</button>
@@ -12599,7 +12588,10 @@ function toggleMobileNav() {
 function _mobileNavOutside(e) {
   const menu = document.getElementById('navMobileMenu');
   const toggle = document.getElementById('navToggle');
-  if (menu && !menu.contains(e.target) && toggle && !toggle.contains(e.target)) {
+  const tabHamburger = document.getElementById('mobTabHamburger');
+  // Ignore clicks on either toggle button — toggleMobileNav() handles those
+  const isToggle = (toggle && toggle.contains(e.target)) || (tabHamburger && tabHamburger.contains(e.target));
+  if (menu && !menu.contains(e.target) && !isToggle) {
     closeMobileNav();
   } else {
     // Tapped inside — re-attach for next outside tap (unless it was a nav link which calls closeMobileNav)
@@ -12619,14 +12611,9 @@ function closeMobileNav() {
   document.body.style.overflow = '';
 }
 
-// Shrink nav on scroll + mobile logo reveal
+// Shrink nav on scroll
 window.addEventListener('scroll', function() {
   document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 40);
-  // Mobile scroll-reveal logo row — v3.12
-  const logoReveal = document.getElementById('mobLogoReveal');
-  if (logoReveal) {
-    logoReveal.classList.toggle('visible', window.scrollY > 60);
-  }
 }, { passive: true });
 
 // Magnetic effect on nav island links
@@ -12693,11 +12680,11 @@ document.addEventListener('keydown', function(e) {
 });
 // v3.12: Cmd+Shift+L — open My Library
 document.addEventListener('keydown', function(e) {
-  if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key === 'L') {
+  if ((e.metaKey || e.ctrlKey) && e.shiftKey && (e.code === 'KeyL' || e.key === 'L' || e.key === 'l')) {
     e.preventDefault();
     if (typeof openLibrary === 'function') openLibrary();
   }
-});
+}, true); // capture:true so it fires even if a focused input calls stopPropagation
 // v2.94: Corner mode dev shortcut — Cmd+Shift+C (hidden feature, not in UI)
 // v2.97: Corner mode — ←→←→←→ sequence (3× left-right within 1.5s)
 // Replaces Cmd+Shift+C which conflicted with Chrome DevTools shortcut
@@ -21829,6 +21816,10 @@ function _csRollNewConcept() {
   const btn = document.getElementById('csNewConceptBtn');
   if (btn) { btn.disabled = true; btn.textContent = '↺ Rolling…'; }
 
+  // Lock scroll container height to prevent action row jumping up during collapse
+  const scrollEl = document.querySelector('.cs-card-inner-scroll');
+  if (scrollEl) { scrollEl.style.minHeight = scrollEl.offsetHeight + 'px'; }
+
   // Collapse prompt + coaching smoothly
   const block = document.getElementById('csPromptBlock');
   const coaching = document.getElementById('csCoaching');
@@ -21858,7 +21849,7 @@ function _csRollNewConcept() {
 
   // Roll after collapse settles
   setTimeout(function() {
-    if (!termEl) { _csLoadNewConcept(target); if (btn) { btn.disabled = false; btn.textContent = '↺ New concept'; } return; }
+    if (!termEl) { _csLoadNewConcept(target); if (btn) { btn.disabled = false; btn.textContent = '↺ concept'; } if (scrollEl) scrollEl.style.minHeight = ''; return; }
 
     const shuffled = pool.slice().sort(() => Math.random() - 0.5).slice(0, 12);
     const rollTerms = shuffled.map(c => c.term);
@@ -21882,7 +21873,9 @@ function _csRollNewConcept() {
         termEl.style.transform = 'translateY(-3px)';
         setTimeout(function() { termEl.style.transform = ''; }, 100);
         _csLoadNewConcept(target);
-        if (btn) { btn.disabled = false; btn.textContent = '↺ New concept'; }
+        if (btn) { btn.disabled = false; btn.textContent = '↺ concept'; }
+        // Release height lock
+        if (scrollEl) { setTimeout(function() { scrollEl.style.minHeight = ''; }, 100); }
       }
     }
     rollStep();

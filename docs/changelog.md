@@ -6,6 +6,15 @@
 
 ---
 
+## v3.13 — 2026-08-05 · Nav polish, Spark panel fixes, Cmd+Shift+L fix
+### index.html
+- **Mobile tab bar ✏ glyph fix:** Added `font-family: 'DM Mono', monospace` to `.mob-tab-glyph` — prevents ✏ from rendering as emoji (system font fallback). Now matches the text glyph used in the hamburger menu.
+- **Logo row always visible:** Removed scroll-reveal animation from `#mobLogoReveal`. The Epistemic + eyebrow banner is now statically visible on mobile (no JS scroll listener, no opacity/max-height transition). Sticky at `top: 52px`.
+- **Hamburger closes on second tap:** Fixed `_mobileNavOutside` to also exclude `#mobTabHamburger` (bottom tab bar toggle) from triggering close — previously tapping the hamburger to close would close+reopen because the outside-click handler fired in capture phase before `toggleMobileNav`.
+- **Cmd+Shift+L fixed:** Changed `e.key === 'L'` to `(e.code === 'KeyL' || e.key === 'L' || e.key === 'l')` for layout-independence. Added `capture: true` so the listener fires even if a focused input has called `stopPropagation`.
+- **Spark panel — "New concept" → "↺ concept":** Removed the word "New" from the button label (and its "Rolling…" intermediate state).
+- **Spark panel — button jump fixed:** When "↺ concept" is clicked, the scroll container's `minHeight` is locked to its current height before collapsing the prompt/coaching sections. Released after the roll completes (100ms after last term lands), preventing the action buttons from jumping up during the 1-2s animation.
+
 ## v3.12 — 2026-08-05 · Mobile scroll-reveal logo, hamburger animation, Library saved tile upgrades
 ### index.html
 - **Mobile scroll-reveal logo row:** A sticky banner (`#mobLogoReveal`) sits just below the nav bar. Hidden at page top (max-height:0, opacity:0). When user scrolls >60px, it smoothly expands in (0.38s cubic-bezier) showing "Epistemic." in Playfair italic + the "Ideas worth saying out loud" eyebrow in DM Mono uppercase. Reverses on scroll back to top.
