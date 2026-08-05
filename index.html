@@ -8648,58 +8648,85 @@
     flex-shrink: 0;
   }
 
-  /* ── ACTION BUTTONS — unified emoji icon system ── */
+  /* ── ACTION BUTTONS — SVG glyph icon system ── */
   /* All card action buttons share .btn-icon base; specific classes add colour accents */
   .btn-icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 28px;
-    height: 28px;
-    border-radius: 7px;
+    /* Visual glyph target: 30×30. Hit area expanded to 44×44 via padding (mobile standard). */
+    width: 30px;
+    height: 30px;
+    padding: 7px;
+    box-sizing: content-box;
+    border-radius: 9px;
     border: none;
     background: transparent;
     cursor: pointer;
     font-size: 0.9rem;
     line-height: 1;
-    transition: background 0.13s, color 0.13s, transform 0.1s;
+    transition: background 0.15s, color 0.15s, transform 0.18s cubic-bezier(0.34,1.56,0.64,1);
     flex-shrink: 0;
     text-decoration: none;
     color: var(--muted);
-    padding: 0;
   }
-  .btn-icon:hover { background: rgba(255,255,255,0.07); color: var(--text); transform: scale(1.08); }
-  .btn-icon:active { transform: scale(0.92); }
+  .btn-icon svg { display: block; pointer-events: none; }
+  .btn-icon:hover { background: rgba(255,255,255,0.07); color: var(--text); transform: scale(1.1); }
+  .btn-icon:active { transform: scale(0.88); transition-duration: 0.08s; }
 
-  /* ★ Master/Save */
-  .btn-icon.btn-master:hover { color: var(--green); background: rgba(122,175,138,0.1); }
+  /* ★ Master/Save — bouncy spring pop (preserved) */
+  .btn-icon.btn-master:hover { color: var(--green); background: rgba(122,175,138,0.1); transform: scale(1.1); }
   .btn-icon.btn-master.mastered-active { color: var(--green); background: rgba(122,175,138,0.1); }
   .concept-card.mastered .btn-icon.btn-master { color: var(--green); background: rgba(122,175,138,0.1); }
 
-  /* 🔗 Share */
-  .btn-icon.btn-share:hover { color: var(--text); }
+  /* 🔗 Share — floats upward */
+  .btn-icon.btn-share:hover { color: var(--text); transform: scale(1.1) translateY(-2px); }
 
   /* 🎧 Listen */
   .btn-icon.btn-listen { color: var(--accent); }
-  .btn-icon.btn-listen:hover { color: var(--accent2); background: rgba(232,213,163,0.08); }
+  .btn-icon.btn-listen:hover { color: var(--accent2); background: rgba(232,213,163,0.08); transform: scale(1.1); }
 
   /* 💬 Chat */
   .btn-icon.btn-chat { color: var(--muted); }
-  .btn-icon.btn-chat:hover { color: #c47a7a; background: rgba(196,122,122,0.08); }
+  .btn-icon.btn-chat:hover { color: #c47a7a; background: rgba(196,122,122,0.08); transform: scale(1.1); }
   .btn-icon.btn-chat.saved { color: #c47a7a; background: rgba(196,122,122,0.1); }
 
-  /* ⟡ Related */
-  .btn-icon.btn-related:hover { color: #9a8fb8; background: rgba(154,143,184,0.1); }
+  /* ⟡ Related — slight orbital rotate */
+  .btn-icon.btn-related:hover { color: #9a8fb8; background: rgba(154,143,184,0.1); transform: scale(1.1) rotate(18deg); }
 
-  /* ✎ Note */
-  .btn-icon.btn-note:hover { color: var(--accent); background: rgba(232,213,163,0.08); }
+  /* ✎ Note — pencil tilt */
+  .btn-icon.btn-note:hover { color: var(--accent); background: rgba(232,213,163,0.08); transform: scale(1.1) rotate(-8deg); }
   .btn-icon.btn-note.has-note { color: var(--accent); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn-icon { transition: background 0.1s, color 0.1s; }
+    .btn-note-pop, .btn-share-pop, .master-pop { animation: none !important; }
+  }
+
+  /* Note-open animation */
+  @keyframes btn-note-pop {
+    0%   { transform: scale(1) rotate(0); }
+    35%  { transform: scale(1.22) rotate(-12deg); }
+    65%  { transform: scale(0.94) rotate(4deg); }
+    100% { transform: scale(1) rotate(0); }
+  }
+  .btn-note-pop { animation: btn-note-pop 0.38s cubic-bezier(0.34,1.56,0.64,1) both; }
+
+  /* Share-click animation */
+  @keyframes btn-share-pop {
+    0%   { transform: translateY(0); }
+    40%  { transform: translateY(-5px); }
+    70%  { transform: translateY(1px); }
+    100% { transform: translateY(0); }
+  }
+  .btn-share-pop { animation: btn-share-pop 0.32s ease both; }
 
   /* Toolbar row */
   .card-actions.card-actions-top {
-    display: flex; gap: 4px;
-    padding: 6px 10px;
+    display: flex; gap: 2px;
+    padding: 5px 10px;
     border-top: 0.5px solid var(--border);
+    border-bottom: 0.5px solid var(--border);
   }
   .card-actions-divider { display: none; }
 
@@ -8709,10 +8736,10 @@
   [data-theme="light"] .btn-icon.btn-listen { color: var(--accent2); }
   [data-theme="light"] .btn-icon.btn-chat.saved { color: #a03040; background: rgba(160,48,64,0.08); }
 
-  /* Note input under card body */
+  /* Note input ABOVE toolbar (inserted as first child of card-back) */
   .card-note-wrap {
-    padding: 0 14px 10px;
-    border-top: 0.5px solid var(--border);
+    padding: 8px 14px;
+    border-bottom: 0.5px solid var(--border);
     display: none;
   }
   .card-note-wrap.open { display: block; }
@@ -13226,19 +13253,19 @@ function buildGrid() {
                   </div>
                   <div class="card-back">
                     <div class="card-actions card-actions-top">
-                      <button class="btn-icon btn-share" onclick="event.stopPropagation();shareCard(event,${c.id})" title="Share">🔗</button>
-                      <button class="btn-icon btn-master${mastered.has(c.id)?' mastered-active':''}" onclick="event.stopPropagation();toggleMaster(event,${c.id})" id="btnMaster${c.id}" title="Save to Mastered">★</button>
-                      <button class="btn-icon btn-chat${_csIsSaved(c.id)?' saved':''}" onclick="event.stopPropagation();toggleChatSave(${c.id})" id="btnChat${c.id}" title="Save to Conversations">💬</button>
                       ${(() => {
                         if (c.collection_id == null || typeof c.timestamp !== 'number') return '';
                         const col = COLLECTIONS_BY_ID[c.collection_id];
                         if (!col || !col.episode_url) return '';
                         const url = buildTimestampedUrl(col.episode_url, c.timestamp);
                         if (!url) return '';
-                        return `<a class="btn-icon btn-listen" href="${url}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="Listen">🎧</a>`;
+                        return `<a class="btn-icon btn-listen" href="${url}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="Listen">${CC_G.listen}</a>`;
                       })()}
-                      ${c.related_ids && c.related_ids.length ? `<button class="btn-icon btn-related" onclick="event.stopPropagation();_ccOpenRelated(${c.id})" title="Related">⟡</button>` : ''}
-                      <button class="btn-icon btn-note${localStorage.getItem('cc_note_'+c.id)?' has-note':''}" onclick="event.stopPropagation();_ccToggleNote(${c.id},this)" title="Note">✎</button>
+                      <button class="btn-icon btn-master${mastered.has(c.id)?' mastered-active':''}" onclick="event.stopPropagation();toggleMaster(event,${c.id})" id="btnMaster${c.id}" title="Save to Mastered">${CC_G.master}</button>
+                      <button class="btn-icon btn-note${localStorage.getItem('cc_note_'+c.id)?' has-note':''}" onclick="event.stopPropagation();_ccToggleNote(${c.id},this)" title="Note">${CC_G.note}</button>
+                      ${c.related_ids && c.related_ids.length ? `<button class="btn-icon btn-related" onclick="event.stopPropagation();_ccOpenRelated(${c.id})" title="Related">${CC_G.related}</button>` : ''}
+                      <button class="btn-icon btn-chat${_csIsSaved(c.id)?' saved':''}" onclick="event.stopPropagation();toggleChatSave(${c.id})" id="btnChat${c.id}" title="Save to Conversations">${CC_G.chat}</button>
+                      <button class="btn-icon btn-share" onclick="event.stopPropagation();shareCard(event,${c.id})" title="Share">${CC_G.share}</button>
                     </div>
                     <div class="card-actions-divider"></div>
                     ${(() => {
@@ -13437,6 +13464,16 @@ function toggleCard(id) {
   }
 }
 
+// ── Card toolbar SVG glyphs ───────────────────────────────────
+const CC_G = {
+  listen:  `<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 10V8a6 6 0 0112 0v2"/><rect x="1.5" y="10" width="3" height="4" rx="1"/><rect x="11.5" y="10" width="3" height="4" rx="1"/></svg>`,
+  master:  `<svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1.5l1.77 3.59 3.96.58-2.87 2.79.68 3.95L8 10.42l-3.54 1.99.68-3.95L2.27 5.67l3.96-.58L8 1.5z"/></svg>`,
+  note:    `<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 2.5l3 3-8 8H2.5v-3l8-8z"/><path d="M9 4l3 3"/></svg>`,
+  related: `<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="3" cy="8" r="1.5"/><circle cx="13" cy="4" r="1.5"/><circle cx="13" cy="12" r="1.5"/><path d="M4.5 8l7-4M4.5 8l7 4"/></svg>`,
+  chat:    `<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13.5 9a4.5 4.5 0 01-6.18 4.16L2.5 14.5l.46-4.82A4.5 4.5 0 118.5 4.5h.5A4.5 4.5 0 0113.5 9z"/></svg>`,
+  share:   `<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v8M5 5l3-3 3 3"/><path d="M3 10v3a1 1 0 001 1h8a1 1 0 001-1v-3"/></svg>`,
+};
+
 function toggleMaster(e, id) {
   e.stopPropagation();
   e.preventDefault();
@@ -13489,6 +13526,14 @@ function shareCard(e, id) {
   if (!c) return;
   track('share_clicked', { id: id });
   _shareConceptId = id;
+  // Share-pop animation on clicked button
+  const btn = e.currentTarget || e.target;
+  if (btn && btn.classList.contains('btn-share')) {
+    btn.classList.remove('btn-share-pop');
+    void btn.offsetWidth;
+    btn.classList.add('btn-share-pop');
+    setTimeout(() => btn.classList.remove('btn-share-pop'), 400);
+  }
   generateShareImage(c);
   document.getElementById('shareModalOverlay').classList.add('open');
   // Show/hide native share button based on capability
@@ -14104,17 +14149,17 @@ function _buildEpColumnHtml(catKey, catConcepts, col) {
         </div>
         <div class="card-back">
           <div class="card-actions card-actions-top">
-            <button class="btn-icon btn-share" onclick="event.stopPropagation();shareCard(event,${c.id})" title="Share">🔗</button>
-            <button class="btn-icon btn-master${mastered.has(c.id)?' mastered-active':''}" onclick="event.stopPropagation();toggleMaster(event,${c.id})" id="btnMasterEp${c.id}" title="Save to Mastered">★</button>
-            <button class="btn-icon btn-chat${_csIsSaved(c.id)?' saved':''}" onclick="event.stopPropagation();toggleChatSave(${c.id})" id="btnChatEp${c.id}" title="Save to Conversations">💬</button>
             ${(() => {
               if (typeof c.timestamp !== 'number' || !col || !col.episode_url) return '';
               const url = buildTimestampedUrl(col.episode_url, c.timestamp);
               if (!url) return '';
-              return `<a class="btn-icon btn-listen" href="${url}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="Listen">🎧</a>`;
+              return `<a class="btn-icon btn-listen" href="${url}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="Listen">${CC_G.listen}</a>`;
             })()}
-            ${c.related_ids && c.related_ids.length ? `<button class="btn-icon btn-related" onclick="event.stopPropagation();_ccOpenRelated(${c.id})" title="Related">⟡</button>` : ''}
-            <button class="btn-icon btn-note${localStorage.getItem('cc_note_'+c.id)?' has-note':''}" onclick="event.stopPropagation();_ccToggleNote(${c.id},this)" title="Note">✎</button>
+            <button class="btn-icon btn-master${mastered.has(c.id)?' mastered-active':''}" onclick="event.stopPropagation();toggleMaster(event,${c.id})" id="btnMasterEp${c.id}" title="Save to Mastered">${CC_G.master}</button>
+            <button class="btn-icon btn-note${localStorage.getItem('cc_note_'+c.id)?' has-note':''}" onclick="event.stopPropagation();_ccToggleNote(${c.id},this)" title="Note">${CC_G.note}</button>
+            ${c.related_ids && c.related_ids.length ? `<button class="btn-icon btn-related" onclick="event.stopPropagation();_ccOpenRelated(${c.id})" title="Related">${CC_G.related}</button>` : ''}
+            <button class="btn-icon btn-chat${_csIsSaved(c.id)?' saved':''}" onclick="event.stopPropagation();toggleChatSave(${c.id})" id="btnChatEp${c.id}" title="Save to Conversations">${CC_G.chat}</button>
+            <button class="btn-icon btn-share" onclick="event.stopPropagation();shareCard(event,${c.id})" title="Share">${CC_G.share}</button>
           </div>
           <div class="card-actions-divider"></div>
           <div class="back-section-label">What it means</div>
@@ -14588,11 +14633,11 @@ function _renderThemeCard(c, prefix, col) {
       </div>
       <div class="card-back">
         <div class="card-actions card-actions-top">
-          <button class="btn-icon btn-share" onclick="event.stopPropagation();shareCard(event,${c.id})" title="Share">🔗</button>
-          <button class="btn-icon btn-master${mastered.has(c.id)?' mastered-active':''}" onclick="event.stopPropagation();toggleMaster(event,${c.id})" id="btnMasterTh${c.id}" title="Save to Mastered">★</button>
-          <button class="btn-icon btn-chat${_csIsSaved(c.id)?' saved':''}" onclick="event.stopPropagation();toggleChatSave(${c.id})" id="btnChat${prefix}${c.id}" title="Save to Conversations">💬</button>
-          ${c.related_ids && c.related_ids.length ? `<button class="btn-icon btn-related" onclick="event.stopPropagation();_ccOpenRelated(${c.id})" title="Related">⟡</button>` : ''}
-          <button class="btn-icon btn-note${localStorage.getItem('cc_note_'+c.id)?' has-note':''}" onclick="event.stopPropagation();_ccToggleNote(${c.id},this)" title="Note">✎</button>
+          <button class="btn-icon btn-master${mastered.has(c.id)?' mastered-active':''}" onclick="event.stopPropagation();toggleMaster(event,${c.id})" id="btnMasterTh${c.id}" title="Save to Mastered">${CC_G.master}</button>
+          <button class="btn-icon btn-note${localStorage.getItem('cc_note_'+c.id)?' has-note':''}" onclick="event.stopPropagation();_ccToggleNote(${c.id},this)" title="Note">${CC_G.note}</button>
+          ${c.related_ids && c.related_ids.length ? `<button class="btn-icon btn-related" onclick="event.stopPropagation();_ccOpenRelated(${c.id})" title="Related">${CC_G.related}</button>` : ''}
+          <button class="btn-icon btn-chat${_csIsSaved(c.id)?' saved':''}" onclick="event.stopPropagation();toggleChatSave(${c.id})" id="btnChat${prefix}${c.id}" title="Save to Conversations">${CC_G.chat}</button>
+          <button class="btn-icon btn-share" onclick="event.stopPropagation();shareCard(event,${c.id})" title="Share">${CC_G.share}</button>
         </div>
         <div class="card-actions-divider"></div>
         <div class="back-section-label">What it means</div>
@@ -15631,7 +15676,7 @@ function setDrawerView(prefix, view, btn) {
         var listenBtn = '';
         if (col2 && col2.episode_url && typeof c.timestamp === 'number') {
           var epUrl = typeof buildTimestampedUrl === 'function' ? buildTimestampedUrl(col2.episode_url, c.timestamp) : '';
-          if (epUrl) listenBtn = '<a class="btn-icon btn-listen" href="' + epUrl + '" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="Listen">🎧</a>';
+          if (epUrl) listenBtn = '<a class="btn-icon btn-listen" href="' + epUrl + '" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="Listen">' + CC_G.listen + '</a>';
         }
         var isMC = typeof mastered !== 'undefined' && mastered.has(c.id);
         var isSv = typeof _csIsSaved === 'function' && _csIsSaved(c.id);
@@ -15654,12 +15699,12 @@ function setDrawerView(prefix, view, btn) {
           '</div>',
           '<div class="card-back">',
           '<div class="card-actions card-actions-top">',
-          '<button class="btn-icon btn-share" onclick="event.stopPropagation();shareCard(event,' + c.id + ')" title="Share">🔗</button>',
-          '<button class="btn-icon btn-master' + (isMC?' mastered-active':'') + '" onclick="event.stopPropagation();toggleMaster(event,' + c.id + ')" id="btnMasterAll' + c.id + '" title="Save">★</button>',
-          '<button class="btn-icon btn-chat' + (isSv?' saved':'') + '" onclick="event.stopPropagation();toggleChatSave(' + c.id + ')" id="btnChatAll' + c.id + '" title="Chat">💬</button>',
           listenBtn,
-          (c.related_ids && c.related_ids.length ? '<button class="btn-icon btn-related" onclick="event.stopPropagation();_ccOpenRelated(' + c.id + ')" title="Related">⟡</button>' : ''),
-          '<button class="btn-icon btn-note' + (localStorage.getItem('cc_note_'+c.id)?' has-note':'') + '" onclick="event.stopPropagation();_ccToggleNote(' + c.id + ',this)" title="Note">✎</button>',
+          '<button class="btn-icon btn-master' + (isMC?' mastered-active':'') + '" onclick="event.stopPropagation();toggleMaster(event,' + c.id + ')" id="btnMasterAll' + c.id + '" title="Save">' + CC_G.master + '</button>',
+          '<button class="btn-icon btn-note' + (localStorage.getItem('cc_note_'+c.id)?' has-note':'') + '" onclick="event.stopPropagation();_ccToggleNote(' + c.id + ',this)" title="Note">' + CC_G.note + '</button>',
+          (c.related_ids && c.related_ids.length ? '<button class="btn-icon btn-related" onclick="event.stopPropagation();_ccOpenRelated(' + c.id + ')" title="Related">' + CC_G.related + '</button>' : ''),
+          '<button class="btn-icon btn-chat' + (isSv?' saved':'') + '" onclick="event.stopPropagation();toggleChatSave(' + c.id + ')" id="btnChatAll' + c.id + '" title="Chat">' + CC_G.chat + '</button>',
+          '<button class="btn-icon btn-share" onclick="event.stopPropagation();shareCard(event,' + c.id + ')" title="Share">' + CC_G.share + '</button>',
           '</div>',
           '<div class="card-actions-divider"></div>',
           '<div class="back-section-label">What it means</div>',
@@ -15879,19 +15924,19 @@ function _spRenderFilteredGrid(pool) {
                   </div>
                   <div class="card-back">
                     <div class="card-actions card-actions-top">
-                      <button class="btn-icon btn-share" onclick="event.stopPropagation();shareCard(event,${c.id})" title="Share">🔗</button>
-                      <button class="btn-icon btn-master${mastered.has(c.id)?' mastered-active':''}" onclick="event.stopPropagation();toggleMaster(event,${c.id})" id="btnMasterFl${c.id}" title="Save to Mastered">★</button>
-                      <button class="btn-icon btn-chat${_csIsSaved(c.id)?' saved':''}" onclick="event.stopPropagation();toggleChatSave(${c.id})" id="btnChat${c.id}" title="Save to Conversations">💬</button>
                       ${(() => {
                         if (c.collection_id == null || typeof c.timestamp !== 'number') return '';
                         const col = COLLECTIONS_BY_ID[c.collection_id];
                         if (!col || !col.episode_url) return '';
                         const url = buildTimestampedUrl(col.episode_url, c.timestamp);
                         if (!url) return '';
-                        return `<a class="btn-icon btn-listen" href="${url}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="Listen">🎧</a>`;
+                        return `<a class="btn-icon btn-listen" href="${url}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="Listen">${CC_G.listen}</a>`;
                       })()}
-                      ${c.related_ids && c.related_ids.length ? `<button class="btn-icon btn-related" onclick="event.stopPropagation();_ccOpenRelated(${c.id})" title="Related">⟡</button>` : ''}
-                      <button class="btn-icon btn-note${localStorage.getItem('cc_note_'+c.id)?' has-note':''}" onclick="event.stopPropagation();_ccToggleNote(${c.id},this)" title="Note">✎</button>
+                      <button class="btn-icon btn-master${mastered.has(c.id)?' mastered-active':''}" onclick="event.stopPropagation();toggleMaster(event,${c.id})" id="btnMasterFl${c.id}" title="Save to Mastered">${CC_G.master}</button>
+                      <button class="btn-icon btn-note${localStorage.getItem('cc_note_'+c.id)?' has-note':''}" onclick="event.stopPropagation();_ccToggleNote(${c.id},this)" title="Note">${CC_G.note}</button>
+                      ${c.related_ids && c.related_ids.length ? `<button class="btn-icon btn-related" onclick="event.stopPropagation();_ccOpenRelated(${c.id})" title="Related">${CC_G.related}</button>` : ''}
+                      <button class="btn-icon btn-chat${_csIsSaved(c.id)?' saved':''}" onclick="event.stopPropagation();toggleChatSave(${c.id})" id="btnChat${c.id}" title="Save to Conversations">${CC_G.chat}</button>
+                      <button class="btn-icon btn-share" onclick="event.stopPropagation();shareCard(event,${c.id})" title="Share">${CC_G.share}</button>
                     </div>
                     <div class="card-actions-divider"></div>
                     ${(() => {
@@ -21574,7 +21619,6 @@ function _ccToggleNote(id, btn) {
       saved.replace(/</g,'&lt;') + '</textarea>';
     var ta = wrap.querySelector('textarea');
     ta.addEventListener('input', function() {
-      // Auto-resize
       ta.style.height = 'auto';
       ta.style.height = ta.scrollHeight + 'px';
     });
@@ -21589,12 +21633,18 @@ function _ccToggleNote(id, btn) {
       }
     });
     ta.addEventListener('click', function(e) { e.stopPropagation(); });
-    cardBack.appendChild(wrap);
+    // Insert ABOVE the toolbar (as first child of card-back)
+    cardBack.insertBefore(wrap, cardBack.firstChild);
   }
 
   var isOpen = wrap.classList.contains('open');
   wrap.classList.toggle('open', !isOpen);
   if (!isOpen) {
+    // Pencil-pop animation on note button
+    btn.classList.remove('btn-note-pop');
+    void btn.offsetWidth;
+    btn.classList.add('btn-note-pop');
+    setTimeout(function() { btn.classList.remove('btn-note-pop'); }, 420);
     setTimeout(function() {
       var ta = wrap.querySelector('textarea');
       if (ta) { ta.focus(); ta.style.height = 'auto'; ta.style.height = ta.scrollHeight + 'px'; }

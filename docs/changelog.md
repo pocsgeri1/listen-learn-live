@@ -6,6 +6,16 @@
 
 ---
 
+## v2.99 — 2026-08-05 · Card toolbar redesign — SVG glyphs, reorder, animations, note position
+### index.html
+- **SVG glyphs:** Replaced all emoji characters (🔗★💬🎧⟡✎) with inline SVG paths across all 5 card-render locations (sp-hero, episode, theme, all-browse, filter). `CC_G` constant object holds all 6 glyphs, referenced in templates.
+- **Button size:** `btn-icon` resized to 30×30px visual target; 44×44 hit area via `padding: 7px; box-sizing: content-box` (mobile touch standard).
+- **Button order:** Reordered left→right: Listen → Master → Note → Related → Chat → Share (source → learn → capture → explore → apply → distribute).
+- **Toolbar border:** Added `border-bottom: 0.5px solid var(--border)` to `.card-actions-top` — toolbar now has top + bottom border, feels like a contained bar.
+- **Animations:** `transition` upgraded to spring cubic-bezier `(0.34,1.56,0.64,1)`. Per-button hover transforms: Related rotates 18°, Note tilts −8°, Share floats up 2px. New keyframes: `btn-note-pop` (pencil bounce on open), `btn-share-pop` (upward arc on click). Master `master-pop` preserved unchanged.
+- **Note position:** Note textarea now inserts as `cardBack.firstChild` (above toolbar) via `insertBefore`, not `appendChild` (was below card body).
+- **Reduced motion:** `@media (prefers-reduced-motion: reduce)` disables all new and existing card animations.
+
 ## v2.98 — 2026-08-04 · Lanes popover · Picks/Recent Word Map fix · Card toolbar + Related + Note · Signup mobile
 
 ### index.html
