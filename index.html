@@ -4490,7 +4490,10 @@
     border-bottom: 1px solid var(--border);
     background: rgba(13,13,13,0.96);
     transition: height 0.3s ease, border-color 0.3s ease, background 0.3s ease;
-    /* iOS Safari: GPU compositing prevents nav from jumping when URL bar shows/hides */
+  }
+  /* iOS Safari: GPU compositing scoped to #mainNav only — prevents it from
+     affecting the mobile-tab-bar (also a <nav>) which has position:fixed */
+  #mainNav {
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
     -webkit-backface-visibility: hidden;
@@ -4900,6 +4903,7 @@
   @media (max-width: 768px) {
     /* 3-col grid: logo | modes (centered) | right actions */
     nav { grid-template-columns: max-content 1fr max-content; padding: 0 10px; height: 52px; }
+    nav.scrolled { height: 52px; } /* prevent nav growing on scroll → eliminates phantom strip */
     .nav-island { display: none; }
 
     /* Centered mode buttons */
@@ -5008,6 +5012,8 @@
   }
   @media (max-width: 768px) {
     .mobile-tab-bar {
+      top: auto;    /* clear inherited top: 0 from base nav {} */
+      height: auto; /* clear inherited height: 52px from base nav {} */
       display: flex;
       position: fixed;
       bottom: 0; left: 0; right: 0;
