@@ -4904,6 +4904,7 @@
     /* 3-col grid: logo | modes (centered) | right actions */
     nav { grid-template-columns: max-content 1fr max-content; padding: 0 10px; height: 52px; }
     nav.scrolled { height: 52px; } /* prevent nav growing on scroll → eliminates phantom strip */
+    #mainNav { display: none; } /* tab bar replaces it on mobile */
     .nav-island { display: none; }
 
     /* Centered mode buttons */
@@ -4978,11 +4979,17 @@
     .mob-logo-reveal {
       display: block;
       position: fixed;
-      top: 52px; /* just below nav bar */
+      top: 52px; /* just below tab bar */
       left: 0; right: 0;
-      z-index: 99; /* below nav (100) but above content */
+      z-index: 89; /* below tab bar (900) and panels */
       background: var(--bg);
       border-bottom: 0.5px solid var(--border);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+    body.mob-panel-open .mob-logo-reveal {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-4px);
     }
     .mob-logo-reveal-inner {
       display: flex;
@@ -5006,22 +5013,22 @@
     }
   }
 
-  /* ── MOBILE BOTTOM TAB BAR ─────────────────────────────────── */
+  /* ── MOBILE TOP TAB BAR ─────────────────────────────────── */
   .mobile-tab-bar {
     display: none;
   }
   @media (max-width: 768px) {
     .mobile-tab-bar {
-      top: auto;    /* clear inherited top: 0 from base nav {} */
+      top: 0;       /* pinned to top on mobile */
+      bottom: auto;
       height: auto; /* clear inherited height: 52px from base nav {} */
       display: flex;
       position: fixed;
-      bottom: 0; left: 0; right: 0;
+      left: 0; right: 0;
       z-index: 900;
       background: var(--surface);
-      border-top: 0.5px solid var(--border);
-      padding-bottom: env(safe-area-inset-bottom, 0);
-      box-shadow: 0 -4px 20px rgba(0,0,0,0.22);
+      border-bottom: 0.5px solid var(--border);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.22);
     }
     .mob-tab {
       flex: 1;
@@ -22366,6 +22373,7 @@ function openCS() {
   const overlay = document.getElementById('convOverlay');
   overlay.classList.add('active');
   document.body.classList.add('cs-panel-open');
+  document.body.classList.add('mob-panel-open');
   if (window.innerWidth <= 899) document.body.classList.add('cotd-open');
   panelSwitchTab('spark', true);
   playCotdSFX();
@@ -22384,6 +22392,7 @@ function closeCS(persist) {
   overlay.classList.remove('active');
   document.body.classList.remove('cs-panel-open');
   document.body.classList.remove('cotd-open');
+  document.body.classList.remove('mob-panel-open');
   document.removeEventListener('keydown', _convEscHandler);
   document.removeEventListener('click', _convOutsideClickHandler, { capture: true });
   _csDismissTermPopups(); // v1.79c: close any floating Stories-tab term previews too
@@ -22578,6 +22587,7 @@ function openLibrary(tab) {
     });
   });
   _spLockBodyScroll();
+  document.body.classList.add('mob-panel-open');
   backdrop.classList.add('open');
   requestAnimationFrame(function() {
     requestAnimationFrame(function() { drawer.classList.add('open'); });
@@ -22590,6 +22600,7 @@ function closeLibrary() {
   if (!backdrop || !drawer) return;
   drawer.classList.remove('open');
   backdrop.classList.remove('open');
+  document.body.classList.remove('mob-panel-open');
   _spUnlockBodyScroll();
 }
 
@@ -28389,6 +28400,7 @@ function openLexiPanel() {
   if (!panel) return;
   panel.setAttribute('aria-hidden', 'false');
   panel.classList.add('open');
+  document.body.classList.add('mob-panel-open');
   _spLockBodyScroll();
   _lexiRenderPanel();
   _lexiUpdateBadge();
@@ -28405,6 +28417,7 @@ function closeLexiPanel() {
   if (!panel) return;
   panel.classList.remove('open');
   panel.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('mob-panel-open');
   _spUnlockBodyScroll();
   document.removeEventListener('keydown', _lexiEscHandler);
   // Close Vocab panel if open alongside Lexi
