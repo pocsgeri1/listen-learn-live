@@ -6,6 +6,19 @@
 
 ---
 
+## v3.16 — 2026-08-07 · Mobile nav gap fix
+### index.html
+- **Tab bar height locked to 52px:** Added explicit `height: 52px` to `.mobile-tab-bar` on mobile. Previously `height: auto` caused the bar to render fractionally under 52px, leaving a 1–2px gap between the tab bar and the logo strip below it — content was visible peeking through on scroll.
+
+## v3.15 — 2026-08-07 · Mobile nav restructure + phantom strip fix
+### index.html
+- **Mobile nav restructured:** `#mainNav` is now hidden on mobile (`display: none`). The mobile-tab-bar (Read · Write · Speak | Library · Join · ≡) has moved from the bottom of the screen to the top (`top: 0; bottom: auto`). Border and shadow flipped to suit a top bar (`border-bottom`, `box-shadow: 0 4px …`).
+- **Phantom strip eliminated:** `nav.scrolled { height: 52px }` added inside the `@media (max-width: 768px)` block — prevents the desktop scroll-shrink animation (76→62px) from firing on mobile and expanding the nav, which was creating a 10px gap between the nav and `mob-logo-reveal` that content could peek through.
+- **`mobile-tab-bar` inherited styles cleared:** `top: auto; height: auto` overrides added in the mobile media query to prevent the base `nav {}` rule (`top: 0; height: 52px`) from bleeding into the tab bar, which was causing it to appear at the top even when it was meant to be bottom-docked.
+- **iOS compositing scoped to `#mainNav`:** Moved `transform: translateZ(0)` and `-webkit-backface-visibility: hidden` from `nav {}` (applied to all `<nav>` elements) to `#mainNav {}` specifically — prevents the CSS transform from breaking `position: fixed` on the sibling `.mobile-tab-bar` on iOS Safari.
+- **Logo strip hides when panels open:** Added `body.mob-panel-open .mob-logo-reveal { opacity: 0; pointer-events: none; transform: translateY(-4px) }` with a 0.2s ease transition. `mob-panel-open` class is added to `<body>` in `openCS`, `openLexiPanel`, `openLibrary` and removed in their respective close functions — so the black Epistemic + tagline strip disappears when any drawer opens and fades back in when it closes.
+- **`mob-logo-reveal` z-index lowered:** Changed from 99 to 89 so it sits below panels and drawers (which use z-index 100–900).
+
 ## v3.14 — 2026-08-05 · Mobile nav scroll fix, shortcut change, Spark/Lexi polish
 ### index.html
 - **"↺ New" button label:** Was changed to "↺ concept" in error; corrected to "↺ New" (keep symbol + New, remove "concept").

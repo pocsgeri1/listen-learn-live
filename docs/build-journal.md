@@ -6,6 +6,38 @@
 
 ---
 
+## 2026-08-07 — Mobile nav restructure + phantom strip fix (v3.15–3.16)
+
+**Base `nav {}` CSS applies to every `<nav>` in the document.** Both `#mainNav` and `.mobile-tab-bar` are `<nav>` tags. Putting `top: 0`, `height: 52px`, and `transform: translateZ(0)` on `nav {}` silently applied all three to `.mobile-tab-bar`, causing it to appear at the top of the screen instead of the bottom and breaking iOS fixed positioning. Rule: never put positional or compositing properties on `nav {}` — scope them to `#mainNav {}`.
+
+**CSS `transform` on iOS breaks sibling `position:fixed` elements.** `transform: translateZ(0)` on a `position:fixed` element creates a new containing block, disrupting `fixed` children and siblings on iOS Safari. Must scope to the specific ID, not the element type.
+
+**`nav.scrolled` desktop animation fires on mobile too.** `nav.scrolled { height: 62px }` was growing the mobile nav from 52px → 62px on scroll, leaving a 10px gap between the nav and `mob-logo-reveal` (fixed at `top: 52px`) that page content peeked through. Fix: add `nav.scrolled { height: 52px }` inside the mobile media query.
+
+**`height: auto` on a fixed bar causes pixel gaps.** When `.mobile-tab-bar` was moved to the top and its height left as `auto`, the rendered height was fractionally under 52px, leaving a 1–2px gap before `mob-logo-reveal` at `top: 52px`. Fix: explicit `height: 52px` on the tab bar so the two strips sit pixel-flush.
+
+**Glob tool results can be silently truncated.** Glob returned a partial file list and omitted `build-journal.md` and `architecture.md` — files that clearly exist. Always verify with `ls` via bash before concluding a file is missing. Never create a file without confirming it doesn't already exist.
+
+**Keyboard shortcut `Cmd+Shift+L` consumed by password managers.** 1Password and LastPass intercept it before JS sees it. `Cmd+Alt+L` (`metaKey + altKey + KeyL`) is safe — not used by Chrome, macOS, or common extensions. Always add `capture: true` to the listener.
+
+## 2026-08-05 — Library, toolbar, scroll, panels, mobile nav (v3.00–v3.14)
+
+**`display:none` in panel collapse causes layout jump.** Spark panel coaching/divider/feedbackRow were hidden with `display:none`, removing them from flow and making the action buttons jump up during the roll animation. Fix: use `.cs-hidden` (opacity:0, pointer-events:none) — elements stay in flow, no shift.
+
+**Two nav elements = base CSS applies to both.** `#mainNav` and `.mobile-tab-bar` are both `<nav>`. Any rule on `nav {}` (top, height, transform) applies to both. Always scope to `#mainNav {}` for desktop-only properties.
+
+**`position:sticky` at document position 0 sits under a `position:fixed` nav.** `mob-logo-reveal` was sticky — but sticky is relative to document flow, so it started at y:0, hidden behind the fixed nav. Changed to `position:fixed; top:52px`. No document flow, always visible below the nav.
+
+**`nav.scrolled` desktop animation fires on mobile.** The 76→62px shrink on scroll also applied at mobile (52px nav), growing it 10px and leaving a gap content peeked through. Always add a mobile override: `nav.scrolled { height: 52px }` inside the mobile media query.
+
+**Scroll jump root cause: `position:fixed` + `scrollY` restore causes flash.** Replaced with `overflow:hidden` on `<html>` + reference-counting lock/unlock. Scroll position never changes, so no restore flash. Added `_spLockBodyScroll()` / `_spUnlockBodyScroll()` as the canonical pattern.
+
+**`_mobileNavOutside` fires before `toggleMobileNav` in capture phase.** Tapping the hamburger to close would close (via outside handler) then immediately reopen (via toggle). Fix: exclude both `#navToggle` AND `#mobTabHamburger` from the outside-click handler.
+
+**✏ renders as emoji, not glyph, without explicit font-family.** System font fallback turns ✏ into the emoji variant. Adding `font-family: 'DM Mono', monospace` to `.mob-tab-glyph` forces the text rendering.
+
+**`lib-detail-row` expand animation needs two rAF frames.** Adding the open class in the same frame as inserting the element into DOM means the transition never fires (browser hasn't painted the initial state). Always: insert element → rAF → rAF → add class.
+
 ## 2026-08-04 — Mobile nav centre · ←→ shortcut · Podcast filter · Lanes view (v2.97)
 
 **Keyboard sequence detector must trim buffer to prevent infinite growth.** After each `ArrowLeft`/`ArrowRight` keydown, push to buf. When `buf.length > SEQ.length`, trim via `buf.slice(-SEQ.length)` so rapid arrow presses don't prevent the detector from ever matching.

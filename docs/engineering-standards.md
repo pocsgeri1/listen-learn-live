@@ -77,6 +77,12 @@
 
 **Search dropdowns must be `position:fixed` + `getBoundingClientRect`** — not `position:absolute`. Parent containers use `overflow:hidden` which clips absolute dropdowns.
 
+**Base `nav {}` rule applies to ALL `<nav>` elements** — `#mainNav` and `.mobile-tab-bar` are both `<nav>` tags. If `nav { top: 0; height: 52px; transform: translateZ(0) }` is in the base rule, those values apply to `.mobile-tab-bar` too. Always scope nav-specific rules to `#mainNav {}`. Never put `transform`, `top`, or `height` in the base `nav {}` block without explicit overrides on every other `<nav>` in the document.
+
+**CSS `transform` on iOS breaks sibling `position:fixed` elements** — applying `transform: translateZ(0)` to a `position:fixed` element creates a new containing block that can disrupt `fixed` positioning of sibling elements on iOS Safari. Scope GPU compositing hints to the specific element ID (`#mainNav`), never to the element type (`nav`).
+
+**Keyboard shortcuts — browser/extension conflicts** — `Cmd+Shift+L` is consumed by password managers (1Password, LastPass) before JS sees it. `Cmd+Shift+F` by browser find. Use `Cmd+Alt+<key>` (`metaKey + altKey`) for app shortcuts — not used by Chrome, macOS, or common extensions. Always add `capture: true` on the event listener so it fires even if a focused element called `stopPropagation`.
+
 **CSS grid with expandable cards:** set `align-items: start` — default `stretch` inflates neighbour cells when a card expands.
 
 ---
