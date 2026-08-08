@@ -8920,19 +8920,17 @@
   .btn-icon.btn-chat.saved { color: var(--purple, #a08fd4); }
   .btn-icon.btn-note.has-note { color: var(--accent); }
 
-  /* Disabled (Related with no data — always rendered for layout consistency) */
-  .btn-icon.btn-icon-empty { opacity: 0.22; pointer-events: none; cursor: default; }
-
-  /* Button groups — left group left-aligned, right group right-aligned via flex-1 divider */
+  /* Button groups */
   .btn-group {
     display: flex;
     align-items: center;
     gap: 6px;
   }
 
-  /* Divider — flex-1 spacer with centered visible line */
+  /* Divider — fixed-width separator with centered visible line */
   .btn-toolbar-div {
-    flex: 1;
+    flex: none;
+    width: 16px;
     position: relative;
     height: 14px;
     align-self: center;
@@ -8967,10 +8965,11 @@
 
   /* master-pop preserved */
 
-  /* Toolbar row — border-top only, no border-bottom */
+  /* Toolbar row — border-top only, no border-bottom; buttons centered */
   .card-actions.card-actions-top {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 0;
     padding: 4px 10px;
     border-top: 0.5px solid var(--border);
@@ -14138,7 +14137,6 @@ function buildGrid() {
                       </div>
                       <span class="btn-toolbar-div"></span>
                       <div class="btn-group">
-                        <button class="btn-icon btn-related${(!c.related_ids||!c.related_ids.length)?' btn-icon-empty':''}" onclick="event.stopPropagation();_ccOpenRelated(${c.id})" title="Related">${CC_G.related}</button>
                         <button class="btn-icon btn-chat" onclick="event.stopPropagation();openSparkPanel(${c.id})" id="btnChat${c.id}" title="Spark">${CC_G.chat}</button>
                         <button class="btn-icon btn-note${localStorage.getItem('cc_note_'+c.id)?' has-note':''}" onclick="event.stopPropagation();_ccToggleNote(${c.id},this)" title="Note">${CC_G.note}</button>
                       </div>
@@ -14367,7 +14365,7 @@ function toggleMaster(e, id) {
   const clickedBtn = e.currentTarget || e.target;
   if (clickedBtn && clickedBtn.classList.contains('btn-master')) {
     clickedBtn.classList.toggle('mastered-active', isSaved);
-    clickedBtn.title = isSaved ? 'Saved ✓' : 'Save to Mastered';
+    clickedBtn.title = isSaved ? 'Saved \u2713' : 'Save';
     // Spring-pop on save only (not remove) — rewards the vault action
     if (isMastering) {
       clickedBtn.classList.remove('master-pop');
@@ -14381,7 +14379,7 @@ function toggleMaster(e, id) {
     const btn = document.getElementById('btnMaster' + suffix + id);
     if (btn && btn !== clickedBtn) {
       btn.classList.toggle('mastered-active', isSaved);
-      btn.title = isSaved ? 'Saved ✓' : 'Save to Mastered';
+      btn.title = isSaved ? 'Saved \u2713' : 'Save';
     }
   });
   // Update card element mastered class
@@ -15040,7 +15038,6 @@ function _buildEpColumnHtml(catKey, catConcepts, col) {
             </div>
             <span class="btn-toolbar-div"></span>
             <div class="btn-group">
-              <button class="btn-icon btn-related${(!c.related_ids||!c.related_ids.length)?' btn-icon-empty':''}" onclick="event.stopPropagation();_ccOpenRelated(${c.id})" title="Related">${CC_G.related}</button>
               <button class="btn-icon btn-chat" onclick="event.stopPropagation();openSparkPanel(${c.id})" id="btnChatEp${c.id}" title="Spark">${CC_G.chat}</button>
               <button class="btn-icon btn-note${localStorage.getItem('cc_note_'+c.id)?' has-note':''}" onclick="event.stopPropagation();_ccToggleNote(${c.id},this)" title="Note">${CC_G.note}</button>
             </div>
@@ -15523,7 +15520,6 @@ function _renderThemeCard(c, prefix, col) {
           </div>
           <span class="btn-toolbar-div"></span>
           <div class="btn-group">
-            <button class="btn-icon btn-related${(!c.related_ids||!c.related_ids.length)?' btn-icon-empty':''}" onclick="event.stopPropagation();_ccOpenRelated(${c.id})" title="Related">${CC_G.related}</button>
             <button class="btn-icon btn-chat" onclick="event.stopPropagation();openSparkPanel(${c.id})" id="btnChat${prefix}${c.id}" title="Spark">${CC_G.chat}</button>
             <button class="btn-icon btn-note${localStorage.getItem('cc_note_'+c.id)?' has-note':''}" onclick="event.stopPropagation();_ccToggleNote(${c.id},this)" title="Note">${CC_G.note}</button>
           </div>
@@ -16599,7 +16595,6 @@ function setDrawerView(prefix, view, btn) {
           '</div>',
           '<span class="btn-toolbar-div"></span>',
           '<div class="btn-group">',
-          '<button class="btn-icon btn-related' + ((!c.related_ids||!c.related_ids.length)?' btn-icon-empty':'') + '" onclick="event.stopPropagation();_ccOpenRelated(' + c.id + ')" title="Related">' + CC_G.related + '</button>',
           '<button class="btn-icon btn-chat" onclick="event.stopPropagation();openSparkPanel(' + c.id + ')" id="btnChatAll' + c.id + '" title="Spark">' + CC_G.chat + '</button>',
           '<button class="btn-icon btn-note' + (localStorage.getItem('cc_note_'+c.id)?' has-note':'') + '" onclick="event.stopPropagation();_ccToggleNote(' + c.id + ',this)" title="Note">' + CC_G.note + '</button>',
           '</div>',
@@ -16835,7 +16830,6 @@ function _spRenderFilteredGrid(pool) {
                       </div>
                       <span class="btn-toolbar-div"></span>
                       <div class="btn-group">
-                        <button class="btn-icon btn-related${(!c.related_ids||!c.related_ids.length)?' btn-icon-empty':''}" onclick="event.stopPropagation();_ccOpenRelated(${c.id})" title="Related">${CC_G.related}</button>
                         <button class="btn-icon btn-chat" onclick="event.stopPropagation();openSparkPanel(${c.id})" id="btnChat${c.id}" title="Spark">${CC_G.chat}</button>
                         <button class="btn-icon btn-note${localStorage.getItem('cc_note_'+c.id)?' has-note':''}" onclick="event.stopPropagation();_ccToggleNote(${c.id},this)" title="Note">${CC_G.note}</button>
                       </div>
@@ -17534,7 +17528,6 @@ function _spPreviewToolbar(id, dismissFn) {
     listenBtn +
     '<button class="btn-icon btn-master sp-pv-btn' + (isMastered ? ' mastered-active' : '') + '" title="' + (isMastered ? 'Saved ✓' : 'Save') + '" onclick="event.stopPropagation();toggleMaster(event,' + id + ')">' + (g.master||'★') + '</button>' +
     '<div class="sp-pv-divider"></div>' +
-    '<button class="btn-icon btn-related sp-pv-btn" title="Related" onclick="event.stopPropagation();' + dismissFn + ';setTimeout(function(){_ccOpenRelated(' + id + ');},80)">' + (g.related||'⋮') + '</button>' +
     '<button class="btn-icon btn-chat sp-pv-btn" title="Spark" onclick="event.stopPropagation();' + dismissFn + ';setTimeout(function(){openSparkPanel(' + id + ');},80)">' + (g.chat||'✦') + '</button>' +
     '<button class="btn-icon btn-note sp-pv-btn' + (hasNote ? ' has-note' : '') + '" title="Note" onclick="event.stopPropagation();' + dismissFn + ';setTimeout(function(){_openConceptNote(' + id + ');},100)">' + (g.note||'✎') + '</button>' +
   '</div>';
@@ -22787,6 +22780,7 @@ function _libToggleSaved(id, el) {
       '<textarea class="lib-detail-note-ta" id="libDetailNoteTA-' + id + '" placeholder="Add a note…" rows="2">' + _esc(noteText) + '</textarea>' +
     '</div>' +
     '<div class="lib-detail-actions">' +
+      (c.related_ids && c.related_ids.length ? '<button class="lib-detail-btn" onclick="closeLibrary();setTimeout(function(){_ccOpenRelated(' + id + ');},80)">\u22ef Related</button>' : '') +
       '<button class="lib-detail-btn" onclick="closeLibrary();openSparkPanel(' + id + ')">✦ Spark it</button>' +
       episodeBtn +
     '</div>';
@@ -23048,6 +23042,26 @@ function _ccToggleNote(id, btn) {
         localStorage.setItem('cc_note_' + id, val);
         try { localStorage.setItem('cc_note_meta_' + id, JSON.stringify({ts: Date.now()})); } catch(e) {}
         btn.classList.add('has-note');
+        // Auto-save concept if not already saved — v3.17
+        try {
+          var _mts = JSON.parse(localStorage.getItem('lll_mastered_ts_v1') || '{}');
+          if (!_mts[id]) {
+            _mts[id] = Date.now();
+            localStorage.setItem('lll_mastered_ts_v1', JSON.stringify(_mts));
+            if (typeof mastered !== 'undefined') mastered.add(id);
+            if (typeof saveMastered === 'function') saveMastered();
+            if (typeof updateProgress === 'function') updateProgress();
+            // Update all master buttons for this concept
+            ['', 'Ep', 'Th', 'Fl', 'All'].forEach(function(sfx) {
+              var mb = document.getElementById('btnMaster' + sfx + id);
+              if (mb) { mb.classList.add('mastered-active'); mb.title = 'Saved \u2713'; }
+            });
+            // Spring-pop on nearest master button
+            var nb = btn.closest('.card-back') && btn.closest('.card-back').querySelector('.btn-master');
+            if (nb) { nb.classList.remove('master-pop'); void nb.offsetWidth; nb.classList.add('master-pop'); setTimeout(function() { nb.classList.remove('master-pop'); }, 420); }
+            _ccShowSavedToast();
+          }
+        } catch(e) {}
       } else {
         localStorage.removeItem('cc_note_' + id);
         localStorage.removeItem('cc_note_meta_' + id);
@@ -23079,6 +23093,21 @@ function _ccToggleNote(id, btn) {
   } else {
     wrap.classList.remove('open');
   }
+}
+
+// Show "Saved ✓" toast — reuses .lex-toast CSS; v3.17 note auto-save feedback
+function _ccShowSavedToast() {
+  var t = document.getElementById('ccSavedToast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'ccSavedToast';
+    t.className = 'lex-toast';
+    document.body.appendChild(t);
+  }
+  t.textContent = 'Saved \u2713';
+  t.classList.add('visible');
+  clearTimeout(t._ccHideTimer);
+  t._ccHideTimer = setTimeout(function() { t.classList.remove('visible'); }, 1600);
 }
 
 // ============================================

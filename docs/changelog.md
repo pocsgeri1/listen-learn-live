@@ -6,6 +6,15 @@
 
 ---
 
+## v3.17 — 2026-08-08 · Toolbar simplification + save semantics
+### index.html
+- **Related button removed from all card toolbars:** Removed from all 5 card template locations (main grid, ep-drawer, theme cards, all-browse, Fl cards) and from `_spPreviewToolbar` (all 4 preview surfaces). `btn-icon-empty` CSS class and placeholder logic removed entirely — no more disabled ghost button.
+- **Toolbar centered:** `.card-actions.card-actions-top` now uses `justify-content: center`. `.btn-toolbar-div` changed from `flex: 1` (stretch) to `flex: none; width: 16px` (fixed spacer) — 5 buttons now sit centered on the card back.
+- **Tooltip rename — Save/Saved:** All master button tooltip updates via `toggleMaster()` now say "Save" (unsaved) / "Saved ✓" (saved). Removed "Save to Mastered" wording everywhere.
+- **Note auto-save:** In `_ccToggleNote` blur handler: if note is non-empty and concept is not yet saved, the concept is automatically saved — writes `lll_mastered_ts_v1`, updates `mastered` Set, fires `saveMastered()` + `updateProgress()`, triggers spring-pop on the nearest master button, and shows a "Saved ✓" toast (new `_ccShowSavedToast()` function, reuses `.lex-toast` CSS). Note deletion does NOT un-save.
+- **Related relocated to Home/Library saved tile:** "⋯ Related" button added to `.lib-detail-actions` row alongside Spark + Episode buttons. Only shown when `related_ids` is non-empty. Closes Library first, opens Related panel with 80ms delay.
+- **`duplicate_of` suppression:** Verified — all discovery paths (main grid, Spark, all-browse, CotD, search) filter `duplicate_of` concepts. They cannot be saved via UI, so Library list requires no additional filter.
+
 ## v3.16 — 2026-08-07 · Mobile nav gap fix
 ### index.html
 - **Tab bar height locked to 52px:** Added explicit `height: 52px` to `.mobile-tab-bar` on mobile. Previously `height: auto` caused the bar to render fractionally under 52px, leaving a 1–2px gap between the tab bar and the logo strip below it — content was visible peeking through on scroll.
