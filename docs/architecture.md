@@ -253,15 +253,21 @@ Static empty-state panels use `panel.dataset.rendered = '1'` guard to avoid re-r
 ### Home dashboard
 `.home-dashboard` strip sits above the tab row, inside the drawer. Rendered by `_homeRenderDashboard()` on every `openLibrary()` call.
 
-**4 stat buckets:**
-| ID | Label | Source |
-|----|-------|--------|
-| `hbSaved` | Saved | `mastered` Set size (`lll_mastered_ts_v1`) |
-| `hbWords` | Words | `lll_lexicon_v1` array length |
-| `hbNotes` | Notes | Count of `cc_note_meta_*` keys in localStorage |
-| `hbEpisodes` | Episodes ♥ | `lll_fav_episodes_v1` object key count |
+**6 stat buckets (v3.22):**
+| ID | Label | Source | Range-sensitive |
+|----|-------|--------|-----------------|
+| `hbSaved` | Saved | `mastered` Set size | No — always all-time |
+| `hbWords` | Words | `lll_lexicon_v1` array length | No |
+| `hbNotes` | Notes | Count of `cc_note_*` keys | No |
+| `hbEpisodes` | Episodes ♥ | `lll_fav_episodes_v1` key count | No |
+| `hbNewEps` | New Eps | Platform episode + short count | Yes — delta vs snapshot |
+| `hbNewConcepts` | New Concepts | `CONCEPTS.length` | Yes — delta vs snapshot |
 
-**Animation:** 600ms ease-out cubic count-up via `requestAnimationFrame`. `prefers-reduced-motion` skips animation (instant render). Range toggle buttons (Wk / Mo / All) are present in DOM but disabled until Phase 6.
+**Range toggle:** `_homeRange = 'all' | 'week' | 'month'`. `_homeSetRange(range)` cross-fades bucket numbers (0.15s), then calls `_homeRenderDashboard(true)`. Wk/Mo show delta vs nearest snapshot ≥7d/30d; if no snapshot old enough, shows total + "tracking started" in delta row.
+
+**Animation:** 600ms ease-out cubic count-up on drawer open. Range switch: cross-fade only (no count-up). `prefers-reduced-motion` skips both.
+
+**Fingerprint line:** `#homeFingerprint` — "Strongest: [cat] · Blind spot: [cat]" from saved-concept category distribution. Hidden when < 5 saved concepts.
 
 ### localStorage keys (Home-related)
 - `lll_mastered_ts_v1` — `{ [conceptId]: timestampMs }` — saved concepts
@@ -269,6 +275,8 @@ Static empty-state panels use `panel.dataset.rendered = '1'` guard to avoid re-r
 - `cc_note_meta_*` — one key per concept with a note (prefix scan)
 - `lll_fav_episodes_v1` — `{ [collectionId]: ts }` — favourited episode collections. Written/deleted by `_epToggleFav(colId)`. Read by `_libRenderEpisodes()` and `_homeRenderDashboard()` (Episodes ♥ bucket).
 - `lll_recent_eps_v1` — `[{ collectionId, ts }, …]` max 10, ring buffer. Written by `_epLogRecent(colId)` on every `openEpisodeDrawer()` call. Deduplicated by `collectionId` before prepend; capped at 10 entries.
+- `lll_stats_snapshot_v1` — `{ snapshots: [{ts, epCount, conceptCount, wordCount}] }`, cap 8. Written by `_homeMaybeSnapshot()` on every `openLibrary()` call if newest snapshot > 24h old. Drives Wk/Mo range delta logic in `_homeGetSnapshot(minAgeDays)`.
+- `lll_quiz_stats_v1` — `{ plays, score, max, lastTs }`. Written by `renderEndScreen()` on quiz completion. Read by `_libRenderPractice()` for the Quiz card live line.
 
 ## SFX architecture
 

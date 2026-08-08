@@ -9230,7 +9230,7 @@
 }
 .home-buckets {
   display: grid;
-  grid-template-columns: repeat(4, minmax(52px, 1fr));
+  grid-template-columns: repeat(3, minmax(60px, 1fr));
   flex: 1;
   min-width: 0;
 }
@@ -9270,15 +9270,129 @@
   .home-range-toggle {
     align-self: flex-end;
   }
+  /* Mobile: snap-scroll row instead of grid */
   .home-buckets {
-    grid-template-columns: repeat(2, 1fr);
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
     width: 100%;
-    gap: 4px 0;
+    gap: 0;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x;
   }
-  .home-bucket-num { font-size: 1.25rem; }
+  .home-buckets::-webkit-scrollbar { display: none; }
+  .home-bucket {
+    flex-shrink: 0;
+    scroll-snap-align: start;
+    min-width: 72px;
+    padding: 2px 8px;
+  }
+  .home-bucket-num { font-size: 1.2rem; }
 }
+/* Range toggle — interactive (Phase 6) */
+.home-range-btn { cursor: pointer; }
+.home-range-btn:disabled { opacity: 0.4; cursor: default; }
+
+/* Bucket delta/growth label */
+.home-bucket-delta {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.44rem;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+  margin-top: 1px;
+  min-height: 10px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* Fingerprint line — v3.22 */
+.home-fingerprint {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 4px 20px 8px;
+  flex-shrink: 0;
+  border-bottom: 0.5px solid var(--border);
+}
+[data-theme="light"] .home-fingerprint { color: var(--muted); }
+
+/* Bucket number cross-fade on range switch */
+.home-bucket-num.fading { opacity: 0; transition: opacity 0.15s ease; }
+.home-bucket-num { transition: opacity 0.15s ease; }
+@media (prefers-reduced-motion: reduce) {
+  .home-bucket-num { transition: none !important; }
+  .home-bucket-num.fading { opacity: 1; }
+}
+
 /* Light mode */
 [data-theme="light"] .home-range-btn.home-range-active { background: var(--surface2); color: var(--text); }
+
+/* ── Practice mode cards — v3.22 ────────────────── */
+.practice-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px 16px 20px;
+}
+.practice-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 14px 16px;
+  border: 0.5px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.2s, background 0.2s;
+}
+.practice-card:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-2px);
+  background: var(--surface2);
+}
+@media (hover: none) {
+  .practice-card:hover { transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .practice-card { transition: border-color 0.15s; }
+  .practice-card:hover { transform: none; }
+}
+.practice-card-glyph {
+  font-size: 1.15rem;
+  color: var(--accent);
+  flex-shrink: 0;
+  margin-top: 2px;
+  width: 22px;
+  text-align: center;
+}
+.practice-card-body { display: flex; flex-direction: column; gap: 3px; flex: 1; min-width: 0; }
+.practice-card-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.2;
+}
+.practice-card-hook {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.72rem;
+  color: var(--muted2);
+  line-height: 1.4;
+}
+.practice-card-live {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.54rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-top: 2px;
+}
+[data-theme="light"] .practice-card { background: var(--surface); border-color: var(--border); }
+[data-theme="light"] .practice-card:hover { background: var(--surface2); }
 
 /* ── Home empty-state pattern ── */
 .home-empty {
@@ -9321,10 +9435,6 @@
   align-items: stretch;
   padding: 32px 24px;
 }
-@media (prefers-reduced-motion: reduce) {
-  .home-bucket-num { transition: none !important; }
-}
-
 /* ── Episode ♥ fav button — v3.19 ───────────────── */
 .ep-fav-btn {
   position: absolute;
@@ -12341,26 +12451,41 @@
       <div class="home-bucket">
         <span class="home-bucket-num" id="hbSaved">0</span>
         <span class="home-bucket-label">Saved</span>
+        <span class="home-bucket-delta" id="hbSavedDelta"></span>
       </div>
       <div class="home-bucket">
         <span class="home-bucket-num" id="hbWords">0</span>
         <span class="home-bucket-label">Words</span>
+        <span class="home-bucket-delta" id="hbWordsDelta"></span>
       </div>
       <div class="home-bucket">
         <span class="home-bucket-num" id="hbNotes">0</span>
         <span class="home-bucket-label">Notes</span>
+        <span class="home-bucket-delta" id="hbNotesDelta"></span>
       </div>
       <div class="home-bucket">
         <span class="home-bucket-num" id="hbEpisodes">0</span>
         <span class="home-bucket-label">Episodes ♥</span>
+        <span class="home-bucket-delta" id="hbEpisodesDelta"></span>
+      </div>
+      <div class="home-bucket">
+        <span class="home-bucket-num" id="hbNewEps">–</span>
+        <span class="home-bucket-label">New Eps</span>
+        <span class="home-bucket-delta" id="hbNewEpsDelta"></span>
+      </div>
+      <div class="home-bucket">
+        <span class="home-bucket-num" id="hbNewConcepts">–</span>
+        <span class="home-bucket-label">New Concepts</span>
+        <span class="home-bucket-delta" id="hbNewConceptsDelta"></span>
       </div>
     </div>
     <div class="home-range-toggle">
-      <button class="home-range-btn" disabled title="coming soon" style="opacity:.4">Wk</button>
-      <button class="home-range-btn" disabled title="coming soon" style="opacity:.4">Mo</button>
-      <button class="home-range-btn home-range-active">All</button>
+      <button class="home-range-btn" id="hbRangeWk" onclick="_homeSetRange('week')">Wk</button>
+      <button class="home-range-btn" id="hbRangeMo" onclick="_homeSetRange('month')">Mo</button>
+      <button class="home-range-btn home-range-active" id="hbRangeAll" onclick="_homeSetRange('all')">All</button>
     </div>
   </div>
+  <div class="home-fingerprint" id="homeFingerprint" style="display:none"></div>
   <div class="lib-tabs">
     <button class="lib-tab" id="libTab-episodes" onclick="_libSwitchTab('episodes')">Episodes</button>
     <button class="lib-tab lib-tab-active" id="libTab-concepts" onclick="_libSwitchTab('concepts')">Concepts</button>
@@ -23175,6 +23300,7 @@ function _ccCloseRelated() {
 
 // ── Home Drawer (formerly My Library) — v3.18 ─────────────────
 var _libActiveTab = 'concepts';
+var _homeRange = 'all'; // 'all' | 'week' | 'month' — dashboard range toggle state — v3.22
 // ── Concepts composable filter state — v3.20 ──────────
 var _libConceptFilter = { cat: null, letter: null, notesOnly: false };
 // Legacy alias (kept for safety — internal code should use _libConceptFilter)
@@ -23203,6 +23329,7 @@ function openLibrary(tab) {
   });
   _libActiveTab = tab;
   _libRender(tab);
+  _homeMaybeSnapshot(); // write snapshot if >24h since last — v3.22
   _homeRenderDashboard();
   requestAnimationFrame(function() {
     _HOME_TABS.forEach(function(t) {
@@ -23786,28 +23913,123 @@ function _libVocabRenderSeg() {
 function _libRenderPractice() {
   var panel = document.getElementById('libPanel-practice');
   if (!panel || panel.dataset.rendered) return;
+
+  // Live data for each card
+  var nSaved = typeof mastered !== 'undefined' ? mastered.size : 0;
+  var nUnpractised = 0;
+  try {
+    var lx = JSON.parse(localStorage.getItem('lll_lexicon_v1') || '[]');
+    if (Array.isArray(lx)) nUnpractised = lx.filter(function(w) { return !w.practiceState || w.practiceState === 'new'; }).length;
+  } catch(e) {}
+  var quizLine = 'Never played';
+  try {
+    var qs = JSON.parse(localStorage.getItem('lll_quiz_stats_v1') || 'null');
+    if (qs && qs.plays) quizLine = 'Last score: ' + qs.score + ' / ' + (qs.max || 180);
+  } catch(e) {}
+
   panel.innerHTML =
-    '<div class="home-empty">' +
-      '<p class="home-empty-text">Three ways to make it stick.</p>' +
-    '</div>' +
-    '<div class="home-practice-interim">' +
-      '<button class="home-empty-btn" onclick="closeLibrary();setTimeout(function(){openSparkPanel();},80)">✦ Spark</button>' +
-      '<button class="home-empty-btn" onclick="closeLibrary();setTimeout(function(){openLexiconPanel();},80)">✏ Write</button>' +
-      '<button class="home-empty-btn" onclick="closeLibrary();setTimeout(function(){openQuiz();},80)">◈ Quiz</button>' +
+    '<div class="practice-cards">' +
+      '<div class="practice-card" onclick="closeLibrary();setTimeout(function(){openSparkPanel();},80)">' +
+        '<div class="practice-card-glyph">✦</div>' +
+        '<div class="practice-card-body">' +
+          '<div class="practice-card-name">Spark</div>' +
+          '<div class="practice-card-hook">Turn a concept into conversation.</div>' +
+          '<div class="practice-card-live">' + nSaved + ' saved concept' + (nSaved !== 1 ? 's' : '') + ' to spark</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="practice-card" onclick="closeLibrary();setTimeout(function(){openLexiconPanel();},80)">' +
+        '<div class="practice-card-glyph">✏</div>' +
+        '<div class="practice-card-body">' +
+          '<div class="practice-card-name">Write</div>' +
+          '<div class="practice-card-hook">Put a word into your own sentence.</div>' +
+          '<div class="practice-card-live">' + (nUnpractised > 0 ? nUnpractised + ' word' + (nUnpractised !== 1 ? 's' : '') + ' waiting to practice' : 'All words practiced') + '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="practice-card" onclick="closeLibrary();setTimeout(function(){openQuiz();},80)">' +
+        '<div class="practice-card-glyph">◈</div>' +
+        '<div class="practice-card-body">' +
+          '<div class="practice-card-name">Quiz</div>' +
+          '<div class="practice-card-hook">Test what stuck.</div>' +
+          '<div class="practice-card-live">' + quizLine + '</div>' +
+        '</div>' +
+      '</div>' +
     '</div>';
   panel.dataset.rendered = '1';
 }
 
 // ── Home dashboard count-up — v3.18 ───────────────────────────
 
-function _homeRenderDashboard() {
+// ── Dashboard snapshot helpers — v3.22 ────────────────────────
+function _homeMaybeSnapshot() {
+  try {
+    var epCount = typeof COLLECTIONS_BY_ID !== 'undefined'
+      ? Object.values(COLLECTIONS_BY_ID).filter(function(c) { return c && (c.type === 'episode' || c.type === 'short'); }).length
+      : 0;
+    var conceptCount = typeof CONCEPTS !== 'undefined' ? CONCEPTS.length : 0;
+    var wordCount = 0;
+    try { var _lx = JSON.parse(localStorage.getItem('lll_lexicon_v1') || '[]'); wordCount = Array.isArray(_lx) ? _lx.length : 0; } catch(e) {}
+
+    var raw = localStorage.getItem('lll_stats_snapshot_v1');
+    var data = raw ? JSON.parse(raw) : { snapshots: [] };
+    if (!Array.isArray(data.snapshots)) data.snapshots = [];
+
+    var now = Date.now();
+    var newest = data.snapshots[0];
+    if (newest && (now - newest.ts) < 86400000) return; // < 24h — skip
+
+    data.snapshots.unshift({ ts: now, epCount: epCount, conceptCount: conceptCount, wordCount: wordCount });
+    if (data.snapshots.length > 8) data.snapshots = data.snapshots.slice(0, 8);
+    localStorage.setItem('lll_stats_snapshot_v1', JSON.stringify(data));
+  } catch(e) {}
+}
+
+function _homeGetSnapshot(minAgeDays) {
+  try {
+    var raw = localStorage.getItem('lll_stats_snapshot_v1');
+    if (!raw) return null;
+    var data = JSON.parse(raw);
+    if (!Array.isArray(data.snapshots)) return null;
+    var threshold = Date.now() - minAgeDays * 86400000;
+    for (var i = 0; i < data.snapshots.length; i++) {
+      if (data.snapshots[i].ts <= threshold) return data.snapshots[i];
+    }
+    return null;
+  } catch(e) { return null; }
+}
+
+function _homeSetRange(range) {
+  if (_homeRange === range) return;
+  _homeRange = range;
+  // Update button active state
+  ['week','month','all'].forEach(function(r) {
+    var btn = document.getElementById('hbRange' + r.charAt(0).toUpperCase() + r.slice(1));
+    if (btn) btn.classList.toggle('home-range-active', r === range);
+  });
+  // Cross-fade bucket numbers
+  var nums = document.querySelectorAll('.home-bucket-num');
+  var noMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (noMotion) {
+    _homeRenderDashboard(true); // skip count-up on range switch
+    return;
+  }
+  nums.forEach(function(el) { el.classList.add('fading'); });
+  setTimeout(function() {
+    _homeRenderDashboard(true);
+    nums = document.querySelectorAll('.home-bucket-num');
+    nums.forEach(function(el) { el.classList.remove('fading'); });
+  }, 150);
+}
+
+function _homeRenderDashboard(skipCountUp) {
   var elSaved    = document.getElementById('hbSaved');
   var elWords    = document.getElementById('hbWords');
   var elNotes    = document.getElementById('hbNotes');
   var elEpisodes = document.getElementById('hbEpisodes');
+  var elNewEps   = document.getElementById('hbNewEps');
+  var elNewCon   = document.getElementById('hbNewConcepts');
   if (!elSaved) return;
 
-  // Compute values
+  // ── Compute personal counts (always all-time) ──
   var nSaved = typeof mastered !== 'undefined' ? mastered.size : 0;
   var nWords = 0;
   try { var lx = JSON.parse(localStorage.getItem('lll_lexicon_v1') || '[]'); nWords = Array.isArray(lx) ? lx.length : 0; } catch(e) {}
@@ -23821,33 +24043,94 @@ function _homeRenderDashboard() {
   var nEpisodes = 0;
   try { nEpisodes = Object.keys(JSON.parse(localStorage.getItem('lll_fav_episodes_v1') || '{}')).length; } catch(e) {}
 
-  // Respect prefers-reduced-motion — render final immediately
-  var noMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (noMotion) {
-    elSaved.textContent    = nSaved;
-    elWords.textContent    = nWords;
-    elNotes.textContent    = nNotes;
-    elEpisodes.textContent = nEpisodes;
-    return;
+  // ── Compute platform counts ──
+  var nTotalEps = typeof COLLECTIONS_BY_ID !== 'undefined'
+    ? Object.values(COLLECTIONS_BY_ID).filter(function(c) { return c && (c.type === 'episode' || c.type === 'short'); }).length
+    : 0;
+  var nTotalCon = typeof CONCEPTS !== 'undefined' ? CONCEPTS.length : 0;
+
+  // ── Range toggle: resolve delta or totals ──
+  var snapshot = null;
+  var trackingNote = '';
+  if (_homeRange === 'week')  { snapshot = _homeGetSnapshot(7);  if (!snapshot) trackingNote = 'tracking started'; }
+  if (_homeRange === 'month') { snapshot = _homeGetSnapshot(30); if (!snapshot) trackingNote = 'tracking started'; }
+
+  var showEpsVal, showConVal;
+  var epsLabel = '', conLabel = '';
+  if (_homeRange === 'all' || !snapshot) {
+    showEpsVal = nTotalEps;
+    showConVal = nTotalCon;
+    if (trackingNote && elNewEps) {
+      document.getElementById('hbNewEpsDelta').textContent = trackingNote;
+      document.getElementById('hbNewConceptsDelta').textContent = trackingNote;
+    }
+  } else {
+    showEpsVal = Math.max(0, nTotalEps - (snapshot.epCount || 0));
+    showConVal = Math.max(0, nTotalCon - (snapshot.conceptCount || 0));
+    epsLabel = '+' + showEpsVal + ' added';
+    conLabel = '+' + showConVal + ' added';
   }
 
-  // Count-up: 600ms ease-out, integers only
-  var duration = 600;
-  var start = performance.now();
-  function tick(now) {
-    var elapsed = Math.min(now - start, duration);
-    var progress = 1 - Math.pow(1 - elapsed / duration, 3); // ease-out cubic
+  // Delta labels for personal buckets (always blank — personal changes don't use snapshots)
+  ['hbSavedDelta','hbWordsDelta','hbNotesDelta','hbEpisodesDelta'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = '';
+  });
+  if (document.getElementById('hbNewEpsDelta'))      document.getElementById('hbNewEpsDelta').textContent      = epsLabel || trackingNote;
+  if (document.getElementById('hbNewConceptsDelta')) document.getElementById('hbNewConceptsDelta').textContent = conLabel || trackingNote;
+
+  // ── Fingerprint line ──
+  var fpEl = document.getElementById('homeFingerprint');
+  if (fpEl && nSaved >= 5 && typeof CONCEPTS !== 'undefined') {
+    var catCounts = {};
+    try {
+      var tsMap = JSON.parse(localStorage.getItem('lll_mastered_ts_v1') || '{}');
+      var savedIds = Object.keys(tsMap).map(Number);
+      savedIds.forEach(function(id) {
+        var c = CONCEPTS.find(function(x) { return x.id === id; });
+        if (c && c.category) catCounts[c.category] = (catCounts[c.category] || 0) + 1;
+      });
+    } catch(e) {}
+    var cats = Object.keys(catCounts).sort(function(a,b) { return catCounts[b] - catCounts[a]; });
+    if (cats.length >= 2) {
+      var strongest = cats[0];
+      var blindspot = cats[cats.length - 1];
+      fpEl.textContent = 'Strongest: ' + strongest + '  ·  Blind spot: ' + blindspot;
+      fpEl.style.display = '';
+    } else {
+      fpEl.style.display = 'none';
+    }
+  } else if (fpEl) {
+    fpEl.style.display = 'none';
+  }
+
+  // ── Render values ──
+  var noMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function setAll(progress) {
+    progress = (progress === undefined) ? 1 : progress;
     elSaved.textContent    = Math.round(nSaved    * progress);
     elWords.textContent    = Math.round(nWords    * progress);
     elNotes.textContent    = Math.round(nNotes    * progress);
     elEpisodes.textContent = Math.round(nEpisodes * progress);
+    if (elNewEps)  elNewEps.textContent  = Math.round(showEpsVal * progress);
+    if (elNewCon)  elNewCon.textContent  = Math.round(showConVal * progress);
+  }
+
+  if (noMotion || skipCountUp) {
+    setAll(1);
+    return;
+  }
+
+  // Count-up: 600ms ease-out cubic — open only (not on range switch)
+  var duration = 600;
+  var start = performance.now();
+  function tick(now) {
+    var elapsed = Math.min(now - start, duration);
+    var progress = 1 - Math.pow(1 - elapsed / duration, 3);
+    setAll(progress);
     if (elapsed < duration) requestAnimationFrame(tick);
-    else {
-      elSaved.textContent    = nSaved;
-      elWords.textContent    = nWords;
-      elNotes.textContent    = nNotes;
-      elEpisodes.textContent = nEpisodes;
-    }
+    else setAll(1);
   }
   requestAnimationFrame(tick);
 }
@@ -24986,6 +25269,16 @@ function renderRound3() {
 function renderEndScreen() {
   // Max possible: 4×10 (R1) + 4×15 (R2) + 4×20 (R3) = 180
   const max = 180;
+
+  // Write quiz stats — v3.22
+  try {
+    var _qs = JSON.parse(localStorage.getItem('lll_quiz_stats_v1') || '{"plays":0,"score":0,"lastTs":0}');
+    _qs.plays = (_qs.plays || 0) + 1;
+    _qs.score = quizState.score;
+    _qs.max   = max;
+    _qs.lastTs = Date.now();
+    localStorage.setItem('lll_quiz_stats_v1', JSON.stringify(_qs));
+  } catch(e) {}
   const pct = Math.round((quizState.score / max) * 100);
 
   // Progress bar fills to 100% on completion

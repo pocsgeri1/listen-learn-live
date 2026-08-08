@@ -6,6 +6,16 @@
 
 ---
 
+## v3.22 — 2026-08-08 · PRACTICE cards + live dashboard + snapshots
+### index.html
+- **PRACTICE mode cards:** Three large tappable cards replace interim buttons — Spark ✦ / Write ✏ / Quiz ◈. Each shows: glyph, Playfair name, DM Sans hook, live DM Mono accent data line (Spark: N saved concepts; Write: N words waiting / "All words practiced"; Quiz: "Last score: X/180" or "Never played"). Hover: border shift + translateY(-2px), 0.2s. `prefers-reduced-motion` + `hover:none` suppress transform.
+- **`lll_quiz_stats_v1`:** Written at top of `renderEndScreen()` — `{ plays, score, max, lastTs }`. Score = `quizState.score` out of 180. Practice card reads this on render.
+- **`lll_stats_snapshot_v1`:** Snapshot mechanism in `_homeMaybeSnapshot()` — called on every `openLibrary()`. If newest snapshot > 24h old: pushes `{ts, epCount, conceptCount, wordCount}`, caps at 8 entries. Used by range toggle delta logic.
+- **Range toggle live:** `_homeSetRange(range)` handles Wk / Mo / All. Wk/Mo find nearest snapshot ≥7d/≥30d via `_homeGetSnapshot(days)`. If no snapshot old enough: shows all-time total + "tracking started" in delta row. Range switch cross-fades bucket numbers (0.15s opacity out → rebuild → in). `_homeRange` module var tracks state.
+- **6 dashboard buckets:** Added New Eps + New Concepts (platform growth) to the 4 personal buckets. Desktop: 3-col × 2-row grid. Mobile: horizontal snap-scroll row (`scroll-snap-type: x proximity`, scrollbar hidden).
+- **Fingerprint line:** `#homeFingerprint` strip — shows "Strongest: [cat] · Blind spot: [cat]" from category distribution of saved concepts. Only shown with ≥5 saved concepts; hidden otherwise.
+- **Bucket cross-fade:** Range switch adds `.fading` (opacity 0) to all `.home-bucket-num` elements, waits 150ms, rebuilds values, removes class. `prefers-reduced-motion` skips fade.
+
 ## v3.21 — 2026-08-08 · VOCAB section + Lexi examples disabled
 ### index.html
 - **VOCAB panel — 3-segment control:** My Words · All Words · Word Map. All Words → closes Home → `_openGlobalVocabView()`. Word Map → closes Home → `_openConstellationView('lexi')`. My Words renders tiles in-place.
