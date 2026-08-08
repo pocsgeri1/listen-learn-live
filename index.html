@@ -9173,10 +9173,11 @@
 }
 .lib-tab {
   background: none; border: none; cursor: pointer;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.75rem; letter-spacing: 0.03em;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem; letter-spacing: 0.1em;
+  text-transform: uppercase;
   color: var(--muted);
-  padding: 6px 14px 10px;
+  padding: 6px 12px 10px;
   position: relative;
   transition: color 0.18s ease;
 }
@@ -9193,6 +9194,137 @@
 }
 .lib-tab.lib-tab-active { color: var(--text); }
 .lib-tab.lib-tab-active::after { opacity: 1; transform: scaleX(1); }
+/* ── Home Dashboard — v3.18 ────────────────────────────── */
+.home-dashboard {
+  padding: 10px 20px 8px;
+  border-bottom: 0.5px solid var(--border);
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.home-range-toggle {
+  display: flex;
+  gap: 0;
+  border: 0.5px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  flex-shrink: 0;
+  align-self: center;
+}
+.home-range-btn {
+  background: none;
+  border: none;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.52rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 4px 7px;
+  cursor: pointer;
+  line-height: 1;
+}
+.home-range-btn.home-range-active {
+  background: var(--surface2);
+  color: var(--text);
+}
+.home-buckets {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(52px, 1fr));
+  flex: 1;
+  min-width: 0;
+}
+.home-bucket {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2px 4px;
+  min-width: 0;
+}
+.home-bucket-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.1;
+  display: block;
+  min-width: 28px;
+  text-align: center;
+}
+.home-bucket-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.48rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 3px;
+  white-space: nowrap;
+  text-align: center;
+}
+@media (max-width: 600px) {
+  .home-dashboard {
+    flex-direction: column-reverse;
+    gap: 6px;
+    padding: 8px 16px 6px;
+  }
+  .home-range-toggle {
+    align-self: flex-end;
+  }
+  .home-buckets {
+    grid-template-columns: repeat(2, 1fr);
+    width: 100%;
+    gap: 4px 0;
+  }
+  .home-bucket-num { font-size: 1.25rem; }
+}
+/* Light mode */
+[data-theme="light"] .home-range-btn.home-range-active { background: var(--surface2); color: var(--text); }
+
+/* ── Home empty-state pattern ── */
+.home-empty {
+  padding: 44px 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+.home-empty-text {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  font-style: italic;
+  color: var(--muted2);
+  line-height: 1.5;
+}
+.home-empty-btn {
+  padding: 8px 20px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text);
+  background: none;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.home-empty-btn:hover { border-color: var(--border-hover); }
+[data-theme="light"] .home-empty-btn { color: var(--text); }
+
+/* Practice interim — 3 stacked buttons */
+.home-practice-interim {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: stretch;
+  padding: 32px 24px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-bucket-num { transition: none !important; }
+}
+
 .lib-panels {
   flex: 1;
   position: relative;
@@ -10702,9 +10834,9 @@
 
   <div class="nav-right">
     <!-- My Library — distinct desktop-only button, lives inside nav-right so it stays in grid column 3 -->
-    <button class="nav-library-btn" id="navLibraryBtn" onclick="openLibrary();playNavSFX()" aria-label="My Library">
+    <button class="nav-library-btn" id="navLibraryBtn" onclick="openLibrary();playNavSFX()" aria-label="Home">
       <span class="nav-library-glyph">◱</span>
-      <span class="nav-library-label">My Library</span>
+      <span class="nav-library-label">Home</span>
     </button>
     <!-- v1.71: epic button lives in nav-right, hidden until nav hover -->
     <a class="nav-epic-standalone" id="navEpicBtn" onclick="openEgg();playNavSFX()" title="I feel epic!">😎 I feel epic!</a>
@@ -10736,7 +10868,7 @@
   <button class="nav-mobile-link nav-mobile-no-border" onclick="playNavSFX();openSparkPanel();closeMobileNav()">◉ Speak</button>
   <div class="nav-mobile-divider"></div>
   <!-- Library + Quiz -->
-  <button class="nav-mobile-link nav-mobile-no-border" onclick="playNavSFX();openLibrary();closeMobileNav()">◱ My Library</button>
+  <button class="nav-mobile-link nav-mobile-no-border" onclick="playNavSFX();openLibrary();closeMobileNav()">◱ Home</button>
   <button class="nav-mobile-link nav-mobile-no-border" onclick="playNavSFX();openQuiz();closeMobileNav()">◈ Quiz mode</button>
   <div class="nav-mobile-divider"></div>
   <!-- Settings -->
@@ -10765,9 +10897,9 @@
     <span class="mob-tab-label">Speak</span>
   </button>
   <div class="mob-tab-divider" aria-hidden="true"></div>
-  <button class="mob-tab mob-tab-lib" id="mobTabLib" onclick="playNavSFX();openLibrary();closeMobileNav()" aria-label="My Library">
+  <button class="mob-tab mob-tab-lib" id="mobTabLib" onclick="playNavSFX();openLibrary();closeMobileNav()" aria-label="Home">
     <span class="mob-tab-icon mob-tab-glyph">◱</span>
-    <span class="mob-tab-label">Library</span>
+    <span class="mob-tab-label">Home</span>
   </button>
   <button class="mob-tab mob-tab-signup" id="mobTabSignup" onclick="playNavSFX();document.getElementById('signup')?.scrollIntoView({behavior:'smooth'})" aria-label="Sign up free">
     <span class="mob-tab-icon mob-tab-glyph">✦</span>
@@ -11690,9 +11822,9 @@
   <div class="app-header">
     <div class="app-title-row">
       <div class="app-title">The <em>Library</em></div>
-      <button class="lib-open-btn" onclick="openLibrary('saved')" title="My Library">
+      <button class="lib-open-btn" onclick="openLibrary('concepts')" title="Home">
         <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 1.5h10v10.5L7 9.5l-5 2.5V1.5z"/></svg>
-        My Library
+        Home
       </button>
     </div>
     <!-- Sort pills — spark.html v1.76 -->
@@ -11803,23 +11935,52 @@
   <div class="ep-drawer-vocab-view" id="themeDrawerVocabView"></div>
 </div>
 
-<!-- MY LIBRARY DRAWER -->
+<!-- HOME DRAWER (formerly My Library) -->
 <div class="lib-backdrop" id="libBackdrop" onclick="closeLibrary()"></div>
 <div class="lib-drawer" id="libDrawer">
   <div class="lib-handle"></div>
   <div class="lib-header">
-    <span class="lib-title">My Library</span>
+    <span class="lib-title">Home</span>
     <span class="lib-shortcut-hint" title="Keyboard shortcut">⌘⌥L</span>
     <button class="lib-close" onclick="closeLibrary()">✕</button>
   </div>
-  <div class="panel-tagline" style="margin: 0; border-radius: 0;">Your saved concepts and personal notes.</div>
+  <div class="panel-tagline" style="margin: 0; border-radius: 0;">Everything you keep — episodes, ideas, words, practice.</div>
+  <div class="home-dashboard" id="homeDashboard">
+    <div class="home-buckets" id="homeBuckets">
+      <div class="home-bucket">
+        <span class="home-bucket-num" id="hbSaved">0</span>
+        <span class="home-bucket-label">Saved</span>
+      </div>
+      <div class="home-bucket">
+        <span class="home-bucket-num" id="hbWords">0</span>
+        <span class="home-bucket-label">Words</span>
+      </div>
+      <div class="home-bucket">
+        <span class="home-bucket-num" id="hbNotes">0</span>
+        <span class="home-bucket-label">Notes</span>
+      </div>
+      <div class="home-bucket">
+        <span class="home-bucket-num" id="hbEpisodes">0</span>
+        <span class="home-bucket-label">Episodes ♥</span>
+      </div>
+    </div>
+    <div class="home-range-toggle">
+      <button class="home-range-btn" disabled title="coming soon" style="opacity:.4">Wk</button>
+      <button class="home-range-btn" disabled title="coming soon" style="opacity:.4">Mo</button>
+      <button class="home-range-btn home-range-active">All</button>
+    </div>
+  </div>
   <div class="lib-tabs">
-    <button class="lib-tab lib-tab-active" id="libTab-saved" onclick="_libSwitchTab('saved')">Saved</button>
-    <button class="lib-tab" id="libTab-notes" onclick="_libSwitchTab('notes')">Notes</button>
+    <button class="lib-tab" id="libTab-episodes" onclick="_libSwitchTab('episodes')">Episodes</button>
+    <button class="lib-tab lib-tab-active" id="libTab-concepts" onclick="_libSwitchTab('concepts')">Concepts</button>
+    <button class="lib-tab" id="libTab-vocab" onclick="_libSwitchTab('vocab')">Vocab</button>
+    <button class="lib-tab" id="libTab-practice" onclick="_libSwitchTab('practice')">Practice</button>
   </div>
   <div class="lib-panels">
-    <div class="lib-panel lib-panel-active" id="libPanel-saved"></div>
-    <div class="lib-panel lib-panel-notes" id="libPanel-notes"></div>
+    <div class="lib-panel" id="libPanel-episodes"></div>
+    <div class="lib-panel lib-panel-active" id="libPanel-concepts"></div>
+    <div class="lib-panel" id="libPanel-vocab"></div>
+    <div class="lib-panel" id="libPanel-practice"></div>
   </div>
 </div>
 
@@ -12694,7 +12855,7 @@ function closeHiwOnBackdrop(e) {
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') closeHiw();
 });
-// v3.13: Cmd+Alt+L (⌘⌥L) — open My Library. Using Alt instead of Shift avoids password-manager conflicts.
+// v3.13: Cmd+Alt+L (⌘⌥L) — open Home drawer. Using Alt instead of Shift avoids password-manager conflicts.
 document.addEventListener('keydown', function(e) {
   if ((e.metaKey || e.ctrlKey) && e.altKey && e.code === 'KeyL') {
     e.preventDefault();
@@ -22552,17 +22713,20 @@ function _ccCloseRelated() {
   if (overlay) overlay.classList.remove('open');
 }
 
-// ── My Library Drawer ─────────────────────────────────────────
-var _libActiveTab = 'saved';
-var _libActiveCat = null; // active category filter in Saved tab
+// ── Home Drawer (formerly My Library) — v3.18 ─────────────────
+var _libActiveTab = 'concepts';
+var _libActiveCat = null; // active category filter in Concepts tab
+var _HOME_TABS = ['episodes','concepts','vocab','practice'];
 
 function openLibrary(tab) {
-  tab = tab || _libActiveTab || 'saved';
+  tab = tab || _libActiveTab || 'concepts';
+  // Validate tab name — fall back to concepts
+  if (_HOME_TABS.indexOf(tab) === -1) tab = 'concepts';
   var backdrop = document.getElementById('libBackdrop');
   var drawer = document.getElementById('libDrawer');
   if (!backdrop || !drawer) return;
-  // Set tab state without animation (drawer is still off-screen)
-  ['saved','notes'].forEach(function(t) {
+  // Set tab state without animation (drawer still off-screen)
+  _HOME_TABS.forEach(function(t) {
     var btn = document.getElementById('libTab-' + t);
     var panel = document.getElementById('libPanel-' + t);
     if (btn) btn.classList.toggle('lib-tab-active', t === tab);
@@ -22573,8 +22737,9 @@ function openLibrary(tab) {
   });
   _libActiveTab = tab;
   _libRender(tab);
+  _homeRenderDashboard();
   requestAnimationFrame(function() {
-    ['saved','notes'].forEach(function(t) {
+    _HOME_TABS.forEach(function(t) {
       var panel = document.getElementById('libPanel-' + t);
       if (panel) panel.style.transition = '';
     });
@@ -22617,8 +22782,11 @@ function _libSwitchTab(tab) {
 }
 
 function _libRender(tab) {
-  if (tab === 'saved') _libRenderSaved();
-  else if (tab === 'notes') _libRenderNotes();
+  if (tab === 'concepts') _libRenderSaved();
+  else if (tab === 'episodes') _libRenderEpisodes();
+  else if (tab === 'vocab') _libRenderVocab();
+  else if (tab === 'practice') _libRenderPractice();
+  // 'notes' kept as dead reference — _libRenderNotes() intact, unused until Phase 7
 }
 
 function _libNavToCard(id) {
@@ -22650,7 +22818,7 @@ function _libFmtDate(ts) {
 }
 
 function _libRenderSaved() {
-  var panel = document.getElementById('libPanel-saved');
+  var panel = document.getElementById('libPanel-concepts');
   if (!panel) return;
   var tsMap = {};
   try { tsMap = JSON.parse(localStorage.getItem('lll_mastered_ts_v1') || '{}'); } catch(e) {}
@@ -22658,9 +22826,9 @@ function _libRenderSaved() {
   ids.sort(function(a, b) { return (tsMap[b] || 0) - (tsMap[a] || 0) || b - a; });
 
   // Update tab badge
-  var savedTab = document.getElementById('libTab-saved');
+  var savedTab = document.getElementById('libTab-concepts');
   if (savedTab) {
-    savedTab.innerHTML = 'Saved' + (ids.length ? '<span class="lib-tab-count">' + ids.length + '</span>' : '');
+    savedTab.innerHTML = 'Concepts' + (ids.length ? '<span class="lib-tab-count">' + ids.length + '</span>' : '');
   }
 
   if (!ids.length) {
@@ -22729,16 +22897,16 @@ function _libRenderSaved() {
 function _libFilterCat(cat) {
   _libActiveCat = (_libActiveCat === cat) ? null : cat;
   // Close any open detail rows before re-rendering
-  document.querySelectorAll('#libPanel-saved .lib-detail-row').forEach(function(r) { r.remove(); });
-  document.querySelectorAll('#libPanel-saved .lib-tile-open').forEach(function(t) { t.classList.remove('lib-tile-open'); });
+  document.querySelectorAll('#libPanel-concepts .lib-detail-row').forEach(function(r) { r.remove(); });
+  document.querySelectorAll('#libPanel-concepts .lib-tile-open').forEach(function(t) { t.classList.remove('lib-tile-open'); });
   _libRenderSaved();
 }
 
 function _libToggleSaved(id, el) {
   var isOpen = el.classList.contains('lib-tile-open');
   // Close all open tiles and remove their detail rows
-  document.querySelectorAll('#libPanel-saved .lib-tile-open').forEach(function(t) { t.classList.remove('lib-tile-open'); });
-  document.querySelectorAll('#libPanel-saved .lib-detail-row').forEach(function(r) {
+  document.querySelectorAll('#libPanel-concepts .lib-tile-open').forEach(function(t) { t.classList.remove('lib-tile-open'); });
+  document.querySelectorAll('#libPanel-concepts .lib-detail-row').forEach(function(r) {
     r.classList.remove('lib-detail-open');
     setTimeout(function() { if (r.parentNode) r.parentNode.removeChild(r); }, 380);
   });
@@ -22832,6 +23000,99 @@ function _libToggleSaved(id, el) {
   });
 }
 
+// ── Home tab renderers (empty states) — v3.18 ─────────────────
+
+function _libRenderEpisodes() {
+  var panel = document.getElementById('libPanel-episodes');
+  if (!panel || panel.dataset.rendered) return;
+  panel.innerHTML =
+    '<div class="home-empty">' +
+      '<p class="home-empty-text">\u2665 any episode and it lives here.</p>' +
+      '<button class="home-empty-btn" onclick="closeLibrary()">Browse episodes</button>' +
+    '</div>';
+  panel.dataset.rendered = '1';
+}
+
+function _libRenderVocab() {
+  var panel = document.getElementById('libPanel-vocab');
+  if (!panel || panel.dataset.rendered) return;
+  panel.innerHTML =
+    '<div class="home-empty">' +
+      '<p class="home-empty-text">Words you save start collecting here.</p>' +
+      '<button class="home-empty-btn" onclick="closeLibrary()">Open an episode\u2019s vocab</button>' +
+    '</div>';
+  panel.dataset.rendered = '1';
+}
+
+function _libRenderPractice() {
+  var panel = document.getElementById('libPanel-practice');
+  if (!panel || panel.dataset.rendered) return;
+  panel.innerHTML =
+    '<div class="home-empty">' +
+      '<p class="home-empty-text">Three ways to make it stick.</p>' +
+    '</div>' +
+    '<div class="home-practice-interim">' +
+      '<button class="home-empty-btn" onclick="closeLibrary();setTimeout(function(){openSparkPanel();},80)">✦ Spark</button>' +
+      '<button class="home-empty-btn" onclick="closeLibrary();setTimeout(function(){openLexiconPanel();},80)">✏ Write</button>' +
+      '<button class="home-empty-btn" onclick="closeLibrary();setTimeout(function(){openQuiz();},80)">◈ Quiz</button>' +
+    '</div>';
+  panel.dataset.rendered = '1';
+}
+
+// ── Home dashboard count-up — v3.18 ───────────────────────────
+
+function _homeRenderDashboard() {
+  var elSaved    = document.getElementById('hbSaved');
+  var elWords    = document.getElementById('hbWords');
+  var elNotes    = document.getElementById('hbNotes');
+  var elEpisodes = document.getElementById('hbEpisodes');
+  if (!elSaved) return;
+
+  // Compute values
+  var nSaved = typeof mastered !== 'undefined' ? mastered.size : 0;
+  var nWords = 0;
+  try { var lx = JSON.parse(localStorage.getItem('lll_lexicon_v1') || '[]'); nWords = Array.isArray(lx) ? lx.length : 0; } catch(e) {}
+  var nNotes = 0;
+  try {
+    for (var i = 0; i < localStorage.length; i++) {
+      var k = localStorage.key(i);
+      if (k && k.startsWith('cc_note_') && !k.startsWith('cc_note_meta_')) nNotes++;
+    }
+  } catch(e) {}
+  var nEpisodes = 0; // Phase 3 wires this up
+
+  // Respect prefers-reduced-motion — render final immediately
+  var noMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (noMotion) {
+    elSaved.textContent    = nSaved;
+    elWords.textContent    = nWords;
+    elNotes.textContent    = nNotes;
+    elEpisodes.textContent = nEpisodes;
+    return;
+  }
+
+  // Count-up: 600ms ease-out, integers only
+  var duration = 600;
+  var start = performance.now();
+  function tick(now) {
+    var elapsed = Math.min(now - start, duration);
+    var progress = 1 - Math.pow(1 - elapsed / duration, 3); // ease-out cubic
+    elSaved.textContent    = Math.round(nSaved    * progress);
+    elWords.textContent    = Math.round(nWords    * progress);
+    elNotes.textContent    = Math.round(nNotes    * progress);
+    elEpisodes.textContent = Math.round(nEpisodes * progress);
+    if (elapsed < duration) requestAnimationFrame(tick);
+    else {
+      elSaved.textContent    = nSaved;
+      elWords.textContent    = nWords;
+      elNotes.textContent    = nNotes;
+      elEpisodes.textContent = nEpisodes;
+    }
+  }
+  requestAnimationFrame(tick);
+}
+
+// ── Notes render (kept intact, unreferenced — Phase 7 will sweep or salvage)
 function _libRenderNotes() {
   var panel = document.getElementById('libPanel-notes');
   if (!panel) return;

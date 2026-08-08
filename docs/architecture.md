@@ -229,6 +229,47 @@ The "Change scenario" section uses a live-measured SVG for the hairline branch a
 6. Scenario buttons use `.btns-visible` for staggered appear (transition-delay 0.38–0.50s), then `.btns-settled` after 700ms resets `transition-delay: 0s !important` so hover responds instantly
 7. Both `.btns-visible` and `.btns-settled` are removed on section close so re-open animates fresh
 
+## Home Drawer (v3.18+)
+
+Formerly "My Library". The Home drawer is the user's personal content hub — everything they've saved, in one place.
+
+### Tab architecture
+`_HOME_TABS = ['episodes', 'concepts', 'vocab', 'practice']` — the authoritative tab list. Default tab: `'concepts'`. `openLibrary(tab)` validates against this array; invalid tab falls back to `'concepts'`.
+
+**Panel IDs:** `libPanel-episodes`, `libPanel-concepts`, `libPanel-vocab`, `libPanel-practice`
+**Tab button IDs:** `libTab-episodes`, `libTab-concepts`, `libTab-vocab`, `libTab-practice`
+
+Active state: `lib-tab-active` on the tab button, `lib-panel-active` on the panel div.
+
+### Render routing
+`_libRender(tab)` routes to the correct render function:
+- `'concepts'` → `_libRenderSaved()` — saved concept tiles (existing Library logic, panel ID is now `libPanel-concepts`)
+- `'episodes'` → `_libRenderEpisodes()` — empty state until Phase 3
+- `'vocab'` → `_libRenderVocab()` — empty state until Phase 5
+- `'practice'` → `_libRenderPractice()` — 3 CTA buttons (Spark / Write / Quiz)
+
+Static empty-state panels use `panel.dataset.rendered = '1'` guard to avoid re-rendering on each tab switch.
+
+### Home dashboard
+`.home-dashboard` strip sits above the tab row, inside the drawer. Rendered by `_homeRenderDashboard()` on every `openLibrary()` call.
+
+**4 stat buckets:**
+| ID | Label | Source |
+|----|-------|--------|
+| `hbSaved` | Saved | `mastered` Set size (`lll_mastered_ts_v1`) |
+| `hbWords` | Words | `lll_lexicon_v1` array length |
+| `hbNotes` | Notes | Count of `cc_note_meta_*` keys in localStorage |
+| `hbEpisodes` | Episodes ♥ | `lll_fav_episodes_v1` array length (Phase 3) |
+
+**Animation:** 600ms ease-out cubic count-up via `requestAnimationFrame`. `prefers-reduced-motion` skips animation (instant render). Range toggle buttons (Wk / Mo / All) are present in DOM but disabled until Phase 6.
+
+### localStorage keys (Home-related)
+- `lll_mastered_ts_v1` — `{ [conceptId]: timestampMs }` — saved concepts
+- `lll_lexicon_v1` — array of saved vocab words
+- `cc_note_meta_*` — one key per concept with a note (prefix scan)
+- `lll_fav_episodes_v1` — array of favourited collection IDs **(Phase 3, not yet written)**
+- `lll_recent_eps_v1` — recently opened episode collection IDs **(Phase 3, not yet written)**
+
 ## SFX architecture
 
 `SFX_ENABLED = false` gates ambient/card SFX globally (theme toggle, vault,

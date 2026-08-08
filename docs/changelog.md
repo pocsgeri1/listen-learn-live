@@ -6,6 +6,15 @@
 
 ---
 
+## v3.18 — 2026-08-08 · Home shell: rename, dashboard skeleton, 4 tabs
+### index.html
+- **"My Library" renamed to "Home":** Drawer title, all JS open/close calls, and aria references updated. "My Library" remains only in code comments for historical context.
+- **4-tab architecture:** Tabs are now Episodes · Concepts · Vocab · Practice (replacing old Saved · Notes). `_HOME_TABS` array governs valid tab names. Default tab is 'concepts'. Panel IDs: `libPanel-episodes`, `libPanel-concepts`, `libPanel-vocab`, `libPanel-practice`.
+- **Home dashboard:** `.home-dashboard` strip added above the tab row — 4 stat buckets (Saved, Words, Notes, Episodes ♥) with Playfair Display numbers and DM Mono labels. Count-up animation (600ms ease-out cubic) on drawer open via `_homeRenderDashboard()`. `prefers-reduced-motion` skips animation. Wk/Mo range buttons stubbed (disabled, coming Phase 6).
+- **Tab labels:** `.lib-tab` switched to DM Mono, uppercase, 0.62rem — consistent with stat labels.
+- **Empty states:** Episodes, Vocab, Practice panels render placeholder states (`home-empty` pattern) with contextual CTAs. Concepts panel renders saved concept tiles (existing `_libRenderSaved` logic).
+- **Panel rename:** `libPanel-saved` → `libPanel-concepts` throughout JS (refresh, collapse, querySelectorAll calls).
+
 ## v3.17 — 2026-08-08 · Toolbar simplification + save semantics
 ### index.html
 - **Related button removed from all card toolbars:** Removed from all 5 card template locations (main grid, ep-drawer, theme cards, all-browse, Fl cards) and from `_spPreviewToolbar` (all 4 preview surfaces). `btn-icon-empty` CSS class and placeholder logic removed entirely — no more disabled ghost button.

@@ -459,6 +459,26 @@ Fill: var(--accent)
 Transition: width 0.5s ease
 ```
 
+### Home Dashboard Bucket (`.home-bucket`, v3.18)
+
+```
+Container: .home-dashboard — padding 10px 20px 8px, border-bottom 0.5px solid var(--border), flex row, gap 12px
+Bucket grid: .home-buckets — CSS grid, 4 equal columns (repeat(4, minmax(52px, 1fr)))
+Number: .home-bucket-num — Playfair Display serif, 1.5rem, font-weight 700, color var(--text)
+Label: .home-bucket-label — DM Mono monospace, 0.48rem, letter-spacing 0.1em, uppercase, color var(--muted)
+Mobile (≤600px): grid collapses to 2 columns; dashboard flexes column-reverse (range toggle above buckets)
+Animation: count-up 600ms ease-out cubic via rAF on drawer open; prefers-reduced-motion → instant
+```
+
+### Home Empty State (`.home-empty`, v3.18)
+
+```
+Container: padding 44px 24px, flex column, align-items center, gap 18px, text-align center
+Text: .home-empty-text — Playfair Display, 1.1rem, italic, color var(--muted2)
+CTA button: .home-empty-btn — border 1px solid var(--border), border-radius 6px, DM Sans, 0.72rem, font-weight 500, letter-spacing 0.06em, uppercase
+No background fill on CTA button (transparent — inherits surface context)
+```
+
 ---
 
 ## Motion & Animation
