@@ -9295,6 +9295,141 @@
 }
 [data-theme="light"] .home-momentum { color: var(--muted); }
 
+/* ── Stats section — v3.31 ─────────────────────────────── */
+.home-stats-section {
+  flex-shrink: 0;
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.34s cubic-bezier(0.4, 0, 0.2, 1);
+  border-bottom: 0.5px solid transparent;
+}
+.home-stats-section.open {
+  max-height: 600px;
+  border-bottom-color: var(--border);
+}
+@media (prefers-reduced-motion: reduce) { .home-stats-section { transition: none !important; } }
+
+.home-stats-toggle {
+  display: flex; align-items: center; justify-content: center;
+  gap: 6px; width: 100%;
+  padding: 7px 20px;
+  font-family: 'DM Mono', monospace; font-size: 0.44rem;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--muted); background: none; border: none;
+  border-bottom: 0.5px solid var(--border);
+  cursor: pointer; transition: color 0.14s;
+}
+.home-stats-toggle:hover { color: var(--muted2); }
+.home-stats-toggle-arrow {
+  display: inline-block; font-size: 0.5rem;
+  transition: transform 0.28s ease;
+}
+.home-stats-section.open ~ .home-stats-toggle .home-stats-toggle-arrow,
+.home-stats-toggle.open .home-stats-toggle-arrow { transform: rotate(180deg); }
+
+.home-stats-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 14px 16px 16px;
+}
+@media (max-width: 520px) { .home-stats-inner { grid-template-columns: 1fr; } }
+
+/* Glass card — iPhone-adjacent, no backdrop-filter */
+.home-stat-card {
+  background: rgba(255,255,255,0.035);
+  border: 0.5px solid rgba(255,255,255,0.09);
+  border-radius: 14px;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.28);
+  padding: 14px 16px 16px;
+  display: flex; flex-direction: column; gap: 10px;
+}
+[data-theme="light"] .home-stat-card {
+  background: rgba(0,0,0,0.025);
+  border-color: rgba(0,0,0,0.07);
+  box-shadow: 0 1px 12px rgba(0,0,0,0.08);
+}
+.home-stat-card-title {
+  font-family: 'DM Mono', monospace; font-size: 0.44rem;
+  letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted);
+}
+
+/* 7-day bar chart */
+.home-bar-chart {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  gap: 5px; height: 56px; width: 100%;
+}
+.home-bar-col {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 4px; flex: 1;
+}
+.home-bar {
+  width: 100%; border-radius: 4px 4px 0 0;
+  background: var(--accent); opacity: 0.25;
+  transition: height 0.5s cubic-bezier(0.4,0,0.2,1), opacity 0.3s;
+  min-height: 2px;
+}
+.home-bar.has-activity { opacity: 0.75; }
+.home-bar.today { opacity: 1; background: var(--accent); }
+.home-bar-day {
+  font-family: 'DM Mono', monospace; font-size: 0.38rem;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted);
+}
+.home-bar-day.today { color: var(--accent); }
+
+/* Category donut */
+.home-donut-wrap {
+  display: flex; align-items: center; gap: 14px;
+}
+.home-donut-svg { flex-shrink: 0; }
+.home-donut-legend {
+  display: flex; flex-direction: column; gap: 5px; flex: 1; min-width: 0;
+}
+.home-donut-row {
+  display: flex; align-items: center; gap: 6px;
+}
+.home-donut-dot {
+  width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0;
+}
+.home-donut-cat {
+  font-family: 'DM Mono', monospace; font-size: 0.42rem;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--muted2); white-space: nowrap; overflow: hidden;
+  text-overflow: ellipsis; flex: 1; min-width: 0;
+}
+.home-donut-pct {
+  font-family: 'DM Mono', monospace; font-size: 0.42rem;
+  color: var(--muted); flex-shrink: 0;
+}
+
+/* Weekly goal */
+.home-goal-row {
+  display: flex; flex-direction: column; gap: 6px;
+}
+.home-goal-header {
+  display: flex; justify-content: space-between; align-items: baseline;
+}
+.home-goal-label {
+  font-family: 'DM Sans', sans-serif; font-size: 0.7rem; color: var(--text);
+}
+.home-goal-count {
+  font-family: 'DM Mono', monospace; font-size: 0.46rem;
+  color: var(--muted); letter-spacing: 0.06em;
+}
+.home-goal-bar {
+  height: 3px; background: var(--surface2); border-radius: 2px; overflow: hidden;
+}
+.home-goal-fill {
+  height: 100%; background: var(--accent); border-radius: 2px;
+  transition: width 0.6s cubic-bezier(0.4,0,0.2,1);
+}
+.home-goal-done .home-goal-fill { background: #7aaf8a; }
+.home-goal-status {
+  font-family: 'DM Mono', monospace; font-size: 0.42rem;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+}
+.home-goal-done .home-goal-status { color: #7aaf8a; }
+
 /* ── Phase 7: scroll-collapse wrapper — v3.25 smooth ── */
 .home-collapse-wrap {
   position: relative;
@@ -12753,6 +12888,35 @@
     <div class="home-momentum" id="homeMomentum"></div>
   </div>
   </div><!-- /.home-collapse-wrap -->
+
+  <!-- Stats toggle button — v3.31 -->
+  <button class="home-stats-toggle" id="homeStatsToggle" onclick="_homeToggleStats()">
+    Stats <span class="home-stats-toggle-arrow">↓</span>
+  </button>
+  <!-- Stats section: charts + goal — v3.31 -->
+  <div class="home-stats-section" id="homeStatsSection">
+    <div class="home-stats-inner">
+      <!-- 7-day activity chart -->
+      <div class="home-stat-card" id="homeBarCard">
+        <div class="home-stat-card-title">7-day activity</div>
+        <div class="home-bar-chart" id="homeBarChart"></div>
+      </div>
+      <!-- Category donut -->
+      <div class="home-stat-card" id="homeDonutCard">
+        <div class="home-stat-card-title">By category</div>
+        <div class="home-donut-wrap">
+          <svg class="home-donut-svg" id="homeDonutSvg" width="72" height="72" viewBox="0 0 72 72"></svg>
+          <div class="home-donut-legend" id="homeDonutLegend"></div>
+        </div>
+      </div>
+      <!-- Weekly goal — spans full width on mobile -->
+      <div class="home-stat-card" id="homeGoalCard" style="grid-column:1/-1">
+        <div class="home-stat-card-title">This week's goal</div>
+        <div class="home-goal-row" id="homeGoalRow"></div>
+      </div>
+    </div>
+  </div>
+
   <div class="lib-tabs">
     <button class="lib-tab" id="libTab-episodes" onclick="_libSwitchTab('episodes')">Episodes</button>
     <button class="lib-tab lib-tab-active" id="libTab-concepts" onclick="_libSwitchTab('concepts')">Concepts</button>
@@ -24774,6 +24938,133 @@ function _homeRenderDashboard(skipCountUp) {
       requestAnimationFrame(tick);
     });
   });
+}
+
+// ── Stats section — v3.31 ─────────────────────────────────────
+var _homeStatsOpen = false;
+
+function _homeToggleStats() {
+  _homeStatsOpen = !_homeStatsOpen;
+  var section = document.getElementById('homeStatsSection');
+  var toggle = document.getElementById('homeStatsToggle');
+  if (section) section.classList.toggle('open', _homeStatsOpen);
+  if (toggle) toggle.classList.toggle('open', _homeStatsOpen);
+  if (_homeStatsOpen) _homeRenderStats();
+}
+
+function _homeRenderStats() {
+  _homeRenderBarChart();
+  _homeRenderDonut();
+  _homeRenderGoal();
+}
+
+function _homeRenderBarChart() {
+  var el = document.getElementById('homeBarChart');
+  if (!el) return;
+  var tsMap = {};
+  try { tsMap = JSON.parse(localStorage.getItem('lll_mastered_ts_v1') || '{}'); } catch(e) {}
+  var days = ['S','M','T','W','T','F','S'];
+  var today = new Date();
+  var counts = [];
+  for (var i = 6; i >= 0; i--) {
+    var d = new Date(today.getFullYear(), today.getMonth(), today.getDate() - i);
+    var count = 0;
+    Object.values(tsMap).forEach(function(ts) {
+      var dt = new Date(Number(ts));
+      if (dt.getFullYear() === d.getFullYear() && dt.getMonth() === d.getMonth() && dt.getDate() === d.getDate()) count++;
+    });
+    counts.push({ label: days[d.getDay()], count: count, isToday: i === 0 });
+  }
+  var maxCount = Math.max.apply(null, counts.map(function(c) { return c.count; })) || 1;
+
+  el.innerHTML = counts.map(function(c) {
+    var pct = Math.max(4, Math.round((c.count / maxCount) * 100));
+    var cls = 'home-bar' + (c.count > 0 ? ' has-activity' : '') + (c.isToday ? ' today' : '');
+    return '<div class="home-bar-col">' +
+      '<div class="' + cls + '" style="height:' + pct + '%"></div>' +
+      '<div class="home-bar-day' + (c.isToday ? ' today' : '') + '">' + c.label + '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function _homeRenderDonut() {
+  var svg = document.getElementById('homeDonutSvg');
+  var legend = document.getElementById('homeDonutLegend');
+  if (!svg || !legend) return;
+
+  // Count saved concepts by category
+  var tsMap = {};
+  try { tsMap = JSON.parse(localStorage.getItem('lll_mastered_ts_v1') || '{}'); } catch(e) {}
+  var catCounts = {};
+  if (typeof CONCEPTS !== 'undefined') {
+    CONCEPTS.forEach(function(c) {
+      if (tsMap[c.id] && c.category) catCounts[c.category] = (catCounts[c.category] || 0) + 1;
+    });
+  }
+  var total = Object.values(catCounts).reduce(function(a, b) { return a + b; }, 0);
+  if (!total) {
+    svg.innerHTML = '';
+    legend.innerHTML = '<div class="home-donut-cat" style="color:var(--muted)">No concepts saved yet</div>';
+    return;
+  }
+
+  // Sort by count desc, take top 5
+  var cats = Object.keys(catCounts).sort(function(a, b) { return catCounts[b] - catCounts[a]; }).slice(0, 5);
+  var CAT_COLORS_LOCAL = typeof CAT_COLOR !== 'undefined' ? CAT_COLOR : {};
+  var fallbackColors = ['#e8d5a3','#5abfaf','#a08fd4','#d4715a','#6b9fc4'];
+
+  // SVG donut
+  var cx = 36, cy = 36, r = 28, stroke = 9;
+  var circumference = 2 * Math.PI * r;
+  var offset = 0;
+  var paths = cats.map(function(cat, i) {
+    var pct = catCounts[cat] / total;
+    var dashLen = pct * circumference;
+    var color = CAT_COLORS_LOCAL[cat] || fallbackColors[i % fallbackColors.length];
+    // small gap between segments
+    var gap = total > 1 ? 2 : 0;
+    var path = '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="none"' +
+      ' stroke="' + color + '" stroke-width="' + stroke + '"' +
+      ' stroke-dasharray="' + (dashLen - gap) + ' ' + (circumference - dashLen + gap) + '"' +
+      ' stroke-dashoffset="' + (-offset * circumference + circumference / 4) + '"' +
+      ' stroke-linecap="round"/>';
+    offset += pct;
+    return { path: path, color: color, cat: cat };
+  });
+
+  svg.innerHTML = '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.05)" stroke-width="' + stroke + '"/>' +
+    paths.map(function(p) { return p.path; }).join('');
+
+  // Legend
+  legend.innerHTML = paths.map(function(p) {
+    var name = (typeof CATEGORIES !== 'undefined' && CATEGORIES.find(function(x) { return x.id === p.cat; }) || {}).name || p.cat;
+    var pct = Math.round(catCounts[p.cat] / total * 100);
+    return '<div class="home-donut-row">' +
+      '<div class="home-donut-dot" style="background:' + p.color + '"></div>' +
+      '<div class="home-donut-cat">' + name + '</div>' +
+      '<div class="home-donut-pct">' + pct + '%</div>' +
+    '</div>';
+  }).join('');
+}
+
+function _homeRenderGoal() {
+  var el = document.getElementById('homeGoalRow');
+  if (!el) return;
+  var GOAL = 5; // weekly concept goal
+  var tsMap = {};
+  try { tsMap = JSON.parse(localStorage.getItem('lll_mastered_ts_v1') || '{}'); } catch(e) {}
+  var weekAgo = Date.now() - 7 * 86400000;
+  var thisWeek = Object.values(tsMap).filter(function(ts) { return Number(ts) > weekAgo; }).length;
+  var pct = Math.min(100, Math.round(thisWeek / GOAL * 100));
+  var done = thisWeek >= GOAL;
+  el.className = 'home-goal-row' + (done ? ' home-goal-done' : '');
+  el.innerHTML =
+    '<div class="home-goal-header">' +
+      '<span class="home-goal-label">Save ' + GOAL + ' concepts this week</span>' +
+      '<span class="home-goal-count">' + thisWeek + ' / ' + GOAL + '</span>' +
+    '</div>' +
+    '<div class="home-goal-bar"><div class="home-goal-fill" style="width:' + pct + '%"></div></div>' +
+    '<div class="home-goal-status">' + (done ? '✦ Goal reached' : (GOAL - thisWeek) + ' to go') + '</div>';
 }
 
 // ── Notes render — v3.23 dead code sweep (notes tab removed; stub kept for _libNoteDelete/_libNoteSave back-compat)

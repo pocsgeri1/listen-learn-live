@@ -6,6 +6,17 @@
 
 ---
 
+## v3.31 — 2026-08-08 · Stats section: charts + donut + weekly goal
+
+### index.html
+- **Stats toggle:** A compact "Stats ↓" button sits between the dashboard and the tab bar. Taps open/close a collapsible `.home-stats-section` with max-height transition. Charts only render when opened (no wasted compute).
+- **7-day activity bar chart:** SVG-free pure CSS bars. Reads `lll_mastered_ts_v1` timestamps, buckets by calendar day, draws proportional bars with DM Mono day labels. Today's bar = full accent opacity; days with activity = 75%; empty days = 25% ghost. Heights animate in via CSS transition on render.
+- **Category donut:** SVG circle-based donut using `stroke-dasharray` arcs. Top 5 categories from saved concepts, each segment colored with the app's `CAT_COLOR` map. Inner ring = subtle glass fill. Compact legend beside: dot + category name + percentage.
+- **Weekly goal:** Hard-coded goal of 5 concepts/week (easy to make dynamic later). Progress bar + "N to go" / "✦ Goal reached" status. Bar fill color switches to green when complete.
+- **Glass card aesthetic:** Cards use `background: rgba(255,255,255,0.035)`, `border: 0.5px solid rgba(255,255,255,0.09)`, `box-shadow: 0 2px 20px rgba(0,0,0,0.28)`, `border-radius: 14px`. Zero `backdrop-filter` — GPU cost near zero.
+
+---
+
 ## v3.30 — 2026-08-08 · Hero dashboard + Concepts search
 
 ### index.html
