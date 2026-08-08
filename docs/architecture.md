@@ -259,7 +259,7 @@ Static empty-state panels use `panel.dataset.rendered = '1'` guard to avoid re-r
 | `hbSaved` | Saved | `mastered` Set size (`lll_mastered_ts_v1`) |
 | `hbWords` | Words | `lll_lexicon_v1` array length |
 | `hbNotes` | Notes | Count of `cc_note_meta_*` keys in localStorage |
-| `hbEpisodes` | Episodes ♥ | `lll_fav_episodes_v1` array length (Phase 3) |
+| `hbEpisodes` | Episodes ♥ | `lll_fav_episodes_v1` object key count |
 
 **Animation:** 600ms ease-out cubic count-up via `requestAnimationFrame`. `prefers-reduced-motion` skips animation (instant render). Range toggle buttons (Wk / Mo / All) are present in DOM but disabled until Phase 6.
 
@@ -267,8 +267,8 @@ Static empty-state panels use `panel.dataset.rendered = '1'` guard to avoid re-r
 - `lll_mastered_ts_v1` — `{ [conceptId]: timestampMs }` — saved concepts
 - `lll_lexicon_v1` — array of saved vocab words
 - `cc_note_meta_*` — one key per concept with a note (prefix scan)
-- `lll_fav_episodes_v1` — array of favourited collection IDs **(Phase 3, not yet written)**
-- `lll_recent_eps_v1` — recently opened episode collection IDs **(Phase 3, not yet written)**
+- `lll_fav_episodes_v1` — `{ [collectionId]: ts }` — favourited episode collections. Written/deleted by `_epToggleFav(colId)`. Read by `_libRenderEpisodes()` and `_homeRenderDashboard()` (Episodes ♥ bucket).
+- `lll_recent_eps_v1` — `[{ collectionId, ts }, …]` max 10, ring buffer. Written by `_epLogRecent(colId)` on every `openEpisodeDrawer()` call. Deduplicated by `collectionId` before prepend; capped at 10 entries.
 
 ## SFX architecture
 

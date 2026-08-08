@@ -6,6 +6,15 @@
 
 ---
 
+## v3.19 — 2026-08-08 · EPISODES section: ♥ fav, recents, latest-5 fallback
+### index.html
+- **♥ Fav button in episode drawer:** Added to top-left of the hero header (`#epFavBtn`). Outline heart → filled accent on fav; scale-pop animation on toggle (0.3s, reduced-motion: none). 44×44 touch target. Mobile: shifts right of count badge to avoid collision.
+- **`lll_fav_episodes_v1`:** New localStorage key `{ [collectionId]: ts }`. Written/deleted by `_epToggleFav()`. Read by `_libRenderEpisodes()` and `_homeRenderDashboard()`.
+- **`lll_recent_eps_v1`:** New localStorage key — array of `{ collectionId, ts }`, ring buffer max 10. Written by `_epLogRecent()` on every `openEpisodeDrawer()` call.
+- **EPISODES panel — full render:** `_libRenderEpisodes()` now renders real content. If favs exist: fav tiles grid (Playfair title, DM Mono podcast/date, accent cross-stats line "N concepts · N words kept", Unfav button) with 40ms stagger entrance animation + "Recently opened" horizontal chip row. If no favs: empty prompt + latest-5 episode list (most recent by `aired_date`).
+- **Dashboard Episodes ♥ bucket live:** `_homeRenderDashboard()` now counts `lll_fav_episodes_v1` keys for the Episodes bucket (was hardcoded 0).
+- **`_epCurrentColId` tracking:** Module-level var set on every drawer open — used by the ♥ button inline onclick (avoids closure over stale collectionId).
+
 ## v3.18 — 2026-08-08 · Home shell: rename, dashboard skeleton, 4 tabs
 ### index.html
 - **"My Library" renamed to "Home":** Drawer title, all JS open/close calls, and aria references updated. "My Library" remains only in code comments for historical context.

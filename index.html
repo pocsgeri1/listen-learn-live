@@ -9325,6 +9325,199 @@
   .home-bucket-num { transition: none !important; }
 }
 
+/* ── Episode ♥ fav button — v3.19 ───────────────── */
+.ep-fav-btn {
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  color: var(--muted);
+  opacity: 0.7;
+  transition: color 0.2s, opacity 0.2s, transform 0.2s;
+  z-index: 2;
+  border-radius: 50%;
+}
+.ep-fav-btn:hover { opacity: 1; color: var(--accent); }
+.ep-fav-btn.fav-active { color: var(--accent); opacity: 1; }
+/* On mobile: count badge moves to top-left — shift fav button right of it */
+@media (max-width: 700px) {
+  .ep-fav-btn { left: 60px; }
+}
+@keyframes epFavPop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.25); }
+  70%  { transform: scale(0.92); }
+  100% { transform: scale(1); }
+}
+.ep-fav-btn.fav-pop { animation: epFavPop 0.3s ease-out forwards; }
+@media (prefers-reduced-motion: reduce) {
+  .ep-fav-btn.fav-pop { animation: none; }
+}
+
+/* ── Episode fav tile (Home Episodes panel) — v3.19 ── */
+.ep-fav-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 12px 14px;
+  border: 0.5px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  background: var(--surface);
+  opacity: 0;
+  transform: translateY(6px);
+  animation: epTileEnter 0.3s ease-out forwards;
+}
+.ep-fav-tile:hover { border-color: var(--border-hover); background: var(--surface2); }
+@keyframes epTileEnter {
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ep-fav-tile { animation: none; opacity: 1; transform: none; }
+}
+.ep-fav-tile-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.82rem;
+  color: var(--text);
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.ep-fav-tile-meta {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.52rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.ep-fav-tile-stats {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.55rem;
+  color: var(--accent);
+  letter-spacing: 0.04em;
+  margin-top: 2px;
+}
+.ep-fav-tile-actions { display: flex; align-items: center; justify-content: space-between; margin-top: 4px; }
+.ep-fav-tile-unfav {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.75rem;
+  color: var(--muted);
+  padding: 2px 4px;
+  border-radius: 4px;
+  transition: color 0.15s;
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ep-fav-tile-unfav:hover { color: var(--accent); }
+
+/* Fav tiles grid */
+.ep-fav-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  padding: 12px 16px 8px;
+}
+@media (min-width: 480px) {
+  .ep-fav-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* Recents row */
+.ep-recents-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.52rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 8px 16px 4px;
+}
+.ep-recents-row {
+  display: flex;
+  gap: 8px;
+  padding: 0 16px 12px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x;
+}
+.ep-recents-row::-webkit-scrollbar { display: none; }
+.ep-recent-chip {
+  flex-shrink: 0;
+  padding: 6px 10px;
+  border: 0.5px solid var(--border);
+  border-radius: 6px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.68rem;
+  color: var(--muted2);
+  cursor: pointer;
+  white-space: nowrap;
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: border-color 0.15s, color 0.15s;
+  background: var(--surface);
+}
+.ep-recent-chip:hover { border-color: var(--border-hover); color: var(--text); }
+
+/* Episodes latest-5 fallback */
+.ep-latest-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.52rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 4px 16px 4px;
+}
+.ep-latest-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 16px;
+  border-bottom: 0.5px solid var(--border);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.ep-latest-item:hover { background: var(--surface2); }
+.ep-latest-item-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.78rem;
+  color: var(--text);
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.ep-latest-item-meta {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* Light-mode overrides — Episodes panel v3.19 */
+[data-theme="light"] .ep-fav-tile { background: var(--surface); border-color: var(--border); }
+[data-theme="light"] .ep-fav-tile:hover { background: var(--surface2); }
+[data-theme="light"] .ep-fav-tile-title { color: var(--text); }
+[data-theme="light"] .ep-latest-item:hover { background: var(--surface2); }
+[data-theme="light"] .ep-recent-chip { background: var(--surface); }
+
 .lib-panels {
   flex: 1;
   position: relative;
@@ -11877,6 +12070,7 @@
     <div class="ep-drawer-hero-bg" id="epDrawerHeroBg" style="display:none"></div>
     <div class="ep-drawer-handle"></div>
     <span class="ep-drawer-count-badge" id="epDrawerCountBadge"></span>
+    <button class="ep-fav-btn" id="epFavBtn" aria-label="Favourite episode" onclick="_epToggleFav(_epCurrentColId)">♡</button>
     <button class="ep-drawer-back-cs" id="epDrawerBackCS" style="display:none" onclick="closeEpisodeDrawer();openCSFromNav()">← Prompts</button>
     <button class="ep-drawer-close" onclick="_playCloseSFX();closeEpisodeDrawer()">✕</button>
     <div class="ep-drawer-hero-content">
@@ -15046,10 +15240,79 @@ function _initDrawerParallax(bodyEl, heroBgEl) {
   };
 }
 
+// ── Episode fav helpers — v3.19 ────────────────────────────────
+var _epCurrentColId = null; // tracks which episode is open in the drawer
+
+function _epGetFavs() {
+  try { return JSON.parse(localStorage.getItem('lll_fav_episodes_v1') || '{}'); } catch(e) { return {}; }
+}
+function _epSaveFavs(obj) {
+  try { localStorage.setItem('lll_fav_episodes_v1', JSON.stringify(obj)); } catch(e) {}
+}
+function _epIsFav(colId) {
+  if (!colId) return false;
+  return !!_epGetFavs()[colId];
+}
+function _epUpdateFavBtn(colId) {
+  var btn = document.getElementById('epFavBtn');
+  if (!btn) return;
+  var fav = _epIsFav(colId);
+  btn.textContent = fav ? '\u2665' : '\u2661'; // ♥ or ♡
+  btn.setAttribute('aria-label', fav ? 'Unfavourite episode' : 'Favourite episode');
+  btn.classList.toggle('fav-active', fav);
+}
+function _epToggleFav(colId) {
+  if (!colId) return;
+  var favs = _epGetFavs();
+  if (favs[colId]) {
+    delete favs[colId];
+  } else {
+    favs[colId] = Date.now();
+  }
+  _epSaveFavs(favs);
+  _epUpdateFavBtn(colId);
+  // Pop animation
+  var btn = document.getElementById('epFavBtn');
+  if (btn) {
+    btn.classList.remove('fav-pop');
+    void btn.offsetWidth; // reflow to restart animation
+    btn.classList.add('fav-pop');
+    setTimeout(function() { btn.classList.remove('fav-pop'); }, 350);
+  }
+  // Refresh Home episodes panel if it was already rendered
+  var epPanel = document.getElementById('libPanel-episodes');
+  if (epPanel) {
+    delete epPanel.dataset.rendered;
+    _libRenderEpisodes();
+  }
+  // Refresh dashboard bucket
+  _homeRenderDashboard();
+}
+function _epLogRecent(colId) {
+  if (!colId) return;
+  try {
+    var recents = JSON.parse(localStorage.getItem('lll_recent_eps_v1') || '[]');
+    if (!Array.isArray(recents)) recents = [];
+    // Dedupe: remove existing entry if present
+    recents = recents.filter(function(r) { return r.collectionId !== colId; });
+    // Prepend
+    recents.unshift({ collectionId: colId, ts: Date.now() });
+    // Cap at 10
+    if (recents.length > 10) recents = recents.slice(0, 10);
+    localStorage.setItem('lll_recent_eps_v1', JSON.stringify(recents));
+  } catch(e) {}
+}
+// ── End episode fav helpers ─────────────────────────────────────
+
 function openEpisodeDrawer(collectionId) {
   const col = COLLECTIONS_BY_ID[collectionId];
   if (!col) return;
   track('episode_drawer_opened', { id: collectionId, title: col.title });
+
+  // Track current open episode + log to recents — v3.19
+  _epCurrentColId = collectionId;
+  _epLogRecent(collectionId);
+  _epUpdateFavBtn(collectionId);
 
   // Open the drawer IMMEDIATELY — empty shell, instant slide-up.
   // Then fill it on the next frame so the heavy DOM work doesn't block the animation.
@@ -23000,17 +23263,126 @@ function _libToggleSaved(id, el) {
   });
 }
 
-// ── Home tab renderers (empty states) — v3.18 ─────────────────
+// ── Home tab renderers — v3.18 / v3.19 ────────────────────────
 
 function _libRenderEpisodes() {
   var panel = document.getElementById('libPanel-episodes');
-  if (!panel || panel.dataset.rendered) return;
-  panel.innerHTML =
-    '<div class="home-empty">' +
-      '<p class="home-empty-text">\u2665 any episode and it lives here.</p>' +
-      '<button class="home-empty-btn" onclick="closeLibrary()">Browse episodes</button>' +
-    '</div>';
-  panel.dataset.rendered = '1';
+  if (!panel) return;
+  // Always re-render (fav state can change) — no dataset.rendered guard here
+
+  var favs = _epGetFavs();
+  var favIds = Object.keys(favs);
+
+  // Build fav tiles sorted by fav date desc
+  var favCols = favIds.map(function(id) {
+    return COLLECTIONS_BY_ID[parseInt(id, 10)];
+  }).filter(Boolean).sort(function(a, b) {
+    return (favs[b.id] || 0) - (favs[a.id] || 0);
+  });
+
+  if (favCols.length === 0) {
+    // FALLBACK: empty prompt + latest 5 episodes
+    var latest5 = Object.values(COLLECTIONS_BY_ID || {})
+      .filter(function(c) { return c && (c.type === 'episode' || c.type === 'short'); })
+      .sort(function(a, b) {
+        var da = new Date(a.aired_date || a.created_date || 0);
+        var db = new Date(b.aired_date || b.created_date || 0);
+        return db - da;
+      })
+      .slice(0, 5);
+
+    var latestHtml = latest5.length
+      ? '<div class="ep-latest-label">Latest episodes</div>' +
+        latest5.map(function(col) {
+          var ds = col.aired_date || col.created_date || '';
+          var dateStr = ds ? new Date(ds).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' }).toUpperCase() : '';
+          return '<div class="ep-latest-item" onclick="closeLibrary();setTimeout(function(){openEpisodeDrawer(' + col.id + ');},80)">' +
+            '<div class="ep-latest-item-title">' + (col.title || '').replace(/</g,'&lt;') + '</div>' +
+            '<div class="ep-latest-item-meta">' + (col.podcast ? col.podcast.replace(/</g,'&lt;') + (dateStr ? ' \u00b7 ' + dateStr : '') : dateStr) + '</div>' +
+          '</div>';
+        }).join('')
+      : '';
+
+    panel.innerHTML =
+      '<div class="home-empty">' +
+        '<p class="home-empty-text">\u2665 any episode and it lives here.</p>' +
+        '<button class="home-empty-btn" onclick="closeLibrary()">Browse episodes</button>' +
+      '</div>' +
+      latestHtml;
+    return;
+  }
+
+  // Fav tiles
+  var masteredTs = {};
+  try { masteredTs = JSON.parse(localStorage.getItem('lll_mastered_ts_v1') || '{}'); } catch(e) {}
+  var lexicon = [];
+  try { lexicon = JSON.parse(localStorage.getItem('lll_lexicon_v1') || '[]'); } catch(e) {}
+
+  var tilesHtml = '<div class="ep-fav-grid">' +
+    favCols.map(function(col, i) {
+      // Cross-stats: saved concepts + words for this episode
+      var savedCount = 0;
+      var wordsCount = 0;
+      if (typeof CONCEPTS !== 'undefined') {
+        CONCEPTS.forEach(function(c) {
+          if (c.collection_id === col.id && masteredTs[c.id]) savedCount++;
+        });
+      }
+      if (Array.isArray(lexicon)) {
+        lexicon.forEach(function(w) {
+          if (w && w.collection_id === col.id) wordsCount++;
+        });
+      }
+      var statsLine = (savedCount > 0 || wordsCount > 0)
+        ? (savedCount > 0 ? savedCount + ' concept' + (savedCount !== 1 ? 's' : '') : '') +
+          (savedCount > 0 && wordsCount > 0 ? ' \u00b7 ' : '') +
+          (wordsCount > 0 ? wordsCount + ' word' + (wordsCount !== 1 ? 's' : '') : '') + ' kept'
+        : '';
+      var favTs = favs[col.id];
+      var favDateStr = favTs ? _epRelativeDate(favTs) : '';
+      var delay = Math.min(i * 40, 300);
+
+      return '<div class="ep-fav-tile" style="animation-delay:' + delay + 'ms" onclick="closeLibrary();setTimeout(function(){openEpisodeDrawer(' + col.id + ');},80)">' +
+        '<div class="ep-fav-tile-title">' + (col.title || '').replace(/</g,'&lt;') + '</div>' +
+        '<div class="ep-fav-tile-meta">' + (col.podcast ? col.podcast.replace(/</g,'&lt;') : '') + (favDateStr ? ' \u00b7 ' + favDateStr : '') + '</div>' +
+        (statsLine ? '<div class="ep-fav-tile-stats">' + statsLine + '</div>' : '') +
+        '<div class="ep-fav-tile-actions">' +
+          '<button class="ep-fav-tile-unfav" title="Remove from favourites" onclick="event.stopPropagation();_epToggleFav(' + col.id + ')">\u2665 Unfav</button>' +
+        '</div>' +
+      '</div>';
+    }).join('') +
+  '</div>';
+
+  // Recents row
+  var recentsHtml = '';
+  try {
+    var recents = JSON.parse(localStorage.getItem('lll_recent_eps_v1') || '[]');
+    if (Array.isArray(recents) && recents.length) {
+      var recentChips = recents.slice(0, 8).map(function(r) {
+        var rc = COLLECTIONS_BY_ID && COLLECTIONS_BY_ID[r.collectionId];
+        if (!rc) return '';
+        return '<div class="ep-recent-chip" onclick="closeLibrary();setTimeout(function(){openEpisodeDrawer(' + r.collectionId + ');},80)">' +
+          (rc.title || '').replace(/</g,'&lt;') + '</div>';
+      }).filter(Boolean).join('');
+      if (recentChips) {
+        recentsHtml = '<div class="ep-recents-label">Recently opened</div>' +
+          '<div class="ep-recents-row">' + recentChips + '</div>';
+      }
+    }
+  } catch(e) {}
+
+  panel.innerHTML = tilesHtml + recentsHtml;
+}
+
+function _epRelativeDate(ts) {
+  var diff = Date.now() - ts;
+  var days = Math.floor(diff / 86400000);
+  if (days === 0) return 'Today';
+  if (days === 1) return 'Yesterday';
+  if (days < 7) return days + 'd ago';
+  if (days < 30) return Math.floor(days / 7) + 'w ago';
+  if (days < 365) return Math.floor(days / 30) + 'mo ago';
+  return Math.floor(days / 365) + 'y ago';
 }
 
 function _libRenderVocab() {
@@ -23059,7 +23431,8 @@ function _homeRenderDashboard() {
       if (k && k.startsWith('cc_note_') && !k.startsWith('cc_note_meta_')) nNotes++;
     }
   } catch(e) {}
-  var nEpisodes = 0; // Phase 3 wires this up
+  var nEpisodes = 0;
+  try { nEpisodes = Object.keys(JSON.parse(localStorage.getItem('lll_fav_episodes_v1') || '{}')).length; } catch(e) {}
 
   // Respect prefers-reduced-motion — render final immediately
   var noMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
