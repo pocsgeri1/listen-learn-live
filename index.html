@@ -14314,6 +14314,11 @@ async function loadConcepts() {
     });
     // #1 Init reading progress observer after first grid render — v1.92
     setTimeout(_initReadingProgress, 400);
+    // Activate nav hover effects after 1.5s — prevents emoji/epic-btn flickering during load — v3.34
+    setTimeout(function() {
+      var nav = document.getElementById('mainNav');
+      if (nav) nav.classList.add('nav-hover-ready');
+    }, 1500);
     // SEO deep-link: #open=ID from concept static pages → open card — v2.68
     (function() {
       var hash = window.location.hash;
@@ -27270,21 +27275,38 @@ function playStreakMilestoneSFX() {
   cursor: pointer;
   text-decoration: none;
   white-space: nowrap;
-  opacity: 0.45;
-  pointer-events: all;
-  transform: none;
-  transition: opacity 0.2s ease, border-color 0.2s ease;
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.9);
+  transition: opacity 0.2s ease, transform 0.2s ease, border-color 0.2s;
 }
 /* Hide on mobile — lives in hamburger menu instead — v1.73b */
 @media (max-width: 768px) {
   .nav-epic-standalone { display: none !important; }
 }
-#mainNav:hover .nav-epic-standalone,
-.nav-epic-standalone:hover {
+/* Hover reveal — only active after .nav-hover-ready class (added after 1.5s) */
+#mainNav.nav-hover-ready:hover .nav-epic-standalone {
   opacity: 1;
+  pointer-events: all;
+  transform: scale(1);
 }
 .nav-epic-standalone:hover { border-color: rgba(232,213,163,0.6); }
-/* v1.71 — hover emojis for Spark / Browse / Stash — opacity-only, no layout shift */
+
+/* While nav-hover-ready not yet set: suppress all hover transitions so nothing flickers on load */
+#mainNav:not(.nav-hover-ready) .nav-epic-standalone,
+#mainNav:not(.nav-hover-ready) .nav-read-emoji,
+#mainNav:not(.nav-hover-ready) .nav-write-emoji,
+#mainNav:not(.nav-hover-ready) .nav-speak-emoji,
+#mainNav:not(.nav-hover-ready) .nav-spark-emoji,
+#mainNav:not(.nav-hover-ready) .nav-browse-emoji,
+#mainNav:not(.nav-hover-ready) .nav-stash-emoji,
+#mainNav:not(.nav-hover-ready) .nav-library-emoji,
+#mainNav:not(.nav-hover-ready) .nav-story-emoji,
+#mainNav:not(.nav-hover-ready) .nav-corner-emoji,
+#mainNav:not(.nav-hover-ready) .nav-lexicon-emoji {
+  transition: none !important;
+}
+/* v1.71 — hover emojis for Spark / Browse / Stash */
 .nav-spark-emoji,
 .nav-browse-emoji,
 .nav-stash-emoji,
@@ -27293,15 +27315,14 @@ function playStreakMilestoneSFX() {
 .nav-corner-emoji,
 .nav-lexicon-emoji {
   display: inline-block;
-  opacity: 0.15;
-  width: 1.15em;
+  opacity: 0;
+  max-width: 0;
   overflow: hidden;
   vertical-align: middle;
   line-height: 1;
-  transition: opacity 0.3s ease;
-  margin-right: 3px;
+  transition: opacity 0.35s ease, max-width 0.35s ease, margin-right 0.35s ease;
+  margin-right: 0;
   font-size: 0.8rem;
-  /* Width always reserved — text never shifts. Resting at 0.15 prevents pop */
 }
 .nav-lexicon-emoji {
   font-family: 'Playfair Display', serif;
@@ -27318,26 +27339,29 @@ function playStreakMilestoneSFX() {
 .nav-corner-nav-btn:hover .nav-corner-emoji,
 .nav-lexicon-btn:hover .nav-lexicon-emoji {
   opacity: 1;
+  max-width: 1.4em;
+  margin-right: 4px;
 }
-/* v2.94: Read · Write · Speak hover emojis — opacity-only, no layout shift */
+/* v2.94: Read · Write · Speak hover emojis */
 .nav-read-emoji,
 .nav-write-emoji,
 .nav-speak-emoji {
   display: inline-block;
-  opacity: 0.15;
-  width: 1.15em;
+  opacity: 0;
+  max-width: 0;
   overflow: hidden;
   vertical-align: middle;
   line-height: 1;
-  transition: opacity 0.3s ease;
-  margin-right: 3px;
+  transition: opacity 0.35s ease, max-width 0.35s ease, margin-right 0.35s ease;
+  margin-right: 0;
   font-size: 0.8rem;
-  /* Width always reserved — text never shifts. Resting at 0.15 prevents pop */
 }
 .nav-read-btn:hover .nav-read-emoji,
 .nav-write-btn:hover .nav-write-emoji,
 .nav-speak-btn:hover .nav-speak-emoji {
   opacity: 1;
+  max-width: 1.4em;
+  margin-right: 4px;
 }
 
 /* ── v2.5: Spark panel header ── */

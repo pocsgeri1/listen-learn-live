@@ -6,6 +6,18 @@
 
 ---
 
+## v3.34 — 2026-08-08 · Page load smoothing
+
+### index.html
+- **Font FOUT eliminated:** Changed Google Fonts from `display=swap` to `display=block`. Browser holds text invisible until Playfair Display / DM Sans / DM Mono arrive instead of rendering a fallback font and swapping — no more text reflow/resize during load. Since the `ep-preload` guard already hides content during the data fetch, fonts are ready before any text is revealed on most connections.
+- **Nav entrance animation:** Logo, nav island (Read · Write · Speak), and right side each slide in separately with `cubic-bezier(0.16, 1, 0.3, 1)` easing. Logo arrives first (0.05s), island second (0.17s), right side last (0.27s). Logo gets a brief accent glow (`text-shadow: 0 0 28px rgba(232,213,163,0.22)`) at the 55% mark that settles clean. `prefers-reduced-motion` suppresses all entrance animations.
+- **Staggered content reveal:** Replaced the simultaneous single opacity fade-in with a JS-driven cascade after the `ep-preload` guard lifts. Each section is held at `opacity: 0` via inline style then revealed 90ms apart: hero (40ms) → browse toggle (130ms) → episodes (220ms) → content rows (310ms) → themes (400ms). Each element uses its own CSS transition so the timing is handled per-element cleanly.
+- **Nav hover effects delayed:** Nav emoji expand and "I feel epic" reveal are disabled for the first 1.5s via `#mainNav:not(.nav-hover-ready)` selector with `transition: none !important`. After 1.5s, `setTimeout` adds `.nav-hover-ready` class to `#mainNav`, activating all hover transitions. Prevents any hover jank from interfering with the page load sequence.
+- **Nav emojis:** Reverted to original `max-width: 0 → 1.4em` expand-on-hover behavior (user preference). The `.nav-hover-ready` delay means they never fire during load.
+- **"I feel epic" button:** Reverted to `opacity: 0; pointer-events: none; transform: scale(0.9)` default, reveals on `#mainNav.nav-hover-ready:hover`. Invisible during load, available after 1.5s.
+
+---
+
 ## v3.33 — 2026-08-08 · Polish pass
 
 ### index.html
