@@ -10222,7 +10222,7 @@
   opacity: 0;
 }
 .vocab-my-tile.vocab-tile-open .vocab-tile-detail {
-  max-height: 300px;
+  max-height: 420px;
   opacity: 1;
 }
 @media (prefers-reduced-motion: reduce) {
@@ -10254,6 +10254,169 @@
 
 /* fade animation for sort change */
 .vocab-my-list.sort-fade { opacity: 0; transition: opacity 0.12s ease; }
+
+/* ── Vocab practice history — v3.30 ─────────────── */
+.vocab-tile-practice-history {
+  border-top: 0.5px solid var(--border); margin-top: 6px; padding-top: 8px;
+}
+.vocab-tile-ph-label {
+  font-family: 'DM Mono', monospace; font-size: 0.44rem; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--muted); margin-bottom: 5px;
+}
+.vocab-tile-ph-verdict {
+  display: inline-block; font-family: 'DM Mono', monospace; font-size: 0.46rem;
+  letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 7px;
+  border-radius: 2px; margin-bottom: 5px;
+}
+.vocab-tile-ph-verdict.great { background: rgba(110,180,110,0.15); color: #7bcf7b; }
+.vocab-tile-ph-verdict.good  { background: rgba(180,160,80,0.15);  color: #c9b55a; }
+.vocab-tile-ph-verdict.needs-work { background: rgba(200,100,80,0.12); color: #d07a6a; }
+.vocab-tile-ph-sentence {
+  font-family: 'Playfair Display', serif; font-style: italic;
+  font-size: 0.72rem; color: var(--text); line-height: 1.45; margin-bottom: 4px;
+}
+.vocab-tile-ph-feedback {
+  font-family: 'DM Sans', sans-serif; font-size: 0.67rem; color: var(--muted2);
+  line-height: 1.4;
+}
+
+/* ── Concepts sort row — v3.31 ──────────────────── */
+.lib-concept-sort-row {
+  display: flex; gap: 6px; padding: 0 0 10px; align-items: center;
+}
+.lib-concept-sort-btn {
+  font-family: 'DM Mono', monospace; font-size: 0.46rem; letter-spacing: 0.08em;
+  text-transform: uppercase; padding: 4px 10px;
+  border: 0.5px solid var(--border); border-radius: 3px;
+  background: none; color: var(--muted); cursor: pointer;
+  transition: color 0.14s, border-color 0.14s, background 0.14s;
+}
+.lib-concept-sort-btn:hover { color: var(--accent); border-color: var(--accent); }
+.lib-concept-sort-btn.active { color: var(--accent); border-color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, transparent); }
+
+/* ── Related concept chips — v3.31 ──────────────── */
+.lib-detail-related-chips {
+  display: flex; flex-wrap: wrap; gap: 6px; margin-top: 2px;
+}
+.lib-detail-chip {
+  font-family: 'DM Sans', sans-serif; font-size: 0.68rem; padding: 4px 10px;
+  border: 0.5px solid var(--border); border-radius: 3px;
+  background: none; color: var(--muted2); cursor: pointer;
+  transition: color 0.14s, border-color 0.14s, background 0.14s;
+  text-align: left;
+}
+.lib-detail-chip:hover { color: var(--accent); border-color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, transparent); }
+
+/* ── Practice Recent Sessions — v3.30 ───────────── */
+.practice-recent-section {
+  margin-top: 24px; padding: 0 2px;
+}
+.practice-recent-label {
+  font-family: 'DM Mono', monospace; font-size: 0.46rem; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--muted); margin-bottom: 12px;
+}
+.practice-recent-item {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 10px 0; border-bottom: 0.5px solid var(--border);
+}
+.practice-recent-item:last-child { border-bottom: none; }
+.practice-recent-verdict {
+  flex-shrink: 0; font-family: 'DM Mono', monospace; font-size: 0.44rem;
+  letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 7px;
+  border-radius: 2px; margin-top: 2px;
+}
+.practice-recent-verdict.great { background: rgba(110,180,110,0.15); color: #7bcf7b; }
+.practice-recent-verdict.good  { background: rgba(180,160,80,0.15);  color: #c9b55a; }
+.practice-recent-verdict.needs-work { background: rgba(200,100,80,0.12); color: #d07a6a; }
+.practice-recent-word {
+  font-family: 'Playfair Display', serif; font-size: 0.8rem; color: var(--text);
+  font-weight: 600; margin-bottom: 2px;
+}
+.practice-recent-sentence {
+  font-family: 'DM Sans', sans-serif; font-size: 0.68rem; color: var(--muted2);
+  font-style: italic; line-height: 1.4;
+}
+
+/* ── Share stats modal — v3.32 ───────────────────── */
+.home-share-btn {
+  font-family: 'DM Mono', monospace; font-size: 0.46rem; letter-spacing: 0.1em;
+  text-transform: uppercase; padding: 5px 14px;
+  border: 0.5px solid var(--border); border-radius: 3px;
+  background: none; color: var(--muted); cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+  margin-top: 4px; display: block; margin-left: auto; margin-right: auto;
+}
+.home-share-btn:hover { color: var(--accent); border-color: var(--accent); }
+.home-share-modal-backdrop {
+  position: fixed; inset: 0; z-index: 9999;
+  background: rgba(0,0,0,0.72); display: flex; align-items: center; justify-content: center;
+  padding: 24px; opacity: 0; transition: opacity 0.22s ease;
+}
+.home-share-modal-backdrop.visible { opacity: 1; }
+.home-share-card {
+  background: #141414; border: 0.5px solid rgba(255,255,255,0.1);
+  border-radius: 14px; padding: 28px 28px 22px; max-width: 340px; width: 100%;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+}
+.home-share-card-brand {
+  font-family: 'DM Mono', monospace; font-size: 0.46rem; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--muted); margin-bottom: 20px;
+}
+.home-share-card-hero {
+  font-family: 'Playfair Display', serif; font-size: 3rem; color: var(--accent);
+  line-height: 1; margin-bottom: 2px;
+}
+.home-share-card-hero-label {
+  font-family: 'DM Mono', monospace; font-size: 0.46rem; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--muted); margin-bottom: 18px;
+}
+.home-share-card-stats {
+  display: flex; gap: 20px; margin-bottom: 18px;
+}
+.home-share-card-stat { flex: 1; }
+.home-share-card-stat-num {
+  font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--text);
+}
+.home-share-card-stat-label {
+  font-family: 'DM Mono', monospace; font-size: 0.42rem; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--muted);
+}
+.home-share-card-cats {
+  display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 20px;
+}
+.home-share-card-cat-chip {
+  font-family: 'DM Mono', monospace; font-size: 0.42rem; letter-spacing: 0.07em;
+  text-transform: uppercase; padding: 3px 8px; border-radius: 3px;
+  border: 0.5px solid;
+}
+.home-share-card-footer {
+  font-family: 'DM Mono', monospace; font-size: 0.42rem; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--muted); text-align: right;
+}
+.home-share-modal-actions {
+  display: flex; gap: 10px; margin-top: 16px; justify-content: flex-end;
+}
+.home-share-modal-btn {
+  font-family: 'DM Mono', monospace; font-size: 0.46rem; letter-spacing: 0.08em;
+  text-transform: uppercase; padding: 6px 14px;
+  border: 0.5px solid var(--border); border-radius: 3px;
+  background: none; color: var(--muted); cursor: pointer;
+  transition: color 0.14s, border-color 0.14s;
+}
+.home-share-modal-btn:hover { color: var(--accent); border-color: var(--accent); }
+.home-share-modal-btn.primary { color: var(--accent); border-color: var(--accent); }
+
+/* ── Unfav toast — v3.33 ─────────────────────────── */
+.lib-toast {
+  position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(12px);
+  background: var(--surface2); border: 0.5px solid var(--border);
+  border-radius: 6px; padding: 8px 16px;
+  font-family: 'DM Mono', monospace; font-size: 0.5rem; letter-spacing: 0.07em;
+  text-transform: uppercase; color: var(--muted2);
+  opacity: 0; transition: opacity 0.18s ease, transform 0.18s ease;
+  z-index: 8888; pointer-events: none; white-space: nowrap;
+}
+.lib-toast.visible { opacity: 1; transform: translateX(-50%) translateY(0); }
 
 /* ── Episode inline expand — v3.28 ──────────────── */
 .ep-fav-tile { cursor: pointer; }
@@ -11775,6 +11938,25 @@
   ← Home
 </button>
 
+<!-- Unfav toast — v3.33 -->
+<div class="lib-toast" id="libToast"></div>
+
+<!-- Share stats modal — v3.32 -->
+<div class="home-share-modal-backdrop" id="homeShareModal" style="display:none" onclick="if(event.target===this)_homeCloseShareCard()">
+  <div class="home-share-card" id="homeShareCardEl">
+    <div class="home-share-card-brand">epistemic.live</div>
+    <div class="home-share-card-hero" id="shareHeroNum">0</div>
+    <div class="home-share-card-hero-label">concepts mastered</div>
+    <div class="home-share-card-stats" id="shareStatRow"></div>
+    <div class="home-share-card-cats" id="shareCardCats"></div>
+    <div class="home-share-card-footer" id="shareCardDate"></div>
+    <div class="home-share-modal-actions">
+      <button class="home-share-modal-btn" onclick="_homeCloseShareCard()">Close</button>
+      <button class="home-share-modal-btn primary" onclick="_homeCopyShareText()">Copy text</button>
+    </div>
+  </div>
+</div>
+
 <!-- MOBILE SCROLL-REVEAL LOGO ROW — v3.12 -->
 <div class="mob-logo-reveal" id="mobLogoReveal" aria-hidden="true">
   <div class="mob-logo-reveal-inner">
@@ -12889,10 +13071,13 @@
   </div>
   </div><!-- /.home-collapse-wrap -->
 
-  <!-- Stats toggle button — v3.31 -->
-  <button class="home-stats-toggle" id="homeStatsToggle" onclick="_homeToggleStats()">
-    Stats <span class="home-stats-toggle-arrow">↓</span>
-  </button>
+  <!-- Stats toggle button + share — v3.31/v3.32 -->
+  <div style="display:flex;align-items:center;justify-content:center;gap:10px">
+    <button class="home-stats-toggle" id="homeStatsToggle" onclick="_homeToggleStats()">
+      Stats <span class="home-stats-toggle-arrow">↓</span>
+    </button>
+    <button class="home-share-btn" onclick="_homeShowShareCard()" title="Share your stats">Share ↗</button>
+  </div>
   <!-- Stats section: charts + goal — v3.31 -->
   <div class="home-stats-section" id="homeStatsSection">
     <div class="home-stats-inner">
@@ -23742,6 +23927,7 @@ var _homeRange = 'all'; // 'all' | 'week' | 'month' — dashboard range toggle s
 var _libConceptFilter = { cat: null, letter: null, notesOnly: false };
 var _libAzOpen = false;
 var _libConceptSearch = ''; // live search string — v3.30
+var _libConceptSort = 'newest'; // 'newest' | 'alpha' — v3.31
 // Legacy alias (kept for safety — internal code should use _libConceptFilter)
 Object.defineProperty(window, '_libActiveCat', {
   get: function() { return _libConceptFilter.cat; },
@@ -24003,9 +24189,10 @@ function _homeShowBackBtn() {
   requestAnimationFrame(function() {
     requestAnimationFrame(function() { btn.classList.add('visible'); });
   });
-  // Auto-hide after 6s if user doesn't interact
+  // Auto-hide after 6s desktop / 10s mobile
+  var isMobile = window.matchMedia && window.matchMedia('(hover: none)').matches;
   clearTimeout(_homeBackBtnTimer);
-  _homeBackBtnTimer = setTimeout(_homeHideBackBtn, 6000);
+  _homeBackBtnTimer = setTimeout(_homeHideBackBtn, isMobile ? 10000 : 6000);
 }
 var _homeBackBtnTimer = null;
 
@@ -24114,7 +24301,11 @@ function _libRenderSaved() {
     : '';
 
   var searchHtml = '<div class="lib-search-wrap"><input class="lib-search-input" id="libConceptSearch" type="search" placeholder="Search saved concepts…" value="' + (_libConceptSearch || '').replace(/"/g,'&quot;') + '" oninput="_libOnConceptSearch(this.value)" autocomplete="off" spellcheck="false"></div>';
-  panel.innerHTML = searchHtml + filterRow + letterRail + '<div class="lib-grid" id="libConceptGrid"></div>';
+  var sortRowHtml = '<div class="lib-concept-sort-row">' +
+    '<button class="lib-concept-sort-btn' + (_libConceptSort === 'newest' ? ' active' : '') + '" onclick="_libConceptSetSort(\'newest\')">Newest</button>' +
+    '<button class="lib-concept-sort-btn' + (_libConceptSort === 'alpha' ? ' active' : '') + '" onclick="_libConceptSetSort(\'alpha\')">A–Z</button>' +
+  '</div>';
+  panel.innerHTML = searchHtml + filterRow + letterRail + sortRowHtml + '<div class="lib-grid" id="libConceptGrid"></div>';
   _libRenderConceptGrid(ids, tsMap);
 }
 
@@ -24183,6 +24374,18 @@ function _libRenderConceptGrid(ids, tsMap) {
     if (searchQ && !((c.term || '').toLowerCase().includes(searchQ) || (c.category || '').toLowerCase().includes(searchQ))) return false;
     return true;
   });
+
+  // Apply sort — v3.31
+  if (_libConceptSort === 'alpha') {
+    visibleIds.sort(function(a, b) {
+      var ca = CONCEPTS && CONCEPTS.find(function(x) { return x.id === a; });
+      var cb = CONCEPTS && CONCEPTS.find(function(x) { return x.id === b; });
+      return ((ca && ca.term) || '').localeCompare((cb && cb.term) || '');
+    });
+  } else {
+    // newest: sort by timestamp desc
+    visibleIds.sort(function(a, b) { return (tsMap[b] || 0) - (tsMap[a] || 0) || b - a; });
+  }
 
   if (!visibleIds.length) {
     var hasFilters = _libConceptFilter.cat || _libConceptFilter.letter || _libConceptFilter.notesOnly;
@@ -24253,6 +24456,23 @@ function _libToggleAZ() {
   }
 }
 
+// ── Concepts sort — v3.31 ──────────────────────────
+function _libConceptSetSort(sort) {
+  _libConceptSort = sort;
+  // Update sort btn active states without full re-render
+  document.querySelectorAll('.lib-concept-sort-btn').forEach(function(btn) {
+    btn.classList.toggle('active', btn.textContent.trim().toLowerCase().replace('–','').replace('a z','alpha').replace('az','alpha') === sort ||
+      (sort === 'newest' && btn.textContent.trim() === 'Newest') ||
+      (sort === 'alpha' && btn.textContent.trim() === 'A–Z'));
+  });
+  var grid = document.getElementById('libConceptGrid');
+  if (!grid) { _libRenderSaved(); return; }
+  var tsMap = {};
+  try { tsMap = JSON.parse(localStorage.getItem('lll_mastered_ts_v1') || '{}'); } catch(e) {}
+  var ids = typeof mastered !== 'undefined' ? Array.from(mastered) : [];
+  _libRenderConceptGrid(ids, tsMap);
+}
+
 // Legacy shim — kept for any external callers
 function _libFilterCat(cat) {
   _libSetFilter('cat', cat);
@@ -24283,6 +24503,20 @@ function _libToggleSaved(id, el) {
     episodeBtn = '<button class="lib-detail-btn" onclick="closeLibrary();openEpisodeDrawer(' + c.collection_id + ')">↗ Episode</button>';
   }
 
+  // Build related concept chips
+  var relatedChipsHtml = '';
+  if (c.related_ids && c.related_ids.length) {
+    var chips = c.related_ids.slice(0, 4).map(function(rid) {
+      var rc = CONCEPTS && CONCEPTS.find(function(x) { return x.id === rid; });
+      if (!rc) return '';
+      var rColor = (typeof CAT_COLOR !== 'undefined' && CAT_COLOR[rc.category]) || 'var(--accent)';
+      return '<button class="lib-detail-chip" style="border-color:' + rColor + '20;color:' + rColor + '" onclick="closeLibrary();setTimeout(function(){_ccOpenRelated(' + id + ');},80)">' + _esc(rc.term) + '</button>';
+    }).filter(Boolean).join('');
+    if (chips) {
+      relatedChipsHtml = '<div style="margin-bottom:10px"><div class="lib-detail-label" style="margin-bottom:6px">Related</div><div class="lib-detail-related-chips">' + chips + '</div></div>';
+    }
+  }
+
   // Build detail as a SIBLING row in the grid (not inside the tile)
   var row = document.createElement('div');
   row.className = 'lib-detail-row';
@@ -24299,12 +24533,12 @@ function _libToggleSaved(id, el) {
         (c.prompt ? '<div class="lib-detail-label" style="margin-top:8px">Prompt</div><div class="lib-detail-prompt">' + _esc(c.prompt) + '</div>' : '') +
       '</div>' +
     '</div>' +
+    relatedChipsHtml +
     '<div class="lib-detail-note-wrap">' +
       '<div class="lib-detail-label">Your note</div>' +
       '<textarea class="lib-detail-note-ta" id="libDetailNoteTA-' + id + '" placeholder="Add a note…" rows="2">' + _esc(noteText) + '</textarea>' +
     '</div>' +
     '<div class="lib-detail-actions">' +
-      (c.related_ids && c.related_ids.length ? '<button class="lib-detail-btn" onclick="closeLibrary();setTimeout(function(){_ccOpenRelated(' + id + ');},80)">\u22ef Related</button>' : '') +
       '<button class="lib-detail-btn" onclick="closeLibrary();openSparkPanel(' + id + ')">✦ Spark it</button>' +
       episodeBtn +
     '</div>';
@@ -24465,7 +24699,7 @@ function _libRenderEpisodes() {
         '<div class="ep-fav-tile-meta">' + (col.podcast ? col.podcast.replace(/</g,'&lt;') : '') + (favDateStr ? ' \u00b7 ' + favDateStr : '') + '</div>' +
         (statsLine ? '<div class="ep-fav-tile-stats">' + statsLine + '</div>' : '') +
         '<div class="ep-fav-tile-actions">' +
-          '<button class="ep-fav-tile-unfav" title="Remove from favourites" onclick="event.stopPropagation();_epToggleFav(' + col.id + ')">\u2665</button>' +
+          '<button class="ep-fav-tile-unfav" title="Remove from favourites" onclick="event.stopPropagation();_epToggleFav(' + col.id + ');_libShowToast(\'Removed from favourites\')">\u2665</button>' +
         '</div>' +
         detailHtml +
       '</div>';
@@ -24626,12 +24860,28 @@ function _libVocabRenderSeg() {
         ? '<span class="vocab-my-badge">' + (state === 'practiced' ? 'practiced' : state === 'mastered' ? 'mastered' : state) + '</span>'
         : '';
       var practiced = state && state !== 'new';
+      // Build practice history section if grading data exists
+      var phHtml = '';
+      if (w.grading && w.grading.gradedAt) {
+        var verdict = (w.grading.verdict || '').toLowerCase();
+        var verdictClass = verdict === 'great' ? 'great' : verdict === 'good' ? 'good' : 'needs-work';
+        var verdictLabel = verdict === 'great' ? 'Great' : verdict === 'good' ? 'Good' : 'Needs work';
+        var sentence = (w.grading.userSentence || '').replace(/[<>&"]/g, function(c){return{'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c];});
+        var feedback = (w.grading.feedback || '').replace(/[<>&"]/g, function(c){return{'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c];});
+        phHtml = '<div class="vocab-tile-practice-history">' +
+          '<div class="vocab-tile-ph-label">Last Lexi session</div>' +
+          '<span class="vocab-tile-ph-verdict ' + verdictClass + '">' + verdictLabel + '</span>' +
+          (sentence ? '<div class="vocab-tile-ph-sentence">&ldquo;' + sentence + '&rdquo;</div>' : '') +
+          (feedback ? '<div class="vocab-tile-ph-feedback">' + feedback + '</div>' : '') +
+        '</div>';
+      }
       return '<div class="vocab-my-tile" id="vt-' + i + '" onclick="_libVocabToggleTile(' + i + ', this)">' +
         '<div class="vocab-my-word">' + word + badge + '</div>' +
         (def ? '<div class="vocab-my-def">' + def + '</div>' : '') +
         (src ? '<div class="vocab-my-meta">' + src + '</div>' : '') +
         '<div class="vocab-tile-detail">' +
           (def ? '<div class="vocab-tile-def-full">' + def + '</div>' : '') +
+          phHtml +
           '<div class="vocab-tile-actions">' +
             '<button class="vocab-tile-action-btn' + (practiced ? ' practiced' : '') + '" onclick="event.stopPropagation();_libVocabMarkPracticed(\'' + (w.word || w.term || '').replace(/'/g,"\\'") + '\', this)">' +
               (practiced ? '✓ Practiced' : 'Mark practiced') +
@@ -24721,7 +24971,8 @@ function _libVocabMarkPracticed(word, btn) {
 
 function _libRenderPractice() {
   var panel = document.getElementById('libPanel-practice');
-  if (!panel || panel.dataset.rendered) return;
+  if (!panel) return;
+  // Always re-render — live data (practice counts, recent sessions) changes between visits
 
   // Live data for each card
   var nSaved = typeof mastered !== 'undefined' ? mastered.size : 0;
@@ -24734,6 +24985,34 @@ function _libRenderPractice() {
   try {
     var qs = JSON.parse(localStorage.getItem('lll_quiz_stats_v1') || 'null');
     if (qs && qs.plays) quizLine = 'Last score: ' + qs.score + ' / ' + (qs.max || 180);
+  } catch(e) {}
+
+  // Build recent Lexi sessions from lexicon entries with grading data
+  var recentHtml = '';
+  try {
+    var _lxAll = JSON.parse(localStorage.getItem('lll_lexicon_v1') || '[]');
+    var practiced = _lxAll.filter(function(w) { return w.grading && w.grading.gradedAt; });
+    practiced.sort(function(a, b) { return (b.grading.gradedAt || 0) - (a.grading.gradedAt || 0); });
+    var recent = practiced.slice(0, 5);
+    if (recent.length) {
+      var _esc2 = function(s) { return (s||'').replace(/[<>&"]/g, function(c){return{'<':'&lt;','>':'&gt;','&':'&amp;'}[c];}); };
+      recentHtml = '<div class="practice-recent-section">' +
+        '<div class="practice-recent-label">Recent Lexi sessions</div>' +
+        recent.map(function(w) {
+          var v = (w.grading.verdict || '').toLowerCase();
+          var vc = v === 'great' ? 'great' : v === 'good' ? 'good' : 'needs-work';
+          var vl = v === 'great' ? 'Great' : v === 'good' ? 'Good' : 'Needs work';
+          var sentence = _esc2(w.grading.userSentence || '');
+          return '<div class="practice-recent-item">' +
+            '<span class="practice-recent-verdict ' + vc + '">' + vl + '</span>' +
+            '<div>' +
+              '<div class="practice-recent-word">' + _esc2(w.word || w.term || '') + '</div>' +
+              (sentence ? '<div class="practice-recent-sentence">&ldquo;' + sentence + '&rdquo;</div>' : '') +
+            '</div>' +
+          '</div>';
+        }).join('') +
+      '</div>';
+    }
   } catch(e) {}
 
   panel.innerHTML =
@@ -24762,8 +25041,9 @@ function _libRenderPractice() {
           '<div class="practice-card-live">' + quizLine + '</div>' +
         '</div>' +
       '</div>' +
-    '</div>';
-  panel.dataset.rendered = '1';
+    '</div>' +
+    recentHtml;
+  // Don't cache — refresh each visit so live data shows
 }
 
 // ── Home dashboard count-up — v3.18 ───────────────────────────
@@ -24912,6 +25192,7 @@ function _homeRenderDashboard(skipCountUp) {
   var strip = document.getElementById('homeCompactStrip');
   if (strip) {
     strip.innerHTML =
+      '<span style="font-size:0.55rem;letter-spacing:0.08em;opacity:0.5;margin-right:8px;text-transform:uppercase;font-family:\'DM Mono\',monospace">↑ Show dashboard</span>' +
       '<span>' + nSaved + ' concepts</span><span class="strip-sep">·</span>' +
       '<span>' + nWords + ' words</span><span class="strip-sep">·</span>' +
       '<span>' + nEpisodes + ' eps ♥</span>';
@@ -25066,6 +25347,73 @@ function _homeRenderGoal() {
     '<div class="home-goal-bar"><div class="home-goal-fill" style="width:' + pct + '%"></div></div>' +
     '<div class="home-goal-status">' + (done ? '✦ Goal reached' : (GOAL - thisWeek) + ' to go') + '</div>';
 }
+
+// ── Share stats card — v3.32 ──────────────────────────────────
+function _homeShowShareCard() {
+  var modal = document.getElementById('homeShareModal');
+  if (!modal) return;
+
+  // Populate data
+  var nSaved = typeof mastered !== 'undefined' ? mastered.size : 0;
+  var streak = _homeComputeStreak ? _homeComputeStreak() : 0;
+  var nWords = 0;
+  try { var _lx = JSON.parse(localStorage.getItem('lll_lexicon_v1') || '[]'); nWords = Array.isArray(_lx) ? _lx.length : 0; } catch(e) {}
+
+  // Category breakdown
+  var catCounts = {};
+  var tsMap = {};
+  try { tsMap = JSON.parse(localStorage.getItem('lll_mastered_ts_v1') || '{}'); } catch(e) {}
+  var ids = typeof mastered !== 'undefined' ? Array.from(mastered) : [];
+  ids.forEach(function(id) {
+    var c = CONCEPTS && CONCEPTS.find(function(x) { return x.id === id; });
+    if (c) catCounts[c.category] = (catCounts[c.category] || 0) + 1;
+  });
+  var topCats = Object.entries(catCounts).sort(function(a,b){return b[1]-a[1];}).slice(0,5);
+
+  var heroEl = document.getElementById('shareHeroNum');
+  var statRow = document.getElementById('shareStatRow');
+  var catsEl = document.getElementById('shareCardCats');
+  var footerEl = document.getElementById('shareCardDate');
+  if (heroEl) heroEl.textContent = nSaved;
+  if (statRow) statRow.innerHTML =
+    '<div class="home-share-card-stat"><div class="home-share-card-stat-num">' + streak + '</div><div class="home-share-card-stat-label">day streak</div></div>' +
+    '<div class="home-share-card-stat"><div class="home-share-card-stat-num">' + nWords + '</div><div class="home-share-card-stat-label">words saved</div></div>';
+  if (catsEl) catsEl.innerHTML = topCats.map(function(kv) {
+    var color = (typeof CAT_COLOR !== 'undefined' && CAT_COLOR[kv[0]]) || 'var(--accent)';
+    return '<span class="home-share-card-cat-chip" style="border-color:' + color + ';color:' + color + '">' + kv[0] + ' ×' + kv[1] + '</span>';
+  }).join('');
+  if (footerEl) footerEl.textContent = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+
+  modal.style.display = 'flex';
+  requestAnimationFrame(function() { requestAnimationFrame(function() { modal.classList.add('visible'); }); });
+}
+
+function _homeCloseShareCard() {
+  var modal = document.getElementById('homeShareModal');
+  if (!modal) return;
+  modal.classList.remove('visible');
+  setTimeout(function() { modal.style.display = 'none'; }, 240);
+}
+
+function _homeCopyShareText() {
+  var nSaved = typeof mastered !== 'undefined' ? mastered.size : 0;
+  var streak = _homeComputeStreak ? _homeComputeStreak() : 0;
+  var text = 'I\u2019ve mastered ' + nSaved + ' concepts on epistemic.live \u2014 ' + streak + '-day streak \uD83D\uDCAC';
+  try {
+    navigator.clipboard.writeText(text).then(function() { _libShowToast('Copied to clipboard'); });
+  } catch(e) { _libShowToast('Copy: ' + text); }
+}
+
+// ── Toast helper — v3.33 ──────────────────────────────────────
+function _libShowToast(msg, durationMs) {
+  var el = document.getElementById('libToast');
+  if (!el) return;
+  el.textContent = msg;
+  el.classList.add('visible');
+  clearTimeout(_libToastTimer);
+  _libToastTimer = setTimeout(function() { el.classList.remove('visible'); }, durationMs || 2800);
+}
+var _libToastTimer = null;
 
 // ── Notes render — v3.23 dead code sweep (notes tab removed; stub kept for _libNoteDelete/_libNoteSave back-compat)
 function _libRenderNotes() { /* no-op — notes tab removed v3.23 */ }

@@ -6,6 +6,36 @@
 
 ---
 
+## v3.33 — 2026-08-08 · Polish pass
+
+### index.html
+- **Compact strip label:** Strip now prefixes "↑ Show dashboard" in a tiny DM Mono label so the purpose is self-evident — especially for new users who've never seen it collapsed.
+- **Back btn auto-dismiss:** Auto-hides after 6s on desktop, extended to 10s on touch devices (detected via `(hover: none)` media query) — more time to tap on mobile.
+- **Unfav toast:** Removing an episode from favourites now shows a 3s toast ("Removed from favourites"). Toast element (`#libToast`) is position:fixed, translates in from below, fades out. `_libShowToast(msg, durationMs)` helper added for reuse.
+- **Practice tab refresh:** Removed `panel.dataset.rendered = '1'` guard from `_libRenderPractice` — panel now re-renders on every tab visit so recent sessions and live word counts stay current.
+
+---
+
+## v3.32 — 2026-08-08 · Stats share card
+
+### index.html
+- **Share button:** A small "Share ↗" button sits alongside the Stats toggle. Opens a modal with a beautiful dark card showing the user's stats.
+- **Share card modal:** Full-screen backdrop (`rgba(0,0,0,0.72)`) with a centered `.home-share-card` dark glass panel. Contains: "epistemic.live" brand label, Playfair hero concept count, streak + words row, top-5 category chips (colored with `CAT_COLOR`), and today's date footer.
+- **Copy text action:** "Copy text" button in the modal writes a shareable sentence to clipboard ("I've mastered N concepts on epistemic.live — N-day streak 💬") via `navigator.clipboard`. Falls back to showing the text in a toast.
+- **`_homeShowShareCard()` / `_homeCloseShareCard()` / `_homeCopyShareText()`:** Three new functions. Modal closes on backdrop click too.
+
+---
+
+## v3.31 — 2026-08-08 · Concepts power-up + practice history
+
+### index.html
+- **Concepts sort row:** "Newest" / "A–Z" sort buttons appear above the concept grid. `_libConceptSort` state; `_libConceptSetSort()` updates active button and re-renders grid. Alpha sort uses `localeCompare`; newest sort by `lll_mastered_ts_v1` timestamp.
+- **Related concept chips:** When a concept tile expands, `related_ids` are rendered as tappable color-tinted chips (each chip border/text uses that concept's category color at 20% opacity). Clicking a chip closes Home and fires `_ccOpenRelated()`. Replaces the old `⋯ Related` plain button.
+- **Practice history in Vocab tiles:** When a word entry has `grading.gradedAt` (set by Lexi's `_lexiSavePracticeResult()`), the expanded tile shows a "Last Lexi session" section: verdict badge (great / good / needs-work color coded), the user's sentence in Playfair italic, and Lexi's feedback snippet.
+- **Practice tab recent sessions:** After the 3 practice mode cards, a "Recent Lexi sessions" section lists the 5 most-recently-practiced words (by `grading.gradedAt`) with verdict badge + user sentence. No new storage needed — reads existing `lll_lexicon_v1` entries.
+
+---
+
 ## v3.31 — 2026-08-08 · Stats section: charts + donut + weekly goal
 
 ### index.html
