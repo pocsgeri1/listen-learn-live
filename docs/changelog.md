@@ -6,6 +6,13 @@
 
 ---
 
+## v3.25b — 2026-08-08 · Dashboard refinement — accent borders, compact stats, duplicate fix
+### index.html
+- **Bucket accent left-borders:** Each personal bucket now has a permanent `2.5px solid var(--bucket-accent)` left border — color identity is always visible, not just on hover. Hover adds a subtle `color-mix` tinted background wash + number lifts in accent color. Number size increased to 2.5rem Playfair.
+- **Platform stats → compact bar:** Removed the two giant "27 / 744" secondary blocks. Replaced with a single compact `.home-stats-bar` DM Mono line ("↗ 27 new eps · ↗ 739 new concepts"). Range delta/tracking note appended inline to the same bar. Looks proportional and secondary — doesn't compete with the 4 personal buckets.
+- **Duplicate concept count fixed:** `nTotalCon` now filters `!c.duplicate_of` — matches the headline count (739, not 744).
+- **Mobile 2×2 grid:** Personal buckets go 2×2 on ≤600px. Top two get a `border-bottom` to form the grid.
+
 ## v3.25 — 2026-08-08 · Home v2 Phase B — dashboard redesign + momentum + smooth collapse
 ### index.html
 - **Dashboard extreme redesign:** Entire layout rebuilt. Panel tagline removed. New structure: eyebrow row ("Your library" + range toggle) → 4 personal buckets (full-width 4-col grid) → 2 platform stat buckets (secondary row, muted) → momentum line. Each personal bucket: 2rem Playfair number, tappable, `--bucket-accent` CSS var drives a scaleX(0→1) top-border reveal on hover + number color shift + translateY(-1px) scale(1.04). Bucket colors: Concepts=gold, Words=teal, Notes=purple, Eps ♥=red. `hover:none` + `prefers-reduced-motion` suppress all transforms.
