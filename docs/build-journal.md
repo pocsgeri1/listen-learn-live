@@ -6,6 +6,18 @@
 
 ---
 
+## 2026-08-08 — Bar chart % heights, grid bottom sheet, related preview positioning (v3.38)
+
+**Bar chart: `height: XX%` on flex children = always 0.** Percentage heights on flex children resolve to 0 when the flex parent has no definite height. Always use explicit pixel values for chart bars. Store in `data-h` attribute, animate via double-rAF.
+
+**2-col grid + bottom sheet beats inline expand.** For a 2-column word card grid, inline expand breaks the layout (card can't span both columns without grid tricks). Bottom sheet (`position:fixed; transform:translateY(100%) → 0`) is cleaner, works at any screen size, and feels native-app quality.
+
+**Related concept preview: position BEFORE `rcp-visible`.** Get the preview element's height (`offsetHeight`) BEFORE adding the visible class — forces a layout pass so `offsetHeight` returns the real height. Then set `top` to `rect.top - ph - 8`. If you add the class first, `offsetHeight` may still be 0.
+
+**`_vwsSorted` global must be set BEFORE innerHTML is written.** If the render function sets `innerHTML` and then sets `_vwsSorted`, any onclick that fires during the innerHTML write (shouldn't happen, but defensive) could hit a stale array. Set `_vwsSorted = sorted` before rendering tiles.
+
+**Episode `border-left-color` needs explicit `border-left-width`.** If the tile CSS only sets `border: 0.5px solid var(--border)` with no `border-left` override, the JS `tile.style.borderLeftColor = color` will work — but only if `border-left-width` is non-zero. The existing 0.5px border covers this; if ever changed to `border-left: none`, the accent won't show.
+
 ## 2026-08-08 — backdrop-filter safe on hero card; z-index on ::before; vocab filter pattern (v3.36)
 
 **`backdrop-filter: blur()` IS safe on `.home-hero-card`** even though engineering-standards bans it on containers with child transitions. The rule's concern is *hover* transitions causing per-frame recomposition. The hero card's only child transition is `opacity 0.15s` on `.home-hero-num.fading` — triggered once programmatically on load, not on hover. No per-frame cost.

@@ -6,6 +6,17 @@
 
 ---
 
+## v3.38 — 2026-08-08 · Vocab 2×2 grid, word sheet, related preview, episode accent, chart fixes
+
+### index.html
+- **Vocab 2-col card grid:** Replaced full-width list with a 2-column CSS grid. Each card shows word (Playfair), 3-line definition clamp, source meta, and a green practiced dot in the top-right corner. Solves the "only left half filled" layout problem.
+- **Word detail bottom sheet:** Tapping a vocab card now slides up a bottom sheet (`#vocabWordSheet`) with full definition, Lexi session history (verdict + sentence + feedback), and action buttons (Mark practiced / Practice now). Smooth `translateY` animation, backdrop tap to close, Escape key support.
+- **Related concept hover preview:** Hovering `.lib-detail-chip` in the concept detail panel shows a floating `#relConPreview` card with category color, term, and hook — no click required. Positioned above the chip via `getBoundingClientRect`. 120ms debounced hide.
+- **Episode tile accent color:** After `_libRenderEpisodes` renders, `_epAccentTiles()` paints each tile's left border with the color of its most-saved concept category. Podcast name promoted to top as a monospace tag.
+- **Bar chart bug fixed:** Bars rendered at `height:0%` (percentage on flexbox parent with no definite height = always 0). Switched to explicit pixel heights (`BAR_MAX_PX = 52`). Stored in `data-h`, animated in via double-rAF.
+- **Donut gap fixed:** `slice(0, 5)` left ~23% of circumference grey. Now draws ALL categories; legend shows top 5 + "Other N%" row. `stroke-linecap` changed from `round` to `butt`.
+- **Practice word bypass:** `_libVocabPracticeWord()` / `_vwsPracticeNow()` call `_lexiStartSession()` directly — no Lexi panel open step. Instant overlay with smooth animation.
+
 ## v3.37 — 2026-08-08 · Scroll fix, tab order, light/dark depth, vocab practice
 
 ### index.html

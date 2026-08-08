@@ -9574,8 +9574,9 @@
 .home-bar {
   width: 100%; border-radius: 6px;
   background: var(--accent); opacity: 0.18;
+  /* v3.38: animate from 0 on render — JS sets pixel height, CSS transitions it in */
   transition: height 0.55s cubic-bezier(0.16,1,0.3,1), opacity 0.35s;
-  min-height: 3px;
+  min-height: 0; height: 0; /* start at 0 so the transition is visible */
 }
 .home-bar.has-activity { opacity: 0.55; }
 .home-bar.today { opacity: 0.9; }
@@ -10010,6 +10011,50 @@
   .ep-fav-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
+/* Episode tile — color accent strip — v3.38 */
+.ep-fav-tile {
+  border-left: 2.5px solid transparent;
+  transition: border-color 0.2s, border-left-color 0.2s, background 0.15s;
+}
+.ep-fav-tile-podcast-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.44rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 4px;
+}
+
+/* ── Related concept hover preview — v3.38 ──────────── */
+#relConPreview {
+  position: fixed; z-index: 1900;
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 13px;
+  max-width: 220px;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.38);
+}
+#relConPreview.rcp-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.rcp-cat {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.4rem; letter-spacing: 0.14em; text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.rcp-term {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.82rem; color: var(--text); line-height: 1.25;
+  margin-bottom: 5px;
+}
+.rcp-hook {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.66rem; color: var(--muted2); line-height: 1.45;
+}
+
 /* Recents row */
 .ep-recents-label {
   font-family: 'DM Mono', monospace;
@@ -10380,45 +10425,70 @@
   color: var(--muted2);
 }
 
-/* My Words tile list */
+/* My Words — 2-col card grid — v3.38 */
 .vocab-my-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-  padding: 0 0 16px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  padding: 12px 16px 80px;
 }
 .vocab-my-tile {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  padding: 10px 20px;
+  gap: 5px;
+  padding: 12px 13px 10px;
+  border: 0.5px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
   cursor: pointer;
-  transition: background 0.13s;
-  border-bottom: 0.5px solid var(--border);
+  position: relative;
+  min-height: 96px;
+  transition: border-color 0.16s, background 0.16s, transform 0.16s;
+  overflow: hidden;
 }
-.vocab-my-tile:hover { background: var(--surface2); }
+.vocab-my-tile::after {
+  content: '';
+  position: absolute; inset: 0;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.028) 0%, transparent 60%);
+  pointer-events: none;
+}
+@media (hover: hover) {
+  .vocab-my-tile:hover {
+    border-color: var(--border-hover);
+    background: var(--surface2);
+    transform: translateY(-1px);
+  }
+}
+.vocab-my-tile:active { transform: scale(0.97); }
 .vocab-my-word {
   font-family: 'Playfair Display', serif;
-  font-size: 0.88rem;
+  font-size: 0.9rem;
   color: var(--text);
   line-height: 1.25;
+  padding-right: 14px;
 }
 .vocab-my-def {
   font-family: 'DM Sans', sans-serif;
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   color: var(--muted2);
   overflow: hidden;
   display: -webkit-box;
-  -webkit-line-clamp: 1;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
+  line-height: 1.45;
+  flex: 1;
 }
 .vocab-my-meta {
   font-family: 'DM Mono', monospace;
-  font-size: 0.5rem;
+  font-size: 0.44rem;
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--muted);
-  margin-top: 1px;
+  margin-top: auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .vocab-my-badge {
   display: inline-block;
@@ -10433,38 +10503,24 @@
   margin-left: 6px;
   vertical-align: middle;
 }
-/* Practiced dot — v3.36: replaces text badge */
+/* Practiced dot — top-right corner of card — v3.38 */
 .vocab-practiced-dot {
-  display: inline-block;
-  width: 6px; height: 6px;
+  position: absolute;
+  top: 11px; right: 11px;
+  width: 7px; height: 7px;
   border-radius: 50%;
   background: #7aaf8a;
-  margin-left: 7px;
-  vertical-align: middle;
+  box-shadow: 0 0 5px rgba(122,175,138,0.5);
   flex-shrink: 0;
 }
-/* Tile expand chevron — v3.36 */
-.vocab-tile-row {
-  display: flex; align-items: baseline; justify-content: space-between; gap: 6px;
-}
-.vocab-tile-chevron {
-  font-size: 0.6rem;
-  color: var(--muted);
-  opacity: 0.45;
-  transition: transform 0.22s cubic-bezier(0.4,0,0.2,1), opacity 0.22s;
-  flex-shrink: 0;
-  line-height: 1;
-  margin-top: 1px;
-}
-.vocab-tile-open .vocab-tile-chevron {
-  transform: rotate(90deg);
-  opacity: 0.7;
-}
+.vocab-tile-row { display: none; }
+.vocab-tile-chevron { display: none; }
 
-/* Light-mode — Vocab panel v3.21 */
+/* Light-mode — Vocab panel */
 [data-theme="light"] .vocab-seg-btn { color: var(--muted); }
 [data-theme="light"] .vocab-seg-btn.active { color: var(--accent2); border-color: var(--accent2); background: rgba(196,169,107,0.08); }
-[data-theme="light"] .vocab-my-tile:hover { background: var(--surface2); }
+[data-theme="light"] .vocab-my-tile { background: var(--surface); }
+[data-theme="light"] .vocab-my-tile:hover { background: var(--surface2); border-color: var(--border-hover); }
 [data-theme="light"] .vocab-my-word { color: var(--text); }
 
 /* ── Vocab controls — v3.36: sort + filter clearly separated ─────── */
@@ -10508,60 +10564,119 @@
 }
 [data-theme="light"] .vocab-filter-btn.active { color: #1e1b16; }
 
-/* ── Vocab tile inline expand — v3.28 ──────────── */
-.vocab-my-tile {
-  cursor: pointer;
+/* ── Vocab word detail bottom sheet — v3.38 ──────────── */
+#vocabWordSheetBg {
+  position: fixed; inset: 0; z-index: 1800;
+  background: rgba(0,0,0,0.55);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.26s ease;
 }
-.vocab-tile-detail {
-  max-height: 0; overflow: hidden;
-  transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
-  opacity: 0;
+#vocabWordSheetBg.vws-open { opacity: 1; pointer-events: auto; }
+#vocabWordSheet {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 1801;
+  background: var(--bg);
+  border-top: 0.5px solid var(--border);
+  border-radius: 20px 20px 0 0;
+  max-height: 76vh;
+  display: flex; flex-direction: column;
+  transform: translateY(100%);
+  transition: transform 0.34s cubic-bezier(0.32, 0.72, 0, 1);
+  will-change: transform;
 }
-.vocab-my-tile.vocab-tile-open .vocab-tile-detail {
-  max-height: 420px;
-  opacity: 1;
-}
+#vocabWordSheet.vws-open { transform: translateY(0); }
 @media (prefers-reduced-motion: reduce) {
-  .vocab-tile-detail { transition: none !important; }
+  #vocabWordSheet { transition: none; }
+  #vocabWordSheetBg { transition: none; }
 }
-.vocab-tile-open { background: var(--surface2) !important; }
-.vocab-tile-open .vocab-my-word { color: var(--accent); }
-.vocab-tile-def-full {
+.vws-handle {
+  width: 36px; height: 4px; border-radius: 2px;
+  background: var(--border); margin: 10px auto 0; flex-shrink: 0;
+}
+.vws-header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  padding: 12px 20px 10px; gap: 12px; flex-shrink: 0;
+  border-bottom: 0.5px solid var(--border);
+}
+.vws-word {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.35rem; font-weight: 700;
+  color: var(--text); line-height: 1.2;
+  flex: 1;
+}
+.vws-close {
+  background: none; border: none; cursor: pointer;
+  font-size: 1rem; color: var(--muted); padding: 4px;
+  line-height: 1; min-width: 32px; min-height: 32px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 6px; transition: color 0.14s, background 0.14s; flex-shrink: 0;
+}
+.vws-close:hover { color: var(--text); background: var(--surface2); }
+.vws-body {
+  overflow-y: auto; padding: 14px 20px;
+  padding-bottom: calc(20px + env(safe-area-inset-bottom));
+  flex: 1;
+}
+.vws-def {
   font-family: 'DM Sans', sans-serif;
-  font-size: 0.74rem; color: var(--text); line-height: 1.5;
-  padding: 8px 0 6px; border-top: 0.5px solid var(--border); margin-top: 4px;
+  font-size: 0.82rem; color: var(--text); line-height: 1.6;
+  margin-bottom: 12px;
 }
-.vocab-tile-actions {
-  display: flex; gap: 8px; padding: 6px 0 4px; flex-wrap: wrap;
+.vws-source {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.48rem; letter-spacing: 0.07em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 16px;
+}
+.vws-actions {
+  display: flex; gap: 8px; flex-wrap: wrap; padding-top: 4px;
 }
 .vocab-tile-action-btn {
   font-family: 'DM Mono', monospace; font-size: 0.5rem; letter-spacing: 0.07em;
-  text-transform: uppercase; padding: 4px 10px;
-  border: 0.5px solid var(--border); border-radius: 3px;
+  text-transform: uppercase; padding: 8px 14px;
+  border: 0.5px solid var(--border); border-radius: 6px;
   background: none; color: var(--muted); cursor: pointer;
-  transition: color 0.14s, border-color 0.14s;
-  white-space: nowrap;
+  transition: color 0.14s, border-color 0.14s, background 0.14s;
+  white-space: nowrap; min-height: 44px;
 }
 .vocab-tile-action-btn:hover { color: var(--accent); border-color: var(--accent); }
 .vocab-tile-action-btn.practiced { color: var(--accent); border-color: var(--accent); opacity: 0.7; }
-/* Practice-this-word — accent-tinted, visually primary among tile actions */
 .vocab-tile-action-btn.vocab-tile-action-practice {
   color: var(--accent);
   border-color: rgba(232,213,163,0.3);
   background: rgba(232,213,163,0.06);
+  flex: 1;
 }
 .vocab-tile-action-btn.vocab-tile-action-practice:hover {
   background: rgba(232,213,163,0.13);
   border-color: var(--accent);
 }
 [data-theme="light"] .vocab-tile-action-btn.vocab-tile-action-practice {
-  color: var(--accent2);
-  border-color: rgba(196,169,107,0.35);
-  background: rgba(196,169,107,0.07);
+  color: var(--accent2); border-color: rgba(196,169,107,0.35); background: rgba(196,169,107,0.07);
 }
-
-/* Hide truncated def when tile is open */
-.vocab-tile-open .vocab-my-def { display: none; }
+/* Practice history inside sheet */
+.vocab-tile-detail { display: none; } /* legacy, not used in grid — keep for compat */
+.vocab-tile-def-full { display: none; }
+.vws-ph {
+  border-top: 0.5px solid var(--border); margin-top: 12px; padding-top: 12px;
+}
+.vws-ph-label {
+  font-family: 'DM Mono', monospace; font-size: 0.44rem; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--muted); margin-bottom: 6px;
+}
+.vws-ph-verdict {
+  display: inline-block; font-family: 'DM Mono', monospace; font-size: 0.46rem;
+  letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 7px;
+  border-radius: 2px; margin-bottom: 6px;
+}
+.vws-ph-verdict.great { background: rgba(110,180,110,0.15); color: #7bcf7b; }
+.vws-ph-verdict.good  { background: rgba(180,160,80,0.15);  color: #c9b55a; }
+.vws-ph-verdict.needs-work { background: rgba(200,100,80,0.12); color: #d07a6a; }
+.vws-ph-sentence {
+  font-family: 'Playfair Display', serif; font-style: italic;
+  font-size: 0.78rem; color: var(--text); line-height: 1.5; margin-bottom: 5px;
+}
+.vws-ph-feedback {
+  font-family: 'DM Sans', sans-serif; font-size: 0.7rem; color: var(--muted2); line-height: 1.4;
+}
 
 /* fade animation for sort change */
 .vocab-my-list.sort-fade { opacity: 0; transition: opacity 0.12s ease; }
@@ -24905,7 +25020,7 @@ function _libToggleSaved(id, el) {
       var rc = CONCEPTS && CONCEPTS.find(function(x) { return x.id === rid; });
       if (!rc) return '';
       var rColor = (typeof CAT_COLOR !== 'undefined' && CAT_COLOR[rc.category]) || 'var(--accent)';
-      return '<button class="lib-detail-chip" style="border-color:' + rColor + '20;color:' + rColor + '" onclick="closeLibrary();setTimeout(function(){_ccOpenRelated(' + id + ');},80)">' + _esc(rc.term) + '</button>';
+      return '<button class="lib-detail-chip" style="border-color:' + rColor + '20;color:' + rColor + '" onmouseenter="_rcpShow(this,' + rc.id + ')" onmouseleave="_rcpHide()" onclick="closeLibrary();setTimeout(function(){_ccOpenRelated(' + id + ');},80)">' + _esc(rc.term) + '</button>';
     }).filter(Boolean).join('');
     if (chips) {
       relatedChipsHtml = '<div style="margin-bottom:10px"><div class="lib-detail-label" style="margin-bottom:6px">Related</div><div class="lib-detail-related-chips">' + chips + '</div></div>';
@@ -25089,9 +25204,10 @@ function _libRenderEpisodes() {
         ? '_libEpToggleTile(' + col.id + ', this)'
         : 'closeLibrary();setTimeout(function(){openEpisodeDrawer(' + col.id + ');},80)';
 
+      var podTag = col.podcast ? '<div class="ep-fav-tile-podcast-tag">' + col.podcast.replace(/</g,'&lt;') + (favDateStr ? ' \u00b7 ' + favDateStr : '') + '</div>' : '';
       return '<div class="ep-fav-tile" id="ept-' + col.id + '" style="animation-delay:' + delay + 'ms" onclick="' + clickAction + '">' +
+        podTag +
         '<div class="ep-fav-tile-title">' + (col.title || '').replace(/</g,'&lt;') + '</div>' +
-        '<div class="ep-fav-tile-meta">' + (col.podcast ? col.podcast.replace(/</g,'&lt;') : '') + (favDateStr ? ' \u00b7 ' + favDateStr : '') + '</div>' +
         (statsLine ? '<div class="ep-fav-tile-stats">' + statsLine + '</div>' : '') +
         '<div class="ep-fav-tile-actions">' +
           '<button class="ep-fav-tile-unfav" title="Remove from favourites" onclick="event.stopPropagation();_epToggleFav(' + col.id + ');_libShowToast(\'Removed from favourites\')">\u2665</button>' +
@@ -25120,6 +25236,8 @@ function _libRenderEpisodes() {
   } catch(e) {}
 
   panel.innerHTML = tilesHtml + recentsHtml;
+  // Paint left-border accent per top category — v3.38
+  requestAnimationFrame(_epAccentTiles);
 }
 
 function _libEpToggleTile(colId, el) {
@@ -25257,48 +25375,23 @@ function _libVocabRenderSeg() {
       '</div>' +
     '</div>';
 
+  // v3.38: sync sorted array so _vwsOpen can look up the word by index
+  _vwsSorted = sorted;
+
+  // v3.38: 2-col card grid — tap card → bottom sheet
   var tilesHtml = '<div class="vocab-my-list" id="vocabMyList">' +
     sorted.map(function(w, i) {
       var word  = (w.word || w.term || '').replace(/</g, '&lt;');
       var def   = (w.definition || w.def || '').replace(/</g, '&lt;');
       var src   = (w.podcastName || w.episodeTitle || '').replace(/</g, '&lt;');
       var state = w.practiceState;
-      var badge = state && state !== 'new'
-        ? '<span class="vocab-practiced-dot" title="practiced"></span>'
-        : '';
       var practiced = state && state !== 'new';
-      // Build practice history section if grading data exists
-      var phHtml = '';
-      if (w.grading && w.grading.gradedAt) {
-        var verdict = (w.grading.verdict || '').toLowerCase();
-        var verdictClass = verdict === 'great' ? 'great' : verdict === 'good' ? 'good' : 'needs-work';
-        var verdictLabel = verdict === 'great' ? 'Great' : verdict === 'good' ? 'Good' : 'Needs work';
-        var sentence = (w.grading.userSentence || '').replace(/[<>&"]/g, function(c){return{'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c];});
-        var feedback = (w.grading.feedback || '').replace(/[<>&"]/g, function(c){return{'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c];});
-        phHtml = '<div class="vocab-tile-practice-history">' +
-          '<div class="vocab-tile-ph-label">Last Lexi session</div>' +
-          '<span class="vocab-tile-ph-verdict ' + verdictClass + '">' + verdictLabel + '</span>' +
-          (sentence ? '<div class="vocab-tile-ph-sentence">&ldquo;' + sentence + '&rdquo;</div>' : '') +
-          (feedback ? '<div class="vocab-tile-ph-feedback">' + feedback + '</div>' : '') +
-        '</div>';
-      }
-      return '<div class="vocab-my-tile" id="vt-' + i + '" onclick="_libVocabToggleTile(' + i + ', this)">' +
-        '<div class="vocab-tile-row">' +
-          '<div class="vocab-my-word">' + word + badge + '</div>' +
-          '<span class="vocab-tile-chevron">\u203a</span>' +
-        '</div>' +
+      var dot = practiced ? '<span class="vocab-practiced-dot" title="practiced"></span>' : '';
+      return '<div class="vocab-my-tile" id="vt-' + i + '" onclick="_vwsOpen(' + i + ')">' +
+        dot +
+        '<div class="vocab-my-word">' + word + '</div>' +
         (def ? '<div class="vocab-my-def">' + def + '</div>' : '') +
         (src ? '<div class="vocab-my-meta">' + src + '</div>' : '') +
-        '<div class="vocab-tile-detail">' +
-          (def ? '<div class="vocab-tile-def-full">' + def + '</div>' : '') +
-          phHtml +
-          '<div class="vocab-tile-actions">' +
-            '<button class="vocab-tile-action-btn' + (practiced ? ' practiced' : '') + '" onclick="event.stopPropagation();_libVocabMarkPracticed(\'' + (w.word || w.term || '').replace(/'/g,"\\'") + '\', this)">' +
-              (practiced ? '✓ Practiced' : 'Mark practiced') +
-            '</button>' +
-            '<button class="vocab-tile-action-btn vocab-tile-action-practice" onclick="event.stopPropagation();_libVocabPracticeWord(\'' + (w.word || w.term || '').replace(/'/g,"\\'") + '\')">Practice this word →</button>' +
-          '</div>' +
-        '</div>' +
       '</div>';
     }).join('') +
   '</div>';
@@ -25336,17 +25429,84 @@ function _libVocabSetFilter(filter) {
   setTimeout(rebuild, 130);
 }
 
-function _libVocabToggleTile(idx, el) {
-  var isOpen = el.classList.contains('vocab-tile-open');
-  // Close all open
-  document.querySelectorAll('#vocabMyList .vocab-tile-open').forEach(function(t) { t.classList.remove('vocab-tile-open'); });
-  if (!isOpen) {
-    el.classList.add('vocab-tile-open');
-    el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+/* ── Vocab word detail bottom sheet — v3.38 ──────────── */
+/* _vwsOpen(idx): opens bottom sheet for sorted[idx] word */
+var _vwsSorted = []; // kept in sync with current render's sorted array
+
+function _vwsOpen(idx) {
+  var w = _vwsSorted[idx];
+  if (!w) return;
+  var word     = (w.word || w.term || '');
+  var def      = (w.definition || w.def || '');
+  var src      = (w.podcastName || w.episodeTitle || '');
+  var state    = w.practiceState;
+  var practiced = state && state !== 'new';
+
+  var wordEl = document.getElementById('vwsWord');
+  var bodyEl = document.getElementById('vwsBody');
+  if (!wordEl || !bodyEl) return;
+
+  var wordSafe = word.replace(/</g,'&lt;');
+  var defSafe  = def.replace(/</g,'&lt;');
+  var srcSafe  = src.replace(/</g,'&lt;');
+
+  wordEl.textContent = word;
+
+  // Practice history
+  var phHtml = '';
+  if (w.grading && w.grading.gradedAt) {
+    var verdict = (w.grading.verdict || '').toLowerCase();
+    var vClass = verdict === 'great' ? 'great' : verdict === 'good' ? 'good' : 'needs-work';
+    var vLabel = verdict === 'great' ? 'Great' : verdict === 'good' ? 'Good' : 'Needs work';
+    var esc = function(s){ return (s||'').replace(/[<>&"]/g,function(c){return{'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c];}); };
+    phHtml = '<div class="vws-ph">' +
+      '<div class="vws-ph-label">Last Lexi session</div>' +
+      '<span class="vws-ph-verdict ' + vClass + '">' + vLabel + '</span>' +
+      (w.grading.userSentence ? '<div class="vws-ph-sentence">&ldquo;' + esc(w.grading.userSentence) + '&rdquo;</div>' : '') +
+      (w.grading.feedback     ? '<div class="vws-ph-feedback">'  + esc(w.grading.feedback) + '</div>' : '') +
+    '</div>';
   }
+
+  var wordEsc = word.replace(/'/g,"\\'");
+  bodyEl.innerHTML =
+    (defSafe ? '<div class="vws-def">' + defSafe + '</div>' : '') +
+    (srcSafe ? '<div class="vws-source">' + srcSafe + '</div>' : '') +
+    phHtml +
+    '<div class="vws-actions">' +
+      '<button class="vocab-tile-action-btn' + (practiced ? ' practiced' : '') + '" id="vwsPracBtn" onclick="_vwsMarkPracticed(\'' + wordEsc + '\')">' +
+        (practiced ? '✓ Practiced' : 'Mark practiced') +
+      '</button>' +
+      '<button class="vocab-tile-action-btn vocab-tile-action-practice" onclick="_vwsPracticeNow(\'' + wordEsc + '\')">Practice now →</button>' +
+    '</div>';
+
+  var bg = document.getElementById('vocabWordSheetBg');
+  var sheet = document.getElementById('vocabWordSheet');
+  if (!bg || !sheet) return;
+  bg.classList.add('vws-open');
+  sheet.setAttribute('aria-hidden', 'false');
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
+      sheet.classList.add('vws-open');
+    });
+  });
+  document.addEventListener('keydown', _vwsKeyClose);
 }
 
-function _libVocabMarkPracticed(word, btn) {
+function _vwsClose() {
+  var bg = document.getElementById('vocabWordSheetBg');
+  var sheet = document.getElementById('vocabWordSheet');
+  if (!bg || !sheet) return;
+  sheet.classList.remove('vws-open');
+  bg.classList.remove('vws-open');
+  sheet.setAttribute('aria-hidden', 'true');
+  document.removeEventListener('keydown', _vwsKeyClose);
+}
+
+function _vwsKeyClose(e) {
+  if (e.key === 'Escape') _vwsClose();
+}
+
+function _vwsMarkPracticed(word) {
   try {
     var lx = JSON.parse(localStorage.getItem('lll_lexicon_v1') || '[]');
     if (Array.isArray(lx)) {
@@ -25355,40 +25515,113 @@ function _libVocabMarkPracticed(word, btn) {
         var already = entry.practiceState && entry.practiceState !== 'new';
         entry.practiceState = already ? 'new' : 'practiced';
         localStorage.setItem('lll_lexicon_v1', JSON.stringify(lx));
+        // Update button
+        var btn = document.getElementById('vwsPracBtn');
         if (btn) {
           btn.classList.toggle('practiced', !already);
           btn.textContent = !already ? '✓ Practiced' : 'Mark practiced';
         }
-        // Update practiced dot in parent tile — v3.36
-        var tile = btn.closest ? btn.closest('.vocab-my-tile') : null;
-        if (tile) {
-          var wordEl = tile.querySelector('.vocab-my-word');
-          if (wordEl) {
-            var existing = wordEl.querySelector('.vocab-practiced-dot, .vocab-my-badge');
-            if (existing) existing.remove();
-            if (!already) {
-              var dot = document.createElement('span');
-              dot.className = 'vocab-practiced-dot';
-              dot.title = 'practiced';
-              wordEl.appendChild(dot);
-            }
-          }
-        }
+        // Update dot on grid card
+        var tileEl = document.querySelector('#vocabMyList .vocab-my-tile .vocab-practiced-dot');
+        // Re-render the grid after a moment so dot state syncs
+        setTimeout(function() { _libVocabRenderSeg(); }, 50);
       }
     }
   } catch(e) {}
 }
 
-/* Practice a single vocab word directly in Lexi — v3.37 */
+function _vwsPracticeNow(word) {
+  _vwsClose();
+  closeLibrary();
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
+      _lexiStartSession(word);
+    });
+  });
+}
+
+/* Legacy: keep stub so old onclick refs don't throw */
+function _libVocabToggleTile(idx, el) { _vwsOpen(idx); }
+
+function _libVocabMarkPracticed(word, btn) { _vwsMarkPracticed(word); }
+
+/* Practice a single vocab word — v3.38: bypass Lexi panel */
 function _libVocabPracticeWord(word) {
   if (!word) return;
+  _vwsClose();
   closeLibrary();
-  setTimeout(function() {
-    openLexiPanel();            // open Lexi panel
-    setTimeout(function() {
-      _lexiStartSession(word);  // start focused single-word session
-    }, 80);
-  }, 80);
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
+      _lexiStartSession(word);
+    });
+  });
+}
+
+/* ── Related concept hover preview — v3.38 ──────────── */
+var _rcpHideTimer = null;
+
+function _rcpShow(btn, conceptId) {
+  if (!btn || !conceptId) return;
+  if (_rcpHideTimer) { clearTimeout(_rcpHideTimer); _rcpHideTimer = null; }
+  var rc = CONCEPTS && CONCEPTS.find(function(x) { return x.id === conceptId; });
+  if (!rc) return;
+  var preview = document.getElementById('relConPreview');
+  var catEl   = document.getElementById('rcpCat');
+  var termEl  = document.getElementById('rcpTerm');
+  var hookEl  = document.getElementById('rcpHook');
+  if (!preview || !catEl || !termEl || !hookEl) return;
+
+  var color = (typeof CAT_COLOR !== 'undefined' && CAT_COLOR[rc.category]) || 'var(--accent)';
+  catEl.textContent  = (rc.category || '').toUpperCase();
+  catEl.style.color  = color;
+  termEl.textContent = rc.term || '';
+  hookEl.textContent = rc.hook || '';
+
+  // Position: above the chip
+  var rect = btn.getBoundingClientRect();
+  var pw = 220;
+  var left = Math.max(8, Math.min(rect.left + rect.width / 2 - pw / 2, window.innerWidth - pw - 8));
+  var top  = rect.top - 10; // will shift up after measure
+
+  preview.style.left    = left + 'px';
+  preview.style.top     = top + 'px';
+  preview.style.width   = pw + 'px';
+  preview.classList.remove('rcp-visible');
+
+  requestAnimationFrame(function() {
+    var ph = preview.offsetHeight;
+    preview.style.top = (rect.top - ph - 8) + 'px';
+    preview.classList.add('rcp-visible');
+  });
+}
+
+function _rcpHide() {
+  _rcpHideTimer = setTimeout(function() {
+    var preview = document.getElementById('relConPreview');
+    if (preview) preview.classList.remove('rcp-visible');
+  }, 120);
+}
+
+/* ── Episode tile accent color — v3.38 ──────────── */
+/* Called after _libRenderEpisodes renders tiles; paints left border per top category */
+function _epAccentTiles() {
+  var masteredTs = {};
+  try { masteredTs = JSON.parse(localStorage.getItem('lll_mastered_ts_v1') || '{}'); } catch(e) {}
+  document.querySelectorAll('#libPanel-episodes .ep-fav-tile[id]').forEach(function(tile) {
+    var colId = parseInt((tile.id || '').replace('ept-', ''), 10);
+    if (!colId) return;
+    var catCounts = {};
+    if (typeof CONCEPTS !== 'undefined') {
+      CONCEPTS.forEach(function(c) {
+        if (c.collection_id === colId && masteredTs[c.id] && c.category) {
+          catCounts[c.category] = (catCounts[c.category] || 0) + 1;
+        }
+      });
+    }
+    var topCat = Object.keys(catCounts).sort(function(a,b){ return catCounts[b]-catCounts[a]; })[0];
+    var color = topCat && typeof CAT_COLOR !== 'undefined' ? CAT_COLOR[topCat] : null;
+    if (color) tile.style.borderLeftColor = color;
+  });
 }
 
 function _libRenderPractice() {
@@ -25739,19 +25972,38 @@ function _homeRenderBarChart() {
   }
   var maxCount = Math.max.apply(null, counts.map(function(c) { return c.count; })) || 1;
   var peakIdx = counts.reduce(function(best, c, i) { return c.count > counts[best].count ? i : best; }, 0);
+  // v3.38 FIX: use pixel heights — % heights are meaningless when parent has no fixed height
+  var BAR_MAX_PX = 52; // chart is 72px, ~18px for label, leave 2px min visible
 
-  el.innerHTML = counts.map(function(c, i) {
-    var pct = c.count > 0 ? Math.max(9, Math.round((c.count / maxCount) * 100)) : 12;
+  var barData = counts.map(function(c, i) {
     var isPeak = c.count > 0 && i === peakIdx;
+    var barPx = c.count > 0 ? Math.max(6, Math.round((c.count / maxCount) * BAR_MAX_PX)) : 4;
+    return {
+      barPx: barPx, isPeak: isPeak, isToday: c.isToday,
+      hasActivity: c.count > 0, label: c.label
+    };
+  });
+
+  // Render bars at height:0 first, then animate to real heights via rAF
+  el.innerHTML = barData.map(function(d) {
     var cls = 'home-bar' +
-      (c.count > 0 ? ' has-activity' : ' ghost') +
-      (c.isToday ? ' today' : '') +
-      (isPeak ? ' peak' : '');
+      (d.hasActivity ? ' has-activity' : ' ghost') +
+      (d.isToday ? ' today' : '') +
+      (d.isPeak ? ' peak' : '');
     return '<div class="home-bar-col">' +
-      '<div class="' + cls + '" style="height:' + pct + '%"></div>' +
-      '<div class="home-bar-day' + (c.isToday ? ' today' : '') + '">' + c.label + '</div>' +
+      '<div class="' + cls + '" style="height:0px" data-h="' + d.barPx + '"></div>' +
+      '<div class="home-bar-day' + (d.isToday ? ' today' : '') + '">' + d.label + '</div>' +
     '</div>';
   }).join('');
+
+  // Animate in
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
+      el.querySelectorAll('.home-bar').forEach(function(bar) {
+        bar.style.height = bar.getAttribute('data-h') + 'px';
+      });
+    });
+  });
 }
 
 function _homeRenderDonut() {
@@ -25775,43 +26027,51 @@ function _homeRenderDonut() {
     return;
   }
 
-  // Sort by count desc, take top 5
-  var cats = Object.keys(catCounts).sort(function(a, b) { return catCounts[b] - catCounts[a]; }).slice(0, 5);
+  // v3.38: show ALL categories (was top-5 only — caused visible grey gap for uncovered arc)
+  // Top 5 in legend, remainder grouped as "Other" segment (always fills 100%)
+  var allCats = Object.keys(catCounts).sort(function(a, b) { return catCounts[b] - catCounts[a]; });
+  var legendCats = allCats.slice(0, 5);
   var CAT_COLORS_LOCAL = typeof CAT_COLOR !== 'undefined' ? CAT_COLOR : {};
-  var fallbackColors = ['#e8d5a3','#5abfaf','#a08fd4','#d4715a','#6b9fc4'];
+  var fallbackColors = ['#e8d5a3','#5abfaf','#a08fd4','#d4715a','#6b9fc4','#7aaf8a','#c47a9f','#e0a060'];
 
-  // SVG donut
+  // SVG donut — all cats + Other
   var cx = 36, cy = 36, r = 28, stroke = 9;
   var circumference = 2 * Math.PI * r;
   var offset = 0;
-  var paths = cats.map(function(cat, i) {
+  var gap = allCats.length > 1 ? 1.5 : 0;
+
+  var paths = allCats.map(function(cat, i) {
     var pct = catCounts[cat] / total;
     var dashLen = pct * circumference;
     var color = CAT_COLORS_LOCAL[cat] || fallbackColors[i % fallbackColors.length];
-    // small gap between segments
-    var gap = total > 1 ? 2 : 0;
     var path = '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="none"' +
       ' stroke="' + color + '" stroke-width="' + stroke + '"' +
-      ' stroke-dasharray="' + (dashLen - gap) + ' ' + (circumference - dashLen + gap) + '"' +
+      ' stroke-dasharray="' + Math.max(0, dashLen - gap) + ' ' + (circumference - Math.max(0, dashLen - gap)) + '"' +
       ' stroke-dashoffset="' + (-offset * circumference + circumference / 4) + '"' +
-      ' stroke-linecap="round"/>';
+      ' stroke-linecap="butt"/>';
     offset += pct;
     return { path: path, color: color, cat: cat };
   });
 
-  svg.innerHTML = '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.05)" stroke-width="' + stroke + '"/>' +
+  svg.innerHTML = '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="' + stroke + '"/>' +
     paths.map(function(p) { return p.path; }).join('');
 
-  // Legend
-  legend.innerHTML = paths.map(function(p) {
-    var name = (typeof CATEGORIES !== 'undefined' && CATEGORIES.find(function(x) { return x.id === p.cat; }) || {}).name || p.cat;
-    var pct = Math.round(catCounts[p.cat] / total * 100);
+  // Legend — top 5 + "Other" if more cats exist
+  var legendRows = legendCats.map(function(cat, i) {
+    var color = CAT_COLORS_LOCAL[cat] || fallbackColors[i % fallbackColors.length];
+    var name = (typeof CATEGORIES !== 'undefined' && CATEGORIES.find(function(x) { return x.id === cat; }) || {}).name || cat;
+    var pct = Math.round(catCounts[cat] / total * 100);
     return '<div class="home-donut-row">' +
-      '<div class="home-donut-dot" style="background:' + p.color + '"></div>' +
+      '<div class="home-donut-dot" style="background:' + color + '"></div>' +
       '<div class="home-donut-cat">' + name + '</div>' +
       '<div class="home-donut-pct">' + pct + '%</div>' +
     '</div>';
-  }).join('');
+  });
+  if (allCats.length > 5) {
+    var otherPct = 100 - legendCats.reduce(function(s, c) { return s + Math.round(catCounts[c] / total * 100); }, 0);
+    legendRows.push('<div class="home-donut-row"><div class="home-donut-dot" style="background:var(--muted)"></div><div class="home-donut-cat">other</div><div class="home-donut-pct">' + Math.max(1, otherPct) + '%</div></div>');
+  }
+  legend.innerHTML = legendRows.join('');
 }
 
 function _homeRenderGoal() {
@@ -31109,6 +31369,24 @@ body.corner-panel-open .stories-panel {
     </div>
 
   </div>
+</div>
+
+<!-- Vocab word detail bottom sheet — v3.38 -->
+<div id="vocabWordSheetBg" onclick="_vwsClose()"></div>
+<div id="vocabWordSheet" role="dialog" aria-modal="true" aria-label="Word detail">
+  <div class="vws-handle"></div>
+  <div class="vws-header">
+    <div class="vws-word" id="vwsWord"></div>
+    <button class="vws-close" onclick="_vwsClose()" aria-label="Close">✕</button>
+  </div>
+  <div class="vws-body" id="vwsBody"></div>
+</div>
+
+<!-- Related concept hover preview — v3.38 -->
+<div id="relConPreview" aria-hidden="true">
+  <div class="rcp-cat" id="rcpCat"></div>
+  <div class="rcp-term" id="rcpTerm"></div>
+  <div class="rcp-hook" id="rcpHook"></div>
 </div>
 
 <!-- #lexiPracticeOverlay — full-screen practice mode (z-index 2000, above everything) -->
