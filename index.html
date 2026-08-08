@@ -41,11 +41,11 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=block" rel="stylesheet">
 <script defer src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js"></script>
 <script defer src="https://cloud.umami.is/script.js" data-website-id="0bb07ad6-a205-4d9d-ae92-b7e184e7fa4f"></script>
 <style>
-  /* Preload guard: prevents episodes/grid flashing before hero on hard refresh */
+  /* Preload guard: hide content until data is ready — v3.34 staggered reveal */
   html.ep-preload .sp-hero,
   html.ep-preload .browse-toggle-wrap,
   html.ep-preload #episodesSection,
@@ -53,13 +53,16 @@
   html.ep-preload #netflixRows {
     opacity: 0;
   }
-  /* Smooth fade-in when preload class is removed */
-  .sp-hero,
-  .browse-toggle-wrap,
-  #episodesSection,
-  #themesSection,
-  #netflixRows {
-    transition: opacity 0.22s ease;
+  /* Each layer has its own transition speed — stagger is applied via JS delay */
+  .sp-hero           { transition: opacity 0.3s ease; }
+  .browse-toggle-wrap{ transition: opacity 0.3s ease; }
+  #episodesSection   { transition: opacity 0.35s ease; }
+  #themesSection     { transition: opacity 0.35s ease; }
+  #netflixRows       { transition: opacity 0.35s ease; }
+  @media (prefers-reduced-motion: reduce) {
+    .sp-hero, .browse-toggle-wrap, #episodesSection, #themesSection, #netflixRows {
+      transition: none !important;
+    }
   }
 
   :root {
@@ -14260,12 +14263,22 @@ async function loadConcepts() {
     initMagneticCards();
     // Scroll-reveal for founder section elements — v2.4
     initScrollReveal('.founder-reveal', document.getElementById('founderText'));
-    // Remove preload guard after first paint — prevents flashing on hard refresh
+    // Staggered reveal — v3.34: remove preload guard then cascade each layer in
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
+        // 1. Remove guard (all layers still opacity:0 from their own inline style)
         document.documentElement.classList.remove('ep-preload');
-        // Enable theme-switch transition only after initial paint — prevents FOUC
         document.body.classList.add('theme-ready');
+        // 2. Stagger: hero → controls → content, 80ms steps
+        var _revealOrder = ['.sp-hero', '.browse-toggle-wrap', '#episodesSection', '#netflixRows', '#themesSection'];
+        var _noMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        _revealOrder.forEach(function(sel, i) {
+          var el = document.querySelector(sel);
+          if (!el) return;
+          // Hold each element at opacity:0 explicitly so CSS guard lift doesn't fire them all at once
+          el.style.opacity = '0';
+          setTimeout(function() { el.style.opacity = ''; }, _noMotion ? 0 : i * 80);
+        });
       });
     });
     // #1 Init reading progress observer after first grid render — v1.92
@@ -27226,22 +27239,21 @@ function playStreakMilestoneSFX() {
   cursor: pointer;
   text-decoration: none;
   white-space: nowrap;
-  opacity: 0;
-  pointer-events: none;
-  transform: scale(0.9);
-  transition: opacity 0.2s ease, transform 0.2s ease, border-color 0.2s;
+  opacity: 0.45;
+  pointer-events: all;
+  transform: none;
+  transition: opacity 0.2s ease, border-color 0.2s ease;
 }
 /* Hide on mobile — lives in hamburger menu instead — v1.73b */
 @media (max-width: 768px) {
   .nav-epic-standalone { display: none !important; }
 }
-#mainNav:hover .nav-epic-standalone {
+#mainNav:hover .nav-epic-standalone,
+.nav-epic-standalone:hover {
   opacity: 1;
-  pointer-events: all;
-  transform: scale(1);
 }
 .nav-epic-standalone:hover { border-color: rgba(232,213,163,0.6); }
-/* v1.71 — hover emojis for Spark / Browse / Stash — span-based for alignment */
+/* v1.71 — hover emojis for Spark / Browse / Stash — opacity-only, no layout shift */
 .nav-spark-emoji,
 .nav-browse-emoji,
 .nav-stash-emoji,
@@ -27251,13 +27263,14 @@ function playStreakMilestoneSFX() {
 .nav-lexicon-emoji {
   display: inline-block;
   opacity: 0;
-  max-width: 0;
+  width: 1.15em;
   overflow: hidden;
   vertical-align: middle;
   line-height: 1;
-  transition: opacity 0.35s ease, max-width 0.35s ease, margin-right 0.35s ease;
-  margin-right: 0;
+  transition: opacity 0.22s ease;
+  margin-right: 3px;
   font-size: 0.8rem;
+  /* Width always reserved — text never shifts on hover */
 }
 .nav-lexicon-emoji {
   font-family: 'Playfair Display', serif;
@@ -27274,29 +27287,26 @@ function playStreakMilestoneSFX() {
 .nav-corner-nav-btn:hover .nav-corner-emoji,
 .nav-lexicon-btn:hover .nav-lexicon-emoji {
   opacity: 1;
-  max-width: 1.4em;
-  margin-right: 4px;
 }
-/* v2.94: Read · Write · Speak hover emojis */
+/* v2.94: Read · Write · Speak hover emojis — opacity-only, no layout shift */
 .nav-read-emoji,
 .nav-write-emoji,
 .nav-speak-emoji {
   display: inline-block;
   opacity: 0;
-  max-width: 0;
+  width: 1.15em;
   overflow: hidden;
   vertical-align: middle;
   line-height: 1;
-  transition: opacity 0.35s ease, max-width 0.35s ease, margin-right 0.35s ease;
-  margin-right: 0;
+  transition: opacity 0.22s ease;
+  margin-right: 3px;
   font-size: 0.8rem;
+  /* Width always reserved — text never shifts on hover */
 }
 .nav-read-btn:hover .nav-read-emoji,
 .nav-write-btn:hover .nav-write-emoji,
 .nav-speak-btn:hover .nav-speak-emoji {
   opacity: 1;
-  max-width: 1.4em;
-  margin-right: 4px;
 }
 
 /* ── v2.5: Spark panel header ── */
