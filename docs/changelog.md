@@ -6,6 +6,15 @@
 
 ---
 
+## v3.24 — 2026-08-08 · Home v2 Phase A — quick wins + polish
+### index.html
+- **Fingerprint line removed:** "Strongest / Blind spot" line was pure clutter with no actionable path. Removed from HTML, CSS, and `_homeRenderDashboard`. Space reclaimed.
+- **Episode ♥ button relocated:** Moved from absolute-positioned hero overlay (was clashing with concept count pill) to inline inside the pills row — after Listen, before "Is it worth my time?". On mobile: `order: 3`, IWTMT forced to `order: 4`. Now a compact border-pill button, consistent with the row's design language.
+- **Practice mode — mobile glyph fix:** Write card used `✏️` emoji on mobile due to system font fallback. Fixed by (1) adding `font-family: 'DM Mono', monospace` to `.practice-card-glyph` and (2) using `&#x270F;&#xFE0E;` (pencil + text variation selector) in JS.
+- **Practice mode — desktop 3-column layout:** On ≥700px, `.practice-cards` switches to `flex-direction: row` — 3 cards side by side, equal width. Mobile remains stacked column.
+- **Note placeholder reduced:** `.card-note-input::placeholder` and `.lib-detail-note-ta::placeholder` font sizes reduced to 0.62rem/0.65rem respectively. Placeholder opacity also softened (0.5/0.7). No longer oversized vs. card body text.
+- **Shortcut updated to ⌘⌥H:** `aria-label` on `#navLibraryBtn` updated to `"Home ⌘⌥H"`. Drawer header shortcut hint title updated to `"⌘⌥H"`. Keyboard handler updated in v3.23; `KeyL` kept as legacy alias.
+
 ## v3.23 — 2026-08-08 · Phase 7 polish + interconnect
 ### index.html
 - **Dashboard scroll-collapse:** `.home-collapse-wrap` wraps `#homeDashboard` + `#homeFingerprint`. Scroll >80px on any active `.lib-panel` (debounced ≥16ms, passive listener) adds `.collapsed` to wrapper — height snaps to 36px, dashboard fades out (0.25s opacity), compact one-line strip fades in (0.25s opacity + translateY). Strip shows "N concepts · N words · N eps ♥". `prefers-reduced-motion` skips transitions. Listeners bound in `openLibrary`, unbound + state reset in `closeLibrary`.

@@ -9005,10 +9005,10 @@
   }
   .card-note-input {
     width: 100%; background: none; border: none; border-bottom: 0.5px solid var(--border);
-    color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.72rem;
+    color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.68rem;
     font-style: italic; padding: 6px 0; outline: none; resize: none;
   }
-  .card-note-input::placeholder { color: var(--muted2); opacity: 0.6; }
+  .card-note-input::placeholder { color: var(--muted2); opacity: 0.5; font-size: 0.62rem; }
   .card-note-saved {
     font-family: 'DM Sans', sans-serif; font-size: 0.72rem; font-style: italic;
     color: var(--muted); padding: 6px 14px 10px; border-top: 0.5px solid var(--border);
@@ -9307,18 +9307,7 @@
   white-space: nowrap;
 }
 
-/* Fingerprint line — v3.22 */
-.home-fingerprint {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.5rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--muted);
-  padding: 4px 20px 8px;
-  flex-shrink: 0;
-  border-bottom: 0.5px solid var(--border);
-}
-[data-theme="light"] .home-fingerprint { color: var(--muted); }
+/* Fingerprint line removed v3.24 — was clutter, replaced by momentum line */
 
 /* Bucket number cross-fade on range switch */
 .home-bucket-num.fading { opacity: 0; transition: opacity 0.15s ease; }
@@ -9377,17 +9366,9 @@
   opacity: 0;
   pointer-events: none;
 }
-.home-collapse-wrap .home-fingerprint {
-  transition: opacity 0.25s ease;
-}
-.home-collapse-wrap.collapsed .home-fingerprint {
-  opacity: 0;
-  pointer-events: none;
-}
 @media (prefers-reduced-motion: reduce) {
   .home-compact-strip,
-  .home-collapse-wrap .home-dashboard,
-  .home-collapse-wrap .home-fingerprint {
+  .home-collapse-wrap .home-dashboard {
     transition: none !important;
   }
 }
@@ -9464,6 +9445,8 @@
 }
 .practice-card-glyph {
   font-size: 1.15rem;
+  font-family: 'DM Mono', monospace; /* prevents emoji rendering on mobile — v3.24 */
+  font-style: normal;
   color: var(--accent);
   flex-shrink: 0;
   margin-top: 2px;
@@ -9471,6 +9454,22 @@
   text-align: center;
 }
 .practice-card-body { display: flex; flex-direction: column; gap: 3px; flex: 1; min-width: 0; }
+/* Desktop: 3 cards side-by-side — v3.24 */
+@media (min-width: 700px) {
+  .practice-cards {
+    flex-direction: row;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .practice-card {
+    flex: 1;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .practice-card-glyph { margin-top: 0; font-size: 1.4rem; width: auto; }
+  .practice-card-live { margin-top: auto; padding-top: 6px; }
+}
 .practice-card-name {
   font-family: 'Playfair Display', serif;
   font-size: 0.95rem;
@@ -9536,31 +9535,31 @@
   align-items: stretch;
   padding: 32px 24px;
 }
-/* ── Episode ♥ fav button — v3.19 ───────────────── */
+/* ── Episode ♥ fav button — v3.24 inline in pills row ─── */
 .ep-fav-btn {
-  position: absolute;
-  top: 10px;
-  left: 12px;
-  width: 44px;
-  height: 44px;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   background: none;
-  border: none;
+  border: 0.5px solid var(--border);
+  border-radius: 3px;
   cursor: pointer;
-  font-size: 1.1rem;
+  font-size: 0.85rem;
+  font-family: 'DM Mono', monospace;
   color: var(--muted);
-  opacity: 0.7;
-  transition: color 0.2s, opacity 0.2s, transform 0.2s;
-  z-index: 2;
-  border-radius: 50%;
+  opacity: 0.65;
+  padding: 2px 7px;
+  line-height: 1;
+  transition: color 0.2s, opacity 0.2s, border-color 0.2s;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
-.ep-fav-btn:hover { opacity: 1; color: var(--accent); }
-.ep-fav-btn.fav-active { color: var(--accent); opacity: 1; }
-/* On mobile: count badge moves to top-left — shift fav button right of it */
-@media (max-width: 700px) {
-  .ep-fav-btn { left: 60px; }
+.ep-fav-btn:hover { opacity: 1; color: var(--accent); border-color: var(--accent); }
+.ep-fav-btn.fav-active { color: var(--accent); border-color: var(--accent); opacity: 1; }
+/* Mobile order — sits after Listen, before IWTMT */
+@media (max-width: 768px) {
+  .ep-fav-btn { order: 3; }
+  .ep-iwtmt-link { order: 4 !important; }
 }
 @keyframes epFavPop {
   0%   { transform: scale(1); }
@@ -9569,9 +9568,7 @@
   100% { transform: scale(1); }
 }
 .ep-fav-btn.fav-pop { animation: epFavPop 0.3s ease-out forwards; }
-@media (prefers-reduced-motion: reduce) {
-  .ep-fav-btn.fav-pop { animation: none; }
-}
+@media (prefers-reduced-motion: reduce) { .ep-fav-btn.fav-pop { animation: none; } }
 
 /* ── Episode fav tile (Home Episodes panel) — v3.19 ── */
 .ep-fav-tile {
@@ -10172,7 +10169,7 @@
   transition: border-color 0.15s;
 }
 .lib-detail-note-ta:focus { border-color: var(--accent); }
-.lib-detail-note-ta::placeholder { color: var(--muted2); font-style: italic; }
+.lib-detail-note-ta::placeholder { color: var(--muted2); font-style: italic; font-size: 0.65rem; opacity: 0.7; }
 .lib-detail-actions {
   display: flex; gap: 8px; flex-wrap: wrap;
   margin-top: 10px;
@@ -11434,7 +11431,7 @@
 
   <div class="nav-right">
     <!-- My Library — distinct desktop-only button, lives inside nav-right so it stays in grid column 3 -->
-    <button class="nav-library-btn" id="navLibraryBtn" onclick="openLibrary();playNavSFX()" aria-label="Home">
+    <button class="nav-library-btn" id="navLibraryBtn" onclick="openLibrary();playNavSFX()" aria-label="Home ⌘⌥H">
       <span class="nav-library-glyph">◱</span>
       <span class="nav-library-label">Home</span>
     </button>
@@ -12477,7 +12474,6 @@
     <div class="ep-drawer-hero-bg" id="epDrawerHeroBg" style="display:none"></div>
     <div class="ep-drawer-handle"></div>
     <span class="ep-drawer-count-badge" id="epDrawerCountBadge"></span>
-    <button class="ep-fav-btn" id="epFavBtn" aria-label="Favourite episode" onclick="_epToggleFav(_epCurrentColId)">♡</button>
     <button class="ep-drawer-back-cs" id="epDrawerBackCS" style="display:none" onclick="closeEpisodeDrawer();openCSFromNav()">← Prompts</button>
     <button class="ep-drawer-close" onclick="_playCloseSFX();closeEpisodeDrawer()">✕</button>
     <div class="ep-drawer-hero-content">
@@ -12542,7 +12538,7 @@
   <div class="lib-handle"></div>
   <div class="lib-header">
     <span class="lib-title">Home</span>
-    <span class="lib-shortcut-hint" title="Keyboard shortcut">⌘⌥H</span>
+    <span class="lib-shortcut-hint" title="⌘⌥H">⌘⌥H</span>
     <button class="lib-export-all-btn" id="homeExportBtn" onclick="_homeExportAll()" title="Export all your data as JSON">↓ JSON</button>
     <button class="lib-close" onclick="closeLibrary()">✕</button>
   </div>
@@ -12588,7 +12584,6 @@
       <button class="home-range-btn home-range-active" id="hbRangeAll" onclick="_homeSetRange('all')">All</button>
     </div>
   </div>
-  <div class="home-fingerprint" id="homeFingerprint" style="display:none"></div>
   </div><!-- /.home-collapse-wrap -->
   <div class="lib-tabs">
     <button class="lib-tab" id="libTab-episodes" onclick="_libSwitchTab('episodes')">Episodes</button>
@@ -15788,7 +15783,9 @@ function _renderDrawerContent(col, collectionId) {
     : '';
   const drawerDateStr = (col.aired_date || col.date || col.created_date) ? new Date(col.aired_date || col.date || col.created_date).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' }).toUpperCase() : '';
   const drawerDateHtml = drawerDateStr ? `<span class="episode-datestamp">${drawerDateStr}</span>` : '';
-  pills.innerHTML = drawerDateHtml + listenLink;
+  var favActiveClass = _epIsFav(_epCurrentColId) ? ' fav-active' : '';
+  var favBtn = '<button class="ep-fav-btn' + favActiveClass + '" id="epFavBtn" aria-label="Favourite episode" onclick="_epToggleFav(_epCurrentColId)">' + (_epIsFav(_epCurrentColId) ? '♥' : '♡') + '</button>';
+  pills.innerHTML = drawerDateHtml + listenLink + favBtn;
 
   // Category mix bar
   const catCounts = {};
@@ -24130,7 +24127,7 @@ function _libRenderPractice() {
         '</div>' +
       '</div>' +
       '<div class="practice-card" onclick="closeLibrary();setTimeout(function(){openLexiconPanel();},80)">' +
-        '<div class="practice-card-glyph">✏</div>' +
+        '<div class="practice-card-glyph">&#x270F;&#xFE0E;</div>' +
         '<div class="practice-card-body">' +
           '<div class="practice-card-name">Write</div>' +
           '<div class="practice-card-hook">Put a word into your own sentence.</div>' +
@@ -24270,31 +24267,6 @@ function _homeRenderDashboard(skipCountUp) {
   });
   if (document.getElementById('hbNewEpsDelta'))      document.getElementById('hbNewEpsDelta').textContent      = epsLabel || trackingNote;
   if (document.getElementById('hbNewConceptsDelta')) document.getElementById('hbNewConceptsDelta').textContent = conLabel || trackingNote;
-
-  // ── Fingerprint line ──
-  var fpEl = document.getElementById('homeFingerprint');
-  if (fpEl && nSaved >= 5 && typeof CONCEPTS !== 'undefined') {
-    var catCounts = {};
-    try {
-      var tsMap = JSON.parse(localStorage.getItem('lll_mastered_ts_v1') || '{}');
-      var savedIds = Object.keys(tsMap).map(Number);
-      savedIds.forEach(function(id) {
-        var c = CONCEPTS.find(function(x) { return x.id === id; });
-        if (c && c.category) catCounts[c.category] = (catCounts[c.category] || 0) + 1;
-      });
-    } catch(e) {}
-    var cats = Object.keys(catCounts).sort(function(a,b) { return catCounts[b] - catCounts[a]; });
-    if (cats.length >= 2) {
-      var strongest = cats[0];
-      var blindspot = cats[cats.length - 1];
-      fpEl.textContent = 'Strongest: ' + strongest + '  ·  Blind spot: ' + blindspot;
-      fpEl.style.display = '';
-    } else {
-      fpEl.style.display = 'none';
-    }
-  } else if (fpEl) {
-    fpEl.style.display = 'none';
-  }
 
   // ── Render values ──
   var noMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
