@@ -9668,6 +9668,128 @@
 .lib-panel { scrollbar-width: none; }
 .lib-panel::-webkit-scrollbar { display: none; }
 
+/* ── VOCAB panel — v3.21 ─────────────────────────── */
+.vocab-seg-row {
+  display: flex;
+  gap: 4px;
+  padding: 10px 20px 6px;
+  flex-shrink: 0;
+  border-bottom: 0.5px solid var(--border);
+}
+.vocab-seg-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.56rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border: 0.5px solid var(--border);
+  border-radius: 20px;
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+  transition: color 0.14s, border-color 0.14s, background 0.14s;
+  min-height: 28px;
+  white-space: nowrap;
+}
+.vocab-seg-btn:hover { color: var(--muted2); border-color: var(--border-hover); }
+.vocab-seg-btn.active { color: var(--accent); border-color: var(--accent); background: rgba(232,213,163,0.07); }
+
+/* My Words header bar */
+.vocab-my-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 20px 4px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.vocab-my-cta {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border: 0.5px solid var(--border);
+  border-radius: 20px;
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+  transition: color 0.14s, border-color 0.14s;
+  white-space: nowrap;
+}
+.vocab-my-cta:hover { color: var(--accent); border-color: var(--accent); }
+.vocab-my-count {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted2);
+}
+
+/* My Words tile list */
+.vocab-my-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 0 0 16px;
+}
+.vocab-my-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background 0.13s;
+  border-bottom: 0.5px solid var(--border);
+}
+.vocab-my-tile:hover { background: var(--surface2); }
+.vocab-my-word {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.88rem;
+  color: var(--text);
+  line-height: 1.25;
+}
+.vocab-my-def {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.7rem;
+  color: var(--muted2);
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+.vocab-my-meta {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 1px;
+}
+.vocab-my-badge {
+  display: inline-block;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.46rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border: 0.5px solid rgba(232,213,163,0.35);
+  border-radius: 3px;
+  padding: 1px 4px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+/* Light-mode — Vocab panel v3.21 */
+[data-theme="light"] .vocab-seg-btn { color: var(--muted); }
+[data-theme="light"] .vocab-seg-btn.active { color: var(--accent2); border-color: var(--accent2); background: rgba(196,169,107,0.08); }
+[data-theme="light"] .vocab-my-tile:hover { background: var(--surface2); }
+[data-theme="light"] .vocab-my-word { color: var(--text); }
+
+/* Lexi examples button — disabled v3.21 */
+.lexi-word-gen-btn:not(.lexi-word-gen-btn--practice) { display: none; } /* v3.21 — examples disabled, logic preserved, see session-plan */
+
 /* ── CONCEPTS letter rail — v3.20 ──────────────────── */
 .lib-letter-rail {
   display: flex;
@@ -23566,15 +23688,99 @@ function _epRelativeDate(ts) {
   return Math.floor(days / 365) + 'y ago';
 }
 
+// ── Vocab panel segment state — v3.21 ──────────────────────────
+var _libVocabSeg = 'my'; // 'my' | 'all' | 'map'
+
 function _libRenderVocab() {
   var panel = document.getElementById('libPanel-vocab');
-  if (!panel || panel.dataset.rendered) return;
-  panel.innerHTML =
-    '<div class="home-empty">' +
-      '<p class="home-empty-text">Words you save start collecting here.</p>' +
-      '<button class="home-empty-btn" onclick="closeLibrary()">Open an episode\u2019s vocab</button>' +
+  if (!panel) return;
+  // Always re-render — no dataset.rendered guard (segment state can change)
+
+  // Segment control
+  var segHtml =
+    '<div class="vocab-seg-row">' +
+      '<button class="vocab-seg-btn' + (_libVocabSeg === 'my'  ? ' active' : '') + '" onclick="_libVocabSwitchSeg(\'my\')">My Words</button>' +
+      '<button class="vocab-seg-btn' + (_libVocabSeg === 'all' ? ' active' : '') + '" onclick="_libVocabSwitchSeg(\'all\')">All Words</button>' +
+      '<button class="vocab-seg-btn' + (_libVocabSeg === 'map' ? ' active' : '') + '" onclick="_libVocabSwitchSeg(\'map\')">Word Map</button>' +
     '</div>';
-  panel.dataset.rendered = '1';
+
+  panel.innerHTML = segHtml + '<div id="libVocabContent"></div>';
+  _libVocabRenderSeg();
+}
+
+function _libVocabSwitchSeg(seg) {
+  if (seg === 'all') {
+    closeLibrary();
+    setTimeout(function() { _openGlobalVocabView(); }, 80);
+    return;
+  }
+  if (seg === 'map') {
+    closeLibrary();
+    setTimeout(function() { _openConstellationView('lexi'); }, 80);
+    return;
+  }
+  _libVocabSeg = seg;
+  var panel = document.getElementById('libPanel-vocab');
+  if (panel) {
+    panel.querySelectorAll('.vocab-seg-btn').forEach(function(btn) {
+      btn.classList.toggle('active', btn.textContent.trim().toLowerCase().replace(' ','') === seg.replace('my','mywords').replace('all','allwords').replace('map','wordmap').toLowerCase().replace(' ',''));
+    });
+    // Re-match by position: My Words = 0, All Words = 1, Word Map = 2
+    var btns = panel.querySelectorAll('.vocab-seg-btn');
+    btns[0] && btns[0].classList.toggle('active', seg === 'my');
+    btns[1] && btns[1].classList.toggle('active', seg === 'all');
+    btns[2] && btns[2].classList.toggle('active', seg === 'map');
+  }
+  _libVocabRenderSeg();
+}
+
+function _libVocabRenderSeg() {
+  var content = document.getElementById('libVocabContent');
+  if (!content) return;
+
+  var lx = [];
+  try { lx = JSON.parse(localStorage.getItem('lll_lexicon_v1') || '[]'); if (!Array.isArray(lx)) lx = []; } catch(e) {}
+
+  if (!lx.length) {
+    content.innerHTML =
+      '<div class="home-empty">' +
+        '<p class="home-empty-text">Words you save start collecting here.</p>' +
+        '<button class="home-empty-btn" onclick="closeLibrary()">Open an episode\u2019s vocab</button>' +
+      '</div>';
+    return;
+  }
+
+  // Sort by savedAt desc
+  var sorted = lx.slice().sort(function(a, b) { return (b.savedAt || 0) - (a.savedAt || 0); });
+  var unpractised = sorted.filter(function(w) { return !w.practiceState || w.practiceState === 'new'; }).length;
+
+  var headerHtml =
+    '<div class="vocab-my-header">' +
+      '<span class="vocab-my-count">' + lx.length + ' word' + (lx.length !== 1 ? 's' : '') + '</span>' +
+      '<div style="display:flex;gap:6px;flex-wrap:wrap">' +
+        (unpractised > 0 ? '<button class="vocab-my-cta" onclick="closeLibrary();setTimeout(function(){openLexiconPanel();},80)">Practice ' + unpractised + ' \u2192</button>' : '') +
+        '<button class="vocab-my-cta" onclick="closeLibrary();setTimeout(function(){openLexiconPanel();},80)">Open Lexi \u2192</button>' +
+      '</div>' +
+    '</div>';
+
+  var tilesHtml = '<div class="vocab-my-list">' +
+    sorted.map(function(w) {
+      var word = (w.word || w.term || '').replace(/</g, '&lt;');
+      var def  = (w.definition || w.def || '').replace(/</g, '&lt;');
+      var src  = (w.podcastName || w.episodeTitle || '').replace(/</g, '&lt;');
+      var state = w.practiceState;
+      var badge = state && state !== 'new'
+        ? '<span class="vocab-my-badge">' + (state === 'practiced' ? 'practiced' : state === 'mastered' ? 'mastered' : state) + '</span>'
+        : '';
+      return '<div class="vocab-my-tile" onclick="closeLibrary();setTimeout(function(){openLexiconPanel();},80)">' +
+        '<div class="vocab-my-word">' + word + badge + '</div>' +
+        (def ? '<div class="vocab-my-def">' + def + '</div>' : '') +
+        (src ? '<div class="vocab-my-meta">' + src + '</div>' : '') +
+      '</div>';
+    }).join('') +
+  '</div>';
+
+  content.innerHTML = headerHtml + tilesHtml;
 }
 
 function _libRenderPractice() {
@@ -29716,7 +29922,9 @@ function _lexiLoadSentences(entry, sentsEl) {
   genBtn.className = 'lexi-word-gen-btn';
   genBtn.textContent = '✦ Examples';
   genBtn.addEventListener('click', function() {
-    genBtn.disabled = true;
+    /* v3.21 — examples disabled, logic preserved, see session-plan */
+    return;
+    genBtn.disabled = true; // eslint-disable-line no-unreachable
     genBtn.textContent = 'Generating\u2026';
     _lexiFetchSentences(word, defText, cacheKey, sentsEl, genBtn, actionsRow);
   });

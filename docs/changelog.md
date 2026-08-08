@@ -6,6 +6,13 @@
 
 ---
 
+## v3.21 — 2026-08-08 · VOCAB section + Lexi examples disabled
+### index.html
+- **VOCAB panel — 3-segment control:** My Words · All Words · Word Map. All Words → closes Home → `_openGlobalVocabView()`. Word Map → closes Home → `_openConstellationView('lexi')`. My Words renders tiles in-place.
+- **My Words tiles:** sorted by `savedAt` desc from `lll_lexicon_v1`. Each tile: word (Playfair), definition snippet (1 line, ellipsis), practice-state badge (accent mono pill for practiced/mastered), podcast/episode source (DM Mono muted). Tile click → close Home → open Lexi. Header bar: word count + "Practice N →" CTA (only when unpractised words exist) + "Open Lexi →". Empty state: Phase 2 copy ("Words you save start collecting here.").
+- **Dashboard Words bucket:** already live from v3.18 (lll_lexicon_v1.length).
+- **Lexi examples button disabled — v3.21:** `.lexi-word-gen-btn:not(.lexi-word-gen-btn--practice) { display: none }` + early `return` guard in click handler. Comment: `/* v3.21 — examples disabled, logic preserved, see session-plan */`. Practice flow reads cleanly: write sentence → evaluator → coaching.
+
 ## v3.20 — 2026-08-08 · CONCEPTS composable filters: cat × letter × notes
 ### index.html
 - **Composable filter state:** Replaced `_libActiveCat` (single) with `_libConceptFilter = { cat, letter, notesOnly }`. All three AND-combine. Legacy `_libActiveCat` getter/setter shim retained for safety.
