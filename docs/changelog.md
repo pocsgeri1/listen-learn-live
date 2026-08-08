@@ -6,6 +6,21 @@
 
 ---
 
+## v3.35 — 2026-08-08 · Home panel design audit
+
+### index.html
+- **Hero glass card:** Wrapped the big concept count + label + activity line in `.home-hero-card` — a rounded glass card (`border-radius: 20px`, `rgba(255,255,255,0.04)` bg, subtle inset highlight, deep drop shadow). Light mode uses white/translucent with proper shadow. Dashboard now reads as an iPhone-style stat widget, not raw text on a dark surface.
+- **Category chips → dot-pills:** Replaced the brick-style chips (left border, rectangular) with compact pill buttons (`border-radius: 999px`, `0.5px border`). Each chip now has a `.lib-chip-dot` (6px colored circle) instead of a colored left border. Counts are hidden from the pill (`.lib-cat-chip em { display: none }`) to reduce noise — color dot communicates the category.
+- **Note badge → colored dot:** The `✏` pencil glyph badge on concept tiles is replaced by a 6px `border-radius: 50%` dot using `var(--cat-color)`. Subtler, on-brand, non-emoji.
+- **Sort merged into search row:** The standalone "Newest / A–Z" sort row below the filter chips is removed (`display: none`). Instead, small pill toggle buttons ("New" / "A–Z") sit inline inside the search input row (`.lib-search-sort`), right-aligned. Less visual clutter, same functionality.
+- **Share button moved into stats:** Removed the Share button from the Stats toggle row. It now lives inside `.home-stats-share-row` at the bottom of the stats section — only visible when stats are expanded.
+- **Ghost bars in activity chart:** Empty days in the 7-day bar chart now render a visible ghost bar (`14%` height, `opacity: 0.1`, `.ghost` class using `--muted2` color). Previously empty days had no bar at all, making the chart feel broken.
+- **Momentum line — single color:** Removed the accent color override on `em` inside `.home-momentum`. The whole line now renders in `var(--muted2)`, unified and calm.
+- **Tile category label — colored:** `.lib-tile-cat` now uses `var(--cat-color)` for text and a translucent `color-mix` border, instead of fixed `var(--muted2)`. Each saved concept tile now shows its category in the right hue.
+- **Tab counts — all tabs:** New `_libUpdateAllTabCounts()` function updates Episodes, Concepts, and Vocab tab badges simultaneously. Called from `openLibrary()`. Previously only Concepts had a count.
+
+---
+
 ## v3.34 — 2026-08-08 · Page load smoothing
 
 ### index.html

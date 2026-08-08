@@ -9309,6 +9309,23 @@
   user-select: none;
 }
 
+/* Hero glass card — v3.35 */
+.home-hero-card {
+  background: rgba(255,255,255,0.04);
+  border: 0.5px solid rgba(255,255,255,0.1);
+  border-radius: 20px;
+  box-shadow: 0 4px 32px rgba(0,0,0,0.32), inset 0 1px 0 rgba(255,255,255,0.06);
+  padding: 24px 32px 20px;
+  display: flex; flex-direction: column; align-items: center;
+  width: 100%; max-width: 320px;
+  margin-bottom: 4px;
+}
+[data-theme="light"] .home-hero-card {
+  background: rgba(255,255,255,0.7);
+  border-color: rgba(0,0,0,0.07);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9);
+}
+
 /* Momentum copy */
 .home-momentum {
   font-family: 'DM Sans', sans-serif;
@@ -9320,12 +9337,13 @@
   line-height: 1.5;
   max-width: 320px;
 }
+/* v3.35: single muted color throughout momentum, no accent override */
 .home-momentum em {
   font-family: 'Playfair Display', serif;
   font-style: italic;
   font-size: 0.84rem;
-  color: var(--accent);
-  font-weight: 700;
+  color: var(--muted2);
+  font-weight: 600;
 }
 [data-theme="light"] .home-momentum { color: var(--muted); }
 
@@ -9368,6 +9386,11 @@
   padding: 14px 16px 16px;
 }
 @media (max-width: 520px) { .home-stats-inner { grid-template-columns: 1fr; } }
+/* Share row inside stats section — v3.35 */
+.home-stats-share-row {
+  display: flex; justify-content: center;
+  padding: 2px 16px 14px;
+}
 
 /* Glass card — iPhone-adjacent, no backdrop-filter */
 .home-stat-card {
@@ -9405,6 +9428,8 @@
 }
 .home-bar.has-activity { opacity: 0.75; }
 .home-bar.today { opacity: 1; background: var(--accent); }
+/* Ghost bars for empty days — v3.35 */
+.home-bar.ghost { opacity: 0.1; background: var(--muted2); }
 .home-bar-day {
   font-family: 'DM Mono', monospace; font-size: 0.38rem;
   letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted);
@@ -9954,15 +9979,15 @@
   min-width: 0;
   position: relative;
 }
-/* Note badge — corner indicator v3.26 */
+/* Note badge — 6px accent dot — v3.35 */
 .lib-tile-note-badge {
-  position: absolute; top: 7px; right: 8px;
-  font-family: 'DM Mono', monospace; font-size: 0.46rem;
-  color: var(--accent); opacity: 0.55;
-  pointer-events: none; line-height: 1;
+  position: absolute; top: 9px; right: 9px;
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--cat-color, var(--accent));
+  opacity: 0.6; pointer-events: none;
   transition: opacity 0.14s;
 }
-.lib-tile:hover .lib-tile-note-badge { opacity: 0.9; }
+.lib-tile:hover .lib-tile-note-badge { opacity: 1; }
 .lib-tile:hover { border-color: var(--border-hover); }
 .lib-tile:hover .lib-tile-term { color: var(--accent); }
 .lib-tile-term {
@@ -9982,8 +10007,8 @@
 .lib-tile-cat {
   font-family: 'DM Mono', monospace;
   font-size: 0.52rem; letter-spacing: 0.08em; text-transform: uppercase;
-  color: var(--muted2); padding: 1px 4px;
-  border: 0.5px solid var(--border); border-radius: 2px;
+  color: var(--cat-color, var(--muted2)); padding: 1px 4px;
+  border: 0.5px solid color-mix(in srgb, var(--cat-color, var(--border)) 35%, transparent); border-radius: 2px;
 }
 .lib-tile-num {
   font-family: 'DM Mono', monospace;
@@ -10086,18 +10111,25 @@
 /* legacy .lib-cat-bar kept as fallback spacer */
 .lib-cat-bar { display: none; }
 
+/* Dot-pill chips — v3.35 */
 .lib-cat-chip {
   font-family: 'DM Mono', monospace;
-  font-size: 0.52rem; letter-spacing: 0.07em; text-transform: uppercase;
-  color: var(--muted2); padding: 2px 7px 2px 5px;
-  border-left: 2px solid var(--cat-color, var(--accent));
-  background: none; cursor: pointer; border-radius: 0 3px 3px 0;
-  transition: color 0.14s, background 0.14s;
+  font-size: 0.5rem; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--muted2); padding: 4px 10px 4px 8px;
+  border: 0.5px solid var(--border);
+  background: none; cursor: pointer; border-radius: 999px;
+  transition: color 0.14s, background 0.14s, border-color 0.14s;
   white-space: nowrap; flex-shrink: 0;
+  display: inline-flex; align-items: center; gap: 5px;
 }
-.lib-cat-chip em { font-style: normal; color: var(--muted); margin-left: 3px; }
-.lib-cat-chip:hover { color: var(--text); }
-.lib-cat-chip.active { color: var(--text); background: color-mix(in srgb, var(--cat-color, var(--accent)) 12%, transparent); }
+.lib-chip-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--cat-color, var(--muted2));
+  flex-shrink: 0; display: inline-block;
+}
+.lib-cat-chip em { display: none; } /* counts hidden in pill — v3.35 */
+.lib-cat-chip:hover { color: var(--text); border-color: var(--border-hover); }
+.lib-cat-chip.active { color: var(--text); border-color: var(--cat-color, var(--accent)); background: color-mix(in srgb, var(--cat-color, var(--accent)) 10%, transparent); }
 .lib-cat-divider {
   border: none; border-top: 0.5px solid var(--border);
   margin: 10px 0 0; flex-shrink: 0;
@@ -10314,14 +10346,26 @@
   line-height: 1.4;
 }
 
-/* ── Concepts sort row — v3.31 ──────────────────── */
-.lib-concept-sort-row {
-  display: flex; gap: 6px; padding: 0 0 10px; align-items: center;
+/* ── Concepts search-sort row — v3.35 (sort merged into search row) ── */
+.lib-concept-sort-row { display: none; } /* standalone sort row removed — v3.35 */
+.lib-search-sort {
+  display: flex; gap: 3px; align-items: center; flex-shrink: 0;
 }
+.lib-search-sort-btn {
+  font-family: 'DM Mono', monospace; font-size: 0.44rem; letter-spacing: 0.07em;
+  text-transform: uppercase; padding: 4px 8px;
+  border: 0.5px solid var(--border); border-radius: 20px;
+  background: none; color: var(--muted); cursor: pointer;
+  transition: color 0.14s, border-color 0.14s, background 0.14s;
+  white-space: nowrap;
+}
+.lib-search-sort-btn:hover { color: var(--accent); border-color: var(--accent); }
+.lib-search-sort-btn.active { color: var(--accent); border-color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, transparent); }
+/* Legacy sort btn compatibility (still used by _libConceptSetSort) */
 .lib-concept-sort-btn {
-  font-family: 'DM Mono', monospace; font-size: 0.46rem; letter-spacing: 0.08em;
-  text-transform: uppercase; padding: 4px 10px;
-  border: 0.5px solid var(--border); border-radius: 3px;
+  font-family: 'DM Mono', monospace; font-size: 0.44rem; letter-spacing: 0.07em;
+  text-transform: uppercase; padding: 4px 8px;
+  border: 0.5px solid var(--border); border-radius: 20px;
   background: none; color: var(--muted); cursor: pointer;
   transition: color 0.14s, border-color 0.14s, background 0.14s;
 }
@@ -13087,11 +13131,13 @@
   <div class="home-collapse-wrap" id="homeCollapseWrap">
   <div class="home-compact-strip" id="homeCompactStrip" onclick="_homeExpandDashboard()" role="button" aria-label="Show dashboard"></div>
   <div class="home-dashboard" id="homeDashboard">
-    <!-- Hero: concepts count — v3.30 -->
-    <div class="home-hero-num" id="hbSaved">0</div>
-    <div class="home-hero-label">concepts saved</div>
-    <!-- Activity: this week + streak -->
-    <div class="home-hero-activity" id="homeHeroActivity"></div>
+    <!-- Hero glass card — v3.35 -->
+    <div class="home-hero-card">
+      <div class="home-hero-num" id="hbSaved">0</div>
+      <div class="home-hero-label">concepts saved</div>
+      <!-- Activity: this week + streak -->
+      <div class="home-hero-activity" id="homeHeroActivity"></div>
+    </div>
     <!-- Secondary: words · eps · notes — tappable -->
     <div class="home-hero-secondary" id="homeHeroSecondary">
       <span class="home-sec-item" id="hbWords" onclick="_homeBucketNav('vocab')">0 words</span>
@@ -13105,13 +13151,10 @@
   </div>
   </div><!-- /.home-collapse-wrap -->
 
-  <!-- Stats toggle button + share — v3.31/v3.32 -->
-  <div style="display:flex;align-items:center;justify-content:center;gap:10px">
-    <button class="home-stats-toggle" id="homeStatsToggle" onclick="_homeToggleStats()">
-      Stats <span class="home-stats-toggle-arrow">↓</span>
-    </button>
-    <button class="home-share-btn" onclick="_homeShowShareCard()" title="Share your stats">Share ↗</button>
-  </div>
+  <!-- Stats toggle button — v3.31/v3.35 -->
+  <button class="home-stats-toggle" id="homeStatsToggle" onclick="_homeToggleStats()">
+    Stats <span class="home-stats-toggle-arrow">↓</span>
+  </button>
   <!-- Stats section: charts + goal — v3.31 -->
   <div class="home-stats-section" id="homeStatsSection">
     <div class="home-stats-inner">
@@ -13133,6 +13176,10 @@
         <div class="home-stat-card-title">This week's goal</div>
         <div class="home-goal-row" id="homeGoalRow"></div>
       </div>
+    </div>
+    <!-- Share button lives inside stats — v3.35 -->
+    <div class="home-stats-share-row">
+      <button class="home-share-btn" onclick="_homeShowShareCard()" title="Share your stats">Share ↗</button>
     </div>
   </div>
 
@@ -24152,6 +24199,7 @@ function openLibrary(tab) {
   _homeHideBackBtn(); // clear back button on library open — v3.27
   _homeMaybeSnapshot(); // write snapshot if >24h since last — v3.22
   _homeRenderDashboard();
+  _libUpdateAllTabCounts(); // all tab counts — v3.35
   _homeUpdateNavBadge(); // v3.23
   _homeBindScrollListeners(); // v3.23
   try { history.replaceState(null, '', '#home/' + tab); } catch(e) {} // v3.27 — tab in hash
@@ -24318,15 +24366,16 @@ function _libRenderSaved() {
   if (_libConceptFilter.letter && !letterSet[_libConceptFilter.letter]) _libConceptFilter.letter = null;
 
   var allActive = !_libConceptFilter.cat && !_libConceptFilter.notesOnly && !_libConceptFilter.letter;
+  // Dot-pill chips — v3.35
   var chipsHtml =
-    '<button class="lib-cat-chip' + (allActive ? ' active' : '') + '" style="--cat-color:var(--muted2)" onclick="_libClearFilters()">All<em>' + ids.length + '</em></button>' +
+    '<button class="lib-cat-chip' + (allActive ? ' active' : '') + '" style="--cat-color:var(--muted2)" onclick="_libClearFilters()"><span class="lib-chip-dot"></span>All<em>' + ids.length + '</em></button>' +
     Object.keys(catCounts)
     .sort(function(a, b) { return catCounts[b] - catCounts[a]; })
     .map(function(cat) {
       var name = (CATEGORIES && CATEGORIES.find(function(x) { return x.id === cat; }) || {}).name || cat;
       var color = (typeof CAT_COLOR !== 'undefined' && CAT_COLOR[cat]) || 'var(--accent)';
       var isActive = cat === _libConceptFilter.cat;
-      return '<button class="lib-cat-chip' + (isActive ? ' active' : '') + '" style="--cat-color:' + color + '" onclick="_libSetFilter(\'cat\',\'' + cat + '\')">' + name + '<em>' + catCounts[cat] + '</em></button>';
+      return '<button class="lib-cat-chip' + (isActive ? ' active' : '') + '" style="--cat-color:' + color + '" onclick="_libSetFilter(\'cat\',\'' + cat + '\')"><span class="lib-chip-dot"></span>' + name + '<em>' + catCounts[cat] + '</em></button>';
     }).join('');
 
   var notesBtn = notesCount
@@ -24349,12 +24398,15 @@ function _libRenderSaved() {
       '</div>'
     : '';
 
-  var searchHtml = '<div class="lib-search-wrap"><input class="lib-search-input" id="libConceptSearch" type="search" placeholder="Search saved concepts…" value="' + (_libConceptSearch || '').replace(/"/g,'&quot;') + '" oninput="_libOnConceptSearch(this.value)" autocomplete="off" spellcheck="false"></div>';
-  var sortRowHtml = '<div class="lib-concept-sort-row">' +
-    '<button class="lib-concept-sort-btn' + (_libConceptSort === 'newest' ? ' active' : '') + '" onclick="_libConceptSetSort(\'newest\')">Newest</button>' +
-    '<button class="lib-concept-sort-btn' + (_libConceptSort === 'alpha' ? ' active' : '') + '" onclick="_libConceptSetSort(\'alpha\')">A–Z</button>' +
+  // Search row with sort merged in — v3.35
+  var searchHtml = '<div class="lib-search-wrap" style="display:flex;align-items:center;gap:6px">' +
+    '<input class="lib-search-input" id="libConceptSearch" type="search" placeholder="Search saved concepts…" value="' + (_libConceptSearch || '').replace(/"/g,'&quot;') + '" oninput="_libOnConceptSearch(this.value)" autocomplete="off" spellcheck="false" style="flex:1;min-width:0">' +
+    '<div class="lib-search-sort">' +
+      '<button class="lib-search-sort-btn lib-concept-sort-btn' + (_libConceptSort === 'newest' ? ' active' : '') + '" onclick="_libConceptSetSort(\'newest\')">New</button>' +
+      '<button class="lib-search-sort-btn lib-concept-sort-btn' + (_libConceptSort === 'alpha' ? ' active' : '') + '" onclick="_libConceptSetSort(\'alpha\')">A–Z</button>' +
+    '</div>' +
   '</div>';
-  panel.innerHTML = searchHtml + filterRow + letterRail + sortRowHtml + '<div class="lib-grid" id="libConceptGrid"></div>';
+  panel.innerHTML = searchHtml + filterRow + letterRail + '<div class="lib-grid" id="libConceptGrid"></div>';
   _libRenderConceptGrid(ids, tsMap);
 }
 
@@ -24452,7 +24504,7 @@ function _libRenderConceptGrid(ids, tsMap) {
     var dateStr = tsMap[id] ? '<span class="lib-tile-date">' + _libFmtDate(tsMap[id]) + '</span>' : '';
     var hasNote = !!localStorage.getItem('cc_note_' + id);
     return '<div class="lib-tile" id="libTile-' + id + '" style="--cat-color:' + catColor + '" onclick="_libToggleSaved(' + id + ', this)">' +
-      (hasNote ? '<span class="lib-tile-note-badge" title="Has note">✏&#xFE0E;</span>' : '') +
+      (hasNote ? '<span class="lib-tile-note-badge" title="Has note"></span>' : '') +
       '<div class="lib-tile-term">' + (c.term || '') + '</div>' +
       '<div class="lib-tile-meta">' +
         '<span class="lib-tile-cat">' + catName + '</span>' +
@@ -24525,6 +24577,27 @@ function _libConceptSetSort(sort) {
 // Legacy shim — kept for any external callers
 function _libFilterCat(cat) {
   _libSetFilter('cat', cat);
+}
+
+// ── All-tab count badges — v3.35 ──────────────────────────────
+function _libUpdateAllTabCounts() {
+  // Episodes
+  var favs = _epGetFavs ? _epGetFavs() : {};
+  var epCount = Object.keys(favs).length;
+  var epTab = document.getElementById('libTab-episodes');
+  if (epTab) epTab.innerHTML = 'Episodes' + (epCount ? '<span class="lib-tab-count">' + epCount + '</span>' : '');
+
+  // Concepts (already updated in _libRenderSaved, update here too)
+  var masteredIds = typeof mastered !== 'undefined' ? Array.from(mastered) : [];
+  var conTab = document.getElementById('libTab-concepts');
+  if (conTab) conTab.innerHTML = 'Concepts' + (masteredIds.length ? '<span class="lib-tab-count">' + masteredIds.length + '</span>' : '');
+
+  // Vocab
+  var lexicon = [];
+  try { lexicon = JSON.parse(localStorage.getItem('lll_lexicon_v1') || '[]'); } catch(e) {}
+  var vocabCount = Array.isArray(lexicon) ? lexicon.length : 0;
+  var vocabTab = document.getElementById('libTab-vocab');
+  if (vocabTab) vocabTab.innerHTML = 'Vocab' + (vocabCount ? '<span class="lib-tab-count">' + vocabCount + '</span>' : '');
 }
 
 function _libToggleSaved(id, el) {
@@ -25308,8 +25381,8 @@ function _homeRenderBarChart() {
   var maxCount = Math.max.apply(null, counts.map(function(c) { return c.count; })) || 1;
 
   el.innerHTML = counts.map(function(c) {
-    var pct = Math.max(4, Math.round((c.count / maxCount) * 100));
-    var cls = 'home-bar' + (c.count > 0 ? ' has-activity' : '') + (c.isToday ? ' today' : '');
+    var pct = c.count > 0 ? Math.max(8, Math.round((c.count / maxCount) * 100)) : 14;
+    var cls = 'home-bar' + (c.count > 0 ? ' has-activity' : ' ghost') + (c.isToday ? ' today' : '');
     return '<div class="home-bar-col">' +
       '<div class="' + cls + '" style="height:' + pct + '%"></div>' +
       '<div class="home-bar-day' + (c.isToday ? ' today' : '') + '">' + c.label + '</div>' +
