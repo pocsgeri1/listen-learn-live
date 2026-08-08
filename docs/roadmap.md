@@ -1,10 +1,14 @@
 # Roadmap — Epistemic.
 
-**Last updated:** 2026-08-03
+**Last updated:** 2026-08-08
 **Purpose:** Phased build plan so every decision and feature fits into the bigger picture. Claude references this to avoid building things that will conflict with future phases.
 **Parking lot:** Ideas discussed but deferred live in `docs/ideas-parking-lot.md` — not here. Keeps Next Up clean.
 
 ---
+
+## Completed milestones
+
+- **Home build ✅ v3.17–v3.23** — "My Library" rearchitected into "Home": compact pinned dashboard (6 buckets, Wk/Mo/All range toggle, count-up, fingerprint line, scroll-collapse strip), 4 tabs (Episodes favs+recents, Concepts composable filters, Vocab segment, Practice cards), nav badge, `#home` deep link, JSON export. All in `index.html`. 7 phases shipped 2026-08-08.
 
 ## Next up
 

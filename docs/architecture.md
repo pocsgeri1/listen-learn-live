@@ -269,6 +269,14 @@ Static empty-state panels use `panel.dataset.rendered = '1'` guard to avoid re-r
 
 **Fingerprint line:** `#homeFingerprint` — "Strongest: [cat] · Blind spot: [cat]" from saved-concept category distribution. Hidden when < 5 saved concepts.
 
+**Scroll-collapse (v3.23):** `#homeCollapseWrap` wraps both `#homeDashboard` and `#homeFingerprint`. On scroll >80px in any `.lib-panel`, wrapper gets `.collapsed` class: height snaps to 36px (no transition), dashboard + fingerprint fade out (0.25s opacity), `#homeCompactStrip` (absolutely positioned, full-width) fades in. Strip text: "N concepts · N words · N eps ♥". Listeners bound per `openLibrary`, unbound + reset per `closeLibrary`. `prefers-reduced-motion` skips all transitions.
+
+**`#home` deep link (v3.23):** `openLibrary()` calls `history.replaceState(null,'','#home')`. `closeLibrary()` clears to `pathname+search`. DOMContentLoaded: `location.hash === '#home'` → `openLibrary()` after 300ms.
+
+**Nav badge (v3.23):** `_homeUpdateNavBadge()` — total of saved concepts + vocab words shown as `.nav-lib-badge` pill on desktop `#navLibraryBtn` label and mobile `#mobTabLib` label. Called on every `openLibrary()`. Hidden when total = 0.
+
+**Export all (v3.23):** `#homeExportBtn` (↓ JSON) in `lib-header`. `_homeExportAll()` dumps all `lll_*` + `cc_note*` localStorage keys as formatted JSON to clipboard.
+
 ### localStorage keys (Home-related)
 - `lll_mastered_ts_v1` — `{ [conceptId]: timestampMs }` — saved concepts
 - `lll_lexicon_v1` — array of saved vocab words

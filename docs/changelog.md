@@ -6,6 +6,14 @@
 
 ---
 
+## v3.23 — 2026-08-08 · Phase 7 polish + interconnect
+### index.html
+- **Dashboard scroll-collapse:** `.home-collapse-wrap` wraps `#homeDashboard` + `#homeFingerprint`. Scroll >80px on any active `.lib-panel` (debounced ≥16ms, passive listener) adds `.collapsed` to wrapper — height snaps to 36px, dashboard fades out (0.25s opacity), compact one-line strip fades in (0.25s opacity + translateY). Strip shows "N concepts · N words · N eps ♥". `prefers-reduced-motion` skips transitions. Listeners bound in `openLibrary`, unbound + state reset in `closeLibrary`.
+- **`#home` deep link:** `openLibrary()` sets `location.hash = '#home'` via `history.replaceState`. `closeLibrary()` clears hash (replaces with `pathname + search`). DOMContentLoaded block: if `location.hash === '#home'`, calls `openLibrary()` after 300ms.
+- **Nav badge:** `_homeUpdateNavBadge()` reads saved concepts (`lll_saved_v1`) + vocab words (`lll_lexicon_v1`), renders `<span class="nav-lib-badge">N</span>` inside `.nav-library-label` (desktop) and `.mob-tab-label` (mobile). Called on every `openLibrary()`. Badge hidden when total = 0.
+- **Export all button:** `↓ JSON` button (`#homeExportBtn`) in `lib-header`. `_homeExportAll()` dumps all `lll_*` + `cc_note*` localStorage keys as JSON to clipboard via `navigator.clipboard` (fallback: `execCommand`). Button flashes "✓ Copied" for 2s.
+- **Dead code sweep:** `_libRenderNotes()` stubbed to no-op (function signature kept for `_libNoteDelete`/`_libNoteSave` back-compat). `.lib-panel-notes .lib-grid` CSS rule removed; note tile CSS retained for future reuse.
+
 ## v3.22 — 2026-08-08 · PRACTICE cards + live dashboard + snapshots
 ### index.html
 - **PRACTICE mode cards:** Three large tappable cards replace interim buttons — Spark ✦ / Write ✏ / Quiz ◈. Each shows: glyph, Playfair name, DM Sans hook, live DM Mono accent data line (Spark: N saved concepts; Write: N words waiting / "All words practiced"; Quiz: "Last score: X/180" or "Never played"). Hover: border shift + translateY(-2px), 0.2s. `prefers-reduced-motion` + `hover:none` suppress transform.

@@ -9331,6 +9331,107 @@
 /* Light mode */
 [data-theme="light"] .home-range-btn.home-range-active { background: var(--surface2); color: var(--text); }
 
+/* ── Phase 7: scroll-collapse wrapper — v3.23 ───── */
+.home-collapse-wrap {
+  position: relative;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+}
+.home-compact-strip {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  color: var(--muted2);
+  border-bottom: 0.5px solid var(--border);
+  height: 36px;
+  gap: 0;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(4px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  background: var(--bg);
+  z-index: 1;
+}
+.home-compact-strip .strip-sep { color: var(--accent); margin: 0 6px; }
+.home-collapse-wrap.collapsed .home-compact-strip {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+.home-collapse-wrap.collapsed {
+  height: 36px;
+  overflow: hidden;
+}
+.home-collapse-wrap .home-dashboard {
+  transition: opacity 0.25s ease;
+}
+.home-collapse-wrap.collapsed .home-dashboard {
+  opacity: 0;
+  pointer-events: none;
+}
+.home-collapse-wrap .home-fingerprint {
+  transition: opacity 0.25s ease;
+}
+.home-collapse-wrap.collapsed .home-fingerprint {
+  opacity: 0;
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-compact-strip,
+  .home-collapse-wrap .home-dashboard,
+  .home-collapse-wrap .home-fingerprint {
+    transition: none !important;
+  }
+}
+/* Nav badge — v3.23 */
+.nav-lib-badge {
+  display: inline-block;
+  background: var(--accent);
+  color: var(--bg);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.42rem;
+  letter-spacing: 0.04em;
+  border-radius: 8px;
+  padding: 1px 4px;
+  margin-left: 5px;
+  vertical-align: middle;
+  line-height: 1.4;
+  font-weight: 700;
+}
+.mob-tab-lib { position: relative; }
+.mob-tab-lib .nav-lib-badge {
+  position: absolute;
+  top: 3px;
+  right: 8px;
+  font-size: 0.38rem;
+  padding: 1px 3px;
+}
+/* Export all button — v3.23 */
+.lib-export-all-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.48rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: none;
+  border: 0.5px solid var(--border);
+  border-radius: 4px;
+  padding: 3px 7px;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+.lib-export-all-btn:hover { color: var(--text); border-color: var(--border-hover); }
+
 /* ── Practice mode cards — v3.22 ────────────────── */
 .practice-cards {
   display: flex;
@@ -10086,8 +10187,7 @@
 }
 .lib-detail-btn:hover { color: var(--text); border-color: var(--border-hover); }
 
-/* Notes panel — visually distinct */
-.lib-panel-notes .lib-grid { grid-template-columns: 1fr; }
+/* Notes panel tiles (notes tab removed v3.23 — tile CSS kept for _libExportNotes preview) */
 .lib-note-tile {
   padding: 14px 16px 12px 16px;
   background: rgba(255,255,255,0.015);
@@ -12442,10 +12542,13 @@
   <div class="lib-handle"></div>
   <div class="lib-header">
     <span class="lib-title">Home</span>
-    <span class="lib-shortcut-hint" title="Keyboard shortcut">⌘⌥L</span>
+    <span class="lib-shortcut-hint" title="Keyboard shortcut">⌘⌥H</span>
+    <button class="lib-export-all-btn" id="homeExportBtn" onclick="_homeExportAll()" title="Export all your data as JSON">↓ JSON</button>
     <button class="lib-close" onclick="closeLibrary()">✕</button>
   </div>
   <div class="panel-tagline" style="margin: 0; border-radius: 0;">Everything you keep — episodes, ideas, words, practice.</div>
+  <div class="home-collapse-wrap" id="homeCollapseWrap">
+  <div class="home-compact-strip" id="homeCompactStrip"></div>
   <div class="home-dashboard" id="homeDashboard">
     <div class="home-buckets" id="homeBuckets">
       <div class="home-bucket">
@@ -12486,6 +12589,7 @@
     </div>
   </div>
   <div class="home-fingerprint" id="homeFingerprint" style="display:none"></div>
+  </div><!-- /.home-collapse-wrap -->
   <div class="lib-tabs">
     <button class="lib-tab" id="libTab-episodes" onclick="_libSwitchTab('episodes')">Episodes</button>
     <button class="lib-tab lib-tab-active" id="libTab-concepts" onclick="_libSwitchTab('concepts')">Concepts</button>
@@ -13371,9 +13475,9 @@ function closeHiwOnBackdrop(e) {
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') closeHiw();
 });
-// v3.13: Cmd+Alt+L (⌘⌥L) — open Home drawer. Using Alt instead of Shift avoids password-manager conflicts.
+// v3.13: Cmd+Alt+H (⌘⌥H) — open Home drawer. Using Alt instead of Shift avoids password-manager conflicts. Renamed L→H v3.23.
 document.addEventListener('keydown', function(e) {
-  if ((e.metaKey || e.ctrlKey) && e.altKey && e.code === 'KeyL') {
+  if ((e.metaKey || e.ctrlKey) && e.altKey && (e.code === 'KeyH' || e.code === 'KeyL')) { // KeyL kept as legacy alias
     e.preventDefault();
     if (typeof openLibrary === 'function') openLibrary();
   }
@@ -13676,6 +13780,10 @@ async function loadConcepts() {
         }, 350);
       }, 400);
     })();
+    // #home deep link — v3.23
+    if (window.location.hash === '#home') {
+      setTimeout(function() { if (typeof openLibrary === 'function') openLibrary(); }, 300);
+    }
 
   } catch (error) {
     console.error('Failed to load concepts:', error);
@@ -23310,6 +23418,85 @@ Object.defineProperty(window, '_libActiveCat', {
 });
 var _HOME_TABS = ['episodes','concepts','vocab','practice'];
 
+/* ── Phase 7: scroll-collapse ─────────────────────────────────── */
+var _homeScrollDebTimer = null;
+function _homeOnPanelScroll(e) {
+  clearTimeout(_homeScrollDebTimer);
+  _homeScrollDebTimer = setTimeout(function() {
+    var wrap = document.getElementById('homeCollapseWrap');
+    if (!wrap) return;
+    wrap.classList.toggle('collapsed', (e.target.scrollTop || 0) > 80);
+  }, 16);
+}
+function _homeBindScrollListeners() {
+  document.querySelectorAll('.lib-panel').forEach(function(p) {
+    p.removeEventListener('scroll', _homeOnPanelScroll);
+    p.addEventListener('scroll', _homeOnPanelScroll, { passive: true });
+  });
+}
+function _homeUnbindScrollListeners() {
+  document.querySelectorAll('.lib-panel').forEach(function(p) {
+    p.removeEventListener('scroll', _homeOnPanelScroll);
+  });
+  var wrap = document.getElementById('homeCollapseWrap');
+  if (wrap) wrap.classList.remove('collapsed');
+}
+
+/* ── Phase 7: nav badge ───────────────────────────────────────── */
+function _homeUpdateNavBadge() {
+  var nConcepts = 0, nWords = 0;
+  try { nConcepts = Object.keys(JSON.parse(localStorage.getItem('lll_saved_v1') || '{}')).length; } catch(e) {}
+  try {
+    var lx = JSON.parse(localStorage.getItem('lll_lexicon_v1') || '[]');
+    nWords = Array.isArray(lx) ? lx.length : Object.keys(lx).length;
+  } catch(e) {}
+  var total = nConcepts + nWords;
+  var badge = total > 0 ? '<span class="nav-lib-badge">' + total + '</span>' : '';
+  var desktopBtn = document.getElementById('navLibraryBtn');
+  if (desktopBtn) {
+    var lbl = desktopBtn.querySelector('.nav-library-label');
+    if (lbl) lbl.innerHTML = 'Home' + badge;
+  }
+  var mobBtn = document.getElementById('mobTabLib');
+  if (mobBtn) {
+    var mobLbl = mobBtn.querySelector('.mob-tab-label');
+    if (mobLbl) mobLbl.innerHTML = 'Home' + badge;
+  }
+}
+
+/* ── Phase 7: export all data ────────────────────────────────── */
+function _homeExportAll() {
+  var out = {};
+  try {
+    for (var i = 0; i < localStorage.length; i++) {
+      var key = localStorage.key(i);
+      if (!key) continue;
+      if (key.startsWith('lll_') || key.startsWith('cc_note')) {
+        out[key] = localStorage.getItem(key);
+      }
+    }
+  } catch(e) {}
+  var json = JSON.stringify(out, null, 2);
+  var btn = document.getElementById('homeExportBtn');
+  function showCopied() {
+    if (btn) {
+      btn.textContent = '✓ Copied';
+      setTimeout(function() { btn.textContent = '↓ JSON'; }, 2000);
+    }
+  }
+  try {
+    navigator.clipboard.writeText(json).then(showCopied);
+  } catch(e) {
+    var ta = document.createElement('textarea');
+    ta.value = json;
+    ta.style.cssText = 'position:fixed;opacity:0;pointer-events:none';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); showCopied(); } catch(e2) {}
+    document.body.removeChild(ta);
+  }
+}
+
 function openLibrary(tab) {
   tab = tab || _libActiveTab || 'concepts';
   // Validate tab name — fall back to concepts
@@ -23331,6 +23518,9 @@ function openLibrary(tab) {
   _libRender(tab);
   _homeMaybeSnapshot(); // write snapshot if >24h since last — v3.22
   _homeRenderDashboard();
+  _homeUpdateNavBadge(); // v3.23
+  _homeBindScrollListeners(); // v3.23
+  try { history.replaceState(null, '', '#home'); } catch(e) {} // v3.23
   requestAnimationFrame(function() {
     _HOME_TABS.forEach(function(t) {
       var panel = document.getElementById('libPanel-' + t);
@@ -23353,6 +23543,8 @@ function closeLibrary() {
   backdrop.classList.remove('open');
   document.body.classList.remove('mob-panel-open');
   _spUnlockBodyScroll();
+  _homeUnbindScrollListeners(); // v3.23
+  try { history.replaceState(null, '', location.pathname + location.search); } catch(e) {} // v3.23
 }
 
 function _libSwitchTab(tab) {
@@ -23379,7 +23571,7 @@ function _libRender(tab) {
   else if (tab === 'episodes') _libRenderEpisodes();
   else if (tab === 'vocab') _libRenderVocab();
   else if (tab === 'practice') _libRenderPractice();
-  // 'notes' kept as dead reference — _libRenderNotes() intact, unused until Phase 7
+  // 'notes' tab removed v3.23 — _libRenderNotes stubbed
 }
 
 function _libNavToCard(id) {
@@ -24117,6 +24309,16 @@ function _homeRenderDashboard(skipCountUp) {
     if (elNewCon)  elNewCon.textContent  = Math.round(showConVal * progress);
   }
 
+  // Compact strip — v3.23
+  (function() {
+    var strip = document.getElementById('homeCompactStrip');
+    if (!strip) return;
+    strip.innerHTML =
+      '<span>' + nSaved + ' concepts</span><span class="strip-sep">·</span>' +
+      '<span>' + nWords + ' words</span><span class="strip-sep">·</span>' +
+      '<span>' + nEpisodes + ' eps ♥</span>';
+  })();
+
   if (noMotion || skipCountUp) {
     setAll(1);
     return;
@@ -24135,66 +24337,8 @@ function _homeRenderDashboard(skipCountUp) {
   requestAnimationFrame(tick);
 }
 
-// ── Notes render (kept intact, unreferenced — Phase 7 will sweep or salvage)
-function _libRenderNotes() {
-  var panel = document.getElementById('libPanel-notes');
-  if (!panel) return;
-  var notes = [];
-  for (var i = 0; i < localStorage.length; i++) {
-    var key = localStorage.key(i);
-    if (!key || !key.startsWith('cc_note_') || key.startsWith('cc_note_meta_')) continue;
-    var idStr = key.replace('cc_note_', '');
-    var id = parseInt(idStr, 10);
-    if (isNaN(id)) continue;
-    var text = localStorage.getItem(key) || '';
-    if (!text.trim()) continue;
-    var meta = {};
-    try { meta = JSON.parse(localStorage.getItem('cc_note_meta_' + id) || '{}'); } catch(e) {}
-    notes.push({ id: id, text: text.trim(), ts: meta.ts || 0 });
-  }
-  notes.sort(function(a, b) { return b.ts - a.ts || b.id - a.id; });
-
-  // Update tab badge
-  var notesTab = document.getElementById('libTab-notes');
-  if (notesTab) {
-    notesTab.innerHTML = 'Notes' + (notes.length ? '<span class="lib-tab-count">' + notes.length + '</span>' : '');
-  }
-
-  if (!notes.length) {
-    panel.innerHTML = '<div class="lib-empty"><span class="lib-empty-icon">✏</span>No notes yet.<br>Tap ✏ on any card back to add a personal note.</div>';
-    return;
-  }
-
-  var header = '<div class="lib-notes-header">' +
-    '<span class="lib-notes-count">' + notes.length + ' note' + (notes.length !== 1 ? 's' : '') + '</span>' +
-    '<button class="lib-export-btn" onclick="_libExportNotes()">↓ Export all</button>' +
-  '</div>';
-
-  var tiles = notes.map(function(n) {
-    var c = CONCEPTS && CONCEPTS.find(function(x) { return x.id === n.id; });
-    if (!c) return '';
-    var catName = (CATEGORIES && CATEGORIES.find(function(x) { return x.id === c.category; }) || {}).name || c.category;
-    var catColor = (typeof CAT_COLOR !== 'undefined' && CAT_COLOR[c.category]) || '#e8d5a3';
-    var safeText = n.text.replace(/[<>&"]/g, function(ch) { return {'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[ch]; });
-    var safeTerm = (c.term || '').replace(/[<>&"]/g, function(ch) { return {'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[ch]; });
-    var dateStr = n.ts ? _libFmtDate(n.ts) : '';
-    return '<div class="lib-note-tile" id="libNoteTile-' + n.id + '" style="--note-cat-color:' + catColor + '">' +
-      '<div class="lib-note-header">' +
-        '<button class="lib-note-info" onclick="event.stopPropagation();_libNotePreview(' + n.id + ', this)" title="Preview concept">i</button>' +
-        '<span class="lib-note-term">' + safeTerm + '</span>' +
-        '<span class="lib-note-cat-chip">' + catName + '</span>' +
-        (dateStr ? '<span class="lib-note-date">' + dateStr + '</span>' : '') +
-        '<button class="lib-note-delete" onclick="_libNoteDelete(' + n.id + ', event)" title="Delete note">✕</button>' +
-      '</div>' +
-      '<div class="lib-note-text" onclick="_libNoteEdit(' + n.id + ', this)">' + safeText + '</div>' +
-      '<textarea class="lib-note-ta" rows="3" onblur="_libNoteSave(' + n.id + ', this)"></textarea>' +
-      '<div class="lib-note-meta-row">' +
-        '<span class="lib-note-chars" id="libNoteChars-' + n.id + '">' + n.text.length + ' chars</span>' +
-      '</div>' +
-    '</div>';
-  }).join('');
-  panel.innerHTML = header + '<div style="padding: 4px 0;">' + tiles + '</div>';
-}
+// ── Notes render — v3.23 dead code sweep (notes tab removed; stub kept for _libNoteDelete/_libNoteSave back-compat)
+function _libRenderNotes() { /* no-op — notes tab removed v3.23 */ }
 
 function _libNoteEdit(id, textEl) {
   var tile = textEl.closest('.lib-note-tile');

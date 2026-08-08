@@ -511,6 +511,19 @@ animation-delay: calc(var(--index) * 0.03s); /* max capped at 20 */
 animation: pulse 2s infinite;
 ```
 
+**Scroll-collapse overlay (v3.23):**
+Two elements stacked inside `.home-collapse-wrap` (flex column, `position: relative`).
+- Dashboard: normal flow; fades out on collapse.
+- Strip: `position: absolute; top:0; left:0; right:0; height:36px`; fades in on collapse.
+- Wrapper: `height` snaps instantly to 36px on `.collapsed` (no height transition, per spec). Opacity transitions are 0.25s ease.
+- `prefers-reduced-motion`: all transitions set to `none !important`.
+
+**Segmented control (3-up):**
+Used in Vocab tab. `display: flex`, border `0.5px solid var(--border)`, `border-radius: 8px`, `overflow: hidden`. Each segment: DM Mono 0.6rem, uppercase, `padding: 6px 14px`. Active: `background: var(--surface2); color: var(--text)`. Inactive: `color: var(--muted)`. No gap between segments.
+
+**Practice mode card:**
+`border: 0.5px solid var(--border)`, `border-radius: 10px`, `background: var(--surface)`, `padding: 14px 16px`. Icon (1.15rem accent), Playfair name (0.95rem 700), DM Sans hook (0.72rem muted2), DM Mono live line (0.54rem accent2). Hover: `border-color: var(--border-hover); transform: translateY(-2px); background: var(--surface2)`. `hover:none` + `reduced-motion` suppress transform.
+
 ### Restrictions
 
 - **No bouncy animations.** No spring physics, no overshoot. The aesthetic is refined, not playful.
