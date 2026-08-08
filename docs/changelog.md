@@ -6,6 +6,16 @@
 
 ---
 
+## v3.20 — 2026-08-08 · CONCEPTS composable filters: cat × letter × notes
+### index.html
+- **Composable filter state:** Replaced `_libActiveCat` (single) with `_libConceptFilter = { cat, letter, notesOnly }`. All three AND-combine. Legacy `_libActiveCat` getter/setter shim retained for safety.
+- **A–Z letter rail:** `.lib-letter-rail` — horizontal scrolling mono row of only letters that exist in the saved set (others omitted entirely). Tap toggles; tap again clears. Mobile: `touch-action: pan-x`, scrollbar hidden.
+- **`_homeApplyConceptFilters()`:** Single function that updates button active states + fade-rebuilds the grid (0.15s opacity out → rebuild → in). Called by all three filter setters. `prefers-reduced-motion` skips fade.
+- **`_libRenderConceptGrid(ids, tsMap)`:** Extracted grid-only render from `_libRenderSaved`. Applies all three filters, renders tiles, or shows `.lib-filter-empty` with Clear button if result is empty.
+- **`_libSetFilter(key, val)`:** Unified toggle handler for cat, letter, notesOnly. Toggle: same value clears. `_libClearFilters()` resets all three at once.
+- **Empty filter state:** `.lib-filter-empty` — Playfair italic "Nothing here yet." + Clear filters button.
+- **`#libConceptGrid`:** Grid div now has a stable ID so `_homeApplyConceptFilters` can target it without re-rendering the filter bars.
+
 ## v3.19 — 2026-08-08 · EPISODES section: ♥ fav, recents, latest-5 fallback
 ### index.html
 - **♥ Fav button in episode drawer:** Added to top-left of the hero header (`#epFavBtn`). Outline heart → filled accent on fav; scale-pop animation on toggle (0.3s, reduced-motion: none). 44×44 touch target. Mobile: shifts right of count badge to avoid collision.

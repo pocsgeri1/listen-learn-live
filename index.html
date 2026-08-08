@@ -9668,6 +9668,81 @@
 .lib-panel { scrollbar-width: none; }
 .lib-panel::-webkit-scrollbar { display: none; }
 
+/* ── CONCEPTS letter rail — v3.20 ──────────────────── */
+.lib-letter-rail {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 6px 20px 2px;
+  flex-shrink: 0;
+  touch-action: pan-x;
+}
+.lib-letter-rail::-webkit-scrollbar { display: none; }
+.lib-letter-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.56rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 5px;
+  min-width: 22px;
+  min-height: 28px;
+  border-radius: 3px;
+  flex-shrink: 0;
+  transition: color 0.13s, background 0.13s;
+  white-space: nowrap;
+}
+.lib-letter-btn:hover { color: var(--text); }
+.lib-letter-btn.active { color: var(--accent); font-weight: 600; }
+
+/* Concept grid fade on filter — v3.20 */
+.lib-grid { transition: opacity 0.15s ease; }
+.lib-grid.filter-fade { opacity: 0; }
+
+/* Empty filter state */
+.lib-filter-empty {
+  padding: 40px 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+.lib-filter-empty-text {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  font-style: italic;
+  color: var(--muted2);
+}
+.lib-filter-empty-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 7px 18px;
+  border: 0.5px solid var(--border);
+  border-radius: 6px;
+  background: none;
+  cursor: pointer;
+  color: var(--muted2);
+  transition: border-color 0.14s, color 0.14s;
+}
+.lib-filter-empty-btn:hover { border-color: var(--border-hover); color: var(--text); }
+
+/* Light-mode overrides — Concepts filters v3.20 */
+[data-theme="light"] .lib-letter-btn { color: var(--muted); }
+[data-theme="light"] .lib-letter-btn.active { color: var(--accent2); }
+[data-theme="light"] .lib-filter-empty-btn { color: var(--text); }
+
+@media (prefers-reduced-motion: reduce) {
+  .lib-grid { transition: none; }
+}
+
 /* Saved tile inline expand — detail row is a grid sibling, not inside tile */
 .lib-tile-open { outline: 0.5px solid var(--border-hover); }
 .lib-detail-row {
@@ -22978,7 +23053,13 @@ function _ccCloseRelated() {
 
 // ── Home Drawer (formerly My Library) — v3.18 ─────────────────
 var _libActiveTab = 'concepts';
-var _libActiveCat = null; // active category filter in Concepts tab
+// ── Concepts composable filter state — v3.20 ──────────
+var _libConceptFilter = { cat: null, letter: null, notesOnly: false };
+// Legacy alias (kept for safety — internal code should use _libConceptFilter)
+Object.defineProperty(window, '_libActiveCat', {
+  get: function() { return _libConceptFilter.cat; },
+  set: function(v) { _libConceptFilter.cat = v; }
+});
 var _HOME_TABS = ['episodes','concepts','vocab','practice'];
 
 function openLibrary(tab) {
@@ -23095,7 +23176,7 @@ function _libRenderSaved() {
   }
 
   if (!ids.length) {
-    _libActiveCat = null;
+    _libConceptFilter = { cat: null, letter: null, notesOnly: false };
     panel.innerHTML = '<div class="lib-empty"><span class="lib-empty-icon">◈</span>No mastered concepts yet.<br>Tap ◈ on any card to save it here.</div>';
     return;
   }
@@ -23110,32 +23191,120 @@ function _libRenderSaved() {
   var noteIds = ids.filter(function(id) { return !!localStorage.getItem('cc_note_' + id); });
   var notesCount = noteIds.length;
 
-  // Validate active filter still exists
-  if (_libActiveCat && _libActiveCat !== '__notes__' && !catCounts[_libActiveCat]) _libActiveCat = null;
+  // Validate cat filter still exists in current set
+  if (_libConceptFilter.cat && _libConceptFilter.cat !== '__notes__' && !catCounts[_libConceptFilter.cat]) {
+    _libConceptFilter.cat = null;
+  }
+
+  // Build A–Z letter rail — only letters that exist in the saved set
+  var letterSet = {};
+  ids.forEach(function(id) {
+    var c = CONCEPTS && CONCEPTS.find(function(x) { return x.id === id; });
+    if (c && c.term) {
+      var first = c.term.trim().charAt(0).toUpperCase();
+      if (/[A-Z]/.test(first)) letterSet[first] = true;
+    }
+  });
+  var letters = Object.keys(letterSet).sort();
+  // Validate letter filter still exists
+  if (_libConceptFilter.letter && !letterSet[_libConceptFilter.letter]) _libConceptFilter.letter = null;
 
   var catBar = '<div class="lib-cat-bar">' +
-    // Regular category chips
     Object.keys(catCounts)
     .sort(function(a, b) { return catCounts[b] - catCounts[a]; })
     .map(function(cat) {
       var name = (CATEGORIES && CATEGORIES.find(function(x) { return x.id === cat; }) || {}).name || cat;
       var color = (typeof CAT_COLOR !== 'undefined' && CAT_COLOR[cat]) || 'var(--accent)';
-      var isActive = cat === _libActiveCat;
-      return '<button class="lib-cat-chip' + (isActive ? ' active' : '') + '" style="--cat-color:' + color + '" onclick="_libFilterCat(\'' + cat + '\')">' + name + '<em>' + catCounts[cat] + '</em></button>';
+      var isActive = cat === _libConceptFilter.cat;
+      return '<button class="lib-cat-chip' + (isActive ? ' active' : '') + '" style="--cat-color:' + color + '" onclick="_libSetFilter(\'cat\',\'' + cat + '\')">' + name + '<em>' + catCounts[cat] + '</em></button>';
     }).join('') +
-    // "With Notes" special chip
-    (notesCount ? '<button class="lib-cat-chip' + (_libActiveCat === '__notes__' ? ' active' : '') + '" style="--cat-color:var(--accent)" onclick="_libFilterCat(\'__notes__\')">✏ Notes<em>' + notesCount + '</em></button>' : '') +
-    '</div><hr class="lib-cat-divider">';
+    (notesCount ? '<button class="lib-cat-chip' + (_libConceptFilter.notesOnly ? ' active' : '') + '" style="--cat-color:var(--accent)" onclick="_libSetFilter(\'notesOnly\',null)">✏ Notes<em>' + notesCount + '</em></button>' : '') +
+    '</div>';
 
-  // Filter by active category
-  var visibleIds = _libActiveCat === '__notes__'
-    ? noteIds
-    : _libActiveCat
-      ? ids.filter(function(id) {
-          var c = CONCEPTS && CONCEPTS.find(function(x) { return x.id === id; });
-          return c && c.category === _libActiveCat;
-        })
-      : ids;
+  var letterRail = letters.length > 1
+    ? '<div class="lib-letter-rail">' +
+        letters.map(function(l) {
+          return '<button class="lib-letter-btn' + (l === _libConceptFilter.letter ? ' active' : '') + '" onclick="_libSetFilter(\'letter\',\'' + l + '\')">' + l + '</button>';
+        }).join('') +
+      '</div>'
+    : '';
+
+  var divider = '<hr class="lib-cat-divider">';
+  panel.innerHTML = catBar + letterRail + divider + '<div class="lib-grid" id="libConceptGrid"></div>';
+  _libRenderConceptGrid(ids, tsMap);
+}
+
+// ── Apply composable filters + rebuild grid — v3.20 ──────────
+function _homeApplyConceptFilters() {
+  var panel = document.getElementById('libPanel-concepts');
+  if (!panel) return;
+
+  // Update filter button active states without full re-render
+  panel.querySelectorAll('.lib-cat-chip').forEach(function(btn) {
+    var onclick = btn.getAttribute('onclick') || '';
+    var catMatch = onclick.match(/_libSetFilter\('cat','([^']+)'\)/);
+    var notesMatch = onclick.match(/_libSetFilter\('notesOnly'/);
+    if (catMatch) btn.classList.toggle('active', catMatch[1] === _libConceptFilter.cat);
+    if (notesMatch) btn.classList.toggle('active', !!_libConceptFilter.notesOnly);
+  });
+  panel.querySelectorAll('.lib-letter-btn').forEach(function(btn) {
+    btn.classList.toggle('active', btn.textContent === _libConceptFilter.letter);
+  });
+
+  var tsMap = {};
+  try { tsMap = JSON.parse(localStorage.getItem('lll_mastered_ts_v1') || '{}'); } catch(e) {}
+  var ids = typeof mastered !== 'undefined' ? Array.from(mastered) : [];
+  ids.sort(function(a, b) { return (tsMap[b] || 0) - (tsMap[a] || 0) || b - a; });
+
+  var grid = document.getElementById('libConceptGrid');
+  if (!grid) { _libRenderSaved(); return; }
+
+  // Close any open detail rows first
+  panel.querySelectorAll('.lib-detail-row').forEach(function(r) { r.remove(); });
+  panel.querySelectorAll('.lib-tile-open').forEach(function(t) { t.classList.remove('lib-tile-open'); });
+
+  // Fade out
+  var noMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function rebuild() {
+    _libRenderConceptGrid(ids, tsMap);
+    if (!noMotion) {
+      requestAnimationFrame(function() { grid = document.getElementById('libConceptGrid'); if (grid) grid.classList.remove('filter-fade'); });
+    }
+  }
+  if (noMotion) {
+    rebuild();
+  } else {
+    grid.classList.add('filter-fade');
+    setTimeout(rebuild, 150);
+  }
+}
+
+function _libRenderConceptGrid(ids, tsMap) {
+  var panel = document.getElementById('libPanel-concepts');
+  var grid = document.getElementById('libConceptGrid');
+  if (!panel || !grid) return;
+
+  // Apply all three filters (AND logic)
+  var noteIds = ids.filter(function(id) { return !!localStorage.getItem('cc_note_' + id); });
+  var visibleIds = ids.filter(function(id) {
+    var c = CONCEPTS && CONCEPTS.find(function(x) { return x.id === id; });
+    if (!c) return false;
+    if (_libConceptFilter.cat && c.category !== _libConceptFilter.cat) return false;
+    if (_libConceptFilter.notesOnly && !localStorage.getItem('cc_note_' + id)) return false;
+    if (_libConceptFilter.letter) {
+      var first = (c.term || '').trim().charAt(0).toUpperCase();
+      if (first !== _libConceptFilter.letter) return false;
+    }
+    return true;
+  });
+
+  if (!visibleIds.length) {
+    var hasFilters = _libConceptFilter.cat || _libConceptFilter.letter || _libConceptFilter.notesOnly;
+    grid.innerHTML = hasFilters
+      ? '<div class="lib-filter-empty"><p class="lib-filter-empty-text">Nothing here yet.</p><button class="lib-filter-empty-btn" onclick="_libClearFilters()">Clear filters</button></div>'
+      : '';
+    return;
+  }
 
   var tiles = visibleIds.map(function(id) {
     var c = CONCEPTS && CONCEPTS.find(function(x) { return x.id === id; });
@@ -23154,15 +23323,27 @@ function _libRenderSaved() {
       '</div>' +
     '</div>';
   }).join('');
-  panel.innerHTML = catBar + '<div class="lib-grid">' + tiles + '</div>';
+  grid.innerHTML = tiles;
 }
 
+function _libSetFilter(key, val) {
+  if (key === 'notesOnly') {
+    _libConceptFilter.notesOnly = !_libConceptFilter.notesOnly;
+  } else {
+    // Toggle: clicking the same value clears it
+    _libConceptFilter[key] = (_libConceptFilter[key] === val) ? null : val;
+  }
+  _homeApplyConceptFilters();
+}
+
+function _libClearFilters() {
+  _libConceptFilter = { cat: null, letter: null, notesOnly: false };
+  _homeApplyConceptFilters();
+}
+
+// Legacy shim — kept for any external callers
 function _libFilterCat(cat) {
-  _libActiveCat = (_libActiveCat === cat) ? null : cat;
-  // Close any open detail rows before re-rendering
-  document.querySelectorAll('#libPanel-concepts .lib-detail-row').forEach(function(r) { r.remove(); });
-  document.querySelectorAll('#libPanel-concepts .lib-tile-open').forEach(function(t) { t.classList.remove('lib-tile-open'); });
-  _libRenderSaved();
+  _libSetFilter('cat', cat);
 }
 
 function _libToggleSaved(id, el) {
