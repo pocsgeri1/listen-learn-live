@@ -6,6 +6,18 @@
 
 ---
 
+## v3.26 — 2026-08-08 · Home v2 Phase C — Concepts filter overhaul + note badges
+
+### index.html
+- **Filter row redesign:** `.lib-cat-bar` (wrapping chips) replaced with a single `.lib-filter-row`: a horizontal scrolling chip strip on the left, and a compact action button group on the right (divided by a `border-left`). No more multi-line wrapping.
+- **Category chips:** `flex-wrap: nowrap` with `overflow-x: auto` on the scroll strip. Each chip retains its `border-left: 2px solid var(--cat-color)` color indicator. Active state uses `color-mix(in srgb, var(--cat-color) 12%, transparent)` for a tinted highlight.
+- **Notes filter button:** Moved out of the chip row entirely. Now a compact `✏︎` icon button in `.lib-filter-actions` (right side of filter row). Active = accent colored. Hides automatically if no notes exist.
+- **A–Z toggle:** New `A–Z` action button (right side). Tap to open/close the letter rail with a smooth `max-height` transition (0 → 44px). `_libToggleAZ()` manages open state + clears letter filter when closed. Rail has `id="libLetterRail"` + `.open` class toggled.
+- **`_libAzOpen` state variable:** Tracks A–Z panel open/closed; persists across `_homeApplyConceptFilters()` re-renders.
+- **Note badge on tiles:** Moved from inline `✏` text in `.lib-tile-meta` to `.lib-tile-note-badge` — `position:absolute; top:7px; right:8px`. Small, premium, fades up to 0.9 opacity on tile hover. Uses text variation selector `✏︎` to prevent emoji render on mobile.
+
+---
+
 ## v3.25b — 2026-08-08 · Dashboard refinement — accent borders, compact stats, duplicate fix
 ### index.html
 - **Bucket accent left-borders:** Each personal bucket now has a permanent `2.5px solid var(--bucket-accent)` left border — color identity is always visible, not just on hover. Hover adds a subtle `color-mix` tinted background wash + number lifts in accent color. Number size increased to 2.5rem Playfair.

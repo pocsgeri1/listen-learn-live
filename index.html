@@ -9804,7 +9804,17 @@
   transition: border-color 0.15s ease;
   align-self: start;
   min-width: 0;
+  position: relative;
 }
+/* Note badge — corner indicator v3.26 */
+.lib-tile-note-badge {
+  position: absolute; top: 7px; right: 8px;
+  font-family: 'DM Mono', monospace; font-size: 0.46rem;
+  color: var(--accent); opacity: 0.55;
+  pointer-events: none; line-height: 1;
+  transition: opacity 0.14s;
+}
+.lib-tile:hover .lib-tile-note-badge { opacity: 0.9; }
 .lib-tile:hover { border-color: var(--border-hover); }
 .lib-tile:hover .lib-tile-term { color: var(--accent); }
 .lib-tile-term {
@@ -9878,28 +9888,47 @@
   padding: 10px 20px 0;
   flex-shrink: 0;
 }
-.lib-cat-bar {
-  display: flex; flex-wrap: wrap; gap: 6px;
-  padding: 10px 20px 0;
-  flex-shrink: 0;
+/* ── Concepts filter row — v3.26 ──────────────────── */
+.lib-filter-row {
+  display: flex; align-items: stretch; flex-shrink: 0;
+  border-bottom: 0.5px solid var(--border);
+  min-height: 38px;
 }
+.lib-filter-scroll {
+  flex: 1; display: flex; gap: 5px; overflow-x: auto; scrollbar-width: none;
+  padding: 6px 10px 6px 20px; align-items: center; min-width: 0;
+  touch-action: pan-x;
+}
+.lib-filter-scroll::-webkit-scrollbar { display: none; }
+.lib-filter-actions {
+  display: flex; align-items: stretch; flex-shrink: 0;
+  border-left: 0.5px solid var(--border);
+}
+.lib-filter-action-btn {
+  font-family: 'DM Mono', monospace; font-size: 0.56rem; letter-spacing: 0.06em;
+  color: var(--muted); background: none; border: none; border-left: 0.5px solid var(--border);
+  cursor: pointer; padding: 0 12px; white-space: nowrap;
+  transition: color 0.14s, background 0.14s;
+}
+.lib-filter-action-btn:first-child { border-left: none; }
+.lib-filter-action-btn:hover { color: var(--text); }
+.lib-filter-action-btn.active { color: var(--accent); }
+
+/* legacy .lib-cat-bar kept as fallback spacer */
+.lib-cat-bar { display: none; }
+
 .lib-cat-chip {
   font-family: 'DM Mono', monospace;
-  font-size: 0.55rem; letter-spacing: 0.07em; text-transform: uppercase;
-  color: var(--muted2);
-  padding: 2px 7px;
+  font-size: 0.52rem; letter-spacing: 0.07em; text-transform: uppercase;
+  color: var(--muted2); padding: 2px 7px 2px 5px;
   border-left: 2px solid var(--cat-color, var(--accent));
-  background: none;
+  background: none; cursor: pointer; border-radius: 0 3px 3px 0;
+  transition: color 0.14s, background 0.14s;
+  white-space: nowrap; flex-shrink: 0;
 }
 .lib-cat-chip em { font-style: normal; color: var(--muted); margin-left: 3px; }
-/* Cat chips are interactive buttons */
-.lib-cat-chip {
-  cursor: pointer; border-radius: 3px;
-  transition: color 0.14s, background 0.14s;
-  border: none;
-}
 .lib-cat-chip:hover { color: var(--text); }
-.lib-cat-chip.active { color: var(--text); background: rgba(232,213,163,0.1); }
+.lib-cat-chip.active { color: var(--text); background: color-mix(in srgb, var(--cat-color, var(--accent)) 12%, transparent); }
 .lib-cat-divider {
   border: none; border-top: 0.5px solid var(--border);
   margin: 10px 0 0; flex-shrink: 0;
@@ -10035,16 +10064,28 @@
 /* Lexi examples button — disabled v3.21 */
 .lexi-word-gen-btn:not(.lexi-word-gen-btn--practice) { display: none; } /* v3.21 — examples disabled, logic preserved, see session-plan */
 
-/* ── CONCEPTS letter rail — v3.20 ──────────────────── */
+/* ── CONCEPTS letter rail — v3.26 ──────────────────── */
 .lib-letter-rail {
   display: flex;
   flex-wrap: nowrap;
   gap: 0;
   overflow-x: auto;
   scrollbar-width: none;
-  padding: 6px 20px 2px;
+  padding: 0 20px;
   flex-shrink: 0;
   touch-action: pan-x;
+  max-height: 0;
+  overflow-y: hidden;
+  transition: max-height 0.2s ease, padding 0.2s ease;
+  border-bottom: 0.5px solid transparent;
+}
+.lib-letter-rail.open {
+  max-height: 44px;
+  padding: 5px 20px 4px;
+  border-bottom-color: var(--border);
+}
+@media (prefers-reduced-motion: reduce) {
+  .lib-letter-rail { transition: none !important; }
 }
 .lib-letter-rail::-webkit-scrollbar { display: none; }
 .lib-letter-btn {
@@ -23449,6 +23490,7 @@ var _libActiveTab = 'concepts';
 var _homeRange = 'all'; // 'all' | 'week' | 'month' — dashboard range toggle state — v3.22
 // ── Concepts composable filter state — v3.20 ──────────
 var _libConceptFilter = { cat: null, letter: null, notesOnly: false };
+var _libAzOpen = false;
 // Legacy alias (kept for safety — internal code should use _libConceptFilter)
 Object.defineProperty(window, '_libActiveCat', {
   get: function() { return _libConceptFilter.cat; },
@@ -23734,28 +23776,36 @@ function _libRenderSaved() {
   // Validate letter filter still exists
   if (_libConceptFilter.letter && !letterSet[_libConceptFilter.letter]) _libConceptFilter.letter = null;
 
-  var catBar = '<div class="lib-cat-bar">' +
-    Object.keys(catCounts)
+  var chipsHtml = Object.keys(catCounts)
     .sort(function(a, b) { return catCounts[b] - catCounts[a]; })
     .map(function(cat) {
       var name = (CATEGORIES && CATEGORIES.find(function(x) { return x.id === cat; }) || {}).name || cat;
       var color = (typeof CAT_COLOR !== 'undefined' && CAT_COLOR[cat]) || 'var(--accent)';
       var isActive = cat === _libConceptFilter.cat;
       return '<button class="lib-cat-chip' + (isActive ? ' active' : '') + '" style="--cat-color:' + color + '" onclick="_libSetFilter(\'cat\',\'' + cat + '\')">' + name + '<em>' + catCounts[cat] + '</em></button>';
-    }).join('') +
-    (notesCount ? '<button class="lib-cat-chip' + (_libConceptFilter.notesOnly ? ' active' : '') + '" style="--cat-color:var(--accent)" onclick="_libSetFilter(\'notesOnly\',null)">✏ Notes<em>' + notesCount + '</em></button>' : '') +
+    }).join('');
+
+  var notesBtn = notesCount
+    ? '<button class="lib-filter-action-btn' + (_libConceptFilter.notesOnly ? ' active' : '') + '" id="libNotesFilterBtn" onclick="_libSetFilter(\'notesOnly\',null)" title="Notes only">✏&#xFE0E;</button>'
+    : '';
+  var azBtn = letters.length > 1
+    ? '<button class="lib-filter-action-btn' + (_libAzOpen ? ' active' : '') + '" id="libAzBtn" onclick="_libToggleAZ()" title="Filter A–Z">A–Z</button>'
+    : '';
+
+  var filterRow = '<div class="lib-filter-row">' +
+    '<div class="lib-filter-scroll">' + chipsHtml + '</div>' +
+    '<div class="lib-filter-actions">' + notesBtn + azBtn + '</div>' +
     '</div>';
 
   var letterRail = letters.length > 1
-    ? '<div class="lib-letter-rail">' +
+    ? '<div class="lib-letter-rail' + (_libAzOpen ? ' open' : '') + '" id="libLetterRail">' +
         letters.map(function(l) {
           return '<button class="lib-letter-btn' + (l === _libConceptFilter.letter ? ' active' : '') + '" onclick="_libSetFilter(\'letter\',\'' + l + '\')">' + l + '</button>';
         }).join('') +
       '</div>'
     : '';
 
-  var divider = '<hr class="lib-cat-divider">';
-  panel.innerHTML = catBar + letterRail + divider + '<div class="lib-grid" id="libConceptGrid"></div>';
+  panel.innerHTML = filterRow + letterRail + '<div class="lib-grid" id="libConceptGrid"></div>';
   _libRenderConceptGrid(ids, tsMap);
 }
 
@@ -23768,10 +23818,10 @@ function _homeApplyConceptFilters() {
   panel.querySelectorAll('.lib-cat-chip').forEach(function(btn) {
     var onclick = btn.getAttribute('onclick') || '';
     var catMatch = onclick.match(/_libSetFilter\('cat','([^']+)'\)/);
-    var notesMatch = onclick.match(/_libSetFilter\('notesOnly'/);
     if (catMatch) btn.classList.toggle('active', catMatch[1] === _libConceptFilter.cat);
-    if (notesMatch) btn.classList.toggle('active', !!_libConceptFilter.notesOnly);
   });
+  var notesBtn = document.getElementById('libNotesFilterBtn');
+  if (notesBtn) notesBtn.classList.toggle('active', !!_libConceptFilter.notesOnly);
   panel.querySelectorAll('.lib-letter-btn').forEach(function(btn) {
     btn.classList.toggle('active', btn.textContent === _libConceptFilter.letter);
   });
@@ -23839,12 +23889,12 @@ function _libRenderConceptGrid(ids, tsMap) {
     var dateStr = tsMap[id] ? '<span class="lib-tile-date">' + _libFmtDate(tsMap[id]) + '</span>' : '';
     var hasNote = !!localStorage.getItem('cc_note_' + id);
     return '<div class="lib-tile" id="libTile-' + id + '" style="--cat-color:' + catColor + '" onclick="_libToggleSaved(' + id + ', this)">' +
+      (hasNote ? '<span class="lib-tile-note-badge" title="Has note">✏&#xFE0E;</span>' : '') +
       '<div class="lib-tile-term">' + (c.term || '') + '</div>' +
       '<div class="lib-tile-meta">' +
         '<span class="lib-tile-cat">' + catName + '</span>' +
         '<span class="lib-tile-id">#' + String(id).padStart(3,'0') + '</span>' +
         dateStr +
-        (hasNote ? '<span class="lib-tile-num" title="Has note">✏</span>' : '') +
       '</div>' +
     '</div>';
   }).join('');
@@ -23864,6 +23914,19 @@ function _libSetFilter(key, val) {
 function _libClearFilters() {
   _libConceptFilter = { cat: null, letter: null, notesOnly: false };
   _homeApplyConceptFilters();
+}
+
+function _libToggleAZ() {
+  _libAzOpen = !_libAzOpen;
+  var rail = document.getElementById('libLetterRail');
+  var btn = document.getElementById('libAzBtn');
+  if (rail) rail.classList.toggle('open', _libAzOpen);
+  if (btn) btn.classList.toggle('active', _libAzOpen);
+  // Clear letter filter when closing
+  if (!_libAzOpen && _libConceptFilter.letter) {
+    _libConceptFilter.letter = null;
+    _homeApplyConceptFilters();
+  }
 }
 
 // Legacy shim — kept for any external callers
