@@ -45,6 +45,37 @@
 <script defer src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js"></script>
 <script defer src="https://cloud.umami.is/script.js" data-website-id="0bb07ad6-a205-4d9d-ae92-b7e184e7fa4f"></script>
 <style>
+  /* ── Nav entrance animation — v3.34 ─────────────────────────────────────── */
+  /* Logo gets a premium ease-out with a brief accent glow at the peak */
+  @keyframes navLogoIn {
+    0%   { opacity: 0; transform: translateY(-10px); }
+    55%  { text-shadow: 0 0 28px rgba(232,213,163,0.22); }
+    100% { opacity: 1; transform: translateY(0); text-shadow: none; }
+  }
+  /* Nav elements: clean ease-out slide-down */
+  @keyframes navElemIn {
+    from { opacity: 0; transform: translateY(-7px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    /* Logo first — 0.05s head start so it reads as the "source" */
+    .nav-logo {
+      animation: navLogoIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.05s backwards;
+    }
+    /* Island (Read · Write · Speak) — follows logo */
+    .nav-island {
+      animation: navElemIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.17s backwards;
+    }
+    /* Mobile mode buttons — same timing as island */
+    .nav-mob-modes {
+      animation: navElemIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.17s backwards;
+    }
+    /* Right side (Home, Epic, theme toggle, count) — last to arrive */
+    .nav-right {
+      animation: navElemIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.27s backwards;
+    }
+  }
+
   /* Preload guard: hide content until data is ready — v3.34 staggered reveal */
   html.ep-preload .sp-hero,
   html.ep-preload .browse-toggle-wrap,
@@ -14277,7 +14308,7 @@ async function loadConcepts() {
           if (!el) return;
           // Hold each element at opacity:0 explicitly so CSS guard lift doesn't fire them all at once
           el.style.opacity = '0';
-          setTimeout(function() { el.style.opacity = ''; }, _noMotion ? 0 : i * 80);
+          setTimeout(function() { el.style.opacity = ''; }, _noMotion ? 0 : 40 + i * 90);
         });
       });
     });
@@ -27262,15 +27293,15 @@ function playStreakMilestoneSFX() {
 .nav-corner-emoji,
 .nav-lexicon-emoji {
   display: inline-block;
-  opacity: 0;
+  opacity: 0.15;
   width: 1.15em;
   overflow: hidden;
   vertical-align: middle;
   line-height: 1;
-  transition: opacity 0.22s ease;
+  transition: opacity 0.3s ease;
   margin-right: 3px;
   font-size: 0.8rem;
-  /* Width always reserved — text never shifts on hover */
+  /* Width always reserved — text never shifts. Resting at 0.15 prevents pop */
 }
 .nav-lexicon-emoji {
   font-family: 'Playfair Display', serif;
@@ -27293,15 +27324,15 @@ function playStreakMilestoneSFX() {
 .nav-write-emoji,
 .nav-speak-emoji {
   display: inline-block;
-  opacity: 0;
+  opacity: 0.15;
   width: 1.15em;
   overflow: hidden;
   vertical-align: middle;
   line-height: 1;
-  transition: opacity 0.22s ease;
+  transition: opacity 0.3s ease;
   margin-right: 3px;
   font-size: 0.8rem;
-  /* Width always reserved — text never shifts on hover */
+  /* Width always reserved — text never shifts. Resting at 0.15 prevents pop */
 }
 .nav-read-btn:hover .nav-read-emoji,
 .nav-write-btn:hover .nav-write-emoji,
