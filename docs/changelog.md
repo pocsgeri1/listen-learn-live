@@ -6,6 +6,20 @@
 
 ---
 
+## v3.37 — 2026-08-08 · Scroll fix, tab order, light/dark depth, vocab practice
+
+### index.html
+- **Scroll-collapse animation fixed:** Replaced `max-height: 600px → 36px` CSS transition (janky ceiling) with JS-measured explicit pixel heights. `_homeCollapseDashboard()` snapshots `getBoundingClientRect().height` before collapsing, stores it in `wrap._openH`, then animates `height` to `36px`. `_homeExpandDashboard()` animates back to the stored value, then releases to `height: auto` via `transitionend`. No more empty-air-first jank.
+- **Collapse is now one-way:** `_homeOnPanelScroll` only triggers collapse (scroll down > 80px). Expanding is manual (strip tap only). Removes threshold-jitter from bidirectional toggling.
+- **Tab order — Concepts first:** Tabs now read Concepts → Episodes → Vocab → Practice, matching the dashboard hero (Concepts count is the primary metric).
+- **Dark mode ambient depth — more vivid:** Four-layer radial gradient blobs with stronger opacity: teal (top-left), purple (top-right), gold (bottom-center), blue (mid-left).
+- **Light mode — dramatic overhaul:** Background is now a warm golden-hour palette — terracotta/coral (top-left), soft blue (top-right), violet (bottom), warm gold (mid-left). Hero card gets `backdrop-filter: blur(28px)` + pure white borders. Mini-cards get a white box-shadow to pop against the colorful backdrop. `lib-drawer` light bg shifted to `#ede6d9`.
+- **Vocab — Practice this word:** Replaced "Open Lexi →" with "Practice this word →" (`vocab-tile-action-practice` CSS class). Calls `_libVocabPracticeWord(word)` which closes the library, opens Lexi, then calls `_lexiStartSession(word)` — launching a focused single-word practice session directly on that word.
+- **Momentum text:** No longer shows the "X to go" milestone message (milestone bar handles that). Now shows streak signal ("7-day streak. That's a habit forming.") or close-milestone alert only for last 3 steps.
+- **Goal strip label:** Shortened from "Weekly goal — save 5 concepts" to "Weekly goal" — strip is too small for verbose labels.
+
+---
+
 ## v3.36 — 2026-08-08 · Home & Vocab visual overhaul
 
 ### index.html

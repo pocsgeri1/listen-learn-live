@@ -9260,24 +9260,29 @@
   position: relative;
   overflow: hidden;
 }
-/* Ambient depth — layered radial blobs — v3.36 */
+/* Ambient depth — v3.37: vivid on dark, rich on light ─────────── */
 .home-dashboard::before {
   content: '';
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 65% 45% at 15% 5%, rgba(90,191,175,0.11) 0%, transparent 70%),
-    radial-gradient(ellipse 55% 65% at 85% 25%, rgba(160,143,212,0.09) 0%, transparent 70%),
-    radial-gradient(ellipse 45% 35% at 50% 95%, rgba(232,213,163,0.07) 0%, transparent 60%);
+    radial-gradient(ellipse 70% 50% at 10% 0%, rgba(90,191,175,0.18) 0%, transparent 65%),
+    radial-gradient(ellipse 60% 70% at 90% 20%, rgba(160,143,212,0.16) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 40% at 55% 100%, rgba(232,213,163,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 30% at 0% 70%, rgba(107,159,196,0.08) 0%, transparent 60%);
   pointer-events: none;
   z-index: 0;
 }
+/* Light mode: warm golden-hour palette — rich and dramatic */
 [data-theme="light"] .home-dashboard::before {
   background:
-    radial-gradient(ellipse 65% 45% at 15% 5%, rgba(107,159,196,0.1) 0%, transparent 70%),
-    radial-gradient(ellipse 55% 65% at 85% 25%, rgba(160,143,212,0.08) 0%, transparent 70%),
-    radial-gradient(ellipse 45% 35% at 50% 95%, rgba(196,169,107,0.09) 0%, transparent 60%);
+    radial-gradient(ellipse 75% 55% at 5% 0%, rgba(196,121,107,0.22) 0%, transparent 65%),
+    radial-gradient(ellipse 65% 75% at 95% 15%, rgba(107,159,196,0.2) 0%, transparent 65%),
+    radial-gradient(ellipse 55% 45% at 50% 105%, rgba(160,143,212,0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 45% 35% at 15% 80%, rgba(196,169,107,0.2) 0%, transparent 55%);
 }
+/* Light mode lib-drawer base — slightly warmer to let blobs show — v3.37 */
+[data-theme="light"] .lib-drawer { background: #ede6d9; }
 /* All direct children of .home-dashboard sit above the pseudo-element */
 .home-dashboard > * { position: relative; z-index: 1; }
 
@@ -9342,12 +9347,14 @@
 }
 .home-mini-card:active { transform: translateY(0); }
 [data-theme="light"] .home-mini-card {
-  background: rgba(255,255,255,0.62);
-  border-color: rgba(0,0,0,0.06);
+  background: rgba(255,255,255,0.72);
+  border-color: rgba(255,255,255,0.85);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
 }
 [data-theme="light"] .home-mini-card:hover {
-  background: rgba(255,255,255,0.82);
-  border-color: rgba(0,0,0,0.1);
+  background: rgba(255,255,255,0.9);
+  border-color: rgba(255,255,255,1);
+  box-shadow: 0 4px 18px rgba(0,0,0,0.1);
 }
 .home-mini-card-num {
   font-family: 'Playfair Display', serif;
@@ -9463,11 +9470,11 @@
   margin-bottom: 4px;
 }
 [data-theme="light"] .home-hero-card {
-  background: rgba(255,255,255,0.72);
-  border-color: rgba(0,0,0,0.06);
-  box-shadow: 0 6px 32px rgba(0,0,0,0.09), inset 0 1px 0 rgba(255,255,255,0.95), inset 0 -1px 0 rgba(0,0,0,0.04);
-  backdrop-filter: blur(22px);
-  -webkit-backdrop-filter: blur(22px);
+  background: rgba(255,255,255,0.78);
+  border-color: rgba(255,255,255,0.9);
+  box-shadow: 0 8px 48px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.04);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
 }
 
 /* Momentum copy */
@@ -9641,11 +9648,14 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  max-height: 600px; /* generous ceiling; never clips normal state */
-  transition: max-height 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  /* v3.37: height set by JS from measured value — no max-height ceiling jank */
+  transition: height 0.32s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .home-collapse-wrap.collapsed {
-  max-height: 36px;
+  height: 36px !important; /* fallback if JS hasn't measured yet */
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-collapse-wrap { transition: none !important; }
 }
 .home-compact-strip {
   position: absolute;
@@ -10534,6 +10544,21 @@
 }
 .vocab-tile-action-btn:hover { color: var(--accent); border-color: var(--accent); }
 .vocab-tile-action-btn.practiced { color: var(--accent); border-color: var(--accent); opacity: 0.7; }
+/* Practice-this-word — accent-tinted, visually primary among tile actions */
+.vocab-tile-action-btn.vocab-tile-action-practice {
+  color: var(--accent);
+  border-color: rgba(232,213,163,0.3);
+  background: rgba(232,213,163,0.06);
+}
+.vocab-tile-action-btn.vocab-tile-action-practice:hover {
+  background: rgba(232,213,163,0.13);
+  border-color: var(--accent);
+}
+[data-theme="light"] .vocab-tile-action-btn.vocab-tile-action-practice {
+  color: var(--accent2);
+  border-color: rgba(196,169,107,0.35);
+  background: rgba(196,169,107,0.07);
+}
 
 /* Hide truncated def when tile is open */
 .vocab-tile-open .vocab-my-def { display: none; }
@@ -13414,15 +13439,16 @@
     </div>
   </div>
 
+  <!-- Tab order v3.37: Concepts first, mirrors dashboard hero — then Episodes, Vocab, Practice -->
   <div class="lib-tabs">
-    <button class="lib-tab" id="libTab-episodes" onclick="_libSwitchTab('episodes')">Episodes</button>
     <button class="lib-tab lib-tab-active" id="libTab-concepts" onclick="_libSwitchTab('concepts')">Concepts</button>
+    <button class="lib-tab" id="libTab-episodes" onclick="_libSwitchTab('episodes')">Episodes</button>
     <button class="lib-tab" id="libTab-vocab" onclick="_libSwitchTab('vocab')">Vocab</button>
     <button class="lib-tab" id="libTab-practice" onclick="_libSwitchTab('practice')">Practice</button>
   </div>
   <div class="lib-panels">
-    <div class="lib-panel" id="libPanel-episodes"></div>
     <div class="lib-panel lib-panel-active" id="libPanel-concepts"></div>
+    <div class="lib-panel" id="libPanel-episodes"></div>
     <div class="lib-panel" id="libPanel-vocab"></div>
     <div class="lib-panel" id="libPanel-practice"></div>
   </div>
@@ -24292,11 +24318,13 @@ function _homeRenderMomentum(nSaved, thisWeekTotal, streak) {
     var now = Date.now();
     var msg = '';
 
-    // Priority: milestone close → streak → activity recency → first-time
-    if (milestone && milestone.left <= 5 && nSaved > 0) {
-      msg = 'Just <em>' + milestone.left + '</em> more to reach ' + milestone.target + ' concepts.';
-    } else if (milestone && nSaved > 0) {
-      msg = '<em>' + milestone.left + '</em> to go. Next milestone: ' + milestone.target + ' concepts.';
+    // v3.37: milestone bar handles "X to go" — momentum shows streak/recency signal only
+    if (milestone && milestone.left <= 3 && nSaved > 0) {
+      msg = 'So close. Just <em>' + milestone.left + '</em> away from ' + milestone.target + '.';
+    } else if (streak >= 7) {
+      msg = '<em>' + streak + '-day streak.</em> That\'s a habit forming.';
+    } else if (streak >= 3) {
+      msg = streak + ' days running. Keep it clean.';
     } else if (!nSaved) {
       msg = 'Save your first concept to start tracking.';
     } else if (lastTs) {
@@ -24312,16 +24340,40 @@ function _homeRenderMomentum(nSaved, thisWeekTotal, streak) {
   }
 }
 
-/* ── Phase 7: scroll-collapse ─────────────────────────────────── */
-var _homeScrollDebTimer = null;
-function _homeOnPanelScroll(e) {
-  clearTimeout(_homeScrollDebTimer);
-  _homeScrollDebTimer = setTimeout(function() {
-    var wrap = document.getElementById('homeCollapseWrap');
-    if (!wrap) return;
-    wrap.classList.toggle('collapsed', (e.target.scrollTop || 0) > 80);
-  }, 16);
+/* ── Scroll-collapse — v3.37: JS-measured heights, one-way trigger ──────── */
+
+function _homeCollapseDashboard() {
+  var wrap = document.getElementById('homeCollapseWrap');
+  if (!wrap || wrap.classList.contains('collapsed')) return;
+  // Snapshot real current height before any animation
+  var h = wrap.getBoundingClientRect().height;
+  wrap._openH = h;                          // remember for re-expand
+  wrap.style.height = h + 'px';             // lock to actual height (no jump)
+  void wrap.offsetHeight;                   // force reflow so transition fires
+  wrap.style.height = '36px';               // animate to strip height
+  wrap.classList.add('collapsed');
 }
+
+function _homeExpandDashboard() {
+  var wrap = document.getElementById('homeCollapseWrap');
+  if (!wrap) return;
+  var targetH = wrap._openH || wrap.scrollHeight;
+  wrap.style.height = targetH + 'px';
+  wrap.classList.remove('collapsed');
+  // After transition completes, release to auto so resizes are fine
+  var cleanup = function() { wrap.style.height = ''; };
+  wrap.addEventListener('transitionend', cleanup, { once: true });
+  // Scroll panel back to top so dashboard is reachable
+  var activePanel = document.querySelector('.lib-panel.lib-panel-active');
+  if (activePanel) activePanel.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function _homeOnPanelScroll(e) {
+  // One-way: collapse on scroll down only. Expand is manual (strip tap).
+  // This eliminates the threshold-jitter from bidirectional toggling.
+  if ((e.target.scrollTop || 0) > 80) _homeCollapseDashboard();
+}
+
 function _homeBindScrollListeners() {
   document.querySelectorAll('.lib-panel').forEach(function(p) {
     p.removeEventListener('scroll', _homeOnPanelScroll);
@@ -24333,17 +24385,7 @@ function _homeUnbindScrollListeners() {
     p.removeEventListener('scroll', _homeOnPanelScroll);
   });
   var wrap = document.getElementById('homeCollapseWrap');
-  if (wrap) wrap.classList.remove('collapsed');
-}
-
-/* ── Phase D: compact strip tap-to-expand — v3.27 ──────────── */
-function _homeExpandDashboard() {
-  var wrap = document.getElementById('homeCollapseWrap');
-  if (!wrap) return;
-  wrap.classList.remove('collapsed');
-  // Scroll the active panel back to top
-  var activePanel = document.querySelector('.lib-panel.lib-panel-active');
-  if (activePanel) activePanel.scrollTo({ top: 0, behavior: 'smooth' });
+  if (wrap) { wrap.classList.remove('collapsed'); wrap.style.height = ''; }
 }
 
 /* ── Phase 7: nav badge ───────────────────────────────────────── */
@@ -25254,7 +25296,7 @@ function _libVocabRenderSeg() {
             '<button class="vocab-tile-action-btn' + (practiced ? ' practiced' : '') + '" onclick="event.stopPropagation();_libVocabMarkPracticed(\'' + (w.word || w.term || '').replace(/'/g,"\\'") + '\', this)">' +
               (practiced ? '✓ Practiced' : 'Mark practiced') +
             '</button>' +
-            '<button class="vocab-tile-action-btn" onclick="event.stopPropagation();closeLibrary();setTimeout(function(){openLexiconPanel();},80)">Open Lexi →</button>' +
+            '<button class="vocab-tile-action-btn vocab-tile-action-practice" onclick="event.stopPropagation();_libVocabPracticeWord(\'' + (w.word || w.term || '').replace(/'/g,"\\'") + '\')">Practice this word →</button>' +
           '</div>' +
         '</div>' +
       '</div>';
@@ -25335,6 +25377,18 @@ function _libVocabMarkPracticed(word, btn) {
       }
     }
   } catch(e) {}
+}
+
+/* Practice a single vocab word directly in Lexi — v3.37 */
+function _libVocabPracticeWord(word) {
+  if (!word) return;
+  closeLibrary();
+  setTimeout(function() {
+    openLexiPanel();            // open Lexi panel
+    setTimeout(function() {
+      _lexiStartSession(word);  // start focused single-word session
+    }, 80);
+  }, 80);
 }
 
 function _libRenderPractice() {
@@ -25556,7 +25610,7 @@ function _homeRenderGoalStrip() {
   el.className = 'home-goal-strip' + (done ? ' home-goal-strip-done' : '');
   el.innerHTML =
     '<div class="home-goal-strip-header">' +
-      '<span class="home-goal-strip-label">Weekly goal — save ' + GOAL + ' concepts</span>' +
+      '<span class="home-goal-strip-label">Weekly goal</span>' +
       '<span class="home-goal-strip-count">' + thisWeek + '\u202f/\u202f' + GOAL + (done ? '\u2009✦' : '') + '</span>' +
     '</div>' +
     '<div class="home-goal-strip-bar"><div class="home-goal-strip-fill" style="width:0%"></div></div>';
