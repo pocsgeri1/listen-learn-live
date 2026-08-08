@@ -6,6 +6,25 @@
 
 ---
 
+## v3.36 — 2026-08-08 · Home & Vocab visual overhaul
+
+### index.html
+- **Home subtitle:** Added 3-word `.lib-subtitle` ("your knowledge in motion") beneath the "Home" header title — DM Mono uppercase, muted, minimal.
+- **Ambient background depth:** `.home-dashboard::before` — three layered radial gradients (teal, purple, gold) float behind the dashboard surface at low opacity. Light-mode variant uses cooler tones. Creates real depth behind glass elements.
+- **Hero glass card — real blur:** Added `backdrop-filter: blur(22px)` + stronger inset shadows to `.home-hero-card`. Now reads as genuine frosted glass against the ambient depth. Light mode updated accordingly.
+- **Hero number bigger:** `font-size: clamp(4.5rem, 14vw, 6.5rem)`, `letter-spacing: -0.04em` — more visual gravity, tighter editorial feel.
+- **Mini stat cards:** Replaced flat dot-separated "34 words · 3 eps · 4 notes" row with three `.home-mini-card` glass cards — each shows a large Playfair number + DM Mono label. Tappable with hover lift. Light + dark mode both handled.
+- **Milestone progress bar:** `.home-milestone-wrap` appears below hero card — shows current count vs. next milestone (e.g. 81 → 100) as a two-label thin bar. Fills animate on paint via double-rAF trick.
+- **Always-visible goal strip:** `.home-goal-strip` sits permanently above the Stats toggle — shows "Weekly goal · N / 5" with thin progress bar. Animated fill. Turns green when done. Stats section no longer contains a duplicate goal card.
+- **Activity bar chart — pill bars + 3-letter days:** Bars are now fully rounded (`border-radius: 6px`), 72px tall (up from 56px). Days render as Sun/Mon/Tue/Wed/Thu/Fri/Sat. Peak activity bar gets `.peak` class with accent glow box-shadow.
+- **Vocab nav — nav links:** "All Words ↗" and "Word Map ↗" are now styled as `.vocab-seg-nav` link buttons (no border, lower weight) separated by a `|` from the "My Words" active segment pill. Both navigate away — consistent visual treatment signals this.
+- **Vocab controls — sort vs filter split:** Replaced single cluttered sort row with `.vocab-controls` two-row component. Row 1: `SORT` label + pill buttons (Newest / A–Z / New first). Row 2: `SHOW` label + solid-toggle square buttons (All / Practiced). Shape + style difference makes the distinction obvious at a glance.
+- **Single CTA:** Shows either "Practice N →" (when unpracticed words exist) or "Lexi →" (when all practiced) — never both simultaneously.
+- **Practiced dot:** Text badge `practiced` replaced by 6px green circle (`.vocab-practiced-dot`). Inline after word, minimal. `_libVocabMarkPracticed` updated to toggle dot instead of badge.
+- **Tile expand chevron:** Each tile row now contains a `.vocab-tile-chevron` (`›`) on the right. Rotates 90° on open — clear tap affordance without adding visual noise.
+
+---
+
 ## v3.35 — 2026-08-08 · Home panel design audit
 
 ### index.html

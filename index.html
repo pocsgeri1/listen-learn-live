@@ -9178,6 +9178,16 @@
   font-size: 1.1rem; font-style: italic;
   color: var(--text);
 }
+/* Home header subtitle — v3.36 */
+.lib-subtitle {
+  display: block;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.4rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 2px;
+}
 .lib-shortcut-hint {
   font-family: 'DM Mono', monospace;
   font-size: 0.55rem;
@@ -9247,16 +9257,38 @@
   text-align: center;
   padding: 32px 24px 0;
   border-bottom: 0.5px solid var(--border);
+  position: relative;
+  overflow: hidden;
 }
+/* Ambient depth — layered radial blobs — v3.36 */
+.home-dashboard::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 65% 45% at 15% 5%, rgba(90,191,175,0.11) 0%, transparent 70%),
+    radial-gradient(ellipse 55% 65% at 85% 25%, rgba(160,143,212,0.09) 0%, transparent 70%),
+    radial-gradient(ellipse 45% 35% at 50% 95%, rgba(232,213,163,0.07) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+[data-theme="light"] .home-dashboard::before {
+  background:
+    radial-gradient(ellipse 65% 45% at 15% 5%, rgba(107,159,196,0.1) 0%, transparent 70%),
+    radial-gradient(ellipse 55% 65% at 85% 25%, rgba(160,143,212,0.08) 0%, transparent 70%),
+    radial-gradient(ellipse 45% 35% at 50% 95%, rgba(196,169,107,0.09) 0%, transparent 60%);
+}
+/* All direct children of .home-dashboard sit above the pseudo-element */
+.home-dashboard > * { position: relative; z-index: 1; }
 
-/* Hero number — concept count */
+/* Hero number — concept count — v3.36 */
 .home-hero-num {
   font-family: 'Playfair Display', serif;
-  font-size: 5rem;
+  font-size: clamp(4.5rem, 14vw, 6.5rem);
   font-weight: 700;
   color: var(--text);
   line-height: 1;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.04em;
   transition: opacity 0.15s ease;
 }
 .home-hero-num.fading { opacity: 0; }
@@ -9280,50 +9312,162 @@
   min-height: 14px;
 }
 
-/* Secondary nav: words · eps · notes — tappable inline */
-.home-hero-secondary {
+/* Mini stat cards — v3.36 (replaces dot-separated row) */
+.home-mini-cards {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0;
-  margin-top: 16px;
-  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+  width: 100%;
+  max-width: 320px;
 }
-.home-sec-item {
+.home-mini-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 10px 8px 9px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.04);
+  border: 0.5px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  cursor: pointer;
+  transition: background 0.16s, border-color 0.16s, transform 0.16s;
+}
+.home-mini-card:hover {
+  background: rgba(255,255,255,0.08);
+  border-color: rgba(255,255,255,0.14);
+  transform: translateY(-1px);
+}
+.home-mini-card:active { transform: translateY(0); }
+[data-theme="light"] .home-mini-card {
+  background: rgba(255,255,255,0.62);
+  border-color: rgba(0,0,0,0.06);
+}
+[data-theme="light"] .home-mini-card:hover {
+  background: rgba(255,255,255,0.82);
+  border-color: rgba(0,0,0,0.1);
+}
+.home-mini-card-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.home-mini-card-label {
   font-family: 'DM Mono', monospace;
-  font-size: 0.5rem;
-  letter-spacing: 0.1em;
+  font-size: 0.38rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--muted);
-  cursor: pointer;
-  padding: 5px 12px;
-  border-radius: 20px;
-  transition: color 0.14s, background 0.14s;
-  white-space: nowrap;
-}
-.home-sec-item:hover { color: var(--text); background: var(--surface2); }
-.home-sec-sep {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.44rem;
-  color: var(--border-hover);
-  user-select: none;
 }
 
-/* Hero glass card — v3.35 */
+/* Milestone progress bar — v3.36 */
+.home-milestone-wrap {
+  width: 100%;
+  max-width: 320px;
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.home-milestone-labels {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.home-milestone-current {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.46rem;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+}
+.home-milestone-target {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.4rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.home-milestone-track {
+  height: 2px;
+  background: rgba(255,255,255,0.07);
+  border-radius: 2px;
+  overflow: hidden;
+}
+[data-theme="light"] .home-milestone-track { background: rgba(0,0,0,0.08); }
+.home-milestone-fill {
+  height: 100%;
+  background: linear-gradient(90deg, rgba(232,213,163,0.5) 0%, var(--accent) 100%);
+  border-radius: 2px;
+  transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Always-visible goal strip — v3.36 */
+.home-goal-strip {
+  width: 100%;
+  padding: 10px 20px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex-shrink: 0;
+}
+.home-goal-strip-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.home-goal-strip-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.42rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.home-goal-strip-count {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.42rem;
+  letter-spacing: 0.06em;
+  color: var(--muted2);
+}
+.home-goal-strip-done .home-goal-strip-count { color: #7aaf8a; }
+.home-goal-strip-bar {
+  height: 2px;
+  background: rgba(255,255,255,0.07);
+  border-radius: 2px;
+  overflow: hidden;
+}
+[data-theme="light"] .home-goal-strip-bar { background: rgba(0,0,0,0.07); }
+.home-goal-strip-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 2px;
+  transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.home-goal-strip-done .home-goal-strip-fill { background: #7aaf8a; }
+
+/* Hero glass card — v3.36 real glass */
 .home-hero-card {
-  background: rgba(255,255,255,0.04);
-  border: 0.5px solid rgba(255,255,255,0.1);
-  border-radius: 20px;
-  box-shadow: 0 4px 32px rgba(0,0,0,0.32), inset 0 1px 0 rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.055);
+  border: 0.5px solid rgba(255,255,255,0.14);
+  border-radius: 22px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.38), inset 0 1px 0 rgba(255,255,255,0.1), inset 0 -1px 0 rgba(0,0,0,0.12);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
   padding: 24px 32px 20px;
   display: flex; flex-direction: column; align-items: center;
   width: 100%; max-width: 320px;
   margin-bottom: 4px;
 }
 [data-theme="light"] .home-hero-card {
-  background: rgba(255,255,255,0.7);
-  border-color: rgba(0,0,0,0.07);
-  box-shadow: 0 4px 24px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9);
+  background: rgba(255,255,255,0.72);
+  border-color: rgba(0,0,0,0.06);
+  box-shadow: 0 6px 32px rgba(0,0,0,0.09), inset 0 1px 0 rgba(255,255,255,0.95), inset 0 -1px 0 rgba(0,0,0,0.04);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
 }
 
 /* Momentum copy */
@@ -9411,28 +9555,29 @@
   letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted);
 }
 
-/* 7-day bar chart */
+/* 7-day bar chart — v3.36 pill bars */
 .home-bar-chart {
   display: flex; align-items: flex-end; justify-content: space-between;
-  gap: 5px; height: 56px; width: 100%;
+  gap: 6px; height: 72px; width: 100%;
 }
 .home-bar-col {
   display: flex; flex-direction: column; align-items: center;
-  gap: 4px; flex: 1;
+  gap: 5px; flex: 1;
 }
 .home-bar {
-  width: 100%; border-radius: 4px 4px 0 0;
-  background: var(--accent); opacity: 0.25;
-  transition: height 0.5s cubic-bezier(0.4,0,0.2,1), opacity 0.3s;
-  min-height: 2px;
+  width: 100%; border-radius: 6px;
+  background: var(--accent); opacity: 0.18;
+  transition: height 0.55s cubic-bezier(0.16,1,0.3,1), opacity 0.35s;
+  min-height: 3px;
 }
-.home-bar.has-activity { opacity: 0.75; }
-.home-bar.today { opacity: 1; background: var(--accent); }
-/* Ghost bars for empty days — v3.35 */
-.home-bar.ghost { opacity: 0.1; background: var(--muted2); }
+.home-bar.has-activity { opacity: 0.55; }
+.home-bar.today { opacity: 0.9; }
+.home-bar.peak { opacity: 1; box-shadow: 0 0 10px rgba(232,213,163,0.28); }
+/* Ghost bars for empty days */
+.home-bar.ghost { opacity: 0.08; background: var(--muted2); }
 .home-bar-day {
-  font-family: 'DM Mono', monospace; font-size: 0.38rem;
-  letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted);
+  font-family: 'DM Mono', monospace; font-size: 0.37rem;
+  letter-spacing: 0.03em; text-transform: uppercase; color: var(--muted);
 }
 .home-bar-day.today { color: var(--accent); }
 
@@ -10144,10 +10289,12 @@
 .lib-panel::-webkit-scrollbar { display: none; }
 
 /* ── VOCAB panel — v3.21 ─────────────────────────── */
+/* Vocab nav row — v3.36: My Words is active segment; All Words + Word Map are nav links */
 .vocab-seg-row {
   display: flex;
+  align-items: center;
   gap: 4px;
-  padding: 10px 20px 6px;
+  padding: 10px 20px 8px;
   flex-shrink: 0;
   border-bottom: 0.5px solid var(--border);
 }
@@ -10156,7 +10303,7 @@
   font-size: 0.56rem;
   letter-spacing: 0.07em;
   text-transform: uppercase;
-  padding: 5px 12px;
+  padding: 5px 14px;
   border: 0.5px solid var(--border);
   border-radius: 20px;
   background: none;
@@ -10168,6 +10315,27 @@
 }
 .vocab-seg-btn:hover { color: var(--muted2); border-color: var(--border-hover); }
 .vocab-seg-btn.active { color: var(--accent); border-color: var(--accent); background: rgba(232,213,163,0.07); }
+/* Nav-link style for All Words and Word Map */
+.vocab-seg-nav {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.52rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  border: none;
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+  transition: color 0.14s;
+  white-space: nowrap;
+  text-decoration: none;
+  display: inline-flex; align-items: center; gap: 3px;
+}
+.vocab-seg-nav:hover { color: var(--muted2); }
+.vocab-seg-nav-sep {
+  font-size: 0.5rem; color: var(--border-hover);
+  margin: 0 2px; user-select: none;
+}
 
 /* My Words header bar */
 .vocab-my-header {
@@ -10255,6 +10423,33 @@
   margin-left: 6px;
   vertical-align: middle;
 }
+/* Practiced dot — v3.36: replaces text badge */
+.vocab-practiced-dot {
+  display: inline-block;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #7aaf8a;
+  margin-left: 7px;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+/* Tile expand chevron — v3.36 */
+.vocab-tile-row {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 6px;
+}
+.vocab-tile-chevron {
+  font-size: 0.6rem;
+  color: var(--muted);
+  opacity: 0.45;
+  transition: transform 0.22s cubic-bezier(0.4,0,0.2,1), opacity 0.22s;
+  flex-shrink: 0;
+  line-height: 1;
+  margin-top: 1px;
+}
+.vocab-tile-open .vocab-tile-chevron {
+  transform: rotate(90deg);
+  opacity: 0.7;
+}
 
 /* Light-mode — Vocab panel v3.21 */
 [data-theme="light"] .vocab-seg-btn { color: var(--muted); }
@@ -10262,21 +10457,46 @@
 [data-theme="light"] .vocab-my-tile:hover { background: var(--surface2); }
 [data-theme="light"] .vocab-my-word { color: var(--text); }
 
-/* ── Vocab sort row — v3.28 ──────────────────────── */
-.vocab-sort-row {
-  display: flex; gap: 0; align-items: center;
-  padding: 0 20px 8px; flex-shrink: 0; flex-wrap: wrap; gap: 5px;
+/* ── Vocab controls — v3.36: sort + filter clearly separated ─────── */
+.vocab-controls {
+  display: flex; flex-direction: column; gap: 0;
+  padding: 6px 20px 2px; flex-shrink: 0;
+  border-bottom: 0.5px solid var(--border);
 }
+.vocab-control-row {
+  display: flex; align-items: center; gap: 6px; padding: 4px 0;
+}
+.vocab-control-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.38rem; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--muted); min-width: 32px; flex-shrink: 0;
+  opacity: 0.7;
+}
+/* Sort buttons — pill style */
 .vocab-sort-btn {
   font-family: 'DM Mono', monospace;
-  font-size: 0.5rem; letter-spacing: 0.07em; text-transform: uppercase;
-  padding: 3px 8px; border: 0.5px solid var(--border);
+  font-size: 0.48rem; letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 3px 9px; border: 0.5px solid var(--border);
   border-radius: 20px; background: none; color: var(--muted);
   cursor: pointer; transition: color 0.14s, border-color 0.14s, background 0.14s;
   white-space: nowrap;
 }
 .vocab-sort-btn:hover { color: var(--muted2); border-color: var(--border-hover); }
 .vocab-sort-btn.active { color: var(--accent); border-color: var(--accent); background: rgba(232,213,163,0.07); }
+/* Filter buttons — squarish solid-toggle style to distinguish from sort */
+.vocab-filter-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.48rem; letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 3px 9px; border: 0.5px solid var(--border);
+  border-radius: 4px; background: none; color: var(--muted);
+  cursor: pointer; transition: color 0.14s, border-color 0.14s, background 0.14s;
+  white-space: nowrap;
+}
+.vocab-filter-btn:hover { color: var(--muted2); border-color: var(--border-hover); }
+.vocab-filter-btn.active {
+  color: var(--bg); background: var(--accent); border-color: var(--accent);
+}
+[data-theme="light"] .vocab-filter-btn.active { color: #1e1b16; }
 
 /* ── Vocab tile inline expand — v3.28 ──────────── */
 .vocab-my-tile {
@@ -13123,7 +13343,10 @@
 <div class="lib-drawer" id="libDrawer">
   <div class="lib-handle"></div>
   <div class="lib-header">
-    <span class="lib-title">Home</span>
+    <span>
+      <span class="lib-title">Home</span>
+      <span class="lib-subtitle">your knowledge in motion</span>
+    </span>
     <span class="lib-shortcut-hint" title="⌘⌥H">⌘⌥H</span>
     <!-- JSON export removed v3.29 -->
     <button class="lib-close" onclick="closeLibrary()">✕</button>
@@ -13138,18 +13361,30 @@
       <!-- Activity: this week + streak -->
       <div class="home-hero-activity" id="homeHeroActivity"></div>
     </div>
-    <!-- Secondary: words · eps · notes — tappable -->
-    <div class="home-hero-secondary" id="homeHeroSecondary">
-      <span class="home-sec-item" id="hbWords" onclick="_homeBucketNav('vocab')">0 words</span>
-      <span class="home-sec-sep">·</span>
-      <span class="home-sec-item" id="hbEpisodes" onclick="_homeBucketNav('episodes')">0 eps ♥</span>
-      <span class="home-sec-sep">·</span>
-      <span class="home-sec-item" id="hbNotes" onclick="_homeBucketNav('concepts','notesOnly')">0 notes</span>
+    <!-- Milestone progress bar — v3.36 -->
+    <div class="home-milestone-wrap" id="homeMilestoneWrap"></div>
+    <!-- Mini stat cards — v3.36 -->
+    <div class="home-mini-cards">
+      <div class="home-mini-card" onclick="_homeBucketNav('vocab')">
+        <div class="home-mini-card-num" id="hbWords">0</div>
+        <div class="home-mini-card-label">words</div>
+      </div>
+      <div class="home-mini-card" onclick="_homeBucketNav('episodes')">
+        <div class="home-mini-card-num" id="hbEpisodes">0</div>
+        <div class="home-mini-card-label">episodes ♥</div>
+      </div>
+      <div class="home-mini-card" onclick="_homeBucketNav('concepts','notesOnly')">
+        <div class="home-mini-card-num" id="hbNotes">0</div>
+        <div class="home-mini-card-label">notes</div>
+      </div>
     </div>
     <!-- Momentum copy -->
     <div class="home-momentum" id="homeMomentum"></div>
   </div>
   </div><!-- /.home-collapse-wrap -->
+
+  <!-- Always-visible weekly goal strip — v3.36 -->
+  <div class="home-goal-strip" id="homeGoalStrip"></div>
 
   <!-- Stats toggle button — v3.31/v3.35 -->
   <button class="home-stats-toggle" id="homeStatsToggle" onclick="_homeToggleStats()">
@@ -13171,11 +13406,7 @@
           <div class="home-donut-legend" id="homeDonutLegend"></div>
         </div>
       </div>
-      <!-- Weekly goal — spans full width on mobile -->
-      <div class="home-stat-card" id="homeGoalCard" style="grid-column:1/-1">
-        <div class="home-stat-card-title">This week's goal</div>
-        <div class="home-goal-row" id="homeGoalRow"></div>
-      </div>
+      <!-- Goal card removed v3.36 — goal is now always-visible above stats toggle -->
     </div>
     <!-- Share button lives inside stats — v3.35 -->
     <div class="home-stats-share-row">
@@ -24879,11 +25110,13 @@ function _libRenderVocab() {
   var panel = document.getElementById('libPanel-vocab');
   if (!panel) return;
 
+  // v3.36: My Words = active segment btn; All Words + Word Map = nav links (both navigate away)
   var segHtml =
     '<div class="vocab-seg-row">' +
-      '<button class="vocab-seg-btn' + (_libVocabSeg === 'my'  ? ' active' : '') + '" onclick="_libVocabSwitchSeg(\'my\')">My Words</button>' +
-      '<button class="vocab-seg-btn' + (_libVocabSeg === 'all' ? ' active' : '') + '" onclick="_libVocabSwitchSeg(\'all\')">All Words</button>' +
-      '<button class="vocab-seg-btn' + (_libVocabSeg === 'map' ? ' active' : '') + '" onclick="_libVocabSwitchSeg(\'map\')">Word Map</button>' +
+      '<button class="vocab-seg-btn active" onclick="_libVocabSwitchSeg(\'my\')">My Words</button>' +
+      '<span class="vocab-seg-nav-sep">|</span>' +
+      '<button class="vocab-seg-nav" onclick="_libVocabSwitchSeg(\'all\')">All Words ↗</button>' +
+      '<button class="vocab-seg-nav" onclick="_libVocabSwitchSeg(\'map\')">Word Map ↗</button>' +
     '</div>';
 
   panel.innerHTML = segHtml + '<div id="libVocabContent"></div>';
@@ -24955,21 +25188,31 @@ function _libVocabRenderSeg() {
 
   var unpractised = lx.filter(function(w) { return !w.practiceState || w.practiceState === 'new'; }).length;
 
+  // Single CTA — v3.36: practice if unpractised exist, otherwise Lexi
+  var ctaHtml = unpractised > 0
+    ? '<button class="vocab-my-cta" onclick="closeLibrary();setTimeout(function(){openLexiconPanel();},80)">Practice ' + unpractised + '\u202f\u2192</button>'
+    : '<button class="vocab-my-cta" onclick="closeLibrary();setTimeout(function(){openLexiconPanel();},80)">Lexi\u202f\u2192</button>';
+
   var headerHtml =
     '<div class="vocab-my-header">' +
       '<span class="vocab-my-count">' + lx.length + ' word' + (lx.length !== 1 ? 's' : '') + '</span>' +
-      '<div style="display:flex;gap:6px;flex-wrap:wrap">' +
-        (unpractised > 0 ? '<button class="vocab-my-cta" onclick="closeLibrary();setTimeout(function(){openLexiconPanel();},80)">Practice ' + unpractised + ' \u2192</button>' : '') +
-        '<button class="vocab-my-cta" onclick="closeLibrary();setTimeout(function(){openLexiconPanel();},80)">Lexi \u2192</button>' +
-      '</div>' +
+      ctaHtml +
     '</div>';
 
+  // v3.36: two-row controls — Sort (pills) + Show (solid-toggle squares)
   var sortRowHtml =
-    '<div class="vocab-sort-row">' +
-      '<button class="vocab-sort-btn' + (_libVocabSort === 'newest'      ? ' active' : '') + '" onclick="_libVocabSetSort(\'newest\')">Newest</button>' +
-      '<button class="vocab-sort-btn' + (_libVocabSort === 'alpha'       ? ' active' : '') + '" onclick="_libVocabSetSort(\'alpha\')">A–Z</button>' +
-      '<button class="vocab-sort-btn' + (_libVocabSort === 'unpractised' ? ' active' : '') + '" onclick="_libVocabSetSort(\'unpractised\')">New first</button>' +
-      '<button class="vocab-sort-btn' + (_libVocabFilter === 'practiced' ? ' active' : '') + '" onclick="_libVocabSetFilter(\'practiced\')" style="margin-left:auto">Practiced</button>' +
+    '<div class="vocab-controls">' +
+      '<div class="vocab-control-row">' +
+        '<span class="vocab-control-label">Sort</span>' +
+        '<button class="vocab-sort-btn' + (_libVocabSort === 'newest'      ? ' active' : '') + '" onclick="_libVocabSetSort(\'newest\')">Newest</button>' +
+        '<button class="vocab-sort-btn' + (_libVocabSort === 'alpha'       ? ' active' : '') + '" onclick="_libVocabSetSort(\'alpha\')">A–Z</button>' +
+        '<button class="vocab-sort-btn' + (_libVocabSort === 'unpractised' ? ' active' : '') + '" onclick="_libVocabSetSort(\'unpractised\')">New first</button>' +
+      '</div>' +
+      '<div class="vocab-control-row">' +
+        '<span class="vocab-control-label">Show</span>' +
+        '<button class="vocab-filter-btn' + (_libVocabFilter !== 'practiced' ? ' active' : '') + '" onclick="_libVocabSetFilter(\'all\')">All</button>' +
+        '<button class="vocab-filter-btn' + (_libVocabFilter === 'practiced' ? ' active' : '') + '" onclick="_libVocabSetFilter(\'practiced\')">Practiced</button>' +
+      '</div>' +
     '</div>';
 
   var tilesHtml = '<div class="vocab-my-list" id="vocabMyList">' +
@@ -24979,7 +25222,7 @@ function _libVocabRenderSeg() {
       var src   = (w.podcastName || w.episodeTitle || '').replace(/</g, '&lt;');
       var state = w.practiceState;
       var badge = state && state !== 'new'
-        ? '<span class="vocab-my-badge">' + (state === 'practiced' ? 'practiced' : state === 'mastered' ? 'mastered' : state) + '</span>'
+        ? '<span class="vocab-practiced-dot" title="practiced"></span>'
         : '';
       var practiced = state && state !== 'new';
       // Build practice history section if grading data exists
@@ -24998,7 +25241,10 @@ function _libVocabRenderSeg() {
         '</div>';
       }
       return '<div class="vocab-my-tile" id="vt-' + i + '" onclick="_libVocabToggleTile(' + i + ', this)">' +
-        '<div class="vocab-my-word">' + word + badge + '</div>' +
+        '<div class="vocab-tile-row">' +
+          '<div class="vocab-my-word">' + word + badge + '</div>' +
+          '<span class="vocab-tile-chevron">\u203a</span>' +
+        '</div>' +
         (def ? '<div class="vocab-my-def">' + def + '</div>' : '') +
         (src ? '<div class="vocab-my-meta">' + src + '</div>' : '') +
         '<div class="vocab-tile-detail">' +
@@ -25035,7 +25281,7 @@ function _libVocabSetSort(sort) {
 }
 
 function _libVocabSetFilter(filter) {
-  _libVocabFilter = (_libVocabFilter === filter) ? 'all' : filter; // toggle
+  _libVocabFilter = filter; // v3.36: explicit set (All / Practiced buttons)
   var list = document.getElementById('vocabMyList');
   var noMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   function rebuild() {
@@ -25071,18 +25317,18 @@ function _libVocabMarkPracticed(word, btn) {
           btn.classList.toggle('practiced', !already);
           btn.textContent = !already ? '✓ Practiced' : 'Mark practiced';
         }
-        // Update badge in parent tile
+        // Update practiced dot in parent tile — v3.36
         var tile = btn.closest ? btn.closest('.vocab-my-tile') : null;
         if (tile) {
           var wordEl = tile.querySelector('.vocab-my-word');
           if (wordEl) {
-            var existing = wordEl.querySelector('.vocab-my-badge');
+            var existing = wordEl.querySelector('.vocab-practiced-dot, .vocab-my-badge');
             if (existing) existing.remove();
             if (!already) {
-              var badge = document.createElement('span');
-              badge.className = 'vocab-my-badge';
-              badge.textContent = 'practiced';
-              wordEl.appendChild(badge);
+              var dot = document.createElement('span');
+              dot.className = 'vocab-practiced-dot';
+              dot.title = 'practiced';
+              wordEl.appendChild(dot);
             }
           }
         }
@@ -25267,6 +25513,61 @@ function _homeNextMilestone(n) {
   return null;
 }
 
+/* Milestone progress bar — v3.36 */
+function _homeRenderMilestone(nSaved) {
+  var el = document.getElementById('homeMilestoneWrap');
+  if (!el) return;
+  var ms = _homeNextMilestone(nSaved);
+  if (!ms) { el.innerHTML = ''; return; }
+  var milestones = [0, 10, 25, 50, 75, 100, 150, 200, 300, 500, 750, 1000];
+  var targetIdx = milestones.indexOf(ms.target);
+  var prevMs = targetIdx > 0 ? milestones[targetIdx - 1] : 0;
+  var range = ms.target - prevMs;
+  var progress = nSaved - prevMs;
+  var pct = Math.round(progress / range * 100);
+  el.innerHTML =
+    '<div class="home-milestone-labels">' +
+      '<span class="home-milestone-current">' + nSaved + ' saved</span>' +
+      '<span class="home-milestone-target">next milestone: ' + ms.target + '</span>' +
+    '</div>' +
+    '<div class="home-milestone-track">' +
+      '<div class="home-milestone-fill" style="width:0%"></div>' +
+    '</div>';
+  // Animate fill after paint
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
+      var fill = el.querySelector('.home-milestone-fill');
+      if (fill) fill.style.width = pct + '%';
+    });
+  });
+}
+
+/* Always-visible goal strip — v3.36 */
+function _homeRenderGoalStrip() {
+  var el = document.getElementById('homeGoalStrip');
+  if (!el) return;
+  var GOAL = 5;
+  var tsMap = {};
+  try { tsMap = JSON.parse(localStorage.getItem('lll_mastered_ts_v1') || '{}'); } catch(e) {}
+  var weekAgo = Date.now() - 7 * 86400000;
+  var thisWeek = Object.values(tsMap).filter(function(ts) { return Number(ts) > weekAgo; }).length;
+  var pct = Math.min(100, Math.round(thisWeek / GOAL * 100));
+  var done = thisWeek >= GOAL;
+  el.className = 'home-goal-strip' + (done ? ' home-goal-strip-done' : '');
+  el.innerHTML =
+    '<div class="home-goal-strip-header">' +
+      '<span class="home-goal-strip-label">Weekly goal — save ' + GOAL + ' concepts</span>' +
+      '<span class="home-goal-strip-count">' + thisWeek + '\u202f/\u202f' + GOAL + (done ? '\u2009✦' : '') + '</span>' +
+    '</div>' +
+    '<div class="home-goal-strip-bar"><div class="home-goal-strip-fill" style="width:0%"></div></div>';
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
+      var fill = el.querySelector('.home-goal-strip-fill');
+      if (fill) fill.style.width = pct + '%';
+    });
+  });
+}
+
 function _homeRenderDashboard(skipCountUp) {
   var elSaved    = document.getElementById('hbSaved');
   var elWords    = document.getElementById('hbWords');
@@ -25305,10 +25606,14 @@ function _homeRenderDashboard(skipCountUp) {
     activityEl.textContent = parts.join(' · ');
   }
 
-  // ── Secondary items ──
-  if (elWords) elWords.textContent = nWords + ' word' + (nWords !== 1 ? 's' : '');
-  if (elEpisodes) elEpisodes.textContent = nEpisodes + ' ep' + (nEpisodes !== 1 ? 's' : '') + ' ♥';
-  if (elNotes) elNotes.textContent = nNotes + ' note' + (nNotes !== 1 ? 's' : '');
+  // ── Mini-cards (numbers only) — v3.36 ──
+  if (elWords) elWords.textContent = nWords;
+  if (elEpisodes) elEpisodes.textContent = nEpisodes;
+  if (elNotes) elNotes.textContent = nNotes;
+
+  // ── Milestone + always-visible goal strip ──
+  _homeRenderMilestone(nSaved);
+  _homeRenderGoalStrip();
 
   // ── Compact strip ──
   var strip = document.getElementById('homeCompactStrip');
@@ -25358,7 +25663,7 @@ function _homeToggleStats() {
 function _homeRenderStats() {
   _homeRenderBarChart();
   _homeRenderDonut();
-  _homeRenderGoal();
+  // Goal moved to always-visible strip above stats toggle (v3.36)
 }
 
 function _homeRenderBarChart() {
@@ -25366,7 +25671,7 @@ function _homeRenderBarChart() {
   if (!el) return;
   var tsMap = {};
   try { tsMap = JSON.parse(localStorage.getItem('lll_mastered_ts_v1') || '{}'); } catch(e) {}
-  var days = ['S','M','T','W','T','F','S'];
+  var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
   var today = new Date();
   var counts = [];
   for (var i = 6; i >= 0; i--) {
@@ -25379,10 +25684,15 @@ function _homeRenderBarChart() {
     counts.push({ label: days[d.getDay()], count: count, isToday: i === 0 });
   }
   var maxCount = Math.max.apply(null, counts.map(function(c) { return c.count; })) || 1;
+  var peakIdx = counts.reduce(function(best, c, i) { return c.count > counts[best].count ? i : best; }, 0);
 
-  el.innerHTML = counts.map(function(c) {
-    var pct = c.count > 0 ? Math.max(8, Math.round((c.count / maxCount) * 100)) : 14;
-    var cls = 'home-bar' + (c.count > 0 ? ' has-activity' : ' ghost') + (c.isToday ? ' today' : '');
+  el.innerHTML = counts.map(function(c, i) {
+    var pct = c.count > 0 ? Math.max(9, Math.round((c.count / maxCount) * 100)) : 12;
+    var isPeak = c.count > 0 && i === peakIdx;
+    var cls = 'home-bar' +
+      (c.count > 0 ? ' has-activity' : ' ghost') +
+      (c.isToday ? ' today' : '') +
+      (isPeak ? ' peak' : '');
     return '<div class="home-bar-col">' +
       '<div class="' + cls + '" style="height:' + pct + '%"></div>' +
       '<div class="home-bar-day' + (c.isToday ? ' today' : '') + '">' + c.label + '</div>' +

@@ -6,6 +6,14 @@
 
 ---
 
+## 2026-08-08 — backdrop-filter safe on hero card; z-index on ::before; vocab filter pattern (v3.36)
+
+**`backdrop-filter: blur()` IS safe on `.home-hero-card`** even though engineering-standards bans it on containers with child transitions. The rule's concern is *hover* transitions causing per-frame recomposition. The hero card's only child transition is `opacity 0.15s` on `.home-hero-num.fading` — triggered once programmatically on load, not on hover. No per-frame cost.
+
+**`position: relative; z-index: 1` on all dashboard children.** When adding a `::before` pseudo-element for ambient depth to a parent, use `parent > * { position: relative; z-index: 1 }` — one rule covers all children cleanly without per-element declarations.
+
+**Vocab filter: use explicit set, not toggle.** When filter has two dedicated buttons (All / Practiced), `_libVocabFilter = filter` (direct assignment) is correct. The old `(current === filter) ? 'all' : filter` toggle pattern breaks when both buttons need independent, non-toggling behavior.
+
 ## 2026-08-07 — Mobile nav restructure + phantom strip fix (v3.15–3.16)
 
 **Base `nav {}` CSS applies to every `<nav>` in the document.** Both `#mainNav` and `.mobile-tab-bar` are `<nav>` tags. Putting `top: 0`, `height: 52px`, and `transform: translateZ(0)` on `nav {}` silently applied all three to `.mobile-tab-bar`, causing it to appear at the top of the screen instead of the bottom and breaking iOS fixed positioning. Rule: never put positional or compositing properties on `nav {}` — scope them to `#mainNav {}`.
