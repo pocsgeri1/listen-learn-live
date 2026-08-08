@@ -6,6 +6,22 @@
 
 ---
 
+## v3.29 — 2026-08-08 · Dashboard beauty pass + personal stats + quick fixes
+
+### index.html
+- **Dashboard hover shine:** Removed permanent left-border color on buckets. Added `::before` pseudo-element — a 2px colored top-border that `scaleX(0→1)` from center on hover ("shines through"). Neutral at rest, alive on interaction. `@media (hover:none)` suppresses it on touch.
+- **Bucket reorder:** Episodes → Concepts → Words → Notes (was Concepts/Words/Notes/Eps).
+- **Range toggle removed:** WK/MO/ALL toggle hidden (`.home-range-toggle { display:none }`). Platform stats bar hidden too. Range JS code preserved but dormant.
+- **Personal stats row:** New `.home-personal-stats` — 3 centered cells below bucket grid: (1) Day streak — computed from `lll_mastered_ts_v1` + `lll_lexicon_v1` savedAt timestamps, consecutive days with any activity; (2) This week — total concepts + words saved in last 7 days, with sub-label breakdown; (3) Next milestone — concepts left to the next threshold (10/25/50/75/100/150/200/300/500/750/1000).
+- **JSON button removed** from lib-header.
+- **Episodes: Unfav → ♥ icon only** — removed "Unfav" text label from the unfav button.
+- **Episode expansion: concept names tappable** — each concept row calls `_libNavToCard(id)` on click (stopPropagation so tile doesn't toggle). Hover color → accent.
+- **Concepts filter: "All" pill** — prepended as first chip in the filter scroll row. Active when no filters are set. Calls `_libClearFilters()`.
+- **Vocab tile: no definition repeat** — `.vocab-tile-open .vocab-my-def { display:none }` hides the truncated one-liner when the tile is expanded (full def already shows in `.vocab-tile-def-full`).
+- **Vocab "Practiced" filter** — new pill in sort row (right-aligned, toggles). `_libVocabFilter` state ('all'|'practiced'). `_libVocabSetFilter()` handles toggle + fade rebuild. Same animation pattern as sort.
+
+---
+
 ## v3.28 — 2026-08-08 · Home v2 Phase E+F — Vocab sort/expand + Episode expand-first
 
 ### index.html

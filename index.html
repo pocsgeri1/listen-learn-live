@@ -9202,157 +9202,173 @@
   border-bottom: 0.5px solid var(--border);
 }
 
-/* Range row */
+/* ── Eyebrow row — v3.29 ── */
 .home-range-row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   padding: 8px 16px 7px;
   border-bottom: 0.5px solid var(--border);
 }
 .home-dash-eyebrow {
   font-family: 'DM Mono', monospace;
-  font-size: 0.45rem;
-  letter-spacing: 0.18em;
+  font-size: 0.44rem;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--muted);
-  opacity: 0.6;
+  opacity: 0.5;
 }
-.home-range-toggle {
-  display: flex;
-  border: 0.5px solid var(--border);
-  border-radius: 4px;
-  overflow: hidden;
-}
-.home-range-btn {
-  background: none;
-  border: none;
-  font-family: 'DM Mono', monospace;
-  font-size: 0.48rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--muted);
-  padding: 4px 9px;
-  cursor: pointer;
-  line-height: 1;
-  transition: background 0.15s, color 0.15s;
-}
-.home-range-btn.home-range-active { background: var(--surface2); color: var(--text); }
-.home-range-btn:disabled { opacity: 0.35; cursor: default; }
-[data-theme="light"] .home-range-btn.home-range-active { background: var(--surface2); color: var(--text); }
+/* Range toggle hidden — v3.29: replaced by personal stats */
+.home-range-toggle { display: none; }
 
-/* ── Personal buckets — 4-col, tappable, accent left-border ── */
+/* ── Personal buckets — 4-col, hover top-shine — v3.29 ── */
 .home-buckets {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
+  border-bottom: 0.5px solid var(--border);
 }
 .home-bucket {
   display: flex;
   flex-direction: column;
-  padding: 18px 14px 14px 16px;
+  padding: 20px 16px 16px;
   border-right: 0.5px solid var(--border);
-  border-left: 2.5px solid var(--bucket-accent, transparent);
   cursor: pointer;
   position: relative;
-  transition: background 0.2s ease, border-left-color 0.2s ease;
+  transition: background 0.22s ease;
   overflow: hidden;
 }
-.home-bucket:first-child { border-left-width: 2.5px; }
 .home-bucket:last-child { border-right: none; }
-/* Hover: subtle tint using accent color at very low opacity */
-.home-bucket:hover { background: color-mix(in srgb, var(--bucket-accent, var(--accent)) 5%, transparent); }
+
+/* Top-border shine — expands from center on hover */
+.home-bucket::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--bucket-accent, var(--accent));
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.home-bucket:hover::before { transform: scaleX(1); }
+.home-bucket:hover { background: color-mix(in srgb, var(--bucket-accent, var(--accent)) 4%, transparent); }
+
 .home-bucket-num {
   font-family: 'Playfair Display', serif;
-  font-size: 2.5rem;
+  font-size: 2.6rem;
   font-weight: 700;
   color: var(--text);
   line-height: 1;
   display: block;
-  transition: color 0.2s ease, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.15s ease;
+  transition: color 0.22s ease, transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.15s ease;
 }
 .home-bucket:hover .home-bucket-num {
   color: var(--bucket-accent, var(--accent));
-  transform: translateY(-2px);
+  transform: translateY(-3px);
 }
 .home-bucket-label {
   font-family: 'DM Mono', monospace;
   font-size: 0.43rem;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--muted);
-  margin-top: 8px;
+  margin-top: 10px;
   white-space: nowrap;
   transition: color 0.2s ease;
 }
 .home-bucket:hover .home-bucket-label { color: var(--muted2); }
-.home-bucket-delta {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.41rem;
-  letter-spacing: 0.05em;
-  color: var(--accent);
-  margin-top: 4px;
-  min-height: 10px;
-  white-space: nowrap;
-}
+.home-bucket-delta { display: none; } /* delta removed v3.29 */
+
 @media (hover: none) {
+  .home-bucket::before { display: none; }
   .home-bucket:hover { background: none; }
   .home-bucket:hover .home-bucket-num { color: var(--text); transform: none; }
 }
 
-/* ── Platform stats bar — single compact DM Mono line ── */
-.home-stats-bar {
+/* ── Personal stats row — v3.29 ── */
+.home-personal-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-bottom: 0.5px solid var(--border);
+}
+.home-stat-cell {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 6px;
-  padding: 7px 16px;
-  border-top: 0.5px solid var(--border);
+  justify-content: center;
+  padding: 11px 8px 10px;
+  border-right: 0.5px solid var(--border);
+  text-align: center;
+  gap: 3px;
+}
+.home-stat-cell:last-child { border-right: none; }
+.home-stat-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1;
+}
+.home-stat-num.accent { color: var(--accent); }
+.home-stat-label {
   font-family: 'DM Mono', monospace;
-  font-size: 0.46rem;
+  font-size: 0.41rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  line-height: 1.3;
+}
+.home-stat-sub {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.38rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--muted);
-  flex-wrap: wrap;
+  opacity: 0.55;
 }
-.home-stats-bar .stats-sep { color: var(--border-hover); margin: 0 2px; }
-.home-stats-bar .stats-up { color: var(--accent); margin-right: 2px; }
 
 /* ── Momentum line ── */
 .home-momentum {
   font-family: 'DM Sans', sans-serif;
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-style: italic;
   color: var(--muted2);
-  padding: 8px 16px 10px;
+  padding: 8px 18px 10px;
   line-height: 1.45;
-  border-top: 0.5px solid var(--border);
+  border-bottom: 0.5px solid var(--border);
 }
 .home-momentum em {
   font-family: 'Playfair Display', serif;
   font-style: italic;
-  font-size: 0.86rem;
+  font-size: 0.84rem;
   color: var(--accent);
   font-weight: 700;
 }
 [data-theme="light"] .home-momentum { color: var(--muted); }
 
-/* Mobile — 2×2 grid */
+/* Mobile — 2×2 buckets + stacked stats */
 @media (max-width: 600px) {
   .home-buckets { grid-template-columns: repeat(2, 1fr); }
-  .home-bucket { padding: 14px 12px 12px 14px; }
+  .home-bucket { padding: 16px 14px 13px; }
   .home-bucket:nth-child(2) { border-right: none; }
   .home-bucket:nth-child(1),
   .home-bucket:nth-child(2) { border-bottom: 0.5px solid var(--border); }
-  .home-bucket-num { font-size: 2rem; }
+  .home-bucket-num { font-size: 2.1rem; }
+  .home-personal-stats { grid-template-columns: repeat(3, 1fr); }
+  .home-stat-num { font-size: 1.1rem; }
 }
 
-/* Bucket number cross-fade on range switch */
+/* Bucket number count-up fade */
 .home-bucket-num.fading { opacity: 0; }
-.home-bucket-num { transition: opacity 0.15s ease, color 0.2s ease, transform 0.2s cubic-bezier(0.34,1.56,0.64,1); }
+.home-bucket-num { transition: opacity 0.15s ease, color 0.22s ease, transform 0.22s cubic-bezier(0.34,1.56,0.64,1); }
 @media (prefers-reduced-motion: reduce) {
+  .home-bucket::before { transition: none !important; }
   .home-bucket-num { transition: none !important; }
   .home-bucket-num.fading { opacity: 1; }
   .home-bucket:hover .home-bucket-num { transform: none; }
 }
+
+/* Legacy stats bar hidden */
+.home-stats-bar { display: none; }
 
 /* ── Phase 7: scroll-collapse wrapper — v3.25 smooth ── */
 .home-collapse-wrap {
@@ -10152,6 +10168,9 @@
 .vocab-tile-action-btn:hover { color: var(--accent); border-color: var(--accent); }
 .vocab-tile-action-btn.practiced { color: var(--accent); border-color: var(--accent); opacity: 0.7; }
 
+/* Hide truncated def when tile is open */
+.vocab-tile-open .vocab-my-def { display: none; }
+
 /* fade animation for sort change */
 .vocab-my-list.sort-fade { opacity: 0; transition: opacity 0.12s ease; }
 
@@ -10183,8 +10202,10 @@
 }
 .ep-tile-concept-item {
   font-family: 'Playfair Display', serif; font-size: 0.78rem;
-  font-style: italic; color: var(--text); padding: 1px 0;
+  font-style: italic; color: var(--text); padding: 2px 0;
+  transition: color 0.13s;
 }
+.ep-tile-concept-item:hover { color: var(--accent); }
 .ep-tile-words {
   display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px;
 }
@@ -12763,51 +12784,50 @@
   <div class="lib-header">
     <span class="lib-title">Home</span>
     <span class="lib-shortcut-hint" title="⌘⌥H">⌘⌥H</span>
-    <button class="lib-export-all-btn" id="homeExportBtn" onclick="_homeExportAll()" title="Export all your data as JSON">↓ JSON</button>
+    <!-- JSON export removed v3.29 -->
     <button class="lib-close" onclick="closeLibrary()">✕</button>
   </div>
   <div class="home-collapse-wrap" id="homeCollapseWrap">
   <div class="home-compact-strip" id="homeCompactStrip" onclick="_homeExpandDashboard()" role="button" aria-label="Show dashboard"></div>
   <div class="home-dashboard" id="homeDashboard">
-    <!-- Eyebrow + range row -->
+    <!-- Eyebrow row -->
     <div class="home-range-row">
       <span class="home-dash-eyebrow">Your library</span>
-      <div class="home-range-toggle">
-        <button class="home-range-btn" id="hbRangeWk" onclick="_homeSetRange('week')">Wk</button>
-        <button class="home-range-btn" id="hbRangeMo" onclick="_homeSetRange('month')">Mo</button>
-        <button class="home-range-btn home-range-active" id="hbRangeAll" onclick="_homeSetRange('all')">All</button>
-      </div>
     </div>
-    <!-- Personal buckets — tappable, route to tabs -->
+    <!-- Personal buckets: Episodes → Concepts → Words → Notes — v3.29 -->
     <div class="home-buckets" id="homeBuckets">
-      <div class="home-bucket" style="--bucket-accent:#e8d5a3" onclick="_homeBucketNav('concepts')" title="View saved concepts">
+      <div class="home-bucket" style="--bucket-accent:#d4715a" onclick="_homeBucketNav('episodes')" title="Favourite episodes">
+        <span class="home-bucket-num" id="hbEpisodes">0</span>
+        <span class="home-bucket-label">Episodes</span>
+      </div>
+      <div class="home-bucket" style="--bucket-accent:#e8d5a3" onclick="_homeBucketNav('concepts')" title="Saved concepts">
         <span class="home-bucket-num" id="hbSaved">0</span>
         <span class="home-bucket-label">Concepts</span>
-        <span class="home-bucket-delta" id="hbSavedDelta"></span>
       </div>
-      <div class="home-bucket" style="--bucket-accent:#5abfaf" onclick="_homeBucketNav('vocab')" title="View saved words">
+      <div class="home-bucket" style="--bucket-accent:#5abfaf" onclick="_homeBucketNav('vocab')" title="Saved words">
         <span class="home-bucket-num" id="hbWords">0</span>
         <span class="home-bucket-label">Words</span>
-        <span class="home-bucket-delta" id="hbWordsDelta"></span>
       </div>
-      <div class="home-bucket" style="--bucket-accent:#a08fd4" onclick="_homeBucketNav('concepts','notesOnly')" title="View notes">
+      <div class="home-bucket" style="--bucket-accent:#a08fd4" onclick="_homeBucketNav('concepts','notesOnly')" title="Notes">
         <span class="home-bucket-num" id="hbNotes">0</span>
         <span class="home-bucket-label">Notes</span>
-        <span class="home-bucket-delta" id="hbNotesDelta"></span>
-      </div>
-      <div class="home-bucket" style="--bucket-accent:#d4715a" onclick="_homeBucketNav('episodes')" title="View favourited episodes">
-        <span class="home-bucket-num" id="hbEpisodes">0</span>
-        <span class="home-bucket-label">Eps ♥</span>
-        <span class="home-bucket-delta" id="hbEpisodesDelta"></span>
       </div>
     </div>
-    <!-- Platform stats — compact single line -->
-    <div class="home-stats-bar" id="homeStatsBar">
-      <span class="stats-up">↗</span><span id="hbNewEps">–</span><span>new eps</span>
-      <span class="stats-sep">·</span>
-      <span class="stats-up">↗</span><span id="hbNewConcepts">–</span><span>new concepts</span>
-      <span id="hbNewEpsDelta" style="display:none"></span>
-      <span id="hbNewConceptsDelta" style="display:none"></span>
+    <!-- Personal progress stats — v3.29 -->
+    <div class="home-personal-stats" id="homePersonalStats">
+      <div class="home-stat-cell">
+        <span class="home-stat-num accent" id="hpStreak">–</span>
+        <span class="home-stat-label" id="hpStreakLabel">day streak</span>
+      </div>
+      <div class="home-stat-cell">
+        <span class="home-stat-num" id="hpThisWeek">–</span>
+        <span class="home-stat-label">this week</span>
+        <span class="home-stat-sub" id="hpThisWeekSub"></span>
+      </div>
+      <div class="home-stat-cell">
+        <span class="home-stat-num" id="hpMilestone">–</span>
+        <span class="home-stat-label" id="hpMilestoneLabel">next milestone</span>
+      </div>
     </div>
     <!-- Momentum line -->
     <div class="home-momentum" id="homeMomentum"></div>
@@ -23972,7 +23992,10 @@ function _libRenderSaved() {
   // Validate letter filter still exists
   if (_libConceptFilter.letter && !letterSet[_libConceptFilter.letter]) _libConceptFilter.letter = null;
 
-  var chipsHtml = Object.keys(catCounts)
+  var allActive = !_libConceptFilter.cat && !_libConceptFilter.notesOnly && !_libConceptFilter.letter;
+  var chipsHtml =
+    '<button class="lib-cat-chip' + (allActive ? ' active' : '') + '" style="--cat-color:var(--muted2)" onclick="_libClearFilters()">All<em>' + ids.length + '</em></button>' +
+    Object.keys(catCounts)
     .sort(function(a, b) { return catCounts[b] - catCounts[a]; })
     .map(function(cat) {
       var name = (CATEGORIES && CATEGORIES.find(function(x) { return x.id === cat; }) || {}).name || cat;
@@ -24318,7 +24341,7 @@ function _libRenderEpisodes() {
 
       var detailHtml = hasItems ? '<div class="ep-tile-detail"><div class="ep-tile-detail-inner">' +
         (epConcepts.length ? '<div class="ep-tile-detail-section">Concepts kept</div><div class="ep-tile-saved-concepts">' +
-          epConcepts.slice(0, 6).map(function(c) { return '<div class="ep-tile-concept-item">' + (c.term || '').replace(/</g,'&lt;') + '</div>'; }).join('') +
+          epConcepts.slice(0, 6).map(function(c) { return '<div class="ep-tile-concept-item" onclick="event.stopPropagation();_libNavToCard(' + c.id + ')" title="View concept card" style="cursor:pointer">' + (c.term || '').replace(/</g,'&lt;') + '</div>'; }).join('') +
           (epConcepts.length > 6 ? '<div class="ep-tile-concept-item" style="color:var(--muted);font-style:normal">+' + (epConcepts.length - 6) + ' more</div>' : '') +
         '</div>' : '') +
         (epWords.length ? '<div class="ep-tile-detail-section">Words saved</div><div class="ep-tile-words">' +
@@ -24337,7 +24360,7 @@ function _libRenderEpisodes() {
         '<div class="ep-fav-tile-meta">' + (col.podcast ? col.podcast.replace(/</g,'&lt;') : '') + (favDateStr ? ' \u00b7 ' + favDateStr : '') + '</div>' +
         (statsLine ? '<div class="ep-fav-tile-stats">' + statsLine + '</div>' : '') +
         '<div class="ep-fav-tile-actions">' +
-          '<button class="ep-fav-tile-unfav" title="Remove from favourites" onclick="event.stopPropagation();_epToggleFav(' + col.id + ')">\u2665 Unfav</button>' +
+          '<button class="ep-fav-tile-unfav" title="Remove from favourites" onclick="event.stopPropagation();_epToggleFav(' + col.id + ')">\u2665</button>' +
         '</div>' +
         detailHtml +
       '</div>';
@@ -24389,6 +24412,7 @@ function _epRelativeDate(ts) {
 var _libVocabSeg = 'my'; // 'my' | 'all' | 'map'
 
 var _libVocabSort = 'newest'; // 'newest' | 'alpha' | 'unpractised' — v3.28
+var _libVocabFilter = 'all'; // 'all' | 'practiced' — v3.29
 
 function _libRenderVocab() {
   var panel = document.getElementById('libPanel-vocab');
@@ -24463,7 +24487,12 @@ function _libVocabRenderSeg() {
     sorted.sort(function(a, b) { return (b.savedAt || 0) - (a.savedAt || 0); });
   }
 
-  var unpractised = sorted.filter(function(w) { return !w.practiceState || w.practiceState === 'new'; }).length;
+  // Apply filter
+  if (_libVocabFilter === 'practiced') {
+    sorted = sorted.filter(function(w) { return w.practiceState && w.practiceState !== 'new'; });
+  }
+
+  var unpractised = lx.filter(function(w) { return !w.practiceState || w.practiceState === 'new'; }).length;
 
   var headerHtml =
     '<div class="vocab-my-header">' +
@@ -24479,6 +24508,7 @@ function _libVocabRenderSeg() {
       '<button class="vocab-sort-btn' + (_libVocabSort === 'newest'      ? ' active' : '') + '" onclick="_libVocabSetSort(\'newest\')">Newest</button>' +
       '<button class="vocab-sort-btn' + (_libVocabSort === 'alpha'       ? ' active' : '') + '" onclick="_libVocabSetSort(\'alpha\')">A–Z</button>' +
       '<button class="vocab-sort-btn' + (_libVocabSort === 'unpractised' ? ' active' : '') + '" onclick="_libVocabSetSort(\'unpractised\')">New first</button>' +
+      '<button class="vocab-sort-btn' + (_libVocabFilter === 'practiced' ? ' active' : '') + '" onclick="_libVocabSetFilter(\'practiced\')" style="margin-left:auto">Practiced</button>' +
     '</div>';
 
   var tilesHtml = '<div class="vocab-my-list" id="vocabMyList">' +
@@ -24521,6 +24551,20 @@ function _libVocabSetSort(sort) {
     if (newList && !noMotion) {
       requestAnimationFrame(function() { newList.classList.remove('sort-fade'); });
     }
+  }
+  if (!list || noMotion) { rebuild(); return; }
+  list.classList.add('sort-fade');
+  setTimeout(rebuild, 130);
+}
+
+function _libVocabSetFilter(filter) {
+  _libVocabFilter = (_libVocabFilter === filter) ? 'all' : filter; // toggle
+  var list = document.getElementById('vocabMyList');
+  var noMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function rebuild() {
+    _libVocabRenderSeg();
+    var newList = document.getElementById('vocabMyList');
+    if (newList && !noMotion) requestAnimationFrame(function() { newList.classList.remove('sort-fade'); });
   }
   if (!list || noMotion) { rebuild(); return; }
   list.classList.add('sort-fade');
@@ -24680,19 +24724,53 @@ function _homeSetRange(range) {
   }, 150);
 }
 
+// ── Personal stats helpers — v3.29 ──────────────────────────────
+function _homeComputeStreak() {
+  var tsMap = {};
+  try { tsMap = JSON.parse(localStorage.getItem('lll_mastered_ts_v1') || '{}'); } catch(e) {}
+  var lx = [];
+  try { lx = JSON.parse(localStorage.getItem('lll_lexicon_v1') || '[]'); if (!Array.isArray(lx)) lx = []; } catch(e) {}
+  var daySet = new Set();
+  Object.values(tsMap).forEach(function(ts) {
+    var d = new Date(Number(ts));
+    daySet.add(d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate());
+  });
+  lx.forEach(function(w) {
+    if (w && w.savedAt) {
+      var d = new Date(w.savedAt);
+      daySet.add(d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate());
+    }
+  });
+  var streak = 0;
+  var today = new Date();
+  for (var i = 0; i < 365; i++) {
+    var d = new Date(today.getFullYear(), today.getMonth(), today.getDate() - i);
+    var key = d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate();
+    if (daySet.has(key)) streak++;
+    else break;
+  }
+  return streak;
+}
+
+function _homeNextMilestone(n) {
+  var ms = [10, 25, 50, 75, 100, 150, 200, 300, 500, 750, 1000];
+  for (var i = 0; i < ms.length; i++) {
+    if (n < ms[i]) return { target: ms[i], left: ms[i] - n };
+  }
+  return null;
+}
+
 function _homeRenderDashboard(skipCountUp) {
   var elSaved    = document.getElementById('hbSaved');
   var elWords    = document.getElementById('hbWords');
   var elNotes    = document.getElementById('hbNotes');
   var elEpisodes = document.getElementById('hbEpisodes');
-  var elNewEps   = document.getElementById('hbNewEps');
-  var elNewCon   = document.getElementById('hbNewConcepts');
   if (!elSaved) return;
 
-  // ── Compute personal counts (always all-time) ──
+  // ── Personal counts ──
   var nSaved = typeof mastered !== 'undefined' ? mastered.size : 0;
-  var nWords = 0;
-  try { var lx = JSON.parse(localStorage.getItem('lll_lexicon_v1') || '[]'); nWords = Array.isArray(lx) ? lx.length : 0; } catch(e) {}
+  var nWords = 0, lx = [];
+  try { lx = JSON.parse(localStorage.getItem('lll_lexicon_v1') || '[]'); nWords = Array.isArray(lx) ? lx.length : 0; } catch(e) {}
   var nNotes = 0;
   try {
     for (var i = 0; i < localStorage.length; i++) {
@@ -24703,95 +24781,76 @@ function _homeRenderDashboard(skipCountUp) {
   var nEpisodes = 0;
   try { nEpisodes = Object.keys(JSON.parse(localStorage.getItem('lll_fav_episodes_v1') || '{}')).length; } catch(e) {}
 
-  // ── Compute platform counts ──
-  var nTotalEps = typeof COLLECTIONS_BY_ID !== 'undefined'
-    ? Object.values(COLLECTIONS_BY_ID).filter(function(c) { return c && (c.type === 'episode' || c.type === 'short'); }).length
-    : 0;
-  var nTotalCon = typeof CONCEPTS !== 'undefined' ? CONCEPTS.filter(function(c){ return !c.duplicate_of; }).length : 0;
+  // ── Personal stats — streak, this week, milestone ──
+  var streak = _homeComputeStreak();
+  var tsMap = {};
+  try { tsMap = JSON.parse(localStorage.getItem('lll_mastered_ts_v1') || '{}'); } catch(e) {}
+  var weekAgo = Date.now() - 7 * 86400000;
+  var thisWeekConcepts = Object.values(tsMap).filter(function(ts) { return Number(ts) > weekAgo; }).length;
+  var thisWeekWords = Array.isArray(lx) ? lx.filter(function(w) { return w && w.savedAt && w.savedAt > weekAgo; }).length : 0;
+  var thisWeekTotal = thisWeekConcepts + thisWeekWords;
+  var milestone = _homeNextMilestone(nSaved);
 
-  // ── Range toggle: resolve delta or totals ──
-  var snapshot = null;
-  var trackingNote = '';
-  if (_homeRange === 'week')  { snapshot = _homeGetSnapshot(7);  if (!snapshot) trackingNote = 'tracking started'; }
-  if (_homeRange === 'month') { snapshot = _homeGetSnapshot(30); if (!snapshot) trackingNote = 'tracking started'; }
+  // Populate personal stats row
+  var elStreak = document.getElementById('hpStreak');
+  var elStreakLabel = document.getElementById('hpStreakLabel');
+  var elWeek = document.getElementById('hpThisWeek');
+  var elWeekSub = document.getElementById('hpThisWeekSub');
+  var elMile = document.getElementById('hpMilestone');
+  var elMileLabel = document.getElementById('hpMilestoneLabel');
 
-  var showEpsVal, showConVal;
-  var epsLabel = '', conLabel = '';
-  if (_homeRange === 'all' || !snapshot) {
-    showEpsVal = nTotalEps;
-    showConVal = nTotalCon;
-    if (trackingNote && elNewEps) {
-      document.getElementById('hbNewEpsDelta').textContent = trackingNote;
-      document.getElementById('hbNewConceptsDelta').textContent = trackingNote;
+  if (elStreak) elStreak.textContent = streak > 0 ? streak : '—';
+  if (elStreakLabel) elStreakLabel.textContent = streak === 1 ? 'day streak' : streak > 1 ? 'day streak' : 'start today';
+  if (elWeek) elWeek.textContent = thisWeekTotal > 0 ? thisWeekTotal : '—';
+  if (elWeekSub) {
+    if (thisWeekConcepts > 0 && thisWeekWords > 0) {
+      elWeekSub.textContent = thisWeekConcepts + ' concepts · ' + thisWeekWords + ' words';
+    } else if (thisWeekConcepts > 0) {
+      elWeekSub.textContent = 'concepts';
+    } else if (thisWeekWords > 0) {
+      elWeekSub.textContent = 'words';
+    } else {
+      elWeekSub.textContent = '';
     }
+  }
+  if (milestone) {
+    if (elMile) elMile.textContent = milestone.left;
+    if (elMileLabel) elMileLabel.textContent = 'to ' + milestone.target + ' concepts';
   } else {
-    showEpsVal = Math.max(0, nTotalEps - (snapshot.epCount || 0));
-    showConVal = Math.max(0, nTotalCon - (snapshot.conceptCount || 0));
-    epsLabel = '+' + showEpsVal + ' added';
-    conLabel = '+' + showConVal + ' added';
+    if (elMile) { elMile.textContent = '✦'; elMile.style.fontSize = '1rem'; }
+    if (elMileLabel) elMileLabel.textContent = 'all milestones hit';
   }
 
-  // Delta labels for personal buckets (blank — personal changes don't use snapshots)
-  ['hbSavedDelta','hbWordsDelta','hbNotesDelta','hbEpisodesDelta'].forEach(function(id) {
-    var el = document.getElementById(id); if (el) el.textContent = '';
-  });
-
-  // Stats bar — platform numbers + range context inline — v3.25b
-  (function() {
-    var bar = document.getElementById('homeStatsBar');
-    if (!bar) return;
-    var epsNum  = document.getElementById('hbNewEps');
-    var conNum  = document.getElementById('hbNewConcepts');
-    // range note appended to bar
-    var existingNote = bar.querySelector('.stats-range-note');
-    if (existingNote) existingNote.remove();
-    var note = epsLabel || conLabel || trackingNote;
-    if (note) {
-      var span = document.createElement('span');
-      span.className = 'stats-range-note stats-sep';
-      span.style.color = trackingNote ? 'var(--muted)' : 'var(--accent)';
-      span.textContent = '· ' + note;
-      bar.appendChild(span);
-    }
-  })();
-
-  // ── Render values ──
-  var noMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  function setAll(progress) {
-    progress = (progress === undefined) ? 1 : progress;
-    elSaved.textContent    = Math.round(nSaved    * progress);
-    elWords.textContent    = Math.round(nWords    * progress);
-    elNotes.textContent    = Math.round(nNotes    * progress);
-    elEpisodes.textContent = Math.round(nEpisodes * progress);
-    if (elNewEps)  elNewEps.textContent  = Math.round(showEpsVal * progress);
-    if (elNewCon)  elNewCon.textContent  = Math.round(showConVal * progress);
-  }
-
-  // Compact strip — v3.23
+  // Compact strip
   (function() {
     var strip = document.getElementById('homeCompactStrip');
     if (!strip) return;
     strip.innerHTML =
+      '<span>' + nEpisodes + ' eps</span><span class="strip-sep">·</span>' +
       '<span>' + nSaved + ' concepts</span><span class="strip-sep">·</span>' +
-      '<span>' + nWords + ' words</span><span class="strip-sep">·</span>' +
-      '<span>' + nEpisodes + ' eps ♥</span>';
+      '<span>' + nWords + ' words</span>';
   })();
 
-  _homeRenderMomentum(); // v3.25
+  _homeRenderMomentum();
 
-  if (noMotion || skipCountUp) {
-    setAll(1);
-    return;
+  // ── Count-up animation ──
+  var noMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function setAll(p) {
+    p = (p === undefined) ? 1 : p;
+    elSaved.textContent    = Math.round(nSaved    * p);
+    elWords.textContent    = Math.round(nWords    * p);
+    elNotes.textContent    = Math.round(nNotes    * p);
+    elEpisodes.textContent = Math.round(nEpisodes * p);
   }
 
-  // Count-up: 600ms ease-out cubic — open only (not on range switch)
-  var duration = 600;
-  var start = performance.now();
+  if (noMotion || skipCountUp) { setAll(1); return; }
+
+  var duration = 600, start = performance.now();
   function tick(now) {
     var elapsed = Math.min(now - start, duration);
-    var progress = 1 - Math.pow(1 - elapsed / duration, 3);
-    setAll(progress);
+    var prog = 1 - Math.pow(1 - elapsed / duration, 3);
+    setAll(prog);
     if (elapsed < duration) requestAnimationFrame(tick);
     else setAll(1);
   }
