@@ -6,6 +6,16 @@
 
 ---
 
+## 2026-08-08 — Heatmap timestamps, YT thumbnails, panel._epActivePodcast state pattern (v3.39)
+
+**Heatmap timestamps: multiply by 1000 if stored as Unix seconds.** `lll_mastered_ts_v1` stores values as integer seconds (not milliseconds). `new Date(ts * 1000)` is correct. If values are already ms, `* 1000` produces dates in ~52000 AD. Always check what unit the timestamp is in before rendering.
+
+**YT thumbnail via URL regex — no API needed.** `url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([A-Za-z0-9_-]{11})/)` → `https://img.youtube.com/vi/{id}/mqdefault.jpg`. Free, no auth, works for all public YT videos. Add `onerror="this.style.display='none'"` for graceful fallback.
+
+**Panel-scoped filter state via `panel._epActivePodcast`.** Storing filter state on the DOM element itself (`panel._epActivePodcast = podcast`) avoids a module-level variable that persists across library open/close cycles. State is naturally reset when the panel is destroyed/re-created. Good pattern for transient UI state in panels that re-render from scratch.
+
+**`grid-column: 1 / -1` on a 2-col grid requires the parent to be `display: grid`.** The stats inner wrapper is already `display: grid; grid-template-columns: 1fr 1fr` so `grid-column: 1 / -1` works correctly. At `max-width: 520px` (1-col fallback) it still spans cleanly.
+
 ## 2026-08-08 — Bar chart % heights, grid bottom sheet, related preview positioning (v3.38)
 
 **Bar chart: `height: XX%` on flex children = always 0.** Percentage heights on flex children resolve to 0 when the flex parent has no definite height. Always use explicit pixel values for chart bars. Store in `data-h` attribute, animate via double-rAF.

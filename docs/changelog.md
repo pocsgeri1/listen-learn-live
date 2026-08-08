@@ -6,6 +6,20 @@
 
 ---
 
+## v3.39 — 2026-08-08 · Heatmap, episode thumbnails + podcast pills, vocab sheet, quick fixes
+
+### index.html
+- **Activity heatmap:** 12-week GitHub-style contribution grid added to Stats section. Each cell = one day, color intensity = concepts saved that day. Cascading stagger animation in. Full-width card (`grid-column: 1/-1`). Hover tooltip shows date + count. CSS variable intensity levels (`--hm0` → `--hm4`) themed for dark and light modes.
+- **Episode thumbnails:** YouTube video ID extracted from `episode_url` → `img.youtube.com/vi/{id}/mqdefault.jpg`. Graceful fallback to a colored initial letter placeholder. `onerror` hides broken images.
+- **Podcast filter pills:** When ≥3 podcasts are favorited, pills appear above the episode grid. Filters without re-fetching (client-side, `panel._epActivePodcast` state). Resets on library close.
+- **Episode concept hover popover:** Hovering a concept name in the episode detail shows `#epConceptPopover` with category color, term, and hook. Clicking navigates in-library via `_libNavToCard`. Replaces useless text-only list.
+- **Episode category dots:** Up to 4 colored dots below the title showing which categories dominate this episode's saved concepts.
+- **Episode tile layout:** Inner flex row — thumbnail | text | unfav button. Cleaner visual hierarchy.
+- **Related concept chip:** Changed from `_ccOpenRelated` (opens bottom panel) to `_libNavToCard(rid)` — navigates to the concept on the main grid, closes library cleanly.
+- **Collapsed strip centered:** Stats text now `justify-content: center`. Verbose "↑ Show dashboard" label removed. Arrow `↑` stays right via `position: absolute; right: 16px`.
+- **Vocab sheet — Practiced removed:** No manual practiced toggle. Practiced state auto-tags via Lexi session completion. Sheet now shows a `✓ practiced` pill (read-only) + single "Practice →" CTA only.
+- **Word Map → Lanes default:** `_wcViewMode = 'lanes'` on init. Active button class synced.
+
 ## v3.38 — 2026-08-08 · Vocab 2×2 grid, word sheet, related preview, episode accent, chart fixes
 
 ### index.html

@@ -9562,6 +9562,63 @@
   letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted);
 }
 
+/* ── Activity heatmap — v3.39 ──────────── */
+/* CSS variables for heatmap intensity levels */
+:root {
+  --hm0: rgba(232,213,163,0.06);
+  --hm1: rgba(232,213,163,0.22);
+  --hm2: rgba(232,213,163,0.45);
+  --hm3: rgba(232,213,163,0.70);
+  --hm4: rgba(232,213,163,0.95);
+}
+[data-theme="light"] {
+  --hm0: rgba(196,169,107,0.08);
+  --hm1: rgba(196,169,107,0.25);
+  --hm2: rgba(196,169,107,0.50);
+  --hm3: rgba(196,169,107,0.75);
+  --hm4: rgba(196,169,107,1.00);
+}
+.home-stat-card-full {
+  grid-column: 1 / -1; /* spans full width of the stats grid */
+}
+.home-heatmap {
+  display: flex; gap: 3px; flex-wrap: nowrap;
+  overflow-x: auto; scrollbar-width: none;
+  padding: 4px 0 2px;
+}
+.home-heatmap::-webkit-scrollbar { display: none; }
+.home-heatmap-week {
+  display: flex; flex-direction: column; gap: 3px; flex-shrink: 0;
+}
+.home-heatmap-day {
+  width: 11px; height: 11px; border-radius: 2px;
+  background: var(--hm0);
+  transition: transform 0.12s, opacity 0.12s;
+  cursor: default;
+  position: relative;
+}
+.home-heatmap-day:hover { transform: scale(1.35); opacity: 0.9; }
+.home-heatmap-day.hm1 { background: var(--hm1); }
+.home-heatmap-day.hm2 { background: var(--hm2); }
+.home-heatmap-day.hm3 { background: var(--hm3); }
+.home-heatmap-day.hm4 { background: var(--hm4); }
+.home-heatmap-day.hm-today { box-shadow: 0 0 0 1px var(--accent); }
+.home-heatmap-legend {
+  display: flex; align-items: center; gap: 3px;
+  margin-top: 6px; justify-content: flex-end;
+}
+.home-heatmap-legend-label {
+  font-family: 'DM Mono', monospace; font-size: 0.38rem;
+  letter-spacing: 0.1em; color: var(--muted); text-transform: uppercase;
+  margin: 0 2px;
+}
+.home-heatmap-cell {
+  width: 9px; height: 9px; border-radius: 2px; display: inline-block;
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-heatmap-day { transition: none; }
+}
+
 /* 7-day bar chart — v3.36 pill bars */
 .home-bar-chart {
   display: flex; align-items: flex-end; justify-content: space-between;
@@ -9663,7 +9720,8 @@
   top: 0; left: 0; right: 0;
   display: flex;
   align-items: center;
-  padding: 0 20px;
+  justify-content: center;
+  padding: 0 44px; /* room for ↑ arrow on right */
   font-family: 'DM Mono', monospace;
   font-size: 0.58rem;
   letter-spacing: 0.08em;
@@ -9684,7 +9742,8 @@
 .home-compact-strip:hover { color: var(--muted); }
 .home-compact-strip::after {
   content: '↑';
-  margin-left: auto;
+  position: absolute;
+  right: 16px;
   font-size: 0.6rem;
   color: var(--accent);
   opacity: 0.6;
@@ -10011,16 +10070,78 @@
   .ep-fav-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
-/* Episode tile — color accent strip — v3.38 */
+/* Episode tile — v3.38/3.39 */
 .ep-fav-tile {
   border-left: 2.5px solid transparent;
   transition: border-color 0.2s, border-left-color 0.2s, background 0.15s;
+  overflow: hidden;
 }
+.ep-fav-tile-inner {
+  display: flex; gap: 10px; align-items: flex-start;
+}
+.ep-fav-tile-thumb {
+  width: 52px; height: 52px; border-radius: 6px;
+  object-fit: cover; flex-shrink: 0;
+  background: var(--surface2);
+}
+.ep-fav-tile-thumb-placeholder {
+  width: 52px; height: 52px; border-radius: 6px;
+  flex-shrink: 0; background: var(--surface2);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Playfair Display', serif; font-size: 1.1rem;
+  color: var(--muted); font-weight: 700; letter-spacing: -0.02em;
+}
+.ep-fav-tile-text { flex: 1; min-width: 0; }
 .ep-fav-tile-podcast-tag {
   font-family: 'DM Mono', monospace;
   font-size: 0.44rem; letter-spacing: 0.12em; text-transform: uppercase;
-  color: var(--muted); margin-bottom: 4px;
+  color: var(--muted); margin-bottom: 3px;
 }
+/* Category dots strip */
+.ep-cat-dots {
+  display: flex; gap: 3px; margin-top: 5px; flex-wrap: wrap;
+}
+.ep-cat-dot {
+  width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
+}
+/* Podcast filter pills — v3.39 */
+.ep-podcast-pills {
+  display: flex; gap: 6px; padding: 10px 16px 4px;
+  overflow-x: auto; scrollbar-width: none; flex-shrink: 0;
+}
+.ep-podcast-pills::-webkit-scrollbar { display: none; }
+.ep-podcast-pill {
+  flex-shrink: 0; padding: 4px 11px;
+  border: 0.5px solid var(--border); border-radius: 20px;
+  font-family: 'DM Mono', monospace; font-size: 0.46rem;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--muted); background: none; cursor: pointer;
+  transition: color 0.14s, border-color 0.14s, background 0.14s;
+  white-space: nowrap;
+}
+.ep-podcast-pill:hover { color: var(--muted2); border-color: var(--border-hover); }
+.ep-podcast-pill.active { color: var(--accent); border-color: var(--accent); background: rgba(232,213,163,0.07); }
+[data-theme="light"] .ep-podcast-pill.active { color: var(--accent2); border-color: var(--accent2); }
+/* Concept popover inside episode tile detail */
+.ep-concept-popover {
+  position: fixed; z-index: 1850;
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: 10px; padding: 11px 14px;
+  max-width: 240px; pointer-events: none;
+  opacity: 0; transform: translateY(4px);
+  transition: opacity 0.18s, transform 0.18s;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.4);
+}
+.ep-concept-popover.ecp-visible { opacity: 1; transform: translateY(0); }
+.ecp-cat { font-family: 'DM Mono', monospace; font-size: 0.4rem; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 3px; }
+.ecp-term { font-family: 'Playfair Display', serif; font-size: 0.82rem; color: var(--text); line-height: 1.25; margin-bottom: 4px; }
+.ecp-hook { font-family: 'DM Sans', sans-serif; font-size: 0.66rem; color: var(--muted2); line-height: 1.4; }
+.ep-tile-concept-item {
+  cursor: pointer;
+  transition: color 0.14s;
+}
+.ep-tile-concept-item:hover { color: var(--accent); }
 
 /* ── Related concept hover preview — v3.38 ──────────── */
 #relConPreview {
@@ -10627,7 +10748,13 @@
   color: var(--muted); margin-bottom: 16px;
 }
 .vws-actions {
-  display: flex; gap: 8px; flex-wrap: wrap; padding-top: 4px;
+  display: flex; gap: 8px; flex-wrap: wrap; padding-top: 4px; align-items: center;
+}
+.vws-practiced-pill {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.46rem; letter-spacing: 0.08em; text-transform: uppercase;
+  color: #7aaf8a; border: 0.5px solid rgba(122,175,138,0.35);
+  border-radius: 20px; padding: 4px 10px; white-space: nowrap;
 }
 .vocab-tile-action-btn {
   font-family: 'DM Mono', monospace; font-size: 0.5rem; letter-spacing: 0.07em;
@@ -13544,6 +13671,20 @@
         <div class="home-donut-wrap">
           <svg class="home-donut-svg" id="homeDonutSvg" width="72" height="72" viewBox="0 0 72 72"></svg>
           <div class="home-donut-legend" id="homeDonutLegend"></div>
+        </div>
+      </div>
+      <!-- Activity heatmap — v3.39 -->
+      <div class="home-stat-card home-stat-card-full" id="homeHeatmapCard">
+        <div class="home-stat-card-title">Activity — last 12 weeks</div>
+        <div class="home-heatmap" id="homeHeatmap"></div>
+        <div class="home-heatmap-legend">
+          <span class="home-heatmap-legend-label">Less</span>
+          <span class="home-heatmap-cell" style="background:var(--hm0)"></span>
+          <span class="home-heatmap-cell" style="background:var(--hm1)"></span>
+          <span class="home-heatmap-cell" style="background:var(--hm2)"></span>
+          <span class="home-heatmap-cell" style="background:var(--hm3)"></span>
+          <span class="home-heatmap-cell" style="background:var(--hm4)"></span>
+          <span class="home-heatmap-legend-label">More</span>
         </div>
       </div>
       <!-- Goal card removed v3.36 — goal is now always-visible above stats toggle -->
@@ -25020,7 +25161,7 @@ function _libToggleSaved(id, el) {
       var rc = CONCEPTS && CONCEPTS.find(function(x) { return x.id === rid; });
       if (!rc) return '';
       var rColor = (typeof CAT_COLOR !== 'undefined' && CAT_COLOR[rc.category]) || 'var(--accent)';
-      return '<button class="lib-detail-chip" style="border-color:' + rColor + '20;color:' + rColor + '" onmouseenter="_rcpShow(this,' + rc.id + ')" onmouseleave="_rcpHide()" onclick="closeLibrary();setTimeout(function(){_ccOpenRelated(' + id + ');},80)">' + _esc(rc.term) + '</button>';
+      return '<button class="lib-detail-chip" style="border-color:' + rColor + '20;color:' + rColor + '" onmouseenter="_rcpShow(this,' + rc.id + ')" onmouseleave="_rcpHide()" onclick="_libNavToCard(' + rc.id + ')">' + _esc(rc.term) + '</button>';
     }).filter(Boolean).join('');
     if (chips) {
       relatedChipsHtml = '<div style="margin-bottom:10px"><div class="lib-detail-label" style="margin-bottom:6px">Related</div><div class="lib-detail-related-chips">' + chips + '</div></div>';
@@ -25149,38 +25290,88 @@ function _libRenderEpisodes() {
     return;
   }
 
-  // Fav tiles
+  // Fav tiles — v3.39: podcast pills, thumbnails, category dots, concept hover popover
   var masteredTs = {};
   try { masteredTs = JSON.parse(localStorage.getItem('lll_mastered_ts_v1') || '{}'); } catch(e) {}
   var lexicon = [];
   try { lexicon = JSON.parse(localStorage.getItem('lll_lexicon_v1') || '[]'); } catch(e) {}
 
-  var tilesHtml = '<div class="ep-fav-grid">' +
-    favCols.map(function(col, i) {
-      // Cross-stats: saved concepts + words for this episode
-      var savedCount = 0;
-      var wordsCount = 0;
+  // Podcast filter pills
+  var _epActivePodcast = panel._epActivePodcast || 'All';
+  var podcasts = ['All'];
+  favCols.forEach(function(col) {
+    if (col.podcast && podcasts.indexOf(col.podcast) === -1) podcasts.push(col.podcast);
+  });
+  var pillsHtml = podcasts.length > 2
+    ? '<div class="ep-podcast-pills">' +
+        podcasts.map(function(p) {
+          return '<button class="ep-podcast-pill' + (p === _epActivePodcast ? ' active' : '') +
+            '" onclick="event.stopPropagation();_epSetPodcastFilter(\'' + p.replace(/'/g,"\\'") + '\')">' +
+            p.replace(/</g,'&lt;') + '</button>';
+        }).join('') +
+      '</div>'
+    : '';
+
+  // Filter by active podcast
+  var displayCols = _epActivePodcast === 'All'
+    ? favCols
+    : favCols.filter(function(col) { return col.podcast === _epActivePodcast; });
+
+  // Helper: extract YouTube video ID from URL
+  function _ytThumb(url) {
+    if (!url) return null;
+    var m = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+    return m ? 'https://img.youtube.com/vi/' + m[1] + '/mqdefault.jpg' : null;
+  }
+
+  var tilesHtml = pillsHtml + '<div class="ep-fav-grid">' +
+    displayCols.map(function(col, i) {
+      var savedCount = 0, wordsCount = 0;
+      var catCounts = {};
       if (typeof CONCEPTS !== 'undefined') {
         CONCEPTS.forEach(function(c) {
-          if (c.collection_id === col.id && masteredTs[c.id]) savedCount++;
+          if (c.collection_id === col.id && masteredTs[c.id]) {
+            savedCount++;
+            if (c.category) catCounts[c.category] = (catCounts[c.category] || 0) + 1;
+          }
         });
       }
       if (Array.isArray(lexicon)) {
-        lexicon.forEach(function(w) {
-          if (w && w.collection_id === col.id) wordsCount++;
-        });
+        lexicon.forEach(function(w) { if (w && w.collection_id === col.id) wordsCount++; });
       }
-      var statsLine = (savedCount > 0 || wordsCount > 0)
-        ? (savedCount > 0 ? savedCount + ' concept' + (savedCount !== 1 ? 's' : '') : '') +
-          (savedCount > 0 && wordsCount > 0 ? ' \u00b7 ' : '') +
-          (wordsCount > 0 ? wordsCount + ' word' + (wordsCount !== 1 ? 's' : '') : '') + ' kept'
-        : '';
+
       var favTs = favs[col.id];
       var favDateStr = favTs ? _epRelativeDate(favTs) : '';
       var delay = Math.min(i * 40, 300);
 
-      // Saved concepts for this episode
-      var epConcepts = (typeof CONCEPTS !== 'undefined')
+      // Thumbnail
+      var thumbUrl = _ytThumb(col.episode_url);
+      var thumbHtml = thumbUrl
+        ? '<img class="ep-fav-tile-thumb" src="' + thumbUrl + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">'
+        : '<div class="ep-fav-tile-thumb-placeholder">' + (col.podcast || '?').charAt(0).toUpperCase() + '</div>';
+
+      // Category dots (top 4 categories by count)
+      var topCats = Object.keys(catCounts).sort(function(a,b){return catCounts[b]-catCounts[a];}).slice(0,4);
+      var dotsHtml = topCats.length
+        ? '<div class="ep-cat-dots">' +
+            topCats.map(function(cat) {
+              var color = (typeof CAT_COLOR !== 'undefined' && CAT_COLOR[cat]) || 'var(--muted)';
+              return '<div class="ep-cat-dot" style="background:' + color + '" title="' + cat + '"></div>';
+            }).join('') +
+          '</div>'
+        : '';
+
+      // Stats line
+      var statsLine = savedCount > 0 || wordsCount > 0
+        ? '<div class="ep-fav-tile-stats">' +
+            (savedCount > 0 ? savedCount + ' concept' + (savedCount !== 1 ? 's' : '') : '') +
+            (savedCount > 0 && wordsCount > 0 ? ' \u00b7 ' : '') +
+            (wordsCount > 0 ? wordsCount + ' word' + (wordsCount !== 1 ? 's' : '') : '') + ' kept' +
+          '</div>'
+        : '';
+
+      // Saved concepts — with hover popover
+      var epConcepts = typeof CONCEPTS !== 'undefined'
         ? CONCEPTS.filter(function(c) { return c.collection_id === col.id && masteredTs[c.id]; })
         : [];
       var epWords = Array.isArray(lexicon)
@@ -25188,29 +25379,58 @@ function _libRenderEpisodes() {
         : [];
       var hasItems = epConcepts.length > 0 || epWords.length > 0;
 
-      var detailHtml = hasItems ? '<div class="ep-tile-detail"><div class="ep-tile-detail-inner">' +
-        (epConcepts.length ? '<div class="ep-tile-detail-section">Concepts kept</div><div class="ep-tile-saved-concepts">' +
-          epConcepts.slice(0, 6).map(function(c) { return '<div class="ep-tile-concept-item" onclick="event.stopPropagation();_libNavToCard(' + c.id + ')" title="View concept card" style="cursor:pointer">' + (c.term || '').replace(/</g,'&lt;') + '</div>'; }).join('') +
-          (epConcepts.length > 6 ? '<div class="ep-tile-concept-item" style="color:var(--muted);font-style:normal">+' + (epConcepts.length - 6) + ' more</div>' : '') +
-        '</div>' : '') +
-        (epWords.length ? '<div class="ep-tile-detail-section">Words saved</div><div class="ep-tile-words">' +
-          epWords.slice(0, 8).map(function(w) { return '<span class="ep-tile-word-chip">' + (w.word || w.term || '').replace(/</g,'&lt;') + '</span>'; }).join('') +
-          (epWords.length > 8 ? '<span class="ep-tile-word-chip">+' + (epWords.length - 8) + '</span>' : '') +
-        '</div>' : '') +
-        '<button class="ep-tile-open-btn" onclick="event.stopPropagation();closeLibrary();setTimeout(function(){openEpisodeDrawer(' + col.id + ');},80)">Open episode →</button>' +
-      '</div></div>' : '';
+      var detailHtml = hasItems
+        ? '<div class="ep-tile-detail"><div class="ep-tile-detail-inner">' +
+            (epConcepts.length
+              ? '<div class="ep-tile-detail-section">Concepts kept</div>' +
+                '<div class="ep-tile-saved-concepts">' +
+                  epConcepts.slice(0, 8).map(function(c) {
+                    return '<div class="ep-tile-concept-item"' +
+                      ' onmouseenter="event.stopPropagation();_ecpShow(this,' + c.id + ')"' +
+                      ' onmouseleave="_ecpHide()"' +
+                      ' onclick="event.stopPropagation();_libNavToCard(' + c.id + ')">' +
+                      (c.term || '').replace(/</g,'&lt;') +
+                    '</div>';
+                  }).join('') +
+                  (epConcepts.length > 8 ? '<div class="ep-tile-concept-item" style="color:var(--muted)">+' + (epConcepts.length - 8) + ' more</div>' : '') +
+                '</div>'
+              : '') +
+            (epWords.length
+              ? '<div class="ep-tile-detail-section">Words saved</div>' +
+                '<div class="ep-tile-words">' +
+                  epWords.slice(0, 8).map(function(w) {
+                    return '<span class="ep-tile-word-chip">' + (w.word || w.term || '').replace(/</g,'&lt;') + '</span>';
+                  }).join('') +
+                  (epWords.length > 8 ? '<span class="ep-tile-word-chip">+' + (epWords.length - 8) + '</span>' : '') +
+                '</div>'
+              : '') +
+            '<button class="ep-tile-open-btn" onclick="event.stopPropagation();closeLibrary();setTimeout(function(){openEpisodeDrawer(' + col.id + ');},80)">Open episode →</button>' +
+          '</div></div>'
+        : '';
 
       var clickAction = hasItems
         ? '_libEpToggleTile(' + col.id + ', this)'
         : 'closeLibrary();setTimeout(function(){openEpisodeDrawer(' + col.id + ');},80)';
 
-      var podTag = col.podcast ? '<div class="ep-fav-tile-podcast-tag">' + col.podcast.replace(/</g,'&lt;') + (favDateStr ? ' \u00b7 ' + favDateStr : '') + '</div>' : '';
+      var podTag = col.podcast
+        ? '<div class="ep-fav-tile-podcast-tag">' + col.podcast.replace(/</g,'&lt;') + (favDateStr ? ' \u00b7 ' + favDateStr : '') + '</div>'
+        : '';
+
+      var ds = col.aired_date || col.created_date || '';
+      var dateStr = ds ? new Date(ds).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' }).toUpperCase() : '';
+
       return '<div class="ep-fav-tile" id="ept-' + col.id + '" style="animation-delay:' + delay + 'ms" onclick="' + clickAction + '">' +
-        podTag +
-        '<div class="ep-fav-tile-title">' + (col.title || '').replace(/</g,'&lt;') + '</div>' +
-        (statsLine ? '<div class="ep-fav-tile-stats">' + statsLine + '</div>' : '') +
-        '<div class="ep-fav-tile-actions">' +
-          '<button class="ep-fav-tile-unfav" title="Remove from favourites" onclick="event.stopPropagation();_epToggleFav(' + col.id + ');_libShowToast(\'Removed from favourites\')">\u2665</button>' +
+        '<div class="ep-fav-tile-inner">' +
+          thumbHtml +
+          '<div class="ep-fav-tile-text">' +
+            podTag +
+            '<div class="ep-fav-tile-title">' + (col.title || '').replace(/</g,'&lt;') + '</div>' +
+            statsLine +
+            dotsHtml +
+          '</div>' +
+          '<div style="margin-left:auto;flex-shrink:0">' +
+            '<button class="ep-fav-tile-unfav" title="Remove from favourites" onclick="event.stopPropagation();_epToggleFav(' + col.id + ');_libShowToast(\'Removed from favourites\')">\u2665</button>' +
+          '</div>' +
         '</div>' +
         detailHtml +
       '</div>';
@@ -25468,15 +25688,18 @@ function _vwsOpen(idx) {
   }
 
   var wordEsc = word.replace(/'/g,"\\'");
+  // Practiced state shows as a pill label — no manual toggle button needed.
+  // Auto-marks practiced when Lexi session completes.
+  var practicedPill = practiced
+    ? '<span class="vws-practiced-pill">✓ practiced</span>'
+    : '';
   bodyEl.innerHTML =
     (defSafe ? '<div class="vws-def">' + defSafe + '</div>' : '') +
     (srcSafe ? '<div class="vws-source">' + srcSafe + '</div>' : '') +
     phHtml +
     '<div class="vws-actions">' +
-      '<button class="vocab-tile-action-btn' + (practiced ? ' practiced' : '') + '" id="vwsPracBtn" onclick="_vwsMarkPracticed(\'' + wordEsc + '\')">' +
-        (practiced ? '✓ Practiced' : 'Mark practiced') +
-      '</button>' +
-      '<button class="vocab-tile-action-btn vocab-tile-action-practice" onclick="_vwsPracticeNow(\'' + wordEsc + '\')">Practice now →</button>' +
+      practicedPill +
+      '<button class="vocab-tile-action-btn vocab-tile-action-practice" onclick="_vwsPracticeNow(\'' + wordEsc + '\')">Practice →</button>' +
     '</div>';
 
   var bg = document.getElementById('vocabWordSheetBg');
@@ -25555,6 +25778,50 @@ function _libVocabPracticeWord(word) {
       _lexiStartSession(word);
     });
   });
+}
+
+/* ── Episode podcast filter — v3.39 ──────────── */
+function _epSetPodcastFilter(podcast) {
+  var panel = document.getElementById('libPanel-episodes');
+  if (!panel) return;
+  panel._epActivePodcast = podcast;
+  _libRenderEpisodes();
+}
+
+/* ── Episode concept popover — v3.39 ──────────── */
+var _ecpHideTimer = null;
+function _ecpShow(el, conceptId) {
+  if (_ecpHideTimer) { clearTimeout(_ecpHideTimer); _ecpHideTimer = null; }
+  var c = CONCEPTS && CONCEPTS.find(function(x) { return x.id === conceptId; });
+  if (!c) return;
+  var pop  = document.getElementById('epConceptPopover');
+  var catEl = document.getElementById('ecpCat');
+  var termEl = document.getElementById('ecpTerm');
+  var hookEl = document.getElementById('ecpHook');
+  if (!pop || !catEl || !termEl || !hookEl) return;
+  var color = (typeof CAT_COLOR !== 'undefined' && CAT_COLOR[c.category]) || 'var(--accent)';
+  catEl.textContent = (c.category || '').toUpperCase();
+  catEl.style.color = color;
+  termEl.textContent = c.term || '';
+  hookEl.textContent = c.hook || '';
+  var rect = el.getBoundingClientRect();
+  var pw = 240;
+  var left = Math.max(8, Math.min(rect.left, window.innerWidth - pw - 8));
+  pop.style.left = left + 'px';
+  pop.style.top  = rect.top + 'px'; // temp, will correct after measure
+  pop.style.width = pw + 'px';
+  pop.classList.remove('ecp-visible');
+  requestAnimationFrame(function() {
+    var ph = pop.offsetHeight;
+    pop.style.top = (rect.top - ph - 8) + 'px';
+    pop.classList.add('ecp-visible');
+  });
+}
+function _ecpHide() {
+  _ecpHideTimer = setTimeout(function() {
+    var pop = document.getElementById('epConceptPopover');
+    if (pop) pop.classList.remove('ecp-visible');
+  }, 120);
 }
 
 /* ── Related concept hover preview — v3.38 ──────────── */
@@ -25906,7 +26173,6 @@ function _homeRenderDashboard(skipCountUp) {
   var strip = document.getElementById('homeCompactStrip');
   if (strip) {
     strip.innerHTML =
-      '<span style="font-size:0.55rem;letter-spacing:0.08em;opacity:0.5;margin-right:8px;text-transform:uppercase;font-family:\'DM Mono\',monospace">↑ Show dashboard</span>' +
       '<span>' + nSaved + ' concepts</span><span class="strip-sep">·</span>' +
       '<span>' + nWords + ' words</span><span class="strip-sep">·</span>' +
       '<span>' + nEpisodes + ' eps ♥</span>';
@@ -25950,6 +26216,7 @@ function _homeToggleStats() {
 function _homeRenderStats() {
   _homeRenderBarChart();
   _homeRenderDonut();
+  _homeRenderHeatmap(); // v3.39
   // Goal moved to always-visible strip above stats toggle (v3.36)
 }
 
@@ -26072,6 +26339,85 @@ function _homeRenderDonut() {
     legendRows.push('<div class="home-donut-row"><div class="home-donut-dot" style="background:var(--muted)"></div><div class="home-donut-cat">other</div><div class="home-donut-pct">' + Math.max(1, otherPct) + '%</div></div>');
   }
   legend.innerHTML = legendRows.join('');
+}
+
+/* ── Activity heatmap — v3.39 ──────────── */
+/* Renders a 12-week (84-day) GitHub-style contribution grid.
+   Data source: lll_mastered_ts_v1 (concept save timestamps).
+   Each cell = one day. Color intensity = number of concepts saved that day. */
+function _homeRenderHeatmap() {
+  var el = document.getElementById('homeHeatmap');
+  if (!el) return;
+
+  var tsMap = {};
+  try { tsMap = JSON.parse(localStorage.getItem('lll_mastered_ts_v1') || '{}'); } catch(e) {}
+
+  // Build a map of dayKey → count (dayKey = 'YYYY-MM-DD')
+  var dayCounts = {};
+  Object.values(tsMap).forEach(function(ts) {
+    if (!ts) return;
+    var d = new Date(typeof ts === 'number' ? ts * 1000 : ts);
+    if (isNaN(d)) return;
+    var key = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+    dayCounts[key] = (dayCounts[key] || 0) + 1;
+  });
+
+  // Build 12 weeks ending today, starting on Sunday
+  var today = new Date();
+  today.setHours(0,0,0,0);
+  var todayKey = today.getFullYear() + '-' + String(today.getMonth()+1).padStart(2,'0') + '-' + String(today.getDate()).padStart(2,'0');
+
+  // Start: go back to last Sunday, then back 11 more weeks = 84 days total
+  var startDay = new Date(today);
+  startDay.setDate(startDay.getDate() - startDay.getDay()); // this Sunday
+  startDay.setDate(startDay.getDate() - 11 * 7);           // 11 weeks back
+
+  // Find max count for intensity scaling
+  var maxCount = Math.max(1, Math.max.apply(null, Object.values(dayCounts).concat([0])));
+
+  // Build weeks array
+  var weeks = [];
+  var cur = new Date(startDay);
+  for (var w = 0; w < 12; w++) {
+    var week = [];
+    for (var d = 0; d < 7; d++) {
+      var key = cur.getFullYear() + '-' + String(cur.getMonth()+1).padStart(2,'0') + '-' + String(cur.getDate()).padStart(2,'0');
+      var count = dayCounts[key] || 0;
+      var level = count === 0 ? 0 : Math.min(4, Math.ceil(count / maxCount * 4));
+      week.push({ key: key, count: count, level: level, isToday: key === todayKey });
+      cur.setDate(cur.getDate() + 1);
+    }
+    weeks.push(week);
+  }
+
+  // Render
+  var noMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  el.innerHTML = weeks.map(function(week, wi) {
+    return '<div class="home-heatmap-week">' +
+      week.map(function(day) {
+        var cls = 'home-heatmap-day' + (day.level > 0 ? ' hm' + day.level : '') + (day.isToday ? ' hm-today' : '');
+        var label = day.count > 0 ? day.key + ': ' + day.count + ' concept' + (day.count !== 1 ? 's' : '') : day.key;
+        return '<div class="' + cls + '" title="' + label + '" style="opacity:0;transform:scale(0.5)"></div>';
+      }).join('') +
+    '</div>';
+  }).join('');
+
+  // Animate in — stagger by week
+  if (!noMotion) {
+    el.querySelectorAll('.home-heatmap-week').forEach(function(week, wi) {
+      setTimeout(function() {
+        week.querySelectorAll('.home-heatmap-day').forEach(function(cell) {
+          cell.style.transition = 'opacity 0.3s ease, transform 0.3s cubic-bezier(0.16,1,0.3,1)';
+          cell.style.opacity = '1';
+          cell.style.transform = 'scale(1)';
+        });
+      }, wi * 30);
+    });
+  } else {
+    el.querySelectorAll('.home-heatmap-day').forEach(function(cell) {
+      cell.style.opacity = '1'; cell.style.transform = 'scale(1)';
+    });
+  }
 }
 
 function _homeRenderGoal() {
@@ -31382,6 +31728,13 @@ body.corner-panel-open .stories-panel {
   <div class="vws-body" id="vwsBody"></div>
 </div>
 
+<!-- Episode concept popover — v3.39 -->
+<div id="epConceptPopover" class="ep-concept-popover" aria-hidden="true">
+  <div class="ecp-cat" id="ecpCat"></div>
+  <div class="ecp-term" id="ecpTerm"></div>
+  <div class="ecp-hook" id="ecpHook"></div>
+</div>
+
 <!-- Related concept hover preview — v3.38 -->
 <div id="relConPreview" aria-hidden="true">
   <div class="rcp-cat" id="rcpCat"></div>
@@ -35451,9 +35804,14 @@ function _openConstellationView(source) {
     _wcWords = _buildGlobalVocabIndex();
     _wcActiveCat = 'All';
     _wcActiveLetter = null;
-    _wcViewMode  = 'free';
+    _wcViewMode  = 'lanes'; // v3.39: default to lanes view
     _wcBuildFilterPills();
     _wcBuildAlphaBar(_wcWords);
+    // Sync view buttons to default
+    var freeBtn  = document.getElementById('wcViewFree');
+    var lanesBtn = document.getElementById('wcViewLanes');
+    if (freeBtn)  freeBtn.classList.remove('active');
+    if (lanesBtn) lanesBtn.classList.add('active');
     _wcDetectAndRender();
   }).catch(function() {
     var stage = document.getElementById('wcStage');
