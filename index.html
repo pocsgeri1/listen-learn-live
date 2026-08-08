@@ -9202,139 +9202,89 @@
   border-bottom: 0.5px solid var(--border);
 }
 
-/* ── Eyebrow row — v3.29 ── */
-.home-range-row {
-  display: flex;
-  align-items: center;
-  padding: 8px 16px 7px;
-  border-bottom: 0.5px solid var(--border);
-}
-.home-dash-eyebrow {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.44rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--muted);
-  opacity: 0.5;
-}
-/* Range toggle hidden — v3.29: replaced by personal stats */
-.home-range-toggle { display: none; }
+/* ── Dashboard hero — v3.30 ── */
+.home-range-row { display: none; } /* eyebrow removed */
+.home-buckets, .home-personal-stats, .home-stats-bar { display: none; } /* legacy grids gone */
 
-/* ── Personal buckets — 4-col, hover top-shine — v3.29 ── */
-.home-buckets {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  border-bottom: 0.5px solid var(--border);
-}
-.home-bucket {
+.home-dashboard {
   display: flex;
   flex-direction: column;
-  padding: 20px 16px 16px;
-  border-right: 0.5px solid var(--border);
-  cursor: pointer;
-  position: relative;
-  transition: background 0.22s ease;
-  overflow: hidden;
+  align-items: center;
+  text-align: center;
+  padding: 32px 24px 0;
+  border-bottom: 0.5px solid var(--border);
 }
-.home-bucket:last-child { border-right: none; }
 
-/* Top-border shine — expands from center on hover */
-.home-bucket::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-  background: var(--bucket-accent, var(--accent));
-  transform: scaleX(0);
-  transform-origin: center;
-  transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.home-bucket:hover::before { transform: scaleX(1); }
-.home-bucket:hover { background: color-mix(in srgb, var(--bucket-accent, var(--accent)) 4%, transparent); }
-
-.home-bucket-num {
+/* Hero number — concept count */
+.home-hero-num {
   font-family: 'Playfair Display', serif;
-  font-size: 2.6rem;
+  font-size: 5rem;
   font-weight: 700;
   color: var(--text);
   line-height: 1;
-  display: block;
-  transition: color 0.22s ease, transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.15s ease;
+  letter-spacing: -0.02em;
+  transition: opacity 0.15s ease;
 }
-.home-bucket:hover .home-bucket-num {
-  color: var(--bucket-accent, var(--accent));
-  transform: translateY(-3px);
-}
-.home-bucket-label {
+.home-hero-num.fading { opacity: 0; }
+.home-hero-label {
   font-family: 'DM Mono', monospace;
-  font-size: 0.43rem;
-  letter-spacing: 0.16em;
+  font-size: 0.44rem;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--muted);
   margin-top: 10px;
-  white-space: nowrap;
-  transition: color 0.2s ease;
-}
-.home-bucket:hover .home-bucket-label { color: var(--muted2); }
-.home-bucket-delta { display: none; } /* delta removed v3.29 */
-
-@media (hover: none) {
-  .home-bucket::before { display: none; }
-  .home-bucket:hover { background: none; }
-  .home-bucket:hover .home-bucket-num { color: var(--text); transform: none; }
 }
 
-/* ── Personal stats row — v3.29 ── */
-.home-personal-stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  border-bottom: 0.5px solid var(--border);
+/* Activity line — "7 this week · 5-day streak" */
+.home-hero-activity {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.48rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-top: 14px;
+  min-height: 14px;
 }
-.home-stat-cell {
+
+/* Secondary nav: words · eps · notes — tappable inline */
+.home-hero-secondary {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 11px 8px 10px;
-  border-right: 0.5px solid var(--border);
-  text-align: center;
-  gap: 3px;
+  gap: 0;
+  margin-top: 16px;
+  flex-wrap: wrap;
 }
-.home-stat-cell:last-child { border-right: none; }
-.home-stat-num {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.35rem;
-  font-weight: 700;
-  color: var(--text);
-  line-height: 1;
-}
-.home-stat-num.accent { color: var(--accent); }
-.home-stat-label {
+.home-sec-item {
   font-family: 'DM Mono', monospace;
-  font-size: 0.41rem;
-  letter-spacing: 0.12em;
+  font-size: 0.5rem;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--muted);
-  line-height: 1.3;
+  cursor: pointer;
+  padding: 5px 12px;
+  border-radius: 20px;
+  transition: color 0.14s, background 0.14s;
+  white-space: nowrap;
 }
-.home-stat-sub {
+.home-sec-item:hover { color: var(--text); background: var(--surface2); }
+.home-sec-sep {
   font-family: 'DM Mono', monospace;
-  font-size: 0.38rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--muted);
-  opacity: 0.55;
+  font-size: 0.44rem;
+  color: var(--border-hover);
+  user-select: none;
 }
 
-/* ── Momentum line ── */
+/* Momentum copy */
 .home-momentum {
   font-family: 'DM Sans', sans-serif;
   font-size: 0.7rem;
   font-style: italic;
   color: var(--muted2);
-  padding: 8px 18px 10px;
-  line-height: 1.45;
-  border-bottom: 0.5px solid var(--border);
+  margin-top: 14px;
+  padding: 0 8px 20px;
+  line-height: 1.5;
+  max-width: 320px;
 }
 .home-momentum em {
   font-family: 'Playfair Display', serif;
@@ -9344,31 +9294,6 @@
   font-weight: 700;
 }
 [data-theme="light"] .home-momentum { color: var(--muted); }
-
-/* Mobile — 2×2 buckets + stacked stats */
-@media (max-width: 600px) {
-  .home-buckets { grid-template-columns: repeat(2, 1fr); }
-  .home-bucket { padding: 16px 14px 13px; }
-  .home-bucket:nth-child(2) { border-right: none; }
-  .home-bucket:nth-child(1),
-  .home-bucket:nth-child(2) { border-bottom: 0.5px solid var(--border); }
-  .home-bucket-num { font-size: 2.1rem; }
-  .home-personal-stats { grid-template-columns: repeat(3, 1fr); }
-  .home-stat-num { font-size: 1.1rem; }
-}
-
-/* Bucket number count-up fade */
-.home-bucket-num.fading { opacity: 0; }
-.home-bucket-num { transition: opacity 0.15s ease, color 0.22s ease, transform 0.22s cubic-bezier(0.34,1.56,0.64,1); }
-@media (prefers-reduced-motion: reduce) {
-  .home-bucket::before { transition: none !important; }
-  .home-bucket-num { transition: none !important; }
-  .home-bucket-num.fading { opacity: 1; }
-  .home-bucket:hover .home-bucket-num { transform: none; }
-}
-
-/* Legacy stats bar hidden */
-.home-stats-bar { display: none; }
 
 /* ── Phase 7: scroll-collapse wrapper — v3.25 smooth ── */
 .home-collapse-wrap {
@@ -9942,6 +9867,27 @@
   padding: 10px 20px 0;
   flex-shrink: 0;
 }
+/* ── Concepts search — v3.30 ── */
+.lib-search-wrap {
+  padding: 8px 20px 0;
+  flex-shrink: 0;
+}
+.lib-search-input {
+  width: 100%;
+  box-sizing: border-box;
+  background: none;
+  border: none;
+  border-bottom: 0.5px solid var(--border);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.78rem;
+  padding: 6px 0 7px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.lib-search-input:focus { border-bottom-color: var(--accent); }
+.lib-search-input::placeholder { color: var(--muted); font-style: italic; font-size: 0.72rem; }
+
 /* ── Concepts filter row — v3.26 ──────────────────── */
 .lib-filter-row {
   display: flex; align-items: stretch; flex-shrink: 0;
@@ -12790,46 +12736,20 @@
   <div class="home-collapse-wrap" id="homeCollapseWrap">
   <div class="home-compact-strip" id="homeCompactStrip" onclick="_homeExpandDashboard()" role="button" aria-label="Show dashboard"></div>
   <div class="home-dashboard" id="homeDashboard">
-    <!-- Eyebrow row -->
-    <div class="home-range-row">
-      <span class="home-dash-eyebrow">Your library</span>
+    <!-- Hero: concepts count — v3.30 -->
+    <div class="home-hero-num" id="hbSaved">0</div>
+    <div class="home-hero-label">concepts saved</div>
+    <!-- Activity: this week + streak -->
+    <div class="home-hero-activity" id="homeHeroActivity"></div>
+    <!-- Secondary: words · eps · notes — tappable -->
+    <div class="home-hero-secondary" id="homeHeroSecondary">
+      <span class="home-sec-item" id="hbWords" onclick="_homeBucketNav('vocab')">0 words</span>
+      <span class="home-sec-sep">·</span>
+      <span class="home-sec-item" id="hbEpisodes" onclick="_homeBucketNav('episodes')">0 eps ♥</span>
+      <span class="home-sec-sep">·</span>
+      <span class="home-sec-item" id="hbNotes" onclick="_homeBucketNav('concepts','notesOnly')">0 notes</span>
     </div>
-    <!-- Personal buckets: Episodes → Concepts → Words → Notes — v3.29 -->
-    <div class="home-buckets" id="homeBuckets">
-      <div class="home-bucket" style="--bucket-accent:#d4715a" onclick="_homeBucketNav('episodes')" title="Favourite episodes">
-        <span class="home-bucket-num" id="hbEpisodes">0</span>
-        <span class="home-bucket-label">Episodes</span>
-      </div>
-      <div class="home-bucket" style="--bucket-accent:#e8d5a3" onclick="_homeBucketNav('concepts')" title="Saved concepts">
-        <span class="home-bucket-num" id="hbSaved">0</span>
-        <span class="home-bucket-label">Concepts</span>
-      </div>
-      <div class="home-bucket" style="--bucket-accent:#5abfaf" onclick="_homeBucketNav('vocab')" title="Saved words">
-        <span class="home-bucket-num" id="hbWords">0</span>
-        <span class="home-bucket-label">Words</span>
-      </div>
-      <div class="home-bucket" style="--bucket-accent:#a08fd4" onclick="_homeBucketNav('concepts','notesOnly')" title="Notes">
-        <span class="home-bucket-num" id="hbNotes">0</span>
-        <span class="home-bucket-label">Notes</span>
-      </div>
-    </div>
-    <!-- Personal progress stats — v3.29 -->
-    <div class="home-personal-stats" id="homePersonalStats">
-      <div class="home-stat-cell">
-        <span class="home-stat-num accent" id="hpStreak">–</span>
-        <span class="home-stat-label" id="hpStreakLabel">day streak</span>
-      </div>
-      <div class="home-stat-cell">
-        <span class="home-stat-num" id="hpThisWeek">–</span>
-        <span class="home-stat-label">this week</span>
-        <span class="home-stat-sub" id="hpThisWeekSub"></span>
-      </div>
-      <div class="home-stat-cell">
-        <span class="home-stat-num" id="hpMilestone">–</span>
-        <span class="home-stat-label" id="hpMilestoneLabel">next milestone</span>
-      </div>
-    </div>
-    <!-- Momentum line -->
+    <!-- Momentum copy -->
     <div class="home-momentum" id="homeMomentum"></div>
   </div>
   </div><!-- /.home-collapse-wrap -->
@@ -23657,6 +23577,7 @@ var _homeRange = 'all'; // 'all' | 'week' | 'month' — dashboard range toggle s
 // ── Concepts composable filter state — v3.20 ──────────
 var _libConceptFilter = { cat: null, letter: null, notesOnly: false };
 var _libAzOpen = false;
+var _libConceptSearch = ''; // live search string — v3.30
 // Legacy alias (kept for safety — internal code should use _libConceptFilter)
 Object.defineProperty(window, '_libActiveCat', {
   get: function() { return _libConceptFilter.cat; },
@@ -23674,37 +23595,41 @@ function _homeBucketNav(tab, extra) {
 }
 
 /* ── Phase B: momentum line ───────────────────────────────────── */
-function _homeRenderMomentum() {
+function _homeRenderMomentum(nSaved, thisWeekTotal, streak) {
   var el = document.getElementById('homeMomentum');
   if (!el) return;
   try {
-    var tsMap = JSON.parse(localStorage.getItem('lll_mastered_ts_v1') || '{}');
+    // Resolve args if called without params (legacy call sites)
+    if (nSaved === undefined) {
+      nSaved = typeof mastered !== 'undefined' ? mastered.size : 0;
+      var _tsMap = JSON.parse(localStorage.getItem('lll_mastered_ts_v1') || '{}');
+      var _wa = Date.now() - 7 * 86400000;
+      thisWeekTotal = Object.values(_tsMap).filter(function(ts) { return Number(ts) > _wa; }).length;
+      streak = _homeComputeStreak();
+    }
+    var milestone = _homeNextMilestone(nSaved || 0);
+    var tsMap = {};
+    try { tsMap = JSON.parse(localStorage.getItem('lll_mastered_ts_v1') || '{}'); } catch(e2) {}
     var vals = Object.values(tsMap).map(Number).filter(Boolean);
-    var now = Date.now();
-    var weekAgo = now - 7 * 86400000;
-    var thisWeek = vals.filter(function(ts) { return ts > weekAgo; }).length;
     var lastTs = vals.length ? Math.max.apply(null, vals) : 0;
+    var now = Date.now();
     var msg = '';
-    if (thisWeek >= 10) {
-      msg = '<em>' + thisWeek + '</em> concepts this week. Exceptional.';
-    } else if (thisWeek >= 5) {
-      msg = '<em>' + thisWeek + '</em> concepts saved this week — you\'re building something.';
-    } else if (thisWeek >= 2) {
-      msg = '<em>' + thisWeek + '</em> concepts this week. Keep the streak alive.';
-    } else if (thisWeek === 1) {
-      msg = '<em>1</em> concept this week. One is one more than zero.';
+
+    // Priority: milestone close → streak → activity recency → first-time
+    if (milestone && milestone.left <= 5 && nSaved > 0) {
+      msg = 'Just <em>' + milestone.left + '</em> more to reach ' + milestone.target + ' concepts.';
+    } else if (milestone && nSaved > 0) {
+      msg = '<em>' + milestone.left + '</em> to go. Next milestone: ' + milestone.target + ' concepts.';
+    } else if (!nSaved) {
+      msg = 'Save your first concept to start tracking.';
     } else if (lastTs) {
       var daysAgo = Math.floor((now - lastTs) / 86400000);
-      if (daysAgo === 0) msg = 'Last saved today. Good habit.';
-      else if (daysAgo === 1) msg = 'Last saved yesterday. Pick it back up.';
-      else if (daysAgo <= 6) msg = 'Last saved <em>' + daysAgo + '</em> days ago.';
-      else if (daysAgo <= 14) msg = 'A week away. What did you listen to lately?';
-      else msg = 'It\'s been a while. The library is waiting.';
-    } else {
-      msg = 'Save your first concept to start tracking.';
+      if (daysAgo <= 1) msg = 'Keep the habit alive.';
+      else if (daysAgo <= 6) msg = 'The library is waiting. Pick up where you left off.';
+      else msg = 'It\'s been a while. Something worth saving is always one episode away.';
     }
     el.innerHTML = msg;
-    el.style.display = '';
+    el.style.display = msg ? '' : 'none';
   } catch(e) {
     el.style.display = 'none';
   }
@@ -24024,7 +23949,8 @@ function _libRenderSaved() {
       '</div>'
     : '';
 
-  panel.innerHTML = filterRow + letterRail + '<div class="lib-grid" id="libConceptGrid"></div>';
+  var searchHtml = '<div class="lib-search-wrap"><input class="lib-search-input" id="libConceptSearch" type="search" placeholder="Search saved concepts…" value="' + (_libConceptSearch || '').replace(/"/g,'&quot;') + '" oninput="_libOnConceptSearch(this.value)" autocomplete="off" spellcheck="false"></div>';
+  panel.innerHTML = searchHtml + filterRow + letterRail + '<div class="lib-grid" id="libConceptGrid"></div>';
   _libRenderConceptGrid(ids, tsMap);
 }
 
@@ -24080,6 +24006,7 @@ function _libRenderConceptGrid(ids, tsMap) {
 
   // Apply all three filters (AND logic)
   var noteIds = ids.filter(function(id) { return !!localStorage.getItem('cc_note_' + id); });
+  var searchQ = (_libConceptSearch || '').trim().toLowerCase();
   var visibleIds = ids.filter(function(id) {
     var c = CONCEPTS && CONCEPTS.find(function(x) { return x.id === id; });
     if (!c) return false;
@@ -24089,6 +24016,7 @@ function _libRenderConceptGrid(ids, tsMap) {
       var first = (c.term || '').trim().charAt(0).toUpperCase();
       if (first !== _libConceptFilter.letter) return false;
     }
+    if (searchQ && !((c.term || '').toLowerCase().includes(searchQ) || (c.category || '').toLowerCase().includes(searchQ))) return false;
     return true;
   });
 
@@ -24132,7 +24060,20 @@ function _libSetFilter(key, val) {
 
 function _libClearFilters() {
   _libConceptFilter = { cat: null, letter: null, notesOnly: false };
-  _homeApplyConceptFilters();
+  _libConceptSearch = '';
+  _libRenderSaved();
+}
+
+function _libOnConceptSearch(val) {
+  _libConceptSearch = val || '';
+  // Rebuild grid without full panel re-render (preserves search input focus)
+  var grid = document.getElementById('libConceptGrid');
+  if (!grid) { _libRenderSaved(); return; }
+  var tsMap = {};
+  try { tsMap = JSON.parse(localStorage.getItem('lll_mastered_ts_v1') || '{}'); } catch(e) {}
+  var ids = typeof mastered !== 'undefined' ? Array.from(mastered) : [];
+  ids.sort(function(a, b) { return (tsMap[b] || 0) - (tsMap[a] || 0) || b - a; });
+  _libRenderConceptGrid(ids, tsMap);
 }
 
 function _libToggleAZ() {
@@ -24767,7 +24708,7 @@ function _homeRenderDashboard(skipCountUp) {
   var elEpisodes = document.getElementById('hbEpisodes');
   if (!elSaved) return;
 
-  // ── Personal counts ──
+  // ── Counts ──
   var nSaved = typeof mastered !== 'undefined' ? mastered.size : 0;
   var nWords = 0, lx = [];
   try { lx = JSON.parse(localStorage.getItem('lll_lexicon_v1') || '[]'); nWords = Array.isArray(lx) ? lx.length : 0; } catch(e) {}
@@ -24781,7 +24722,7 @@ function _homeRenderDashboard(skipCountUp) {
   var nEpisodes = 0;
   try { nEpisodes = Object.keys(JSON.parse(localStorage.getItem('lll_fav_episodes_v1') || '{}')).length; } catch(e) {}
 
-  // ── Personal stats — streak, this week, milestone ──
+  // ── Activity line: this week + streak ──
   var streak = _homeComputeStreak();
   var tsMap = {};
   try { tsMap = JSON.parse(localStorage.getItem('lll_mastered_ts_v1') || '{}'); } catch(e) {}
@@ -24789,72 +24730,50 @@ function _homeRenderDashboard(skipCountUp) {
   var thisWeekConcepts = Object.values(tsMap).filter(function(ts) { return Number(ts) > weekAgo; }).length;
   var thisWeekWords = Array.isArray(lx) ? lx.filter(function(w) { return w && w.savedAt && w.savedAt > weekAgo; }).length : 0;
   var thisWeekTotal = thisWeekConcepts + thisWeekWords;
-  var milestone = _homeNextMilestone(nSaved);
 
-  // Populate personal stats row
-  var elStreak = document.getElementById('hpStreak');
-  var elStreakLabel = document.getElementById('hpStreakLabel');
-  var elWeek = document.getElementById('hpThisWeek');
-  var elWeekSub = document.getElementById('hpThisWeekSub');
-  var elMile = document.getElementById('hpMilestone');
-  var elMileLabel = document.getElementById('hpMilestoneLabel');
-
-  if (elStreak) elStreak.textContent = streak > 0 ? streak : '—';
-  if (elStreakLabel) elStreakLabel.textContent = streak === 1 ? 'day streak' : streak > 1 ? 'day streak' : 'start today';
-  if (elWeek) elWeek.textContent = thisWeekTotal > 0 ? thisWeekTotal : '—';
-  if (elWeekSub) {
-    if (thisWeekConcepts > 0 && thisWeekWords > 0) {
-      elWeekSub.textContent = thisWeekConcepts + ' concepts · ' + thisWeekWords + ' words';
-    } else if (thisWeekConcepts > 0) {
-      elWeekSub.textContent = 'concepts';
-    } else if (thisWeekWords > 0) {
-      elWeekSub.textContent = 'words';
-    } else {
-      elWeekSub.textContent = '';
-    }
-  }
-  if (milestone) {
-    if (elMile) elMile.textContent = milestone.left;
-    if (elMileLabel) elMileLabel.textContent = 'to ' + milestone.target + ' concepts';
-  } else {
-    if (elMile) { elMile.textContent = '✦'; elMile.style.fontSize = '1rem'; }
-    if (elMileLabel) elMileLabel.textContent = 'all milestones hit';
+  var activityEl = document.getElementById('homeHeroActivity');
+  if (activityEl) {
+    var parts = [];
+    if (thisWeekTotal > 0) parts.push(thisWeekTotal + ' this week');
+    if (streak > 1) parts.push(streak + '-day streak');
+    activityEl.textContent = parts.join(' · ');
   }
 
-  // Compact strip
-  (function() {
-    var strip = document.getElementById('homeCompactStrip');
-    if (!strip) return;
+  // ── Secondary items ──
+  if (elWords) elWords.textContent = nWords + ' word' + (nWords !== 1 ? 's' : '');
+  if (elEpisodes) elEpisodes.textContent = nEpisodes + ' ep' + (nEpisodes !== 1 ? 's' : '') + ' ♥';
+  if (elNotes) elNotes.textContent = nNotes + ' note' + (nNotes !== 1 ? 's' : '');
+
+  // ── Compact strip ──
+  var strip = document.getElementById('homeCompactStrip');
+  if (strip) {
     strip.innerHTML =
-      '<span>' + nEpisodes + ' eps</span><span class="strip-sep">·</span>' +
       '<span>' + nSaved + ' concepts</span><span class="strip-sep">·</span>' +
-      '<span>' + nWords + ' words</span>';
-  })();
+      '<span>' + nWords + ' words</span><span class="strip-sep">·</span>' +
+      '<span>' + nEpisodes + ' eps ♥</span>';
+  }
 
-  _homeRenderMomentum();
+  _homeRenderMomentum(nSaved, thisWeekTotal, streak);
 
-  // ── Count-up animation ──
+  // ── Count-up on hero number only ──
   var noMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (noMotion || skipCountUp) { elSaved.textContent = nSaved; return; }
 
-  function setAll(p) {
-    p = (p === undefined) ? 1 : p;
-    elSaved.textContent    = Math.round(nSaved    * p);
-    elWords.textContent    = Math.round(nWords    * p);
-    elNotes.textContent    = Math.round(nNotes    * p);
-    elEpisodes.textContent = Math.round(nEpisodes * p);
-  }
-
-  if (noMotion || skipCountUp) { setAll(1); return; }
-
-  var duration = 600, start = performance.now();
-  function tick(now) {
-    var elapsed = Math.min(now - start, duration);
-    var prog = 1 - Math.pow(1 - elapsed / duration, 3);
-    setAll(prog);
-    if (elapsed < duration) requestAnimationFrame(tick);
-    else setAll(1);
-  }
-  requestAnimationFrame(tick);
+  elSaved.classList.add('fading');
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
+      elSaved.classList.remove('fading');
+      var duration = 700, start = performance.now();
+      function tick(now) {
+        var elapsed = Math.min(now - start, duration);
+        var prog = 1 - Math.pow(1 - elapsed / duration, 3);
+        elSaved.textContent = Math.round(nSaved * prog);
+        if (elapsed < duration) requestAnimationFrame(tick);
+        else elSaved.textContent = nSaved;
+      }
+      requestAnimationFrame(tick);
+    });
+  });
 }
 
 // ── Notes render — v3.23 dead code sweep (notes tab removed; stub kept for _libNoteDelete/_libNoteSave back-compat)

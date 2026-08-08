@@ -6,6 +6,15 @@
 
 ---
 
+## v3.30 — 2026-08-08 · Hero dashboard + Concepts search
+
+### index.html
+- **Dashboard hero redesign:** Replaced 4-bucket grid + 3-cell stats row with a single centered layout. One large Playfair number (concept count, 5rem). DM Mono label below. One DM Mono activity line ("7 this week · 5-day streak") — only shown when there's activity. Three tappable inline secondary items (words · eps ♥ · notes) as small DM Mono pills — navigate to their respective tabs. Momentum copy line below, max-width 320px centered. All grids/boxes/borders gone from the dashboard interior.
+- **Momentum rewritten:** No longer repeats the week count (already in activity line). Focuses on: milestone proximity ("Just 4 more to reach 75 concepts"), then recency ("The library is waiting"), then first-time. Cleaner, more purposeful copy.
+- **Concepts search bar:** Minimal underline-only input at top of Concepts panel (`lib-search-input`). Filters live on `oninput` against term + category. `_libOnConceptSearch()` rebuilds the grid without re-rendering the full panel (preserves focus). `_libConceptSearch` state persists across filter changes, cleared on `_libClearFilters()`.
+
+---
+
 ## v3.29 — 2026-08-08 · Dashboard beauty pass + personal stats + quick fixes
 
 ### index.html
