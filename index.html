@@ -9194,138 +9194,198 @@
 }
 .lib-tab.lib-tab-active { color: var(--text); }
 .lib-tab.lib-tab-active::after { opacity: 1; transform: scaleX(1); }
-/* ── Home Dashboard — v3.18 ────────────────────────────── */
+/* ── Home Dashboard — v3.25 extreme redesign ───────────────── */
 .home-dashboard {
-  padding: 10px 20px 8px;
-  border-bottom: 0.5px solid var(--border);
   display: flex;
-  align-items: flex-start;
-  gap: 12px;
+  flex-direction: column;
   flex-shrink: 0;
+  border-bottom: 0.5px solid var(--border);
+}
+
+/* Range row — eyebrow + toggle */
+.home-range-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 16px 7px;
+  border-bottom: 0.5px solid var(--border);
+}
+.home-dash-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.46rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  opacity: 0.7;
 }
 .home-range-toggle {
   display: flex;
   gap: 0;
   border: 0.5px solid var(--border);
-  border-radius: 6px;
+  border-radius: 5px;
   overflow: hidden;
   flex-shrink: 0;
-  align-self: center;
 }
 .home-range-btn {
   background: none;
   border: none;
   font-family: 'DM Mono', monospace;
-  font-size: 0.52rem;
-  letter-spacing: 0.08em;
+  font-size: 0.5rem;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--muted);
-  padding: 4px 7px;
+  padding: 4px 8px;
   cursor: pointer;
   line-height: 1;
+  transition: background 0.15s, color 0.15s;
 }
-.home-range-btn.home-range-active {
-  background: var(--surface2);
-  color: var(--text);
-}
+.home-range-btn.home-range-active { background: var(--surface2); color: var(--text); }
+.home-range-btn:disabled { opacity: 0.35; cursor: default; }
+[data-theme="light"] .home-range-btn.home-range-active { background: var(--surface2); color: var(--text); }
+
+/* Personal buckets — 4-col grid, tappable */
 .home-buckets {
   display: grid;
-  grid-template-columns: repeat(3, minmax(60px, 1fr));
-  flex: 1;
-  min-width: 0;
+  grid-template-columns: repeat(4, 1fr);
+  border-bottom: 0.5px solid var(--border);
 }
 .home-bucket {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 2px 4px;
-  min-width: 0;
+  padding: 14px 12px 10px;
+  border-right: 0.5px solid var(--border);
+  cursor: pointer;
+  position: relative;
+  transition: background 0.18s ease;
+  overflow: hidden;
 }
+.home-bucket:last-child { border-right: none; }
+.home-bucket::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--bucket-accent, var(--accent));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.home-bucket:hover { background: var(--surface); }
+.home-bucket:hover::after { transform: scaleX(1); }
 .home-bucket-num {
   font-family: 'Playfair Display', serif;
-  font-size: 1.5rem;
+  font-size: 2rem;
   font-weight: 700;
   color: var(--text);
-  line-height: 1.1;
+  line-height: 1;
+  transition: color 0.18s ease, transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.15s ease;
   display: block;
-  min-width: 28px;
-  text-align: center;
+}
+.home-bucket:hover .home-bucket-num {
+  color: var(--bucket-accent, var(--accent));
+  transform: translateY(-1px) scale(1.04);
 }
 .home-bucket-label {
   font-family: 'DM Mono', monospace;
-  font-size: 0.48rem;
-  letter-spacing: 0.1em;
+  font-size: 0.44rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--muted);
-  margin-top: 3px;
+  margin-top: 6px;
   white-space: nowrap;
-  text-align: center;
+  transition: color 0.18s ease;
 }
-@media (max-width: 600px) {
-  .home-dashboard {
-    flex-direction: column-reverse;
-    gap: 6px;
-    padding: 8px 16px 6px;
-  }
-  .home-range-toggle {
-    align-self: flex-end;
-  }
-  /* Mobile: snap-scroll row instead of grid */
-  .home-buckets {
-    display: flex;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    scroll-snap-type: x proximity;
-    scrollbar-width: none;
-    width: 100%;
-    gap: 0;
-    -webkit-overflow-scrolling: touch;
-    touch-action: pan-x;
-  }
-  .home-buckets::-webkit-scrollbar { display: none; }
-  .home-bucket {
-    flex-shrink: 0;
-    scroll-snap-align: start;
-    min-width: 72px;
-    padding: 2px 8px;
-  }
-  .home-bucket-num { font-size: 1.2rem; }
-}
-/* Range toggle — interactive (Phase 6) */
-.home-range-btn { cursor: pointer; }
-.home-range-btn:disabled { opacity: 0.4; cursor: default; }
-
-/* Bucket delta/growth label */
+.home-bucket:hover .home-bucket-label { color: var(--muted2); }
 .home-bucket-delta {
   font-family: 'DM Mono', monospace;
-  font-size: 0.44rem;
+  font-size: 0.42rem;
   letter-spacing: 0.05em;
   color: var(--accent);
-  margin-top: 1px;
+  margin-top: 3px;
   min-height: 10px;
-  text-align: center;
   white-space: nowrap;
 }
+@media (hover: none) {
+  .home-bucket:hover { background: none; }
+  .home-bucket:hover .home-bucket-num { color: var(--text); transform: none; }
+  .home-bucket:hover::after { transform: scaleX(0); }
+}
 
-/* Fingerprint line removed v3.24 — was clutter, replaced by momentum line */
+/* Platform stats — secondary row, smaller, no click */
+.home-buckets--platform {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  border-bottom: 0.5px solid var(--border);
+  background: transparent;
+}
+.home-bucket--platform {
+  cursor: default;
+  padding: 8px 12px 7px;
+}
+.home-bucket--platform:hover { background: none; }
+.home-bucket--platform:hover::after { transform: scaleX(0); }
+.home-bucket--platform:hover .home-bucket-num { color: var(--text); transform: none; }
+.home-bucket--platform:hover .home-bucket-label { color: var(--muted); }
+.home-bucket-num--sm {
+  font-size: 1.1rem;
+  color: var(--muted2);
+}
+
+/* Momentum line */
+.home-momentum {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.7rem;
+  font-style: italic;
+  color: var(--muted2);
+  padding: 8px 16px 9px;
+  line-height: 1.4;
+  min-height: 34px;
+}
+.home-momentum em {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 0.82rem;
+  color: var(--accent);
+  font-weight: 700;
+}
+[data-theme="light"] .home-momentum { color: var(--muted); }
+
+/* Mobile */
+@media (max-width: 600px) {
+  .home-buckets {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .home-bucket:nth-child(2) { border-right: none; }
+  .home-bucket:nth-child(1),
+  .home-bucket:nth-child(2) { border-bottom: 0.5px solid var(--border); }
+  .home-bucket-num { font-size: 1.65rem; }
+  .home-buckets--platform {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
 
 /* Bucket number cross-fade on range switch */
-.home-bucket-num.fading { opacity: 0; transition: opacity 0.15s ease; }
-.home-bucket-num { transition: opacity 0.15s ease; }
+.home-bucket-num.fading { opacity: 0; }
+.home-bucket-num { transition: opacity 0.15s ease, color 0.18s ease, transform 0.18s cubic-bezier(0.34,1.56,0.64,1); }
 @media (prefers-reduced-motion: reduce) {
   .home-bucket-num { transition: none !important; }
   .home-bucket-num.fading { opacity: 1; }
+  .home-bucket::after { transition: none !important; }
+  .home-bucket:hover .home-bucket-num { transform: none; }
 }
 
-/* Light mode */
-[data-theme="light"] .home-range-btn.home-range-active { background: var(--surface2); color: var(--text); }
-
-/* ── Phase 7: scroll-collapse wrapper — v3.23 ───── */
+/* ── Phase 7: scroll-collapse wrapper — v3.25 smooth ── */
 .home-collapse-wrap {
   position: relative;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+  max-height: 600px; /* generous ceiling; never clips normal state */
+  transition: max-height 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.home-collapse-wrap.collapsed {
+  max-height: 36px;
 }
 .home-compact-strip {
   position: absolute;
@@ -9355,10 +9415,6 @@
   pointer-events: auto;
   transform: translateY(0);
 }
-.home-collapse-wrap.collapsed {
-  height: 36px;
-  overflow: hidden;
-}
 .home-collapse-wrap .home-dashboard {
   transition: opacity 0.25s ease;
 }
@@ -9367,6 +9423,7 @@
   pointer-events: none;
 }
 @media (prefers-reduced-motion: reduce) {
+  .home-collapse-wrap,
   .home-compact-strip,
   .home-collapse-wrap .home-dashboard {
     transition: none !important;
@@ -12542,47 +12599,56 @@
     <button class="lib-export-all-btn" id="homeExportBtn" onclick="_homeExportAll()" title="Export all your data as JSON">↓ JSON</button>
     <button class="lib-close" onclick="closeLibrary()">✕</button>
   </div>
-  <div class="panel-tagline" style="margin: 0; border-radius: 0;">Everything you keep — episodes, ideas, words, practice.</div>
   <div class="home-collapse-wrap" id="homeCollapseWrap">
   <div class="home-compact-strip" id="homeCompactStrip"></div>
   <div class="home-dashboard" id="homeDashboard">
+    <!-- Eyebrow + range row -->
+    <div class="home-range-row">
+      <span class="home-dash-eyebrow">Your library</span>
+      <div class="home-range-toggle">
+        <button class="home-range-btn" id="hbRangeWk" onclick="_homeSetRange('week')">Wk</button>
+        <button class="home-range-btn" id="hbRangeMo" onclick="_homeSetRange('month')">Mo</button>
+        <button class="home-range-btn home-range-active" id="hbRangeAll" onclick="_homeSetRange('all')">All</button>
+      </div>
+    </div>
+    <!-- Personal buckets — tappable, route to tabs -->
     <div class="home-buckets" id="homeBuckets">
-      <div class="home-bucket">
+      <div class="home-bucket" style="--bucket-accent:#e8d5a3" onclick="_homeBucketNav('concepts')" title="View saved concepts">
         <span class="home-bucket-num" id="hbSaved">0</span>
-        <span class="home-bucket-label">Saved</span>
+        <span class="home-bucket-label">Concepts</span>
         <span class="home-bucket-delta" id="hbSavedDelta"></span>
       </div>
-      <div class="home-bucket">
+      <div class="home-bucket" style="--bucket-accent:#5abfaf" onclick="_homeBucketNav('vocab')" title="View saved words">
         <span class="home-bucket-num" id="hbWords">0</span>
         <span class="home-bucket-label">Words</span>
         <span class="home-bucket-delta" id="hbWordsDelta"></span>
       </div>
-      <div class="home-bucket">
+      <div class="home-bucket" style="--bucket-accent:#a08fd4" onclick="_homeBucketNav('concepts','notesOnly')" title="View notes">
         <span class="home-bucket-num" id="hbNotes">0</span>
         <span class="home-bucket-label">Notes</span>
         <span class="home-bucket-delta" id="hbNotesDelta"></span>
       </div>
-      <div class="home-bucket">
+      <div class="home-bucket" style="--bucket-accent:#d4715a" onclick="_homeBucketNav('episodes')" title="View favourited episodes">
         <span class="home-bucket-num" id="hbEpisodes">0</span>
-        <span class="home-bucket-label">Episodes ♥</span>
+        <span class="home-bucket-label">Eps ♥</span>
         <span class="home-bucket-delta" id="hbEpisodesDelta"></span>
       </div>
-      <div class="home-bucket">
-        <span class="home-bucket-num" id="hbNewEps">–</span>
-        <span class="home-bucket-label">New Eps</span>
+    </div>
+    <!-- Platform stats — secondary, non-interactive -->
+    <div class="home-buckets home-buckets--platform">
+      <div class="home-bucket home-bucket--platform">
+        <span class="home-bucket-num home-bucket-num--sm" id="hbNewEps">–</span>
+        <span class="home-bucket-label">New eps</span>
         <span class="home-bucket-delta" id="hbNewEpsDelta"></span>
       </div>
-      <div class="home-bucket">
-        <span class="home-bucket-num" id="hbNewConcepts">–</span>
-        <span class="home-bucket-label">New Concepts</span>
+      <div class="home-bucket home-bucket--platform">
+        <span class="home-bucket-num home-bucket-num--sm" id="hbNewConcepts">–</span>
+        <span class="home-bucket-label">New concepts</span>
         <span class="home-bucket-delta" id="hbNewConceptsDelta"></span>
       </div>
     </div>
-    <div class="home-range-toggle">
-      <button class="home-range-btn" id="hbRangeWk" onclick="_homeSetRange('week')">Wk</button>
-      <button class="home-range-btn" id="hbRangeMo" onclick="_homeSetRange('month')">Mo</button>
-      <button class="home-range-btn home-range-active" id="hbRangeAll" onclick="_homeSetRange('all')">All</button>
-    </div>
+    <!-- Momentum line -->
+    <div class="home-momentum" id="homeMomentum"></div>
   </div>
   </div><!-- /.home-collapse-wrap -->
   <div class="lib-tabs">
@@ -23415,6 +23481,52 @@ Object.defineProperty(window, '_libActiveCat', {
 });
 var _HOME_TABS = ['episodes','concepts','vocab','practice'];
 
+/* ── Phase B: bucket navigation ──────────────────────────────── */
+function _homeBucketNav(tab, extra) {
+  if (extra === 'notesOnly') {
+    _libConceptFilter.notesOnly = true;
+    if (typeof _homeApplyConceptFilters === 'function') _homeApplyConceptFilters();
+  }
+  if (tab && _libActiveTab !== tab) _libSwitchTab(tab);
+}
+
+/* ── Phase B: momentum line ───────────────────────────────────── */
+function _homeRenderMomentum() {
+  var el = document.getElementById('homeMomentum');
+  if (!el) return;
+  try {
+    var tsMap = JSON.parse(localStorage.getItem('lll_mastered_ts_v1') || '{}');
+    var vals = Object.values(tsMap).map(Number).filter(Boolean);
+    var now = Date.now();
+    var weekAgo = now - 7 * 86400000;
+    var thisWeek = vals.filter(function(ts) { return ts > weekAgo; }).length;
+    var lastTs = vals.length ? Math.max.apply(null, vals) : 0;
+    var msg = '';
+    if (thisWeek >= 10) {
+      msg = '<em>' + thisWeek + '</em> concepts this week. Exceptional.';
+    } else if (thisWeek >= 5) {
+      msg = '<em>' + thisWeek + '</em> concepts saved this week — you\'re building something.';
+    } else if (thisWeek >= 2) {
+      msg = '<em>' + thisWeek + '</em> concepts this week. Keep the streak alive.';
+    } else if (thisWeek === 1) {
+      msg = '<em>1</em> concept this week. One is one more than zero.';
+    } else if (lastTs) {
+      var daysAgo = Math.floor((now - lastTs) / 86400000);
+      if (daysAgo === 0) msg = 'Last saved today. Good habit.';
+      else if (daysAgo === 1) msg = 'Last saved yesterday. Pick it back up.';
+      else if (daysAgo <= 6) msg = 'Last saved <em>' + daysAgo + '</em> days ago.';
+      else if (daysAgo <= 14) msg = 'A week away. What did you listen to lately?';
+      else msg = 'It\'s been a while. The library is waiting.';
+    } else {
+      msg = 'Save your first concept to start tracking.';
+    }
+    el.innerHTML = msg;
+    el.style.display = '';
+  } catch(e) {
+    el.style.display = 'none';
+  }
+}
+
 /* ── Phase 7: scroll-collapse ─────────────────────────────────── */
 var _homeScrollDebTimer = null;
 function _homeOnPanelScroll(e) {
@@ -24290,6 +24402,8 @@ function _homeRenderDashboard(skipCountUp) {
       '<span>' + nWords + ' words</span><span class="strip-sep">·</span>' +
       '<span>' + nEpisodes + ' eps ♥</span>';
   })();
+
+  _homeRenderMomentum(); // v3.25
 
   if (noMotion || skipCountUp) {
     setAll(1);

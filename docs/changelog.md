@@ -6,6 +6,13 @@
 
 ---
 
+## v3.25 — 2026-08-08 · Home v2 Phase B — dashboard redesign + momentum + smooth collapse
+### index.html
+- **Dashboard extreme redesign:** Entire layout rebuilt. Panel tagline removed. New structure: eyebrow row ("Your library" + range toggle) → 4 personal buckets (full-width 4-col grid) → 2 platform stat buckets (secondary row, muted) → momentum line. Each personal bucket: 2rem Playfair number, tappable, `--bucket-accent` CSS var drives a scaleX(0→1) top-border reveal on hover + number color shift + translateY(-1px) scale(1.04). Bucket colors: Concepts=gold, Words=teal, Notes=purple, Eps ♥=red. `hover:none` + `prefers-reduced-motion` suppress all transforms.
+- **Tappable buckets:** Each personal bucket routes via `_homeBucketNav(tab, extra)`. Saved→Concepts tab, Words→Vocab tab, Notes→Concepts tab with notesOnly filter activated, Eps ♥→Episodes tab.
+- **Momentum line (`#homeMomentum`):** DM Sans italic, below platform stats. Reads `lll_mastered_ts_v1` timestamps to compute this-week count + days-since-last. Copy ranges from "3 concepts this week. Keep the streak alive." to "It's been a while. The library is waiting." Key numbers wrapped in `<em>` (Playfair italic, accent color). Called on every `_homeRenderDashboard()`.
+- **Smooth scroll-collapse:** Replaced instant `height: 36px` snap with `max-height: 600px → 36px` transition (`0.28s cubic-bezier(0.4,0,0.2,1)`). Combined with existing opacity cross-fade, collapse now feels silky instead of jarring. `prefers-reduced-motion` skips the transition.
+
 ## v3.24 — 2026-08-08 · Home v2 Phase A — quick wins + polish
 ### index.html
 - **Fingerprint line removed:** "Strongest / Blind spot" line was pure clutter with no actionable path. Removed from HTML, CSS, and `_homeRenderDashboard`. Space reclaimed.
