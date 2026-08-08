@@ -10099,6 +10099,109 @@
 [data-theme="light"] .vocab-my-tile:hover { background: var(--surface2); }
 [data-theme="light"] .vocab-my-word { color: var(--text); }
 
+/* ── Vocab sort row — v3.28 ──────────────────────── */
+.vocab-sort-row {
+  display: flex; gap: 0; align-items: center;
+  padding: 0 20px 8px; flex-shrink: 0; flex-wrap: wrap; gap: 5px;
+}
+.vocab-sort-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.5rem; letter-spacing: 0.07em; text-transform: uppercase;
+  padding: 3px 8px; border: 0.5px solid var(--border);
+  border-radius: 20px; background: none; color: var(--muted);
+  cursor: pointer; transition: color 0.14s, border-color 0.14s, background 0.14s;
+  white-space: nowrap;
+}
+.vocab-sort-btn:hover { color: var(--muted2); border-color: var(--border-hover); }
+.vocab-sort-btn.active { color: var(--accent); border-color: var(--accent); background: rgba(232,213,163,0.07); }
+
+/* ── Vocab tile inline expand — v3.28 ──────────── */
+.vocab-my-tile {
+  cursor: pointer;
+}
+.vocab-tile-detail {
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
+  opacity: 0;
+}
+.vocab-my-tile.vocab-tile-open .vocab-tile-detail {
+  max-height: 300px;
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .vocab-tile-detail { transition: none !important; }
+}
+.vocab-tile-open { background: var(--surface2) !important; }
+.vocab-tile-open .vocab-my-word { color: var(--accent); }
+.vocab-tile-def-full {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.74rem; color: var(--text); line-height: 1.5;
+  padding: 8px 0 6px; border-top: 0.5px solid var(--border); margin-top: 4px;
+}
+.vocab-tile-actions {
+  display: flex; gap: 8px; padding: 6px 0 4px; flex-wrap: wrap;
+}
+.vocab-tile-action-btn {
+  font-family: 'DM Mono', monospace; font-size: 0.5rem; letter-spacing: 0.07em;
+  text-transform: uppercase; padding: 4px 10px;
+  border: 0.5px solid var(--border); border-radius: 3px;
+  background: none; color: var(--muted); cursor: pointer;
+  transition: color 0.14s, border-color 0.14s;
+  white-space: nowrap;
+}
+.vocab-tile-action-btn:hover { color: var(--accent); border-color: var(--accent); }
+.vocab-tile-action-btn.practiced { color: var(--accent); border-color: var(--accent); opacity: 0.7; }
+
+/* fade animation for sort change */
+.vocab-my-list.sort-fade { opacity: 0; transition: opacity 0.12s ease; }
+
+/* ── Episode inline expand — v3.28 ──────────────── */
+.ep-fav-tile { cursor: pointer; }
+.ep-tile-detail {
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.32s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.22s ease;
+  opacity: 0;
+}
+.ep-fav-tile.ep-tile-open .ep-tile-detail {
+  max-height: 400px; opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ep-tile-detail { transition: none !important; }
+}
+.ep-fav-tile.ep-tile-open { background: var(--surface2, var(--surface)); }
+.ep-tile-detail-inner {
+  padding: 10px 0 6px;
+  border-top: 0.5px solid var(--border);
+  margin-top: 8px;
+}
+.ep-tile-detail-section {
+  font-family: 'DM Mono', monospace; font-size: 0.46rem; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--muted); margin-bottom: 5px;
+}
+.ep-tile-saved-concepts {
+  display: flex; flex-direction: column; gap: 2px; margin-bottom: 10px;
+}
+.ep-tile-concept-item {
+  font-family: 'Playfair Display', serif; font-size: 0.78rem;
+  font-style: italic; color: var(--text); padding: 1px 0;
+}
+.ep-tile-words {
+  display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px;
+}
+.ep-tile-word-chip {
+  font-family: 'DM Mono', monospace; font-size: 0.5rem; letter-spacing: 0.06em;
+  text-transform: uppercase; padding: 2px 7px;
+  border: 0.5px solid var(--border); border-radius: 20px; color: var(--muted2);
+}
+.ep-tile-open-btn {
+  font-family: 'DM Mono', monospace; font-size: 0.5rem; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--muted); background: none;
+  border: 0.5px solid var(--border); border-radius: 3px;
+  padding: 4px 10px; cursor: pointer;
+  transition: color 0.14s, border-color 0.14s;
+}
+.ep-tile-open-btn:hover { color: var(--accent); border-color: var(--accent); }
+
 /* Lexi examples button — disabled v3.21 */
 .lexi-word-gen-btn:not(.lexi-word-gen-btn--practice) { display: none; } /* v3.21 — examples disabled, logic preserved, see session-plan */
 
@@ -24204,13 +24307,39 @@ function _libRenderEpisodes() {
       var favDateStr = favTs ? _epRelativeDate(favTs) : '';
       var delay = Math.min(i * 40, 300);
 
-      return '<div class="ep-fav-tile" style="animation-delay:' + delay + 'ms" onclick="closeLibrary();setTimeout(function(){openEpisodeDrawer(' + col.id + ');},80)">' +
+      // Saved concepts for this episode
+      var epConcepts = (typeof CONCEPTS !== 'undefined')
+        ? CONCEPTS.filter(function(c) { return c.collection_id === col.id && masteredTs[c.id]; })
+        : [];
+      var epWords = Array.isArray(lexicon)
+        ? lexicon.filter(function(w) { return w && w.collection_id === col.id; })
+        : [];
+      var hasItems = epConcepts.length > 0 || epWords.length > 0;
+
+      var detailHtml = hasItems ? '<div class="ep-tile-detail"><div class="ep-tile-detail-inner">' +
+        (epConcepts.length ? '<div class="ep-tile-detail-section">Concepts kept</div><div class="ep-tile-saved-concepts">' +
+          epConcepts.slice(0, 6).map(function(c) { return '<div class="ep-tile-concept-item">' + (c.term || '').replace(/</g,'&lt;') + '</div>'; }).join('') +
+          (epConcepts.length > 6 ? '<div class="ep-tile-concept-item" style="color:var(--muted);font-style:normal">+' + (epConcepts.length - 6) + ' more</div>' : '') +
+        '</div>' : '') +
+        (epWords.length ? '<div class="ep-tile-detail-section">Words saved</div><div class="ep-tile-words">' +
+          epWords.slice(0, 8).map(function(w) { return '<span class="ep-tile-word-chip">' + (w.word || w.term || '').replace(/</g,'&lt;') + '</span>'; }).join('') +
+          (epWords.length > 8 ? '<span class="ep-tile-word-chip">+' + (epWords.length - 8) + '</span>' : '') +
+        '</div>' : '') +
+        '<button class="ep-tile-open-btn" onclick="event.stopPropagation();closeLibrary();setTimeout(function(){openEpisodeDrawer(' + col.id + ');},80)">Open episode →</button>' +
+      '</div></div>' : '';
+
+      var clickAction = hasItems
+        ? '_libEpToggleTile(' + col.id + ', this)'
+        : 'closeLibrary();setTimeout(function(){openEpisodeDrawer(' + col.id + ');},80)';
+
+      return '<div class="ep-fav-tile" id="ept-' + col.id + '" style="animation-delay:' + delay + 'ms" onclick="' + clickAction + '">' +
         '<div class="ep-fav-tile-title">' + (col.title || '').replace(/</g,'&lt;') + '</div>' +
         '<div class="ep-fav-tile-meta">' + (col.podcast ? col.podcast.replace(/</g,'&lt;') : '') + (favDateStr ? ' \u00b7 ' + favDateStr : '') + '</div>' +
         (statsLine ? '<div class="ep-fav-tile-stats">' + statsLine + '</div>' : '') +
         '<div class="ep-fav-tile-actions">' +
           '<button class="ep-fav-tile-unfav" title="Remove from favourites" onclick="event.stopPropagation();_epToggleFav(' + col.id + ')">\u2665 Unfav</button>' +
         '</div>' +
+        detailHtml +
       '</div>';
     }).join('') +
   '</div>';
@@ -24236,6 +24365,15 @@ function _libRenderEpisodes() {
   panel.innerHTML = tilesHtml + recentsHtml;
 }
 
+function _libEpToggleTile(colId, el) {
+  var isOpen = el.classList.contains('ep-tile-open');
+  document.querySelectorAll('#libPanel-episodes .ep-tile-open').forEach(function(t) { t.classList.remove('ep-tile-open'); });
+  if (!isOpen) {
+    el.classList.add('ep-tile-open');
+    el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+}
+
 function _epRelativeDate(ts) {
   var diff = Date.now() - ts;
   var days = Math.floor(diff / 86400000);
@@ -24250,12 +24388,12 @@ function _epRelativeDate(ts) {
 // ── Vocab panel segment state — v3.21 ──────────────────────────
 var _libVocabSeg = 'my'; // 'my' | 'all' | 'map'
 
+var _libVocabSort = 'newest'; // 'newest' | 'alpha' | 'unpractised' — v3.28
+
 function _libRenderVocab() {
   var panel = document.getElementById('libPanel-vocab');
   if (!panel) return;
-  // Always re-render — no dataset.rendered guard (segment state can change)
 
-  // Segment control
   var segHtml =
     '<div class="vocab-seg-row">' +
       '<button class="vocab-seg-btn' + (_libVocabSeg === 'my'  ? ' active' : '') + '" onclick="_libVocabSwitchSeg(\'my\')">My Words</button>' +
@@ -24309,8 +24447,22 @@ function _libVocabRenderSeg() {
     return;
   }
 
-  // Sort by savedAt desc
-  var sorted = lx.slice().sort(function(a, b) { return (b.savedAt || 0) - (a.savedAt || 0); });
+  // Sort
+  var sorted = lx.slice();
+  if (_libVocabSort === 'alpha') {
+    sorted.sort(function(a, b) {
+      return (a.word || a.term || '').localeCompare(b.word || b.term || '');
+    });
+  } else if (_libVocabSort === 'unpractised') {
+    sorted.sort(function(a, b) {
+      var aNew = !a.practiceState || a.practiceState === 'new' ? 0 : 1;
+      var bNew = !b.practiceState || b.practiceState === 'new' ? 0 : 1;
+      return aNew - bNew || (b.savedAt || 0) - (a.savedAt || 0);
+    });
+  } else {
+    sorted.sort(function(a, b) { return (b.savedAt || 0) - (a.savedAt || 0); });
+  }
+
   var unpractised = sorted.filter(function(w) { return !w.practiceState || w.practiceState === 'new'; }).length;
 
   var headerHtml =
@@ -24318,28 +24470,104 @@ function _libVocabRenderSeg() {
       '<span class="vocab-my-count">' + lx.length + ' word' + (lx.length !== 1 ? 's' : '') + '</span>' +
       '<div style="display:flex;gap:6px;flex-wrap:wrap">' +
         (unpractised > 0 ? '<button class="vocab-my-cta" onclick="closeLibrary();setTimeout(function(){openLexiconPanel();},80)">Practice ' + unpractised + ' \u2192</button>' : '') +
-        '<button class="vocab-my-cta" onclick="closeLibrary();setTimeout(function(){openLexiconPanel();},80)">Open Lexi \u2192</button>' +
+        '<button class="vocab-my-cta" onclick="closeLibrary();setTimeout(function(){openLexiconPanel();},80)">Lexi \u2192</button>' +
       '</div>' +
     '</div>';
 
-  var tilesHtml = '<div class="vocab-my-list">' +
-    sorted.map(function(w) {
-      var word = (w.word || w.term || '').replace(/</g, '&lt;');
-      var def  = (w.definition || w.def || '').replace(/</g, '&lt;');
-      var src  = (w.podcastName || w.episodeTitle || '').replace(/</g, '&lt;');
+  var sortRowHtml =
+    '<div class="vocab-sort-row">' +
+      '<button class="vocab-sort-btn' + (_libVocabSort === 'newest'      ? ' active' : '') + '" onclick="_libVocabSetSort(\'newest\')">Newest</button>' +
+      '<button class="vocab-sort-btn' + (_libVocabSort === 'alpha'       ? ' active' : '') + '" onclick="_libVocabSetSort(\'alpha\')">A–Z</button>' +
+      '<button class="vocab-sort-btn' + (_libVocabSort === 'unpractised' ? ' active' : '') + '" onclick="_libVocabSetSort(\'unpractised\')">New first</button>' +
+    '</div>';
+
+  var tilesHtml = '<div class="vocab-my-list" id="vocabMyList">' +
+    sorted.map(function(w, i) {
+      var word  = (w.word || w.term || '').replace(/</g, '&lt;');
+      var def   = (w.definition || w.def || '').replace(/</g, '&lt;');
+      var src   = (w.podcastName || w.episodeTitle || '').replace(/</g, '&lt;');
       var state = w.practiceState;
       var badge = state && state !== 'new'
         ? '<span class="vocab-my-badge">' + (state === 'practiced' ? 'practiced' : state === 'mastered' ? 'mastered' : state) + '</span>'
         : '';
-      return '<div class="vocab-my-tile" onclick="closeLibrary();setTimeout(function(){openLexiconPanel();},80)">' +
+      var practiced = state && state !== 'new';
+      return '<div class="vocab-my-tile" id="vt-' + i + '" onclick="_libVocabToggleTile(' + i + ', this)">' +
         '<div class="vocab-my-word">' + word + badge + '</div>' +
         (def ? '<div class="vocab-my-def">' + def + '</div>' : '') +
         (src ? '<div class="vocab-my-meta">' + src + '</div>' : '') +
+        '<div class="vocab-tile-detail">' +
+          (def ? '<div class="vocab-tile-def-full">' + def + '</div>' : '') +
+          '<div class="vocab-tile-actions">' +
+            '<button class="vocab-tile-action-btn' + (practiced ? ' practiced' : '') + '" onclick="event.stopPropagation();_libVocabMarkPracticed(\'' + (w.word || w.term || '').replace(/'/g,"\\'") + '\', this)">' +
+              (practiced ? '✓ Practiced' : 'Mark practiced') +
+            '</button>' +
+            '<button class="vocab-tile-action-btn" onclick="event.stopPropagation();closeLibrary();setTimeout(function(){openLexiconPanel();},80)">Open Lexi →</button>' +
+          '</div>' +
+        '</div>' +
       '</div>';
     }).join('') +
   '</div>';
 
-  content.innerHTML = headerHtml + tilesHtml;
+  content.innerHTML = headerHtml + sortRowHtml + tilesHtml;
+}
+
+function _libVocabSetSort(sort) {
+  _libVocabSort = sort;
+  var list = document.getElementById('vocabMyList');
+  var noMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function rebuild() {
+    _libVocabRenderSeg();
+    var newList = document.getElementById('vocabMyList');
+    if (newList && !noMotion) {
+      requestAnimationFrame(function() { newList.classList.remove('sort-fade'); });
+    }
+  }
+  if (!list || noMotion) { rebuild(); return; }
+  list.classList.add('sort-fade');
+  setTimeout(rebuild, 130);
+}
+
+function _libVocabToggleTile(idx, el) {
+  var isOpen = el.classList.contains('vocab-tile-open');
+  // Close all open
+  document.querySelectorAll('#vocabMyList .vocab-tile-open').forEach(function(t) { t.classList.remove('vocab-tile-open'); });
+  if (!isOpen) {
+    el.classList.add('vocab-tile-open');
+    el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+}
+
+function _libVocabMarkPracticed(word, btn) {
+  try {
+    var lx = JSON.parse(localStorage.getItem('lll_lexicon_v1') || '[]');
+    if (Array.isArray(lx)) {
+      var entry = lx.find(function(w) { return (w.word || w.term || '') === word; });
+      if (entry) {
+        var already = entry.practiceState && entry.practiceState !== 'new';
+        entry.practiceState = already ? 'new' : 'practiced';
+        localStorage.setItem('lll_lexicon_v1', JSON.stringify(lx));
+        if (btn) {
+          btn.classList.toggle('practiced', !already);
+          btn.textContent = !already ? '✓ Practiced' : 'Mark practiced';
+        }
+        // Update badge in parent tile
+        var tile = btn.closest ? btn.closest('.vocab-my-tile') : null;
+        if (tile) {
+          var wordEl = tile.querySelector('.vocab-my-word');
+          if (wordEl) {
+            var existing = wordEl.querySelector('.vocab-my-badge');
+            if (existing) existing.remove();
+            if (!already) {
+              var badge = document.createElement('span');
+              badge.className = 'vocab-my-badge';
+              badge.textContent = 'practiced';
+              wordEl.appendChild(badge);
+            }
+          }
+        }
+      }
+    }
+  } catch(e) {}
 }
 
 function _libRenderPractice() {

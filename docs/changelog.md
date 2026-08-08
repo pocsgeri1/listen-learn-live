@@ -6,6 +6,15 @@
 
 ---
 
+## v3.28 — 2026-08-08 · Home v2 Phase E+F — Vocab sort/expand + Episode expand-first
+
+### index.html
+- **Vocab sort row (#11):** New `_libVocabSort` state ('newest'|'alpha'|'unpractised'). Sort row rendered above the word list — 3 compact pill buttons (Newest, A–Z, New first). Changing sort fades the list out then re-renders (`sort-fade` class + 130ms timeout). `_libVocabSetSort()` handles state + animation.
+- **Vocab inline tile expand (#10):** Word tiles now expand inline on tap instead of closing Home and opening Lexi. Each tile gets a `.vocab-tile-detail` section (max-height: 0 → 300px, opacity transition). Expanded view shows: full definition, "Mark practiced" toggle button (persists to `lll_lexicon_v1`), "Open Lexi →" button. Badge in tile header updates live when mark-practiced is toggled. `_libVocabToggleTile()` manages open/close; `_libVocabMarkPracticed()` writes to localStorage.
+- **Episode expand-first (#9):** Favourite episode tiles with saved items now expand on tap instead of immediately going to the episode drawer. Expanded inline section (`.ep-tile-detail`) shows: saved concept names (Playfair italic, up to 6), saved word chips (up to 8), "Open episode →" button. Episodes with no saved items still go directly to the drawer. `_libEpToggleTile()` manages open/close; only one tile open at a time. Episodes without saved items retain old click-through-to-drawer behavior.
+
+---
+
 ## v3.27 — 2026-08-08 · Home v2 Phase D — Navigation: URL hash tabs, compact strip expand, back button
 
 ### index.html
