@@ -9388,6 +9388,16 @@
   overflow: hidden;
   background: var(--bg);
   z-index: 1;
+  cursor: pointer;
+}
+.home-compact-strip:hover { color: var(--muted); }
+.home-compact-strip::after {
+  content: '↑';
+  margin-left: auto;
+  font-size: 0.6rem;
+  color: var(--accent);
+  opacity: 0.6;
+  font-family: 'DM Sans', sans-serif;
 }
 .home-compact-strip .strip-sep { color: var(--accent); margin: 0 6px; }
 .home-collapse-wrap.collapsed .home-compact-strip {
@@ -9431,6 +9441,34 @@
   right: 8px;
   font-size: 0.38rem;
   padding: 1px 3px;
+}
+/* Back to Home button — v3.27 */
+.back-to-home-btn {
+  position: fixed;
+  bottom: 24px; left: 50%; transform: translateX(-50%) translateY(12px);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.56rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--text);
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: 20px;
+  padding: 8px 18px;
+  cursor: pointer;
+  z-index: 200;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.22s ease, transform 0.22s ease, border-color 0.15s;
+  white-space: nowrap;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.35);
+}
+.back-to-home-btn.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+.back-to-home-btn:hover { border-color: var(--border-hover); }
+@media (prefers-reduced-motion: reduce) {
+  .back-to-home-btn { transition: opacity 0.22s ease; transform: translateX(-50%) !important; }
 }
 /* Export all button — v3.23 */
 .lib-export-all-btn {
@@ -11527,6 +11565,11 @@
   </div>
 </nav>
 
+<!-- BACK TO HOME BUTTON — v3.27 — appears after navigating from Home drawer -->
+<button class="back-to-home-btn" id="backToHomeBtn" style="display:none" onclick="_homeBackBtn()" aria-label="Back to Home">
+  ← Home
+</button>
+
 <!-- MOBILE SCROLL-REVEAL LOGO ROW — v3.12 -->
 <div class="mob-logo-reveal" id="mobLogoReveal" aria-hidden="true">
   <div class="mob-logo-reveal-inner">
@@ -12621,7 +12664,7 @@
     <button class="lib-close" onclick="closeLibrary()">✕</button>
   </div>
   <div class="home-collapse-wrap" id="homeCollapseWrap">
-  <div class="home-compact-strip" id="homeCompactStrip"></div>
+  <div class="home-compact-strip" id="homeCompactStrip" onclick="_homeExpandDashboard()" role="button" aria-label="Show dashboard"></div>
   <div class="home-dashboard" id="homeDashboard">
     <!-- Eyebrow + range row -->
     <div class="home-range-row">
@@ -13858,8 +13901,8 @@ async function loadConcepts() {
       }, 400);
     })();
     // #home deep link — v3.23
-    if (window.location.hash === '#home') {
-      setTimeout(function() { if (typeof openLibrary === 'function') openLibrary(); }, 300);
+    if (window.location.hash.startsWith('#home')) {
+      setTimeout(function() { if (typeof openLibrary === 'function') openLibrary(); }, 300); // tab parsed inside openLibrary
     }
 
   } catch (error) {
@@ -23568,6 +23611,16 @@ function _homeUnbindScrollListeners() {
   if (wrap) wrap.classList.remove('collapsed');
 }
 
+/* ── Phase D: compact strip tap-to-expand — v3.27 ──────────── */
+function _homeExpandDashboard() {
+  var wrap = document.getElementById('homeCollapseWrap');
+  if (!wrap) return;
+  wrap.classList.remove('collapsed');
+  // Scroll the active panel back to top
+  var activePanel = document.querySelector('.lib-panel.lib-panel-active');
+  if (activePanel) activePanel.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
 /* ── Phase 7: nav badge ───────────────────────────────────────── */
 function _homeUpdateNavBadge() {
   var nConcepts = 0, nWords = 0;
@@ -23624,6 +23677,13 @@ function _homeExportAll() {
 }
 
 function openLibrary(tab) {
+  // Parse tab from URL hash if not explicitly passed — v3.27
+  if (!tab) {
+    var hashParts = location.hash.replace('#','').split('/');
+    if (hashParts[0] === 'home' && hashParts[1] && _HOME_TABS.indexOf(hashParts[1]) !== -1) {
+      tab = hashParts[1];
+    }
+  }
   tab = tab || _libActiveTab || 'concepts';
   // Validate tab name — fall back to concepts
   if (_HOME_TABS.indexOf(tab) === -1) tab = 'concepts';
@@ -23642,11 +23702,12 @@ function openLibrary(tab) {
   });
   _libActiveTab = tab;
   _libRender(tab);
+  _homeHideBackBtn(); // clear back button on library open — v3.27
   _homeMaybeSnapshot(); // write snapshot if >24h since last — v3.22
   _homeRenderDashboard();
   _homeUpdateNavBadge(); // v3.23
   _homeBindScrollListeners(); // v3.23
-  try { history.replaceState(null, '', '#home'); } catch(e) {} // v3.23
+  try { history.replaceState(null, '', '#home/' + tab); } catch(e) {} // v3.27 — tab in hash
   requestAnimationFrame(function() {
     _HOME_TABS.forEach(function(t) {
       var panel = document.getElementById('libPanel-' + t);
@@ -23677,6 +23738,7 @@ function _libSwitchTab(tab) {
   if (_libActiveTab === tab) return;
   var prev = _libActiveTab;
   _libActiveTab = tab;
+  try { history.replaceState(null, '', '#home/' + tab); } catch(e) {}
   var prevPanel = document.getElementById('libPanel-' + prev);
   var prevBtn = document.getElementById('libTab-' + prev);
   if (prevPanel) prevPanel.classList.remove('lib-panel-active');
@@ -23700,8 +23762,12 @@ function _libRender(tab) {
   // 'notes' tab removed v3.23 — _libRenderNotes stubbed
 }
 
+var _libNavFromHomeTab = null; // track which Home tab we came from — v3.27
+
 function _libNavToCard(id) {
+  _libNavFromHomeTab = _libActiveTab; // remember where we came from
   closeLibrary();
+  _homeShowBackBtn();
   var c = CONCEPTS.find(function(x) { return x.id === id; });
   if (!c) return;
   setTimeout(function() {
@@ -23716,6 +23782,33 @@ function _libNavToCard(id) {
       }
     }, 200);
   }, 80);
+}
+
+function _homeShowBackBtn() {
+  var btn = document.getElementById('backToHomeBtn');
+  if (!btn) return;
+  btn.style.display = '';
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() { btn.classList.add('visible'); });
+  });
+  // Auto-hide after 6s if user doesn't interact
+  clearTimeout(_homeBackBtnTimer);
+  _homeBackBtnTimer = setTimeout(_homeHideBackBtn, 6000);
+}
+var _homeBackBtnTimer = null;
+
+function _homeHideBackBtn() {
+  var btn = document.getElementById('backToHomeBtn');
+  if (!btn) return;
+  btn.classList.remove('visible');
+  setTimeout(function() { btn.style.display = 'none'; }, 250);
+  _libNavFromHomeTab = null;
+}
+
+function _homeBackBtn() {
+  var tab = _libNavFromHomeTab || 'concepts';
+  _homeHideBackBtn();
+  openLibrary(tab);
 }
 
 function _libFmtDate(ts) {

@@ -6,6 +6,15 @@
 
 ---
 
+## v3.27 — 2026-08-08 · Home v2 Phase D — Navigation: URL hash tabs, compact strip expand, back button
+
+### index.html
+- **URL hash tab persistence (#14):** `openLibrary` now reads `#home/concepts` / `#home/vocab` / `#home/episodes` / `#home/practice` from `location.hash` when no tab is explicitly passed. `_libSwitchTab` writes `#home/<tab>` on every tab switch. `openLibrary` writes `#home/<tab>` (was `#home`). DOMContentLoaded handler uses `.startsWith('#home')` so all formats deep-link correctly.
+- **Compact strip tap-to-expand (#15):** `#homeCompactStrip` now has `cursor:pointer`, `onclick="_homeExpandDashboard()"`, and a `::after` `↑` arrow hint (accent color, right-aligned). New `_homeExpandDashboard()` removes `.collapsed` from `#homeCollapseWrap` and smooth-scrolls the active panel back to `scrollTop:0`.
+- **Back to Home button (#16):** New `#backToHomeBtn` — a fixed pill button `position:fixed; bottom:24px; left:50%` that slides up when shown. Appears automatically when `_libNavToCard()` is called (navigating from Home to a concept card). Auto-hides after 6 seconds. Clicking it calls `_homeBackBtn()` → `openLibrary(lastTab)` returning to exactly where the user was. `_libNavFromHomeTab` stores the originating tab. Button is hidden and cleared whenever `openLibrary` is called normally.
+
+---
+
 ## v3.26 — 2026-08-08 · Home v2 Phase C — Concepts filter overhaul + note badges
 
 ### index.html
