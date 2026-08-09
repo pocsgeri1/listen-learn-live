@@ -9581,34 +9581,65 @@
 .home-stat-card-full {
   grid-column: 1 / -1; /* spans full width of the stats grid */
 }
+/* Heatmap outer wrapper — scrolls horizontally */
 .home-heatmap {
-  display: flex; gap: 3px; flex-wrap: nowrap;
   overflow-x: auto; scrollbar-width: none;
-  padding: 4px 0 2px;
+  padding: 2px 0 4px;
+  min-width: 0;
 }
 .home-heatmap::-webkit-scrollbar { display: none; }
+/* Month label row */
+.home-heatmap-month-row {
+  display: flex; align-items: center; margin-bottom: 3px;
+}
+.home-heatmap-month-cell {
+  width: 14px; flex-shrink: 0;
+  font-family: 'DM Mono', monospace; font-size: 0.36rem;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--muted); text-align: left; white-space: nowrap;
+  overflow: visible;
+}
+/* Grid row: day labels + week columns */
+.home-heatmap-grid {
+  display: flex; align-items: flex-start; gap: 3px;
+}
+/* Day-of-week labels (Mon / Wed / Fri) */
+.home-heatmap-day-labels {
+  display: flex; flex-direction: column; gap: 3px; flex-shrink: 0;
+  margin-right: 1px;
+}
+.home-heatmap-day-label {
+  height: 11px; width: 18px;
+  font-family: 'DM Mono', monospace; font-size: 0.34rem;
+  letter-spacing: 0.04em; text-transform: uppercase;
+  color: var(--muted); line-height: 11px; text-align: right;
+  padding-right: 2px;
+}
+/* Week columns */
 .home-heatmap-week {
   display: flex; flex-direction: column; gap: 3px; flex-shrink: 0;
 }
+/* Individual day cells */
 .home-heatmap-day {
   width: 11px; height: 11px; border-radius: 2px;
   background: var(--hm0);
-  transition: transform 0.12s, opacity 0.12s;
   cursor: default;
-  position: relative;
 }
-.home-heatmap-day:hover { transform: scale(1.35); opacity: 0.9; }
+@media (hover: hover) {
+  .home-heatmap-day:hover { outline: 1px solid rgba(255,255,255,0.3); }
+}
 .home-heatmap-day.hm1 { background: var(--hm1); }
 .home-heatmap-day.hm2 { background: var(--hm2); }
 .home-heatmap-day.hm3 { background: var(--hm3); }
 .home-heatmap-day.hm4 { background: var(--hm4); }
-.home-heatmap-day.hm-today { box-shadow: 0 0 0 1px var(--accent); }
+.home-heatmap-day.hm-today { box-shadow: 0 0 0 1.5px var(--accent); }
+/* Legend */
 .home-heatmap-legend {
   display: flex; align-items: center; gap: 3px;
   margin-top: 6px; justify-content: flex-end;
 }
 .home-heatmap-legend-label {
-  font-family: 'DM Mono', monospace; font-size: 0.38rem;
+  font-family: 'DM Mono', monospace; font-size: 0.36rem;
   letter-spacing: 0.1em; color: var(--muted); text-transform: uppercase;
   margin: 0 2px;
 }
@@ -9616,7 +9647,7 @@
   width: 9px; height: 9px; border-radius: 2px; display: inline-block;
 }
 @media (prefers-reduced-motion: reduce) {
-  .home-heatmap-day { transition: none; }
+  .home-heatmap-day { transition: none !important; }
 }
 
 /* 7-day bar chart — v3.36 pill bars */
@@ -25607,7 +25638,8 @@ function _libVocabRenderSeg() {
       var state = w.practiceState;
       var practiced = state && state !== 'new';
       var dot = practiced ? '<span class="vocab-practiced-dot" title="practiced"></span>' : '';
-      return '<div class="vocab-my-tile" id="vt-' + i + '" onclick="_vwsOpen(' + i + ')">' +
+      var rawWord = (w.word || w.term || '').replace(/'/g,"\\'");
+      return '<div class="vocab-my-tile" id="vt-' + i + '" onclick="_vwsPracticeNow(\'' + rawWord + '\')">' +
         dot +
         '<div class="vocab-my-word">' + word + '</div>' +
         (def ? '<div class="vocab-my-def">' + def + '</div>' : '') +
@@ -26341,81 +26373,108 @@ function _homeRenderDonut() {
   legend.innerHTML = legendRows.join('');
 }
 
-/* ── Activity heatmap — v3.39 ──────────── */
-/* Renders a 12-week (84-day) GitHub-style contribution grid.
-   Data source: lll_mastered_ts_v1 (concept save timestamps).
-   Each cell = one day. Color intensity = number of concepts saved that day. */
+/* ── Activity heatmap — v3.39 (GitHub-style, 52 weeks) ──────────── */
+/* 365-day grid. Timestamps from lll_mastered_ts_v1 are Date.now() = milliseconds. */
 function _homeRenderHeatmap() {
-  var el = document.getElementById('homeHeatmap');
-  if (!el) return;
+  var wrap = document.getElementById('homeHeatmap');
+  if (!wrap) return;
 
   var tsMap = {};
   try { tsMap = JSON.parse(localStorage.getItem('lll_mastered_ts_v1') || '{}'); } catch(e) {}
 
-  // Build a map of dayKey → count (dayKey = 'YYYY-MM-DD')
+  // Build dayKey → count  (timestamps are ms from Date.now())
   var dayCounts = {};
   Object.values(tsMap).forEach(function(ts) {
     if (!ts) return;
-    var d = new Date(typeof ts === 'number' ? ts * 1000 : ts);
-    if (isNaN(d)) return;
+    var d = new Date(Number(ts)); // Date.now() = ms — no * 1000
+    if (isNaN(d.getTime())) return;
     var key = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
     dayCounts[key] = (dayCounts[key] || 0) + 1;
   });
 
-  // Build 12 weeks ending today, starting on Sunday
+  var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var DAYS   = ['','Mon','','Wed','','Fri','']; // GitHub shows Mon/Wed/Fri
+
+  // Today, normalised
   var today = new Date();
   today.setHours(0,0,0,0);
   var todayKey = today.getFullYear() + '-' + String(today.getMonth()+1).padStart(2,'0') + '-' + String(today.getDate()).padStart(2,'0');
 
-  // Start: go back to last Sunday, then back 11 more weeks = 84 days total
+  // Start = 51 weeks ago, on the Sunday of that week
   var startDay = new Date(today);
-  startDay.setDate(startDay.getDate() - startDay.getDay()); // this Sunday
-  startDay.setDate(startDay.getDate() - 11 * 7);           // 11 weeks back
+  startDay.setDate(startDay.getDate() - startDay.getDay() - 51 * 7);
 
-  // Find max count for intensity scaling
+  // Intensity: logarithmic scale so even 1 concept shows visible colour
   var maxCount = Math.max(1, Math.max.apply(null, Object.values(dayCounts).concat([0])));
+  function level(count) {
+    if (count === 0) return 0;
+    // map 1..max → 1..4 with log curve for visual spread
+    return Math.min(4, Math.ceil(Math.log(count + 1) / Math.log(maxCount + 1) * 4) || 1);
+  }
 
-  // Build weeks array
+  // Build 52 weeks
   var weeks = [];
   var cur = new Date(startDay);
-  for (var w = 0; w < 12; w++) {
-    var week = [];
+  for (var w = 0; w < 52; w++) {
+    var week = { monthLabel: null, days: [] };
     for (var d = 0; d < 7; d++) {
       var key = cur.getFullYear() + '-' + String(cur.getMonth()+1).padStart(2,'0') + '-' + String(cur.getDate()).padStart(2,'0');
       var count = dayCounts[key] || 0;
-      var level = count === 0 ? 0 : Math.min(4, Math.ceil(count / maxCount * 4));
-      week.push({ key: key, count: count, level: level, isToday: key === todayKey });
+      // Month label: show on first day of month that falls in this week
+      if (cur.getDate() === 1 && week.monthLabel === null) {
+        week.monthLabel = MONTHS[cur.getMonth()];
+      }
+      week.days.push({ key: key, count: count, lv: level(count), isToday: key === todayKey, dayOfWeek: cur.getDay() });
       cur.setDate(cur.getDate() + 1);
     }
+    if (week.monthLabel === null && w === 0) week.monthLabel = MONTHS[startDay.getMonth()]; // always label first week
     weeks.push(week);
   }
 
-  // Render
   var noMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  el.innerHTML = weeks.map(function(week, wi) {
-    return '<div class="home-heatmap-week">' +
-      week.map(function(day) {
-        var cls = 'home-heatmap-day' + (day.level > 0 ? ' hm' + day.level : '') + (day.isToday ? ' hm-today' : '');
-        var label = day.count > 0 ? day.key + ': ' + day.count + ' concept' + (day.count !== 1 ? 's' : '') : day.key;
-        return '<div class="' + cls + '" title="' + label + '" style="opacity:0;transform:scale(0.5)"></div>';
-      }).join('') +
-    '</div>';
-  }).join('');
 
-  // Animate in — stagger by week
+  // Layout: day labels column + week columns
+  var dayLabelsHtml = '<div class="home-heatmap-day-labels">' +
+    DAYS.map(function(label) {
+      return '<div class="home-heatmap-day-label">' + label + '</div>';
+    }).join('') +
+  '</div>';
+
+  var monthLabelsHtml = '<div class="home-heatmap-month-row">' +
+    '<div class="home-heatmap-day-labels" style="visibility:hidden"></div>' + // spacer
+    weeks.map(function(wk) {
+      return '<div class="home-heatmap-month-cell">' + (wk.monthLabel || '') + '</div>';
+    }).join('') +
+  '</div>';
+
+  var gridHtml = '<div class="home-heatmap-grid">' +
+    dayLabelsHtml +
+    weeks.map(function(wk, wi) {
+      return '<div class="home-heatmap-week">' +
+        wk.days.map(function(day) {
+          var cls = 'home-heatmap-day' + (day.lv > 0 ? ' hm' + day.lv : '') + (day.isToday ? ' hm-today' : '');
+          var title = day.count > 0
+            ? day.key + ': ' + day.count + ' concept' + (day.count !== 1 ? 's' : '')
+            : day.key;
+          var style = noMotion ? '' : ' style="opacity:0;transform:scale(0.6)"';
+          return '<div class="' + cls + '" title="' + title + '"' + style + '></div>';
+        }).join('') +
+      '</div>';
+    }).join('') +
+  '</div>';
+
+  wrap.innerHTML = monthLabelsHtml + gridHtml;
+
+  // Stagger-animate week columns in
   if (!noMotion) {
-    el.querySelectorAll('.home-heatmap-week').forEach(function(week, wi) {
+    wrap.querySelectorAll('.home-heatmap-week').forEach(function(wkEl, wi) {
       setTimeout(function() {
-        week.querySelectorAll('.home-heatmap-day').forEach(function(cell) {
-          cell.style.transition = 'opacity 0.3s ease, transform 0.3s cubic-bezier(0.16,1,0.3,1)';
+        wkEl.querySelectorAll('.home-heatmap-day').forEach(function(cell) {
+          cell.style.transition = 'opacity 0.25s ease, transform 0.25s cubic-bezier(0.16,1,0.3,1)';
           cell.style.opacity = '1';
           cell.style.transform = 'scale(1)';
         });
-      }, wi * 30);
-    });
-  } else {
-    el.querySelectorAll('.home-heatmap-day').forEach(function(cell) {
-      cell.style.opacity = '1'; cell.style.transform = 'scale(1)';
+      }, Math.min(wi * 12, 400));
     });
   }
 }

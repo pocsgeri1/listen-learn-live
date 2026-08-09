@@ -6,6 +6,12 @@
 
 ---
 
+## v3.40 — 2026-08-09 · Heatmap fix (52-week GitHub layout), vocab tap → instant practice
+
+### index.html
+- **Heatmap bug fixed + expanded to 52 weeks:** Root cause was `ts * 1000` treating `Date.now()` millisecond timestamps as Unix seconds → dates ~52 years in the future. Fixed to `new Date(Number(ts))`. Grid expanded from 12 → 52 weeks (365 days). Added month label row and day-of-week labels (Mon/Wed/Fri) matching GitHub's exact layout. Logarithmic intensity scale so even single-concept days show color. Stagger animation by column (12ms per week).
+- **Vocab card tap → instant practice:** Removed the sheet-open intermediary. Card `onclick` now calls `_vwsPracticeNow(word)` directly — closes library, double-rAF, opens `#lexiPracticeOverlay`. Bottom sheet still exists for other entry points but is no longer triggered from the grid.
+
 ## v3.39 — 2026-08-08 · Heatmap, episode thumbnails + podcast pills, vocab sheet, quick fixes
 
 ### index.html
