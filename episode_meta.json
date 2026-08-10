@@ -4148,6 +4148,305 @@
       "actionability_score": 2,
       "evergreen": true,
       "controversy_flag": true
+    },
+    "524": {
+      "collection_id": 524,
+      "dna": {},
+      "summary_style": "B",
+      "summary": "Dan Koe designed his morning around walks, novel projects, and three hours without a phone. The whole system assumes you can design your morning. Most people cannot.\n\nThe one part that does not require schedule freedom is the boredom argument. Koe's friend had not built a creative business when he spent years choosing Netflix over building anything. He just had spare time and made the wrong call with it, repeatedly. The anti-vision exercise does not need a free morning either. Twenty minutes writing down what you never want to repeat again requires no flexibility, no boss's permission, no particular lifestyle.\n\nYou will not finish this episode convinced you can run Dan Koe's morning. You might finish it less convinced your current one is the only option.",
+      "sharpest_line": "School taught you hours equal paycheck, but creative work doesn't care how hard you worked if nobody needed what you made.",
+      "tension": "Obsessive focus vs. everything else falling away",
+      "verdict_listen": [
+        "you've ever worked very hard on something and felt betrayed when results didn't match effort",
+        "you're the kind of person who gets anxious starting projects because you don't have all the pieces yet",
+        "you work in a creative field and suspect you're confusing motion with leverage"
+      ],
+      "verdict_skip": [
+        "you need tactical business advice more than philosophy about cycles and boredom",
+        "the phrase 'creative work' makes you tune out immediately"
+      ],
+      "vocab_vault": [
+        {
+          "word": "entropy",
+          "definition": "disorder that increases when energy isn't directed toward a goal",
+          "timestamp_seconds": null,
+          "category": "Science",
+          "category_alt": null
+        },
+        {
+          "word": "Parkinson's Law",
+          "definition": "work expands to fill the time available for completion",
+          "timestamp_seconds": null,
+          "category": "Business",
+          "category_alt": null
+        },
+        {
+          "word": "default mode network",
+          "definition": "brain state active during rest that generates spontaneous insights",
+          "timestamp_seconds": null,
+          "category": "Smartypants",
+          "category_alt": null
+        },
+        {
+          "word": "salient",
+          "definition": "most noticeable or important in a given context",
+          "timestamp_seconds": null,
+          "category": "Smartypants",
+          "category_alt": null
+        },
+        {
+          "word": "equalized",
+          "definition": "returned to balance or normal state over time",
+          "timestamp_seconds": null,
+          "category": "Small Talk",
+          "category_alt": null
+        },
+        {
+          "word": "iteration",
+          "definition": "one version in a series of repeated refinements",
+          "timestamp_seconds": null,
+          "category": "Business",
+          "category_alt": null
+        },
+        {
+          "word": "cringe at",
+          "definition": "feel embarrassed by something you did in the past",
+          "timestamp_seconds": null,
+          "category": "Small Talk",
+          "category_alt": null
+        },
+        {
+          "word": "inversion",
+          "definition": "solving a problem by asking what would cause the opposite outcome",
+          "timestamp_seconds": null,
+          "category": "Smartypants",
+          "category_alt": null
+        },
+        {
+          "word": "Charlie Munger",
+          "definition": "investor known for using mental models and inversion thinking",
+          "timestamp_seconds": null,
+          "category": "Mind & People",
+          "category_alt": null
+        },
+        {
+          "word": "tradeoffs",
+          "definition": "sacrifices made to gain something else of value",
+          "timestamp_seconds": null,
+          "category": "Business",
+          "category_alt": null
+        },
+        {
+          "word": "minutia",
+          "definition": "small, precise details that are easy to overlook",
+          "timestamp_seconds": null,
+          "category": "Smartypants",
+          "category_alt": null
+        },
+        {
+          "word": "byproduct",
+          "definition": "secondary consequence produced alongside the main result",
+          "timestamp_seconds": null,
+          "category": "Business",
+          "category_alt": null
+        },
+        {
+          "word": "stock vs index",
+          "definition": "one data point versus the overall trend or portfolio",
+          "timestamp_seconds": null,
+          "category": "Business",
+          "category_alt": null
+        },
+        {
+          "word": "amplifies",
+          "definition": "increases the effect or reach of something",
+          "timestamp_seconds": null,
+          "category": "Small Talk",
+          "category_alt": null
+        },
+        {
+          "word": "base form",
+          "definition": "foundational version from which other variations are built",
+          "timestamp_seconds": null,
+          "category": "Smartypants",
+          "category_alt": null
+        },
+        {
+          "word": "outsource",
+          "definition": "delegate a task or responsibility to an external source",
+          "timestamp_seconds": null,
+          "category": "Business",
+          "category_alt": null
+        },
+        {
+          "word": "accountability",
+          "definition": "responsibility enforced by external expectations or observation",
+          "timestamp_seconds": null,
+          "category": "Business",
+          "category_alt": null
+        },
+        {
+          "word": "therapeutic",
+          "definition": "having a healing or mentally beneficial effect",
+          "timestamp_seconds": null,
+          "category": "Mind & People",
+          "category_alt": null
+        },
+        {
+          "word": "liberated",
+          "definition": "freed from a constraint or mental burden",
+          "timestamp_seconds": null,
+          "category": "Small Talk",
+          "category_alt": null
+        },
+        {
+          "word": "resonant",
+          "definition": "emotionally or intellectually meaningful to someone",
+          "timestamp_seconds": null,
+          "category": "Smartypants",
+          "category_alt": null
+        },
+        {
+          "word": "extraction",
+          "definition": "pulling useful information from a larger source",
+          "timestamp_seconds": null,
+          "category": "Business",
+          "category_alt": null
+        },
+        {
+          "word": "passive consumption",
+          "definition": "absorbing content without actively engaging or questioning it",
+          "timestamp_seconds": null,
+          "category": "Small Talk",
+          "category_alt": null
+        },
+        {
+          "word": "compass",
+          "definition": "guiding principle or tool for decision-making",
+          "timestamp_seconds": null,
+          "category": "Small Talk",
+          "category_alt": null
+        },
+        {
+          "word": "trajectory",
+          "definition": "path or direction of progress over time",
+          "timestamp_seconds": null,
+          "category": "Science",
+          "category_alt": null
+        },
+        {
+          "word": "baseline",
+          "definition": "starting point or minimum level of performance",
+          "timestamp_seconds": null,
+          "category": "Science",
+          "category_alt": null
+        },
+        {
+          "word": "burn out",
+          "definition": "exhaust yourself completely through unsustainable effort",
+          "timestamp_seconds": null,
+          "category": "Small Talk",
+          "category_alt": null
+        },
+        {
+          "word": "bulking and cutting",
+          "definition": "fitness strategy alternating between muscle gain and fat loss",
+          "timestamp_seconds": null,
+          "category": "Small Talk",
+          "category_alt": null
+        },
+        {
+          "word": "lever",
+          "definition": "action or tool that produces disproportionate impact",
+          "timestamp_seconds": null,
+          "category": "Business",
+          "category_alt": null
+        },
+        {
+          "word": "dilute",
+          "definition": "weaken by spreading attention or resources too thin",
+          "timestamp_seconds": null,
+          "category": "Small Talk",
+          "category_alt": null
+        },
+        {
+          "word": "ritual",
+          "definition": "repeated action performed with intention to create structure",
+          "timestamp_seconds": null,
+          "category": "Mind & People",
+          "category_alt": null
+        },
+        {
+          "word": "context",
+          "definition": "surrounding information that shapes meaning or focus",
+          "timestamp_seconds": null,
+          "category": "Smartypants",
+          "category_alt": null
+        },
+        {
+          "word": "cross-domain",
+          "definition": "transferring ideas or principles between unrelated fields",
+          "timestamp_seconds": null,
+          "category": "Smartypants",
+          "category_alt": null
+        },
+        {
+          "word": "one-shotted",
+          "definition": "defeated instantly due to overwhelming difference in strength",
+          "timestamp_seconds": null,
+          "category": "Small Talk",
+          "category_alt": null
+        },
+        {
+          "word": "vanity",
+          "definition": "concern with appearance or superficial qualities",
+          "timestamp_seconds": null,
+          "category": "Small Talk",
+          "category_alt": null
+        },
+        {
+          "word": "mastery",
+          "definition": "deep skill developed through sustained deliberate practice",
+          "timestamp_seconds": null,
+          "category": "Mind & People",
+          "category_alt": null
+        },
+        {
+          "word": "worldview",
+          "definition": "framework of beliefs shaping how you interpret reality",
+          "timestamp_seconds": null,
+          "category": "Mind & People",
+          "category_alt": null
+        },
+        {
+          "word": "reorient",
+          "definition": "shift focus or perspective toward a new direction",
+          "timestamp_seconds": null,
+          "category": "Smartypants",
+          "category_alt": null
+        },
+        {
+          "word": "rabbit holes",
+          "definition": "deep explorations into niche topics triggered by curiosity",
+          "timestamp_seconds": null,
+          "category": "Small Talk",
+          "category_alt": null
+        },
+        {
+          "word": "momentum",
+          "definition": "increasing ease and speed built from sustained action",
+          "timestamp_seconds": null,
+          "category": "Science",
+          "category_alt": null
+        },
+        {
+          "word": "portfolio",
+          "definition": "collection of investments, skills, or life areas managed together",
+          "timestamp_seconds": null,
+          "category": "Business",
+          "category_alt": null
+        }
+      ]
     }
   }
 }
