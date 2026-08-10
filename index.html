@@ -16924,7 +16924,7 @@ function openEpisodeDrawer(collectionId) {
 }
 
 function _renderDrawerContent(col, collectionId) {
-  const epConcepts = CONCEPTS.filter(c => c.collection_id === collectionId).reverse();
+  const epConcepts = CONCEPTS.filter(c => c.collection_id === collectionId);
 
   // Subtitle: guest/person names as italic subtitle
   document.getElementById('epDrawerSubtitle').textContent = (col.people || []).join(' · ');
