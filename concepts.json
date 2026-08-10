@@ -17364,5 +17364,733 @@
     "airtable_id": "recPOBeKEb0tYoMpk",
     "published_at": "2026-08-10T07:40:25.194Z",
     "extraction_prompt_version": null
+  },
+  {
+    "id": 820,
+    "term": "Learning as Output Process",
+    "category": "thinking",
+    "source": "dk",
+    "hook": "Creating before you're ready teaches faster than waiting until you are.",
+    "plain": "Learning isn't input (reading, watching, hoarding notes). Output demands input. When you start building, gaps in knowledge reveal themselves naturally. Your mind filters for exactly what's needed, exactly when it's needed. The project creates the learning, not the other way around.",
+    "analogy": "A guitarist learns more from one bad chord than a year of music theory.",
+    "prompt": "What project could you start this week that would force you to learn something you've been avoiding?",
+    "collection_id": 525,
+    "timestamp": 103,
+    "editors_pick": false,
+    "related_ids": [
+      133,
+      160,
+      501,
+      685,
+      512
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 9,
+      "actionability": 9,
+      "novelty": 8,
+      "conversation_value": 8,
+      "composite": 8.5
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "recH5bwuSpkfx2SIn",
+    "published_at": "2026-08-10T11:23:30.686Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 829,
+    "term": "Cybernetic Learning Loop",
+    "category": "thinking",
+    "source": "dk",
+    "hook": "Learning is steering, not filling — every action is a course correction.",
+    "plain": "Cybernetics is how intelligent systems work: set a target state (goal), read current state (perception), compute the gap (error signal), then act to close it (behavior). A thermostat does this. Your body does this. Real learning happens the same way through constant course correction.",
+    "analogy": "A thermostat checks the room dozens of times a day and corrects without being asked.",
+    "prompt": "Pick one current project. What's the gap between where it is now and where you want it? What's the next correction?",
+    "collection_id": 525,
+    "timestamp": 294,
+    "editors_pick": true,
+    "related_ids": [
+      468,
+      477,
+      686,
+      683,
+      50
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 8,
+      "novelty": 9,
+      "conversation_value": 9,
+      "composite": 8.5
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "recVbgK6JSnkI8l5O",
+    "published_at": "2026-08-10T11:23:30.686Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 837,
+    "term": "Intellectual Obesity",
+    "category": "psychology",
+    "source": "dk",
+    "hook": "Scrolling self-improvement content with no action is brain rot with better branding.",
+    "plain": "If you eat too much food without exercising, you get fat. Same with information. Binging self-improvement content without applying it is worse, actually, because it creates a false sense of progress. Information becomes mental fat when it's consumed but never used.",
+    "analogy": "A library locked in a room no one enters doesn't educate anyone.",
+    "prompt": "What's one idea you consumed this week that you haven't used? Will you use it, or should you admit you won't?",
+    "collection_id": 525,
+    "timestamp": 423,
+    "editors_pick": false,
+    "related_ids": [
+      197,
+      174,
+      398,
+      779,
+      802
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 9,
+      "actionability": 8,
+      "novelty": 9,
+      "conversation_value": 9,
+      "composite": 8.8
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "recvr9AwZb0KLWERd",
+    "published_at": "2026-08-10T11:23:30.686Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 821,
+    "term": "Error Signal Filter",
+    "category": "thinking",
+    "source": "dk",
+    "hook": "Your goal determines what your brain bothers to notice.",
+    "plain": "A goal creates an error signal (gap between now and future). The error signal creates a filter. The filter creates relevance (what's useful). Relevance creates retention. Without a goal, your brain actively filters out opportunities because they don't register as relevant to any outcome you're pursuing.",
+    "analogy": "Someone conditioned for \"retire at 65\" won't notice the business opportunity.",
+    "prompt": "Name one opportunity you ignored this month. What goal would have made you notice it?",
+    "collection_id": 525,
+    "timestamp": 447,
+    "editors_pick": true,
+    "related_ids": [
+      477,
+      790,
+      2,
+      11,
+      220
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 9,
+      "actionability": 8,
+      "novelty": 9,
+      "conversation_value": 9,
+      "composite": 8.8
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "recLHISPVPlrQJp3y",
+    "published_at": "2026-08-10T11:23:30.686Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 836,
+    "term": "Default Path Blindness",
+    "category": "psychology",
+    "source": "dk",
+    "hook": "You inherited a destination before you were old enough to choose one.",
+    "plain": "Most people inherit the goal \"go to school, get a job, retire at 65\" from society. That goal unconsciously directs their behavior and learning. They course-correct toward the assigned destiny without choosing it. Worse, their brain actively filters out opportunities outside that path as irrelevant noise.",
+    "analogy": "A train on rails crosses the whole country without noticing a single side road.",
+    "prompt": "What's one decision you made this year because \"that's just what you do\"? Who decided that?",
+    "collection_id": 525,
+    "timestamp": 486,
+    "editors_pick": false,
+    "related_ids": [
+      692,
+      677,
+      689,
+      670,
+      38
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 9,
+      "actionability": 7,
+      "novelty": 7,
+      "conversation_value": 8,
+      "composite": 7.8
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recuqdxnfT6WgVw4C",
+    "published_at": "2026-08-10T11:23:30.686Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 833,
+    "term": "Anti-vision as Compass",
+    "category": "thinking",
+    "source": "dk",
+    "hook": "Knowing what you hate is more useful than imagining perfection.",
+    "plain": "Most visions are vague fantasies. The practical frame: know exactly what you don't want out of life (specific experiences, outcomes, lifestyles). Compare that against an evolving vision of what you do want. The tension between the two lets you sense when you're off track, notice the error, and course-correct.",
+    "analogy": "A sculptor gets closer to the figure by removing everything it isn't.",
+    "prompt": "Describe in detail the version of your life you'd despise living. What's one choice this week that moves you away from it?",
+    "collection_id": 525,
+    "timestamp": 602,
+    "editors_pick": false,
+    "related_ids": [
+      476,
+      704,
+      813,
+      808,
+      33
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 9,
+      "novelty": 8,
+      "conversation_value": 9,
+      "composite": 8.5
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "recijiNh65k5BzkzO",
+    "published_at": "2026-08-10T11:23:30.686Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 828,
+    "term": "Obsession Under Pressure",
+    "category": "psychology",
+    "source": "dk",
+    "hook": "Burning the boats changes your brain, not just your options.",
+    "plain": "Being extreme toward a goal enhances neuroplasticity. Some people thrive under pressure, like quitting a job before having a backup plan. The weight of necessity creates obsessive focus. It's not for everyone, but for those it fits, pressure literally rewires the brain to learn and adapt faster.",
+    "analogy": "Soldiers who've seen real stakes navigate uncertainty that training exercises never produce.",
+    "prompt": "When did pressure make you perform better than comfort ever did? What was different?",
+    "collection_id": 525,
+    "timestamp": 687,
+    "editors_pick": false,
+    "related_ids": [
+      339,
+      475,
+      118,
+      123,
+      811
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 6,
+      "actionability": 7,
+      "novelty": 7,
+      "conversation_value": 8,
+      "composite": 7
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recUZ7GQHQXGoBpcA",
+    "published_at": "2026-08-10T11:23:30.686Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 826,
+    "term": "Project = Learning Frame",
+    "category": "thinking",
+    "source": "dk",
+    "hook": "The life you want sits at the end of a project, not a course.",
+    "plain": "A project is a structured set of goals and milestones. It creates a tangible thing to work toward and publish. Treat your mind, body, relationships, finances as projects. The project filters out unimportant noise, anything not directly moving it forward isn't worth learning right now because you won't retain it anyway.",
+    "analogy": "A carpenter learns more from one warped joint than a year of woodworking videos.",
+    "prompt": "What's one project you could start this month where failure would teach you more than any tutorial?",
+    "collection_id": 525,
+    "timestamp": 793,
+    "editors_pick": true,
+    "related_ids": [
+      133,
+      115,
+      142,
+      512,
+      472
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 9,
+      "actionability": 9,
+      "novelty": 7,
+      "conversation_value": 8,
+      "composite": 8.3
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "recQVAFXHnZH1p3vS",
+    "published_at": "2026-08-10T11:23:30.686Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 832,
+    "term": "Specific > General Knowledge",
+    "category": "thinking",
+    "source": "dk",
+    "hook": "Schools teach you to work. Self-education teaches you to navigate.",
+    "plain": "General knowledge is what's required to do a job someone else designed. Specific knowledge is what's necessary to achieve self-generated goals. Schools narrow you into one area of study, which doesn't prepare you to direct your own path. Self-education is learning what moves your unique goals forward, not hoarding information.",
+    "analogy": "A GPS loaded with every road in the world is useless without a destination entered.",
+    "prompt": "What's one skill you're learning right now? Does it move a goal forward, or are you hoarding it just in case?",
+    "collection_id": 525,
+    "timestamp": 888,
+    "editors_pick": false,
+    "related_ids": [
+      152,
+      149,
+      166,
+      505,
+      773
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 8,
+      "novelty": 7,
+      "conversation_value": 8,
+      "composite": 7.8
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recgCbrmXXAIhGh9r",
+    "published_at": "2026-08-10T11:23:30.686Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 823,
+    "term": "Tutorial Trap",
+    "category": "thinking",
+    "source": "dk",
+    "hook": "Watching tutorials without building creates the illusion of progress.",
+    "plain": "Most people watch a tutorial on complex software, then open it and still have no idea what to do. They loop: watch more tutorials, still stuck. The fix: start with something to build. A vision. Then find a tutorial as similar to that vision as possible and apply it directly while creating.",
+    "analogy": "Adobe After Effects has four hundred buttons. You need three to finish your first clip.",
+    "prompt": "What tutorial have you watched twice without building anything? What's the smallest thing you could make with it today?",
+    "collection_id": 525,
+    "timestamp": 1008,
+    "editors_pick": true,
+    "related_ids": [
+      398,
+      526,
+      83,
+      197,
+      598
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 9,
+      "novelty": 7,
+      "conversation_value": 7,
+      "composite": 7.8
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recOWDzgSp6UT3A39",
+    "published_at": "2026-08-10T11:23:30.686Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 831,
+    "term": "Market Sophistication Drift",
+    "category": "language",
+    "source": "dk",
+    "hook": "An idea's shelf life shrinks every time someone else says it first.",
+    "plain": "What works in content depends on culture and how much an idea has been repeated. Even if AI says something will perform well, it might not, because ideas lose punch as they spread. A cliche today was fresh five years ago. Market sophistication is why you can't just copy formulas and expect the same results.",
+    "analogy": "The first person said \"hustle culture is toxic\" went viral. The millionth gets ignored.",
+    "prompt": "What advice have you heard so many times it now annoys you? Why did it work when you first saw it?",
+    "collection_id": 525,
+    "timestamp": 1107,
+    "editors_pick": false,
+    "related_ids": [
+      595,
+      622,
+      602,
+      760,
+      176
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 7,
+      "actionability": 6,
+      "novelty": 8,
+      "conversation_value": 8,
+      "composite": 7.3
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recYLUTpG2sJJgRBl",
+    "published_at": "2026-08-10T11:23:30.686Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 838,
+    "term": "Technique Stacking",
+    "category": "thinking",
+    "source": "dk",
+    "hook": "Mastery isn't knowing every tool, but stacking enough techniques to get results.",
+    "plain": "You don't need to know every feature in Photoshop or every chord on a guitar. You learn one technique that gets you closer to the result, then the next, then the next. Over time, you stack enough to achieve your specific goal. Then you move to the next project and stack more.",
+    "analogy": "A builder who knows three joints well finishes more houses than one who studied every joint in theory.",
+    "prompt": "What's the next technique you need to learn to finish the project you're working on right now?",
+    "collection_id": 525,
+    "timestamp": 1177,
+    "editors_pick": false,
+    "related_ids": [
+      505,
+      716,
+      492,
+      136,
+      773
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 9,
+      "novelty": 7,
+      "conversation_value": 7,
+      "composite": 7.8
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "reczAVB2aWj1Q9sDN",
+    "published_at": "2026-08-10T11:23:30.686Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 818,
+    "term": "Commonplace Book vs Productivity System",
+    "category": "creativity",
+    "source": "dk",
+    "hook": "Marcus Aurelius had a notebook. You have a productivity fetish.",
+    "plain": "Historical creatives like Leonardo da Vinci, Mark Twain, and Marcus Aurelius kept commonplace books: collections of ideas, sketches, borrowed thoughts. The difference from modern second brains is that their notes fueled creations. Yours sit in folders, never to be seen again. Capture is useless without a project to apply ideas to.",
+    "analogy": "A painter's color swatches exist to get onto canvas, not to be framed on the wall.",
+    "prompt": "Open your notes app. Pick one idea you saved. What project could you apply it to this week?",
+    "collection_id": 525,
+    "timestamp": 1376,
+    "editors_pick": false,
+    "related_ids": [
+      527,
+      167,
+      678,
+      763,
+      796
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 8,
+      "novelty": 8,
+      "conversation_value": 8,
+      "composite": 8
+    },
+    "curated_collection_ids": [
+      206
+    ],
+    "airtable_id": "rec8GRciouoybVx3Q",
+    "published_at": "2026-08-10T11:23:30.686Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 824,
+    "term": "Second Subconscious",
+    "category": "creativity",
+    "source": "dk",
+    "hook": "The best \"second brain\" returns the right idea before you know to search for it.",
+    "plain": "A second brain isn't just for organizing notes. It's a second subconscious. When you're writing, your mind surfaces relevant ideas. But it's limited. A digital commonplace book, if built right, retrieves ideas you forgot existed at exactly the right moment, like your subconscious would if it had infinite memory.",
+    "analogy": "The right metaphor surfaces from notes you forgot you saved, exactly when the sentence needs it.",
+    "prompt": "When did you know the perfect example existed but couldn't remember it? How much would instant recall be worth?",
+    "collection_id": 525,
+    "timestamp": 1399,
+    "editors_pick": true,
+    "related_ids": [
+      167,
+      527,
+      796,
+      802,
+      763
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 7,
+      "actionability": 7,
+      "novelty": 8,
+      "conversation_value": 8,
+      "composite": 7.5
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recP6dmqdvo7x79a2",
+    "published_at": "2026-08-10T11:23:30.686Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 817,
+    "term": "Religion of AI Opinion",
+    "category": "society",
+    "source": "dk",
+    "hook": "People picked a side on AI before thinking. Now they can't think.",
+    "plain": "Some people are 100% pro-AI. Others claim using it once makes you useless. Both are ideology, not thought. Everything is spectrum, not binary. AI is a tool, good for some things, terrible for others. The inability to hold that nuance reveals you've joined a religion, not formed an opinion.",
+    "analogy": "Every new tool since the printing press came with its own apocalypse forecast.",
+    "prompt": "What's one use of AI you think is harmful and one you think is helpful? Can you hold both at once, or does one invalidate the other?",
+    "collection_id": 525,
+    "timestamp": 1519,
+    "editors_pick": false,
+    "related_ids": [
+      57,
+      597,
+      365,
+      365,
+      251
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 6,
+      "novelty": 7,
+      "conversation_value": 9,
+      "composite": 7.5
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "rec5yO1xRqk2ec5Zh",
+    "published_at": "2026-08-10T11:23:30.686Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 825,
+    "term": "Novel Connections > Keyword Search",
+    "category": "creativity",
+    "source": "dk",
+    "hook": "The idea that changes everything is never the one you searched for.",
+    "plain": "Keyword search finds ideas that match words. Novel connections find ideas that match meaning. Creative work comes from unexpected combinations, not synonyms. Embedding ideas in meaning space (vector coordinates) lets software surface related concepts you'd never think to search for, just like your brain does during a shower.",
+    "analogy": "Your shower finds connections your search bar never would.",
+    "prompt": "What two unrelated ideas have you combined into something new? How did you stumble on the connection?",
+    "collection_id": 525,
+    "timestamp": 1855,
+    "editors_pick": false,
+    "related_ids": [
+      529,
+      803,
+      517,
+      795,
+      682
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 7,
+      "actionability": 7,
+      "novelty": 9,
+      "conversation_value": 9,
+      "composite": 8
+    },
+    "curated_collection_ids": [
+      206
+    ],
+    "airtable_id": "recPxPR5JPIBOjHrZ",
+    "published_at": "2026-08-10T11:23:30.686Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 830,
+    "term": "Curate Your Worldview",
+    "category": "identity",
+    "source": "dk",
+    "hook": "Your audience follows the lens you use to read the world, not the content.",
+    "plain": "People can Google facts or ask AI questions. They follow you for your point of view, interpretation, personality, story. All of those are downstream of the ideas composing your worldview. Your second brain should capture the ideas that form your unique perspective, not random noise you'll never use.",
+    "analogy": "Two photographers with the same camera shoot the same street and come back with entirely different cities.",
+    "prompt": "What three ideas shape how you see the world differently from most people? Have you written about them?",
+    "collection_id": 525,
+    "timestamp": 2045,
+    "editors_pick": false,
+    "related_ids": [
+      71,
+      130,
+      231,
+      688,
+      357
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 8,
+      "novelty": 8,
+      "conversation_value": 9,
+      "composite": 8.3
+    },
+    "curated_collection_ids": [
+      203
+    ],
+    "airtable_id": "recVdt6d8CXLrimLG",
+    "published_at": "2026-08-10T11:23:30.686Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 835,
+    "term": "Applied Research = 80% Work",
+    "category": "creativity",
+    "source": "dk",
+    "hook": "Most of your work should happen before you start working.",
+    "plain": "As a writer or creator, research isn't separate from the work, it is the work. Read books, follow curated thinkers, let curiosity guide you. Reject doom scrolling. Embrace lists of authors dedicated to good ideas. Capturing and organizing research is 80% of creating something valuable. Writing is the final 20%.",
+    "analogy": "A chef who spends the day sourcing and prepping can plate in ten minutes flat.",
+    "prompt": "What's one book or thinker you've been meaning to explore? Block two hours this week just for that, no output required.",
+    "collection_id": 525,
+    "timestamp": 2189,
+    "editors_pick": false,
+    "related_ids": [
+      678,
+      796,
+      527,
+      167,
+      794
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 7,
+      "actionability": 8,
+      "novelty": 7,
+      "conversation_value": 7,
+      "composite": 7.3
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "rectBGCRHebLvia7X",
+    "published_at": "2026-08-10T11:23:30.686Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 822,
+    "term": "Performance X Excitement Matrix",
+    "category": "creativity",
+    "source": "dk",
+    "hook": "Create what excites you, then pair it with what the market already wants.",
+    "plain": "Performance equals topics proven to do well (viral posts, high-view videos). Excitement equals topics you're curious about. The best content lives at the intersection. Take the idea you want to explore and pair it with a proven angle, so you write what matters to you while increasing its odds of traction.",
+    "analogy": "A documentary filmmaker wraps a niche obsession in a question everyone already asks.",
+    "prompt": "What topic do you want to write about that probably won't perform? What proven angle could you pair it with?",
+    "collection_id": 525,
+    "timestamp": 2283,
+    "editors_pick": false,
+    "related_ids": [
+      168,
+      176,
+      795,
+      760,
+      175
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 7,
+      "actionability": 9,
+      "novelty": 8,
+      "conversation_value": 8,
+      "composite": 8
+    },
+    "curated_collection_ids": [
+      206
+    ],
+    "airtable_id": "recMeTH7AdSMlBqIj",
+    "published_at": "2026-08-10T11:23:30.686Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 827,
+    "term": "Brain Dump → Outline → Draft",
+    "category": "creativity",
+    "source": "dk",
+    "hook": "Good writing begins with a chaotic brain dump, not a clean first sentence.",
+    "plain": "Don't open a draft and expect ideas to flow linearly. First, brain dump every potential idea that could fit the topic. Look through notes, add research. Second, create structure by organizing ideas into problem, insight, solution. Third, synthesize brain dump and outline into sentences. Writing is assembly, not invention.",
+    "analogy": "A house goes foundation first, walls second, windows last.",
+    "prompt": "What's the next thing you need to write? Set a timer for 10 minutes and brain dump everything that could go in it.",
+    "collection_id": 525,
+    "timestamp": 2351,
+    "editors_pick": false,
+    "related_ids": [
+      501,
+      133,
+      678,
+      341,
+      794
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 10,
+      "novelty": 7,
+      "conversation_value": 7,
+      "composite": 8
+    },
+    "curated_collection_ids": [
+      206
+    ],
+    "airtable_id": "recTuzgRl88KA3AOT",
+    "published_at": "2026-08-10T11:23:30.686Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 819,
+    "term": "AI = Friction Remover",
+    "category": "tech-ai",
+    "source": "dk",
+    "hook": "Use AI to remove friction from where your judgment is not required.",
+    "plain": "AI is good at processing large amounts of information quickly. Use it like a course or mentor while learning: to suggest structures, offer directions, research efficiently. It will hallucinate and give bad advice sometimes. Your job is to question it, just like you'd question a human expert. Don't outsource thinking, remove repetitive friction.",
+    "analogy": "A fast research assistant who sometimes invents citations still saves three hours of grunt work.",
+    "prompt": "What repetitive research task could AI handle for you this week so you can focus on thinking?",
+    "collection_id": 525,
+    "timestamp": 2477,
+    "editors_pick": false,
+    "related_ids": [
+      572,
+      576,
+      382,
+      330,
+      498
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 8,
+      "novelty": 7,
+      "conversation_value": 7,
+      "composite": 7.5
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recAlesfn4Nooum94",
+    "published_at": "2026-08-10T11:23:30.686Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 834,
+    "term": "Articulation Builds the Mind",
+    "category": "language",
+    "source": "dk",
+    "hook": "The struggle to say it in your own words is where the thinking actually happens.",
+    "plain": "There's value in the struggle to articulate your own thoughts. It creates a gap you then learn to fill. Using AI to express opinions and beliefs robs you of that. Use AI for facts, structures, research. Articulate your perspective yourself because the act of wrestling with words sharpens your thinking.",
+    "analogy": "A student who copies notes by hand retains more than one who photographs the board.",
+    "prompt": "What's one belief you hold that you've never forced yourself to write out clearly? Try explaining it in 100 words today.",
+    "collection_id": 525,
+    "timestamp": 2517,
+    "editors_pick": true,
+    "related_ids": [
+      501,
+      812,
+      133,
+      175,
+      554
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 9,
+      "actionability": 9,
+      "novelty": 7,
+      "conversation_value": 8,
+      "composite": 8.3
+    },
+    "curated_collection_ids": [
+      203
+    ],
+    "airtable_id": "recmhobf1AffvfgF0",
+    "published_at": "2026-08-10T11:23:30.686Z",
+    "extraction_prompt_version": null
   }
 ]
