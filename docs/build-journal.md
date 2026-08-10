@@ -104,6 +104,16 @@
 
 **right-tabs-group `body.cs-panel-open` hide uses CSS not JS.** The Speak panel open/close touches `body.classList` — no need to wire JS in `openCS` / `closeConversations`. CSS selector `body.cs-panel-open .speak-pull-tab` handles it cleanly with opacity+pointer-events, same pattern used elsewhere in the codebase.
 
+## 2026-08-10 — Analogy ceiling revert + intel fix (v2.94)
+
+**Analogy ceiling drifted from 20w → 25w silently during v2.17.** The change wasn't logged. Result: an entire batch of 26 concepts came out with analogies 22–38 words long — zero passed the ceiling. Root cause confirmed by diffing extract.html git history. Fix: reverted all three locations where the ceiling appears in the prompt. The good/bad calibration examples from v1.8 were also missing (stripped in v1.9) — restored them, as they're the strongest guard against model drift on this rule.
+
+**Intel JSON truncation was a max_tokens problem, not a parsing bug.** "Unterminated string in JSON at position 8200" means the response was cut off mid-token. 35–40 vocab items + all intel fields regularly exceed 2000 tokens. Raised to 4000 — well above any realistic output size.
+
+**Lesson: never change a ceiling without logging it.** The 25w drift happened silently across a version bump with no changelog entry. Any analogy/hook/plain ceiling change must be in the changelog with old → new value.
+
+---
+
 ## 2026-08-04 — Enrichment button + vocab prompt revert (v2.93)
 
 **Vocab Tier system caused quality drift.** Tier 1/2/3 language added in v2.46 made the prompt longer and introduced ambiguity — model started over-including internet slang and under-including the clean academic vocabulary that defines Epistemic's voice. Reverted to single-instruction format. Kept only the New Yorker/Atlantic test from the Tier 3 rule.

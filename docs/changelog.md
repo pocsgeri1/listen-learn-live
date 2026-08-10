@@ -522,6 +522,30 @@
 
 ---
 
+## v2.94 — 2026-08-10 · Analogy ceiling revert to 20w + intel max_tokens fix (extraction-prompt-v2.4)
+
+### extract.html — extraction prompt (epistemic-tools repo)
+- **Analogy ceiling reverted: 25w → 20w.** Ceiling had silently drifted from 20 (v1.9 standard) to 25 in v2.17. Reverted across all three locations: quick-reference field rules, full ANALOGY FIELD RULES section, and regen-field rules. Word counter target updated to 15w (was 18w).
+- **Good/bad analogy examples restored** (from v1.8, stripped in v1.9). Four calibration examples added back to ANALOGY FIELD RULES and regen-field rules to prevent model drift.
+- **Self-check item 4 strengthened:** Added explicit note that analogy word count drift is the #1 quality failure mode — model must count manually before finalising.
+- **Extraction prompt version bumped: 2.3 → 2.4.** Stamped on every extracted concept.
+
+### extract.html — intel generation
+- **max_tokens raised: 2000 → 4000.** Root cause of recurring "Unterminated string in JSON" error. Summary + sharpest_line + tension + verdicts + 35–40 vocab items regularly exceeded 2000 tokens, truncating mid-JSON. 4000 gives safe headroom.
+
+### What was NOT changed (intentionally kept from v2.3+)
+- Separated extraction/intel flow (intel auto-triggers after concepts)
+- Enrichment button (generate enrichment → episode_meta.json)
+- Vocab vault: 35–40 words, clean single-instruction format, categories/dropdowns UI
+- Chronological sort in publish-batch.js (site-side, not extract.html)
+- Field counters, sticky rules sidebar, Copy QC button, related_ids propagation
+
+### REVERT INSTRUCTIONS
+- To revert analogy ceiling back to 25w: search "20-word ceiling" / "20 words" in extract.html, change to 25. Also update `analogy: { kind: 'words', target: 15, ceiling: 20 }` → target: 18, ceiling: 25.
+- To revert max_tokens: change `max_tokens: 4000` back to `2000` in generateIntel() (~line 3125).
+
+---
+
 ## v2.93 — 2026-08-04 · Enrichment button in extract.html + vocab vault prompt revert
 
 ### extract.html (epistemic-tools repo)
