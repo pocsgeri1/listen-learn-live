@@ -4460,6 +4460,23 @@
       "actionability_score": 3,
       "evergreen": true,
       "controversy_flag": false
+    },
+    "525": {
+      "collection_id": 525,
+      "dna": {},
+      "difficulty_level": 2,
+      "tone": "confrontational",
+      "guest_field": "learning & productivity",
+      "key_quotes": [
+        "Scrolling self-improvement content with no action is brain rot with better branding",
+        "The life you want sits at the end of a project, not a course",
+        "Learning is steering, not filling — every action is a course correction"
+      ],
+      "core_claim": "Stop consuming learning content passively; build projects instead, because action creates the learning loop that consumption merely simulates.",
+      "episode_type": "solo",
+      "actionability_score": 3,
+      "evergreen": true,
+      "controversy_flag": true
     }
   }
 }
