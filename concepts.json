@@ -16504,5 +16504,865 @@
     "airtable_id": "rectWReo52HfwkJ4M",
     "published_at": "2026-08-04T08:36:43.150Z",
     "extraction_prompt_version": null
+  },
+  {
+    "id": 798,
+    "term": "Boredom → Life Direction",
+    "category": "psychology",
+    "source": "dk",
+    "hook": "How you fill empty time decides who you become in five years.",
+    "plain": "Dan Koe's friend nearly built a company called Bored - he'd spent years filling boredom with scrolling and Netflix, never building anything. Without a project to aim at, your easiest habits win by default. What you do when bored is what your life becomes.",
+    "analogy": "Water always fills the lowest point. Your habits rush to fill empty time.",
+    "prompt": "What did you do the last three times you felt bored? If you repeat that pattern for five years, where does it take you?",
+    "collection_id": 524,
+    "timestamp": 0,
+    "editors_pick": false,
+    "related_ids": [
+      90,
+      174,
+      423
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 9,
+      "actionability": 8,
+      "novelty": 8,
+      "conversation_value": 8,
+      "composite": 8.3
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "recRY3pJMwfUvAjPL",
+    "published_at": "2026-08-10T07:40:25.194Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 795,
+    "term": "Koe's Law",
+    "category": "creativity",
+    "source": "dk",
+    "hook": "Better creative leverage beats more hours every time.",
+    "plain": "Koe noticed he could make substantially more without working more once he moved from freelancing to products and social media. Parkinson's Law says work expands to fill time. Koe's version: creative results can expand exponentially in the same hours if you find higher-leverage actions.",
+    "analogy": "A sculptor who finds better stone produces a better statue in the same hours.",
+    "prompt": "What's one thing you've worked hard on for months that could be replaced by a higher-leverage approach in weeks?",
+    "collection_id": 524,
+    "timestamp": 119,
+    "editors_pick": true,
+    "related_ids": [
+      27,
+      128,
+      139
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 7,
+      "actionability": 8,
+      "novelty": 9,
+      "conversation_value": 8,
+      "composite": 8
+    },
+    "curated_collection_ids": [
+      206
+    ],
+    "airtable_id": "recJW12R2dvNLi4S4",
+    "published_at": "2026-08-10T07:40:25.194Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 815,
+    "term": "Hard Work ≠ Deserved Outcomes",
+    "category": "thinking",
+    "source": "dk",
+    "hook": "Working hard on the wrong thing gets you tired, not paid.",
+    "plain": "Most people tie specific hours to a specific paycheck. That mindset breaks down in creative work. Grinding hard on the wrong thing, or without the right levers, gets you discouraged. Hard work earns results only when pointed at something worth building.",
+    "analogy": "Nine people dig in the same field and find nothing. One digs in the right spot.",
+    "prompt": "Where in your life are you expecting a result simply because you worked hard, not because you worked on the right thing?",
+    "collection_id": 524,
+    "timestamp": 203,
+    "editors_pick": false,
+    "related_ids": [
+      83,
+      118,
+      197
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 7,
+      "novelty": 7,
+      "conversation_value": 8,
+      "composite": 7.5
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recviTl02azO7LDr2",
+    "published_at": "2026-08-10T07:40:25.194Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 809,
+    "term": "Intensity ↔ Consistency Cycle",
+    "category": "thinking",
+    "source": "dk",
+    "hook": "Life moves in seasons: lost, curious, intense, consistent.",
+    "plain": "Dan identifies four phases: feeling lost after hitting a goal, then curiosity until something grabs you, then intensity where 12-hour days feel natural, then consistency where you build systems around a higher baseline. Each phase resets. The next goal starts a new cycle.",
+    "analogy": "Winter = clarity. Spring = experiments. Summer = growth. Fall = harvest.",
+    "prompt": "Which phase are you in right now? What would the next phase require from you?",
+    "collection_id": 524,
+    "timestamp": 477,
+    "editors_pick": true,
+    "related_ids": [
+      122,
+      361,
+      503
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 8,
+      "novelty": 8,
+      "conversation_value": 8,
+      "composite": 8
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "recjuwrTrZhxxqvtJ",
+    "published_at": "2026-08-10T07:40:25.194Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 797,
+    "term": "Bulk vs Cut for Work",
+    "category": "thinking",
+    "source": "dk",
+    "hook": "Intensity builds muscle. Consistency cuts fat.",
+    "plain": "The intensity phase is for building: big pushes, other areas take a backseat. The consistency phase is for maintaining a higher baseline and revealing what you built. Dan cycles between both. Staying in intensity forever burns out everything around you.",
+    "analogy": "Construction phase: pour concrete. Finishing phase: polish the surface.",
+    "prompt": "Right now — are you in a phase where you should be building something new, or maintaining what you've already built? Which does your calendar reflect?",
+    "collection_id": 524,
+    "timestamp": 692,
+    "editors_pick": false,
+    "related_ids": [
+      41,
+      507,
+      499
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 7,
+      "actionability": 8,
+      "novelty": 8,
+      "conversation_value": 7,
+      "composite": 7.5
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recQ89xd3MIQLeTrq",
+    "published_at": "2026-08-10T07:40:25.194Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 806,
+    "term": "Lifestyle Fit Test",
+    "category": "thinking",
+    "source": "dk",
+    "hook": "Every new desire costs something you already value.",
+    "plain": "Dan tries anything he is genuinely curious about. But he asks first: does this cost something higher-priority? Running felt good until it clashed with lifting, work, and his social life. Nutrition tanked. He quit. If something does not fit, leave fast. You can still pull one principle from it.",
+    "analogy": "A suitcase packed full has no room for a new jacket.",
+    "prompt": "What hobby or side interest are you forcing into your life at the expense of something more important?",
+    "collection_id": 524,
+    "timestamp": 837,
+    "editors_pick": true,
+    "related_ids": [
+      356,
+      704,
+      705
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 8,
+      "novelty": 7,
+      "conversation_value": 7,
+      "composite": 7.5
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recYXTwlzATxU4e3a",
+    "published_at": "2026-08-10T07:40:25.194Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 799,
+    "term": "Shiny Objects + Priorities",
+    "category": "thinking",
+    "source": "dk",
+    "hook": "A new obsession usually reveals what your current life is missing.",
+    "plain": "Shiny object syndrome isn't the problem... losing your priorities is. Dan tries new things to extract a principle or lesson, then brings it back. The urge to try something new points at something missing. Get it out of your system, pull the principle, don't let it derail the main thing.",
+    "analogy": "A chef samples cuisines, brings spices back, but won't abandon the restaurant.",
+    "prompt": "What new interest are you exploring? What principle could you extract from it to apply to your main focus?",
+    "collection_id": 524,
+    "timestamp": 872,
+    "editors_pick": false,
+    "related_ids": [
+      132,
+      135,
+      364
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 7,
+      "actionability": 8,
+      "novelty": 8,
+      "conversation_value": 7,
+      "composite": 7.5
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recSBNYEqCN7FjFxg",
+    "published_at": "2026-08-10T07:40:25.194Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 793,
+    "term": "High Leverage Actions",
+    "category": "business",
+    "source": "dk",
+    "hook": "One exceptional post can outperform a thousand mediocre ones.",
+    "plain": "When Dan had to work with limited energy, he asked: what one or two actions actually move the lever? Creative work has more room for asymmetry than almost anything else. One great post can beat a thousand average ones. If you are not hunting for that, you will spend your career grinding averages.",
+    "analogy": "A vein of gold in a mountain. One strike pays more than a hundred digs.",
+    "prompt": "What's the single action in your work right now that, if done exceptionally, would make everything else easier?",
+    "collection_id": 524,
+    "timestamp": 1012,
+    "editors_pick": false,
+    "related_ids": [
+      27,
+      484,
+      602
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 8,
+      "novelty": 7,
+      "conversation_value": 8,
+      "composite": 7.8
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recBR5JqX4au5tsWS",
+    "published_at": "2026-08-10T07:40:25.194Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 814,
+    "term": "Productivity Needs Creativity",
+    "category": "thinking",
+    "source": "dk",
+    "hook": "Productivity without creativity loses impact. So does creativity without productivity.",
+    "plain": "When you separate productivity and creativity, both lose impact. During rest, on walks or in the shower, ideas surface from your subconscious and attach to whatever project has your focus. Those ideas are usually higher-leverage than anything ground out at a desk. One fuels the other.",
+    "analogy": "Without a compass, fast legs just get you lost faster.",
+    "prompt": "When did your best idea for a current project hit you? Were you working on it at the time?",
+    "collection_id": 524,
+    "timestamp": 1253,
+    "editors_pick": false,
+    "related_ids": [
+      530,
+      520,
+      341
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 7,
+      "novelty": 8,
+      "conversation_value": 8,
+      "composite": 7.8
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recvHVH3RLdkZycVg",
+    "published_at": "2026-08-10T07:40:25.194Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 805,
+    "term": "Novel Morning Block",
+    "category": "creativity",
+    "source": "dk",
+    "hook": "Hardest, newest work belongs to the fresh mind.",
+    "plain": "Dan splits his day into two modes. Morning means no phone, a focused walk, then the hardest creative work first. Afternoon is releasing entropy: email, Slack, admin, and maintenance. Most people mix the two all day and wonder why nothing important ever gets finished.",
+    "analogy": "A chef preps the hardest dish first, then the easy sides.",
+    "prompt": "What's the hardest, most important creative work you're avoiding? What if it went first tomorrow?",
+    "collection_id": 524,
+    "timestamp": 1371,
+    "editors_pick": false,
+    "related_ids": [
+      413,
+      494,
+      228
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 7,
+      "actionability": 9,
+      "novelty": 7,
+      "conversation_value": 7,
+      "composite": 7.5
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recWhOF6hns1iNjjF",
+    "published_at": "2026-08-10T07:40:25.194Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 789,
+    "term": "The Segmenting Walk",
+    "category": "thinking",
+    "source": "dk",
+    "hook": "A walk divides your day better than any meeting.",
+    "plain": "Dan takes a walk between his deep work block and his admin block. Morning walk: what am I writing today? Mid-day walk: transition from creation to maintenance. No phone on either. The walk creates a hard boundary between the two halves of the day - it clears the last context, prepares for the next.",
+    "analogy": "A curtain drops between acts. Same stage, different scene.",
+    "prompt": "What short ritual could you add between your focused work and your reactive work to create a clean break?",
+    "collection_id": 524,
+    "timestamp": 1407,
+    "editors_pick": false,
+    "related_ids": [
+      222,
+      665,
+      657
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 7,
+      "actionability": 9,
+      "novelty": 7,
+      "conversation_value": 6,
+      "composite": 7.3
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "rec0Owyf621uoCAqq",
+    "published_at": "2026-08-10T07:40:25.194Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 801,
+    "term": "Creativity Within Constraints",
+    "category": "creativity",
+    "source": "dk",
+    "hook": "Without a project to contain it, creativity just scatters.",
+    "plain": "Dan's creativity always operates within a container: a book, newsletter, or project. Listen to something unrelated on a walk and your mind still pulls ideas back to what you are building. The project gives you a filter. No project, and ideas just pass through without sticking.",
+    "analogy": "A river flows faster through narrow banks, not a swamp.",
+    "prompt": "What project could you commit to this month that would give your random thoughts a place to land?",
+    "collection_id": 524,
+    "timestamp": 1502,
+    "editors_pick": true,
+    "related_ids": [
+      481,
+      499,
+      344
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 8,
+      "novelty": 8,
+      "conversation_value": 8,
+      "composite": 8
+    },
+    "curated_collection_ids": [
+      206
+    ],
+    "airtable_id": "recU0HP6SH4ZqvLJk",
+    "published_at": "2026-08-10T07:40:25.194Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 803,
+    "term": "Cross-domain Idea Transfer",
+    "category": "creativity",
+    "source": "dk",
+    "hook": "Whatever you consume gets filtered through whatever you are building.",
+    "plain": "Once you are working on a project, your mind expands into its context. A random podcast, even an argument with someone you love, gets filtered through whatever has your focus. Your brain pulls something relevant back every time. The topic of the input does not matter. The project is the lens.",
+    "analogy": "A prism bends all light toward the same point, no matter the source.",
+    "prompt": "What completely unrelated thing did you consume recently that sparked an idea for your main work?",
+    "collection_id": 524,
+    "timestamp": 1566,
+    "editors_pick": false,
+    "related_ids": [
+      529,
+      517,
+      682
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 7,
+      "actionability": 7,
+      "novelty": 8,
+      "conversation_value": 8,
+      "composite": 7.5
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recUVWMNZfjZOshdL",
+    "published_at": "2026-08-10T07:40:25.194Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 800,
+    "term": "Progressive Uncertainty Overload",
+    "category": "thinking",
+    "source": "dk",
+    "hook": "Your potential scales with the uncertainty you embrace.",
+    "plain": "Do not throw yourself into the ocean before you can swim. Gradually push the edge of what is known into the unknown. Each step expands your capacity. At the gym it means adding 2.5kg. In life it means setting goals where you do not have all the pieces yet. Last year's scary becomes this year's normal.",
+    "analogy": "A weightlifter adds 2.5kg, not 50kg. Progression, not suicide.",
+    "prompt": "What's one slightly uncertain thing you could try this week that's just beyond your current skill level?",
+    "collection_id": 524,
+    "timestamp": 1637,
+    "editors_pick": false,
+    "related_ids": [
+      101,
+      96,
+      415
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 8,
+      "novelty": 8,
+      "conversation_value": 8,
+      "composite": 8
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "recTQcwDSVbITczkH",
+    "published_at": "2026-08-10T07:40:25.194Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 792,
+    "term": "Skill-challenge Edge",
+    "category": "psychology",
+    "source": "core",
+    "hook": "Fulfillment lives exactly where your skill meets its limit.",
+    "plain": "Use anxiety and boredom as your compass. Anxious means the task is too far above your current skill. Bored means it is too easy. The sweet spot is making progress on something difficult enough to engage you but not so hard you freeze. That is where growth and satisfaction concentrate.",
+    "analogy": "A video game level just hard enough to keep you trying.",
+    "prompt": "What activity this week left you neither bored nor anxious, just deeply engaged? How do you get more of that?",
+    "collection_id": 524,
+    "timestamp": 1790,
+    "editors_pick": false,
+    "related_ids": [
+      672,
+      373,
+      528
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 9,
+      "actionability": 8,
+      "novelty": 7,
+      "conversation_value": 8,
+      "composite": 8
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "rec2WU1HXicqN4XBF",
+    "published_at": "2026-08-10T07:40:25.194Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 813,
+    "term": "Infinite String of Problems",
+    "category": "philosophy",
+    "source": "dk",
+    "hook": "Solving one problem just reveals a deeper, harder one underneath.",
+    "plain": "There is always one most pressing problem in your life right now. Solve it and a deeper one appears. Fix sluggishness through nutrition and the gym, and two years later the new problem is mastery and philosophy. Each solved problem reveals a harder, more meaningful one.",
+    "analogy": "Video game levels: beat one and a harder one unlocks, indefinitely.",
+    "prompt": "What problem are you solving right now? What deeper problem will likely appear once you solve it?",
+    "collection_id": 524,
+    "timestamp": 1871,
+    "editors_pick": false,
+    "related_ids": [
+      89,
+      656,
+      769
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 9,
+      "actionability": 7,
+      "novelty": 8,
+      "conversation_value": 9,
+      "composite": 8.3
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "recs4ghNbFOQJcY5H",
+    "published_at": "2026-08-10T07:40:25.194Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 790,
+    "term": "Frame for Operating",
+    "category": "thinking",
+    "source": "dk",
+    "hook": "Vision and anti-vision give your mind a direction without a rigid plan.",
+    "plain": "The anti-vision (what to avoid) and vision (what to pursue) create a frame. Your worldview, your little map. With that frame, your mind can piece together opportunities, filter decisions, orient toward better outcomes. It's not about a specific path. It's about direction. The frame lets you see what you'd miss otherwise.",
+    "analogy": "A windowpane. You can't see the whole world, but you see what matters through this frame.",
+    "prompt": "If your life had clear boundaries of 'never this' and 'more of this,' what decisions would become obvious?",
+    "collection_id": 524,
+    "timestamp": 1951,
+    "editors_pick": false,
+    "related_ids": [
+      169,
+      477,
+      485
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 7,
+      "actionability": 8,
+      "novelty": 7,
+      "conversation_value": 7,
+      "composite": 7.3
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "rec1VuFOdIYGzjujD",
+    "published_at": "2026-08-10T07:40:25.194Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 808,
+    "term": "Decide What to Suck At",
+    "category": "philosophy",
+    "source": "core",
+    "hook": "Oliver Burkeman: decide in advance what you'll suck at.",
+    "plain": "If you focus all attention on one thing, you make more progress than spreading it. Six months of full focus on health beats a year at 50% attention. There are no solutions, only tradeoffs. Decide in advance what you're willing to trade: social life, other hobbies, perfection elsewhere. Name the cost before you start.",
+    "analogy": "A spotlight on one actor. The rest of the stage goes dark.",
+    "prompt": "What are you pursuing right now? What have you decided to suck at in order to make it happen?",
+    "collection_id": 524,
+    "timestamp": 2489,
+    "editors_pick": true,
+    "related_ids": [
+      704,
+      414,
+      499
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 9,
+      "novelty": 8,
+      "conversation_value": 8,
+      "composite": 8.3
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "reccecQW5p4hIEgT1",
+    "published_at": "2026-08-10T07:40:25.194Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 816,
+    "term": "Obsession Compounds Non-linearly",
+    "category": "thinking",
+    "source": "cw",
+    "hook": "Six months of full obsession beats a year of split attention.",
+    "plain": "More time does not equal proportional progress. Focus exclusively on one thing for six months and you outpace 50% attention for a year. Obsession lets you notice details you would miss when distracted. Results accumulate faster when attention is undivided.",
+    "analogy": "A magnifying glass focuses sunlight to start a fire. Spread the beam, nothing happens.",
+    "prompt": "What would happen if you gave your biggest goal 100% attention for the next 90 days instead of splitting focus?",
+    "collection_id": 524,
+    "timestamp": 2489,
+    "editors_pick": false,
+    "related_ids": [
+      411,
+      472,
+      364
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 8,
+      "novelty": 8,
+      "conversation_value": 8,
+      "composite": 8
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "recwjHAzTPNdBvfuW",
+    "published_at": "2026-08-10T07:40:25.194Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 804,
+    "term": "Byproduct Pain",
+    "category": "psychology",
+    "source": "cw",
+    "hook": "People quit because of what drops off, not lack of progress.",
+    "plain": "Most people stop not because they are failing at the goal, but because of what falls away around it. Working 12-hour days on your business? Friends stop calling. You feel isolated. The discomfort of what you are sacrificing, not the difficulty of the work, is what kills most pursuits. You have to manage both costs.",
+    "analogy": "A climber quits not because the mountain is too hard, but because he misses the valley.",
+    "prompt": "What goal have you abandoned? Was it because the goal was impossible, or because you couldn't handle what you had to give up?",
+    "collection_id": 524,
+    "timestamp": 2605,
+    "editors_pick": false,
+    "related_ids": [
+      232,
+      727,
+      279
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 7,
+      "novelty": 8,
+      "conversation_value": 8,
+      "composite": 7.8
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recWGTHRtGAZKNRI5",
+    "published_at": "2026-08-10T07:40:25.194Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 811,
+    "term": "Pixel vs Whole Picture",
+    "category": "thinking",
+    "source": "dk",
+    "hook": "One bad moment becomes someone's entire identity in your head.",
+    "plain": "A person's life is a song, an image, a story. But people zoom in on one pixel, one lyric, one phrase, and act like that's the entirety of their being. Thinking in stories instead of snapshots lets you see growth, pull something useful, and drop the pointless anger.",
+    "analogy": "Judging a painting by one brushstroke.",
+    "prompt": "Who have you judged based on one thing they said or did? What's the bigger story you're missing?",
+    "collection_id": 524,
+    "timestamp": 2674,
+    "editors_pick": false,
+    "related_ids": [
+      71,
+      199,
+      424
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 7,
+      "novelty": 7,
+      "conversation_value": 8,
+      "composite": 7.5
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "reclLBPP3LDA69Pax",
+    "published_at": "2026-08-10T07:40:25.194Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 807,
+    "term": "Stock Down, Index Up",
+    "category": "thinking",
+    "source": "dk",
+    "hook": "One position can be tanking while the whole portfolio is up.",
+    "plain": "People focus on the one stock that's down and act like the whole portfolio is failing. But the index fund is up. One area of your life can be struggling while the whole is improving. Zoom out. Look at the trajectory, not the single data point. Your life is a portfolio, not one position.",
+    "analogy": "A forest loses a tree. The forest is still growing.",
+    "prompt": "What one area of your life is struggling right now? How's the rest of the portfolio doing?",
+    "collection_id": 524,
+    "timestamp": 2714,
+    "editors_pick": false,
+    "related_ids": [
+      48,
+      698,
+      220
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 7,
+      "actionability": 7,
+      "novelty": 7,
+      "conversation_value": 7,
+      "composite": 7
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recbuq39vh3WJ6gHT",
+    "published_at": "2026-08-10T07:40:25.194Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 812,
+    "term": "Writing Amplifies All Skills",
+    "category": "language",
+    "source": "dk",
+    "hook": "Writing teaches psychology, persuasion, and how to think.",
+    "plain": "Dan sees writing as the skill that amplifies any other skill you acquire. It forces you to learn fundamentals: human nature, psychology, persuasion, communication. Anything you want in life involves persuading, offering value, exchanging value. The written word is the base form of media.",
+    "analogy": "A knife sharpens all tools. Writing sharpens all abilities.",
+    "prompt": "What's one skill you're building right now? How would explaining it in writing make you better at it?",
+    "collection_id": 524,
+    "timestamp": 2877,
+    "editors_pick": false,
+    "related_ids": [
+      133,
+      501,
+      175
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 8,
+      "novelty": 7,
+      "conversation_value": 8,
+      "composite": 7.8
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recqFcvklx8qbIDAj",
+    "published_at": "2026-08-10T07:40:25.194Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 810,
+    "term": "Externalized Social Pressure",
+    "category": "psychology",
+    "source": "cw",
+    "hook": "You won't quit mid-workout when others are watching.",
+    "plain": "Chris struggled with journaling until he started Three Minute Monday, a public newsletter subscribers expected every Monday. Same with CrossFit: 15 people working out next to you means you do not quit mid-set. Outsource your motivation to the group. Make the commitment public when internal discipline keeps failing.",
+    "analogy": "A gym buddy makes you show up. A deadline makes you ship.",
+    "prompt": "What habit have you failed to build alone that you could make public or social to force consistency?",
+    "collection_id": 524,
+    "timestamp": 3089,
+    "editors_pick": false,
+    "related_ids": [
+      105,
+      509,
+      140
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 9,
+      "novelty": 7,
+      "conversation_value": 7,
+      "composite": 7.8
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recl5LEZFXgUPOs9A",
+    "published_at": "2026-08-10T07:40:25.194Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 791,
+    "term": "Focused Conversation Therapy",
+    "category": "relationships",
+    "source": "cw",
+    "hook": "30 minutes on one topic goes deeper than 3 hours of chit-chat.",
+    "plain": "Chris found focused conversations therapeutic in a way he did not know he needed. Put your phone on the table, press record, and talk to a friend about one thing you care about for 30 minutes. Do not let it drift. Go deep on one thing.",
+    "analogy": "A scalpel, not a butter knife. One clean cut, not spreading.",
+    "prompt": "Who could you have a 30-minute conversation with this week about one specific thing you're working through?",
+    "collection_id": 524,
+    "timestamp": 3212,
+    "editors_pick": false,
+    "related_ids": [
+      108,
+      99,
+      206
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 7,
+      "actionability": 9,
+      "novelty": 7,
+      "conversation_value": 8,
+      "composite": 7.8
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "rec1hMB9WZGMn4Z4r",
+    "published_at": "2026-08-10T07:40:25.194Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 802,
+    "term": "Ideas Trapped in Your Head",
+    "category": "thinking",
+    "source": "dk",
+    "hook": "Unwritten ideas keep nagging your brain until you release them.",
+    "plain": "Missing persons families say 'I just want to know where they are.' Your brain does the same with ideas. Until you write them down, your brain keeps reminding you, occupying mental space. Once it's on paper, you're liberated to think about new things. The ruthless truth: unwritten ideas consume attention you could spend on new insights.",
+    "analogy": "A detective can't solve new cases while searching for the missing file.",
+    "prompt": "What idea has been bouncing around your head for weeks that you could write down in the next five minutes?",
+    "collection_id": 524,
+    "timestamp": 3241,
+    "editors_pick": true,
+    "related_ids": [
+      44,
+      219,
+      341
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 9,
+      "novelty": 8,
+      "conversation_value": 8,
+      "composite": 8.3
+    },
+    "curated_collection_ids": [
+      202
+    ],
+    "airtable_id": "recUNZqsPnN7C6tI3",
+    "published_at": "2026-08-10T07:40:25.194Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 794,
+    "term": "Good Shit Sticks",
+    "category": "thinking",
+    "source": "core",
+    "hook": "It's not your job to find books interesting. It's theirs.",
+    "plain": "Tim Ferriss principle: the good shit sticks. If you read 200 pages and remember nothing, that's not a you problem. The book failed to be interesting or resonant. Naval: if you didn't remember it, you didn't need to. Trying to memorize anything is against the point. If something mattered, it would have stuck.",
+    "analogy": "A magnet picks up iron, not plastic. Your mind knows what matters.",
+    "prompt": "What book have you tried to force yourself through? Why are you reading it if nothing sticks?",
+    "collection_id": 524,
+    "timestamp": 3471,
+    "editors_pick": false,
+    "related_ids": [
+      528,
+      760,
+      167
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 8,
+      "actionability": 7,
+      "novelty": 8,
+      "conversation_value": 8,
+      "composite": 7.8
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recCQl07I0SrouzTT",
+    "published_at": "2026-08-10T07:40:25.194Z",
+    "extraction_prompt_version": null
+  },
+  {
+    "id": 796,
+    "term": "Hunting for Ideas",
+    "category": "creativity",
+    "source": "dk",
+    "hook": "No need to read every page, just focus on extracting key ideas.",
+    "plain": "Dan does not read cover to cover. He hunts for the one idea he can use, write about, or weave into his worldview. If he finds it on page 40, he stops. The rest does not matter. Reading becomes active extraction, not passive consumption.",
+    "analogy": "A bee takes pollen, not the whole flower.",
+    "prompt": "Open the last book you started. What's one idea you can actually use this week? If none, why are you reading it?",
+    "collection_id": 524,
+    "timestamp": 3541,
+    "editors_pick": true,
+    "related_ids": [
+      167,
+      527,
+      763
+    ],
+    "duplicate_of": null,
+    "scores": {
+      "universality": 7,
+      "actionability": 8,
+      "novelty": 8,
+      "conversation_value": 7,
+      "composite": 7.5
+    },
+    "curated_collection_ids": [],
+    "airtable_id": "recPOBeKEb0tYoMpk",
+    "published_at": "2026-08-10T07:40:25.194Z",
+    "extraction_prompt_version": null
   }
 ]
