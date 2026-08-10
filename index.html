@@ -32,7 +32,7 @@
     var t = localStorage.getItem('lll_theme');
     if(t === 'light') {
       document.documentElement.setAttribute('data-theme','light');
-      document.getElementById('themeColorMeta').content = '#f5f2ed';
+      document.getElementById('themeColorMeta').content = '#faf8f4';
     }
     // Preload guard: hide below-nav content until first rAF to prevent
     // episodes flashing before hero paint completes on hard refresh
@@ -119,16 +119,16 @@
      LIGHT MODE TOKENS
      ============================================ */
   [data-theme="light"] {
-    --bg: #f5f0e8;
-    --surface: #eee8db;
-    --surface2: #e4dccf;
-    --border: rgba(0,0,0,0.08);
-    --border-hover: rgba(0,0,0,0.18);
-    --text: #1a1714;
-    --muted: #7a7060;
-    --muted2: #5a5040;
-    --accent: #b8860b;
-    --accent2: #9a700a;
+    --bg: #faf8f4;
+    --surface: #f2ede3;
+    --surface2: #e8e0d0;
+    --border: rgba(0,0,0,0.09);
+    --border-hover: rgba(0,0,0,0.2);
+    --text: #1e1812;
+    --muted: #857060;
+    --muted2: #5c4a38;
+    --accent: #3d6b52;
+    --accent2: #2d5242;
     --red: #c0442a;
     --green: #3d7a50;
     --blue: #2e6fa0;
@@ -149,7 +149,7 @@
     inset: 0;
     pointer-events: none;
     z-index: 0;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 900'%3E%3Cdefs%3E%3Cstyle%3E.wm%7Bfont-family:serif;font-weight:700;font-style:italic;fill:%23b8860b;fill-opacity:0.045;letter-spacing:0.18em%7D.rule%7Bstroke:%23b8860b;stroke-opacity:0.18;fill:none;stroke-width:1%7D.thin%7Bstroke:%23b8860b;stroke-opacity:0.07;fill:none;stroke-width:0.5%7D.orn%7Bfill:%23b8860b;fill-opacity:0.13%7D%3C/style%3E%3C/defs%3E%3C!-- DIAGONAL WATERMARK — large italic serif --%3E%3Ctext class='wm' x='50%25' y='50%25' font-size='148' text-anchor='middle' dominant-baseline='middle' transform='rotate(-28 720 450)'%3EEPISTEMIC%3C/text%3E%3C!-- strong left margin rule --%3E%3Cline class='rule' x1='52' y1='0' x2='52' y2='900'/%3E%3C!-- hairline right rule --%3E%3Cline class='thin' x1='1388' y1='0' x2='1388' y2='900'/%3E%3C!-- top rule --%3E%3Cline class='rule' x1='0' y1='52' x2='1440' y2='52'/%3E%3C!-- bottom rule --%3E%3Cline class='thin' x1='0' y1='848' x2='1440' y2='848'/%3E%3C!-- top-left corner ornament: crosshair --%3E%3Cline class='rule' x1='0' y1='52' x2='52' y2='52'/%3E%3Cline class='rule' x1='52' y1='0' x2='52' y2='52'/%3E%3Ccircle class='orn' cx='52' cy='52' r='3.5'/%3E%3C!-- top-right --%3E%3Ccircle class='orn' cx='1388' cy='52' r='3.5'/%3E%3C!-- bottom-left --%3E%3Ccircle class='orn' cx='52' cy='848' r='3.5'/%3E%3C!-- bottom-right --%3E%3Ccircle class='orn' cx='1388' cy='848' r='3.5'/%3E%3C!-- top label removed — duplicates nav eyebrow --%3E%3C!-- issue number bottom right --%3E%3Ctext x='1368' y='866' font-family='monospace' font-size='9' letter-spacing='0.15em' fill='%23b8860b' fill-opacity='0.28' text-anchor='end'%3EEPISTEMIC%3C/text%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 900'%3E%3Cdefs%3E%3Cstyle%3E.wm%7Bfont-family:serif;font-weight:700;font-style:italic;fill:%233d6b52;fill-opacity:0.045;letter-spacing:0.18em%7D.rule%7Bstroke:%233d6b52;stroke-opacity:0.18;fill:none;stroke-width:1%7D.thin%7Bstroke:%233d6b52;stroke-opacity:0.07;fill:none;stroke-width:0.5%7D.orn%7Bfill:%233d6b52;fill-opacity:0.13%7D%3C/style%3E%3C/defs%3E%3C!-- DIAGONAL WATERMARK — large italic serif --%3E%3Ctext class='wm' x='50%25' y='50%25' font-size='148' text-anchor='middle' dominant-baseline='middle' transform='rotate(-28 720 450)'%3EEPISTEMIC%3C/text%3E%3C!-- strong left margin rule --%3E%3Cline class='rule' x1='52' y1='0' x2='52' y2='900'/%3E%3C!-- hairline right rule --%3E%3Cline class='thin' x1='1388' y1='0' x2='1388' y2='900'/%3E%3C!-- top rule --%3E%3Cline class='rule' x1='0' y1='52' x2='1440' y2='52'/%3E%3C!-- bottom rule --%3E%3Cline class='thin' x1='0' y1='848' x2='1440' y2='848'/%3E%3C!-- top-left corner ornament: crosshair --%3E%3Cline class='rule' x1='0' y1='52' x2='52' y2='52'/%3E%3Cline class='rule' x1='52' y1='0' x2='52' y2='52'/%3E%3Ccircle class='orn' cx='52' cy='52' r='3.5'/%3E%3C!-- top-right --%3E%3Ccircle class='orn' cx='1388' cy='52' r='3.5'/%3E%3C!-- bottom-left --%3E%3Ccircle class='orn' cx='52' cy='848' r='3.5'/%3E%3C!-- bottom-right --%3E%3Ccircle class='orn' cx='1388' cy='848' r='3.5'/%3E%3C!-- top label removed — duplicates nav eyebrow --%3E%3C!-- issue number bottom right --%3E%3Ctext x='1368' y='866' font-family='monospace' font-size='9' letter-spacing='0.15em' fill='%233d6b52' fill-opacity='0.28' text-anchor='end'%3EEPISTEMIC%3C/text%3E%3C/svg%3E");
     background-size: 100% 100%;
     background-repeat: no-repeat;
   }
@@ -211,13 +211,13 @@
 
   /* Hero search on light — cream card */
   [data-theme="light"] .sp-search-wrap {
-    background: #f0e9da;
+    background: #f2ede3;
     border-color: rgba(0,0,0,0.12);
     box-shadow: 0 2px 8px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.6);
   }
   [data-theme="light"] .sp-search-wrap:focus-within {
     border-color: var(--accent);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06), 0 0 0 2px rgba(184,134,11,0.12), inset 0 1px 0 rgba(255,255,255,0.6);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06), 0 0 0 2px rgba(61,107,82,0.12), inset 0 1px 0 rgba(255,255,255,0.6);
   }
 
   /* Tagline on light — deep ink */
@@ -232,7 +232,7 @@
 
   /* Drawers — heavier paper feel */
   [data-theme="light"] .ep-drawer {
-    background: #f0e9da;
+    background: #f2ede3;
     border-top-color: rgba(0,0,0,0.14);
   }
   [data-theme="light"] .ep-drawer-body {
@@ -394,7 +394,7 @@
 
   /* Vault pill active bg in light */
   [data-theme="light"] .vault-pill.vault-active {
-    background: rgba(184,134,11,0.08);
+    background: rgba(61,107,82,0.08);
   }
 
   /* Cat card active in light */
@@ -405,12 +405,12 @@
   [data-theme="light"] .cat-card[data-cat="all"] {
     color: #7a5c00 !important;
     border-color: rgba(122,92,0,0.4) !important;
-    background: rgba(184,134,11,0.1) !important;
+    background: rgba(61,107,82,0.1) !important;
   }
   [data-theme="light"] .cat-card[data-cat="all"].active {
     color: #5a4200 !important;
     border-color: #7a5c00 !important;
-    background: rgba(184,134,11,0.18) !important;
+    background: rgba(61,107,82,0.18) !important;
   }
 
   /* NF flip card front shadow in light */
@@ -465,8 +465,8 @@
 
   /* COTD use-today block in light */
   [data-theme="light"] .cotd-use-today {
-    background: rgba(184,134,11,0.05);
-    border-color: rgba(184,134,11,0.15);
+    background: rgba(61,107,82,0.05);
+    border-color: rgba(61,107,82,0.15);
   }
 
   /* Category pill colors in light — hardcoded instead of filter: brightness/saturate
@@ -516,8 +516,8 @@
      into the light card background (low-alpha tint was nearly invisible) */
   [data-theme="light"] .ep-cat-column .back-prompt,
   [data-theme="light"] .nf-row .concept-card .back-prompt {
-    background: linear-gradient(135deg, rgba(184,134,11,0.13), rgba(184,134,11,0.05));
-    border: 1px solid rgba(184,134,11,0.3);
+    background: linear-gradient(135deg, rgba(61,107,82,0.13), rgba(61,107,82,0.05));
+    border: 1px solid rgba(61,107,82,0.3);
     border-left: 3px solid var(--accent);
   }
   [data-theme="light"] .ep-cat-column .back-prompt p,
@@ -527,8 +527,8 @@
 
   /* hc-back-prompt in light */
   [data-theme="light"] .hc-back-prompt {
-    background: rgba(184,134,11,0.05);
-    border-color: rgba(184,134,11,0.14);
+    background: rgba(61,107,82,0.05);
+    border-color: rgba(61,107,82,0.14);
   }
 
   /* Theme toggle button — light state */
@@ -1498,8 +1498,8 @@
     transition: color 0.15s;
   }
   .ep-intel-vocab-toggle:hover { color: rgba(232,213,163,0.95); }
-  [data-theme="light"] .ep-intel-vocab-toggle { color: rgba(150,120,40,0.65); }
-  [data-theme="light"] .ep-intel-vocab-toggle:hover { color: rgba(150,120,40,0.95); }
+  [data-theme="light"] .ep-intel-vocab-toggle { color: rgba(61,107,82,0.65); }
+  [data-theme="light"] .ep-intel-vocab-toggle:hover { color: rgba(61,107,82,0.95); }
   .ep-intel-vocab-expand-wrap {
     display: grid;
     grid-template-rows: 0fr;
@@ -1518,7 +1518,7 @@
     margin-top: 2px;
     border-top: 1px dashed rgba(232,213,163,0.22);
   }
-  [data-theme="light"] .ep-intel-vocab-expand-wrap.open .ep-intel-vocab-expand-inner { border-top-color: rgba(150,120,40,0.25); }
+  [data-theme="light"] .ep-intel-vocab-expand-wrap.open .ep-intel-vocab-expand-inner { border-top-color: rgba(61,107,82,0.25); }
 
   /* ── Vocab "+N more" — lives inside the preview grid's empty 8th cell ──
      v2.21: sized to its own content (not stretched to fill the cell) and
@@ -1549,14 +1549,14 @@
     transform: translateY(-1px);
   }
   [data-theme="light"] .ep-intel-vocab-more-cell {
-    color: rgba(150,120,40,0.8);
-    background: rgba(150,120,40,0.08);
-    border-color: rgba(150,120,40,0.25);
+    color: rgba(61,107,82,0.8);
+    background: rgba(61,107,82,0.08);
+    border-color: rgba(61,107,82,0.25);
   }
   [data-theme="light"] .ep-intel-vocab-more-cell:hover {
-    background: rgba(150,120,40,0.15);
-    border-color: rgba(150,120,40,0.4);
-    color: rgba(150,120,40,0.95);
+    background: rgba(61,107,82,0.15);
+    border-color: rgba(61,107,82,0.4);
+    color: rgba(61,107,82,0.95);
   }
 
   /* ── Vocab inline drawer panel — expands in normal doc flow so it pushes
@@ -1586,7 +1586,7 @@
     border-bottom: 1px dashed rgba(232,213,163,0.22);
   }
   [data-theme="light"] .ep-drawer-vocab-panel.open .ep-drawer-vocab-panel-inner {
-    border-color: rgba(150,120,40,0.25);
+    border-color: rgba(61,107,82,0.25);
   }
   /* v2.21: the full-word-list grid inside the panel uses auto-fill instead of
      a hardcoded 4-column split, so column count adapts to the drawer's real
@@ -1740,8 +1740,8 @@
     background-image: linear-gradient(
       to right,
       transparent 0%,
-      rgba(184,134,11,0.12) 12%,
-      rgba(184,134,11,0.12) 88%,
+      rgba(61,107,82,0.12) 12%,
+      rgba(61,107,82,0.12) 88%,
       transparent 100%
     );
   }
@@ -1778,8 +1778,8 @@
   .vocab-cat-pill.active { color: var(--accent); border-color: var(--accent); }
   .vocab-cat-pill[data-empty] { opacity: 0.28; cursor: default; pointer-events: none; }
   [data-theme="light"] .vocab-cat-pill { color: rgba(30,27,22,0.42); border-color: rgba(0,0,0,0.1); }
-  [data-theme="light"] .vocab-cat-pill.active { color: rgba(150,120,40,0.95); border-color: rgba(150,120,40,0.55); }
-  [data-theme="light"] .vocab-cat-pill:hover { border-color: rgba(150,120,40,0.3); }
+  [data-theme="light"] .vocab-cat-pill.active { color: rgba(61,107,82,0.95); border-color: rgba(61,107,82,0.55); }
+  [data-theme="light"] .vocab-cat-pill:hover { border-color: rgba(61,107,82,0.3); }
 
   /* ── PROFILE PILL POPOVER / SHEET (v2.47) ── */
   .ep-profile-core-claim {
@@ -1963,7 +1963,7 @@
     pointer-events: none;
   }
   [data-theme="light"] .lexicon-word::after {
-    background: linear-gradient(105deg, transparent 38%, rgba(184,134,11,0.16) 50%, transparent 62%);
+    background: linear-gradient(105deg, transparent 38%, rgba(61,107,82,0.16) 50%, transparent 62%);
     background-size: 300% 100%;
   }
   @media (prefers-reduced-motion: reduce) {
@@ -1992,7 +1992,7 @@
   .lex-use-btn:hover { color: var(--accent); }
   .lex-use-btn:disabled { opacity: 0.4; cursor: default; }
   .lex-use-btn.saved { color: var(--accent); }
-  [data-theme="light"] .lex-use-btn { color: rgba(150,120,40,0.5); }
+  [data-theme="light"] .lex-use-btn { color: rgba(61,107,82,0.5); }
   [data-theme="light"] .lex-use-btn:hover,
   [data-theme="light"] .lex-use-btn.saved { color: var(--accent); }
   .lex-sentence-wrap {
@@ -2175,7 +2175,7 @@
     pointer-events: none;
   }
   [data-theme="light"] .lex-saved-word::after {
-    background: linear-gradient(105deg, transparent 30%, rgba(184,134,11,0.25) 50%, transparent 70%);
+    background: linear-gradient(105deg, transparent 30%, rgba(61,107,82,0.25) 50%, transparent 70%);
     background-size: 200% 100%;
   }
   @media (prefers-reduced-motion: reduce) { .lex-saved-word::after { display: none; } }
@@ -2906,7 +2906,7 @@
     color: var(--green);
     box-shadow: 0 0 0 3px rgba(122,175,138,0.07);
   }
-  [data-theme="light"] .lexi-word-gen-btn:hover { box-shadow: 0 0 0 3px rgba(184,134,11,0.08); }
+  [data-theme="light"] .lexi-word-gen-btn:hover { box-shadow: 0 0 0 3px rgba(61,107,82,0.08); }
   /* Typewriter cursor */
   .lexi-cursor {
     color: var(--accent);
@@ -2952,10 +2952,10 @@
   [data-theme="light"] .lexi-panel.open { background: rgba(0,0,0,0.18); }
   [data-theme="light"] .lexi-panel-inner { background: var(--bg); border-right-color: var(--border); }
   [data-theme="light"] .lexi-word-row-top:hover { background: rgba(0,0,0,0.025); }
-  [data-theme="light"] .lexi-fav-btn.faved { color: rgba(150,120,40,0.9); }
-  [data-theme="light"] .lexi-state-new { border-color: rgba(184,134,11,0.3); }
+  [data-theme="light"] .lexi-fav-btn.faved { color: rgba(61,107,82,0.9); }
+  [data-theme="light"] .lexi-state-new { border-color: rgba(61,107,82,0.3); }
   [data-theme="light"] .lexi-word-sent-block {
-    border-left-color: rgba(184,134,11,0.3);
+    border-left-color: rgba(61,107,82,0.3);
     background: rgba(0,0,0,0.018);
   }
   [data-theme="light"] .lexi-remove-x:hover { color: var(--red); }
@@ -3191,7 +3191,7 @@
   }
   .lexi-summary-actions { display: flex; gap: 16px; align-items: center; margin-top: 8px; }
   /* Light mode overrides */
-  [data-theme="light"] .lexi-practice-overlay { background: #faf8f3; }
+  [data-theme="light"] .lexi-practice-overlay { background: #faf8f4; }
   [data-theme="light"] .lexi-card-textarea {
     background: rgba(0,0,0,0.03); border-color: rgba(0,0,0,0.12); color: #1a1a18;
   }
@@ -3628,7 +3628,7 @@
   [data-theme="light"] .ep-drawer-view-btn.active {
     color: var(--accent2);
     border-color: var(--accent2);
-    background: rgba(184,134,11,0.08);
+    background: rgba(61,107,82,0.08);
   }
 
   /* ── DRAWER SCAN TILES (2-col centered) ─── */
@@ -4599,17 +4599,16 @@
   .nav-library-btn:hover .nav-library-label { letter-spacing: 0.12em; }
   /* Hide on mobile — nav-right is already hidden on mobile */
   @media (max-width: 768px) { .nav-library-btn { display: none !important; } }
-  [data-theme="light"] .nav-library-btn:hover { background: rgba(150,120,40,0.06); }
+  [data-theme="light"] .nav-library-btn:hover { background: rgba(61,107,82,0.06); }
 
-  /* CENTER ISLAND */
+  /* CENTER ISLAND — editorial text links, no pill container */
   .nav-island {
     display: flex;
     align-items: center;
-    gap: 2px;
-    background: var(--surface2);
-    border: 0.5px solid var(--border-hover);
-    border-radius: 999px;
-    padding: 4px;
+    gap: 0;
+    background: none;
+    border: none;
+    padding: 0;
   }
 
   .nav-link {
@@ -4618,18 +4617,84 @@
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--muted2);
-    text-decoration: none;
-    padding: 7px 15px;
-    border-radius: 999px;
-    transition: color 0.2s, background 0.2s, transform 0.15s ease;
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 4px;
+    text-decoration-thickness: 1px;
+    padding: 7px 14px;
+    border-radius: 0;
+    transition: color 0.18s, text-decoration-color 0.18s, transform 0.15s ease;
     white-space: nowrap;
     cursor: pointer;
     background: none;
     border: none;
+    position: relative;
   }
-  .nav-link:hover { color: var(--text); background: rgba(255,255,255,0.06); transform: translateY(-1px); }
+  /* Dot separator between links — using CSS ::after pseudo, hidden on last child */
+  .nav-island .nav-link:not(:last-of-type)::after {
+    content: '·';
+    position: absolute;
+    right: -2px;
+    color: var(--muted);
+    opacity: 0.4;
+    font-size: 0.8rem;
+    pointer-events: none;
+  }
+  .nav-link:hover {
+    color: var(--text);
+    text-decoration-color: var(--border-hover);
+    background: none;
+    transform: none;
+  }
   .nav-link:active { transform: translateY(0); }
-.nav-link.nav-link--active { color: var(--accent); }
+  .nav-link.nav-link--active {
+    color: var(--accent);
+    text-decoration-color: rgba(61,107,82,0.35);
+  }
+  [data-theme="light"] .nav-link.nav-link--active {
+    text-decoration-color: rgba(61,107,82,0.3);
+  }
+
+  /* Theme toggle — pill matching Home button */
+  .nav-theme-pill {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--muted);
+    background: none;
+    border: 0.5px solid var(--border-hover);
+    border-radius: 999px;
+    padding: 6px 12px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color 0.18s, border-color 0.18s;
+    flex-shrink: 0;
+  }
+  .nav-theme-pill:hover { color: var(--accent); border-color: var(--accent); }
+  .nav-theme-pill-icon { font-size: 0.82rem; opacity: 0.7; }
+  @media (max-width: 768px) { .nav-theme-pill { display: none !important; } }
+
+  /* Nav library badge (saved count) */
+  .nav-library-badge {
+    background: var(--accent);
+    color: var(--bg);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.5rem;
+    font-weight: 500;
+    border-radius: 999px;
+    padding: 1px 5px;
+    line-height: 1.4;
+    flex-shrink: 0;
+  }
+  [data-theme="light"] .nav-library-badge { color: #fff; }
+
+  /* Nav-pill (concept count) — hidden on desktop, moved to Home panel */
+  .nav-pill { display: none; }
+  .nav-dot  { display: none; }
 
 .nav-divider {
   width: 0.5px;
@@ -4772,7 +4837,7 @@
   .nav-right {
     display: flex;
     align-items: center;
-    gap: 1.4rem;
+    gap: 8px;
     justify-content: flex-end;
   }
 
@@ -5148,7 +5213,7 @@
     background: var(--muted);
     transition: transform 0.2s, background 0.2s;
   }
-  [data-theme="light"] .nav-mob-theme-toggle { background: rgba(150,120,40,0.3); }
+  [data-theme="light"] .nav-mob-theme-toggle { background: rgba(61,107,82,0.3); }
   [data-theme="light"] .nav-mob-theme-toggle::after { transform: translateX(14px); background: var(--accent); }
 
   /* HERO */
@@ -9127,8 +9192,8 @@
   font-family: 'DM Sans', sans-serif; font-size: 0.72rem;
   color: var(--muted); line-height: 1.5;
 }
-[data-theme="light"] .cc-related-panel { background: #f5f0e8; }
-[data-theme="light"] .cc-related-card { background: #ede8e0; }
+[data-theme="light"] .cc-related-panel { background: #faf8f4; }
+[data-theme="light"] .cc-related-card { background: #f0ebe5; }
 
 /* ── My Library Drawer ──────────────────────────────────────── */
 .lib-backdrop {
@@ -9279,10 +9344,10 @@
     radial-gradient(ellipse 75% 55% at 5% 0%, rgba(196,121,107,0.22) 0%, transparent 65%),
     radial-gradient(ellipse 65% 75% at 95% 15%, rgba(107,159,196,0.2) 0%, transparent 65%),
     radial-gradient(ellipse 55% 45% at 50% 105%, rgba(160,143,212,0.18) 0%, transparent 60%),
-    radial-gradient(ellipse 45% 35% at 15% 80%, rgba(196,169,107,0.2) 0%, transparent 55%);
+    radial-gradient(ellipse 45% 35% at 15% 80%, rgba(80,130,100,0.2) 0%, transparent 55%);
 }
 /* Light mode lib-drawer base — slightly warmer to let blobs show — v3.37 */
-[data-theme="light"] .lib-drawer { background: #ede6d9; }
+[data-theme="light"] .lib-drawer { background: #f2ede3; }
 /* All direct children of .home-dashboard sit above the pseudo-element */
 .home-dashboard > * { position: relative; z-index: 1; }
 
@@ -9498,6 +9563,47 @@
 }
 [data-theme="light"] .home-momentum { color: var(--muted); }
 
+/* ── Mood row ─────────────────────────────────────────── */
+.home-mood-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0 2px;
+  border-top: 0.5px solid var(--border);
+  margin-top: 8px;
+}
+.home-mood-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.home-mood-options {
+  display: flex;
+  gap: 2px;
+}
+.home-mood-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.15rem;
+  line-height: 1;
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: background 0.15s, transform 0.12s;
+  padding: 0;
+}
+.home-mood-btn:hover { background: var(--surface2); transform: scale(1.18); }
+.home-mood-btn:active { transform: scale(0.95); }
+@media (prefers-reduced-motion: reduce) {
+  .home-mood-btn { transition: none; }
+}
+
 /* ── Stats section — v3.31 ─────────────────────────────── */
 .home-stats-section {
   flex-shrink: 0;
@@ -9572,11 +9678,11 @@
   --hm4: rgba(232,213,163,0.95);
 }
 [data-theme="light"] {
-  --hm0: rgba(196,169,107,0.08);
-  --hm1: rgba(196,169,107,0.25);
-  --hm2: rgba(196,169,107,0.50);
-  --hm3: rgba(196,169,107,0.75);
-  --hm4: rgba(196,169,107,1.00);
+  --hm0: rgba(80,130,100,0.08);
+  --hm1: rgba(80,130,100,0.25);
+  --hm2: rgba(80,130,100,0.50);
+  --hm3: rgba(80,130,100,0.75);
+  --hm4: rgba(80,130,100,1.00);
 }
 .home-stat-card-full {
   grid-column: 1 / -1; /* spans full width of the stats grid */
@@ -10405,7 +10511,7 @@
 }
 .lib-open-btn:hover { color: var(--text); border-color: var(--border-hover); }
 .lib-open-btn svg { width: 12px; height: 12px; flex-shrink: 0; }
-[data-theme="light"] .lib-drawer { background: #f0e9da; }
+[data-theme="light"] .lib-drawer { background: #f2ede3; }
 
 /* ── Library: category bar, tile expansion, notes distinct style ── */
 .lib-header-meta {
@@ -10670,7 +10776,7 @@
 
 /* Light-mode — Vocab panel */
 [data-theme="light"] .vocab-seg-btn { color: var(--muted); }
-[data-theme="light"] .vocab-seg-btn.active { color: var(--accent2); border-color: var(--accent2); background: rgba(196,169,107,0.08); }
+[data-theme="light"] .vocab-seg-btn.active { color: var(--accent2); border-color: var(--accent2); background: rgba(80,130,100,0.08); }
 [data-theme="light"] .vocab-my-tile { background: var(--surface); }
 [data-theme="light"] .vocab-my-tile:hover { background: var(--surface2); border-color: var(--border-hover); }
 [data-theme="light"] .vocab-my-word { color: var(--text); }
@@ -10808,7 +10914,7 @@
   border-color: var(--accent);
 }
 [data-theme="light"] .vocab-tile-action-btn.vocab-tile-action-practice {
-  color: var(--accent2); border-color: rgba(196,169,107,0.35); background: rgba(196,169,107,0.07);
+  color: var(--accent2); border-color: rgba(80,130,100,0.35); background: rgba(80,130,100,0.07);
 }
 /* Practice history inside sheet */
 .vocab-tile-detail { display: none; } /* legacy, not used in grid — keep for compat */
@@ -11420,7 +11526,7 @@
   font-family: 'DM Sans', sans-serif;
   font-size: 0.7rem; color: var(--muted); line-height: 1.5;
 }
-[data-theme="light"] .lib-note-popover { background: #f0ebe2; border-color: rgba(0,0,0,0.1); }
+[data-theme="light"] .lib-note-popover { background: #efe9df; border-color: rgba(0,0,0,0.1); }
 /* Read panel tagline spacing */
 .gv-tagline { margin: 0; border-radius: 0; }
 
@@ -12510,21 +12616,21 @@
   </div>
 
   <div class="nav-right">
-    <!-- My Library — distinct desktop-only button, lives inside nav-right so it stays in grid column 3 -->
+    <!-- Home — pill with saved-count badge -->
     <button class="nav-library-btn" id="navLibraryBtn" onclick="openLibrary();playNavSFX()" aria-label="Home ⌘⌥H">
       <span class="nav-library-glyph">◱</span>
       <span class="nav-library-label">Home</span>
+      <span class="nav-library-badge" id="navLibraryBadge" style="display:none"></span>
     </button>
-    <!-- v1.71: epic button lives in nav-right, hidden until nav hover -->
-    <a class="nav-epic-standalone" id="navEpicBtn" onclick="openEgg();playNavSFX()" title="I feel epic!">😎 I feel epic!</a>
     <!-- Apply: hidden, accessible via ←→ sequence -->
     <button class="nav-mob-action" id="navMobApply" onclick="enterCornerMode();playNavSFX()" aria-label="Apply" style="display:none">🥊</button>
-    <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode" onclick="toggleTheme()">☽</button>
-    <div class="nav-pill">
-      <div class="nav-dot"></div>
-      <span id="navConceptCount">—</span> ideas
-    </div>
-    <button class="nav-signup-btn" aria-label="Sign up" onclick="document.getElementById('signup')?.scrollIntoView({behavior:'smooth'})">✦</button>
+    <!-- Theme toggle — pill style to match Home -->
+    <button class="nav-theme-pill" id="themeToggle" aria-label="Toggle light/dark mode" onclick="toggleTheme()">
+      <span class="nav-theme-pill-icon">☽</span>
+      <span class="nav-theme-pill-label" id="navThemeLabel">Dark</span>
+    </button>
+    <!-- Signup — opens modal -->
+    <button class="nav-signup-btn" aria-label="Sign up" onclick="openSignupModal()">Signup</button>
     <button class="nav-mobile-toggle" id="navToggle" onclick="toggleMobileNav()">≡</button>
   </div>
 </nav>
@@ -12698,7 +12804,7 @@
   text-align: right;
 }
 [data-theme="light"] .sp-tour-step {
-  box-shadow: 0 6px 24px rgba(0,0,0,0.12), 0 0 0 1px rgba(150,120,40,0.15);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.12), 0 0 0 1px rgba(61,107,82,0.15);
 }
 @media (prefers-reduced-motion: reduce) {
   .sp-tour-step { transition: opacity 0.1s ease; }
@@ -12797,7 +12903,7 @@
   letter-spacing: 0.18em; text-transform: uppercase;
   color: var(--accent); opacity: 0.38; transition: opacity 0.25s;
 }
-[data-theme="light"] .og-expand-label { color: #7a6830; opacity: 0.72; }
+[data-theme="light"] .og-expand-label { color: #3d5e48; opacity: 0.72; }
 [data-theme="light"] .og-expand-row:hover .og-expand-label { opacity: 1; }
 
 /* ── OG collapsible section ─────────────────────────────── */
@@ -12821,7 +12927,7 @@
   color: var(--accent); opacity: 0.38; margin-bottom: 0.6rem; margin-top: 0;
 }
 /* v2.15d: match .og-expand-label's light-mode treatment for visibility */
-[data-theme="light"] .og-story p.og-kicker { color: #7a6830; opacity: 0.72; }
+[data-theme="light"] .og-story p.og-kicker { color: #3d5e48; opacity: 0.72; }
 @media (max-width: 700px) {
   /* OG text flows single-column on mobile instead of squeezing into 2 narrow columns */
   .og-story { columns: 1; }
@@ -12847,7 +12953,7 @@
   letter-spacing: 0.12em; color: var(--accent); opacity: 0.3;
   text-align: center; margin: 2rem 0 0.75rem; text-transform: uppercase;
 }
-[data-theme="light"] .og-map-hint { color: #7a6830; opacity: 0.65; }
+[data-theme="light"] .og-map-hint { color: #3d5e48; opacity: 0.65; }
 .og-map-wrap {
   position: relative;
   width: 100%;
@@ -13678,6 +13784,16 @@
     </div>
     <!-- Momentum copy -->
     <div class="home-momentum" id="homeMomentum"></div>
+    <!-- Mood row — moved from nav — v3.38 -->
+    <div class="home-mood-row" id="homeMoodRow">
+      <div class="home-mood-label">How are you feeling?</div>
+      <div class="home-mood-options">
+        <button class="home-mood-btn" onclick="openEgg();playNavSFX()" title="I feel epic!">😎</button>
+        <button class="home-mood-btn" onclick="openEgg();playNavSFX()" title="Feeling good">😊</button>
+        <button class="home-mood-btn" onclick="openEgg();playNavSFX()" title="Just okay">😐</button>
+        <button class="home-mood-btn" onclick="openEgg();playNavSFX()" title="Could be better">😔</button>
+      </div>
+    </div>
   </div>
   </div><!-- /.home-collapse-wrap -->
 
@@ -14597,6 +14713,14 @@ function initMagneticNav() {
 // Call after DOM ready
 document.addEventListener('DOMContentLoaded', initMagneticNav);
 document.addEventListener('DOMContentLoaded', refreshNavBadge);
+document.addEventListener('DOMContentLoaded', function() {
+  // Sync theme pill label to current theme on load
+  const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+  const pillIcon  = document.querySelector('.nav-theme-pill-icon');
+  const pillLabel = document.getElementById('navThemeLabel');
+  if (pillIcon)  pillIcon.textContent  = isLight ? '◑' : '☽';
+  if (pillLabel) pillLabel.textContent = isLight ? 'Light' : 'Dark';
+});
 // HOW IT WORKS MODAL
 function openHiw() {
   document.getElementById('hiwOverlay').classList.add('open');
@@ -20095,19 +20219,16 @@ function _getTodayStr() {
 }
 
 function refreshNavBadge() {
-  const badge = document.getElementById('navSavedBadge');
+  const badge = document.getElementById('navLibraryBadge');
   if (!badge) return;
   try {
-    const todayStr = _getTodayStr();
     const saved = JSON.parse(localStorage.getItem(CS_SAVED_KEY) || '[]').filter(Boolean);
-    // Count only items saved today
-    const todayCount = saved.filter(s => s.savedAt && s.savedAt.slice(0, 10) === todayStr).length;
-    if (todayCount === 0) {
+    const total = saved.length;
+    if (total === 0) {
       badge.style.display = 'none';
     } else {
       badge.style.display = 'inline-flex';
-      badge.textContent = todayCount;
-      badge.classList.toggle('badge-alert', todayCount >= 5);
+      badge.textContent = total;
     }
   } catch(e) { badge.style.display = 'none'; }
 }
@@ -27831,7 +27952,12 @@ function toggleTheme() {
 
   // Update button icon
   const btn = document.getElementById('themeToggle');
-  if (btn) btn.textContent = next === 'light' ? '☀' : '☽';
+  // Update theme pill icon + label
+  const pillIcon  = btn ? btn.querySelector('.nav-theme-pill-icon') : null;
+  const pillLabel = document.getElementById('navThemeLabel');
+  if (pillIcon)  pillIcon.textContent  = next === 'light' ? '◑' : '☽';
+  if (pillLabel) pillLabel.textContent = next === 'light' ? 'Light' : 'Dark';
+  if (btn && !pillIcon) btn.textContent = next === 'light' ? '☀' : '☽'; // fallback
 
   // Update hamburger theme label
   const mobLabel = document.getElementById('navMobThemeLabel');
@@ -27839,8 +27965,157 @@ function toggleTheme() {
 
   // Update meta theme-color for mobile browser chrome
   const meta = document.getElementById('themeColorMeta');
-  if (meta) meta.content = next === 'light' ? '#f5f2ed' : '#0d0d0d';
+  if (meta) meta.content = next === 'light' ? '#faf8f4' : '#0d0d0d';
+
+  // Update theme toggle pill label
+  const toggleLabel = document.getElementById('navThemeLabel');
+  if (toggleLabel) toggleLabel.textContent = next === 'light' ? 'Light' : 'Dark';
 }
+
+/* ── SIGNUP MODAL — v1.0 ──────────────────────────────────────────────── */
+// localStorage keys
+const EP_UNLOCKED_KEY  = 'ep_unlocked';
+const EP_EMAIL_KEY     = 'ep_email';
+const EP_USED_PREFIX   = 'ep_used_'; // + featureName → tracks one-free-use per feature
+
+// Returns true if user has already submitted their email
+function epIsUnlocked() {
+  return localStorage.getItem(EP_UNLOCKED_KEY) === 'true';
+}
+
+// Call before any AI feature. featureName = 'spark' | 'practice' | 'lexi' etc.
+// Returns true if the feature should proceed, false if the modal was shown instead.
+function epCheckGate(featureName, onUnlock) {
+  if (epIsUnlocked()) return true;
+  const usedKey = EP_USED_PREFIX + featureName;
+  const used = localStorage.getItem(usedKey) === 'true';
+  if (!used) {
+    // First use free — mark and allow
+    localStorage.setItem(usedKey, 'true');
+    return true;
+  }
+  // Second use — show gate modal
+  openSignupModal({ featureName: featureName, onUnlock: onUnlock });
+  return false;
+}
+
+let _signupContext = null; // { featureName, onUnlock }
+
+function openSignupModal(ctx) {
+  _signupContext = ctx || null;
+  const overlay = document.getElementById('epSignupOverlay');
+  if (!overlay) return;
+
+  // Reset to form state
+  const form    = document.getElementById('epSignupForm');
+  const success = document.getElementById('epSignupSuccess');
+  const errEl   = document.getElementById('epSignupError');
+  const emailEl = document.getElementById('epSignupEmail');
+  const btnEl   = document.getElementById('epSignupSubmit');
+  if (form)    { form.style.display = '';    form.style.removeProperty('display'); }
+  if (success) success.classList.remove('show');
+  if (errEl)   { errEl.classList.remove('show'); errEl.textContent = ''; }
+  if (emailEl) emailEl.value = '';
+  if (btnEl)   { btnEl.disabled = false; btnEl.textContent = 'Create free account'; }
+
+  // Contextualise the CTA if coming from a feature gate
+  if (ctx && ctx.featureName) {
+    const label = { spark: 'Unlock Spark', practice: 'Unlock Practice', lexi: 'Unlock Lexi' }[ctx.featureName] || 'Unlock feature';
+    if (btnEl) btnEl.textContent = label;
+    const sub = document.getElementById('epSignupSub');
+    if (sub) sub.textContent = 'The ideas you heard on podcasts — finally organised, deepened, and ready to use in real conversation.';
+  }
+
+  _spLockBodyScroll();
+  requestAnimationFrame(() => overlay.classList.add('open'));
+}
+
+function closeSignupModal() {
+  const overlay = document.getElementById('epSignupOverlay');
+  if (!overlay) return;
+  overlay.classList.remove('open');
+  _spUnlockBodyScroll();
+  _signupContext = null;
+}
+
+async function epSignupSubmit() {
+  const emailEl = document.getElementById('epSignupEmail');
+  const btnEl   = document.getElementById('epSignupSubmit');
+  const errEl   = document.getElementById('epSignupError');
+  if (!emailEl || !btnEl) return;
+
+  const email = emailEl.value.trim();
+  if (!email || !email.includes('@') || !email.includes('.')) {
+    if (errEl) { errEl.textContent = 'Please enter a valid email address.'; errEl.classList.add('show'); }
+    emailEl.focus();
+    return;
+  }
+  if (errEl) errEl.classList.remove('show');
+  btnEl.disabled = true;
+  btnEl.textContent = 'Joining…';
+
+  try {
+    const res = await fetch('/api/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, source: 'modal', founding: true })
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || 'Something went wrong.');
+
+    // Success — unlock
+    localStorage.setItem(EP_UNLOCKED_KEY, 'true');
+    localStorage.setItem(EP_EMAIL_KEY, email);
+
+    // Show success state
+    const form    = document.getElementById('epSignupForm');
+    const success = document.getElementById('epSignupSuccess');
+    if (form)    form.style.display = 'none';
+    if (success) success.classList.add('show');
+
+    // Wire up contextual continue button
+    const continueBtn = document.getElementById('epSignupContinueBtn');
+    if (continueBtn) {
+      continueBtn.onclick = () => {
+        closeSignupModal();
+        if (_signupContext && typeof _signupContext.onUnlock === 'function') {
+          _signupContext.onUnlock();
+        }
+      };
+      const label = _signupContext && _signupContext.featureName
+        ? { spark: 'Continue to Spark →', practice: 'Continue to Practice →', lexi: 'Continue to Lexi →' }[_signupContext.featureName] || 'Start exploring →'
+        : 'Start exploring →';
+      continueBtn.textContent = label;
+    }
+
+  } catch (err) {
+    if (errEl) { errEl.textContent = err.message || 'Network error — please try again.'; errEl.classList.add('show'); }
+    btnEl.disabled = false;
+    btnEl.textContent = 'Try again';
+  }
+}
+
+// Wire up modal events on DOMContentLoaded
+document.addEventListener('DOMContentLoaded', () => {
+  const closeBtn = document.getElementById('epSignupClose');
+  const overlay  = document.getElementById('epSignupOverlay');
+  const emailEl  = document.getElementById('epSignupEmail');
+  const submitBtn = document.getElementById('epSignupSubmit');
+
+  if (closeBtn) closeBtn.addEventListener('click', closeSignupModal);
+  if (overlay)  overlay.addEventListener('click', e => { if (e.target === overlay) closeSignupModal(); });
+  if (submitBtn) submitBtn.addEventListener('click', epSignupSubmit);
+  if (emailEl) {
+    emailEl.addEventListener('keydown', e => { if (e.key === 'Enter') epSignupSubmit(); });
+  }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      const ov = document.getElementById('epSignupOverlay');
+      if (ov && ov.classList.contains('open')) closeSignupModal();
+    }
+  }, true);
+});
+/* ── END SIGNUP MODAL JS ────────────────────────────────────────────────── */
 
 // Apply correct icon on load (theme already set by inline head script)
 (function() {
@@ -29426,17 +29701,17 @@ body.sp2-panel-open .sp-pull-quote-left { opacity: 0 !important; transition: opa
 }
 [data-theme="light"] .sp-search-wrap {
   background: var(--surface);
-  border-color: rgba(184,134,11,0.25);
+  border-color: rgba(61,107,82,0.25);
   box-shadow:
-    0 0 0 1px rgba(184,134,11,0.05),
-    0 0 18px rgba(184,134,11,0.08),
+    0 0 0 1px rgba(61,107,82,0.05),
+    0 0 18px rgba(61,107,82,0.08),
     0 2px 10px rgba(0,0,0,0.07);
 }
 [data-theme="light"] .sp-search-wrap:focus-within {
-  border-color: rgba(184,134,11,0.5);
+  border-color: rgba(61,107,82,0.5);
   box-shadow:
-    0 0 0 1px rgba(184,134,11,0.1),
-    0 0 26px rgba(184,134,11,0.14),
+    0 0 0 1px rgba(61,107,82,0.1),
+    0 0 26px rgba(61,107,82,0.14),
     0 2px 14px rgba(0,0,0,0.09);
 }
 .sp-search-icon {
@@ -29703,7 +29978,7 @@ body.sp2-panel-open .sp-pull-quote-left { opacity: 0 !important; transition: opa
   transition: background 0.12s;
 }
 .sp-drop-cta-btn:hover { background: rgba(232,213,163,0.07); }
-[data-theme="light"] .sp-drop-cta-btn:hover { background: rgba(184,134,11,0.07); }
+[data-theme="light"] .sp-drop-cta-btn:hover { background: rgba(61,107,82,0.07); }
 
 .sp-drop-empty {
   padding: 18px 16px;
@@ -29904,12 +30179,12 @@ body.sp2-panel-open .sp-pull-quote-left { opacity: 0 !important; transition: opa
 [data-theme="light"] .sp-pill:hover {
   color: var(--text);
   border-color: var(--accent);
-  background: rgba(184,134,11,0.07);
+  background: rgba(61,107,82,0.07);
 }
 [data-theme="light"] .sp-pill.active {
   color: var(--accent);
   border-color: var(--accent);
-  background: rgba(184,134,11,0.08);
+  background: rgba(61,107,82,0.08);
 }
 [data-theme="light"] .sp-pill-more {
   border-color: var(--border);
@@ -30009,7 +30284,7 @@ body.sp2-panel-open .sp-pull-quote-left { opacity: 0 !important; transition: opa
 [data-theme="light"] .sp-scan-toggle.active {
   color: var(--accent2);
   border-color: var(--accent2);
-  background: rgba(184,134,11,0.08);
+  background: rgba(61,107,82,0.08);
 }
 
 /* --- Concept preview card (fixed position, shown when user clicks a term) --- */
@@ -30265,8 +30540,8 @@ body.sp2-panel-open .sp-pull-quote-left { opacity: 0 !important; transition: opa
    disappears against the light card — give the prompt + CTA a distinct,
    confident treatment instead of just a fainter version of the dark style. */
 [data-theme="light"] .sp-mobile-preview-content .back-prompt {
-  background: linear-gradient(135deg, rgba(184,134,11,0.13), rgba(184,134,11,0.05));
-  border: 1px solid rgba(184,134,11,0.3);
+  background: linear-gradient(135deg, rgba(61,107,82,0.13), rgba(61,107,82,0.05));
+  border: 1px solid rgba(61,107,82,0.3);
   border-left: 3px solid var(--accent);
 }
 [data-theme="light"] .sp-mobile-preview-content .back-prompt p {
@@ -30617,8 +30892,8 @@ body.corner-mode #spCornerSearchWrap {
   color: #3a3028;
 }
 [data-theme="light"] .sp-mode-pill.active {
-  border-color: rgba(184,134,11,0.55);
-  background: rgba(184,134,11,0.10);
+  border-color: rgba(61,107,82,0.55);
+  background: rgba(61,107,82,0.10);
   color: #8a6a00;
 }
 
@@ -31214,7 +31489,7 @@ body.corner-panel-open .stories-panel {
 .corner-panel-body.cp-visible { opacity: 1; }
 [data-theme="light"] .stories-overlay.active { background: rgba(0,0,0,0.28); }
 [data-theme="light"] .stories-panel {
-  background: #faf8f3;
+  background: #faf8f4;
   border-left: 1px solid rgba(0,0,0,0.08);
 }
 
@@ -31738,7 +32013,7 @@ body.corner-panel-open .stories-panel {
 }
 
 /* light mode overrides */
-[data-theme="light"] .sp2-peek { background: #faf8f3; border-color: rgba(0,0,0,0.1); }
+[data-theme="light"] .sp2-peek { background: #faf8f4; border-color: rgba(0,0,0,0.1); }
 [data-theme="light"] .stories-panel .sp2-story-body { color: var(--text); }
 </style>
 
@@ -35777,7 +36052,7 @@ function _gvEsc(str) {
 
 /* Light mode */
 [data-theme="light"] .gv-overlay.open { background: rgba(0,0,0,0.25); }
-[data-theme="light"] .gv-panel { background: #faf8f3; }
+[data-theme="light"] .gv-panel { background: #faf8f4; }
 [data-theme="light"] .gv-cat-card { border-color: rgba(0,0,0,0.1); }
 [data-theme="light"] .gv-word-row { border-color: rgba(0,0,0,0.09); }
 
@@ -36979,20 +37254,344 @@ function _wcRenderMobileGrid(words) {
 .wc-lane-chip-dimmed {
   opacity: 0.2; pointer-events: none;
 }
-[data-theme="light"] .wc-lane-popover { background: #f0ebe2; border-color: rgba(0,0,0,0.1); }
+[data-theme="light"] .wc-lane-popover { background: #efe9df; border-color: rgba(0,0,0,0.1); }
 
 /* Collect button is irrelevant in lanes mode */
 .wc-overlay[data-view="lanes"] .wc-collect-btn { display: none !important; }
 
-[data-theme="light"] .wc-overlay { background: #f5f0e8; }
-[data-theme="light"] .wc-tooltip { background: #eee8db; box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
+[data-theme="light"] .wc-overlay { background: #faf8f4; }
+[data-theme="light"] .wc-tooltip { background: #f2ede3; box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
 [data-theme="light"] .wc-lane { border-bottom-color: rgba(0,0,0,0.06); }
-[data-theme="light"] .wc-lane-def { background: #f0ebe2; border-color: rgba(0,0,0,0.1); }
+[data-theme="light"] .wc-lane-def { background: #efe9df; border-color: rgba(0,0,0,0.1); }
 
 @media (prefers-reduced-motion: reduce) {
   .wc-overlay, .wc-word, .wc-tooltip { transition: none; animation: none; }
   .wc-word.wc-visible { opacity: 0.82; }
 }
+
+/* ── SIGNUP MODAL — v1.0 ────────────────────────────────────────────────── */
+.ep-signup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(13,13,13,0.86);
+  z-index: 9000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.22s ease;
+}
+.ep-signup-overlay.open {
+  opacity: 1;
+  pointer-events: all;
+}
+.ep-signup-modal {
+  background: var(--surface);
+  border: 1px solid var(--border-hover);
+  border-radius: 14px;
+  width: 100%;
+  max-width: 440px;
+  position: relative;
+  overflow: hidden;
+  transform: translateY(14px);
+  transition: transform 0.25s cubic-bezier(0.22,1,0.36,1);
+}
+.ep-signup-overlay.open .ep-signup-modal {
+  transform: translateY(0);
+}
+.ep-signup-close {
+  position: absolute;
+  top: 14px; right: 16px;
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  border: 0.5px solid var(--border-hover);
+  background: transparent;
+  color: var(--muted);
+  font-size: 12px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  z-index: 2;
+  transition: color 0.15s, border-color 0.15s;
+}
+.ep-signup-close:hover { color: var(--text); border-color: var(--border-hover); }
+
+/* Founding member banner */
+.ep-signup-banner {
+  background: rgba(61,107,82,0.07);
+  border-bottom: 0.5px solid rgba(61,107,82,0.18);
+  padding: 10px 28px;
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+}
+[data-theme="light"] .ep-signup-banner {
+  background: rgba(61,107,82,0.06);
+  border-bottom-color: rgba(61,107,82,0.15);
+}
+.ep-signup-banner-glyph {
+  font-size: 10px;
+  color: var(--accent);
+  flex-shrink: 0;
+  margin-top: 2px;
+  font-family: 'DM Mono', monospace;
+}
+.ep-signup-banner-text {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.57rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted2);
+  line-height: 1.65;
+}
+.ep-signup-banner-text strong {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+/* Body */
+.ep-signup-body {
+  padding: 30px 36px 30px;
+}
+.ep-signup-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 11px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.ep-signup-eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 14px; height: 1px;
+  background: var(--accent);
+  opacity: 0.5;
+}
+.ep-signup-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+.ep-signup-title em {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--accent);
+}
+.ep-signup-sub {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.8rem;
+  color: var(--muted);
+  line-height: 1.65;
+  margin-bottom: 20px;
+  font-weight: 300;
+}
+.ep-signup-benefits {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 22px;
+}
+.ep-signup-benefit {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.76rem;
+  color: var(--muted2);
+  font-weight: 300;
+  line-height: 1.4;
+}
+.ep-signup-benefit-glyph {
+  font-size: 0.62rem;
+  color: var(--accent);
+  flex-shrink: 0;
+  margin-top: 2px;
+  font-family: 'DM Mono', monospace;
+}
+.ep-signup-input {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border-hover);
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.86rem;
+  color: var(--text);
+  outline: none;
+  margin-bottom: 9px;
+  transition: border-color 0.18s;
+}
+.ep-signup-input::placeholder { color: var(--muted); opacity: 0.6; }
+.ep-signup-input:focus { border-color: var(--accent); }
+.ep-signup-btn {
+  width: 100%;
+  background: var(--accent);
+  color: var(--bg);
+  border: none;
+  border-radius: 999px;
+  padding: 12px;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.67rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  margin-bottom: 11px;
+  transition: opacity 0.18s, transform 0.12s;
+}
+[data-theme="light"] .ep-signup-btn { color: #fff; }
+.ep-signup-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+.ep-signup-btn:active { transform: translateY(0); }
+.ep-signup-btn:disabled { opacity: 0.5; cursor: default; transform: none; }
+.ep-signup-fine {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.52rem;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  opacity: 0.5;
+  text-align: center;
+  line-height: 1.5;
+}
+.ep-signup-error {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.74rem;
+  color: var(--red);
+  margin-bottom: 8px;
+  display: none;
+}
+.ep-signup-error.show { display: block; }
+
+/* Success state */
+.ep-signup-success {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 44px 36px 40px;
+}
+.ep-signup-success.show { display: flex; }
+.ep-signup-success-glyph {
+  width: 46px; height: 46px;
+  border-radius: 50%;
+  border: 1px solid rgba(61,107,82,0.35);
+  background: rgba(61,107,82,0.08);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  color: var(--accent);
+  margin-bottom: 18px;
+}
+.ep-signup-success-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+.ep-signup-success-title em { font-style: italic; font-weight: 400; color: var(--accent); }
+.ep-signup-success-sub {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.79rem;
+  color: var(--muted);
+  line-height: 1.6;
+  font-weight: 300;
+  margin-bottom: 26px;
+  max-width: 280px;
+}
+.ep-signup-success-btn {
+  width: 100%;
+  background: rgba(61,107,82,0.1);
+  border: 0.5px solid rgba(61,107,82,0.3);
+  border-radius: 999px;
+  padding: 11px;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.64rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  cursor: pointer;
+  margin-bottom: 8px;
+  transition: background 0.18s;
+}
+.ep-signup-success-btn:hover { background: rgba(61,107,82,0.16); }
+.ep-signup-success-btn.secondary {
+  background: transparent;
+  border-color: var(--border-hover);
+  color: var(--muted);
+}
+.ep-signup-success-btn.secondary:hover { background: var(--surface2); }
+
+/* Mobile */
+@media (max-width: 600px) {
+  .ep-signup-body { padding: 24px 22px 24px; }
+  .ep-signup-banner { padding: 10px 22px; }
+  .ep-signup-title { font-size: 1.35rem; }
+  .ep-signup-success { padding: 36px 22px 32px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ep-signup-overlay, .ep-signup-modal { transition: none; }
+}
+/* ── END SIGNUP MODAL ───────────────────────────────────────────────────── */
 </style>
+
+<!-- SIGNUP MODAL — v1.0 -->
+<div class="ep-signup-overlay" id="epSignupOverlay" role="dialog" aria-modal="true" aria-labelledby="epSignupTitle">
+  <div class="ep-signup-modal" id="epSignupModal">
+    <button class="ep-signup-close" id="epSignupClose" aria-label="Close">✕</button>
+
+    <!-- Founding member banner -->
+    <div class="ep-signup-banner">
+      <span class="ep-signup-banner-glyph">✦</span>
+      <div class="ep-signup-banner-text">
+        <strong>Founding member</strong> — you're early.<br>
+        Lock in 50% off Pro, forever, when we launch it.
+      </div>
+    </div>
+
+    <!-- Form state -->
+    <div class="ep-signup-body" id="epSignupForm">
+      <div class="ep-signup-eyebrow">Join Epistemic</div>
+      <div class="ep-signup-title" id="epSignupTitle">The library that<br><em>talks back.</em></div>
+      <div class="ep-signup-sub" id="epSignupSub">The ideas you heard on podcasts — finally organised, deepened, and ready to use in real conversation.</div>
+
+      <div class="ep-signup-benefits">
+        <div class="ep-signup-benefit">
+          <span class="ep-signup-benefit-glyph">◈</span>
+          <span>Unlock all AI-powered features and practice modes</span>
+        </div>
+        <div class="ep-signup-benefit">
+          <span class="ep-signup-benefit-glyph">◈</span>
+          <span>Save the best ideas to your personal library</span>
+        </div>
+        <div class="ep-signup-benefit">
+          <span class="ep-signup-benefit-glyph">◈</span>
+          <span>Weekly digest of new concepts from top podcasts</span>
+        </div>
+      </div>
+
+      <div class="ep-signup-error" id="epSignupError"></div>
+      <input class="ep-signup-input" id="epSignupEmail" type="email" placeholder="your@email.com" autocomplete="email" />
+      <button class="ep-signup-btn" id="epSignupSubmit">Create free account</button>
+      <div class="ep-signup-fine">No password. No credit card. Unsubscribe anytime.</div>
+    </div>
+
+    <!-- Success state -->
+    <div class="ep-signup-success" id="epSignupSuccess">
+      <div class="ep-signup-success-glyph">✓</div>
+      <div class="ep-signup-success-title">You're <em>in.</em></div>
+      <div class="ep-signup-success-sub">Check your inbox for a welcome from Epistemic. Your features are unlocked — start exploring.</div>
+      <button class="ep-signup-success-btn" id="epSignupContinueBtn">Continue →</button>
+      <button class="ep-signup-success-btn secondary" onclick="closeSignupModal()">Back to library</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>

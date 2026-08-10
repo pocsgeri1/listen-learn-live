@@ -6,6 +6,20 @@
 
 ---
 
+## 2026-08-10 — Nav redesign, light mode overhaul, email gate (v3.41)
+
+**`[data-theme="light"]` at scale: sed replacements must run in the right order.** With 35k+ lines and 257 light-mode rules, running `rgba(X) → rgba(Y)` replacements in the wrong order can create new matches that get re-replaced by a later rule. Always grep for remaining instances after each sed batch to confirm zero residuals.
+
+**Body `::after` SVG uses URL-encoded hex — not CSS vars.** The hairline SVG background in `body::after` uses `%23RRGGBB` encoding (URL-encoded `#`). CSS variables don't resolve inside `url()` strings — you must hardcode the colour and URL-encode it manually. Grep for `%23` when changing accent colour across themes.
+
+**`navSavedBadge` vs `navLibraryBadge` — element ID must match the function.** `refreshNavBadge()` was silently failing because it referenced `navSavedBadge` but the nav HTML used `navLibraryBadge`. No console error — `getElementById` just returns null and the badge never updates. Always grep for the old ID after any nav HTML refactor.
+
+**Modal body scroll: use `_spLockBodyScroll()` not `overflow:hidden`.** On iOS Safari, `document.body.style.overflow='hidden'` combined with an inner `overflow-y:auto` element causes a scroll-stuck bug where the page is permanently frozen after the modal closes. `_spLockBodyScroll()` / `_spUnlockBodyScroll()` (saves scrollY, pins body with `position:fixed; top:-scrollY`) is the correct pattern. Already in engineering-standards.md — follow it.
+
+**One-free-use gate: per-feature `localStorage` key is enough.** Full auth not needed for a soft gate. `ep_used_{featureName}` boolean key + `ep_unlocked` global key + `ep_email` is sufficient. No server, no sessions. Each call site returns early if `epIsUnlocked()`. Second use of any feature triggers the modal with the `featureName` context and an `onUnlock` callback for post-signup continuation.
+
+---
+
 ## 2026-08-10 — Grid animation for card expand/collapse, deploy button, send+enrich sequencing (v2.95)
 
 **CSS `grid-template-rows: 0fr → 1fr` is the right way to animate height-to-auto.** `display:none → block` gives no animation. `max-height` fakes it but causes pop-in if the value is too small or dead air if too large. `grid-template-rows: 0fr → 1fr` on a grid parent with a child set to `min-height: 0` gives a true height animation. Needs `overflow: hidden` on the grid parent. Add the `.open` class with JS and let CSS do the rest.

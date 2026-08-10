@@ -6,6 +6,22 @@
 
 ---
 
+## v3.41 — 2026-08-10 · Nav redesign, signup modal + email gate, light mode overhaul, mood row
+
+### index.html
+- **Nav right side redesigned:** Removed `.nav-epic-standalone` (I Feel Epic) and concept count pill from nav. Added `.nav-theme-pill` (pill-shaped toggle with icon + label replacing the circle button). Added `.nav-signup-btn`. Reduced nav-right gap to 8px.
+- **Nav center links:** Switched to editorial DM Mono text links with underline + dot separator (·) between items. No background pill. Active state uses forest green accent underline.
+- **Signup modal built:** Full email-capture modal (`ep-signup-overlay`) with founding member banner, Variation 2 aspirational copy, benefits list, email input, POST to `/api/subscribe` with `source:'modal'`. Dark + light mode. z-index 9000. Reduced-motion override.
+- **Email gate system:** `epIsUnlocked()`, `epCheckGate(featureName, onUnlock)`, `epSignupSubmit()` added. One free use per feature tracked via `ep_used_{feature}` in localStorage. Second use triggers modal. On success: `ep_unlocked=true` stored, contextual continue button calls `onUnlock` callback.
+- **Light mode overhaul — Crisp Paper palette:** Updated root `[data-theme="light"]` variables: `--bg:#faf8f4`, `--surface:#f2ede3`, `--surface2:#e8e0d0`, `--accent:#3d6b52` (forest green), `--muted2:#5c4a38`. Replaced all gold rgba variants (`rgba(184,134,11,…)`, `rgba(150,120,40,…)`, `rgba(196,169,107,…)`) with forest green equivalents across all `[data-theme="light"]` rules.
+- **SVG hairline body::after:** URL-encoded color updated `%23b8860b` → `%233d6b52`.
+- **`toggleTheme()` updated:** Pill icon/label toggle (☽/◑, Dark/Light). Meta theme-color corrected to `#faf8f4` (was `#f5f2ed`).
+- **`refreshNavBadge()` fixed:** Updated to use `navLibraryBadge` ID (was `navSavedBadge` — was broken). Now shows total saved count (not daily count).
+- **I Feel Epic → Home panel:** Mood row with 4 emoji buttons (😎😊😐😔) added below `home-momentum` inside Home dashboard. CSS: DM Mono label, 44×44px touch targets, scale hover, border-top separator, reduced-motion override.
+
+### api/subscribe.js
+- **Modal source handling:** `source:'modal'` → lists `[3, 4]` + `FOUNDING_MEMBER: true` attribute. `source:'inline'` → list `[3]` only. `updateEnabled: true` prevents duplicate-contact errors.
+
 ## v2.95 — 2026-08-10 · extract.html: sticky counter, step status bar, Send+Enrich, Deploy button, card animations
 
 ### extract.html
