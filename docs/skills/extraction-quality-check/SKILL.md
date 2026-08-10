@@ -103,10 +103,23 @@ Present results as a table, one row per concept:
 | # | Term | Composite | Pass/Fix/Reject | Issues |
 |---|------|-----------|-----------------|--------|
 
-Then for any concept rated "Fix", list the specific field changes needed.
+Then for any concept rated "Fix", list the specific field changes needed with the new copy written out in full.
 Then for any "Reject", state the primary reason (one line — be direct).
 
 After the table: count of Pass / Fix / Reject, and one line on the overall batch quality.
+
+**Copy-paste format rules — non-negotiable:**
+- Write every fixed field value as plain text on its own line, preceded by the field name and a colon.
+- No quotation marks around values. No code blocks. No bullet points inside the fix section.
+- The reader should be able to double-click the value text and copy it directly.
+
+Example of correct fix output:
+
+hook:
+Creating before you're ready teaches faster than waiting until you are.
+
+analogy:
+A guitarist learns more from one bad chord than a year of music theory.
 
 ## Rejection defaults
 
