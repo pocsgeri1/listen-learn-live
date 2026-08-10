@@ -4476,7 +4476,267 @@
       "episode_type": "solo",
       "actionability_score": 3,
       "evergreen": true,
-      "controversy_flag": true
+      "controversy_flag": true,
+      "summary_style": "B",
+      "summary": "The self-improvement industry has been selling you the wrong half of learning. Reading, notes, courses, second brains: all input. Nothing sticks unless something is pulling it through.\n\nThe mechanism is borrowed from engineering. A goal creates an error signal, the gap between where you are and where you are going. That signal creates a filter. The filter decides what information your brain bothers to keep. Koe calls consuming without a project intellectual obesity: your brain registers progress while nothing changes. A project makes certain ideas suddenly necessary. A better filing system does not.\n\nYou will recognise this. You probably built a second brain to solve a problem that only a project could fix.",
+      "sharpest_line": "Scrolling self-improvement content without applying it is brain rot with better branding.",
+      "tension": "Building to learn vs. learning to build",
+      "verdict_listen": [
+        "you've ever finished a book and retained almost nothing two weeks later",
+        "you work in a field where creating something matters more than credentials",
+        "you're the kind of person who watches tutorials but still opens the software confused"
+      ],
+      "verdict_skip": [
+        "you need structured frameworks and prefer formal pedagogy over chaotic experimentation",
+        "you're looking for memory techniques or mnemonics rather than a philosophy of applied learning"
+      ],
+      "vocab_vault": [
+        {
+          "word": "cybernetics",
+          "definition": "science of how systems self-regulate through feedback loops and goal-directed behavior",
+          "timestamp_seconds": null,
+          "category": "Science",
+          "category_alt": null
+        },
+        {
+          "word": "error signal",
+          "definition": "gap between current state and goal that drives corrective action",
+          "timestamp_seconds": null,
+          "category": "Science",
+          "category_alt": null
+        },
+        {
+          "word": "neuroplasticity",
+          "definition": "brain's ability to physically rewire itself in response to experience",
+          "timestamp_seconds": null,
+          "category": "Science",
+          "category_alt": null
+        },
+        {
+          "word": "commonplace book",
+          "definition": "personal collection of quotes, ideas, and observations kept by historical thinkers",
+          "timestamp_seconds": null,
+          "category": "Smartypants",
+          "category_alt": null
+        },
+        {
+          "word": "market sophistication",
+          "definition": "audience's familiarity with an idea, determining how fresh or cliche it feels",
+          "timestamp_seconds": null,
+          "category": "Business",
+          "category_alt": null
+        },
+        {
+          "word": "second brain",
+          "definition": "external digital system for capturing and organizing thoughts and knowledge",
+          "timestamp_seconds": null,
+          "category": "Business",
+          "category_alt": null
+        },
+        {
+          "word": "embedding",
+          "definition": "converting text into numerical coordinates that represent meaning in multi-dimensional space",
+          "timestamp_seconds": null,
+          "category": "Science",
+          "category_alt": null
+        },
+        {
+          "word": "vector coordinates",
+          "definition": "numerical values representing position in multi-dimensional space for comparison",
+          "timestamp_seconds": null,
+          "category": "Science",
+          "category_alt": null
+        },
+        {
+          "word": "hallucinate",
+          "definition": "when AI generates plausible-sounding but incorrect or fabricated information",
+          "timestamp_seconds": null,
+          "category": "Science",
+          "category_alt": null
+        },
+        {
+          "word": "brain dump",
+          "definition": "unstructured capture of every idea in your head about a topic",
+          "timestamp_seconds": null,
+          "category": "Small Talk",
+          "category_alt": null
+        },
+        {
+          "word": "curate",
+          "definition": "deliberately select and organize content or ideas for specific purpose",
+          "timestamp_seconds": null,
+          "category": "Small Talk",
+          "category_alt": null
+        },
+        {
+          "word": "synthesize",
+          "definition": "combine separate elements into coherent whole with new meaning",
+          "timestamp_seconds": null,
+          "category": "Smartypants",
+          "category_alt": null
+        },
+        {
+          "word": "articulate",
+          "definition": "express thoughts clearly and precisely in words",
+          "timestamp_seconds": null,
+          "category": "Small Talk",
+          "category_alt": null
+        },
+        {
+          "word": "false sense of progress",
+          "definition": "feeling productive while accomplishing nothing of real value",
+          "timestamp_seconds": null,
+          "category": "Mind & People",
+          "category_alt": null
+        },
+        {
+          "word": "course-correct",
+          "definition": "adjust direction or approach based on feedback to stay on track",
+          "timestamp_seconds": null,
+          "category": "Small Talk",
+          "category_alt": null
+        },
+        {
+          "word": "burning the boats",
+          "definition": "eliminating retreat options to force commitment to forward movement",
+          "timestamp_seconds": null,
+          "category": "Smartypants",
+          "category_alt": null
+        },
+        {
+          "word": "worldview",
+          "definition": "interconnected set of beliefs and ideas shaping how you interpret reality",
+          "timestamp_seconds": null,
+          "category": "Mind & People",
+          "category_alt": null
+        },
+        {
+          "word": "traction",
+          "definition": "measurable forward movement or audience engagement with your work",
+          "timestamp_seconds": null,
+          "category": "Business",
+          "category_alt": null
+        },
+        {
+          "word": "ideological",
+          "definition": "committed to fixed belief system rather than open thinking",
+          "timestamp_seconds": null,
+          "category": "Smartypants",
+          "category_alt": null
+        },
+        {
+          "word": "nuance",
+          "definition": "subtle distinction or complexity that resists simple binary thinking",
+          "timestamp_seconds": null,
+          "category": "Small Talk",
+          "category_alt": null
+        },
+        {
+          "word": "pedagogy",
+          "definition": "method and practice of formal teaching",
+          "timestamp_seconds": null,
+          "category": "Smartypants",
+          "category_alt": null
+        },
+        {
+          "word": "friction",
+          "definition": "unnecessary resistance or obstacles slowing down a process",
+          "timestamp_seconds": null,
+          "category": "Business",
+          "category_alt": null
+        },
+        {
+          "word": "doom scrolling",
+          "definition": "compulsively consuming negative or useless content despite feeling worse",
+          "timestamp_seconds": null,
+          "category": "Small Talk",
+          "category_alt": null
+        },
+        {
+          "word": "milestone",
+          "definition": "significant marker showing progress toward larger goal",
+          "timestamp_seconds": null,
+          "category": "Business",
+          "category_alt": null
+        },
+        {
+          "word": "tangible",
+          "definition": "concrete and real enough to touch or clearly demonstrate",
+          "timestamp_seconds": null,
+          "category": "Small Talk",
+          "category_alt": null
+        },
+        {
+          "word": "spectrum",
+          "definition": "continuous range between two extremes rather than either-or choice",
+          "timestamp_seconds": null,
+          "category": "Small Talk",
+          "category_alt": null
+        },
+        {
+          "word": "thermostat",
+          "definition": "device that maintains desired temperature through automatic feedback adjustment",
+          "timestamp_seconds": null,
+          "category": "Science",
+          "category_alt": null
+        },
+        {
+          "word": "punch",
+          "definition": "impact or effectiveness of message or idea",
+          "timestamp_seconds": null,
+          "category": "Small Talk",
+          "category_alt": null
+        },
+        {
+          "word": "fetish",
+          "definition": "excessive attachment to object or system beyond its actual value",
+          "timestamp_seconds": null,
+          "category": "Mind & People",
+          "category_alt": null
+        },
+        {
+          "word": "lens",
+          "definition": "particular perspective or interpretive framework for viewing reality",
+          "timestamp_seconds": null,
+          "category": "Small Talk",
+          "category_alt": null
+        },
+        {
+          "word": "downstream",
+          "definition": "resulting from or following naturally after something else",
+          "timestamp_seconds": null,
+          "category": "Small Talk",
+          "category_alt": null
+        },
+        {
+          "word": "obsessive",
+          "definition": "intensely focused to point of excluding everything else",
+          "timestamp_seconds": null,
+          "category": "Mind & People",
+          "category_alt": null
+        },
+        {
+          "word": "cliche",
+          "definition": "overused phrase or idea that lost original impact through repetition",
+          "timestamp_seconds": null,
+          "category": "Small Talk",
+          "category_alt": null
+        },
+        {
+          "word": "kicker",
+          "definition": "final punch line or surprising ending that reframes everything before",
+          "timestamp_seconds": null,
+          "category": "Small Talk",
+          "category_alt": null
+        },
+        {
+          "word": "demographics",
+          "definition": "statistical characteristics of population like age, gender, location",
+          "timestamp_seconds": null,
+          "category": "Business",
+          "category_alt": null
+        }
+      ]
     }
   }
 }
