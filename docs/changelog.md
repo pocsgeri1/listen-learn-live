@@ -6,6 +6,23 @@
 
 ---
 
+## v2.95 — 2026-08-10 · extract.html: sticky counter, step status bar, Send+Enrich, Deploy button, card animations
+
+### extract.html
+- **Sticky concept counter bar:** Appears above the concept list once extraction runs. Shows total count, sent count, and flag pills (fields over limit / edited cards / skipped). Collapse All / Expand All buttons. Updates live as concepts are sent or edited.
+- **Visual step-based status bar:** Replaced the plain log line with a 5-step indicator: Fetch → Extract → Intel → Send → Enrich. Each step lights up as active (accent) or done (green). Progress bar underneath with smooth cubic-bezier easing.
+- **Send + Enrich combined button:** "Send to Airtable + Enrich" runs `sendAllToAirtable()` then auto-calls `generateEnrichment()` sequentially. "Send only" still available as a secondary button. Enrichment button in the intel panel now reads "Regenerate enrichment" for clarity.
+- **Deploy button:** After a successful send, a "⬆ Deploy to live site" button appears. Calls `POST /repos/pocsgeri1/listen-learn-live/actions/workflows/publish-approved.yml/dispatches` via GitHub API. Shows success/error status inline. Requires the GitHub PAT to have `actions: write` permission.
+- **Smooth card expand/collapse animation:** Replaced `display:none/block` toggle with CSS `grid-template-rows: 0fr → 1fr` transition (0.22s ease). Added `.concept-card-body-inner` wrapper. Chevron rotates via `transform: rotate(180deg)` with matching transition.
+- **`toggleCard` now calls `updateConceptCounter()`** so the counter stays in sync when individual cards are opened.
+- **Deploy row auto-hides** until all concepts are successfully sent. Cleared on `clearAll()`.
+- **`clearAll` resets** counter bar, deploy row, and status steps.
+
+### index.html (listen-learn-live)
+- **Fixed `.reverse()` bug in `_renderDrawerContent`:** `.reverse()` was silently reversing chronologically-sorted concepts inside episode drawers. Removed. Collection 524 now displays in ascending timestamp order as intended.
+
+---
+
 ## v3.40 — 2026-08-09 · Heatmap fix (52-week GitHub layout), vocab tap → instant practice
 
 ### index.html

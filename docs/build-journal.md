@@ -6,6 +6,18 @@
 
 ---
 
+## 2026-08-10 — Grid animation for card expand/collapse, deploy button, send+enrich sequencing (v2.95)
+
+**CSS `grid-template-rows: 0fr → 1fr` is the right way to animate height-to-auto.** `display:none → block` gives no animation. `max-height` fakes it but causes pop-in if the value is too small or dead air if too large. `grid-template-rows: 0fr → 1fr` on a grid parent with a child set to `min-height: 0` gives a true height animation. Needs `overflow: hidden` on the grid parent. Add the `.open` class with JS and let CSS do the rest.
+
+**GitHub Actions workflow_dispatch requires `actions: write` on fine-grained PATs.** Classic PATs with `repo` scope already have it. Fine-grained PATs need it explicitly. If `POST /dispatches` returns 422, check: (a) the workflow YAML has `on: workflow_dispatch` and (b) the workflow file name in the URL matches exactly (including `.yml` extension).
+
+**Sequencing async flows: `await fn1(); await fn2()` is enough.** No need for a Promise chain or event emitter. `sendAndEnrich()` simply awaits `sendAllToAirtable()` and then calls `generateEnrichment()`. Guards on `activeCollectionId` handle the "send failed, skip enrich" case cleanly.
+
+**`.reverse()` on an already-sorted array is a silent bug.** The `.reverse()` in `_renderDrawerContent` was added when concepts were sorted by composite score descending — reversing gave ascending display. After the timestamp-ascending sort was added to `concepts.json`, `.reverse()` flipped the episode drawer backwards. Lesson: when changing sort order upstream, grep for `.reverse()` in all consumers.
+
+---
+
 ## 2026-08-08 — Heatmap timestamps, YT thumbnails, panel._epActivePodcast state pattern (v3.39)
 
 **Heatmap timestamps: multiply by 1000 if stored as Unix seconds.** `lll_mastered_ts_v1` stores values as integer seconds (not milliseconds). `new Date(ts * 1000)` is correct. If values are already ms, `* 1000` produces dates in ~52000 AD. Always check what unit the timestamp is in before rendering.
