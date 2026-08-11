@@ -26704,7 +26704,11 @@ function _folderRemoveVocab(folderId, word) {
   var arr = _foldersGet();
   var f = arr.find(function(x) { return x.id === folderId; });
   if (!f) return;
-  f.vocabWords = (f.vocabWords || []).filter(function(w) { return w !== word.toLowerCase().trim(); });
+  var normalized = (word || '').toLowerCase().trim();
+  f.vocabWords = (f.vocabWords || []).filter(function(w) {
+    var wStr = (w && typeof w === 'object') ? (w.word || '') : (w || '');
+    return wStr.toLowerCase().trim() !== normalized;
+  });
   f.updatedAt = Date.now();
   _foldersSet(arr);
 }
@@ -26868,8 +26872,10 @@ function _folderBuildDetailInner(folder, _esc) {
   if ((folder.vocabWords || []).length) {
     html += '<div class="folder-vocab-label">Words</div><div class="folder-vocab-chips">';
     folder.vocabWords.forEach(function(w) {
-      html += '<div class="folder-vocab-chip">' + _esc(w) +
-        '<button class="folder-vocab-remove" onclick="event.stopPropagation();_folderRemoveVocab(\'' + fid + '\',\'' + w.replace(/'/g,"\\'") + '\');_folderRefreshItem(\'' + fid + '\')" title="Remove">✕</button>' +
+      var wordStr = (w && typeof w === 'object') ? (w.word || '') : (w || '');
+      var wordEscSQ = wordStr.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+      html += '<div class="folder-vocab-chip">' + _esc(wordStr) +
+        '<button class="folder-vocab-remove" onclick="event.stopPropagation();_folderRemoveVocab(\'' + fid + '\',\'' + wordEscSQ + '\');_folderRefreshItem(\'' + fid + '\')" title="Remove">&#x2715;</button>' +
         '</div>';
     });
     html += '</div>';
@@ -28161,9 +28167,11 @@ function _cvAddVocabMenu(btn) {
   var rows = !words.length
     ? '<div class="cv-mp-empty">No vocab words in this folder yet. Add some from the Vocab tab.</div>'
     : words.map(function(w) {
-        var used = usedWords.indexOf(w) !== -1;
-        return '<div class="cv-mp-row' + (used ? ' cv-mp-used' : '') + '" onclick="_cvPlaceVocab(\'' + w.replace(/'/g,"\\'") + '\')">' +
-          '<span class="cv-mp-term">' + _esc(w) + '</span>' +
+        var wStr = (w && typeof w === 'object') ? (w.word || '') : (w || '');
+        var wEsc = wStr.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+        var used = usedWords.indexOf(wStr) !== -1;
+        return '<div class="cv-mp-row' + (used ? ' cv-mp-used' : '') + '" onclick="_cvPlaceVocab(\'' + wEsc + '\')">' +
+          '<span class="cv-mp-term">' + _esc(wStr) + '</span>' +
           (used ? '<span class="cv-mp-check">\u2713</span>' : '') +
         '</div>';
       }).join('');
@@ -29111,7 +29119,8 @@ function _vwsOpen(idx) {
     phHtml +
     '<div class="vws-actions">' +
       practicedPill +
-      '<button class="vocab-tile-action-btn vocab-tile-action-practice" onclick="_vwsPracticeNow(\'' + wordEsc + '\')">Practice →</button>' +
+      '<button class="vocab-tile-action-btn vws-folder-btn" onclick="event.stopPropagation();_vwsAddToFolder(this,\'' + wordEsc + '\')">+ Folder</button>' +
+      '<button class="vocab-tile-action-btn vocab-tile-action-practice" onclick="_vwsPracticeNow(\'' + wordEsc + '\')">Practice \u2192</button>' +
     '</div>';
 
   var bg = document.getElementById('vocabWordSheetBg');
@@ -29125,6 +29134,14 @@ function _vwsOpen(idx) {
     });
   });
   document.addEventListener('keydown', _vwsKeyClose);
+}
+
+function _vwsAddToFolder(btn, word) {
+  var w = _vwsSorted.find(function(x) { return (x.word || x.term || '') === word; });
+  var def      = w ? (w.definition || w.def || '') : '';
+  var category = w ? (w.category || '') : '';
+  var colId    = w ? (w.collectionId || w.colId || null) : null;
+  _vocabFolderPickerOpen(btn, word, def, category, colId);
 }
 
 function _vwsClose() {
@@ -38556,6 +38573,10 @@ function _gvOutsideClickHandler(e) {
   // If click is inside the Read panel or inside the open Lexi panel — don't close
   if (panel.contains(e.target)) return;
   if (lexiPanel && lexiPanel.contains(e.target)) return;
+  // Don't close if click is on the folder picker backdrop/popover (they're appended to body, not inside gvPanel)
+  if (e.target.id === 'fpBackdrop') return;
+  var fpPop = document.getElementById('folderPickerPopover');
+  if (fpPop && fpPop.contains(e.target)) return;
   _closeGlobalVocabView();
 }
 
