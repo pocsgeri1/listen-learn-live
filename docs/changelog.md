@@ -6,6 +6,20 @@
 
 ---
 
+## v3.49 — 2026-08-11 · Folders — data model, panel, CRUD, inline concept search
+
+### index.html
+- **Folders tab:** New "Folders" tab added to the Home drawer between Concepts and Episodes. Tab shows folder count badge. Wired into `_HOME_TABS`, `_libRender`, and `_libUpdateAllTabCounts`.
+- **`lll_folders_v1` data model:** New localStorage key. Schema: `{ id, name, icon, color, conceptIds[], vocabWords[], noteIds[], canvasLayout, createdAt, updatedAt, pinned }`. Future-proofed for canvas (Phase 4) and vocab (Phase 5).
+- **CRUD helpers:** `_foldersGet`, `_foldersSet`, `_folderCreate`, `_folderAddConcept`, `_folderRemoveConcept`, `_folderAddVocab`, `_folderRemoveVocab`, `_folderDelete`.
+- **Folder list:** `_libRenderFolders` renders folder rows with left-color-accent border, emoji, name, concept/vocab counts, 3 preview chips, expand chevron.
+- **Create form:** Slide-down `folder-create-wrap` with name input, 16-emoji icon picker, 8 color swatches (all matching category palette). Enter key submits. Auto-expands new folder on create.
+- **Folder accordion:** Click any folder row → expands inline to show concept rows (with category dot + remove button), vocab chips, inline concept search, footer actions (Add concepts / Delete folder).
+- **Inline concept search:** `_folderOpenSearch` / `_folderSearchConcepts` — searches saved concepts by term/hook, shows category dot + name + category label. Click to add. Fuse.js fallback when available.
+- **`_folderRefreshItem`:** Rebuilds a single folder row in-place after add/remove — no full re-render.
+- **Empty state:** Animated floating 🗂️ icon with headline, sub-copy, and CTA to open create form.
+- **CSS:** ~280 lines of new folder panel styles — header, create form, emoji/color pickers, folder rows, expanded detail, concept rows, vocab chips, search, all with `[data-theme="light"]` overrides and `@media (max-width:520px)` mobile tweaks. No hardcoded hex values; uses `var(--accent)`, `var(--border)`, `color-mix()`.
+
 ## v3.48 — 2026-08-11 · Related chip in-place swap + breadcrumb back-nav
 
 ### index.html

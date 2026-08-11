@@ -10658,6 +10658,317 @@
 .lib-panel { scrollbar-width: none; }
 .lib-panel::-webkit-scrollbar { display: none; }
 
+/* ══════════════════════════════════════════════════
+   FOLDERS PANEL — v3.49
+   ══════════════════════════════════════════════════ */
+
+/* Panel header */
+.folders-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 4px 2px 16px;
+}
+.folders-header-title {
+  font-family: 'DM Mono', monospace; font-size: 0.52rem;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--muted); opacity: 0.6;
+}
+.folders-new-btn {
+  font-family: 'DM Mono', monospace; font-size: 0.6rem;
+  letter-spacing: 0.04em; color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+  border: 0.5px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-radius: 4px; padding: 5px 11px; cursor: pointer;
+  transition: background 0.16s, border-color 0.16s;
+}
+.folders-new-btn:hover {
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  border-color: var(--accent);
+}
+
+/* Empty state */
+.folders-empty {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 52px 24px 40px; text-align: center; gap: 12px;
+}
+.folders-empty-icon {
+  font-size: 2.6rem; line-height: 1; opacity: 0.5;
+  animation: folderEmptyFloat 3s ease-in-out infinite;
+}
+@keyframes folderEmptyFloat {
+  0%,100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+@media (prefers-reduced-motion: reduce) { .folders-empty-icon { animation: none; } }
+.folders-empty-heading {
+  font-family: 'Playfair Display', serif; font-style: italic;
+  font-size: 1rem; color: var(--text); opacity: 0.75;
+}
+.folders-empty-sub {
+  font-family: 'DM Sans', sans-serif; font-size: 0.7rem;
+  color: var(--muted); line-height: 1.55; max-width: 240px;
+}
+.folders-empty-cta {
+  font-family: 'DM Mono', monospace; font-size: 0.62rem;
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+  border: 0.5px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-radius: 4px; padding: 7px 16px; cursor: pointer; margin-top: 4px;
+  transition: background 0.16s, border-color 0.16s;
+}
+.folders-empty-cta:hover {
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  border-color: var(--accent);
+}
+
+/* Create form — slides down from header */
+.folder-create-wrap {
+  overflow: hidden;
+  max-height: 0; opacity: 0;
+  transition: max-height 0.34s cubic-bezier(0.4,0,0.2,1), opacity 0.22s ease, margin 0.22s ease;
+  margin-bottom: 0;
+}
+.folder-create-wrap.fc-open {
+  max-height: 340px; opacity: 1; margin-bottom: 18px;
+}
+.folder-create-card {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-top: 2px solid var(--accent);
+  border-radius: 0 0 8px 8px;
+  padding: 16px 16px 14px;
+}
+.folder-create-label {
+  font-family: 'DM Mono', monospace; font-size: 0.48rem;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--accent); opacity: 0.65; margin-bottom: 7px;
+}
+.folder-create-input {
+  width: 100%; background: none;
+  border: 0.5px solid var(--border); border-radius: 5px;
+  color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.8rem;
+  padding: 8px 12px; outline: none; box-sizing: border-box;
+  transition: border-color 0.16s;
+}
+.folder-create-input:focus { border-color: var(--accent); }
+.folder-create-input::placeholder { color: var(--muted2); opacity: 0.55; font-style: italic; }
+[data-theme="light"] .folder-create-input { background: rgba(255,255,255,0.6); }
+
+/* Emoji picker */
+.folder-emoji-row {
+  display: flex; flex-wrap: wrap; gap: 4px; margin: 11px 0 10px;
+}
+.folder-emoji-btn {
+  width: 32px; height: 32px; font-size: 1.05rem; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 5px; cursor: pointer;
+  border: 1.5px solid transparent;
+  background: color-mix(in srgb, var(--text) 5%, transparent);
+  transition: border-color 0.14s, background 0.14s, transform 0.12s;
+}
+.folder-emoji-btn:hover { background: color-mix(in srgb, var(--accent) 10%, transparent); transform: scale(1.15); }
+.folder-emoji-btn.fe-selected {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+/* Color swatches */
+.folder-color-row { display: flex; gap: 7px; margin-bottom: 14px; flex-wrap: wrap; }
+.folder-color-swatch {
+  width: 20px; height: 20px; border-radius: 50%; cursor: pointer;
+  border: 2px solid transparent; outline: 2px solid transparent;
+  transition: outline-color 0.14s, transform 0.12s;
+}
+.folder-color-swatch:hover { transform: scale(1.2); }
+.folder-color-swatch.fc-selected { outline-color: var(--accent); outline-offset: 2px; }
+
+/* Form actions */
+.folder-create-actions { display: flex; gap: 8px; justify-content: flex-end; }
+.folder-create-submit {
+  font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.04em;
+  color: var(--bg); background: var(--accent);
+  border: none; border-radius: 4px; padding: 6px 14px; cursor: pointer;
+  transition: opacity 0.16s;
+}
+.folder-create-submit:hover { opacity: 0.85; }
+.folder-create-cancel {
+  font-family: 'DM Mono', monospace; font-size: 0.6rem;
+  color: var(--muted); background: none;
+  border: 0.5px solid var(--border); border-radius: 4px; padding: 6px 12px; cursor: pointer;
+  transition: color 0.14s, border-color 0.14s;
+}
+.folder-create-cancel:hover { color: var(--text); border-color: var(--border-hover); }
+
+/* Folder list */
+.folder-list { display: flex; flex-direction: column; gap: 6px; }
+
+/* Folder item — accordion row */
+.folder-item {
+  border: 0.5px solid var(--border);
+  border-radius: 8px; overflow: hidden;
+  border-left: 3px solid var(--folder-color, var(--accent));
+  transition: border-color 0.18s, box-shadow 0.18s;
+}
+.folder-item:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.12); }
+[data-theme="light"] .folder-item:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+
+/* Folder main row (header, always visible) */
+.folder-item-main {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 14px 10px 12px; cursor: pointer;
+  background: var(--surface);
+  transition: background 0.16s;
+}
+.folder-item-main:hover { background: color-mix(in srgb, var(--surface) 80%, var(--accent) 3%); }
+[data-theme="light"] .folder-item-main { background: rgba(255,255,255,0.7); }
+[data-theme="light"] .folder-item-main:hover { background: rgba(255,255,255,0.95); }
+
+.folder-item-emoji { font-size: 1.1rem; line-height: 1; flex-shrink: 0; }
+.folder-item-info  { flex: 1; min-width: 0; }
+.folder-item-name  {
+  font-family: 'DM Sans', sans-serif; font-size: 0.78rem; font-weight: 500;
+  color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.folder-item-meta  {
+  font-family: 'DM Mono', monospace; font-size: 0.5rem; letter-spacing: 0.06em;
+  color: var(--muted); margin-top: 2px; opacity: 0.7;
+}
+.folder-item-preview { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 5px; }
+.folder-preview-chip {
+  font-family: 'DM Sans', sans-serif; font-size: 0.58rem;
+  color: var(--muted2); background: color-mix(in srgb, var(--text) 5%, transparent);
+  border: 0.5px solid var(--border); border-radius: 3px;
+  padding: 2px 7px; white-space: nowrap;
+}
+.folder-preview-chip.fp-more { opacity: 0.55; }
+.folder-item-arrow {
+  font-size: 0.65rem; color: var(--muted); opacity: 0.5; flex-shrink: 0;
+  transition: transform 0.22s cubic-bezier(0.34,1.56,0.64,1);
+  font-family: 'DM Mono', monospace;
+}
+.folder-item.fi-open .folder-item-arrow { transform: rotate(90deg); }
+
+/* Folder expanded detail */
+.folder-item-detail {
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.36s cubic-bezier(0.4,0,0.2,1);
+  background: color-mix(in srgb, var(--surface) 60%, var(--bg) 40%);
+  border-top: 0.5px solid var(--border);
+}
+[data-theme="light"] .folder-item-detail { background: rgba(255,255,255,0.45); }
+.folder-item.fi-open .folder-item-detail { max-height: 600px; }
+.folder-item-detail-inner { padding: 14px 14px 10px 14px; }
+
+/* Concept rows inside expanded folder */
+.folder-concept-list { display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px; }
+.folder-concept-row {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 8px; border-radius: 5px;
+  border: 0.5px solid var(--border);
+  background: color-mix(in srgb, var(--text) 3%, transparent);
+  cursor: pointer; transition: background 0.14s;
+}
+.folder-concept-row:hover { background: color-mix(in srgb, var(--accent) 6%, transparent); }
+.folder-concept-cat-dot {
+  width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+}
+.folder-concept-term {
+  flex: 1; font-family: 'DM Sans', sans-serif; font-size: 0.72rem;
+  color: var(--text); min-width: 0; white-space: nowrap;
+  overflow: hidden; text-overflow: ellipsis;
+}
+.folder-concept-remove {
+  font-size: 0.6rem; color: var(--muted); background: none; border: none;
+  cursor: pointer; padding: 2px 4px; border-radius: 3px; flex-shrink: 0; line-height: 1;
+  transition: color 0.14s, background 0.14s;
+}
+.folder-concept-remove:hover { color: var(--power-color, #d4715a); background: rgba(212,113,90,0.1); }
+
+/* Vocab chips inside folder */
+.folder-vocab-label {
+  font-family: 'DM Mono', monospace; font-size: 0.46rem;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--accent); opacity: 0.6; margin-bottom: 6px;
+}
+.folder-vocab-chips { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
+.folder-vocab-chip {
+  font-family: 'DM Sans', sans-serif; font-size: 0.62rem;
+  color: var(--muted2); background: color-mix(in srgb, var(--accent) 6%, transparent);
+  border: 0.5px solid color-mix(in srgb, var(--accent) 20%, transparent);
+  border-radius: 20px; padding: 3px 9px; display: flex; align-items: center; gap: 5px;
+}
+.folder-vocab-remove {
+  font-size: 0.55rem; color: var(--muted); background: none; border: none;
+  cursor: pointer; padding: 0; line-height: 1; transition: color 0.12s;
+}
+.folder-vocab-remove:hover { color: var(--power-color, #d4715a); }
+
+/* Expanded folder footer actions */
+.folder-detail-actions {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 10px; padding-top: 10px;
+  border-top: 0.5px solid var(--border);
+}
+.folder-add-btn {
+  font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing: 0.04em;
+  color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, transparent);
+  border: 0.5px solid color-mix(in srgb, var(--accent) 25%, transparent);
+  border-radius: 4px; padding: 5px 10px; cursor: pointer;
+  transition: background 0.14s, border-color 0.14s;
+}
+.folder-add-btn:hover {
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  border-color: var(--accent);
+}
+.folder-delete-btn {
+  font-family: 'DM Mono', monospace; font-size: 0.52rem;
+  color: var(--muted); background: none; border: none; cursor: pointer; opacity: 0.5;
+  transition: opacity 0.14s, color 0.14s;
+}
+.folder-delete-btn:hover { opacity: 1; color: var(--power-color, #d4715a); }
+
+/* "Add concept" inline search (appears inside expanded folder) */
+.folder-concept-search-wrap {
+  max-height: 0; overflow: hidden; opacity: 0;
+  transition: max-height 0.26s ease, opacity 0.18s ease;
+}
+.folder-concept-search-wrap.fcs-open { max-height: 220px; opacity: 1; }
+.folder-concept-search-input {
+  width: 100%; background: none;
+  border: 0.5px solid var(--accent); border-radius: 5px;
+  color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.72rem;
+  padding: 7px 11px; outline: none; box-sizing: border-box; margin-bottom: 6px;
+}
+.folder-concept-search-input::placeholder { color: var(--muted2); opacity: 0.6; font-style: italic; }
+[data-theme="light"] .folder-concept-search-input { background: rgba(255,255,255,0.6); }
+.folder-search-results { display: flex; flex-direction: column; gap: 3px; }
+.folder-search-result {
+  display: flex; align-items: center; gap: 7px;
+  padding: 5px 8px; border-radius: 4px; cursor: pointer;
+  font-family: 'DM Sans', sans-serif; font-size: 0.7rem; color: var(--text);
+  transition: background 0.12s;
+}
+.folder-search-result:hover { background: color-mix(in srgb, var(--accent) 8%, transparent); }
+.folder-search-result-cat {
+  font-family: 'DM Mono', monospace; font-size: 0.44rem;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--muted); flex-shrink: 0;
+}
+
+/* Light-mode overrides */
+[data-theme="light"] .folder-create-card { background: rgba(255,255,255,0.85); }
+[data-theme="light"] .folder-emoji-btn { background: rgba(0,0,0,0.04); }
+[data-theme="light"] .folder-concept-row { background: rgba(0,0,0,0.025); }
+[data-theme="light"] .folder-vocab-chip { background: color-mix(in srgb, var(--accent) 8%, transparent); }
+
+/* Mobile tweaks */
+@media (max-width: 520px) {
+  .folder-item-main { padding: 11px 12px 9px 10px; }
+  .folder-create-card { padding: 14px 12px 12px; }
+  .folder-emoji-row { gap: 3px; }
+  .folder-emoji-btn { width: 30px; height: 30px; font-size: 0.95rem; }
+}
+
 /* ── VOCAB panel — v3.21 ─────────────────────────── */
 /* Vocab nav row — v3.36: My Words is active segment; All Words + Word Map are nav links */
 .vocab-seg-row {
@@ -13986,12 +14297,14 @@
   <!-- Tab order v3.37: Concepts first, mirrors dashboard hero — then Episodes, Vocab, Practice -->
   <div class="lib-tabs">
     <button class="lib-tab lib-tab-active" id="libTab-concepts" onclick="_libSwitchTab('concepts')">Concepts</button>
+    <button class="lib-tab" id="libTab-folders" onclick="_libSwitchTab('folders')">Folders</button>
     <button class="lib-tab" id="libTab-episodes" onclick="_libSwitchTab('episodes')">Episodes</button>
     <button class="lib-tab" id="libTab-vocab" onclick="_libSwitchTab('vocab')">Vocab</button>
     <button class="lib-tab" id="libTab-practice" onclick="_libSwitchTab('practice')">Practice</button>
   </div>
   <div class="lib-panels">
     <div class="lib-panel lib-panel-active" id="libPanel-concepts"></div>
+    <div class="lib-panel" id="libPanel-folders"></div>
     <div class="lib-panel" id="libPanel-episodes"></div>
     <div class="lib-panel" id="libPanel-vocab"></div>
     <div class="lib-panel" id="libPanel-practice"></div>
@@ -24863,7 +25176,7 @@ Object.defineProperty(window, '_libActiveCat', {
   get: function() { return _libConceptFilter.cat; },
   set: function(v) { _libConceptFilter.cat = v; }
 });
-var _HOME_TABS = ['episodes','concepts','vocab','practice'];
+var _HOME_TABS = ['episodes','concepts','folders','vocab','practice'];
 
 /* ── Phase B: bucket navigation ──────────────────────────────── */
 function _homeBucketNav(tab, extra) {
@@ -25123,6 +25436,7 @@ function _libSwitchTab(tab) {
 
 function _libRender(tab) {
   if (tab === 'concepts') _libRenderSaved();
+  else if (tab === 'folders') _libRenderFolders();
   else if (tab === 'episodes') _libRenderEpisodes();
   else if (tab === 'vocab') _libRenderVocab();
   else if (tab === 'practice') _libRenderPractice();
@@ -25470,6 +25784,447 @@ function _libUpdateAllTabCounts() {
   var vocabCount = Array.isArray(lexicon) ? lexicon.length : 0;
   var vocabTab = document.getElementById('libTab-vocab');
   if (vocabTab) vocabTab.innerHTML = 'Vocab' + (vocabCount ? '<span class="lib-tab-count">' + vocabCount + '</span>' : '');
+
+  // Folders
+  var folders = _foldersGet();
+  var foldersTab = document.getElementById('libTab-folders');
+  if (foldersTab) foldersTab.innerHTML = 'Folders' + (folders.length ? '<span class="lib-tab-count">' + folders.length + '</span>' : '');
+}
+
+// ══════════════════════════════════════════════════
+// FOLDERS — Data Layer (v3.49)
+// ══════════════════════════════════════════════════
+
+var _FOLDER_COLORS = ['#7aaf8a','#a08fd4','#6b9fc4','#d4a574','#c47a9f','#5abfaf','#d4715a','#e0a060'];
+var _FOLDER_EMOJIS = ['📚','🧠','🤝','💡','🎯','🔮','📖','💬','🌱','⚡','🏆','🗺️','🔑','💎','🌊','🧩'];
+var _folderCreateIcon = '📚';
+var _folderCreateColor = '#7aaf8a';
+
+function _foldersGet() {
+  try { return JSON.parse(localStorage.getItem('lll_folders_v1') || '[]'); } catch(e) { return []; }
+}
+function _foldersSet(arr) {
+  try { localStorage.setItem('lll_folders_v1', JSON.stringify(arr)); } catch(e) {}
+}
+function _folderCreate(name, icon, color) {
+  var folder = {
+    id: 'f_' + Date.now(),
+    name: name.trim(),
+    icon: icon || '📚',
+    color: color || '#7aaf8a',
+    conceptIds: [],
+    vocabWords: [],
+    noteIds: [],
+    canvasLayout: null,
+    createdAt: Date.now(),
+    updatedAt: Date.now(),
+    pinned: false
+  };
+  var arr = _foldersGet();
+  arr.unshift(folder);
+  _foldersSet(arr);
+  return folder;
+}
+function _folderAddConcept(folderId, conceptId) {
+  var arr = _foldersGet();
+  var f = arr.find(function(x) { return x.id === folderId; });
+  if (!f) return;
+  if (f.conceptIds.indexOf(conceptId) === -1) {
+    f.conceptIds.unshift(conceptId);
+    f.updatedAt = Date.now();
+    _foldersSet(arr);
+  }
+}
+function _folderRemoveConcept(folderId, conceptId) {
+  var arr = _foldersGet();
+  var f = arr.find(function(x) { return x.id === folderId; });
+  if (!f) return;
+  f.conceptIds = f.conceptIds.filter(function(id) { return id !== conceptId; });
+  f.updatedAt = Date.now();
+  _foldersSet(arr);
+}
+function _folderAddVocab(folderId, word) {
+  var arr = _foldersGet();
+  var f = arr.find(function(x) { return x.id === folderId; });
+  if (!f) return;
+  var key = word.toLowerCase().trim();
+  if (!f.vocabWords) f.vocabWords = [];
+  if (f.vocabWords.indexOf(key) === -1) {
+    f.vocabWords.unshift(key);
+    f.updatedAt = Date.now();
+    _foldersSet(arr);
+  }
+}
+function _folderRemoveVocab(folderId, word) {
+  var arr = _foldersGet();
+  var f = arr.find(function(x) { return x.id === folderId; });
+  if (!f) return;
+  f.vocabWords = (f.vocabWords || []).filter(function(w) { return w !== word.toLowerCase().trim(); });
+  f.updatedAt = Date.now();
+  _foldersSet(arr);
+}
+function _folderDelete(folderId) {
+  var arr = _foldersGet().filter(function(x) { return x.id !== folderId; });
+  _foldersSet(arr);
+}
+
+// ══════════════════════════════════════════════════
+// FOLDERS — Panel Renderer (v3.49)
+// ══════════════════════════════════════════════════
+
+function _libRenderFolders() {
+  var panel = document.getElementById('libPanel-folders');
+  if (!panel) return;
+  panel.innerHTML = '';
+
+  var _esc = function(s) { return (s||'').replace(/[<>&"]/g, function(ch){return{'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[ch];}); };
+
+  // ── Header ──
+  var header = document.createElement('div');
+  header.className = 'folders-header';
+  header.innerHTML =
+    '<span class="folders-header-title">Your Folders</span>' +
+    '<button class="folders-new-btn" onclick="_folderToggleCreate()">＋ New folder</button>';
+  panel.appendChild(header);
+
+  // ── Create form (hidden by default) ──
+  var createWrap = document.createElement('div');
+  createWrap.className = 'folder-create-wrap';
+  createWrap.id = 'folderCreateWrap';
+  _folderCreateIcon = '📚';
+  _folderCreateColor = _FOLDER_COLORS[0];
+  var emojiButtons = _FOLDER_EMOJIS.map(function(em, i) {
+    return '<button class="folder-emoji-btn' + (i === 0 ? ' fe-selected' : '') + '" onclick="_folderPickEmoji(this,\'' + em + '\')">' + em + '</button>';
+  }).join('');
+  var colorSwatches = _FOLDER_COLORS.map(function(col, i) {
+    return '<div class="folder-color-swatch' + (i === 0 ? ' fc-selected' : '') + '" style="background:' + col + '" onclick="_folderPickColor(this,\'' + col + '\')" title="' + col + '"></div>';
+  }).join('');
+  createWrap.innerHTML =
+    '<div class="folder-create-card">' +
+      '<div class="folder-create-label">Folder name</div>' +
+      '<input class="folder-create-input" id="folderCreateInput" placeholder="e.g. Negotiation Playbook" maxlength="40" ' +
+        'onkeydown="if(event.key===\'Enter\')_folderSubmitCreate()" />' +
+      '<div class="folder-create-label" style="margin-top:12px">Icon</div>' +
+      '<div class="folder-emoji-row" id="folderEmojiRow">' + emojiButtons + '</div>' +
+      '<div class="folder-create-label">Colour</div>' +
+      '<div class="folder-color-row" id="folderColorRow">' + colorSwatches + '</div>' +
+      '<div class="folder-create-actions">' +
+        '<button class="folder-create-cancel" onclick="_folderToggleCreate()">Cancel</button>' +
+        '<button class="folder-create-submit" onclick="_folderSubmitCreate()">Create folder →</button>' +
+      '</div>' +
+    '</div>';
+  panel.appendChild(createWrap);
+
+  // ── Folder list or empty state ──
+  var folders = _foldersGet();
+  if (!folders.length) {
+    var empty = document.createElement('div');
+    empty.className = 'folders-empty';
+    empty.innerHTML =
+      '<div class="folders-empty-icon">🗂️</div>' +
+      '<div class="folders-empty-heading">No folders yet</div>' +
+      '<div class="folders-empty-sub">Group concepts and vocab into folders — your personal mental model library.</div>' +
+      '<button class="folders-empty-cta" onclick="_folderToggleCreate()">＋ Create your first folder</button>';
+    panel.appendChild(empty);
+    return;
+  }
+
+  var list = document.createElement('div');
+  list.className = 'folder-list';
+  list.id = 'folderList';
+
+  folders.forEach(function(folder) {
+    var item = _folderBuildItem(folder, _esc);
+    list.appendChild(item);
+  });
+
+  panel.appendChild(list);
+
+  // Auto-focus create input if form is open (re-render after create)
+  requestAnimationFrame(function() {
+    var inp = document.getElementById('folderCreateInput');
+    if (inp && document.getElementById('folderCreateWrap').classList.contains('fc-open')) inp.focus();
+  });
+}
+
+function _folderBuildItem(folder, _esc) {
+  if (!_esc) _esc = function(s) { return (s||'').replace(/[<>&"]/g, function(ch){return{'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[ch];}); };
+
+  var conceptCount = (folder.conceptIds || []).length;
+  var vocabCount   = (folder.vocabWords  || []).length;
+  var metaParts = [];
+  if (conceptCount) metaParts.push(conceptCount + ' concept' + (conceptCount !== 1 ? 's' : ''));
+  if (vocabCount)   metaParts.push(vocabCount + ' word'    + (vocabCount  !== 1 ? 's' : ''));
+  if (!metaParts.length) metaParts.push('empty');
+
+  // 3 preview chips
+  var previewIds = (folder.conceptIds || []).slice(0, 3);
+  var previewConcepts = previewIds.map(function(id) {
+    return CONCEPTS && CONCEPTS.find(function(x) { return x.id === id; });
+  }).filter(Boolean);
+  var remaining = conceptCount - previewConcepts.length;
+  var previewChips = previewConcepts.map(function(c) {
+    return '<span class="folder-preview-chip">' + _esc(c.term) + '</span>';
+  }).join('');
+  if (remaining > 0) previewChips += '<span class="folder-preview-chip fp-more">+' + remaining + ' more</span>';
+
+  var item = document.createElement('div');
+  item.className = 'folder-item';
+  item.id = 'folderItem-' + folder.id;
+  item.style.setProperty('--folder-color', folder.color || 'var(--accent)');
+
+  item.innerHTML =
+    '<div class="folder-item-main" onclick="_folderToggleItem(\'' + folder.id + '\')">' +
+      '<div class="folder-item-emoji">' + _esc(folder.icon || '📚') + '</div>' +
+      '<div class="folder-item-info">' +
+        '<div class="folder-item-name">' + _esc(folder.name) + '</div>' +
+        '<div class="folder-item-meta">' + metaParts.join(' · ') + '</div>' +
+        (previewChips ? '<div class="folder-item-preview">' + previewChips + '</div>' : '') +
+      '</div>' +
+      '<div class="folder-item-arrow">›</div>' +
+    '</div>' +
+    '<div class="folder-item-detail">' +
+      '<div class="folder-item-detail-inner" id="folderDetail-' + folder.id + '">' +
+        _folderBuildDetailInner(folder, _esc) +
+      '</div>' +
+    '</div>';
+
+  return item;
+}
+
+function _folderBuildDetailInner(folder, _esc) {
+  if (!_esc) _esc = function(s) { return (s||'').replace(/[<>&"]/g, function(ch){return{'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[ch];}); };
+  var fid = folder.id;
+  var html = '';
+
+  // Concept rows
+  var concepts = (folder.conceptIds || []).map(function(id) {
+    return CONCEPTS && CONCEPTS.find(function(x) { return x.id === id; });
+  }).filter(Boolean);
+
+  if (concepts.length) {
+    html += '<div class="folder-concept-list">';
+    concepts.forEach(function(c) {
+      var catColor = (typeof CAT_COLOR !== 'undefined' && CAT_COLOR[c.category]) || 'var(--accent)';
+      html +=
+        '<div class="folder-concept-row" onclick="closeLibrary();_libNavToCard(' + c.id + ')">' +
+          '<div class="folder-concept-cat-dot" style="background:' + catColor + '"></div>' +
+          '<span class="folder-concept-term">' + _esc(c.term) + '</span>' +
+          '<button class="folder-concept-remove" onclick="event.stopPropagation();_folderRemoveConcept(\'' + fid + '\',' + c.id + ');_folderRefreshItem(\'' + fid + '\')" title="Remove from folder">✕</button>' +
+        '</div>';
+    });
+    html += '</div>';
+  } else {
+    html += '<div style="font-family:\'DM Sans\',sans-serif;font-size:0.68rem;color:var(--muted);opacity:0.6;margin-bottom:10px;font-style:italic;">No concepts yet — add some below.</div>';
+  }
+
+  // Vocab chips
+  if ((folder.vocabWords || []).length) {
+    html += '<div class="folder-vocab-label">Words</div><div class="folder-vocab-chips">';
+    folder.vocabWords.forEach(function(w) {
+      html += '<div class="folder-vocab-chip">' + _esc(w) +
+        '<button class="folder-vocab-remove" onclick="event.stopPropagation();_folderRemoveVocab(\'' + fid + '\',\'' + w.replace(/'/g,"\\'") + '\');_folderRefreshItem(\'' + fid + '\')" title="Remove">✕</button>' +
+        '</div>';
+    });
+    html += '</div>';
+  }
+
+  // Inline concept search (hidden by default)
+  html +=
+    '<div class="folder-concept-search-wrap" id="folderSearch-' + fid + '">' +
+      '<input class="folder-concept-search-input" id="folderSearchInput-' + fid + '" ' +
+        'placeholder="Search concepts to add…" oninput="_folderSearchConcepts(\'' + fid + '\',this.value)" ' +
+        'onkeydown="if(event.key===\'Escape\')_folderCloseSearch(\'' + fid + '\')" autocomplete="off" />' +
+      '<div class="folder-search-results" id="folderSearchResults-' + fid + '"></div>' +
+    '</div>';
+
+  // Footer actions
+  html +=
+    '<div class="folder-detail-actions">' +
+      '<button class="folder-add-btn" onclick="_folderOpenSearch(\'' + fid + '\')">＋ Add concepts</button>' +
+      '<button class="folder-delete-btn" onclick="_folderConfirmDelete(\'' + fid + '\')">Delete folder</button>' +
+    '</div>';
+
+  return html;
+}
+
+// ══════════════════════════════════════════════════
+// FOLDERS — UI Interactions (v3.49)
+// ══════════════════════════════════════════════════
+
+function _folderToggleCreate() {
+  var wrap = document.getElementById('folderCreateWrap');
+  if (!wrap) return;
+  var opening = !wrap.classList.contains('fc-open');
+  wrap.classList.toggle('fc-open');
+  if (opening) {
+    requestAnimationFrame(function() {
+      var inp = document.getElementById('folderCreateInput');
+      if (inp) { inp.value = ''; inp.focus(); }
+      // Reset selections
+      _folderCreateIcon  = _FOLDER_EMOJIS[0];
+      _folderCreateColor = _FOLDER_COLORS[0];
+      document.querySelectorAll('.folder-emoji-btn').forEach(function(b,i){ b.classList.toggle('fe-selected', i===0); });
+      document.querySelectorAll('.folder-color-swatch').forEach(function(b,i){ b.classList.toggle('fc-selected', i===0); });
+    });
+  }
+}
+
+function _folderPickEmoji(btn, emoji) {
+  _folderCreateIcon = emoji;
+  document.querySelectorAll('.folder-emoji-btn').forEach(function(b) { b.classList.remove('fe-selected'); });
+  btn.classList.add('fe-selected');
+}
+
+function _folderPickColor(swatch, color) {
+  _folderCreateColor = color;
+  document.querySelectorAll('.folder-color-swatch').forEach(function(b) { b.classList.remove('fc-selected'); });
+  swatch.classList.add('fc-selected');
+}
+
+function _folderSubmitCreate() {
+  var inp = document.getElementById('folderCreateInput');
+  if (!inp) return;
+  var name = (inp.value || '').trim();
+  if (!name) { inp.focus(); inp.style.borderColor = 'var(--power-color, #d4715a)'; return; }
+  inp.style.borderColor = '';
+  var folder = _folderCreate(name, _folderCreateIcon, _folderCreateColor);
+  _libUpdateAllTabCounts();
+
+  // Close form
+  var wrap = document.getElementById('folderCreateWrap');
+  if (wrap) wrap.classList.remove('fc-open');
+
+  // Re-render panel (shows new folder at top)
+  _libRenderFolders();
+
+  // Auto-expand the new folder with a brief delay
+  setTimeout(function() { _folderToggleItem(folder.id); }, 80);
+
+  if (typeof _playSwapSFX === 'function') _playSwapSFX();
+}
+
+function _folderToggleItem(folderId) {
+  var item = document.getElementById('folderItem-' + folderId);
+  if (!item) return;
+  var isOpen = item.classList.contains('fi-open');
+  // Close all
+  document.querySelectorAll('.folder-item.fi-open').forEach(function(el) { el.classList.remove('fi-open'); });
+  if (!isOpen) {
+    item.classList.add('fi-open');
+    // Focus search if it was open before
+  }
+}
+
+function _folderRefreshItem(folderId) {
+  var folders = _foldersGet();
+  var folder = folders.find(function(x) { return x.id === folderId; });
+  if (!folder) {
+    // Folder was deleted — re-render whole panel
+    _libRenderFolders();
+    _libUpdateAllTabCounts();
+    return;
+  }
+  // Rebuild item in-place
+  var oldItem = document.getElementById('folderItem-' + folderId);
+  if (!oldItem || !oldItem.parentNode) return;
+  var wasOpen = oldItem.classList.contains('fi-open');
+  var _esc = function(s) { return (s||'').replace(/[<>&"]/g, function(ch){return{'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[ch];}); };
+  var newItem = _folderBuildItem(folder, _esc);
+  oldItem.parentNode.replaceChild(newItem, oldItem);
+  if (wasOpen) {
+    newItem.classList.add('fi-open');
+  }
+  _libUpdateAllTabCounts();
+}
+
+function _folderConfirmDelete(folderId) {
+  var folders = _foldersGet();
+  var folder = folders.find(function(x) { return x.id === folderId; });
+  var name = folder ? folder.name : 'this folder';
+  if (!confirm('Delete "' + name + '"? This cannot be undone.')) return;
+  _folderDelete(folderId);
+  _libRenderFolders();
+  _libUpdateAllTabCounts();
+  if (typeof _playSwapSFX === 'function') _playSwapSFX();
+}
+
+// ── Inline concept search inside folder ──────────────────────
+var _FUSE_FOLDER = null; // lazy init
+
+function _folderOpenSearch(folderId) {
+  var wrap = document.getElementById('folderSearch-' + folderId);
+  if (!wrap) return;
+  var wasOpen = wrap.classList.contains('fcs-open');
+  if (wasOpen) { _folderCloseSearch(folderId); return; }
+  wrap.classList.add('fcs-open');
+  requestAnimationFrame(function() {
+    var inp = document.getElementById('folderSearchInput-' + folderId);
+    if (inp) { inp.value = ''; inp.focus(); _folderSearchConcepts(folderId, ''); }
+  });
+}
+
+function _folderCloseSearch(folderId) {
+  var wrap = document.getElementById('folderSearch-' + folderId);
+  if (wrap) wrap.classList.remove('fcs-open');
+}
+
+function _folderSearchConcepts(folderId, query) {
+  var resultsEl = document.getElementById('folderSearchResults-' + folderId);
+  if (!resultsEl) return;
+  var folders = _foldersGet();
+  var folder = folders.find(function(x) { return x.id === folderId; });
+  var existing = folder ? (folder.conceptIds || []) : [];
+
+  var pool = (CONCEPTS || []).filter(function(c) {
+    // Only show saved concepts (in mastered set) or all if fewer than 5 saved
+    var isSaved = typeof mastered !== 'undefined' && mastered.has(c.id);
+    return isSaved && existing.indexOf(c.id) === -1;
+  });
+
+  // If mastered set is too small, fall back to all concepts
+  if (pool.length < 5) {
+    pool = (CONCEPTS || []).filter(function(c) { return existing.indexOf(c.id) === -1; });
+  }
+
+  var results;
+  var q = (query || '').trim();
+  if (!q) {
+    results = pool.slice(0, 6);
+  } else {
+    // Simple fuzzy: term includes query (case-insensitive)
+    var ql = q.toLowerCase();
+    results = pool.filter(function(c) {
+      return c.term.toLowerCase().indexOf(ql) !== -1 || (c.hook && c.hook.toLowerCase().indexOf(ql) !== -1);
+    }).slice(0, 8);
+    // Fallback to Fuse if available and no results
+    if (!results.length && typeof FUSE !== 'undefined') {
+      if (!_FUSE_FOLDER) _FUSE_FOLDER = new FUSE(pool, {keys:[{name:'term',weight:2},{name:'hook',weight:1}],threshold:0.4});
+      results = _FUSE_FOLDER.search(q).map(function(r) { return r.item || r; }).slice(0, 8);
+    }
+  }
+
+  if (!results.length) {
+    resultsEl.innerHTML = '<div style="font-family:\'DM Sans\',sans-serif;font-size:0.65rem;color:var(--muted);padding:4px 2px;opacity:0.6;">No matches</div>';
+    return;
+  }
+
+  var _esc = function(s) { return (s||'').replace(/[<>&"]/g, function(ch){return{'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[ch];}); };
+  resultsEl.innerHTML = results.map(function(c) {
+    var catColor = (typeof CAT_COLOR !== 'undefined' && CAT_COLOR[c.category]) || 'var(--accent)';
+    return '<div class="folder-search-result" onclick="_folderAddConceptFromSearch(\'' + folderId + '\',' + c.id + ')">' +
+      '<div class="folder-concept-cat-dot" style="background:' + catColor + '"></div>' +
+      '<span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + _esc(c.term) + '</span>' +
+      '<span class="folder-search-result-cat">' + _esc(c.category) + '</span>' +
+    '</div>';
+  }).join('');
+}
+
+function _folderAddConceptFromSearch(folderId, conceptId) {
+  _folderAddConcept(folderId, conceptId);
+  _folderCloseSearch(folderId);
+  _folderRefreshItem(folderId);
+  if (typeof _playSwapSFX === 'function') _playSwapSFX();
 }
 
 function _libToggleSaved(id, el) {
