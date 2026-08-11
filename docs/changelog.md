@@ -6,6 +6,19 @@
 
 ---
 
+## v3.54 — 2026-08-11 · Phase 5 — Canvas element types: Note, Label, Vocab, YT Clip, Link
+
+### index.html
+- **Bottom toolbar:** Replaced header "＋ Add" / "Auto-arrange" buttons with a centered floating pill toolbar at the bottom of the canvas. 7 buttons: 📝 Note, 🏷 Label, 💬 Vocab, ▶ Clip, 🔗 Link, ─, ＋ Concept, ⊞ Arrange. Icon + label on desktop, icon-only on mobile. Smooth hover tint on each button.
+- **Mini picker popover (`#cvMiniPicker`):** Shared `position:fixed` popover used by Vocab, Clip, and Link toolbar buttons. Appears above anchor button, auto-positioned to avoid viewport edges. Backdrop closes it on click.
+- **📝 Free Note:** 190px amber-tinted dashed-border card. Textarea (DM Sans, auto-save on blur). Drag via header handle only — textarea stays interactive. Warm amber palette: `color-mix(in srgb, #e8d5a3 7%, var(--surface))`. Dark + light mode.
+- **🏷 Section Label:** Invisible text label (DM Mono, uppercase, letter-spacing 0.2em). Editable via `contenteditable` on click. Turns accent color on hover with left accent bar. Minimal — near-invisible until interacted with. Draggable from anywhere except the text itself.
+- **💬 Vocab Pill:** Rounded pill from folder's `vocabWords[]`. Hover reveals a definition tooltip card (sourced from `lll_lexicon_v1`). Accent-colored border, spring hover animation. Mini picker shows all folder vocab words, greyed out if already on canvas.
+- **▶ YouTube Clip:** 244px card with thumbnail (`img.youtube.com/vi/{ytId}/mqdefault.jpg`), red play button overlay, timestamp label (DM Mono red), episode title + concept term. Click thumbnail → collapses thumb, shows live iframe embed with autoplay. Only available for concepts already on canvas that have timestamps. Draggable via card body.
+- **🔗 External Link:** 204px dashed card with domain (DM Mono) + title + "↗ Open" button. URL input form in mini picker; auto-extracts domain as fallback title. Hover reveals action buttons.
+- **Architecture:** `_CV.extraItems[]` added alongside existing `_CV.layout{}` (backward compatible — no migration). `_cvSaveItems()` persists to `f.canvasItems`. `_cvBuildStage()` now renders both concept cards and extra items. `dragItem` handler added to `_cvBindEvents` pointermove/pointerup. `_cvMakeDraggable(el, item, handle?)` is a shared drag utility. `_cvBuildExtraItemEl(item)` dispatches to type builders. `_cvUpdateEmpty()` checks both arrays.
+- **22 new functions:** `_cvItemId`, `_cvCenterPos`, `_cvMakeDraggable`, `_cvBuildExtraItemEl`, `_cvRemoveItem`, `_cvAddNote`, `_cvBuildNoteEl`, `_cvAddLabel`, `_cvBuildLabelEl`, `_cvAddVocabMenu`, `_cvPlaceVocab`, `_cvBuildVocabEl`, `_cvAddYTMenu`, `_cvFmtTs`, `_cvPlaceYT`, `_cvBuildYTEl`, `_cvYTExpand`, `_cvAddLinkMenu`, `_cvSubmitLink`, `_cvBuildLinkEl`, `_cvShowMiniPicker`, `_cvCloseMiniPicker`.
+
 ## v3.53 — 2026-08-11 · Folder glyph on preview + mobile preview; canvas dot grid fix
 
 ### index.html

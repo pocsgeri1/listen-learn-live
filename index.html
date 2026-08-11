@@ -11382,6 +11382,304 @@
   #canvasFolderName { max-width: 80px; }
 }
 
+/* ── Canvas Bottom Toolbar — v3.54 ─────────────────────────────────── */
+#canvasToolbar {
+  position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+  z-index: 20; display: flex; align-items: center; gap: 2px;
+  background: var(--surface); border: 0.5px solid var(--border);
+  border-radius: 14px; padding: 5px 7px;
+  box-shadow: 0 6px 28px rgba(0,0,0,0.4);
+  backdrop-filter: none;
+}
+.cv-tb-btn {
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  padding: 6px 9px; border-radius: 9px; min-width: 40px;
+  background: none; border: none; cursor: pointer; color: var(--text);
+  transition: background 0.14s;
+}
+.cv-tb-btn:hover { background: color-mix(in srgb, var(--accent) 9%, transparent); }
+.cv-tb-icon { font-size: 0.95rem; line-height: 1; }
+.cv-tb-label {
+  font-family: 'DM Mono', monospace; font-size: 0.42rem;
+  letter-spacing: 0.07em; text-transform: uppercase;
+  color: var(--muted); white-space: nowrap;
+}
+.cv-tb-sep { width: 0.5px; height: 26px; background: var(--border); margin: 0 3px; flex-shrink: 0; }
+.cv-tb-primary .cv-tb-icon { color: var(--accent); }
+.cv-tb-primary .cv-tb-label { color: var(--accent); }
+[data-theme="light"] #canvasToolbar { box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
+@media (max-width: 520px) {
+  #canvasToolbar { bottom: calc(env(safe-area-inset-bottom) + 10px); gap: 0; padding: 4px 5px; }
+  .cv-tb-btn { padding: 5px 6px; min-width: 34px; }
+  .cv-tb-label { display: none; }
+}
+
+/* ── Mini picker popover (vocab / yt / link) — v3.54 ── */
+#cvMiniPicker {
+  position: fixed; z-index: 9100;
+  width: 260px; background: var(--surface);
+  border: 0.5px solid var(--border); border-top: 2px solid var(--accent);
+  border-radius: 8px; overflow: hidden;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.35);
+  display: none;
+  animation: fpIn 0.16s cubic-bezier(0.34,1.56,0.64,1);
+}
+#cvMiniPicker.cv-mp-open { display: block; }
+#cvMiniBackdrop { position: fixed; inset: 0; z-index: 9099; display: none; }
+#cvMiniBackdrop.cv-mp-open { display: block; }
+.cv-mp-header {
+  padding: 9px 12px 7px; border-bottom: 0.5px solid var(--border);
+  font-family: 'DM Mono', monospace; font-size: 0.5rem;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
+}
+.cv-mp-list { max-height: 240px; overflow-y: auto; scrollbar-width: none; padding: 4px 0; }
+.cv-mp-list::-webkit-scrollbar { display: none; }
+.cv-mp-row {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 12px; cursor: pointer;
+  font-family: 'DM Sans', sans-serif; font-size: 0.68rem; color: var(--text);
+  transition: background 0.12s;
+}
+.cv-mp-row:hover { background: color-mix(in srgb, var(--accent) 7%, transparent); }
+.cv-mp-row.cv-mp-used { opacity: 0.45; pointer-events: none; }
+.cv-mp-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.cv-mp-term { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cv-mp-sub { font-family: 'DM Mono', monospace; font-size: 0.46rem; color: var(--muted); flex-shrink: 0; }
+.cv-mp-check { font-size: 0.6rem; color: var(--accent); }
+.cv-mp-empty { padding: 12px 14px; font-family: 'DM Sans', sans-serif; font-size: 0.65rem; color: var(--muted); opacity: 0.6; font-style: italic; }
+.cv-mp-input-wrap { padding: 10px 12px; border-bottom: 0.5px solid var(--border); display: flex; flex-direction: column; gap: 7px; }
+.cv-mp-input {
+  width: 100%; box-sizing: border-box;
+  background: var(--surface2, var(--bg)); border: 0.5px solid var(--border);
+  border-radius: 5px; padding: 7px 9px;
+  font-family: 'DM Sans', sans-serif; font-size: 0.7rem; color: var(--text);
+  outline: none; transition: border-color 0.14s;
+}
+.cv-mp-input:focus { border-color: var(--accent); }
+.cv-mp-submit {
+  background: var(--accent); color: var(--bg); border: none; border-radius: 5px;
+  font-family: 'DM Mono', monospace; font-size: 0.52rem; letter-spacing: 0.05em;
+  padding: 7px 12px; cursor: pointer; align-self: flex-end;
+  transition: opacity 0.14s;
+}
+.cv-mp-submit:hover { opacity: 0.85; }
+
+/* ── Note card — v3.54 ── */
+.cv-note {
+  position: absolute; width: 190px; min-height: 100px;
+  background: color-mix(in srgb, #e8d5a3 7%, var(--surface));
+  border: 1px dashed rgba(232,213,163,0.32);
+  border-radius: 6px; overflow: hidden;
+  cursor: default; user-select: none;
+}
+.cv-note-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 6px 10px 4px;
+  background: rgba(232,213,163,0.06);
+  border-bottom: 0.5px dashed rgba(232,213,163,0.2);
+  cursor: grab;
+}
+.cv-note-header:active { cursor: grabbing; }
+.cv-note-label {
+  font-family: 'DM Mono', monospace; font-size: 0.42rem;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: rgba(232,213,163,0.5);
+}
+.cv-note-remove {
+  font-size: 0.5rem; color: rgba(232,213,163,0.4); background: none; border: none;
+  cursor: pointer; padding: 1px 3px; border-radius: 3px; line-height: 1;
+  transition: color 0.12s; pointer-events: all;
+}
+.cv-note-remove:hover { color: rgba(232,213,163,0.9); }
+.cv-note-ta {
+  display: block; width: 100%; box-sizing: border-box;
+  background: none; border: none; resize: none;
+  font-family: 'DM Sans', sans-serif; font-size: 0.68rem; line-height: 1.55;
+  color: var(--text); outline: none; padding: 8px 10px 9px;
+  min-height: 70px; cursor: text; user-select: text;
+}
+.cv-note-ta::placeholder { color: var(--muted); opacity: 0.45; font-style: italic; }
+[data-theme="light"] .cv-note {
+  background: color-mix(in srgb, #e8d5a3 12%, #fff);
+  border-color: rgba(180,150,80,0.28);
+}
+[data-theme="light"] .cv-note-header { background: rgba(180,150,80,0.07); }
+
+/* ── Section label — v3.54 ── */
+.cv-label {
+  position: absolute; cursor: grab; user-select: none; display: inline-block;
+}
+.cv-label:active { cursor: grabbing; }
+.cv-label-inner {
+  display: flex; align-items: center; gap: 8px;
+  padding: 4px 2px;
+}
+.cv-label-bar {
+  width: 18px; height: 1px;
+  background: color-mix(in srgb, var(--accent) 45%, transparent);
+  flex-shrink: 0; transition: background 0.15s;
+}
+.cv-label-text {
+  font-family: 'DM Mono', monospace; font-size: 0.54rem;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--muted); opacity: 0.55;
+  outline: none; white-space: nowrap;
+  transition: color 0.15s, opacity 0.15s;
+  cursor: text;
+}
+.cv-label:hover .cv-label-text { opacity: 0.9; color: var(--accent); }
+.cv-label:hover .cv-label-bar { background: var(--accent); }
+.cv-label-remove {
+  font-size: 0.44rem; color: var(--muted); background: none; border: none;
+  cursor: pointer; padding: 1px 3px; border-radius: 3px; opacity: 0;
+  transition: opacity 0.12s, color 0.12s; pointer-events: all;
+}
+.cv-label:hover .cv-label-remove { opacity: 1; }
+.cv-label-remove:hover { color: var(--accent); }
+
+/* ── Vocab pill — v3.54 ── */
+.cv-vocab { position: absolute; cursor: grab; }
+.cv-vocab:active { cursor: grabbing; }
+.cv-vocab-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 12px 5px 10px;
+  background: color-mix(in srgb, var(--accent) 7%, var(--surface));
+  border: 0.5px solid color-mix(in srgb, var(--accent) 24%, transparent);
+  border-radius: 20px;
+  font-family: 'DM Mono', monospace; font-size: 0.56rem; letter-spacing: 0.04em;
+  color: var(--accent); white-space: nowrap;
+  transition: background 0.14s, border-color 0.14s, box-shadow 0.14s;
+  user-select: none;
+}
+.cv-vocab:hover .cv-vocab-pill {
+  background: color-mix(in srgb, var(--accent) 13%, var(--surface));
+  border-color: var(--accent); box-shadow: 0 3px 12px rgba(0,0,0,0.22);
+}
+.cv-vocab-remove {
+  font-size: 0.44rem; opacity: 0; cursor: pointer;
+  color: var(--accent); line-height: 1;
+  transition: opacity 0.12s;
+  pointer-events: all;
+}
+.cv-vocab:hover .cv-vocab-remove { opacity: 0.65; }
+.cv-vocab-remove:hover { opacity: 1 !important; }
+.cv-vocab-def {
+  position: absolute; top: calc(100% + 9px); left: 50%; transform: translateX(-50%);
+  width: 230px;
+  background: var(--surface); border: 0.5px solid var(--border);
+  border-top: 2px solid var(--accent);
+  border-radius: 7px; padding: 11px 13px;
+  font-family: 'DM Sans', sans-serif; font-size: 0.64rem; color: var(--text); line-height: 1.55;
+  z-index: 50; pointer-events: none;
+  opacity: 0; transition: opacity 0.18s;
+  box-shadow: 0 5px 18px rgba(0,0,0,0.25);
+}
+.cv-vocab:hover .cv-vocab-def { opacity: 1; }
+.cv-vocab-def-word {
+  font-family: 'Playfair Display', serif; font-style: italic;
+  font-size: 0.72rem; color: var(--accent);
+  margin-bottom: 5px; display: block;
+}
+[data-theme="light"] .cv-vocab-def { box-shadow: 0 4px 14px rgba(0,0,0,0.1); }
+
+/* ── YouTube clip card — v3.54 ── */
+.cv-yt {
+  position: absolute; width: 244px;
+  background: var(--surface); border: 0.5px solid var(--border);
+  border-radius: 8px; overflow: hidden; cursor: grab;
+}
+.cv-yt:active { cursor: grabbing; }
+.cv-yt-thumb {
+  width: 100%; height: 136px; position: relative;
+  background: #111; overflow: hidden; cursor: pointer; flex-shrink: 0;
+}
+.cv-yt-thumb img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; display: block; }
+.cv-yt-thumb-placeholder {
+  width: 100%; height: 100%; background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+  display: flex; align-items: center; justify-content: center;
+}
+.cv-yt-play-overlay {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  transition: background 0.14s;
+}
+.cv-yt-thumb:hover .cv-yt-play-overlay { background: rgba(0,0,0,0.12); }
+.cv-yt-play-btn {
+  width: 42px; height: 42px; border-radius: 50%;
+  background: rgba(255,48,48,0.92);
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 0.15s, background 0.15s;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.5);
+}
+.cv-yt-thumb:hover .cv-yt-play-btn { transform: scale(1.1); background: rgba(255,48,48,1); }
+.cv-yt-play-tri {
+  width: 0; height: 0;
+  border-top: 8px solid transparent; border-bottom: 8px solid transparent;
+  border-left: 14px solid #fff; margin-left: 3px;
+}
+.cv-yt-embed { display: none; }
+.cv-yt-embed iframe { width: 100%; height: 136px; border: none; display: block; }
+.cv-yt-info { padding: 8px 10px 9px; display: flex; align-items: flex-start; justify-content: space-between; gap: 6px; }
+.cv-yt-meta { flex: 1; min-width: 0; }
+.cv-yt-ts {
+  font-family: 'DM Mono', monospace; font-size: 0.46rem;
+  letter-spacing: 0.07em; color: #ff3b30; opacity: 0.85; margin-bottom: 3px;
+}
+.cv-yt-ep {
+  font-family: 'DM Sans', sans-serif; font-size: 0.6rem;
+  color: var(--text); opacity: 0.7;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.cv-yt-term {
+  font-family: 'Playfair Display', serif; font-style: italic;
+  font-size: 0.62rem; color: var(--accent); margin-top: 2px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.cv-yt-remove {
+  font-size: 0.52rem; color: var(--muted); cursor: pointer;
+  padding: 2px 4px; border-radius: 3px; flex-shrink: 0;
+  transition: color 0.12s; pointer-events: all; background: none; border: none;
+}
+.cv-yt-remove:hover { color: var(--text); }
+[data-theme="light"] .cv-yt { background: rgba(255,255,255,0.97); }
+
+/* ── Link card — v3.54 ── */
+.cv-link {
+  position: absolute; width: 204px;
+  background: var(--surface); border: 1px dashed var(--border);
+  border-radius: 7px; padding: 9px 11px 8px; cursor: grab;
+  transition: border-color 0.14s;
+}
+.cv-link:active { cursor: grabbing; }
+.cv-link:hover { border-color: color-mix(in srgb, var(--accent) 40%, transparent); }
+.cv-link-domain {
+  font-family: 'DM Mono', monospace; font-size: 0.46rem; letter-spacing: 0.08em;
+  color: var(--accent); opacity: 0.7; margin-bottom: 4px;
+  display: flex; align-items: center; gap: 5px;
+}
+.cv-link-icon { font-size: 0.6rem; opacity: 0.8; }
+.cv-link-title {
+  font-family: 'DM Sans', sans-serif; font-size: 0.65rem; color: var(--text); line-height: 1.4;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.cv-link-actions {
+  display: flex; justify-content: flex-end; gap: 5px; margin-top: 7px;
+  opacity: 0; transition: opacity 0.14s;
+}
+.cv-link:hover .cv-link-actions { opacity: 1; }
+.cv-link-btn {
+  background: none; border: none; cursor: pointer;
+  font-family: 'DM Mono', monospace; font-size: 0.44rem; letter-spacing: 0.04em;
+  color: var(--muted); padding: 2px 5px; border-radius: 3px;
+  transition: color 0.12s; pointer-events: all;
+}
+.cv-link-btn:hover { color: var(--accent); }
+[data-theme="light"] .cv-link { background: rgba(255,255,255,0.95); }
+
+/* Reduced motion additions */
+@media (prefers-reduced-motion: reduce) {
+  .cv-vocab-def, .cv-yt-play-btn, .cv-label-text, .cv-label-bar { transition: none; }
+}
+
 /* ── VOCAB panel — v3.21 ─────────────────────────── */
 /* Vocab nav row — v3.36: My Words is active segment; All Words + Word Map are nav links */
 .vocab-seg-row {
@@ -26896,7 +27194,9 @@ var _CV = {
   panStartX: 0, panStartY: 0,
   panOriginX: 0, panOriginY: 0,
   dragCard: null,        // { el, conceptId, startPtrX, startPtrY, origX, origY }
-  layout: {},            // conceptId → { x, y }
+  dragItem: null,        // { el, item, startPtrX, startPtrY, origX, origY }
+  layout: {},            // conceptId → { x, y }  (concept cards)
+  extraItems: [],        // [{id,type,x,y,...}]    (notes/labels/vocab/yt/links)
   arrowRafId: null
 };
 
@@ -26910,6 +27210,7 @@ function _cvOpen(folderId) {
   _CV.folderId = folderId;
   _CV.panX = 0; _CV.panY = 0; _CV.zoom = 1;
   _CV.layout = (f.canvasLayout && typeof f.canvasLayout === 'object') ? JSON.parse(JSON.stringify(f.canvasLayout)) : {};
+  _CV.extraItems = (f.canvasItems && Array.isArray(f.canvasItems)) ? JSON.parse(JSON.stringify(f.canvasItems)) : [];
 
   // Header
   var emojiEl = document.getElementById('canvasFolderEmoji');
@@ -26958,17 +27259,24 @@ function _cvBuildStage() {
   var stage = document.getElementById('canvasStage');
   if (!stage) return;
 
-  // Clear existing cards (but keep SVG layer)
-  var oldCards = stage.querySelectorAll('.cv-card');
-  oldCards.forEach(function(el) { el.parentNode.removeChild(el); });
+  // Clear all canvas items (keep SVG layer)
+  stage.querySelectorAll('.cv-card,.cv-note,.cv-label,.cv-vocab,.cv-yt,.cv-link').forEach(function(el) {
+    el.parentNode.removeChild(el);
+  });
 
   if (!_CV.folderId) return;
   var folders = _foldersGet();
   var f = folders.find(function(x) { return x.id === _CV.folderId; });
   if (!f) return;
 
+  // Render extra items first (behind concept cards)
+  _CV.extraItems.forEach(function(item) {
+    var el = _cvBuildExtraItemEl(item);
+    if (el) stage.appendChild(el);
+  });
+
   var conceptIds = Object.keys(_CV.layout).map(Number);
-  if (!conceptIds.length) return;
+  if (!conceptIds.length) { _cvScheduleArrows(); return; }
 
   var _esc = function(s) { return (s||'').replace(/[<>&"]/g, function(ch){return{'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[ch];}); };
 
@@ -27072,6 +27380,17 @@ function _cvBindEvents() {
       _cvScheduleArrows();
       return;
     }
+    if (_CV.dragItem) {
+      var dx2 = (e.clientX - _CV.dragItem.startPtrX) / _CV.zoom;
+      var dy2 = (e.clientY - _CV.dragItem.startPtrY) / _CV.zoom;
+      var nx2 = _CV.dragItem.origX + dx2;
+      var ny2 = _CV.dragItem.origY + dy2;
+      _CV.dragItem.el.style.left = nx2 + 'px';
+      _CV.dragItem.el.style.top  = ny2 + 'px';
+      _CV.dragItem.item.x = nx2;
+      _CV.dragItem.item.y = ny2;
+      return;
+    }
     if (_CV.panning) {
       _CV.panX = _CV.panOriginX + (e.clientX - _CV.panStartX);
       _CV.panY = _CV.panOriginY + (e.clientY - _CV.panStartY);
@@ -27084,6 +27403,12 @@ function _cvBindEvents() {
       _CV.dragCard.el.classList.remove('cv-dragging');
       _cvSaveLayout();
       _CV.dragCard = null;
+      return;
+    }
+    if (_CV.dragItem) {
+      _CV.dragItem.el.classList.remove('cv-dragging');
+      _cvSaveItems();
+      _CV.dragItem = null;
       return;
     }
     if (_CV.panning) {
@@ -27199,6 +27524,16 @@ function _cvSaveLayout() {
   _foldersSet(folders);
 }
 
+function _cvSaveItems() {
+  if (!_CV.folderId) return;
+  var folders = _foldersGet();
+  var f = folders.find(function(x) { return x.id === _CV.folderId; });
+  if (!f) return;
+  f.canvasItems = JSON.parse(JSON.stringify(_CV.extraItems));
+  f.updatedAt = Date.now();
+  _foldersSet(folders);
+}
+
 // ── Auto-arrange ──────────────────────────────────────────────────────
 
 function _cvAutoArrange() {
@@ -27239,7 +27574,7 @@ function _cvRemoveCard(conceptId) {
 function _cvUpdateEmpty() {
   var hint = document.getElementById('canvasEmptyHint');
   if (!hint) return;
-  var hasCards = Object.keys(_CV.layout).length > 0;
+  var hasCards = Object.keys(_CV.layout).length > 0 || _CV.extraItems.length > 0;
   hint.classList.toggle('cv-empty-show', !hasCards);
 }
 
@@ -27312,6 +27647,420 @@ function _cvAddToggle(conceptId) {
   _cvSaveLayout();
   _cvAddSearch(document.getElementById('canvasAddSearch') ? document.getElementById('canvasAddSearch').value : '');
   if (typeof _playSwapSFX === 'function') _playSwapSFX();
+}
+
+// ══════════════════════════════════════════════════
+// CANVAS EXTRA ITEMS — v3.54
+// Notes, Labels, Vocab, YouTube Clips, Links
+// ══════════════════════════════════════════════════
+
+function _cvItemId() {
+  return 'cvi_' + Date.now() + '_' + Math.floor(Math.random() * 9999);
+}
+
+// Center of visible viewport in stage coordinates
+function _cvCenterPos(wHalf, hHalf) {
+  var container = document.getElementById('canvasContainer');
+  var rect = container ? container.getBoundingClientRect() : { width: 800, height: 560 };
+  return {
+    x: Math.round((rect.width / 2 - _CV.panX) / _CV.zoom - (wHalf || 95)),
+    y: Math.round((rect.height / 2 - _CV.panY) / _CV.zoom - (hHalf || 55))
+  };
+}
+
+// Make an extra item draggable — skip drag when clicking interactive children
+function _cvMakeDraggable(el, item, dragHandle) {
+  var handle = dragHandle || el;
+  handle.addEventListener('pointerdown', function(e) {
+    if (e.button !== 0) return;
+    var tag = e.target.tagName;
+    if (tag === 'TEXTAREA' || tag === 'BUTTON' || tag === 'A' || tag === 'INPUT') return;
+    if (e.target.isContentEditable) return;
+    e.stopPropagation();
+    e.preventDefault();
+    el.setPointerCapture(e.pointerId);
+    el.classList.add('cv-dragging');
+    _CV.dragItem = { el: el, item: item, startPtrX: e.clientX, startPtrY: e.clientY, origX: item.x, origY: item.y };
+  });
+}
+
+// Build DOM element for any extra item
+function _cvBuildExtraItemEl(item) {
+  var el = null;
+  if (item.type === 'note')  el = _cvBuildNoteEl(item);
+  if (item.type === 'label') el = _cvBuildLabelEl(item);
+  if (item.type === 'vocab') el = _cvBuildVocabEl(item);
+  if (item.type === 'youtube') el = _cvBuildYTEl(item);
+  if (item.type === 'link')  el = _cvBuildLinkEl(item);
+  if (el) { el.style.left = item.x + 'px'; el.style.top = item.y + 'px'; }
+  return el;
+}
+
+function _cvRemoveItem(itemId) {
+  _CV.extraItems = _CV.extraItems.filter(function(it) { return it.id !== itemId; });
+  var el = document.getElementById('cvItem-' + itemId);
+  if (el && el.parentNode) el.parentNode.removeChild(el);
+  _cvSaveItems();
+  _cvUpdateEmpty();
+}
+
+// ── Note ─────────────────────────────────────────────────────────────
+
+function _cvAddNote() {
+  var pos = _cvCenterPos(95, 55);
+  var item = { id: _cvItemId(), type: 'note', x: pos.x, y: pos.y, content: '' };
+  _CV.extraItems.push(item);
+  var el = _cvBuildNoteEl(item);
+  if (el) {
+    el.style.left = item.x + 'px'; el.style.top = item.y + 'px';
+    var stage = document.getElementById('canvasStage');
+    if (stage) stage.appendChild(el);
+    // Focus textarea
+    var ta = el.querySelector('textarea');
+    if (ta) setTimeout(function() { ta.focus(); }, 50);
+  }
+  _cvSaveItems();
+  _cvUpdateEmpty();
+  if (typeof _playSwapSFX === 'function') _playSwapSFX();
+}
+
+function _cvBuildNoteEl(item) {
+  var el = document.createElement('div');
+  el.className = 'cv-note';
+  el.id = 'cvItem-' + item.id;
+  el.innerHTML =
+    '<div class="cv-note-header">' +
+      '<span class="cv-note-label">note</span>' +
+      '<button class="cv-note-remove" onclick="event.stopPropagation();_cvRemoveItem(\'' + item.id + '\')">✕</button>' +
+    '</div>' +
+    '<textarea class="cv-note-ta" placeholder="Your thought\u2026" rows="3">' + (item.content || '') + '</textarea>';
+
+  // Save note content on blur
+  var ta = el.querySelector('textarea');
+  if (ta) {
+    ta.addEventListener('input', function() { item.content = ta.value; });
+    ta.addEventListener('blur', function() { item.content = ta.value; _cvSaveItems(); });
+    ta.addEventListener('pointerdown', function(e) { e.stopPropagation(); });
+  }
+  // Drag via header only
+  _cvMakeDraggable(el, item, el.querySelector('.cv-note-header'));
+  return el;
+}
+
+// ── Label ─────────────────────────────────────────────────────────────
+
+function _cvAddLabel() {
+  var pos = _cvCenterPos(60, 12);
+  var item = { id: _cvItemId(), type: 'label', x: pos.x, y: pos.y, text: 'SECTION' };
+  _CV.extraItems.push(item);
+  var el = _cvBuildLabelEl(item);
+  if (el) {
+    el.style.left = item.x + 'px'; el.style.top = item.y + 'px';
+    var stage = document.getElementById('canvasStage');
+    if (stage) stage.appendChild(el);
+    // Select text for immediate rename
+    var span = el.querySelector('.cv-label-text');
+    if (span) setTimeout(function() { span.focus(); document.execCommand('selectAll', false, null); }, 50);
+  }
+  _cvSaveItems();
+  _cvUpdateEmpty();
+  if (typeof _playSwapSFX === 'function') _playSwapSFX();
+}
+
+function _cvBuildLabelEl(item) {
+  var el = document.createElement('div');
+  el.className = 'cv-label';
+  el.id = 'cvItem-' + item.id;
+  el.innerHTML =
+    '<div class="cv-label-inner">' +
+      '<div class="cv-label-bar"></div>' +
+      '<span class="cv-label-text" contenteditable="true" spellcheck="false">' + (item.text || 'SECTION') + '</span>' +
+      '<button class="cv-label-remove" onclick="event.stopPropagation();_cvRemoveItem(\'' + item.id + '\')">✕</button>' +
+    '</div>';
+
+  var span = el.querySelector('.cv-label-text');
+  if (span) {
+    span.addEventListener('blur', function() {
+      item.text = span.textContent.trim().toUpperCase() || 'SECTION';
+      span.textContent = item.text;
+      _cvSaveItems();
+    });
+    span.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') { e.preventDefault(); span.blur(); }
+    });
+    span.addEventListener('pointerdown', function(e) { e.stopPropagation(); });
+  }
+  _cvMakeDraggable(el, item);
+  return el;
+}
+
+// ── Vocab ─────────────────────────────────────────────────────────────
+
+function _cvAddVocabMenu(btn) {
+  if (!_CV.folderId) return;
+  var folders = _foldersGet();
+  var f = folders.find(function(x) { return x.id === _CV.folderId; });
+  if (!f) return;
+
+  var _esc = function(s) { return (s||'').replace(/[<>&"]/g,function(ch){return{'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[ch];}); };
+  var words = f.vocabWords || [];
+  var usedWords = _CV.extraItems.filter(function(it) { return it.type === 'vocab'; }).map(function(it) { return it.word; });
+
+  var rows = !words.length
+    ? '<div class="cv-mp-empty">No vocab words in this folder yet. Add some from the Vocab tab.</div>'
+    : words.map(function(w) {
+        var used = usedWords.indexOf(w) !== -1;
+        return '<div class="cv-mp-row' + (used ? ' cv-mp-used' : '') + '" onclick="_cvPlaceVocab(\'' + w.replace(/'/g,"\\'") + '\')">' +
+          '<span class="cv-mp-term">' + _esc(w) + '</span>' +
+          (used ? '<span class="cv-mp-check">\u2713</span>' : '') +
+        '</div>';
+      }).join('');
+
+  _cvShowMiniPicker(btn, '<div class="cv-mp-header">Vocab words</div><div class="cv-mp-list">' + rows + '</div>');
+}
+
+function _cvPlaceVocab(word) {
+  _cvCloseMiniPicker();
+  var pos = _cvCenterPos(70, 14);
+  // Cascade if multiple vocab items
+  var count = _CV.extraItems.filter(function(it) { return it.type === 'vocab'; }).length;
+  pos.y += count * 45;
+  var item = { id: _cvItemId(), type: 'vocab', x: pos.x, y: pos.y, word: word };
+  _CV.extraItems.push(item);
+  var el = _cvBuildVocabEl(item);
+  if (el) {
+    el.style.left = item.x + 'px'; el.style.top = item.y + 'px';
+    var stage = document.getElementById('canvasStage');
+    if (stage) stage.appendChild(el);
+  }
+  _cvSaveItems();
+  _cvUpdateEmpty();
+  if (typeof _playSwapSFX === 'function') _playSwapSFX();
+}
+
+function _cvBuildVocabEl(item) {
+  var _esc = function(s) { return (s||'').replace(/[<>&"]/g,function(ch){return{'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[ch];}); };
+  // Look up definition from lexicon
+  var defHtml = '';
+  try {
+    var lexicon = JSON.parse(localStorage.getItem('lll_lexicon_v1') || '[]');
+    var entry = lexicon.find(function(e) { return (e.word||'').toLowerCase() === (item.word||'').toLowerCase(); });
+    if (entry && entry.definition) {
+      defHtml = '<span class="cv-vocab-def-word">' + _esc(entry.word) + '</span>' + _esc(entry.definition);
+    }
+  } catch(e) {}
+  if (!defHtml) defHtml = '<span class="cv-vocab-def-word">' + _esc(item.word) + '</span>Click to explore in Vocab tab.';
+
+  var el = document.createElement('div');
+  el.className = 'cv-vocab';
+  el.id = 'cvItem-' + item.id;
+  el.innerHTML =
+    '<div class="cv-vocab-pill">' +
+      _esc(item.word) +
+      '<span class="cv-vocab-remove" onclick="event.stopPropagation();_cvRemoveItem(\'' + item.id + '\')">✕</span>' +
+    '</div>' +
+    (defHtml ? '<div class="cv-vocab-def">' + defHtml + '</div>' : '');
+
+  _cvMakeDraggable(el, item);
+  return el;
+}
+
+// ── YouTube Clip ──────────────────────────────────────────────────────
+
+function _cvAddYTMenu(btn) {
+  if (!_CV.folderId) return;
+  var _esc = function(s) { return (s||'').replace(/[<>&"]/g,function(ch){return{'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[ch];}); };
+
+  // Concepts on canvas that have timestamps
+  var conceptIds = Object.keys(_CV.layout).map(Number);
+  var rows = '';
+  var usedConceptIds = _CV.extraItems.filter(function(it) { return it.type === 'youtube'; }).map(function(it) { return it.conceptId; });
+
+  var clips = conceptIds.map(function(cid) {
+    var c = CONCEPTS && CONCEPTS.find(function(x) { return x.id === cid; });
+    if (!c || typeof c.timestamp !== 'number') return null;
+    var col = c.collection_id != null && COLLECTIONS_BY_ID ? COLLECTIONS_BY_ID[c.collection_id] : null;
+    if (!col || !col.episode_url) return null;
+    var ytId = typeof getYouTubeId === 'function' ? getYouTubeId(col.episode_url) : null;
+    if (!ytId) return null;
+    return { c: c, col: col, ytId: ytId };
+  }).filter(Boolean);
+
+  if (!clips.length) {
+    rows = '<div class="cv-mp-empty">No concepts with YouTube timestamps are on this canvas yet. Add timestamped concepts first.</div>';
+  } else {
+    rows = clips.map(function(clip) {
+      var used = usedConceptIds.indexOf(clip.c.id) !== -1;
+      var ts = _cvFmtTs(clip.c.timestamp);
+      var catColor = (typeof CAT_COLOR !== 'undefined' && CAT_COLOR[clip.c.category]) || 'var(--accent)';
+      return '<div class="cv-mp-row' + (used ? ' cv-mp-used' : '') + '" onclick="_cvPlaceYT(' + clip.c.id + ')">' +
+        '<div class="cv-mp-dot" style="background:' + catColor + '"></div>' +
+        '<span class="cv-mp-term">' + _esc(clip.c.term) + '</span>' +
+        '<span class="cv-mp-sub">' + ts + '</span>' +
+        (used ? '<span class="cv-mp-check">\u2713</span>' : '') +
+      '</div>';
+    }).join('');
+  }
+  _cvShowMiniPicker(btn, '<div class="cv-mp-header">Pick a clip</div><div class="cv-mp-list">' + rows + '</div>');
+}
+
+function _cvFmtTs(sec) {
+  if (typeof sec !== 'number') return '';
+  var m = Math.floor(sec / 60); var s = sec % 60;
+  return m + ':' + (s < 10 ? '0' : '') + s;
+}
+
+function _cvPlaceYT(conceptId) {
+  _cvCloseMiniPicker();
+  var c = CONCEPTS && CONCEPTS.find(function(x) { return x.id === conceptId; });
+  if (!c) return;
+  var col = c.collection_id != null && COLLECTIONS_BY_ID ? COLLECTIONS_BY_ID[c.collection_id] : null;
+  var ytId = col && col.episode_url && typeof getYouTubeId === 'function' ? getYouTubeId(col.episode_url) : null;
+  var pos = _cvCenterPos(122, 85);
+  var count = _CV.extraItems.filter(function(it) { return it.type === 'youtube'; }).length;
+  pos.x += count * 30; pos.y += count * 30;
+  var item = { id: _cvItemId(), type: 'youtube', x: pos.x, y: pos.y, conceptId: conceptId, ytId: ytId, timestamp: c.timestamp, episodeTitle: (col && col.title) || '', term: c.term };
+  _CV.extraItems.push(item);
+  var el = _cvBuildYTEl(item);
+  if (el) {
+    el.style.left = item.x + 'px'; el.style.top = item.y + 'px';
+    var stage = document.getElementById('canvasStage');
+    if (stage) stage.appendChild(el);
+  }
+  _cvSaveItems();
+  _cvUpdateEmpty();
+  if (typeof _playSwapSFX === 'function') _playSwapSFX();
+}
+
+function _cvBuildYTEl(item) {
+  var _esc = function(s) { return (s||'').replace(/[<>&"]/g,function(ch){return{'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[ch];}); };
+  var el = document.createElement('div');
+  el.className = 'cv-yt';
+  el.id = 'cvItem-' + item.id;
+
+  var thumbUrl = item.ytId ? 'https://img.youtube.com/vi/' + item.ytId + '/mqdefault.jpg' : '';
+  var startSec = typeof item.timestamp === 'number' ? Math.max(0, item.timestamp - 8) : 0;
+  var embedSrc = item.ytId ? 'https://www.youtube.com/embed/' + item.ytId + '?start=' + startSec + '&rel=0&modestbranding=1&playsinline=1&autoplay=1' : '';
+
+  el.innerHTML =
+    '<div class="cv-yt-thumb" id="cvYTThumb-' + item.id + '" onclick="event.stopPropagation();_cvYTExpand(\'' + item.id + '\',\'' + embedSrc.replace(/'/g,"\\'") + '\')">' +
+      (thumbUrl ? '<img src="' + thumbUrl + '" alt="Video thumbnail" loading="lazy">' : '<div class="cv-yt-thumb-placeholder"></div>') +
+      '<div class="cv-yt-play-overlay"><div class="cv-yt-play-btn"><div class="cv-yt-play-tri"></div></div></div>' +
+    '</div>' +
+    '<div class="cv-yt-embed" id="cvYTEmbed-' + item.id + '"></div>' +
+    '<div class="cv-yt-info">' +
+      '<div class="cv-yt-meta">' +
+        (item.timestamp != null ? '<div class="cv-yt-ts">▶ ' + _cvFmtTs(item.timestamp) + '</div>' : '') +
+        '<div class="cv-yt-ep">' + _esc(item.episodeTitle || '') + '</div>' +
+        '<div class="cv-yt-term">' + _esc(item.term || '') + '</div>' +
+      '</div>' +
+      '<button class="cv-yt-remove" onclick="event.stopPropagation();_cvRemoveItem(\'' + item.id + '\')">✕</button>' +
+    '</div>';
+
+  _cvMakeDraggable(el, item);
+  return el;
+}
+
+function _cvYTExpand(itemId, embedSrc) {
+  var thumb = document.getElementById('cvYTThumb-' + itemId);
+  var embed = document.getElementById('cvYTEmbed-' + itemId);
+  if (!thumb || !embed) return;
+  thumb.style.display = 'none';
+  embed.style.display = 'block';
+  embed.innerHTML = '<iframe src="' + embedSrc + '" frameborder="0" allowfullscreen allow="autoplay" loading="lazy"></iframe>';
+}
+
+// ── External Link ─────────────────────────────────────────────────────
+
+function _cvAddLinkMenu(btn) {
+  var html =
+    '<div class="cv-mp-header">Add external link</div>' +
+    '<div class="cv-mp-input-wrap">' +
+      '<input class="cv-mp-input" id="cvLinkUrlInput" type="url" placeholder="https://\u2026" />' +
+      '<input class="cv-mp-input" id="cvLinkTitleInput" type="text" placeholder="Title (optional)" />' +
+      '<button class="cv-mp-submit" onclick="_cvSubmitLink()">Add to canvas</button>' +
+    '</div>';
+  _cvShowMiniPicker(btn, html);
+  setTimeout(function() {
+    var inp = document.getElementById('cvLinkUrlInput');
+    if (inp) inp.focus();
+    var inp2 = document.getElementById('cvLinkUrlInput');
+    if (inp2) inp2.addEventListener('keydown', function(e) { if (e.key === 'Enter') _cvSubmitLink(); });
+  }, 80);
+}
+
+function _cvSubmitLink() {
+  var urlEl = document.getElementById('cvLinkUrlInput');
+  var titleEl = document.getElementById('cvLinkTitleInput');
+  var url = urlEl ? urlEl.value.trim() : '';
+  if (!url) { if (urlEl) urlEl.focus(); return; }
+  if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
+  var title = titleEl ? titleEl.value.trim() : '';
+  if (!title) {
+    try { title = new URL(url).hostname; } catch(e) { title = url; }
+  }
+  _cvCloseMiniPicker();
+  var pos = _cvCenterPos(102, 50);
+  var count = _CV.extraItems.filter(function(it) { return it.type === 'link'; }).length;
+  pos.x += count * 20; pos.y += count * 25;
+  var item = { id: _cvItemId(), type: 'link', x: pos.x, y: pos.y, url: url, title: title };
+  _CV.extraItems.push(item);
+  var el = _cvBuildLinkEl(item);
+  if (el) {
+    el.style.left = item.x + 'px'; el.style.top = item.y + 'px';
+    var stage = document.getElementById('canvasStage');
+    if (stage) stage.appendChild(el);
+  }
+  _cvSaveItems();
+  _cvUpdateEmpty();
+  if (typeof _playSwapSFX === 'function') _playSwapSFX();
+}
+
+function _cvBuildLinkEl(item) {
+  var _esc = function(s) { return (s||'').replace(/[<>&"]/g,function(ch){return{'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[ch];}); };
+  var domain = '';
+  try { domain = new URL(item.url).hostname.replace('www.', ''); } catch(e) { domain = item.url; }
+  var el = document.createElement('div');
+  el.className = 'cv-link';
+  el.id = 'cvItem-' + item.id;
+  el.innerHTML =
+    '<div class="cv-link-domain"><span class="cv-link-icon">🔗</span>' + _esc(domain) + '</div>' +
+    '<div class="cv-link-title">' + _esc(item.title || domain) + '</div>' +
+    '<div class="cv-link-actions">' +
+      '<a class="cv-link-btn" href="' + _esc(item.url) + '" target="_blank" rel="noopener" onclick="event.stopPropagation()">↗ Open</a>' +
+      '<button class="cv-link-btn" onclick="event.stopPropagation();_cvRemoveItem(\'' + item.id + '\')">✕</button>' +
+    '</div>';
+  _cvMakeDraggable(el, item);
+  return el;
+}
+
+// ── Mini picker shared helpers ────────────────────────────────────────
+
+function _cvShowMiniPicker(anchorBtn, html) {
+  var pop = document.getElementById('cvMiniPicker');
+  var bd  = document.getElementById('cvMiniBackdrop');
+  if (!pop || !bd) return;
+  pop.innerHTML = html;
+  pop.classList.add('cv-mp-open');
+  bd.classList.add('cv-mp-open');
+  // Position above the button
+  if (anchorBtn) {
+    var rect = anchorBtn.getBoundingClientRect();
+    var popH = 280;
+    var top = rect.top - popH - 8;
+    if (top < 8) top = rect.bottom + 8;
+    var left = rect.left + rect.width / 2 - 130;
+    left = Math.max(8, Math.min(left, window.innerWidth - 270));
+    pop.style.top = top + 'px';
+    pop.style.left = left + 'px';
+  }
+}
+
+function _cvCloseMiniPicker() {
+  var pop = document.getElementById('cvMiniPicker');
+  var bd  = document.getElementById('cvMiniBackdrop');
+  if (pop) pop.classList.remove('cv-mp-open');
+  if (bd)  bd.classList.remove('cv-mp-open');
 }
 
 function _libToggleSaved(id, el) {
@@ -39793,8 +40542,6 @@ function _wcRenderMobileGrid(words) {
       <button class="cv-zoom-btn cv-zoom-reset" onclick="_cvZoomReset()" title="Reset view">⌂</button>
     </div>
     <div id="canvasHeaderRight">
-      <button class="cv-btn-ghost" onclick="_cvAutoArrange()" title="Auto-arrange cards">Auto-arrange</button>
-      <button class="cv-btn-ghost" id="cvAddBtn" onclick="_cvOpenAdd()" title="Add concepts to canvas">＋ Add</button>
       <button class="cv-close-btn" onclick="_cvClose()" title="Close canvas">✕</button>
     </div>
   </div>
@@ -39809,6 +40556,35 @@ function _wcRenderMobileGrid(words) {
       <div id="canvasAddResults"></div>
     </div>
   </div>
+  <!-- Bottom toolbar — v3.54 -->
+  <div id="canvasToolbar">
+    <button class="cv-tb-btn" onclick="_cvAddNote()" title="Add a free note">
+      <span class="cv-tb-icon">📝</span><span class="cv-tb-label">Note</span>
+    </button>
+    <button class="cv-tb-btn" onclick="_cvAddLabel()" title="Add a section label">
+      <span class="cv-tb-icon">🏷</span><span class="cv-tb-label">Label</span>
+    </button>
+    <button class="cv-tb-btn" id="cvVocabBtn" onclick="_cvAddVocabMenu(this)" title="Add a vocab word">
+      <span class="cv-tb-icon">💬</span><span class="cv-tb-label">Vocab</span>
+    </button>
+    <button class="cv-tb-btn" id="cvClipBtn" onclick="_cvAddYTMenu(this)" title="Add a YouTube clip">
+      <span class="cv-tb-icon">▶</span><span class="cv-tb-label">Clip</span>
+    </button>
+    <button class="cv-tb-btn" id="cvLinkBtn" onclick="_cvAddLinkMenu(this)" title="Add an external link">
+      <span class="cv-tb-icon">🔗</span><span class="cv-tb-label">Link</span>
+    </button>
+    <div class="cv-tb-sep"></div>
+    <button class="cv-tb-btn cv-tb-primary" onclick="_cvOpenAdd()" title="Add concepts from this folder">
+      <span class="cv-tb-icon">＋</span><span class="cv-tb-label">Concept</span>
+    </button>
+    <button class="cv-tb-btn" onclick="_cvAutoArrange()" title="Auto-arrange all concept cards">
+      <span class="cv-tb-icon">⊞</span><span class="cv-tb-label">Arrange</span>
+    </button>
+  </div>
+  <!-- Mini picker popover for vocab / yt / link -->
+  <div id="cvMiniPicker"></div>
+  <div id="cvMiniBackdrop" onclick="_cvCloseMiniPicker()"></div>
+
   <div id="canvasEmptyHint">
     <div class="cv-empty-icon">🗺</div>
     <div class="cv-empty-title">Canvas is empty</div>
