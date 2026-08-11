@@ -6,6 +6,19 @@
 
 ---
 
+## v3.50 — 2026-08-11 · Add-to-folder surfaces: picker popover, detail button, chip bubbles, tile context
+
+### index.html
+- **Folder picker popover:** `_folderPickerOpen(anchorEl, conceptId)` — creates a `position:fixed` popover listing all folders with color dot, emoji, name, and ✓ checkmark. Click any row to toggle the concept in/out of that folder. Closes on backdrop click or ✕ button. On mobile (≤700px) renders as a bottom sheet with darkened backdrop and `env(safe-area-inset-bottom)` padding.
+- **＋ Folder button:** Added to `lib-detail-actions` in every expanded concept card (`_libBuildDetailBody`). Accent-colored with subtle border, hover background via `color-mix()`.
+- **Related chip ＋ bubble:** Each related chip is now wrapped in `.lib-chip-wrap`. A `.lib-chip-add` ＋ bubble (accent circle) appears on hover above the chip — click to open picker for that related concept. Reveals with scale spring animation (`cubic-bezier(0.34,1.56,0.64,1)`).
+- **Tile right-click (desktop):** `oncontextmenu` on every `.lib-tile` opens the folder picker anchored to the tile. Default context menu suppressed.
+- **Tile long-press (mobile):** Touch delegation on `#libConceptGrid` — 500ms hold triggers picker. `touchmove` and `touchend` cancel the timer. Visual feedback via `.lib-tile-lp` (slight scale-down + accent border).
+- **Picker state functions:** `_folderPickerBuildHtml`, `_folderPickerRefill`, `_folderPickerClose`, `_folderPickerToggle`, `_folderPickerGoCreate`, `_folderChipQuickAdd`. Toggle updates `lll_folders_v1`, refreshes folder tab count badge, refreshes open folder item in-place. Plays `_playSwapSFX` on toggle.
+- **CSS:** `#folderPickerPopover` (fixed, 230px, spring animation), `.fp-mobile` (bottom sheet, border-radius 14px top), `@keyframes fpIn` + `fpMobileIn`, `#fpBackdrop`, `.fp-header`, `.fp-title`, `.fp-close`, `.fp-list`, `.fp-row`, `.fp-row-color/emoji/name/check`, `.fp-row.fp-checked`, `.fp-footer`, `.fp-create-btn`, `.fp-empty`, `.lib-detail-btn-folder`, `.lib-chip-wrap`, `.lib-chip-add`, `.lib-tile-lp`, `.lib-tile::after` hover hint. Light-mode override for popover shadow.
+
+---
+
 ## v3.49 — 2026-08-11 · Folders — data model, panel, CRUD, inline concept search
 
 ### index.html

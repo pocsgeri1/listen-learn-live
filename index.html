@@ -10505,6 +10505,7 @@
 .lib-tile:hover .lib-tile-note-badge { opacity: 1; }
 .lib-tile:hover { border-color: var(--border-hover); }
 .lib-tile:hover .lib-tile-term { color: var(--accent); }
+.lib-tile-lp { border-color: var(--accent) !important; transform: scale(0.96); transition: transform 0.15s; }
 .lib-tile-term {
   font-family: 'Playfair Display', serif;
   font-size: 0.84rem; font-style: italic;
@@ -10968,6 +10969,129 @@
   .folder-emoji-row { gap: 3px; }
   .folder-emoji-btn { width: 30px; height: 30px; font-size: 0.95rem; }
 }
+
+/* ── Folder picker popover — v3.50 ─────────────────
+   Created fresh in DOM each open; removed on close.
+   position:fixed escapes all overflow:hidden parents. */
+#folderPickerPopover {
+  position: fixed; z-index: 9200;
+  width: 230px;
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-top: 2px solid var(--accent);
+  border-radius: 8px;
+  overflow: hidden;
+  animation: fpIn 0.18s cubic-bezier(0.34,1.56,0.64,1);
+  box-shadow: 0 10px 36px rgba(0,0,0,0.3);
+}
+#folderPickerPopover.fp-mobile {
+  width: 100%; left: 0 !important; right: 0; bottom: 0 !important; top: auto !important;
+  border-radius: 14px 14px 0 0; border-top: 2px solid var(--accent);
+  animation: fpMobileIn 0.22s cubic-bezier(0.25,0.46,0.45,0.94);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+@keyframes fpIn { from { opacity:0; transform:scale(0.93) translateY(-6px); } to { opacity:1; transform:none; } }
+@keyframes fpMobileIn { from { transform:translateY(100%); } to { transform:none; } }
+@media (prefers-reduced-motion: reduce) {
+  #folderPickerPopover, #folderPickerPopover.fp-mobile { animation: none; }
+}
+#fpBackdrop { position: fixed; inset: 0; z-index: 9199; }
+#fpBackdrop.fp-mobile-bg { background: rgba(0,0,0,0.38); }
+.fp-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 13px 8px;
+  border-bottom: 0.5px solid var(--border);
+}
+.fp-title {
+  font-family: 'DM Mono', monospace; font-size: 0.5rem;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--muted); opacity: 0.65;
+}
+.fp-close {
+  font-size: 0.6rem; color: var(--muted); background: none; border: none;
+  cursor: pointer; padding: 2px 5px; border-radius: 3px; line-height: 1;
+  transition: color 0.12s;
+}
+.fp-close:hover { color: var(--text); }
+.fp-list { padding: 4px 0; max-height: 210px; overflow-y: auto; scrollbar-width: none; }
+.fp-list::-webkit-scrollbar { display: none; }
+.fp-empty {
+  font-family: 'DM Sans', sans-serif; font-size: 0.65rem;
+  color: var(--muted); padding: 12px 14px; opacity: 0.55; font-style: italic;
+}
+.fp-row {
+  display: flex; align-items: center; gap: 7px;
+  padding: 8px 13px; cursor: pointer;
+  transition: background 0.12s;
+}
+.fp-row:hover { background: color-mix(in srgb, var(--accent) 6%, transparent); }
+.fp-row-color { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.fp-row-emoji { font-size: 0.88rem; flex-shrink: 0; line-height: 1; }
+.fp-row-name {
+  flex: 1; font-family: 'DM Sans', sans-serif; font-size: 0.7rem;
+  color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  transition: color 0.12s;
+}
+.fp-row-check {
+  font-size: 0.6rem; color: var(--accent); opacity: 0; flex-shrink: 0;
+  transition: opacity 0.12s; font-family: 'DM Mono', monospace;
+}
+.fp-row.fp-checked .fp-row-check  { opacity: 1; }
+.fp-row.fp-checked .fp-row-name   { color: var(--accent); }
+.fp-footer { padding: 5px 7px 7px; border-top: 0.5px solid var(--border); }
+.fp-create-btn {
+  width: 100%; background: none; border: none; cursor: pointer;
+  font-family: 'DM Mono', monospace; font-size: 0.54rem; letter-spacing: 0.04em;
+  color: var(--muted); padding: 6px 6px; text-align: left; border-radius: 4px;
+  transition: color 0.12s, background 0.12s;
+}
+.fp-create-btn:hover { color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, transparent); }
+[data-theme="light"] #folderPickerPopover { box-shadow: 0 10px 36px rgba(0,0,0,0.12); }
+
+/* ── Folder button in detail actions — v3.50 ── */
+.lib-detail-btn-folder {
+  color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 22%, transparent);
+}
+.lib-detail-btn-folder:hover {
+  background: color-mix(in srgb, var(--accent) 7%, transparent);
+  border-color: var(--accent); color: var(--accent);
+}
+
+/* ── Related chip wrap + quick-add bubble — v3.50 ── */
+.lib-detail-related-chips {
+  padding-top: 5px; /* headroom for the add bubble */
+}
+.lib-chip-wrap {
+  position: relative; display: inline-flex; align-items: center;
+}
+.lib-chip-add {
+  position: absolute; top: -7px; right: -5px;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--accent); color: var(--bg);
+  font-size: 0.52rem; font-family: 'DM Mono', monospace;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; user-select: none; z-index: 2;
+  opacity: 0; transform: scale(0.5);
+  transition: opacity 0.14s, transform 0.2s cubic-bezier(0.34,1.56,0.64,1);
+}
+.lib-chip-wrap:hover .lib-chip-add { opacity: 1; transform: scale(1); }
+@media (hover: none) {
+  /* Always visible on touch — slightly smaller, static */
+  .lib-chip-add { opacity: 0.85; transform: scale(0.88); }
+}
+
+/* ── Tile context-menu hint on hover — v3.50 ── */
+.lib-tile::after {
+  content: '⊕';
+  position: absolute; bottom: 7px; right: 9px;
+  font-size: 0.55rem; color: var(--accent); opacity: 0;
+  font-family: 'DM Mono', monospace;
+  transition: opacity 0.18s;
+  pointer-events: none;
+}
+.lib-tile:hover::after { opacity: 0.35; }
+@media (hover: none) { .lib-tile::after { display: none; } }
 
 /* ── VOCAB panel — v3.21 ─────────────────────────── */
 /* Vocab nav row — v3.36: My Words is active segment; All Words + Word Map are nav links */
@@ -25689,7 +25813,7 @@ function _libRenderConceptGrid(ids, tsMap) {
     var catColor = (typeof CAT_COLOR !== 'undefined' && CAT_COLOR[c.category]) || 'var(--accent)';
     var dateStr = tsMap[id] ? '<span class="lib-tile-date">' + _libFmtDate(tsMap[id]) + '</span>' : '';
     var hasNote = !!localStorage.getItem('cc_note_' + id);
-    return '<div class="lib-tile" id="libTile-' + id + '" style="--cat-color:' + catColor + '" onclick="_libToggleSaved(' + id + ', this)">' +
+    return '<div class="lib-tile" id="libTile-' + id + '" style="--cat-color:' + catColor + '" onclick="_libToggleSaved(' + id + ', this)" oncontextmenu="event.preventDefault();_folderPickerOpen(this,' + id + ')">' +
       (hasNote ? '<span class="lib-tile-note-badge" title="Has note"></span>' : '') +
       '<div class="lib-tile-term">' + (c.term || '') + '</div>' +
       '<div class="lib-tile-meta">' +
@@ -25700,6 +25824,29 @@ function _libRenderConceptGrid(ids, tsMap) {
     '</div>';
   }).join('');
   grid.innerHTML = tiles;
+
+  // Mobile long-press delegation — v3.50
+  if ('ontouchstart' in window) {
+    var _lpTimer = null;
+    var _lpId = null;
+    grid.addEventListener('touchstart', function(e) {
+      var tile = e.target.closest('.lib-tile');
+      if (!tile) return;
+      _lpId = parseInt(tile.id.replace('libTile-', ''), 10);
+      _lpTimer = setTimeout(function() {
+        _lpTimer = null;
+        if (_lpId) { tile.classList.add('lib-tile-lp'); _folderPickerOpen(tile, _lpId); }
+      }, 500);
+    }, { passive: true });
+    grid.addEventListener('touchend', function() {
+      if (_lpTimer) { clearTimeout(_lpTimer); _lpTimer = null; }
+      var active = grid.querySelector('.lib-tile-lp');
+      if (active) active.classList.remove('lib-tile-lp');
+    }, { passive: true });
+    grid.addEventListener('touchmove', function() {
+      if (_lpTimer) { clearTimeout(_lpTimer); _lpTimer = null; }
+    }, { passive: true });
+  }
 }
 
 function _libSetFilter(key, val) {
@@ -26227,6 +26374,126 @@ function _folderAddConceptFromSearch(folderId, conceptId) {
   if (typeof _playSwapSFX === 'function') _playSwapSFX();
 }
 
+// ── Folder Picker Popover — v3.50 ──────────────────────────────────
+// Opens a fixed popover/bottom-sheet that lets the user add/remove a concept
+// from any folder. Triggered by right-click on grid tile, chip ＋ bubble,
+// or "＋ Folder" button in lib-detail-actions.
+
+var _fpCurrentConceptId = null;
+
+function _folderPickerOpen(anchorEl, conceptId) {
+  _fpCurrentConceptId = conceptId;
+  _folderPickerClose(); // close any existing
+
+  // Backdrop
+  var bd = document.createElement('div');
+  bd.id = 'fpBackdrop';
+  bd.onclick = _folderPickerClose;
+  document.body.appendChild(bd);
+
+  // Popover
+  var pop = document.createElement('div');
+  pop.id = 'folderPickerPopover';
+
+  var isMobile = window.innerWidth <= 700;
+  if (isMobile) { pop.classList.add('fp-mobile'); bd.classList.add('fp-mobile-bg'); }
+
+  pop.innerHTML = _folderPickerBuildHtml(conceptId);
+  document.body.appendChild(pop);
+
+  if (!isMobile) {
+    // Position below/above anchor
+    var rect = anchorEl.getBoundingClientRect ? anchorEl.getBoundingClientRect() : { bottom: 0, left: 0, top: 0 };
+    var popH = 280; // estimated
+    var spaceBelow = window.innerHeight - rect.bottom;
+    var top = spaceBelow >= popH ? rect.bottom + 6 : rect.top - popH - 6;
+    var left = Math.min(rect.left, window.innerWidth - 242);
+    pop.style.top = Math.max(8, top) + 'px';
+    pop.style.left = Math.max(8, left) + 'px';
+  } else {
+    pop.style.bottom = '0';
+    pop.style.left = '0';
+    pop.style.right = '0';
+    pop.style.width = '100%';
+  }
+}
+
+function _folderPickerBuildHtml(conceptId) {
+  var c = CONCEPTS && CONCEPTS.find(function(x) { return x.id === conceptId; });
+  var termLabel = c ? c.term : '#' + conceptId;
+  var _esc = function(s) { return (s||'').replace(/[<>&"]/g, function(ch){return{'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[ch];}); };
+  var folders = _foldersGet();
+
+  var rows = '';
+  if (!folders.length) {
+    rows = '<div class="fp-empty">No folders yet.</div>' +
+      '<div class="fp-footer"><button class="fp-create-btn" onclick="_folderPickerGoCreate()">＋ Create your first folder</button></div>';
+  } else {
+    rows = folders.map(function(f) {
+      var inFolder = f.conceptIds && f.conceptIds.indexOf(conceptId) !== -1;
+      return '<div class="fp-row' + (inFolder ? ' fp-checked' : '') + '" onclick="_folderPickerToggle(' + conceptId + ',\'' + f.id + '\')">' +
+        '<span class="fp-row-color" style="background:' + (f.color || 'var(--accent)') + '"></span>' +
+        '<span class="fp-row-emoji">' + (f.emoji || '\uD83D\uDCC2') + '</span>' +
+        '<span class="fp-row-name">' + _esc(f.name) + '</span>' +
+        '<span class="fp-row-check">' + (inFolder ? '\u2713' : '') + '</span>' +
+      '</div>';
+    }).join('') +
+    '<div class="fp-footer"><button class="fp-create-btn" onclick="_folderPickerGoCreate()">＋ New folder</button></div>';
+  }
+
+  return '<div class="fp-header"><span class="fp-title">' + _esc(termLabel) + '</span>' +
+    '<button class="fp-close" onclick="_folderPickerClose()">✕</button></div>' +
+    '<div class="fp-list">' + rows + '</div>';
+}
+
+function _folderPickerRefill(conceptId) {
+  var pop = document.getElementById('folderPickerPopover');
+  if (!pop) return;
+  pop.innerHTML = _folderPickerBuildHtml(conceptId);
+}
+
+function _folderPickerClose() {
+  var pop = document.getElementById('folderPickerPopover');
+  var bd = document.getElementById('fpBackdrop');
+  if (pop && pop.parentNode) pop.parentNode.removeChild(pop);
+  if (bd && bd.parentNode) bd.parentNode.removeChild(bd);
+}
+
+function _folderPickerToggle(conceptId, folderId) {
+  var folders = _foldersGet();
+  var f = folders.find(function(x) { return x.id === folderId; });
+  if (!f) return;
+  var inFolder = f.conceptIds && f.conceptIds.indexOf(conceptId) !== -1;
+  if (inFolder) {
+    _folderRemoveConcept(folderId, conceptId);
+  } else {
+    _folderAddConcept(folderId, conceptId);
+  }
+  if (typeof _playSwapSFX === 'function') _playSwapSFX();
+  _folderPickerRefill(conceptId);
+  // Refresh folders tab count badge
+  if (typeof _libUpdateAllTabCounts === 'function') _libUpdateAllTabCounts();
+  // If folders tab is open, refresh the open folder item
+  _folderRefreshItem(folderId);
+}
+
+function _folderPickerGoCreate() {
+  _folderPickerClose();
+  // Open library to folders tab + trigger create form
+  if (typeof openLibrary === 'function') openLibrary();
+  setTimeout(function() {
+    if (typeof _libSwitchTab === 'function') _libSwitchTab('folders');
+    setTimeout(function() {
+      _folderToggleCreate();
+    }, 120);
+  }, 80);
+}
+
+// Quick-add from related chip ＋ bubble
+function _folderChipQuickAdd(conceptId, btn) {
+  _folderPickerOpen(btn, conceptId);
+}
+
 function _libToggleSaved(id, el) {
   var isOpen = el.classList.contains('lib-tile-open');
   // Close all open tiles and remove their detail rows
@@ -26295,9 +26562,12 @@ function _libBuildDetailBody(conceptId, bcStack) {
       var rc = CONCEPTS && CONCEPTS.find(function(x) { return x.id === rid; });
       if (!rc) return '';
       var rColor = (typeof CAT_COLOR !== 'undefined' && CAT_COLOR[rc.category]) || 'var(--accent)';
-      return '<button class="lib-detail-chip" style="border-color:' + rColor + '20;color:' + rColor + '" ' +
+      return '<span class="lib-chip-wrap">' +
+        '<button class="lib-detail-chip" style="border-color:' + rColor + '20;color:' + rColor + '" ' +
         'onmouseenter="_rcpShow(this,' + rc.id + ')" onmouseleave="_rcpHide()" ' +
-        'onclick="_libSwapRelatedConcept(' + conceptId + ',' + rc.id + ')">' + _esc(rc.term) + '</button>';
+        'onclick="_libSwapRelatedConcept(' + conceptId + ',' + rc.id + ')">' + _esc(rc.term) + '</button>' +
+        '<span class="lib-chip-add" title="Add to folder" onclick="event.stopPropagation();_folderChipQuickAdd(' + rc.id + ',this)">＋</span>' +
+        '</span>';
     }).filter(Boolean).join('');
     if (chips) {
       relatedChipsHtml = '<div style="margin-bottom:10px">' +
@@ -26328,6 +26598,7 @@ function _libBuildDetailBody(conceptId, bcStack) {
     '<div class="lib-detail-actions">' +
       '<button class="lib-detail-btn" onclick="closeLibrary();openSparkPanel(' + conceptId + ')">✦ Spark it</button>' +
       episodeBtn +
+      '<button class="lib-detail-btn lib-detail-btn-folder" onclick="_folderPickerOpen(this,' + conceptId + ')">＋ Folder</button>' +
     '</div>';
 
   return { bodyHtml: bodyHtml };
