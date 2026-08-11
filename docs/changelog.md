@@ -6,6 +6,17 @@
 
 ---
 
+## v3.48 — 2026-08-11 · Related chip in-place swap + breadcrumb back-nav
+
+### index.html
+- **Related chip click fixed:** Clicking a related concept chip no longer closes the library and jumps to the main grid. Content swaps in-place inside the expanded card with a 175ms fade + subtle translateY animation. Library stays open, scroll position unchanged.
+- **Breadcrumb trail:** After a related chip swap, a "Exploring from → ← [Original Term]" breadcrumb bar appears at the top of the detail row. Clicking any breadcrumb navigates back to that concept (stack-aware, max 3 deep). Breadcrumb fades in with a slide-down animation; hidden on initial open.
+- **Shared detail builder:** Extracted `_libBuildDetailBody(conceptId, bcStack)` and `_libWireDetailNote(row, conceptId)` from `_libToggleSaved` — both are now reused by the swap path. `_libToggleSaved` is ~60% shorter. No behaviour change on initial card open.
+- **New functions:** `_libBuildDetailBody`, `_libWireDetailNote`, `_libSwapRelatedConcept`, `_libRenderBreadcrumb`, `_libBcNavTo`
+- **CSS:** `.lib-detail-breadcrumb`, `.lib-detail-bc-btn`, `.lib-detail-bc-sep`, `.lib-detail-bc-label`, `.lib-detail-body`, `.lib-detail-body.lib-swapping`, `@keyframes bcFadeIn` — all with dark + light mode variants
+- **Related chip label updated:** "Related" → "Related — explore" to signal the new interactive behaviour
+- **SFX:** `_playSwapSFX()` fires on each swap (same sound as scenario/tab switches)
+
 ## v3.47 — 2026-08-11 · Expanded card redesign + YT embed centering
 
 ### index.html

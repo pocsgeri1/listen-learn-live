@@ -11066,6 +11066,57 @@
 }
 .lib-detail-chip:hover { color: var(--accent); border-color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, transparent); }
 
+/* ── Related-chip breadcrumb trail — v3.48 ─────── */
+.lib-detail-breadcrumb {
+  display: none;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 13px;
+  padding: 7px 10px;
+  background: color-mix(in srgb, var(--accent) 5%, transparent);
+  border: 0.5px solid color-mix(in srgb, var(--accent) 15%, transparent);
+  border-radius: 5px;
+  animation: bcFadeIn 0.22s ease;
+}
+.lib-detail-breadcrumb.bc-visible { display: flex; }
+@keyframes bcFadeIn { from { opacity:0; transform:translateY(-3px); } to { opacity:1; transform:none; } }
+.lib-detail-bc-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.57rem; letter-spacing: 0.03em;
+  color: var(--muted2); background: none;
+  border: 0.5px solid var(--border);
+  border-radius: 3px; padding: 3px 9px;
+  cursor: pointer; white-space: nowrap;
+  max-width: 180px; overflow: hidden; text-overflow: ellipsis;
+  transition: color 0.14s, border-color 0.14s, background 0.14s;
+}
+.lib-detail-bc-btn:hover {
+  color: var(--accent); border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+}
+.lib-detail-bc-sep {
+  font-family: 'DM Mono', monospace; font-size: 0.5rem;
+  color: var(--muted2); opacity: 0.35;
+}
+.lib-detail-bc-label {
+  font-family: 'DM Mono', monospace; font-size: 0.5rem;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--accent); opacity: 0.55; margin-right: 2px;
+}
+[data-theme="light"] .lib-detail-breadcrumb {
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 18%, transparent);
+}
+
+/* ── Detail body — fades on related-chip swap (v3.48) ── */
+.lib-detail-body {
+  transition: opacity 0.17s ease, transform 0.17s ease;
+}
+.lib-detail-body.lib-swapping {
+  opacity: 0; transform: translateY(5px); pointer-events: none;
+}
+
 /* ── Practice Recent Sessions — v3.30 ───────────── */
 .practice-recent-section {
   margin-top: 24px; padding: 0 2px;
@@ -25436,9 +25487,37 @@ function _libToggleSaved(id, el) {
 
   el.classList.add('lib-tile-open');
 
-  var col = c.collection_id != null && COLLECTIONS_BY_ID ? COLLECTIONS_BY_ID[c.collection_id] : null;
-  var noteText = localStorage.getItem('cc_note_' + id) || '';
+  // Build detail row — content via shared builder (v3.48)
+  var row = document.createElement('div');
+  row.className = 'lib-detail-row';
+  row._bcStack = [];
+  row._currentConceptId = id;
+
+  var built = _libBuildDetailBody(id, []);
+  row.innerHTML =
+    '<div class="lib-detail-breadcrumb"></div>' +
+    '<div class="lib-detail-body">' + built.bodyHtml + '</div>';
+
+  // Insert after the tile (as grid sibling)
+  el.parentNode.insertBefore(row, el.nextSibling);
+  _libWireDetailNote(row, id);
+
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
+      row.classList.add('lib-detail-open');
+    });
+  });
+}
+
+// ── Detail content builder — v3.48 ───────────────────────────────
+// Shared by _libToggleSaved and _libSwapRelatedConcept.
+// Returns { bodyHtml } for the given concept + breadcrumb stack.
+function _libBuildDetailBody(conceptId, bcStack) {
+  var c = CONCEPTS && CONCEPTS.find(function(x) { return x.id === conceptId; });
+  if (!c) return { bodyHtml: '' };
   var _esc = function(s) { return (s||'').replace(/[<>&"]/g, function(ch) { return {'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[ch]; }); };
+  var col = c.collection_id != null && COLLECTIONS_BY_ID ? COLLECTIONS_BY_ID[c.collection_id] : null;
+  var noteText = localStorage.getItem('cc_note_' + conceptId) || '';
   var catColor = (typeof CAT_COLOR !== 'undefined' && CAT_COLOR[c.category]) || 'var(--accent)';
 
   var episodeBtn = '';
@@ -25446,23 +25525,6 @@ function _libToggleSaved(id, el) {
     episodeBtn = '<button class="lib-detail-btn" onclick="closeLibrary();openEpisodeDrawer(' + c.collection_id + ')">↗ Episode</button>';
   }
 
-  // Build related concept chips
-  var relatedChipsHtml = '';
-  if (c.related_ids && c.related_ids.length) {
-    var chips = c.related_ids.slice(0, 4).map(function(rid) {
-      var rc = CONCEPTS && CONCEPTS.find(function(x) { return x.id === rid; });
-      if (!rc) return '';
-      var rColor = (typeof CAT_COLOR !== 'undefined' && CAT_COLOR[rc.category]) || 'var(--accent)';
-      return '<button class="lib-detail-chip" style="border-color:' + rColor + '20;color:' + rColor + '" onmouseenter="_rcpShow(this,' + rc.id + ')" onmouseleave="_rcpHide()" onclick="_libNavToCard(' + rc.id + ')">' + _esc(rc.term) + '</button>';
-    }).filter(Boolean).join('');
-    if (chips) {
-      relatedChipsHtml = '<div style="margin-bottom:10px"><div class="lib-detail-label" style="margin-bottom:6px">Related</div><div class="lib-detail-related-chips">' + chips + '</div></div>';
-    }
-  }
-
-  // Build detail as a SIBLING row in the grid (not inside the tile)
-  var row = document.createElement('div');
-  row.className = 'lib-detail-row';
   var ytEmbedHtml = '';
   if (col && col.episode_url && typeof c.timestamp === 'number' && c.timestamp >= 0) {
     var ytId = typeof getYouTubeId === 'function' ? getYouTubeId(col.episode_url) : null;
@@ -25472,7 +25534,24 @@ function _libToggleSaved(id, el) {
     }
   }
 
-  row.innerHTML =
+  var relatedChipsHtml = '';
+  if (c.related_ids && c.related_ids.length) {
+    var chips = c.related_ids.slice(0, 4).map(function(rid) {
+      var rc = CONCEPTS && CONCEPTS.find(function(x) { return x.id === rid; });
+      if (!rc) return '';
+      var rColor = (typeof CAT_COLOR !== 'undefined' && CAT_COLOR[rc.category]) || 'var(--accent)';
+      return '<button class="lib-detail-chip" style="border-color:' + rColor + '20;color:' + rColor + '" ' +
+        'onmouseenter="_rcpShow(this,' + rc.id + ')" onmouseleave="_rcpHide()" ' +
+        'onclick="_libSwapRelatedConcept(' + conceptId + ',' + rc.id + ')">' + _esc(rc.term) + '</button>';
+    }).filter(Boolean).join('');
+    if (chips) {
+      relatedChipsHtml = '<div style="margin-bottom:10px">' +
+        '<div class="lib-detail-label" style="margin-bottom:6px">Related — explore</div>' +
+        '<div class="lib-detail-related-chips">' + chips + '</div></div>';
+    }
+  }
+
+  var bodyHtml =
     '<div class="lib-detail-hook" style="border-left-color:' + catColor + '">' + _esc(c.hook) + '</div>' +
     ytEmbedHtml +
     '<div class="lib-detail-cols">' +
@@ -25489,58 +25568,141 @@ function _libToggleSaved(id, el) {
     relatedChipsHtml +
     '<div class="lib-detail-note-wrap">' +
       '<div class="lib-detail-label">Your note</div>' +
-      '<textarea class="lib-detail-note-ta" id="libDetailNoteTA-' + id + '" placeholder="Add a note…" rows="2">' + _esc(noteText) + '</textarea>' +
+      '<textarea class="lib-detail-note-ta" id="libDetailNoteTA-' + conceptId + '" placeholder="Add a note…" rows="2">' + _esc(noteText) + '</textarea>' +
     '</div>' +
     '<div class="lib-detail-actions">' +
-      '<button class="lib-detail-btn" onclick="closeLibrary();openSparkPanel(' + id + ')">✦ Spark it</button>' +
+      '<button class="lib-detail-btn" onclick="closeLibrary();openSparkPanel(' + conceptId + ')">✦ Spark it</button>' +
       episodeBtn +
     '</div>';
 
-  // Insert after the tile (as grid sibling)
-  el.parentNode.insertBefore(row, el.nextSibling);
+  return { bodyHtml: bodyHtml };
+}
 
-  // Wire up note textarea save/autogrow
-  var ta = row.querySelector('.lib-detail-note-ta');
-  if (ta) {
-    ta.addEventListener('input', function() {
-      ta.style.height = 'auto';
-      ta.style.height = ta.scrollHeight + 'px';
-    });
-    ta.addEventListener('blur', function() {
-      var val = ta.value.trim();
-      if (val) {
-        localStorage.setItem('cc_note_' + id, val);
-        try { localStorage.setItem('cc_note_meta_' + id, JSON.stringify({ts: Date.now()})); } catch(e2) {}
-      } else {
-        localStorage.removeItem('cc_note_' + id);
-        localStorage.removeItem('cc_note_meta_' + id);
-      }
-      // Update tile ✏ indicator
-      var tile = document.getElementById('libTile-' + id);
-      if (tile) {
-        var metaRow = tile.querySelector('.lib-tile-meta');
-        var existingNote = metaRow && metaRow.querySelector('.lib-tile-num[title="Has note"]');
-        if (val && !existingNote && metaRow) {
-          var noteSpan = document.createElement('span');
-          noteSpan.className = 'lib-tile-num';
-          noteSpan.title = 'Has note';
-          noteSpan.textContent = '✏';
-          metaRow.appendChild(noteSpan);
-        } else if (!val && existingNote) {
-          existingNote.remove();
-        }
-      }
-    });
-    ta.addEventListener('click', function(e) { e.stopPropagation(); });
-    // Auto-resize if pre-filled
-    if (noteText) { ta.style.height = 'auto'; ta.style.height = ta.scrollHeight + 'px'; }
-  }
-
-  requestAnimationFrame(function() {
-    requestAnimationFrame(function() {
-      row.classList.add('lib-detail-open');
-    });
+// ── Detail note textarea wiring — v3.48 ──────────────────────────
+// Extracted from _libToggleSaved; works for initial open + after swap.
+function _libWireDetailNote(row, conceptId) {
+  var ta = row.querySelector('#libDetailNoteTA-' + conceptId);
+  if (!ta) return;
+  ta.addEventListener('input', function() {
+    ta.style.height = 'auto';
+    ta.style.height = ta.scrollHeight + 'px';
   });
+  ta.addEventListener('blur', function() {
+    var val = ta.value.trim();
+    if (val) {
+      localStorage.setItem('cc_note_' + conceptId, val);
+      try { localStorage.setItem('cc_note_meta_' + conceptId, JSON.stringify({ts: Date.now()})); } catch(e2) {}
+    } else {
+      localStorage.removeItem('cc_note_' + conceptId);
+      localStorage.removeItem('cc_note_meta_' + conceptId);
+    }
+    var tile = document.getElementById('libTile-' + conceptId);
+    if (tile) {
+      var metaRow = tile.querySelector('.lib-tile-meta');
+      var existingNote = metaRow && metaRow.querySelector('.lib-tile-num[title="Has note"]');
+      if (val && !existingNote && metaRow) {
+        var noteSpan = document.createElement('span');
+        noteSpan.className = 'lib-tile-num';
+        noteSpan.title = 'Has note';
+        noteSpan.textContent = '\u270F';
+        metaRow.appendChild(noteSpan);
+      } else if (!val && existingNote) {
+        existingNote.remove();
+      }
+    }
+  });
+  ta.addEventListener('click', function(e) { e.stopPropagation(); });
+  var noteText = localStorage.getItem('cc_note_' + conceptId) || '';
+  if (noteText) { ta.style.height = 'auto'; ta.style.height = ta.scrollHeight + 'px'; }
+}
+
+// ── Related chip in-place swap — v3.48 ────────────────────────────
+// Replaces _libNavToCard for related chip clicks.
+// Swaps content in-place with a fade; keeps library open; shows breadcrumb trail.
+function _libSwapRelatedConcept(fromId, toId) {
+  var row = document.querySelector('#libPanel-concepts .lib-detail-row');
+  if (!row) return;
+
+  // Guard: don't swap to the concept already showing
+  if (row._currentConceptId === toId) return;
+
+  // Update breadcrumb stack
+  if (!row._bcStack) row._bcStack = [];
+  var fromConcept = CONCEPTS && CONCEPTS.find(function(x) { return x.id === fromId; });
+  if (fromConcept) {
+    // If fromId is already in the stack (going sideways), trim forward entries
+    var existingIdx = row._bcStack.findIndex(function(e) { return e.id === fromId; });
+    if (existingIdx >= 0) {
+      row._bcStack = row._bcStack.slice(0, existingIdx + 1);
+    } else {
+      row._bcStack.push({ id: fromId, term: fromConcept.term });
+      if (row._bcStack.length > 3) row._bcStack.shift();
+    }
+  }
+  row._currentConceptId = toId;
+
+  // Fade out body
+  var body = row.querySelector('.lib-detail-body');
+  if (body) body.classList.add('lib-swapping');
+  if (typeof _playSwapSFX === 'function') _playSwapSFX();
+
+  setTimeout(function() {
+    // Rebuild body for new concept
+    var built = _libBuildDetailBody(toId, row._bcStack);
+    if (body) body.innerHTML = built.bodyHtml;
+
+    // Render breadcrumb
+    _libRenderBreadcrumb(row);
+
+    // Wire note
+    _libWireDetailNote(row, toId);
+
+    // Fade back in
+    requestAnimationFrame(function() {
+      if (body) body.classList.remove('lib-swapping');
+    });
+  }, 175);
+}
+
+// ── Breadcrumb renderer — v3.48 ───────────────────────────────────
+function _libRenderBreadcrumb(row) {
+  var bc = row.querySelector('.lib-detail-breadcrumb');
+  if (!bc) return;
+  var stack = row._bcStack || [];
+  if (!stack.length) { bc.classList.remove('bc-visible'); bc.innerHTML = ''; return; }
+  var _esc = function(s) { return (s||'').replace(/[<>&"]/g, function(ch) { return {'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[ch]; }); };
+  var parts = ['<span class="lib-detail-bc-label">Exploring from</span>'];
+  stack.forEach(function(entry, idx) {
+    if (idx > 0) parts.push('<span class="lib-detail-bc-sep">/</span>');
+    parts.push('<button class="lib-detail-bc-btn" onclick="_libBcNavTo(' + entry.id + ',' + idx + ')">← ' + _esc(entry.term) + '</button>');
+  });
+  bc.innerHTML = parts.join('');
+  bc.classList.add('bc-visible');
+}
+
+// ── Breadcrumb back-navigation — v3.48 ───────────────────────────
+// Called from breadcrumb button clicks; navigates back to a prior concept.
+function _libBcNavTo(conceptId, stackIdx) {
+  var row = document.querySelector('#libPanel-concepts .lib-detail-row');
+  if (!row || !row._bcStack) return;
+
+  // Trim stack: remove everything after this index
+  row._bcStack = row._bcStack.slice(0, stackIdx);
+  row._currentConceptId = conceptId;
+
+  var body = row.querySelector('.lib-detail-body');
+  if (body) body.classList.add('lib-swapping');
+  if (typeof _playSwapSFX === 'function') _playSwapSFX();
+
+  setTimeout(function() {
+    var built = _libBuildDetailBody(conceptId, row._bcStack);
+    if (body) body.innerHTML = built.bodyHtml;
+    _libRenderBreadcrumb(row);
+    _libWireDetailNote(row, conceptId);
+    requestAnimationFrame(function() {
+      if (body) body.classList.remove('lib-swapping');
+    });
+  }, 175);
 }
 
 // ── Home tab renderers — v3.18 / v3.19 ────────────────────────
