@@ -6,6 +6,13 @@
 
 ---
 
+## v3.57a — 2026-08-11 · Bug fixes — vocab folder integration
+
+### index.html
+- **Bug: Folder disappears after adding vocab word** — `_folderBuildItemBody`, `_folderRemoveVocab`, and `_cvAddVocabMenu` all treated `vocabWords[]` entries as plain strings, but `_vocabFolderToggle` stores them as objects `{ word, definition, category, colId }`. Fixed all three with `(w && typeof w === 'object') ? w.word : w` guards. Also hardened the single-quote escaping in the remove button.
+- **Bug: Read panel auto-closes when using folder picker** — `_gvOutsideClickHandler` uses a capture `mousedown` on `document`. The folder picker popover and backdrop are appended to `body` (not inside `#gvPanel`), so any click inside the picker triggered an "outside click" and closed the Read panel. Fixed by adding two early-return guards: skip if `e.target.id === 'fpBackdrop'` or if target is inside `#folderPickerPopover`.
+- **Bug: Home Vocab tab has no folder button** — tapping a word in the Vocab tab bottom sheet only offered "Practice →". Added a "+ Folder" button to `vws-actions` in `_vwsOpen`. New helper `_vwsAddToFolder(btn, word)` looks up the word in `_vwsSorted` and calls `_vocabFolderPickerOpen` with full word metadata.
+
 ## v3.57 — 2026-08-11 · Phase 7 — Board sharing + Phase 4 missed items
 
 ### index.html
