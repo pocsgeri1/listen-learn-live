@@ -1,7 +1,7 @@
 // /api/subscribe.js
 // Adds a new subscriber to Brevo.
-// source='modal'  → list 3 (Newsletter) + list 4 (Modal Signups) + FOUNDING_MEMBER=true
-// source='inline' → list 3 (Newsletter) only
+// ALL signups → list 3 (Epistemic Newsletter) + list 6 (Modal Signups) + FOUNDING_MEMBER=true
+// Everyone who gives their email right now is a founding member — no distinction needed yet.
 // Env var required: BREVO_API_KEY
 
 export default async function handler(req, res) {
@@ -9,7 +9,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed. Use POST.' });
   }
 
-  const { email, source, founding } = req.body || {};
+  const { email } = req.body || {};
 
   if (!email || !email.includes('@')) {
     return res.status(400).json({ error: 'Valid email address required.' });
@@ -20,14 +20,11 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'Server misconfigured: BREVO_API_KEY missing.' });
   }
 
-  const isModal = source === 'modal';
-
-  // List IDs: 3 = Newsletter, 4 = Modal Signups (founding members)
-  // NOTE: Create list 4 in Brevo dashboard before enabling — add its real ID here.
-  const listIds = isModal ? [3, 4] : [3];
-
-  // Attributes: FOUNDING_MEMBER custom boolean attribute (create in Brevo first)
-  const attributes = isModal ? { FOUNDING_MEMBER: true } : {};
+  // List 3 = Epistemic Newsletter (main list, triggers welcome automation)
+  // List 6 = Epistemic — Modal Signups (founding member segment)
+  // FOUNDING_MEMBER = true for all signups at this stage
+  const listIds   = [3, 6];
+  const attributes = { FOUNDING_MEMBER: true };
 
   try {
     const response = await fetch('https://api.brevo.com/v3/contacts', {
@@ -40,11 +37,10 @@ export default async function handler(req, res) {
         email: email.trim().toLowerCase(),
         listIds,
         attributes,
-        updateEnabled: true, // prevents error if contact already exists; merges lists
+        updateEnabled: true, // merges lists if contact already exists
       }),
     });
 
-    // Brevo returns 201 Created or 204 No Content (updateEnabled + existing contact)
     if (response.status === 201 || response.status === 204) {
       return res.status(200).json({ success: true });
     }

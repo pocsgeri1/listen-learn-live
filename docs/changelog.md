@@ -6,6 +6,18 @@
 
 ---
 
+## v3.45 — 2026-08-11 · Search bar fix, heatmap months, badge today count, goal 25, counts smooth
+
+### index.html
+- **Search bar bug fixed:** Placeholder typewriter animation now pauses on `visibilitychange` (tab hidden) and restarts cleanly on return. Prevents garbled characters appearing after switching tabs.
+- **Home nav badge:** Now shows today's new concepts + words saved (resets at midnight). Uses `lll_mastered_ts_v1` + `lll_lexicon_v1` `savedAt` timestamps filtered to today. Badge is `position:absolute` so it no longer shifts "Home" text alignment.
+- **Heatmap month labels:** Rewritten to label the first week column where each new month appears (was: only when the 1st of month fell in that week — caused many months to be unlabelled).
+- **Weekly goal:** 5 → 25 concepts per week.
+- **Count-up animation:** Replaced mixed elastic/bounce easings with uniform smooth ease-out cubic. All 4 buckets still staggered (60–200ms) with varied durations (1.3–1.9s).
+
+### api/subscribe.js
+- **All signups → founding member:** Everyone who signs up now goes to list 3 (Newsletter) + list 6 (Modal Signups) with `FOUNDING_MEMBER=true`. No source distinction at this stage — everyone is a founding member.
+
 ## v3.44 — 2026-08-11 · Modal copy, mood egg, count-up slowdown, pull quote fix
 
 ### index.html

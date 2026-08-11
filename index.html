@@ -9968,6 +9968,16 @@
   line-height: 1.4;
   font-weight: 700;
 }
+/* Absolute badge — sits top-right of parent, never shifts text layout */
+.nav-lib-badge--abs {
+  position: absolute;
+  top: 3px;
+  right: 2px;
+  margin-left: 0;
+  font-size: 0.38rem;
+  padding: 1px 3px;
+}
+.nav-home-center-btn { position: relative; }
 .mob-tab-lib { position: relative; }
 .mob-tab-lib .nav-lib-badge {
   position: absolute;
@@ -19343,14 +19353,47 @@ function initSparkHero() {
       }, 350);
     }
 
+    var _phCycleInterval = null;
+
+    function _phReset() {
+      // Hard-clear overlay and restart from scratch — called on tab re-focus
+      clearTimeout(_phTimer);
+      _phTyping = false;
+      _phOverlay.textContent = '';
+      _phOverlay.classList.remove('fading', 'hidden');
+    }
+
     // Type first phrase immediately, then cycle
     _phType(_placeholders[0], () => {
-      setInterval(_phCycle, 3200);
+      _phCycleInterval = setInterval(_phCycle, 3200);
     });
     _phInput.placeholder = '';
 
+    // Fix: pause animation when tab is hidden, reset cleanly when visible again
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        clearTimeout(_phTimer);
+        clearInterval(_phCycleInterval);
+        _phCycleInterval = null;
+        _phTyping = false;
+      } else {
+        // Tab became visible — reset overlay and restart cycle after short delay
+        if (document.activeElement !== _phInput && !_phInput.value) {
+          _phReset();
+          setTimeout(() => {
+            _phi = (_phi + 1) % _placeholders.length;
+            _phType(_placeholders[_phi], () => {
+              _phCycleInterval = setInterval(_phCycle, 3200);
+            });
+          }, 400);
+        }
+      }
+    });
+
     _phInput.addEventListener('focus', () => {
       clearTimeout(_phTimer);
+      clearInterval(_phCycleInterval);
+      _phCycleInterval = null;
       _phTyping = false;
       _phOverlay.classList.add('hidden');
       _phInput.placeholder = 'Search an idea, topic, or concept…';
@@ -19360,6 +19403,12 @@ function initSparkHero() {
         setTimeout(() => {
           _phInput.placeholder = '';
           _phOverlay.classList.remove('hidden');
+          if (!_phCycleInterval) {
+            _phReset();
+            _phType(_placeholders[_phi], () => {
+              _phCycleInterval = setInterval(_phCycle, 3200);
+            });
+          }
         }, 200);
       }
     });
@@ -24829,15 +24878,29 @@ function _homeUnbindScrollListeners() {
 
 /* ── Phase 7: nav badge ───────────────────────────────────────── */
 function _homeUpdateNavBadge() {
-  var nConcepts = 0, nWords = 0;
-  try { nConcepts = Object.keys(JSON.parse(localStorage.getItem('lll_saved_v1') || '{}')).length; } catch(e) {}
+  // Badge = today's new concepts + words saved (resets at midnight)
+  var todayStr = new Date().toISOString().slice(0, 10);
+  var todayConcepts = 0, todayWords = 0;
+  try {
+    var tsMap = JSON.parse(localStorage.getItem('lll_mastered_ts_v1') || '{}');
+    Object.values(tsMap).forEach(function(ts) {
+      if (ts && new Date(Number(ts)).toISOString().slice(0, 10) === todayStr) todayConcepts++;
+    });
+  } catch(e) {}
   try {
     var lx = JSON.parse(localStorage.getItem('lll_lexicon_v1') || '[]');
-    nWords = Array.isArray(lx) ? lx.length : Object.keys(lx).length;
+    if (Array.isArray(lx)) {
+      lx.forEach(function(w) {
+        if (w && w.savedAt && new Date(w.savedAt).toISOString().slice(0, 10) === todayStr) todayWords++;
+      });
+    }
   } catch(e) {}
-  var total = nConcepts + nWords;
-  var badge = total > 0 ? '<span class="nav-lib-badge">' + total + '</span>' : '';
-  // Update center-island Home button (v3.42)
+  var todayTotal = todayConcepts + todayWords;
+  // Badge: absolute-positioned dot so it never shifts "Home" text alignment
+  var badge = todayTotal > 0
+    ? '<span class="nav-lib-badge nav-lib-badge--abs">' + todayTotal + '</span>'
+    : '';
+  // Center-island Home button
   var centerBtn = document.querySelector('.nav-home-center-btn');
   if (centerBtn) {
     var centerEmoji = centerBtn.querySelector('.nav-home-emoji');
@@ -26292,7 +26355,7 @@ function _homeRenderMilestone(nSaved) {
 function _homeRenderGoalStrip() {
   var el = document.getElementById('homeGoalStrip');
   if (!el) return;
-  var GOAL = 5;
+  var GOAL = 25;
   var tsMap = {};
   try { tsMap = JSON.parse(localStorage.getItem('lll_mastered_ts_v1') || '{}'); } catch(e) {}
   var weekAgo = Date.now() - 7 * 86400000;
@@ -26382,12 +26445,13 @@ function _homeRenderDashboard(skipCountUp) {
     return;
   }
 
-  // Each bucket gets a different duration + easing feel
+  // Smooth ease-out per bucket — varied durations, staggered starts, no bounce
+  var easeOut = function(t) { return 1 - Math.pow(1 - t, 3); };
   var buckets = [
-    { el: elSaved,    val: nSaved,    duration: 1800, delay: 0,   ease: function(t) { return 1 - Math.pow(1-t, 4); } },
-    { el: elWords,    val: nWords,    duration: 1600, delay: 120, ease: function(t) { return t < 0.5 ? 2*t*t : -1+(4-2*t)*t; } }, // ease-in-out
-    { el: elNotes,    val: nNotes,    duration: 1400, delay: 220, ease: function(t) { return 1 - Math.pow(1-t, 3); } },
-    { el: elEpisodes, val: nEpisodes, duration: 2000, delay: 80,  ease: function(t) { var c4=2*Math.PI/3; return t===0?0:t===1?1:Math.pow(2,-8*t)*Math.sin((t*10-0.75)*c4)+1; } } // subtle elastic
+    { el: elSaved,    val: nSaved,    duration: 1700, delay: 0   },
+    { el: elWords,    val: nWords,    duration: 1500, delay: 100 },
+    { el: elNotes,    val: nNotes,    duration: 1300, delay: 200 },
+    { el: elEpisodes, val: nEpisodes, duration: 1900, delay: 60  }
   ];
 
   buckets.forEach(function(b) {
@@ -26400,7 +26464,7 @@ function _homeRenderDashboard(skipCountUp) {
           var start = performance.now();
           function tick(now) {
             var elapsed = Math.min(now - start, b.duration);
-            var prog = b.ease(elapsed / b.duration);
+            var prog = easeOut(elapsed / b.duration);
             b.el.textContent = Math.round(b.val * prog);
             if (elapsed < b.duration) requestAnimationFrame(tick);
             else b.el.textContent = b.val;
@@ -26595,22 +26659,24 @@ function _homeRenderHeatmap() {
     return Math.min(4, Math.ceil(Math.log(count + 1) / Math.log(maxCount + 1) * 4) || 1);
   }
 
-  // Build 52 weeks
+  // Build 52 weeks — label each week with the month if it's the first week that month appears
   var weeks = [];
   var cur = new Date(startDay);
+  var lastLabeledMonth = -1;
   for (var w = 0; w < 52; w++) {
     var week = { monthLabel: null, days: [] };
     for (var d = 0; d < 7; d++) {
       var key = cur.getFullYear() + '-' + String(cur.getMonth()+1).padStart(2,'0') + '-' + String(cur.getDate()).padStart(2,'0');
       var count = dayCounts[key] || 0;
-      // Month label: show on first day of month that falls in this week
-      if (cur.getDate() === 1 && week.monthLabel === null) {
-        week.monthLabel = MONTHS[cur.getMonth()];
+      // Label this week if we've entered a new month for the first time
+      var curMonth = cur.getMonth();
+      if (curMonth !== lastLabeledMonth && week.monthLabel === null) {
+        week.monthLabel = MONTHS[curMonth];
+        lastLabeledMonth = curMonth;
       }
       week.days.push({ key: key, count: count, lv: level(count), isToday: key === todayKey, dayOfWeek: cur.getDay() });
       cur.setDate(cur.getDate() + 1);
     }
-    if (week.monthLabel === null && w === 0) week.monthLabel = MONTHS[startDay.getMonth()]; // always label first week
     weeks.push(week);
   }
 
@@ -26665,7 +26731,7 @@ function _homeRenderHeatmap() {
 function _homeRenderGoal() {
   var el = document.getElementById('homeGoalRow');
   if (!el) return;
-  var GOAL = 5; // weekly concept goal
+  var GOAL = 25; // weekly concept goal
   var tsMap = {};
   try { tsMap = JSON.parse(localStorage.getItem('lll_mastered_ts_v1') || '{}'); } catch(e) {}
   var weekAgo = Date.now() - 7 * 86400000;
