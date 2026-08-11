@@ -6,6 +6,15 @@
 
 ---
 
+## v3.44 — 2026-08-11 · Modal copy, mood egg, count-up slowdown, pull quote fix
+
+### index.html
+- **Modal copy:** Title → "The library that talks back." Subtext → "The gap between hearing and knowing is finally closed." Bullets: personal library / weekly digest / AI tools no credit card.
+- **Mood row:** Reduced to single 😎 button, no label, no other emojis. Opacity 0.18 at rest, brightens + tilts on hover — subtle easter egg feel.
+- **Count-up animation:** All 4 home buckets now animate with varied durations (1400–2000ms), different easing curves per bucket (quartic, ease-in-out quad, cubic, subtle elastic), staggered delays. Was 700ms single number.
+- **Bar chart:** Staggered per-bar animation — each bar rises with a randomised delay (60–400ms) and duration (0.55–0.85s) using spring easing.
+- **Pull quotes:** Media query raised `900px → 1440px`. Now hidden on 13" and smaller laptops; only shown on 16" MacBook and larger displays.
+
 ## v3.43 — 2026-08-11 · Nav hover redesign, emoji fix, tour centering, bg revert
 
 ### index.html

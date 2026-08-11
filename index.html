@@ -9620,40 +9620,33 @@
 /* ── Mood row ─────────────────────────────────────────── */
 .home-mood-row {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 0 2px;
-  border-top: 0.5px solid var(--border);
-  margin-top: 8px;
-}
-.home-mood-label {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.62rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-.home-mood-options {
-  display: flex;
-  gap: 2px;
+  justify-content: flex-end;
+  padding: 6px 0 0;
+  margin-top: 4px;
 }
 .home-mood-btn {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 1.15rem;
+  font-size: 0.85rem;
   line-height: 1;
-  min-width: 44px;
-  min-height: 44px;
+  min-width: 28px;
+  min-height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 8px;
-  transition: background 0.15s, transform 0.12s;
+  border-radius: 50%;
   padding: 0;
+  opacity: 0.18;
+  transition: opacity 0.3s ease, transform 0.2s ease;
+  filter: grayscale(0.4);
 }
-.home-mood-btn:hover { background: var(--surface2); transform: scale(1.18); }
-.home-mood-btn:active { transform: scale(0.95); }
+.home-mood-egg:hover {
+  opacity: 0.75;
+  transform: scale(1.25) rotate(-8deg);
+  filter: none;
+}
+.home-mood-egg:active { transform: scale(1.0); }
 @media (prefers-reduced-motion: reduce) {
   .home-mood-btn { transition: none; }
 }
@@ -13841,13 +13834,7 @@
     <div class="home-momentum" id="homeMomentum"></div>
     <!-- Mood row — moved from nav — v3.38 -->
     <div class="home-mood-row" id="homeMoodRow">
-      <div class="home-mood-label">I feel epic!</div>
-      <div class="home-mood-options">
-        <button class="home-mood-btn" onclick="openEgg();playNavSFX()" title="I feel epic!">😎</button>
-        <button class="home-mood-btn" onclick="openEgg();playNavSFX()" title="Feeling good">😊</button>
-        <button class="home-mood-btn" onclick="openEgg();playNavSFX()" title="Just okay">😐</button>
-        <button class="home-mood-btn" onclick="openEgg();playNavSFX()" title="Could be better">😔</button>
-      </div>
+      <button class="home-mood-btn home-mood-egg" onclick="openEgg();playNavSFX()" title="I feel epic" aria-label="I feel epic">😎</button>
     </div>
   </div>
   </div><!-- /.home-collapse-wrap -->
@@ -26385,24 +26372,43 @@ function _homeRenderDashboard(skipCountUp) {
 
   _homeRenderMomentum(nSaved, thisWeekTotal, streak);
 
-  // ── Count-up on hero number only ──
+  // ── Count-up — smooth, varied pace per bucket (v3.44) ──
   var noMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (noMotion || skipCountUp) { elSaved.textContent = nSaved; return; }
+  if (noMotion || skipCountUp) {
+    elSaved.textContent = nSaved;
+    if (elWords) elWords.textContent = nWords;
+    if (elNotes) elNotes.textContent = nNotes;
+    if (elEpisodes) elEpisodes.textContent = nEpisodes;
+    return;
+  }
 
-  elSaved.classList.add('fading');
-  requestAnimationFrame(function() {
-    requestAnimationFrame(function() {
-      elSaved.classList.remove('fading');
-      var duration = 700, start = performance.now();
-      function tick(now) {
-        var elapsed = Math.min(now - start, duration);
-        var prog = 1 - Math.pow(1 - elapsed / duration, 3);
-        elSaved.textContent = Math.round(nSaved * prog);
-        if (elapsed < duration) requestAnimationFrame(tick);
-        else elSaved.textContent = nSaved;
-      }
-      requestAnimationFrame(tick);
-    });
+  // Each bucket gets a different duration + easing feel
+  var buckets = [
+    { el: elSaved,    val: nSaved,    duration: 1800, delay: 0,   ease: function(t) { return 1 - Math.pow(1-t, 4); } },
+    { el: elWords,    val: nWords,    duration: 1600, delay: 120, ease: function(t) { return t < 0.5 ? 2*t*t : -1+(4-2*t)*t; } }, // ease-in-out
+    { el: elNotes,    val: nNotes,    duration: 1400, delay: 220, ease: function(t) { return 1 - Math.pow(1-t, 3); } },
+    { el: elEpisodes, val: nEpisodes, duration: 2000, delay: 80,  ease: function(t) { var c4=2*Math.PI/3; return t===0?0:t===1?1:Math.pow(2,-8*t)*Math.sin((t*10-0.75)*c4)+1; } } // subtle elastic
+  ];
+
+  buckets.forEach(function(b) {
+    if (!b.el) return;
+    b.el.classList.add('fading');
+    setTimeout(function() {
+      requestAnimationFrame(function() {
+        requestAnimationFrame(function() {
+          b.el.classList.remove('fading');
+          var start = performance.now();
+          function tick(now) {
+            var elapsed = Math.min(now - start, b.duration);
+            var prog = b.ease(elapsed / b.duration);
+            b.el.textContent = Math.round(b.val * prog);
+            if (elapsed < b.duration) requestAnimationFrame(tick);
+            else b.el.textContent = b.val;
+          }
+          requestAnimationFrame(tick);
+        });
+      });
+    }, b.delay);
   });
 }
 
@@ -26468,11 +26474,15 @@ function _homeRenderBarChart() {
     '</div>';
   }).join('');
 
-  // Animate in
+  // Animate bars in with stagger — each bar rises at its own pace
   requestAnimationFrame(function() {
     requestAnimationFrame(function() {
-      el.querySelectorAll('.home-bar').forEach(function(bar) {
-        bar.style.height = bar.getAttribute('data-h') + 'px';
+      el.querySelectorAll('.home-bar').forEach(function(bar, i) {
+        var delay = 60 + i * 55 + Math.round(Math.random() * 40);
+        setTimeout(function() {
+          bar.style.transition = 'height ' + (0.55 + Math.random() * 0.3).toFixed(2) + 's cubic-bezier(0.22,1,0.36,1)';
+          bar.style.height = bar.getAttribute('data-h') + 'px';
+        }, delay);
       });
     });
   });
@@ -29583,7 +29593,7 @@ body.corner-mode .sp-eyebrow-kicker { opacity: 0; pointer-events: none; transiti
   pointer-events: none;
   margin: 0;
 }
-@media (min-width: 900px) {
+@media (min-width: 1440px) {
   .sp-pull-quote {
     display: flex;
     flex-direction: column;
@@ -29628,7 +29638,7 @@ body.corner-mode .sp-eyebrow-kicker { opacity: 0; pointer-events: none; transiti
   }
 }
 /* ── Left-side mirrored pull quote ── */
-@media (min-width: 900px) {
+@media (min-width: 1440px) {
   .sp-pull-quote-left {
     left: 9.35rem;
     right: auto;
@@ -37609,17 +37619,17 @@ function _wcRenderMobileGrid(words) {
     <!-- Form state -->
     <div class="ep-signup-body" id="epSignupForm">
       <div class="ep-signup-eyebrow">Join Epistemic</div>
-      <div class="ep-signup-title" id="epSignupTitle">The ideas worth keeping,<br><em>finally kept.</em></div>
-      <div class="ep-signup-sub" id="epSignupSub">The gap between knowing and using is smaller than you think.</div>
+      <div class="ep-signup-title" id="epSignupTitle">The library that<br><em>talks back.</em></div>
+      <div class="ep-signup-sub" id="epSignupSub">The gap between hearing and knowing is finally closed.</div>
 
       <div class="ep-signup-benefits">
         <div class="ep-signup-benefit">
           <span class="ep-signup-benefit-glyph">◈</span>
-          <span>Save the ideas that hit different</span>
+          <span>Build a personal library of ideas that matter to you</span>
         </div>
         <div class="ep-signup-benefit">
           <span class="ep-signup-benefit-glyph">◈</span>
-          <span>We'll send your weekly recap so nothing slips</span>
+          <span>Get a weekly digest of new concepts from top podcasts</span>
         </div>
         <div class="ep-signup-benefit">
           <span class="ep-signup-benefit-glyph">◈</span>
