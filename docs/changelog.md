@@ -6,6 +6,31 @@
 
 ---
 
+## v3.52 — 2026-08-11 · Folder edit + folder glyph on all cards + tile dot clarification
+
+### index.html
+- **Folder inline edit:** Pencil ✎ button appears on folder row hover. Opens an inline edit form (slides in, replaces the header row) with: name input, emoji picker, color swatch picker. Enter saves, Escape cancels. `_folderEdit`, `_folderSaveEdit`, `_folderCancelEdit`, `_folderEditPickEmoji`, `_folderEditPickColor` functions. Edit state is isolated per folder via `_folderEditState{}`.
+- **Folder glyph on all cards:** Added `CC_G.folder` (folder + plus SVG icon) to the icon registry. Added `btn-folder` button (6th action) to all 5 card action bars: home feed cards, episode drawer cards, theme cards, all-concepts grid cards, and folder canvas cards. `.btn-icon.btn-folder` CSS: muted default, accent on hover.
+- **Tile dot explained:** The 6px dot on the bottom-right of library grid tiles (`.lib-tile-note-badge`) is the existing note indicator — it marks concepts that have a saved note. Not new, not a bug.
+- **Right-click / long-press clarification:** Desktop = right-click any tile to open folder picker. Mobile = 500ms long-press. The tile `::after` hint text updated to `＋` (was `⊕`).
+
+## v3.51 — 2026-08-11 · Phase 4 — Infinite spatial canvas per folder
+
+### index.html
+- **Canvas overlay:** Full-screen `#canvasOverlay` (z-index 8000) with fade-in animation. Opened via "⬡ Open Canvas" button in every folder's expanded detail footer. Closed with ✕ or Escape key.
+- **Header bar:** Folder emoji + name (left), zoom controls — [−] [100%] [+] [⌂ reset] (center), [Auto-arrange] [＋ Add] [✕] (right). Mobile: horizontal reflow, zoom label hidden.
+- **Infinite pan:** Pointer drag on stage background pans the canvas. `grabbing` cursor during pan. Pointer events via `pointerdown/pointermove/pointerup` on `#canvasContainer`.
+- **Pinch/scroll zoom:** Mouse wheel zooms toward cursor position. Zoom clamped 0.25×–2.5×. Zoom buttons step ±15% toward viewport center.
+- **Draggable concept cards:** `.cv-card` (175px wide, category left-border, Playfair term, DM Mono category label). Drag via pointer capture — no jitter, no offset errors. Position stored in `_CV.layout` and persisted to `folder.canvasLayout` on drag end.
+- **Hover expand:** Card hover reveals hook text (max-height animation) and 3 action buttons: ✦ Spark, ◱ View (opens library detail), ✕ Remove from canvas.
+- **SVG arrow layer:** `#canvasArrowLayer` is a `position:absolute` SVG spanning the stage. Dashed quadratic bezier arrows drawn between related concept pairs where both are on the canvas. Redrawn via `requestAnimationFrame` throttle on every drag frame. Offset by 2000px to allow negative-coordinate arrows without clipping.
+- **Add concepts panel:** Bottom sheet (`#canvasAddPanel`) with search input + scrollable results list. Each row shows category dot, term, category label, and ✓ if already on canvas. Click toggles on/off. New concepts placed at cascading grid positions.
+- **Auto-arrange:** Calculates √N columns, arranges all canvas cards in a clean grid (210px × 140px spacing) from (60, 60). Plays SFX.
+- **Dotted grid background:** CSS `radial-gradient` dot pattern on `#canvasContainer::before` — editorial, minimal, dark + light mode.
+- **Persistence:** Canvas positions saved to `folder.canvasLayout` (already in schema from v3.49) on every drag end and add/remove. Restored on next open.
+- **Empty state:** Floating 🗺 icon + headline + CTA button shown when canvas has no cards.
+- **CSS:** ~220 lines — overlay, header, zoom controls, ghost buttons, container, stage, SVG arrows, `.cv-card` with hover expand, add panel + results, empty state, dot grid. Full dark + light mode. `prefers-reduced-motion` override. Mobile breakpoints.
+
 ## v3.50 — 2026-08-11 · Add-to-folder surfaces: picker popover, detail button, chip bubbles, tile context
 
 ### index.html

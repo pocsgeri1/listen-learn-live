@@ -9072,6 +9072,9 @@
   .concept-card.mastered .btn-icon.btn-master { color: var(--green); }
   .btn-icon.btn-chat.saved { color: var(--purple, #a08fd4); }
   .btn-icon.btn-note.has-note { color: var(--accent); }
+  .btn-icon.btn-folder { color: var(--muted); }
+  .btn-icon.btn-folder:hover { color: var(--accent); }
+  .btn-icon.btn-folder.in-folder { color: var(--accent); }
 
   /* Button groups */
   .btn-group {
@@ -10848,6 +10851,45 @@
   font-family: 'DM Mono', monospace;
 }
 .folder-item.fi-open .folder-item-arrow { transform: rotate(90deg); }
+.folder-item-edit-btn {
+  background: none; border: none; cursor: pointer; flex-shrink: 0;
+  font-size: 0.75rem; color: var(--muted); opacity: 0;
+  padding: 3px 5px; border-radius: 4px; line-height: 1;
+  transition: opacity 0.15s, color 0.12s, background 0.12s;
+}
+.folder-item-main:hover .folder-item-edit-btn { opacity: 0.55; }
+.folder-item-edit-btn:hover { opacity: 1 !important; color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, transparent); }
+
+/* Folder edit form (inline, replaces item-main) */
+.folder-edit-form {
+  padding: 12px 14px 11px;
+  background: var(--surface);
+  border-bottom: 0.5px solid var(--border);
+  display: flex; flex-direction: column; gap: 9px;
+}
+.folder-edit-row { display: flex; align-items: center; gap: 8px; }
+.folder-edit-input {
+  flex: 1; background: var(--surface2, var(--surface)); border: 0.5px solid var(--border);
+  border-radius: 5px; padding: 6px 9px;
+  font-family: 'DM Sans', sans-serif; font-size: 0.72rem; color: var(--text);
+  outline: none; transition: border-color 0.14s;
+}
+.folder-edit-input:focus { border-color: var(--accent); }
+.folder-edit-save {
+  background: var(--accent); color: var(--bg); border: none; border-radius: 5px;
+  font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing: 0.05em;
+  padding: 6px 11px; cursor: pointer; white-space: nowrap; flex-shrink: 0;
+  transition: opacity 0.12s;
+}
+.folder-edit-save:hover { opacity: 0.85; }
+.folder-edit-cancel {
+  background: none; border: 0.5px solid var(--border); border-radius: 5px;
+  font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing: 0.05em;
+  color: var(--muted); padding: 6px 10px; cursor: pointer; white-space: nowrap; flex-shrink: 0;
+  transition: border-color 0.12s, color 0.12s;
+}
+.folder-edit-cancel:hover { border-color: var(--text); color: var(--text); }
+[data-theme="light"] .folder-edit-input { background: #fff; }
 
 /* Folder expanded detail */
 .folder-item-detail {
@@ -11081,9 +11123,10 @@
   .lib-chip-add { opacity: 0.85; transform: scale(0.88); }
 }
 
-/* ── Tile context-menu hint on hover — v3.50 ── */
+/* ── Tile folder-add hint on hover — v3.50 ── (right-click = folder picker) */
 .lib-tile::after {
-  content: '⊕';
+  content: '＋';
+  font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing: 0;
   position: absolute; bottom: 7px; right: 9px;
   font-size: 0.55rem; color: var(--accent); opacity: 0;
   font-family: 'DM Mono', monospace;
@@ -11092,6 +11135,251 @@
 }
 .lib-tile:hover::after { opacity: 0.35; }
 @media (hover: none) { .lib-tile::after { display: none; } }
+
+/* ══════════════════════════════════════════════════
+   CANVAS OVERLAY — v3.51
+   Infinite spatial canvas per folder.
+   DOM + CSS transforms only — no <canvas> element.
+   ══════════════════════════════════════════════════ */
+
+#canvasOverlay {
+  position: fixed; inset: 0; z-index: 8000;
+  background: var(--bg, #0d0d0d);
+  display: none; flex-direction: column;
+  opacity: 0;
+  transition: opacity 0.22s ease;
+}
+#canvasOverlay.cv-open { display: flex; }
+#canvasOverlay.cv-visible { opacity: 1; }
+
+/* Header */
+#canvasHeader {
+  position: relative; z-index: 10;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 52px; padding: 0 16px; flex-shrink: 0;
+  border-bottom: 0.5px solid var(--border);
+  background: var(--surface);
+}
+#canvasHeaderLeft {
+  display: flex; align-items: center; gap: 8px;
+  min-width: 0; flex: 1;
+}
+#canvasFolderEmoji { font-size: 1.1rem; line-height: 1; flex-shrink: 0; }
+#canvasFolderName {
+  font-family: 'Playfair Display', serif; font-style: italic;
+  font-size: 0.9rem; color: var(--text);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+#canvasHeaderCenter {
+  display: flex; align-items: center; gap: 4px;
+  position: absolute; left: 50%; transform: translateX(-50%);
+}
+#canvasHeaderRight {
+  display: flex; align-items: center; gap: 8px;
+  flex-shrink: 0;
+}
+.cv-zoom-btn {
+  width: 26px; height: 26px; border-radius: 5px;
+  background: none; border: 0.5px solid var(--border);
+  color: var(--muted); cursor: pointer;
+  font-family: 'DM Mono', monospace; font-size: 0.75rem; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+}
+.cv-zoom-btn:hover { background: color-mix(in srgb, var(--accent) 8%, transparent); border-color: var(--accent); color: var(--accent); }
+.cv-zoom-reset { width: auto; padding: 0 7px; font-size: 0.65rem; }
+.cv-zoom-label {
+  font-family: 'DM Mono', monospace; font-size: 0.58rem;
+  color: var(--muted); min-width: 36px; text-align: center; letter-spacing: 0.04em;
+}
+.cv-btn-ghost {
+  background: none; border: 0.5px solid var(--border); border-radius: 5px;
+  color: var(--muted); cursor: pointer; padding: 5px 10px;
+  font-family: 'DM Mono', monospace; font-size: 0.54rem; letter-spacing: 0.04em;
+  white-space: nowrap;
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+}
+.cv-btn-ghost:hover { border-color: var(--accent); color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, transparent); }
+.cv-close-btn {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: none; border: 0.5px solid var(--border);
+  color: var(--muted); cursor: pointer; font-size: 0.65rem;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.12s, color 0.12s;
+}
+.cv-close-btn:hover { background: color-mix(in srgb, var(--accent) 10%, transparent); color: var(--accent); }
+[data-theme="light"] #canvasHeader { background: rgba(255,255,255,0.95); }
+
+/* Canvas container + stage */
+#canvasContainer {
+  flex: 1; position: relative; overflow: hidden;
+  cursor: grab; user-select: none;
+}
+#canvasContainer.cv-panning { cursor: grabbing; }
+#canvasStage {
+  position: absolute; top: 0; left: 0;
+  transform-origin: 0 0;
+  will-change: transform;
+}
+
+/* SVG arrow layer */
+#canvasArrowLayer {
+  position: absolute; top: -2000px; left: -2000px;
+  width: calc(100% + 4000px); height: calc(100% + 4000px);
+  pointer-events: none; overflow: visible;
+}
+.cv-arrow {
+  fill: none; stroke: var(--accent);
+  stroke-width: 1.2; stroke-dasharray: 4 4;
+  opacity: 0.28;
+}
+
+/* Concept cards on canvas */
+.cv-card {
+  position: absolute;
+  width: 175px;
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-left: 3px solid var(--cv-cat-color, var(--accent));
+  border-radius: 8px;
+  padding: 10px 12px 9px;
+  cursor: grab;
+  user-select: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  will-change: transform;
+}
+.cv-card:hover { border-color: var(--cv-cat-color, var(--accent)); box-shadow: 0 4px 18px rgba(0,0,0,0.28); }
+.cv-card.cv-dragging { cursor: grabbing; box-shadow: 0 8px 30px rgba(0,0,0,0.4); z-index: 100; transition: none; }
+.cv-card-term {
+  font-family: 'Playfair Display', serif; font-style: italic;
+  font-size: 0.78rem; color: var(--text); line-height: 1.3;
+  margin-bottom: 5px;
+}
+.cv-card-cat {
+  font-family: 'DM Mono', monospace; font-size: 0.48rem;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--cv-cat-color, var(--accent)); opacity: 0.75;
+}
+.cv-card-hook {
+  font-family: 'DM Sans', sans-serif; font-size: 0.6rem;
+  color: var(--muted); line-height: 1.4;
+  margin-top: 5px; opacity: 0;
+  max-height: 0; overflow: hidden;
+  transition: opacity 0.18s, max-height 0.22s;
+}
+.cv-card:hover .cv-card-hook { opacity: 0.8; max-height: 60px; }
+.cv-card-actions {
+  display: flex; gap: 4px; margin-top: 7px;
+  opacity: 0; transition: opacity 0.15s;
+}
+.cv-card:hover .cv-card-actions { opacity: 1; }
+.cv-card-btn {
+  flex: 1; background: none; border: 0.5px solid var(--border); border-radius: 4px;
+  font-family: 'DM Mono', monospace; font-size: 0.46rem; letter-spacing: 0.04em;
+  color: var(--muted); cursor: pointer; padding: 4px 3px; white-space: nowrap;
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+}
+.cv-card-btn:hover { border-color: var(--accent); color: var(--accent); background: color-mix(in srgb, var(--accent) 7%, transparent); }
+.cv-card-btn-remove { color: var(--muted); }
+.cv-card-btn-remove:hover { border-color: #d4715a; color: #d4715a; background: color-mix(in srgb, #d4715a 7%, transparent); }
+[data-theme="light"] .cv-card { background: rgba(255,255,255,0.95); }
+[data-theme="light"] .cv-card:hover { box-shadow: 0 4px 18px rgba(0,0,0,0.1); }
+[data-theme="light"] .cv-card.cv-dragging { box-shadow: 0 8px 30px rgba(0,0,0,0.18); }
+
+/* Add concepts panel (bottom sheet) */
+#canvasAddPanel {
+  position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: min(480px, 94vw); z-index: 20;
+  background: var(--surface); border: 0.5px solid var(--border);
+  border-radius: 12px 12px 0 0; border-top: 2px solid var(--accent);
+  padding-bottom: env(safe-area-inset-bottom);
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.26s cubic-bezier(0.25,0.46,0.45,0.94);
+}
+#canvasAddPanel.cv-add-open { max-height: 340px; }
+#canvasAddInner { padding: 14px 14px 10px; }
+.cv-search-input {
+  width: 100%; box-sizing: border-box;
+  background: var(--surface2, var(--bg)); border: 0.5px solid var(--border);
+  border-radius: 6px; padding: 8px 11px;
+  font-family: 'DM Sans', sans-serif; font-size: 0.72rem; color: var(--text);
+  outline: none;
+  transition: border-color 0.14s;
+}
+.cv-search-input:focus { border-color: var(--accent); }
+#canvasAddResults { margin-top: 8px; max-height: 220px; overflow-y: auto; scrollbar-width: none; }
+#canvasAddResults::-webkit-scrollbar { display: none; }
+.cv-add-row {
+  display: flex; align-items: center; gap: 8px;
+  padding: 7px 4px; border-radius: 5px; cursor: pointer;
+  transition: background 0.12s;
+}
+.cv-add-row:hover { background: color-mix(in srgb, var(--accent) 7%, transparent); }
+.cv-add-row-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.cv-add-row-term { flex: 1; font-family: 'DM Sans', sans-serif; font-size: 0.7rem; color: var(--text); }
+.cv-add-row-cat { font-family: 'DM Mono', monospace; font-size: 0.46rem; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); }
+.cv-add-row-check { font-size: 0.6rem; color: var(--accent); opacity: 0; transition: opacity 0.1s; }
+.cv-add-row.cv-on-canvas .cv-add-row-check { opacity: 1; }
+.cv-add-row.cv-on-canvas .cv-add-row-term { color: var(--accent); }
+[data-theme="light"] .cv-search-input { background: #fff; }
+[data-theme="light"] #canvasAddPanel { background: rgba(255,255,255,0.98); }
+
+/* Empty state */
+#canvasEmptyHint {
+  position: absolute; inset: 0; display: none;
+  flex-direction: column; align-items: center; justify-content: center;
+  pointer-events: none; z-index: 5;
+}
+#canvasEmptyHint.cv-empty-show { display: flex; }
+.cv-empty-icon { font-size: 2.5rem; margin-bottom: 14px; opacity: 0.4; }
+.cv-empty-title {
+  font-family: 'Playfair Display', serif; font-style: italic;
+  font-size: 1.1rem; color: var(--text); opacity: 0.5; margin-bottom: 6px;
+}
+.cv-empty-sub {
+  font-family: 'DM Sans', sans-serif; font-size: 0.68rem;
+  color: var(--muted); opacity: 0.55; margin-bottom: 18px; text-align: center;
+  max-width: 260px; line-height: 1.5;
+}
+.cv-empty-btn {
+  pointer-events: all;
+  background: var(--accent); color: var(--bg); border: none; border-radius: 6px;
+  font-family: 'DM Mono', monospace; font-size: 0.56rem; letter-spacing: 0.05em;
+  padding: 9px 18px; cursor: pointer; transition: opacity 0.14s;
+}
+.cv-empty-btn:hover { opacity: 0.85; }
+
+/* Canvas grid dot background */
+#canvasContainer::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background-image: radial-gradient(circle, color-mix(in srgb, var(--border) 60%, transparent) 1px, transparent 1px);
+  background-size: 28px 28px;
+  opacity: 0.45;
+}
+[data-theme="light"] #canvasContainer::before { opacity: 0.3; }
+
+/* "Open Canvas" button in folder footer */
+.folder-canvas-btn {
+  background: color-mix(in srgb, var(--accent) 9%, transparent);
+  border: 0.5px solid color-mix(in srgb, var(--accent) 28%, transparent);
+  border-radius: 5px; color: var(--accent);
+  font-family: 'DM Mono', monospace; font-size: 0.54rem; letter-spacing: 0.04em;
+  padding: 6px 11px; cursor: pointer; white-space: nowrap;
+  transition: background 0.14s, border-color 0.14s;
+}
+.folder-canvas-btn:hover { background: color-mix(in srgb, var(--accent) 16%, transparent); border-color: var(--accent); }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  #canvasOverlay, .cv-card, .cv-card-hook, #canvasAddPanel { transition: none; }
+}
+/* Mobile: hide header center controls in tight space */
+@media (max-width: 520px) {
+  #canvasHeaderCenter { position: static; transform: none; }
+  .cv-zoom-label { display: none; }
+  .cv-btn-ghost { padding: 5px 7px; }
+  #canvasFolderName { max-width: 80px; }
+}
 
 /* ── VOCAB panel — v3.21 ─────────────────────────── */
 /* Vocab nav row — v3.36: My Words is active segment; All Words + Word Map are nav links */
@@ -16778,6 +17066,7 @@ function buildGrid() {
                       <div class="btn-group">
                         <button class="btn-icon btn-chat" onclick="event.stopPropagation();openSparkPanel(${c.id})" id="btnChat${c.id}" title="Spark">${CC_G.chat}</button>
                         <button class="btn-icon btn-note${localStorage.getItem('cc_note_'+c.id)?' has-note':''}" onclick="event.stopPropagation();_ccToggleNote(${c.id},this)" title="Note">${CC_G.note}</button>
+                        <button class="btn-icon btn-folder" onclick="event.stopPropagation();_folderPickerOpen(this,${c.id})" title="Add to folder">${CC_G.folder}</button>
                       </div>
                     </div>
                     <div class="card-actions-divider"></div>
@@ -16980,6 +17269,7 @@ const CC_G = {
   related: `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="3" cy="8" r="1.5"/><circle cx="13" cy="4" r="1.5"/><circle cx="13" cy="12" r="1.5"/><path d="M4.5 8l7-4M4.5 8l7 4"/></svg>`,
   chat:    `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13.5 9a4.5 4.5 0 01-6.18 4.16L2.5 14.5l.46-4.82A4.5 4.5 0 118.5 4.5h.5A4.5 4.5 0 0113.5 9z"/></svg>`,
   share:   `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v8M5 5l3-3 3 3"/><path d="M3 10v3a1 1 0 001 1h8a1 1 0 001-1v-3"/></svg>`,
+  folder:  `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4.5A1.5 1.5 0 013.5 3h3l1.5 2H12.5A1.5 1.5 0 0114 6.5v5A1.5 1.5 0 0112.5 13h-9A1.5 1.5 0 012 11.5v-7z"/><path d="M8 8v3M6.5 9.5l1.5-1.5 1.5 1.5"/></svg>`,
 };
 
 function toggleMaster(e, id) {
@@ -17750,6 +18040,7 @@ function _buildEpColumnHtml(catKey, catConcepts, col) {
             <div class="btn-group">
               <button class="btn-icon btn-chat" onclick="event.stopPropagation();openSparkPanel(${c.id})" id="btnChatEp${c.id}" title="Spark">${CC_G.chat}</button>
               <button class="btn-icon btn-note${localStorage.getItem('cc_note_'+c.id)?' has-note':''}" onclick="event.stopPropagation();_ccToggleNote(${c.id},this)" title="Note">${CC_G.note}</button>
+              <button class="btn-icon btn-folder" onclick="event.stopPropagation();_folderPickerOpen(this,${c.id})" title="Add to folder">${CC_G.folder}</button>
             </div>
           </div>
           <div class="card-actions-divider"></div>
@@ -18232,6 +18523,7 @@ function _renderThemeCard(c, prefix, col) {
           <div class="btn-group">
             <button class="btn-icon btn-chat" onclick="event.stopPropagation();openSparkPanel(${c.id})" id="btnChat${prefix}${c.id}" title="Spark">${CC_G.chat}</button>
             <button class="btn-icon btn-note${localStorage.getItem('cc_note_'+c.id)?' has-note':''}" onclick="event.stopPropagation();_ccToggleNote(${c.id},this)" title="Note">${CC_G.note}</button>
+            <button class="btn-icon btn-folder" onclick="event.stopPropagation();_folderPickerOpen(this,${c.id})" title="Add to folder">${CC_G.folder}</button>
           </div>
         </div>
         <div class="card-actions-divider"></div>
@@ -19307,6 +19599,7 @@ function setDrawerView(prefix, view, btn) {
           '<div class="btn-group">',
           '<button class="btn-icon btn-chat" onclick="event.stopPropagation();openSparkPanel(' + c.id + ')" id="btnChatAll' + c.id + '" title="Spark">' + CC_G.chat + '</button>',
           '<button class="btn-icon btn-note' + (localStorage.getItem('cc_note_'+c.id)?' has-note':'') + '" onclick="event.stopPropagation();_ccToggleNote(' + c.id + ',this)" title="Note">' + CC_G.note + '</button>',
+          '<button class="btn-icon btn-folder" onclick="event.stopPropagation();_folderPickerOpen(this,' + c.id + ')" title="Add to folder">' + CC_G.folder + '</button>',
           '</div>',
           '</div>',
           '<div class="card-actions-divider"></div>',
@@ -19542,6 +19835,7 @@ function _spRenderFilteredGrid(pool) {
                       <div class="btn-group">
                         <button class="btn-icon btn-chat" onclick="event.stopPropagation();openSparkPanel(${c.id})" id="btnChat${c.id}" title="Spark">${CC_G.chat}</button>
                         <button class="btn-icon btn-note${localStorage.getItem('cc_note_'+c.id)?' has-note':''}" onclick="event.stopPropagation();_ccToggleNote(${c.id},this)" title="Note">${CC_G.note}</button>
+                        <button class="btn-icon btn-folder" onclick="event.stopPropagation();_folderPickerOpen(this,${c.id})" title="Add to folder">${CC_G.folder}</button>
                       </div>
                     </div>
                     <div class="card-actions-divider"></div>
@@ -26128,6 +26422,7 @@ function _folderBuildItem(folder, _esc) {
         '<div class="folder-item-meta">' + metaParts.join(' · ') + '</div>' +
         (previewChips ? '<div class="folder-item-preview">' + previewChips + '</div>' : '') +
       '</div>' +
+      '<button class="folder-item-edit-btn" onclick="event.stopPropagation();_folderEdit(\'' + folder.id + '\')" title="Edit folder">✎</button>' +
       '<div class="folder-item-arrow">›</div>' +
     '</div>' +
     '<div class="folder-item-detail">' +
@@ -26189,6 +26484,7 @@ function _folderBuildDetailInner(folder, _esc) {
   html +=
     '<div class="folder-detail-actions">' +
       '<button class="folder-add-btn" onclick="_folderOpenSearch(\'' + fid + '\')">＋ Add concepts</button>' +
+      '<button class="folder-canvas-btn" onclick="_cvOpen(\'' + fid + '\')">⬡ Open Canvas</button>' +
       '<button class="folder-delete-btn" onclick="_folderConfirmDelete(\'' + fid + '\')">Delete folder</button>' +
     '</div>';
 
@@ -26198,6 +26494,97 @@ function _folderBuildDetailInner(folder, _esc) {
 // ══════════════════════════════════════════════════
 // FOLDERS — UI Interactions (v3.49)
 // ══════════════════════════════════════════════════
+
+// ── Folder inline edit — v3.51 ──────────────────────────────────────
+function _folderEdit(folderId) {
+  var item = document.getElementById('folderItem-' + folderId);
+  if (!item) return;
+  var folders = _foldersGet();
+  var f = folders.find(function(x) { return x.id === folderId; });
+  if (!f) return;
+  var _esc = function(s) { return (s||'').replace(/[<>&"]/g,function(ch){return{'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[ch];}); };
+
+  // Build emoji row
+  var emojiRow = _FOLDER_EMOJIS.map(function(em) {
+    return '<button class="folder-emoji-btn' + (em === (f.icon||_FOLDER_EMOJIS[0]) ? ' fe-selected' : '') + '" ' +
+      'onclick="event.stopPropagation();_folderEditPickEmoji(\'' + folderId + '\',this,\'' + em + '\')">' + em + '</button>';
+  }).join('');
+  var colorRow = _FOLDER_COLORS.map(function(col) {
+    return '<span class="folder-color-swatch folder-edit-swatch' + (col === (f.color||_FOLDER_COLORS[0]) ? ' fc-selected' : '') + '" ' +
+      'style="background:' + col + '" ' +
+      'onclick="event.stopPropagation();_folderEditPickColor(\'' + folderId + '\',this,\'' + col + '\')"></span>';
+  }).join('');
+
+  var mainEl = item.querySelector('.folder-item-main');
+  if (!mainEl) return;
+  var editForm = document.createElement('div');
+  editForm.className = 'folder-edit-form';
+  editForm.id = 'folderEditForm-' + folderId;
+  editForm.innerHTML =
+    '<div class="folder-edit-row">' +
+      '<input class="folder-edit-input" id="folderEditName-' + folderId + '" value="' + _esc(f.name) + '" maxlength="40" ' +
+        'onkeydown="if(event.key===\'Enter\')_folderSaveEdit(\'' + folderId + '\');if(event.key===\'Escape\')_folderCancelEdit(\'' + folderId + '\')" />' +
+      '<button class="folder-edit-save" onclick="_folderSaveEdit(\'' + folderId + '\')">Save</button>' +
+      '<button class="folder-edit-cancel" onclick="_folderCancelEdit(\'' + folderId + '\')">✕</button>' +
+    '</div>' +
+    '<div class="folder-emoji-row">' + emojiRow + '</div>' +
+    '<div class="folder-color-row">' + colorRow + '</div>';
+
+  mainEl.style.display = 'none';
+  item.insertBefore(editForm, item.querySelector('.folder-item-detail'));
+  var inp = editForm.querySelector('#folderEditName-' + folderId);
+  if (inp) { inp.focus(); inp.select(); }
+}
+
+// Temp state for edit-in-progress
+var _folderEditState = {};
+
+function _folderEditPickEmoji(folderId, btn, emoji) {
+  if (!_folderEditState[folderId]) _folderEditState[folderId] = {};
+  _folderEditState[folderId].icon = emoji;
+  var form = document.getElementById('folderEditForm-' + folderId);
+  if (form) form.querySelectorAll('.folder-emoji-btn').forEach(function(b) { b.classList.remove('fe-selected'); });
+  btn.classList.add('fe-selected');
+}
+
+function _folderEditPickColor(folderId, swatch, color) {
+  if (!_folderEditState[folderId]) _folderEditState[folderId] = {};
+  _folderEditState[folderId].color = color;
+  var form = document.getElementById('folderEditForm-' + folderId);
+  if (form) form.querySelectorAll('.folder-edit-swatch').forEach(function(b) { b.classList.remove('fc-selected'); });
+  swatch.classList.add('fc-selected');
+}
+
+function _folderSaveEdit(folderId) {
+  var inp = document.getElementById('folderEditName-' + folderId);
+  var name = inp ? (inp.value || '').trim() : '';
+  if (!name) { if (inp) { inp.style.borderColor = 'var(--power-color, #d4715a)'; inp.focus(); } return; }
+
+  var folders = _foldersGet();
+  var f = folders.find(function(x) { return x.id === folderId; });
+  if (!f) return;
+  f.name = name;
+  if (_folderEditState[folderId] && _folderEditState[folderId].icon) f.icon = _folderEditState[folderId].icon;
+  if (_folderEditState[folderId] && _folderEditState[folderId].color) f.color = _folderEditState[folderId].color;
+  f.updatedAt = Date.now();
+  delete _folderEditState[folderId];
+  _foldersSet(folders);
+
+  _folderCancelEdit(folderId); // restore main row
+  _folderRefreshItem(folderId);
+  _libUpdateAllTabCounts();
+  if (typeof _playSwapSFX === 'function') _playSwapSFX();
+}
+
+function _folderCancelEdit(folderId) {
+  var item = document.getElementById('folderItem-' + folderId);
+  if (!item) return;
+  var form = document.getElementById('folderEditForm-' + folderId);
+  if (form && form.parentNode) form.parentNode.removeChild(form);
+  var mainEl = item.querySelector('.folder-item-main');
+  if (mainEl) mainEl.style.display = '';
+  delete _folderEditState[folderId];
+}
 
 function _folderToggleCreate() {
   var wrap = document.getElementById('folderCreateWrap');
@@ -26492,6 +26879,437 @@ function _folderPickerGoCreate() {
 // Quick-add from related chip ＋ bubble
 function _folderChipQuickAdd(conceptId, btn) {
   _folderPickerOpen(btn, conceptId);
+}
+
+// ══════════════════════════════════════════════════
+// CANVAS — infinite spatial workspace per folder
+// v3.51
+// ══════════════════════════════════════════════════
+
+var _CV = {
+  folderId: null,
+  panX: 0, panY: 0,
+  zoom: 1,
+  panning: false,
+  panStartX: 0, panStartY: 0,
+  panOriginX: 0, panOriginY: 0,
+  dragCard: null,        // { el, conceptId, startPtrX, startPtrY, origX, origY }
+  layout: {},            // conceptId → { x, y }
+  arrowRafId: null
+};
+
+// ── Open / Close ─────────────────────────────────────────────────────
+
+function _cvOpen(folderId) {
+  var folders = _foldersGet();
+  var f = folders.find(function(x) { return x.id === folderId; });
+  if (!f) return;
+
+  _CV.folderId = folderId;
+  _CV.panX = 0; _CV.panY = 0; _CV.zoom = 1;
+  _CV.layout = (f.canvasLayout && typeof f.canvasLayout === 'object') ? JSON.parse(JSON.stringify(f.canvasLayout)) : {};
+
+  // Header
+  var emojiEl = document.getElementById('canvasFolderEmoji');
+  var nameEl  = document.getElementById('canvasFolderName');
+  if (emojiEl) emojiEl.textContent = f.icon || '\uD83D\uDCC2';
+  if (nameEl)  nameEl.textContent  = f.name || 'Folder';
+
+  // Show overlay
+  var overlay = document.getElementById('canvasOverlay');
+  if (!overlay) return;
+  overlay.classList.add('cv-open');
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() { overlay.classList.add('cv-visible'); });
+  });
+
+  // Lock body scroll
+  if (typeof _spLockBodyScroll === 'function') _spLockBodyScroll();
+
+  // Build cards
+  _cvBuildStage();
+  _cvApplyTransform();
+  _cvUpdateZoomLabel();
+  _cvUpdateEmpty();
+
+  // Bind events
+  _cvBindEvents();
+  if (typeof _playSwapSFX === 'function') _playSwapSFX();
+}
+
+function _cvClose() {
+  var overlay = document.getElementById('canvasOverlay');
+  if (!overlay) return;
+  overlay.classList.remove('cv-visible');
+  setTimeout(function() {
+    overlay.classList.remove('cv-open');
+    _cvCloseAdd();
+  }, 220);
+  if (typeof _spUnlockBodyScroll === 'function') _spUnlockBodyScroll();
+  _cvUnbindEvents();
+  if (_CV.arrowRafId) { cancelAnimationFrame(_CV.arrowRafId); _CV.arrowRafId = null; }
+}
+
+// ── Stage build ───────────────────────────────────────────────────────
+
+function _cvBuildStage() {
+  var stage = document.getElementById('canvasStage');
+  if (!stage) return;
+
+  // Clear existing cards (but keep SVG layer)
+  var oldCards = stage.querySelectorAll('.cv-card');
+  oldCards.forEach(function(el) { el.parentNode.removeChild(el); });
+
+  if (!_CV.folderId) return;
+  var folders = _foldersGet();
+  var f = folders.find(function(x) { return x.id === _CV.folderId; });
+  if (!f) return;
+
+  var conceptIds = Object.keys(_CV.layout).map(Number);
+  if (!conceptIds.length) return;
+
+  var _esc = function(s) { return (s||'').replace(/[<>&"]/g, function(ch){return{'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[ch];}); };
+
+  conceptIds.forEach(function(cid) {
+    var c = CONCEPTS && CONCEPTS.find(function(x) { return x.id === cid; });
+    if (!c) return;
+    var pos = _CV.layout[cid] || { x: 60, y: 60 };
+    var catColor = (typeof CAT_COLOR !== 'undefined' && CAT_COLOR[c.category]) || 'var(--accent)';
+    var catName = (CATEGORIES && CATEGORIES.find(function(x) { return x.id === c.category; }) || {}).name || c.category;
+
+    var card = document.createElement('div');
+    card.className = 'cv-card';
+    card.id = 'cvCard-' + cid;
+    card.setAttribute('data-concept-id', cid);
+    card.style.left = pos.x + 'px';
+    card.style.top  = pos.y + 'px';
+    card.style.setProperty('--cv-cat-color', catColor);
+    card.innerHTML =
+      '<div class="cv-card-term">' + _esc(c.term) + '</div>' +
+      '<div class="cv-card-cat">' + _esc(catName) + '</div>' +
+      '<div class="cv-card-hook">' + _esc(c.hook) + '</div>' +
+      '<div class="cv-card-actions">' +
+        '<button class="cv-card-btn" onclick="event.stopPropagation();closeLibrary();openSparkPanel(' + cid + ');_cvClose()" title="Spark">✦ Spark</button>' +
+        '<button class="cv-card-btn" onclick="event.stopPropagation();_cvClose();openLibrary();setTimeout(function(){_libToggleSaved(' + cid + ',document.getElementById(\'libTile-' + cid + '\'))},200)" title="Library">◱ View</button>' +
+        '<button class="cv-card-btn cv-card-btn-remove" onclick="event.stopPropagation();_cvRemoveCard(' + cid + ')" title="Remove from canvas">✕</button>' +
+      '</div>';
+
+    // Drag handling via pointer events
+    card.addEventListener('pointerdown', function(e) {
+      if (e.button !== 0) return;
+      if (e.target.closest('.cv-card-btn')) return;
+      e.stopPropagation();
+      e.preventDefault();
+      card.setPointerCapture(e.pointerId);
+      card.classList.add('cv-dragging');
+      var pos2 = _CV.layout[cid] || { x: 0, y: 0 };
+      _CV.dragCard = { el: card, conceptId: cid, startPtrX: e.clientX, startPtrY: e.clientY, origX: pos2.x, origY: pos2.y };
+    });
+
+    stage.appendChild(card);
+  });
+
+  _cvScheduleArrows();
+}
+
+// ── Transform ─────────────────────────────────────────────────────────
+
+function _cvApplyTransform() {
+  var stage = document.getElementById('canvasStage');
+  if (!stage) return;
+  stage.style.transform = 'translate(' + _CV.panX + 'px,' + _CV.panY + 'px) scale(' + _CV.zoom + ')';
+  _cvScheduleArrows();
+}
+
+function _cvUpdateZoomLabel() {
+  var lbl = document.getElementById('cvZoomLabel');
+  if (lbl) lbl.textContent = Math.round(_CV.zoom * 100) + '%';
+}
+
+function _cvZoom(delta) {
+  var container = document.getElementById('canvasContainer');
+  var rect = container ? container.getBoundingClientRect() : { width: window.innerWidth, height: window.innerHeight };
+  var cx = rect.width / 2;
+  var cy = rect.height / 2;
+  // Zoom toward center of viewport
+  var newZoom = Math.min(2.5, Math.max(0.25, _CV.zoom + delta));
+  var ratio = newZoom / _CV.zoom;
+  _CV.panX = cx - ratio * (cx - _CV.panX);
+  _CV.panY = cy - ratio * (cy - _CV.panY);
+  _CV.zoom = newZoom;
+  _cvApplyTransform();
+  _cvUpdateZoomLabel();
+}
+
+function _cvZoomReset() {
+  _CV.zoom = 1; _CV.panX = 0; _CV.panY = 0;
+  _cvApplyTransform();
+  _cvUpdateZoomLabel();
+}
+
+// ── Events ────────────────────────────────────────────────────────────
+
+var _cvBoundPointerMove = null;
+var _cvBoundPointerUp   = null;
+var _cvBoundWheel       = null;
+var _cvBoundKeyDown     = null;
+
+function _cvBindEvents() {
+  var container = document.getElementById('canvasContainer');
+  if (!container) return;
+
+  _cvBoundPointerMove = function(e) {
+    if (_CV.dragCard) {
+      var dx = (e.clientX - _CV.dragCard.startPtrX) / _CV.zoom;
+      var dy = (e.clientY - _CV.dragCard.startPtrY) / _CV.zoom;
+      var nx = _CV.dragCard.origX + dx;
+      var ny = _CV.dragCard.origY + dy;
+      _CV.dragCard.el.style.left = nx + 'px';
+      _CV.dragCard.el.style.top  = ny + 'px';
+      _CV.layout[_CV.dragCard.conceptId] = { x: nx, y: ny };
+      _cvScheduleArrows();
+      return;
+    }
+    if (_CV.panning) {
+      _CV.panX = _CV.panOriginX + (e.clientX - _CV.panStartX);
+      _CV.panY = _CV.panOriginY + (e.clientY - _CV.panStartY);
+      _cvApplyTransform();
+    }
+  };
+
+  _cvBoundPointerUp = function(e) {
+    if (_CV.dragCard) {
+      _CV.dragCard.el.classList.remove('cv-dragging');
+      _cvSaveLayout();
+      _CV.dragCard = null;
+      return;
+    }
+    if (_CV.panning) {
+      _CV.panning = false;
+      container.classList.remove('cv-panning');
+    }
+  };
+
+  _cvBoundWheel = function(e) {
+    e.preventDefault();
+    var delta = e.deltaY > 0 ? -0.08 : 0.08;
+    var rect = container.getBoundingClientRect();
+    var cx = e.clientX - rect.left;
+    var cy = e.clientY - rect.top;
+    var newZoom = Math.min(2.5, Math.max(0.25, _CV.zoom + delta));
+    var ratio = newZoom / _CV.zoom;
+    _CV.panX = cx - ratio * (cx - _CV.panX);
+    _CV.panY = cy - ratio * (cy - _CV.panY);
+    _CV.zoom = newZoom;
+    _cvApplyTransform();
+    _cvUpdateZoomLabel();
+  };
+
+  _cvBoundKeyDown = function(e) {
+    if (e.key === 'Escape') _cvClose();
+  };
+
+  container.addEventListener('pointermove', _cvBoundPointerMove);
+  container.addEventListener('pointerup',   _cvBoundPointerUp);
+  container.addEventListener('wheel',       _cvBoundWheel, { passive: false });
+  document.addEventListener('keydown',      _cvBoundKeyDown, { capture: true });
+
+  // Pan starts on container background (not on cards)
+  container.addEventListener('pointerdown', function(e) {
+    if (e.target !== container && e.target !== document.getElementById('canvasStage') && !e.target.closest('#canvasArrowLayer')) return;
+    if (e.button !== 0) return;
+    _CV.panning = true;
+    _CV.panStartX = e.clientX; _CV.panStartY = e.clientY;
+    _CV.panOriginX = _CV.panX; _CV.panOriginY = _CV.panY;
+    container.classList.add('cv-panning');
+  });
+}
+
+function _cvUnbindEvents() {
+  var container = document.getElementById('canvasContainer');
+  if (container) {
+    if (_cvBoundPointerMove) container.removeEventListener('pointermove', _cvBoundPointerMove);
+    if (_cvBoundPointerUp)   container.removeEventListener('pointerup',   _cvBoundPointerUp);
+    if (_cvBoundWheel)       container.removeEventListener('wheel',       _cvBoundWheel);
+  }
+  if (_cvBoundKeyDown) document.removeEventListener('keydown', _cvBoundKeyDown, { capture: true });
+  _cvBoundPointerMove = _cvBoundPointerUp = _cvBoundWheel = _cvBoundKeyDown = null;
+}
+
+// ── Arrows ────────────────────────────────────────────────────────────
+
+function _cvScheduleArrows() {
+  if (_CV.arrowRafId) return;
+  _CV.arrowRafId = requestAnimationFrame(function() {
+    _CV.arrowRafId = null;
+    _cvDrawArrows();
+  });
+}
+
+function _cvDrawArrows() {
+  var svg = document.getElementById('canvasArrowLayer');
+  if (!svg) return;
+  svg.innerHTML = '';
+
+  var onCanvas = Object.keys(_CV.layout).map(Number);
+  var drawn = {};
+
+  onCanvas.forEach(function(cid) {
+    var c = CONCEPTS && CONCEPTS.find(function(x) { return x.id === cid; });
+    if (!c || !c.related_ids) return;
+    c.related_ids.forEach(function(rid) {
+      if (onCanvas.indexOf(rid) === -1) return;
+      var key = cid < rid ? cid + '-' + rid : rid + '-' + cid;
+      if (drawn[key]) return;
+      drawn[key] = true;
+
+      var fromEl = document.getElementById('cvCard-' + cid);
+      var toEl   = document.getElementById('cvCard-' + rid);
+      if (!fromEl || !toEl) return;
+
+      // Center of each card in stage coordinates
+      var fx = (parseFloat(fromEl.style.left) || 0) + fromEl.offsetWidth  / 2 + 2000;
+      var fy = (parseFloat(fromEl.style.top)  || 0) + fromEl.offsetHeight / 2 + 2000;
+      var tx = (parseFloat(toEl.style.left)   || 0) + toEl.offsetWidth    / 2 + 2000;
+      var ty = (parseFloat(toEl.style.top)    || 0) + toEl.offsetHeight   / 2 + 2000;
+
+      // Quadratic bezier with slight curve
+      var mx = (fx + tx) / 2 - (ty - fy) * 0.15;
+      var my = (fy + ty) / 2 + (tx - fx) * 0.15;
+
+      var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.setAttribute('d', 'M' + fx + ',' + fy + ' Q' + mx + ',' + my + ' ' + tx + ',' + ty);
+      path.setAttribute('class', 'cv-arrow');
+      svg.appendChild(path);
+    });
+  });
+}
+
+// ── Persistence ───────────────────────────────────────────────────────
+
+function _cvSaveLayout() {
+  if (!_CV.folderId) return;
+  var folders = _foldersGet();
+  var f = folders.find(function(x) { return x.id === _CV.folderId; });
+  if (!f) return;
+  f.canvasLayout = JSON.parse(JSON.stringify(_CV.layout));
+  f.updatedAt = Date.now();
+  _foldersSet(folders);
+}
+
+// ── Auto-arrange ──────────────────────────────────────────────────────
+
+function _cvAutoArrange() {
+  var keys = Object.keys(_CV.layout).map(Number);
+  if (!keys.length) return;
+  var cols = Math.ceil(Math.sqrt(keys.length));
+  var gapX = 210; var gapY = 140; var startX = 60; var startY = 60;
+  keys.forEach(function(cid, i) {
+    var col = i % cols;
+    var row = Math.floor(i / cols);
+    var nx = startX + col * gapX;
+    var ny = startY + row * gapY;
+    _CV.layout[cid] = { x: nx, y: ny };
+    var card = document.getElementById('cvCard-' + cid);
+    if (card) { card.style.left = nx + 'px'; card.style.top = ny + 'px'; }
+  });
+  _cvSaveLayout();
+  _cvScheduleArrows();
+  if (typeof _playSwapSFX === 'function') _playSwapSFX();
+}
+
+// ── Remove card from canvas ───────────────────────────────────────────
+
+function _cvRemoveCard(conceptId) {
+  delete _CV.layout[conceptId];
+  var card = document.getElementById('cvCard-' + conceptId);
+  if (card && card.parentNode) card.parentNode.removeChild(card);
+  _cvSaveLayout();
+  _cvScheduleArrows();
+  _cvUpdateEmpty();
+  // Refresh add panel if open
+  var panel = document.getElementById('canvasAddPanel');
+  if (panel && panel.classList.contains('cv-add-open')) _cvAddSearch(document.getElementById('canvasAddSearch') ? document.getElementById('canvasAddSearch').value : '');
+}
+
+// ── Empty state ───────────────────────────────────────────────────────
+
+function _cvUpdateEmpty() {
+  var hint = document.getElementById('canvasEmptyHint');
+  if (!hint) return;
+  var hasCards = Object.keys(_CV.layout).length > 0;
+  hint.classList.toggle('cv-empty-show', !hasCards);
+}
+
+// ── Add panel ─────────────────────────────────────────────────────────
+
+function _cvOpenAdd() {
+  var panel = document.getElementById('canvasAddPanel');
+  if (!panel) return;
+  panel.classList.add('cv-add-open');
+  var inp = document.getElementById('canvasAddSearch');
+  if (inp) { inp.value = ''; inp.focus(); }
+  _cvAddSearch('');
+}
+
+function _cvCloseAdd() {
+  var panel = document.getElementById('canvasAddPanel');
+  if (panel) panel.classList.remove('cv-add-open');
+}
+
+function _cvAddSearch(q) {
+  var resultsEl = document.getElementById('canvasAddResults');
+  if (!resultsEl || !_CV.folderId) return;
+  var folders = _foldersGet();
+  var f = folders.find(function(x) { return x.id === _CV.folderId; });
+  if (!f) return;
+
+  var _esc = function(s) { return (s||'').replace(/[<>&"]/g, function(ch){return{'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[ch];}); };
+  var query = (q || '').trim().toLowerCase();
+
+  var concepts = (f.conceptIds || []).map(function(id) {
+    return CONCEPTS && CONCEPTS.find(function(x) { return x.id === id; });
+  }).filter(Boolean);
+
+  if (query) {
+    concepts = concepts.filter(function(c) {
+      return (c.term || '').toLowerCase().includes(query) || (c.category || '').toLowerCase().includes(query);
+    });
+  }
+
+  if (!concepts.length) {
+    resultsEl.innerHTML = '<div style="font-family:\'DM Sans\',sans-serif;font-size:0.65rem;color:var(--muted);padding:8px 4px;opacity:0.55;">No concepts in this folder yet.</div>';
+    return;
+  }
+
+  resultsEl.innerHTML = concepts.map(function(c) {
+    var onCanvas = !!_CV.layout[c.id];
+    var catColor = (typeof CAT_COLOR !== 'undefined' && CAT_COLOR[c.category]) || 'var(--accent)';
+    return '<div class="cv-add-row' + (onCanvas ? ' cv-on-canvas' : '') + '" onclick="_cvAddToggle(' + c.id + ')">' +
+      '<div class="cv-add-row-dot" style="background:' + catColor + '"></div>' +
+      '<span class="cv-add-row-term">' + _esc(c.term) + '</span>' +
+      '<span class="cv-add-row-cat">' + _esc(c.category) + '</span>' +
+      '<span class="cv-add-row-check">\u2713</span>' +
+    '</div>';
+  }).join('');
+}
+
+function _cvAddToggle(conceptId) {
+  if (_CV.layout[conceptId]) {
+    _cvRemoveCard(conceptId);
+  } else {
+    // Place at a cascaded position based on how many are already on canvas
+    var count = Object.keys(_CV.layout).length;
+    var cols = 4;
+    var col = count % cols;
+    var row = Math.floor(count / cols);
+    _CV.layout[conceptId] = { x: 60 + col * 210, y: 60 + row * 140 };
+    _cvBuildStage();
+    _cvUpdateEmpty();
+  }
+  _cvSaveLayout();
+  _cvAddSearch(document.getElementById('canvasAddSearch') ? document.getElementById('canvasAddSearch').value : '');
+  if (typeof _playSwapSFX === 'function') _playSwapSFX();
 }
 
 function _libToggleSaved(id, el) {
@@ -38956,6 +39774,44 @@ function _wcRenderMobileGrid(words) {
       <button class="ep-signup-success-btn" id="epSignupContinueBtn">Continue →</button>
       <button class="ep-signup-success-btn secondary" onclick="closeSignupModal()">Back to library</button>
     </div>
+  </div>
+</div>
+
+<!-- ── Canvas Overlay — v3.51 ── -->
+<div id="canvasOverlay" aria-hidden="true">
+  <div id="canvasHeader">
+    <div id="canvasHeaderLeft">
+      <span id="canvasFolderEmoji"></span>
+      <span id="canvasFolderName"></span>
+    </div>
+    <div id="canvasHeaderCenter">
+      <button class="cv-zoom-btn" id="cvZoomOut" onclick="_cvZoom(-0.15)" title="Zoom out">−</button>
+      <span class="cv-zoom-label" id="cvZoomLabel">100%</span>
+      <button class="cv-zoom-btn" id="cvZoomIn" onclick="_cvZoom(0.15)" title="Zoom in">+</button>
+      <button class="cv-zoom-btn cv-zoom-reset" onclick="_cvZoomReset()" title="Reset view">⌂</button>
+    </div>
+    <div id="canvasHeaderRight">
+      <button class="cv-btn-ghost" onclick="_cvAutoArrange()" title="Auto-arrange cards">Auto-arrange</button>
+      <button class="cv-btn-ghost" id="cvAddBtn" onclick="_cvOpenAdd()" title="Add concepts to canvas">＋ Add</button>
+      <button class="cv-close-btn" onclick="_cvClose()" title="Close canvas">✕</button>
+    </div>
+  </div>
+  <div id="canvasContainer">
+    <div id="canvasStage">
+      <svg id="canvasArrowLayer" aria-hidden="true"></svg>
+    </div>
+  </div>
+  <div id="canvasAddPanel">
+    <div id="canvasAddInner">
+      <input id="canvasAddSearch" class="cv-search-input" placeholder="Search concepts in this folder…" oninput="_cvAddSearch(this.value)" autocomplete="off" />
+      <div id="canvasAddResults"></div>
+    </div>
+  </div>
+  <div id="canvasEmptyHint">
+    <div class="cv-empty-icon">🗺</div>
+    <div class="cv-empty-title">Canvas is empty</div>
+    <div class="cv-empty-sub">Add concepts from this folder to start building your map</div>
+    <button class="cv-empty-btn" onclick="_cvOpenAdd()">＋ Add concepts</button>
   </div>
 </div>
 
