@@ -25,7 +25,7 @@
 <meta name="twitter:title" content="Epistemic. — Master the concepts that shape intelligent conversation" />
 <meta name="twitter:description" content="Turn podcast ideas into concept cards you actually keep. Plain definitions, real analogies, Spark prompts to use them in conversation." />
 <meta name="twitter:image" content="https://epistemic.live/og-image.png" />
-<meta name="theme-color" content="#111210" id="themeColorMeta">
+<meta name="theme-color" content="#0d0d0d" id="themeColorMeta">
 <meta name="google-site-verification" content="AsMIpquI-8CtsrdyL_yEDVkQMUaFL3CSaCpxtL4u-HQ" />
 <script>
   (function(){
@@ -97,7 +97,7 @@
   }
 
   :root {
-    --bg: #111210;
+    --bg: #0d0d0d;
     --surface: #141414;
     --surface2: #1c1c1c;
     --border: rgba(255,255,255,0.07);
@@ -4601,7 +4601,7 @@
   @media (max-width: 768px) { .nav-library-btn { display: none !important; } }
   [data-theme="light"] .nav-library-btn:hover { background: rgba(61,107,82,0.06); }
 
-  /* CENTER ISLAND — editorial text links, no pill container */
+  /* CENTER ISLAND — editorial text links v3.42 */
   .nav-island {
     display: flex;
     align-items: center;
@@ -4613,59 +4613,101 @@
 
   .nav-link {
     font-family: 'DM Mono', monospace;
-    font-size: 0.72rem;
-    letter-spacing: 0.1em;
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--muted2);
-    text-decoration: underline;
-    text-decoration-color: transparent;
-    text-underline-offset: 4px;
-    text-decoration-thickness: 1px;
-    padding: 7px 14px;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 8px 13px;
     border-radius: 0;
-    transition: color 0.18s, text-decoration-color 0.18s, transform 0.15s ease;
-    white-space: nowrap;
     cursor: pointer;
-    background: none;
+    background: none !important; /* kill any browser default */
     border: none;
     position: relative;
+    white-space: nowrap;
+    transition: color 0.22s ease, letter-spacing 0.22s ease;
   }
-  /* Dot separator between links — using CSS ::after pseudo, hidden on last child */
+  /* Animated accent underline via ::before — slides in on hover */
+  .nav-link::before {
+    content: '';
+    position: absolute;
+    bottom: 3px;
+    left: 13px;
+    right: 13px;
+    height: 1px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.28s cubic-bezier(0.22,1,0.36,1);
+    opacity: 0.55;
+  }
+  /* Dot separator */
   .nav-island .nav-link:not(:last-of-type)::after {
     content: '·';
     position: absolute;
-    right: -2px;
+    right: -1px;
+    top: 50%;
+    transform: translateY(-50%);
     color: var(--muted);
-    opacity: 0.4;
-    font-size: 0.8rem;
+    opacity: 0.3;
+    font-size: 0.75rem;
     pointer-events: none;
   }
-  .nav-link:hover {
+  .nav-link:hover, .nav-link:focus-visible {
     color: var(--text);
-    text-decoration-color: var(--border-hover);
-    background: none;
-    transform: none;
+    letter-spacing: 0.15em;
+    background: none !important;
+    outline: none;
   }
-  .nav-link:active { transform: translateY(0); }
+  .nav-link:hover::before { transform: scaleX(1); }
+  .nav-link:active { opacity: 0.7; }
   .nav-link.nav-link--active {
-    color: var(--accent);
-    text-decoration-color: rgba(61,107,82,0.35);
+    color: var(--text);
   }
-  [data-theme="light"] .nav-link.nav-link--active {
-    text-decoration-color: rgba(61,107,82,0.3);
+  .nav-link.nav-link--active::before {
+    transform: scaleX(1);
+    opacity: 0.4;
   }
-  /* Home in center island — slightly distinct: separator + subtle pill */
+  /* Home — left rule separates it from the modes cluster */
   .nav-home-center-btn {
-    margin-left: 6px;
-    padding-left: 16px;
-    border-left: 0.5px solid var(--border-hover);
+    margin-left: 4px;
+    padding-left: 15px;
+    border-left: 0.5px solid rgba(255,255,255,0.1);
   }
-  .nav-home-center-btn .nav-home-emoji {
-    font-size: 0.8rem;
-    opacity: 0.7;
-    transition: opacity 0.18s;
+  [data-theme="light"] .nav-home-center-btn {
+    border-left-color: rgba(0,0,0,0.12);
   }
-  .nav-home-center-btn:hover .nav-home-emoji { opacity: 1; }
+  /* All nav-island emojis: hidden by default, slide in on hover — uniform pattern */
+  .nav-listen-emoji,
+  .nav-read-emoji,
+  .nav-write-emoji,
+  .nav-speak-emoji,
+  .nav-home-emoji {
+    display: inline-block;
+    opacity: 0;
+    max-width: 0;
+    overflow: hidden;
+    vertical-align: middle;
+    line-height: 1;
+    font-size: 0.78rem;
+    margin-right: 0;
+    transition: opacity 0.28s ease, max-width 0.28s ease, margin-right 0.28s ease;
+  }
+  .nav-listen-btn:hover .nav-listen-emoji,
+  .nav-read-btn:hover .nav-read-emoji,
+  .nav-write-btn:hover .nav-write-emoji,
+  .nav-speak-btn:hover .nav-speak-emoji,
+  .nav-home-center-btn:hover .nav-home-emoji {
+    opacity: 1;
+    max-width: 1.4em;
+    margin-right: 4px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .nav-link::before { transition: none; }
+    .nav-link { transition: color 0.1s; }
+    .nav-listen-emoji, .nav-read-emoji, .nav-write-emoji,
+    .nav-speak-emoji, .nav-home-emoji { transition: none; }
+  }
 
   /* Theme toggle — pill matching Home button */
   .nav-theme-pill {
@@ -27975,7 +28017,7 @@ function toggleTheme() {
 
   // Update meta theme-color for mobile browser chrome
   const meta = document.getElementById('themeColorMeta');
-  if (meta) meta.content = next === 'light' ? '#f7f3ec' : '#111210';
+  if (meta) meta.content = next === 'light' ? '#f7f3ec' : '#0d0d0d';
 
   // Update theme toggle pill label
   const toggleLabel = document.getElementById('navThemeLabel');
@@ -28681,9 +28723,11 @@ function playStreakMilestoneSFX() {
 
 /* While nav-hover-ready not yet set: suppress all hover transitions so nothing flickers on load */
 #mainNav:not(.nav-hover-ready) .nav-epic-standalone,
+#mainNav:not(.nav-hover-ready) .nav-listen-emoji,
 #mainNav:not(.nav-hover-ready) .nav-read-emoji,
 #mainNav:not(.nav-hover-ready) .nav-write-emoji,
 #mainNav:not(.nav-hover-ready) .nav-speak-emoji,
+#mainNav:not(.nav-hover-ready) .nav-home-emoji,
 #mainNav:not(.nav-hover-ready) .nav-spark-emoji,
 #mainNav:not(.nav-hover-ready) .nav-browse-emoji,
 #mainNav:not(.nav-hover-ready) .nav-stash-emoji,
@@ -28729,27 +28773,7 @@ function playStreakMilestoneSFX() {
   max-width: 1.4em;
   margin-right: 4px;
 }
-/* v2.94: Read · Write · Speak hover emojis */
-.nav-read-emoji,
-.nav-write-emoji,
-.nav-speak-emoji {
-  display: inline-block;
-  opacity: 0;
-  max-width: 0;
-  overflow: hidden;
-  vertical-align: middle;
-  line-height: 1;
-  transition: opacity 0.35s ease, max-width 0.35s ease, margin-right 0.35s ease;
-  margin-right: 0;
-  font-size: 0.8rem;
-}
-.nav-read-btn:hover .nav-read-emoji,
-.nav-write-btn:hover .nav-write-emoji,
-.nav-speak-btn:hover .nav-speak-emoji {
-  opacity: 1;
-  max-width: 1.4em;
-  margin-right: 4px;
-}
+/* v2.94 emoji rules moved to nav island CSS block v3.42 */
 
 /* ── v2.5: Spark panel header ── */
 .spark-panel-header {
@@ -35029,11 +35053,11 @@ function _convOpenCSById(id) {
       position:  'below'
     },
     {
-      targetSel: '.nav-read-btn',
+      targetSel: '.nav-write-btn',
       arrow:     'arrow-top',
       label:     'Three ways to make ideas stick',
       desc:      'Read builds your vocabulary. Write practises it. Speak turns it into conversation.',
-      position:  'below'
+      position:  'below-modes'
     },
     {
       targetSel: '.nav-home-center-btn',
@@ -35071,6 +35095,16 @@ function _convOpenCSById(id) {
       el.style.left = (rect.right + GAP) + 'px';
       el.style.top  = (rect.top + rect.height / 2) + 'px';
       el.style.transform = 'translateY(-50%)';
+    } else if (position === 'below-modes') {
+      // Centre the tooltip across the Read · Write · Speak cluster
+      var r  = document.querySelector('.nav-read-btn');
+      var s  = document.querySelector('.nav-speak-btn');
+      var rR = r  ? r.getBoundingClientRect()  : rect;
+      var sR = s  ? s.getBoundingClientRect()  : rect;
+      var midX = (rR.left + sR.right) / 2;
+      el.style.left      = midX + 'px';
+      el.style.top       = (rect.bottom + GAP) + 'px';
+      el.style.transform = 'translateX(-50%)';
     } else if (position === 'below') {
       el.style.left = (rect.left + rect.width / 2) + 'px';
       el.style.top  = (rect.bottom + GAP) + 'px';
@@ -37309,7 +37343,7 @@ function _wcRenderMobileGrid(words) {
   border: 1px solid var(--border-hover);
   border-radius: 14px;
   width: 100%;
-  max-width: 580px;
+  max-width: 440px;
   position: relative;
   overflow: hidden;
   transform: translateY(14px);

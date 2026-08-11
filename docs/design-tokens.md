@@ -19,7 +19,7 @@ Dark, editorial, minimal. The aesthetic is a cross between Modern Wisdom's websi
 
 | Token | Hex | Usage |
 |-------|-----|-------|
-| `--bg` | `#111210` | Main page background — warm charcoal (updated v3.42, was `#0d0d0d`) |
+| `--bg` | `#0d0d0d` | Main page background — pure near-black. Intentional: `#111210` (warm charcoal) was tried v3.42 and reverted same session — too warm for dark mode, keep as reference only. |
 | `--surface` | `#141414` | Card backgrounds, elevated surfaces |
 | `--surface2` | `#1c1c1c` | Secondary surfaces, hover states, pills |
 | `--text` | `#f0ede8` | Primary text (warm off-white, not pure white) |

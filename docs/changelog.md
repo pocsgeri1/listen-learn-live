@@ -6,6 +6,16 @@
 
 ---
 
+## v3.43 — 2026-08-11 · Nav hover redesign, emoji fix, tour centering, bg revert
+
+### index.html
+- **Nav hover redesign:** Removed rectangular background on hover entirely. New mechanic: text brightens (`--muted → --text`) + letter-spacing expands (`0.12em → 0.15em`) + a 1px accent underline slides in left-to-right via `::before scaleX(0→1)` transition. No background ever.
+- **Nav emojis unified:** All 5 island links (Listen/Read/Write/Speak/Home) now use identical hidden-by-default / reveal-on-hover pattern. Removed old duplicate v2.94 block.
+- **Listen + Home emojis hidden by default** — consistent with Read/Write/Speak. Only text visible at rest.
+- **Tour step 2 centered across modes:** Tooltip now uses `below-modes` position — measures Read + Speak bounding rects, places tooltip at the midpoint. Targets `.nav-write-btn` (middle button) for bottom reference.
+- **Dark bg reverted:** `#111210 → #0d0d0d`. Tried and reverted same session (too warm for dark). Light bg `#f7f3ec` kept.
+- **Modal width reverted:** `580px → 440px`. Copy changes kept.
+
 ## v3.42 — 2026-08-11 · Nav 5-link island (Listen+Home), modal copy, bg colors, tour rewrite
 
 ### index.html
