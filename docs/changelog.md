@@ -6,6 +6,27 @@
 
 ---
 
+## v3.57 — 2026-08-11 · Phase 7 — Board sharing + Phase 4 missed items
+
+### index.html
+- **Board sharing (`_cvShare`, `_cvShareToast`):** New ⤴ Share button in canvas header. Encodes entire folder as base64 JSON → `?import=` URL param. Copies link to clipboard; falls back to `prompt()` on iOS. Toast notification on success.
+- **Import board (`_showImportBanner`, `_importBoard`, `_dismissImportBanner`):** On page load, detects `?import=` param, decodes and parses the folder, shows a fixed top banner with folder emoji, name, concept count, vocab count, and "Import" button. Imports into local folders storage with a fresh timestamp ID. Cleans the URL after parsing.
+- **Canvas deep link (`#canvas-{folderId}`):** Opening a canvas now sets `window.location.hash = '#canvas-{id}'`. Closing clears the hash. On page load, hash is detected and the corresponding canvas opens automatically.
+- **Mobile pinch-to-zoom:** Two-pointer `touchmove` on `#canvasContainer` computes pinch distance ratio and applies zoom toward the midpoint between fingers — same range and pan-update logic as wheel zoom. Uses `{ passive: false }` to allow `preventDefault()` on two-finger scroll.
+- **Connections toggle (`_cvToggleArrows`):** ⌁ Connections button in canvas header. Toggles `canvasArrowLayer` opacity 0 ↔ 1 and dims the button via `.cv-btn-off` when hidden.
+- **PNG export (`_cvExportPNG`):** ⬇ Export button in canvas header. Lazy-loads html2canvas 1.4.1 from cdnjs on first click. Captures `#canvasContainer` at 1× scale with the current background color. Downloads as `{folder-name}.png`.
+- **4 new CSS classes:** `.cv-header-btn`, `.cv-toast`, `.import-banner` (+ inner/text/btn/dismiss), `.cv-btn-off`
+
+## v3.56 — 2026-08-11 · Phase 3 missed — + Folder on all vocab surfaces
+
+### index.html
+- **Vocab folder picker (`_vocabFolderPickerOpen`, `_vocabFolderPickerBuildHtml`, `_vocabFolderToggle`):** New parallel to concept folder picker but for vocab words. Stores words as objects `{ word, definition, category, colId }` in `folder.vocabWords[]`. Same popover UI as concept picker. Checks for existing entry by `w.word` matching.
+- **GV word rows (Word Map list):** ＋ Folder button added to each word row's actions area alongside "Add to Lexi" and "↗ episode". Calls `_vocabFolderPickerOpen`.
+- **Word Map lane chip popover:** Lane def popover now wraps "Add to Lexi" and new folder button inside `.wc-lane-pop-actions` flex row. Close button curly-quote replaced with HTML entity.
+- **Word Cloud tooltip:** Folder button added to the `srcRow` flex strip alongside "Add to Lexi" and "↗ episode". Uses same `.wc-tt-folder` style.
+- **Lexi panel word rows:** Folder icon button (`.lexi-folder-btn`) added before the heart/remove buttons. Hidden until row hover; reveals at 42% opacity, accent on hover. Calls `_vocabFolderPickerOpen`.
+- **5 new CSS classes:** `.lexi-folder-btn`, `.gv-folder-btn`, `.wc-tt-folder`, `.wc-lane-pop-actions`, `.wc-lane-pop-folder`
+
 ## v3.54 — 2026-08-11 · Phase 5 — Canvas element types: Note, Label, Vocab, YT Clip, Link
 
 ### index.html

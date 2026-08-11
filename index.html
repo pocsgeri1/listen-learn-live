@@ -11210,6 +11210,110 @@
 .cv-close-btn:hover { background: color-mix(in srgb, var(--accent) 10%, transparent); color: var(--accent); }
 [data-theme="light"] #canvasHeader { background: rgba(255,255,255,0.95); }
 
+/* Canvas header action buttons — share, connections, export */
+.cv-header-btn {
+  height: 26px; padding: 0 9px; border-radius: 5px;
+  background: none; border: 0.5px solid var(--border);
+  color: var(--muted); cursor: pointer; font-size: 0.7rem;
+  display: flex; align-items: center; gap: 4px;
+  font-family: 'DM Mono', monospace; letter-spacing: 0.03em;
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+  white-space: nowrap;
+}
+.cv-header-btn:hover { border-color: var(--accent); color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, transparent); }
+.cv-header-btn.cv-btn-off { opacity: 0.38; }
+.cv-header-btn.cv-btn-off:hover { opacity: 0.7; }
+
+/* Canvas toast notification */
+.cv-toast {
+  position: fixed; bottom: 88px; left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  background: rgba(30,30,30,0.96); color: var(--text);
+  padding: 9px 18px; border-radius: 8px;
+  font: 500 13px/1 'DM Sans', sans-serif;
+  opacity: 0; transition: opacity 0.22s, transform 0.22s;
+  z-index: 10100; pointer-events: none;
+  border: 0.5px solid var(--border);
+}
+.cv-toast.cv-toast-show { opacity: 1; transform: translateX(-50%) translateY(0); }
+[data-theme="light"] .cv-toast { background: rgba(20,20,20,0.92); }
+
+/* Import board banner */
+.import-banner {
+  position: fixed; top: 72px; left: 50%;
+  transform: translateX(-50%) translateY(-14px);
+  opacity: 0; transition: opacity 0.28s, transform 0.28s;
+  z-index: 9900; pointer-events: none;
+}
+.import-banner.import-banner-show { opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: auto; }
+.import-banner-inner {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 12px 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.42);
+  min-width: 280px; max-width: 440px;
+}
+.import-banner-icon { font-size: 22px; flex-shrink: 0; }
+.import-banner-text { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+.import-banner-text strong { font: 600 14px/1.2 'DM Sans', sans-serif; color: var(--text); }
+.import-banner-text span { font: 400 12px/1.2 'DM Sans', sans-serif; color: var(--muted); }
+.import-banner-btn {
+  background: var(--accent); color: #0d0d0d;
+  border: none; border-radius: 7px; padding: 7px 16px;
+  font: 600 13px/1 'DM Sans', sans-serif; cursor: pointer; flex-shrink: 0;
+  transition: opacity 0.15s;
+}
+.import-banner-btn:hover { opacity: 0.85; }
+.import-banner-dismiss {
+  background: none; border: none; color: var(--muted);
+  cursor: pointer; font-size: 16px; padding: 4px; flex-shrink: 0; line-height: 1;
+}
+.import-banner-dismiss:hover { color: var(--text); }
+[data-theme="light"] .import-banner-inner { box-shadow: 0 8px 32px rgba(0,0,0,0.13); }
+
+/* Lexi panel folder button */
+.lexi-folder-btn {
+  background: none; border: none; color: var(--muted);
+  cursor: pointer; padding: 2px 4px; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity 0.15s, color 0.15s;
+}
+.lexi-folder-btn svg { width: 13px; height: 13px; }
+.lexi-word-row-top:hover .lexi-folder-btn { opacity: 0.42; }
+.lexi-folder-btn:hover { opacity: 1 !important; color: var(--accent); }
+
+/* GV word map — folder button on rows */
+.gv-folder-btn {
+  background: none; border: 1px solid var(--border); border-radius: 5px;
+  color: var(--muted); cursor: pointer; font-size: 12px;
+  padding: 4px 9px; display: flex; align-items: center; gap: 4px;
+  transition: background 0.13s, color 0.13s;
+}
+.gv-folder-btn svg { width: 11px; height: 11px; }
+.gv-folder-btn:hover { background: color-mix(in srgb, var(--accent) 8%, transparent); color: var(--accent); border-color: var(--accent); }
+
+/* Word cloud tooltip folder button */
+.wc-tt-folder {
+  background: none; border: 1px solid var(--border); border-radius: 5px;
+  color: var(--muted); cursor: pointer; font-size: 12px;
+  padding: 4px 9px; display: flex; align-items: center;
+  transition: background 0.13s, color 0.13s; line-height: 1;
+  flex-shrink: 0;
+}
+.wc-tt-folder svg { width: 11px; height: 11px; }
+.wc-tt-folder:hover { background: color-mix(in srgb, var(--accent) 8%, transparent); color: var(--accent); border-color: var(--accent); }
+
+/* Word Map lane popover — actions row + folder btn */
+.wc-lane-pop-actions { display: flex; gap: 8px; align-items: center; margin-top: 10px; }
+.wc-lane-pop-folder {
+  background: none; border: 1px solid var(--border); border-radius: 5px;
+  color: var(--muted); cursor: pointer; font-size: 13px;
+  padding: 5px 9px; display: flex; align-items: center;
+  transition: background 0.13s, color 0.13s; line-height: 1;
+}
+.wc-lane-pop-folder svg { width: 13px; height: 13px; }
+.wc-lane-pop-folder:hover { background: color-mix(in srgb, var(--accent) 8%, transparent); color: var(--accent); border-color: var(--accent); }
+
 /* Canvas container + stage */
 #canvasContainer {
   flex: 1; position: relative; overflow: hidden;
@@ -27181,6 +27285,80 @@ function _folderChipQuickAdd(conceptId, btn) {
   _folderPickerOpen(btn, conceptId);
 }
 
+// ── Vocab word → folder picker ────────────────────────────────────────
+var _fpVocabWord = null;
+
+function _vocabFolderPickerOpen(anchorEl, word, def, category, colId) {
+  _fpVocabWord = { word: word, def: def || '', category: category || '', colId: colId || null };
+  _folderPickerClose();
+  var bd = document.createElement('div');
+  bd.id = 'fpBackdrop';
+  bd.onclick = _folderPickerClose;
+  document.body.appendChild(bd);
+  var pop = document.createElement('div');
+  pop.id = 'folderPickerPopover';
+  var isMobile = window.innerWidth <= 700;
+  if (isMobile) { pop.classList.add('fp-mobile'); bd.classList.add('fp-mobile-bg'); }
+  pop.innerHTML = _vocabFolderPickerBuildHtml(word);
+  document.body.appendChild(pop);
+  if (!isMobile) {
+    var rect = anchorEl.getBoundingClientRect ? anchorEl.getBoundingClientRect() : { bottom: 0, left: 0, top: 0 };
+    var popH = 280;
+    var spaceBelow = window.innerHeight - rect.bottom;
+    var top = spaceBelow >= popH ? rect.bottom + 6 : rect.top - popH - 6;
+    var left = Math.min(rect.left, window.innerWidth - 242);
+    pop.style.top = Math.max(8, top) + 'px';
+    pop.style.left = Math.max(8, left) + 'px';
+  } else {
+    pop.style.bottom = '0'; pop.style.left = '0'; pop.style.right = '0'; pop.style.width = '100%';
+  }
+}
+
+function _vocabFolderPickerBuildHtml(word) {
+  var _esc = function(s) { return (s||'').replace(/[<>&"]/g, function(ch){return{'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[ch];}); };
+  var folders = _foldersGet();
+  var escapedWord = word.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+  var rows = '';
+  if (!folders.length) {
+    rows = '<div class="fp-empty">No folders yet.</div>' +
+      '<div class="fp-footer"><button class="fp-create-btn" onclick="_folderPickerGoCreate()">+ Create your first folder</button></div>';
+  } else {
+    rows = folders.map(function(f) {
+      var inFolder = f.vocabWords && f.vocabWords.some(function(w) { return (w.word || w) === word; });
+      return '<div class="fp-row' + (inFolder ? ' fp-checked' : '') + '" onclick="_vocabFolderToggle(\'' + escapedWord + '\',\'' + f.id + '\')">' +
+        '<span class="fp-row-color" style="background:' + (f.color || 'var(--accent)') + '"></span>' +
+        '<span class="fp-row-emoji">' + (f.emoji || '\uD83D\uDCC2') + '</span>' +
+        '<span class="fp-row-name">' + _esc(f.name) + '</span>' +
+        '<span class="fp-row-check">' + (inFolder ? '\u2713' : '') + '</span>' +
+      '</div>';
+    }).join('') +
+    '<div class="fp-footer"><button class="fp-create-btn" onclick="_folderPickerGoCreate()">+ New folder</button></div>';
+  }
+  return '<div class="fp-header"><span class="fp-title">' + _esc(word) + '</span>' +
+    '<button class="fp-close" onclick="_folderPickerClose()">&#x2715;</button></div>' +
+    '<div class="fp-list">' + rows + '</div>';
+}
+
+function _vocabFolderToggle(word, folderId) {
+  var folders = _foldersGet();
+  var f = folders.find(function(x) { return x.id === folderId; });
+  if (!f) return;
+  if (!f.vocabWords) f.vocabWords = [];
+  var idx = f.vocabWords.findIndex(function(w) { return (w.word || w) === word; });
+  if (idx !== -1) {
+    f.vocabWords.splice(idx, 1);
+  } else {
+    var vd = _fpVocabWord || { word: word, def: '', category: '', colId: null };
+    f.vocabWords.push({ word: vd.word, definition: vd.def, category: vd.category, colId: vd.colId });
+  }
+  _foldersSet(folders);
+  if (typeof _playSwapSFX === 'function') _playSwapSFX();
+  var pop = document.getElementById('folderPickerPopover');
+  if (pop) pop.innerHTML = _vocabFolderPickerBuildHtml(word);
+  if (typeof _libUpdateAllTabCounts === 'function') _libUpdateAllTabCounts();
+  _folderRefreshItem(folderId);
+}
+
 // ══════════════════════════════════════════════════
 // CANVAS — infinite spatial workspace per folder
 // v3.51
@@ -27218,6 +27396,9 @@ function _cvOpen(folderId) {
   if (emojiEl) emojiEl.textContent = f.icon || '\uD83D\uDCC2';
   if (nameEl)  nameEl.textContent  = f.name || 'Folder';
 
+  // Update URL hash for deep linking
+  history.replaceState(null, '', '#canvas-' + folderId);
+
   // Show overlay
   var overlay = document.getElementById('canvasOverlay');
   if (!overlay) return;
@@ -27251,6 +27432,137 @@ function _cvClose() {
   if (typeof _spUnlockBodyScroll === 'function') _spUnlockBodyScroll();
   _cvUnbindEvents();
   if (_CV.arrowRafId) { cancelAnimationFrame(_CV.arrowRafId); _CV.arrowRafId = null; }
+  // Clear URL hash
+  history.replaceState(null, '', window.location.pathname + window.location.search);
+}
+
+// ── Connections toggle ────────────────────────────────────────────────
+var _cvArrowsVisible = true;
+function _cvToggleArrows() {
+  _cvArrowsVisible = !_cvArrowsVisible;
+  var svg = document.getElementById('canvasArrowLayer');
+  if (svg) svg.style.opacity = _cvArrowsVisible ? '' : '0';
+  var btn = document.getElementById('cvArrowToggle');
+  if (btn) btn.classList.toggle('cv-btn-off', !_cvArrowsVisible);
+}
+
+// ── PNG export ────────────────────────────────────────────────────────
+function _cvExportPNG() {
+  var container = document.getElementById('canvasContainer');
+  if (!container) return;
+  var btn = document.getElementById('cvExportBtn');
+  function doExport() {
+    if (typeof html2canvas === 'undefined') {
+      var s = document.createElement('script');
+      s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+      s.onload = doExport;
+      document.head.appendChild(s);
+      return;
+    }
+    if (btn) { btn.textContent = '…'; btn.disabled = true; }
+    var bg = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim() || '#0d0d0d';
+    html2canvas(container, { backgroundColor: bg, useCORS: true, scale: 1 }).then(function(canvas) {
+      var link = document.createElement('a');
+      var folders = _foldersGet();
+      var f = folders.find(function(x) { return x.id === _CV.folderId; });
+      link.download = (f ? f.name.replace(/[^a-z0-9]/gi, '-') : 'canvas') + '.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      if (btn) { btn.innerHTML = '\u2B07 Export'; btn.disabled = false; }
+    }).catch(function() {
+      if (btn) { btn.innerHTML = '\u2B07 Export'; btn.disabled = false; }
+    });
+  }
+  doExport();
+}
+
+// ── Share board ───────────────────────────────────────────────────────
+function _cvShare() {
+  var folders = _foldersGet();
+  var f = folders.find(function(x) { return x.id === _CV.folderId; });
+  if (!f) return;
+  try {
+    var data = JSON.stringify(f);
+    var b64 = btoa(unescape(encodeURIComponent(data)));
+    var url = window.location.origin + window.location.pathname + '?import=' + b64;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(function() {
+        _cvShareToast('\u2713 Link copied to clipboard');
+      }).catch(function() { _cvSharePrompt(url); });
+    } else {
+      _cvSharePrompt(url);
+    }
+  } catch(e) { _cvShareToast('Could not generate share link'); }
+}
+
+function _cvShareToast(msg) {
+  var t = document.createElement('div');
+  t.className = 'cv-toast';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  requestAnimationFrame(function() { requestAnimationFrame(function() { t.classList.add('cv-toast-show'); }); });
+  setTimeout(function() {
+    t.classList.remove('cv-toast-show');
+    setTimeout(function() { if (t.parentNode) t.parentNode.removeChild(t); }, 300);
+  }, 2400);
+}
+
+function _cvSharePrompt(url) {
+  prompt('Copy this link to share your board:', url);
+}
+
+// ── Import board from shared URL ──────────────────────────────────────
+function _showImportBanner(folder) {
+  var existing = document.getElementById('importBanner');
+  if (existing && existing.parentNode) existing.parentNode.removeChild(existing);
+  var conceptCount = (folder.conceptIds || []).length;
+  var vocabCount   = (folder.vocabWords  || []).length;
+  var banner = document.createElement('div');
+  banner.id = 'importBanner';
+  banner.className = 'import-banner';
+  banner.innerHTML =
+    '<div class="import-banner-inner">' +
+    '<span class="import-banner-icon">' + (folder.emoji || '\uD83D\uDCC2') + '</span>' +
+    '<div class="import-banner-text">' +
+    '<strong>' + (folder.name || 'Board') + '</strong>' +
+    '<span>' + conceptCount + ' concept' + (conceptCount !== 1 ? 's' : '') +
+    (vocabCount ? ' \u00B7 ' + vocabCount + ' word' + (vocabCount !== 1 ? 's' : '') : '') + '</span>' +
+    '</div>' +
+    '<button class="import-banner-btn" onclick="_importBoard()">Import</button>' +
+    '<button class="import-banner-dismiss" onclick="_dismissImportBanner()" aria-label="Dismiss">&#x2715;</button>' +
+    '</div>';
+  document.body.appendChild(banner);
+  requestAnimationFrame(function() { requestAnimationFrame(function() { banner.classList.add('import-banner-show'); }); });
+  window._pendingImportFolder = folder;
+}
+
+function _importBoard() {
+  var folder = window._pendingImportFolder;
+  if (!folder) return;
+  var folders = _foldersGet();
+  // Assign new ID to avoid collision
+  folder.id = 'f' + Date.now();
+  folder.createdAt = new Date().toISOString();
+  folder.updatedAt = new Date().toISOString();
+  folders.push(folder);
+  _foldersSet(folders);
+  _dismissImportBanner();
+  if (typeof _libUpdateAllTabCounts === 'function') _libUpdateAllTabCounts();
+  _cvShareToast('\u2713 Board imported!');
+  window._pendingImportFolder = null;
+  // Open library folders tab
+  if (typeof openLibrary === 'function') openLibrary();
+  setTimeout(function() {
+    if (typeof _libSwitchTab === 'function') _libSwitchTab('folders');
+  }, 80);
+}
+
+function _dismissImportBanner() {
+  var banner = document.getElementById('importBanner');
+  if (!banner) return;
+  banner.classList.remove('import-banner-show');
+  setTimeout(function() { if (banner.parentNode) banner.parentNode.removeChild(banner); }, 300);
+  window._pendingImportFolder = null;
 }
 
 // ── Stage build ───────────────────────────────────────────────────────
@@ -27450,6 +27762,46 @@ function _cvBindEvents() {
     _CV.panOriginX = _CV.panX; _CV.panOriginY = _CV.panY;
     container.classList.add('cv-panning');
   });
+
+  // ── Mobile pinch-to-zoom ──────────────────────────────────────
+  var _cvPinchDist = null;
+  var _cvPinchMidX = 0;
+  var _cvPinchMidY = 0;
+  container.addEventListener('touchstart', function(e) {
+    if (e.touches.length === 2) {
+      _cvPinchDist = Math.hypot(
+        e.touches[0].clientX - e.touches[1].clientX,
+        e.touches[0].clientY - e.touches[1].clientY
+      );
+      var rect = container.getBoundingClientRect();
+      _cvPinchMidX = (e.touches[0].clientX + e.touches[1].clientX) / 2 - rect.left;
+      _cvPinchMidY = (e.touches[0].clientY + e.touches[1].clientY) / 2 - rect.top;
+    }
+  }, { passive: true });
+  container.addEventListener('touchmove', function(e) {
+    if (e.touches.length === 2 && _cvPinchDist !== null) {
+      e.preventDefault();
+      var newDist = Math.hypot(
+        e.touches[0].clientX - e.touches[1].clientX,
+        e.touches[0].clientY - e.touches[1].clientY
+      );
+      var rect = container.getBoundingClientRect();
+      var midX = (e.touches[0].clientX + e.touches[1].clientX) / 2 - rect.left;
+      var midY = (e.touches[0].clientY + e.touches[1].clientY) / 2 - rect.top;
+      var scaleFactor = newDist / _cvPinchDist;
+      var newZoom = Math.min(2.5, Math.max(0.25, _CV.zoom * scaleFactor));
+      var ratio = newZoom / _CV.zoom;
+      _CV.panX = midX - ratio * (midX - _CV.panX);
+      _CV.panY = midY - ratio * (midY - _CV.panY);
+      _CV.zoom = newZoom;
+      _cvPinchDist = newDist;
+      _cvApplyTransform();
+      _cvUpdateZoomLabel();
+    }
+  }, { passive: false });
+  container.addEventListener('touchend', function(e) {
+    if (e.touches.length < 2) _cvPinchDist = null;
+  }, { passive: true });
 }
 
 function _cvUnbindEvents() {
@@ -35722,6 +36074,20 @@ function _lexiBuildWordRow(entry) {
     top.appendChild(srcBtn);
   }
 
+  // Folder button — add vocab word to a folder
+  var lexiFolderBtn = document.createElement('button');
+  lexiFolderBtn.type = 'button';
+  lexiFolderBtn.className = 'lexi-folder-btn';
+  lexiFolderBtn.title = 'Add to folder';
+  lexiFolderBtn.innerHTML = (typeof CC_G !== 'undefined' && CC_G.folder) ? CC_G.folder : '\uD83D\uDCC2';
+  lexiFolderBtn.addEventListener('click', (function(e, w) {
+    return function(ev) {
+      ev.stopPropagation();
+      _vocabFolderPickerOpen(lexiFolderBtn, w.word, w.definition, w.category, w.collectionId || null);
+    };
+  })(entry, entry));
+  top.appendChild(lexiFolderBtn);
+
   top.appendChild(favBtn);
   top.appendChild(removeBtn);
 
@@ -38467,9 +38833,18 @@ function _gvRenderWordList(words, selectedCat) {
     }
 
     // Source link — small ↗ to open the episode drawer
+    var folderBtn = document.createElement('button');
+    folderBtn.className = 'gv-folder-btn';
+    folderBtn.title = 'Add to folder';
+    folderBtn.innerHTML = (typeof CC_G !== 'undefined' && CC_G.folder) ? CC_G.folder : '\uD83D\uDCC2';
+    folderBtn.addEventListener('click', (function(word, def, cat, colId) {
+      return function(e) { e.stopPropagation(); _vocabFolderPickerOpen(folderBtn, word, def, cat, colId); };
+    })(w.word, w.definition, w.category, w.colId || null));
+
     var actionsRow = document.createElement('div');
     actionsRow.className = 'gv-word-actions';
     actionsRow.appendChild(addBtn);
+    actionsRow.appendChild(folderBtn);
     if (w.colId) {
       var srcBtn = document.createElement('button');
       srcBtn.className = 'gv-src-btn';
@@ -39540,11 +39915,15 @@ function _wcShowLaneDef(chip, w, color) {
   }
 
   pop.innerHTML =
-    '<button class="wc-lane-pop-close" aria-label="Close">✕</button>' +
+    '<button class="wc-lane-pop-close" aria-label="Close">&#x2715;</button>' +
     '<span class="wc-lane-pop-word" style="color:' + color + '">' + _gvEsc(w.word) + '</span>' +
     '<span class="wc-lane-pop-def">' + _gvEsc(w.definition) + '</span>' +
+    '<div class="wc-lane-pop-actions">' +
     '<button class="wc-tt-add' + (isSaved ? ' saved' : '') + '">' +
-    (isSaved ? '✓ In Lexi' : '+ Add to Lexi') + '</button>';
+    (isSaved ? '\u2713 In Lexi' : '+ Add to Lexi') + '</button>' +
+    '<button class="wc-lane-pop-folder" title="Add to folder">' +
+    ((typeof CC_G !== 'undefined' && CC_G.folder) ? CC_G.folder : '\uD83D\uDCC2') + '</button>' +
+    '</div>';
 
   var closeBtn = pop.querySelector('.wc-lane-pop-close');
   if (closeBtn) closeBtn.addEventListener('click', function(e) { e.stopPropagation(); _wcHideLaneDef(); });
@@ -39555,7 +39934,15 @@ function _wcShowLaneDef(chip, w, color) {
       ev.stopPropagation();
       _gvAddWordToLexi(w.word, w.definition, w.category, w.colId, addBtn);
       chip.classList.add('wc-lane-chip-saved');
-      addBtn.textContent = '✓ In Lexi'; addBtn.classList.add('saved');
+      addBtn.textContent = '\u2713 In Lexi'; addBtn.classList.add('saved');
+    });
+  }
+
+  var lanePopFolderBtn = pop.querySelector('.wc-lane-pop-folder');
+  if (lanePopFolderBtn) {
+    lanePopFolderBtn.addEventListener('click', function(ev) {
+      ev.stopPropagation();
+      _vocabFolderPickerOpen(lanePopFolderBtn, w.word, w.definition, w.category, w.colId || null);
     });
   }
 
@@ -39663,10 +40050,17 @@ function _wcShowTooltip(spanEl) {
   }
   srcRow.innerHTML = '';
   if (addBtn) srcRow.appendChild(addBtn);
+  // Folder button — add vocab word to a folder
+  var wcFolderBtn = document.createElement('button');
+  wcFolderBtn.className = 'wc-tt-folder';
+  wcFolderBtn.title = 'Add to folder';
+  wcFolderBtn.innerHTML = (typeof CC_G !== 'undefined' && CC_G.folder) ? CC_G.folder : '\uD83D\uDCC2';
+  wcFolderBtn.onclick = function() { _vocabFolderPickerOpen(wcFolderBtn, word, def, cat, colId); };
+  srcRow.appendChild(wcFolderBtn);
   if (colId) {
     var ttSrc = document.createElement('button');
     ttSrc.className = 'wc-tt-src';
-    ttSrc.textContent = '↗ episode';
+    ttSrc.textContent = '\u2197 episode';
     ttSrc.title = 'Open source episode';
     ttSrc.onclick = function() { _openSourceEpisode(colId); };
     srcRow.appendChild(ttSrc);
@@ -40529,6 +40923,43 @@ function _wcRenderMobileGrid(words) {
 </div>
 
 <!-- ── Canvas Overlay — v3.51 ── -->
+<!-- Canvas deep link + import handler -->
+<script>
+(function() {
+  function _cvInitDeepLink() {
+    // Check for ?import= first (board sharing)
+    var params = new URLSearchParams(window.location.search);
+    var b64 = params.get('import');
+    if (b64) {
+      try {
+        var json = decodeURIComponent(escape(atob(b64)));
+        var imported = JSON.parse(json);
+        if (imported && imported.id && imported.name) {
+          _showImportBanner(imported);
+          history.replaceState(null, '', window.location.pathname);
+        }
+      } catch(e) {}
+      return; // don't also open canvas on import
+    }
+    // Check for #canvas-{id} hash
+    var h = window.location.hash;
+    var m = h.match(/^#canvas-(.+)$/);
+    if (m) {
+      var fid = m[1];
+      var folders = (typeof _foldersGet === 'function') ? _foldersGet() : [];
+      var f = folders.find(function(x) { return x.id === fid; });
+      if (f && typeof _cvOpen === 'function') _cvOpen(f.id);
+    }
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', _cvInitDeepLink);
+  } else {
+    // Defer one tick so all functions are defined
+    setTimeout(_cvInitDeepLink, 0);
+  }
+})();
+</script>
+
 <div id="canvasOverlay" aria-hidden="true">
   <div id="canvasHeader">
     <div id="canvasHeaderLeft">
@@ -40542,6 +40973,9 @@ function _wcRenderMobileGrid(words) {
       <button class="cv-zoom-btn cv-zoom-reset" onclick="_cvZoomReset()" title="Reset view">⌂</button>
     </div>
     <div id="canvasHeaderRight">
+      <button class="cv-header-btn" id="cvArrowToggle" onclick="_cvToggleArrows()" title="Show / hide connections">⌁ Connections</button>
+      <button class="cv-header-btn" id="cvExportBtn" onclick="_cvExportPNG()" title="Export canvas as PNG">⬇ Export</button>
+      <button class="cv-header-btn" id="cvShareBtn" onclick="_cvShare()" title="Share this board">⤴ Share</button>
       <button class="cv-close-btn" onclick="_cvClose()" title="Close canvas">✕</button>
     </div>
   </div>
