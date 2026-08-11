@@ -707,10 +707,7 @@ function buildSitemap(concepts, allConcepts) {
     })
     .join('\n');
 
-  const categoryUrls = Object.keys(CAT_COLOR)
-    .map(cat => `  <url>\n    <loc>${BASE_URL}/category/${cat}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>`)
-    .join('\n');
-
+  // NOTE: category URLs intentionally excluded — SPA routes, not indexable static pages.
   return `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
@@ -718,7 +715,6 @@ function buildSitemap(concepts, allConcepts) {
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
-${categoryUrls}
 ${conceptUrls}
 </urlset>`;
 }
