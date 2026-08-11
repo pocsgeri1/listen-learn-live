@@ -19,7 +19,7 @@ Dark, editorial, minimal. The aesthetic is a cross between Modern Wisdom's websi
 
 | Token | Hex | Usage |
 |-------|-----|-------|
-| `--bg` | `#0d0d0d` | Main page background |
+| `--bg` | `#111210` | Main page background — warm charcoal (updated v3.42, was `#0d0d0d`) |
 | `--surface` | `#141414` | Card backgrounds, elevated surfaces |
 | `--surface2` | `#1c1c1c` | Secondary surfaces, hover states, pills |
 | `--text` | `#f0ede8` | Primary text (warm off-white, not pure white) |
@@ -32,11 +32,11 @@ Dark, editorial, minimal. The aesthetic is a cross between Modern Wisdom's websi
 
 Applied via `html[data-theme="light"]`. Activated by toggle; persisted to `localStorage` key `lll_theme`.
 
-Updated v1.92 — warmer/darker values for a layered-paper feel.
+Updated v3.42 — Crisp Paper light palette + forest green accent + warmer bg tones.
 
 | Token | Dark value | Light value |
 |-------|-----------|-------------|
-| `--bg` | `#0d0d0d` | `#f5f0e8` |
+| `--bg` | `#111210` | `#f7f3ec` |
 | `--surface` | `#141414` | `#eee8db` |
 | `--surface2` | `#1c1c1c` | `#e4dccf` |
 | `--border` | `rgba(255,255,255,0.07)` | `rgba(0,0,0,0.08)` |
@@ -44,8 +44,8 @@ Updated v1.92 — warmer/darker values for a layered-paper feel.
 | `--text` | `#f0ede8` | `#1a1714` |
 | `--muted` | `#6b6b6b` | `#7a7060` |
 | `--muted2` | `#9a9a9a` | `#5a5040` |
-| `--accent` | `#e8d5a3` | `#b8860b` |
-| `--accent2` | `#c4a96b` | `#9a700a` |
+| `--accent` | `#e8d5a3` | `#3d6b52` (forest green — v3.41) |
+| `--accent2` | `#c4a96b` | `#2d5242` |
 
 Semantic colors (red, green, blue, purple, pink, teal) also darkened ~15% in light mode for contrast. Category colors unchanged — they hold on both themes.
 

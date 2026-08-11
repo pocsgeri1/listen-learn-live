@@ -25,14 +25,14 @@
 <meta name="twitter:title" content="Epistemic. — Master the concepts that shape intelligent conversation" />
 <meta name="twitter:description" content="Turn podcast ideas into concept cards you actually keep. Plain definitions, real analogies, Spark prompts to use them in conversation." />
 <meta name="twitter:image" content="https://epistemic.live/og-image.png" />
-<meta name="theme-color" content="#0d0d0d" id="themeColorMeta">
+<meta name="theme-color" content="#111210" id="themeColorMeta">
 <meta name="google-site-verification" content="AsMIpquI-8CtsrdyL_yEDVkQMUaFL3CSaCpxtL4u-HQ" />
 <script>
   (function(){
     var t = localStorage.getItem('lll_theme');
     if(t === 'light') {
       document.documentElement.setAttribute('data-theme','light');
-      document.getElementById('themeColorMeta').content = '#faf8f4';
+      document.getElementById('themeColorMeta').content = '#f7f3ec';
     }
     // Preload guard: hide below-nav content until first rAF to prevent
     // episodes flashing before hero paint completes on hard refresh
@@ -97,7 +97,7 @@
   }
 
   :root {
-    --bg: #0d0d0d;
+    --bg: #111210;
     --surface: #141414;
     --surface2: #1c1c1c;
     --border: rgba(255,255,255,0.07);
@@ -119,7 +119,7 @@
      LIGHT MODE TOKENS
      ============================================ */
   [data-theme="light"] {
-    --bg: #faf8f4;
+    --bg: #f7f3ec;
     --surface: #f2ede3;
     --surface2: #e8e0d0;
     --border: rgba(0,0,0,0.09);
@@ -1287,7 +1287,7 @@
     transition: opacity 0.18s ease;
   }
   [data-theme="light"] .ep-intel-popover {
-    background: #faf8f4;
+    background: #f7f3ec;
     border-color: rgba(0,0,0,0.09);
     box-shadow: 0 12px 40px rgba(0,0,0,0.1), 0 2px 8px rgba(0,0,0,0.06);
   }
@@ -3191,7 +3191,7 @@
   }
   .lexi-summary-actions { display: flex; gap: 16px; align-items: center; margin-top: 8px; }
   /* Light mode overrides */
-  [data-theme="light"] .lexi-practice-overlay { background: #faf8f4; }
+  [data-theme="light"] .lexi-practice-overlay { background: #f7f3ec; }
   [data-theme="light"] .lexi-card-textarea {
     background: rgba(0,0,0,0.03); border-color: rgba(0,0,0,0.12); color: #1a1a18;
   }
@@ -3281,7 +3281,7 @@
     overflow-y: auto;
     scrollbar-width: none;
   }
-  [data-theme="light"] .ep-intel-sheet { background: #faf8f4; border-color: rgba(0,0,0,0.08); }
+  [data-theme="light"] .ep-intel-sheet { background: #f7f3ec; border-color: rgba(0,0,0,0.08); }
   .ep-intel-sheet.open { transform: translateY(0); }
   .ep-intel-sheet-handle {
     width: 36px; height: 4px;
@@ -4654,6 +4654,18 @@
   [data-theme="light"] .nav-link.nav-link--active {
     text-decoration-color: rgba(61,107,82,0.3);
   }
+  /* Home in center island — slightly distinct: separator + subtle pill */
+  .nav-home-center-btn {
+    margin-left: 6px;
+    padding-left: 16px;
+    border-left: 0.5px solid var(--border-hover);
+  }
+  .nav-home-center-btn .nav-home-emoji {
+    font-size: 0.8rem;
+    opacity: 0.7;
+    transition: opacity 0.18s;
+  }
+  .nav-home-center-btn:hover .nav-home-emoji { opacity: 1; }
 
   /* Theme toggle — pill matching Home button */
   .nav-theme-pill {
@@ -9192,7 +9204,7 @@
   font-family: 'DM Sans', sans-serif; font-size: 0.72rem;
   color: var(--muted); line-height: 1.5;
 }
-[data-theme="light"] .cc-related-panel { background: #faf8f4; }
+[data-theme="light"] .cc-related-panel { background: #f7f3ec; }
 [data-theme="light"] .cc-related-card { background: #f0ebe5; }
 
 /* ── My Library Drawer ──────────────────────────────────────── */
@@ -12597,11 +12609,13 @@
   </div>
 
   <div class="nav-island" id="navIsland">
-    <!-- v2.94: Read · Write · Speak — three-mode navigation -->
-    <a class="nav-link nav-read-btn"  onclick="_openGlobalVocabView();playNavSFX()"><span class="nav-read-emoji">📚</span>Read</a>
-    <a class="nav-link nav-write-btn" onclick="openLexiconPanel();playNavSFX()"><span class="nav-write-emoji">✍️</span>Write</a>
-    <a class="nav-link nav-speak-btn" onclick="openSparkPanel();playNavSFX()"><span class="nav-speak-emoji">💬</span>Speak</a>
-    <!-- legacy hidden — kept for tour/shortcut refs -->
+    <!-- Listen · Read · Write · Speak · Home — v3.42 -->
+    <a class="nav-link nav-listen-btn" onclick="closeLibrary();closeLexiconPanel();closeCornerPanel();closeStoriesPanel();window.scrollTo({top:0,behavior:'smooth'});playNavSFX()"><span class="nav-listen-emoji">🎧</span>Listen</a>
+    <a class="nav-link nav-read-btn"   onclick="_openGlobalVocabView();playNavSFX()"><span class="nav-read-emoji">📚</span>Read</a>
+    <a class="nav-link nav-write-btn"  onclick="openLexiconPanel();playNavSFX()"><span class="nav-write-emoji">✍️</span>Write</a>
+    <a class="nav-link nav-speak-btn"  onclick="openSparkPanel();playNavSFX()"><span class="nav-speak-emoji">💬</span>Speak</a>
+    <a class="nav-link nav-home-center-btn" onclick="openLibrary();playNavSFX()"><span class="nav-home-emoji">◱</span>Home</a>
+    <!-- legacy hidden — kept for shortcut refs -->
     <a class="nav-link nav-spark-btn"       style="display:none"></a>
     <a class="nav-link nav-corner-nav-btn"  style="display:none"></a>
   </div>
@@ -12616,11 +12630,10 @@
   </div>
 
   <div class="nav-right">
-    <!-- Home — pill with saved-count badge -->
-    <button class="nav-library-btn" id="navLibraryBtn" onclick="openLibrary();playNavSFX()" aria-label="Home ⌘⌥H">
+    <!-- navLibraryBtn: hidden, kept for badge fn + keyboard shortcut compat -->
+    <button class="nav-library-btn" id="navLibraryBtn" onclick="openLibrary();playNavSFX()" aria-label="Home ⌘⌥H" style="display:none">
       <span class="nav-library-glyph">◱</span>
       <span class="nav-library-label">Home</span>
-      <span class="nav-library-badge" id="navLibraryBadge" style="display:none"></span>
     </button>
     <!-- Apply: hidden, accessible via ←→ sequence -->
     <button class="nav-mob-action" id="navMobApply" onclick="enterCornerMode();playNavSFX()" aria-label="Apply" style="display:none">🥊</button>
@@ -13786,7 +13799,7 @@
     <div class="home-momentum" id="homeMomentum"></div>
     <!-- Mood row — moved from nav — v3.38 -->
     <div class="home-mood-row" id="homeMoodRow">
-      <div class="home-mood-label">How are you feeling?</div>
+      <div class="home-mood-label">I feel epic!</div>
       <div class="home-mood-options">
         <button class="home-mood-btn" onclick="openEgg();playNavSFX()" title="I feel epic!">😎</button>
         <button class="home-mood-btn" onclick="openEgg();playNavSFX()" title="Feeling good">😊</button>
@@ -20219,18 +20232,7 @@ function _getTodayStr() {
 }
 
 function refreshNavBadge() {
-  const badge = document.getElementById('navLibraryBadge');
-  if (!badge) return;
-  try {
-    const saved = JSON.parse(localStorage.getItem(CS_SAVED_KEY) || '[]').filter(Boolean);
-    const total = saved.length;
-    if (total === 0) {
-      badge.style.display = 'none';
-    } else {
-      badge.style.display = 'inline-flex';
-      badge.textContent = total;
-    }
-  } catch(e) { badge.style.display = 'none'; }
+  if (typeof _homeUpdateNavBadge === 'function') _homeUpdateNavBadge();
 }
 
 function _incrementNavBadge() {
@@ -24806,6 +24808,14 @@ function _homeUpdateNavBadge() {
   } catch(e) {}
   var total = nConcepts + nWords;
   var badge = total > 0 ? '<span class="nav-lib-badge">' + total + '</span>' : '';
+  // Update center-island Home button (v3.42)
+  var centerBtn = document.querySelector('.nav-home-center-btn');
+  if (centerBtn) {
+    var centerEmoji = centerBtn.querySelector('.nav-home-emoji');
+    var emojiHtml = centerEmoji ? centerEmoji.outerHTML : '';
+    centerBtn.innerHTML = emojiHtml + 'Home' + badge;
+  }
+  // Legacy hidden btn + mobile tab
   var desktopBtn = document.getElementById('navLibraryBtn');
   if (desktopBtn) {
     var lbl = desktopBtn.querySelector('.nav-library-label');
@@ -27965,7 +27975,7 @@ function toggleTheme() {
 
   // Update meta theme-color for mobile browser chrome
   const meta = document.getElementById('themeColorMeta');
-  if (meta) meta.content = next === 'light' ? '#faf8f4' : '#0d0d0d';
+  if (meta) meta.content = next === 'light' ? '#f7f3ec' : '#111210';
 
   // Update theme toggle pill label
   const toggleLabel = document.getElementById('navThemeLabel');
@@ -31489,7 +31499,7 @@ body.corner-panel-open .stories-panel {
 .corner-panel-body.cp-visible { opacity: 1; }
 [data-theme="light"] .stories-overlay.active { background: rgba(0,0,0,0.28); }
 [data-theme="light"] .stories-panel {
-  background: #faf8f4;
+  background: #f7f3ec;
   border-left: 1px solid rgba(0,0,0,0.08);
 }
 
@@ -32013,7 +32023,7 @@ body.corner-panel-open .stories-panel {
 }
 
 /* light mode overrides */
-[data-theme="light"] .sp2-peek { background: #faf8f4; border-color: rgba(0,0,0,0.1); }
+[data-theme="light"] .sp2-peek { background: #f7f3ec; border-color: rgba(0,0,0,0.1); }
 [data-theme="light"] .stories-panel .sp2-story-body { color: var(--text); }
 </style>
 
@@ -35012,24 +35022,31 @@ function _convOpenCSById(id) {
 
   var STEPS = [
     {
-      targetSel: '.nav-read-btn',
+      targetSel: '.nav-listen-btn',
       arrow:     'arrow-top',
-      label:     'Browse all vocabulary',
-      desc:      'Explore curated words from every episode. Save the ones you want to practice.',
+      label:     'Start here — Listen',
+      desc:      'Browse episodes and concepts from the podcasts you already love.',
       position:  'below'
     },
     {
-      targetId:  'lexiPullTab',
-      arrow:     'arrow-left',
-      label:     'Your writing practice',
-      desc:      'Saved words live here. Practice using them in sentences and get feedback.',
-      position:  'right'
+      targetSel: '.nav-read-btn',
+      arrow:     'arrow-top',
+      label:     'Three ways to make ideas stick',
+      desc:      'Read builds your vocabulary. Write practises it. Speak turns it into conversation.',
+      position:  'below'
     },
     {
-      targetSel: '.nav-speak-btn',
+      targetSel: '.nav-home-center-btn',
       arrow:     'arrow-top',
-      label:     'Turn ideas into speech',
-      desc:      'Pick any concept and spark a conversation starter. Use it tonight.',
+      label:     'Your space',
+      desc:      'Streaks, saved ideas, and everything you\'ve collected — right here.',
+      position:  'below'
+    },
+    {
+      targetSel: '.nav-signup-btn',
+      arrow:     'arrow-top',
+      label:     'It\'s free',
+      desc:      'Sign up in 10 seconds. Unlock everything. No credit card, no catch.',
       position:  'below'
     }
   ];
@@ -36052,7 +36069,7 @@ function _gvEsc(str) {
 
 /* Light mode */
 [data-theme="light"] .gv-overlay.open { background: rgba(0,0,0,0.25); }
-[data-theme="light"] .gv-panel { background: #faf8f4; }
+[data-theme="light"] .gv-panel { background: #f7f3ec; }
 [data-theme="light"] .gv-cat-card { border-color: rgba(0,0,0,0.1); }
 [data-theme="light"] .gv-word-row { border-color: rgba(0,0,0,0.09); }
 
@@ -37259,7 +37276,7 @@ function _wcRenderMobileGrid(words) {
 /* Collect button is irrelevant in lanes mode */
 .wc-overlay[data-view="lanes"] .wc-collect-btn { display: none !important; }
 
-[data-theme="light"] .wc-overlay { background: #faf8f4; }
+[data-theme="light"] .wc-overlay { background: #f7f3ec; }
 [data-theme="light"] .wc-tooltip { background: #f2ede3; box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
 [data-theme="light"] .wc-lane { border-bottom-color: rgba(0,0,0,0.06); }
 [data-theme="light"] .wc-lane-def { background: #efe9df; border-color: rgba(0,0,0,0.1); }
@@ -37292,7 +37309,7 @@ function _wcRenderMobileGrid(words) {
   border: 1px solid var(--border-hover);
   border-radius: 14px;
   width: 100%;
-  max-width: 440px;
+  max-width: 580px;
   position: relative;
   overflow: hidden;
   transform: translateY(14px);
@@ -37558,21 +37575,21 @@ function _wcRenderMobileGrid(words) {
     <!-- Form state -->
     <div class="ep-signup-body" id="epSignupForm">
       <div class="ep-signup-eyebrow">Join Epistemic</div>
-      <div class="ep-signup-title" id="epSignupTitle">The library that<br><em>talks back.</em></div>
-      <div class="ep-signup-sub" id="epSignupSub">The ideas you heard on podcasts — finally organised, deepened, and ready to use in real conversation.</div>
+      <div class="ep-signup-title" id="epSignupTitle">The ideas worth keeping,<br><em>finally kept.</em></div>
+      <div class="ep-signup-sub" id="epSignupSub">The gap between knowing and using is smaller than you think.</div>
 
       <div class="ep-signup-benefits">
         <div class="ep-signup-benefit">
           <span class="ep-signup-benefit-glyph">◈</span>
-          <span>Unlock all AI-powered features and practice modes</span>
+          <span>Save the ideas that hit different</span>
         </div>
         <div class="ep-signup-benefit">
           <span class="ep-signup-benefit-glyph">◈</span>
-          <span>Save the best ideas to your personal library</span>
+          <span>We'll send your weekly recap so nothing slips</span>
         </div>
         <div class="ep-signup-benefit">
           <span class="ep-signup-benefit-glyph">◈</span>
-          <span>Weekly digest of new concepts from top podcasts</span>
+          <span>Unlock all AI-powered tools, no credit card</span>
         </div>
       </div>
 

@@ -6,6 +6,21 @@
 
 ---
 
+## v3.42 — 2026-08-11 · Nav 5-link island (Listen+Home), modal copy, bg colors, tour rewrite
+
+### index.html
+- **Nav island expanded to 5 links:** Added `Listen` (closes panels, scrolls to top) and `Home` as centre-island link. Home visually distinct via left border separator. Old `navLibraryBtn` pill hidden (kept for badge/shortcut compat).
+- **`_homeUpdateNavBadge()` updated:** Now injects badge into `.nav-home-center-btn` (centre island) in addition to legacy hidden btn + mobile tab.
+- **Tour rewritten — 4 steps:** Listen → (Read/Write/Speak together) → Home → Signup. Copy speaks to new user; targets updated to `.nav-listen-btn`, `.nav-read-btn`, `.nav-home-center-btn`, `.nav-signup-btn`.
+- **Modal copy updated:** Title → "The ideas worth keeping, finally kept." Subtext → "The gap between knowing and using is smaller than you think." Bullets: Save ideas that hit different / Weekly recap / Unlock all AI tools, no credit card.
+- **Modal width enlarged:** `max-width: 440px → 580px` (~30% wider).
+- **Background colors:** Dark bg `#0d0d0d → #111210` (warm charcoal). Light bg `#faf8f4 → #f7f3ec` (parchment). All hardcoded references updated incl. meta theme-color and `toggleTheme()`.
+- **Double badge fix:** Removed `navLibraryBadge` span (was showing a second count alongside `_homeUpdateNavBadge`). `refreshNavBadge()` now delegates to `_homeUpdateNavBadge()`.
+- **Mood row label:** "How are you feeling?" → "I feel epic!"
+
+### docs/design-tokens.md
+- Updated `--bg` dark/light values and light-mode accent to reflect v3.41–v3.42 changes.
+
 ## v3.41 — 2026-08-10 · Nav redesign, signup modal + email gate, light mode overhaul, mood row
 
 ### index.html

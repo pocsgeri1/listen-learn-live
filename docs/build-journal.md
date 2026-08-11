@@ -6,6 +6,16 @@
 
 ---
 
+## 2026-08-11 — Nav 5-link island, bg color swap, tour rewrite (v3.42)
+
+**Two badge systems on the same button = two numbers.** `refreshNavBadge()` (my addition) updated a `navLibraryBadge` span; `_homeUpdateNavBadge()` (existing) injected a badge string into the label's `innerHTML`. Both ran on the same Home button → two numbers displayed. Fix: remove the span, make `refreshNavBadge()` delegate to `_homeUpdateNavBadge()`. Rule: grep for existing badge/count functions before adding a new one.
+
+**Moving a button into the island breaks `_homeUpdateNavBadge()`.** The badge fn used `navLibraryBtn` querySelector to inject HTML into `.nav-library-label`. Moving Home to a new `.nav-home-center-btn` means the fn targets a hidden element. Always update badge/label injection functions when the target element changes. Keep the old element hidden (not removed) as a safety net for other consumers (keyboard shortcuts, etc).
+
+**`sed -i` on a file invalidates the Edit tool's cached version.** After running bash `sed` on `index.html`, subsequent Edit calls fail with "file modified since read." Always re-Read the relevant lines after any bash sed before using Edit on the same file.
+
+---
+
 ## 2026-08-10 — Nav redesign, light mode overhaul, email gate (v3.41)
 
 **`[data-theme="light"]` at scale: sed replacements must run in the right order.** With 35k+ lines and 257 light-mode rules, running `rgba(X) → rgba(Y)` replacements in the wrong order can create new matches that get re-replaced by a later rule. Always grep for remaining instances after each sed batch to confirm zero residuals.
