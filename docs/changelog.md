@@ -6,6 +6,12 @@
 
 ---
 
+## v3.53 — 2026-08-11 · Folder glyph on preview + mobile preview; canvas dot grid fix
+
+### index.html
+- **Folder button in `_spPreviewToolbar`:** Added 6th action to the shared preview toolbar used by both `_spPreviewCard` (search/hover floating preview, desktop) and `_spOpenMobilePreview` (full-screen mobile preview modal). Folder glyph now present on every concept surface across the entire product.
+- **Canvas dot grid fixed:** Removed `::before` pseudo-element approach (which was hidden behind the transparent stage). Applied `background-image: radial-gradient` directly to `#canvasContainer` — dots now render correctly through the transparent stage. Light mode variant uses black dots at 10% opacity.
+
 ## v3.52 — 2026-08-11 · Folder edit + folder glyph on all cards + tile dot clarification
 
 ### index.html

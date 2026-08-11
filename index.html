@@ -11349,14 +11349,15 @@
 }
 .cv-empty-btn:hover { opacity: 0.85; }
 
-/* Canvas grid dot background */
-#canvasContainer::before {
-  content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 0;
-  background-image: radial-gradient(circle, color-mix(in srgb, var(--border) 60%, transparent) 1px, transparent 1px);
-  background-size: 28px 28px;
-  opacity: 0.45;
+/* Canvas grid dot background — applied directly so stage transparency reveals it */
+#canvasContainer {
+  background-image: radial-gradient(circle, rgba(255,255,255,0.13) 1px, transparent 1px);
+  background-size: 26px 26px;
+  background-position: 0 0;
 }
-[data-theme="light"] #canvasContainer::before { opacity: 0.3; }
+[data-theme="light"] #canvasContainer {
+  background-image: radial-gradient(circle, rgba(0,0,0,0.1) 1px, transparent 1px);
+}
 
 /* "Open Canvas" button in folder footer */
 .folder-canvas-btn {
@@ -20573,6 +20574,7 @@ function _spPreviewToolbar(id, dismissFn) {
     '<div class="sp-pv-divider"></div>' +
     '<button class="btn-icon btn-chat sp-pv-btn" title="Spark" onclick="event.stopPropagation();' + dismissFn + ';setTimeout(function(){openSparkPanel(' + id + ');},80)">' + (g.chat||'✦') + '</button>' +
     '<button class="btn-icon btn-note sp-pv-btn' + (hasNote ? ' has-note' : '') + '" title="Note" onclick="event.stopPropagation();' + dismissFn + ';setTimeout(function(){_openConceptNote(' + id + ');},100)">' + (g.note||'✎') + '</button>' +
+    '<button class="btn-icon btn-folder sp-pv-btn" title="Add to folder" onclick="event.stopPropagation();_folderPickerOpen(this,' + id + ')">' + (g.folder||'\uD83D\uDCC2') + '</button>' +
   '</div>';
 }
 
