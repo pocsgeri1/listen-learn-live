@@ -6,6 +6,27 @@
 
 ---
 
+## v3.47 — 2026-08-11 · Expanded card redesign + YT embed centering
+
+### index.html
+- **Expanded concept card redesign:** Each content section (Plain English, Analogy, Prompt, Note) now has its own frosted card panel with subtle border and background — depth and layering visible in both light and dark mode.
+- **Hook upgraded:** Playfair Display italic, warm background panel, accent left border — reads like an editorial pull quote.
+- **YouTube embed centred:** Constrained to `max-width: 480px`, `margin: auto`, with a deeper box-shadow. No longer left-aligned.
+- **Note editor:** Borderless textarea inside a dedicated frosted container — cleaner, feels like a real notepad.
+- **Actions row:** Now separated by a top border from the content above.
+- **`lib-detail-row` border-top:** Accent colour accent-line at top of expanded row for clear visual connection to the opened tile.
+
+---
+
+## v3.46 — 2026-08-11 · YouTube embed in Home > Concepts expanded cards, heatmap Mon–Sun, Listen scroll fix
+
+### index.html
+- **YouTube embed:** When a saved concept has a `collection_id` with a YouTube `episode_url` and a `timestamp`, expanding the card in Home > Concepts now shows an embedded YouTube player starting 8 seconds before the concept's timestamp. Uses existing `getYouTubeId()` helper. Modest size, lazy-loaded, responsive 16:9.
+- **Heatmap week order:** Changed from Sun–Sat to Mon–Sun. Row labels updated to show Tue / Thu / Sun. Month labels now appear on first week a new month appears (more reliable alignment).
+- **Listen nav button:** Now scrolls to `#episodesSection` with nav-height offset instead of scrolling to top.
+
+---
+
 ## v3.45 — 2026-08-11 · Search bar fix, heatmap months, badge today count, goal 25, counts smooth
 
 ### index.html

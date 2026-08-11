@@ -11320,35 +11320,120 @@
 .lib-tile-open { outline: 0.5px solid var(--border-hover); }
 .lib-detail-row {
   grid-column: 1 / -1;
-  padding: 0 16px;
-  background: var(--surface2, var(--surface));
+  padding: 0 18px;
+  background: var(--surface);
   border: 0.5px solid var(--border);
-  border-radius: 8px;
+  border-top: 2px solid var(--accent);
+  border-radius: 0 0 10px 10px;
   overflow: hidden;
   max-height: 0;
   opacity: 0;
-  transition: max-height 0.36s cubic-bezier(0.4, 0, 0.2, 1),
-              opacity 0.24s ease,
-              padding 0.36s ease;
+  transition: max-height 0.38s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.26s ease,
+              padding 0.38s ease;
 }
 .lib-detail-row.lib-detail-open {
-  max-height: 700px;
+  max-height: 820px;
   opacity: 1;
-  padding: 14px 16px 12px;
+  padding: 18px 18px 14px;
 }
+/* Hook — full-width, large italic quote feel */
 .lib-detail-hook {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.8rem; font-style: italic;
-  color: var(--text); line-height: 1.45;
+  font-family: 'Playfair Display', serif;
+  font-size: 0.9rem; font-style: italic;
+  color: var(--text); line-height: 1.5;
+  padding: 10px 14px;
+  background: rgba(232,213,163,0.06);
   border-left: 2px solid var(--accent);
-  padding-left: 10px; margin-bottom: 12px;
+  border-radius: 0 5px 5px 0;
+  margin-bottom: 14px;
 }
+/* YT embed — centered, constrained width */
+.lib-detail-yt {
+  max-width: 480px;
+  margin: 0 auto 16px;
+  border-radius: 8px;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.28);
+}
+.lib-detail-yt iframe {
+  width: 100%; height: 100%;
+  border: none; display: block;
+}
+/* Two-column content grid */
 .lib-detail-cols {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
-  margin-bottom: 10px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+  margin-bottom: 12px;
 }
 @media (max-width: 520px) { .lib-detail-cols { grid-template-columns: 1fr; } }
-/* Keep old .lib-tile-detail for compat, but we no longer use it */
+/* Each column is a frosted card */
+.lib-detail-cols > div {
+  background: rgba(255,255,255,0.03);
+  border: 0.5px solid var(--border);
+  border-radius: 8px;
+  padding: 11px 13px;
+}
+[data-theme="light"] .lib-detail-cols > div {
+  background: rgba(0,0,0,0.025);
+}
+/* Labels */
+.lib-detail-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.48rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--accent); opacity: 0.7;
+  margin-bottom: 5px;
+}
+/* Plain English */
+.lib-detail-plain {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.73rem; color: var(--text);
+  line-height: 1.58; opacity: 0.85;
+}
+/* Analogy — italic serif */
+.lib-detail-analogy {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 0.74rem; color: var(--text);
+  line-height: 1.52; opacity: 0.8;
+}
+/* Prompt — warm accent border */
+.lib-detail-prompt {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.7rem; color: var(--text);
+  line-height: 1.52;
+  border-left: 1.5px solid var(--accent);
+  padding-left: 8px; opacity: 0.78;
+  margin-top: 10px;
+}
+/* Note editor */
+.lib-detail-note-wrap {
+  margin-top: 12px; margin-bottom: 6px;
+  background: rgba(232,213,163,0.04);
+  border: 0.5px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 13px;
+}
+.lib-detail-note-ta {
+  width: 100%; background: transparent;
+  border: none;
+  color: var(--text); font-family: 'DM Sans', sans-serif;
+  font-size: 0.72rem; line-height: 1.5;
+  resize: none; outline: none;
+  padding: 0; min-height: 48px;
+}
+.lib-detail-note-ta:focus { outline: none; }
+.lib-detail-note-ta::placeholder { color: var(--muted2); font-style: italic; font-size: 0.65rem; opacity: 0.6; }
+/* Legacy compat */
+.lib-detail-note {
+  font-family: 'DM Sans', sans-serif; font-style: italic;
+  font-size: 0.72rem; color: var(--text);
+  line-height: 1.5; margin-bottom: 8px;
+  padding: 6px 10px;
+  border-left: 2px solid var(--accent);
+  background: rgba(232,213,163,0.06);
+}
 .lib-tile-detail {
   max-height: 0; overflow: hidden;
   transition: max-height 0.3s ease, opacity 0.25s ease; opacity: 0;
@@ -11364,72 +11449,11 @@
   font-size: 0.72rem; color: var(--muted);
   line-height: 1.5; margin-bottom: 8px;
 }
-/* v3.12: Plain text is softer opacity */
-.lib-detail-plain {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.72rem; color: var(--muted2);
-  line-height: 1.52; margin-bottom: 8px;
-}
-/* v3.12: Analogy is Playfair italic */
-.lib-detail-analogy {
-  font-family: 'Playfair Display', serif;
-  font-style: italic;
-  font-size: 0.73rem; color: var(--muted);
-  line-height: 1.52; margin-bottom: 8px;
-}
-/* v3.12: Prompt is distinct — muted border, slightly warm */
-.lib-detail-prompt {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.7rem; color: var(--text);
-  line-height: 1.5;
-  border-left: 2px solid var(--accent);
-  padding-left: 8px;
-  opacity: 0.75;
-  margin-top: 6px;
-}
-.lib-detail-label {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.52rem; letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--muted2); margin-bottom: 3px;
-}
-.lib-detail-note {
-  font-family: 'DM Sans', sans-serif; font-style: italic;
-  font-size: 0.72rem; color: var(--text);
-  line-height: 1.5; margin-bottom: 8px;
-  padding: 6px 10px;
-  border-left: 2px solid var(--accent);
-  background: rgba(232,213,163,0.06);
-}
-/* Inline note editor inside tile detail row */
-.lib-detail-note-wrap { margin-top: 10px; margin-bottom: 4px; }
-.lib-detail-note-ta {
-  width: 100%; background: rgba(232,213,163,0.04);
-  border: 0.5px solid var(--border); border-radius: 5px;
-  color: var(--text); font-family: 'DM Sans', sans-serif;
-  font-size: 0.72rem; line-height: 1.5;
-  resize: none; outline: none;
-  padding: 7px 10px; min-height: 52px;
-  transition: border-color 0.15s;
-}
-.lib-detail-note-ta:focus { border-color: var(--accent); }
-.lib-detail-note-ta::placeholder { color: var(--muted2); font-style: italic; font-size: 0.65rem; opacity: 0.7; }
 .lib-detail-actions {
   display: flex; gap: 8px; flex-wrap: wrap;
   margin-top: 10px;
-}
-.lib-detail-yt {
-  margin: 10px 0 12px;
-  border-radius: 8px;
-  overflow: hidden;
-  aspect-ratio: 16 / 9;
-  max-height: 185px;
-  background: #000;
-}
-.lib-detail-yt iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-  display: block;
+  padding-top: 10px;
+  border-top: 0.5px solid var(--border);
 }
 .lib-detail-btn {
   font-family: 'DM Mono', monospace;
