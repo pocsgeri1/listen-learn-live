@@ -6,6 +6,45 @@
 
 ---
 
+## v3.58 — 2026-08-11 · Docs: V3 architecture + AI voice system
+
+**Documentation only. Zero code changes.** This version is the complete V3 build plan — the strategy session output that v3.59 onward executes against.
+
+### docs/v3-architecture.md (NEW, 1,276 lines)
+- **§0 Preconditions + corrections.** Three factual errors in the V3 brief corrected against the live repo: `lll_saved_v1` does not exist (it is `lll_mastered_ts_v1`), `lll_user_id` is not implemented (roadmap-only), and `folder.vocabWords[]` holds objects since v3.56 (not strings). Two live findings: the `claude-sonnet-4-6` vs `claude-sonnet-4-5` model-string conflict (8 call sites on 4-5), and z-index — **1200 is occupied** by `.lexi-panel` / `.egg-overlay` / `.stories-overlay`, so the V3 rail takes **1150**, the free band beneath the whole legacy overlay stack.
+- **§2 The core decision — two shells, one file.** `body[data-shell="site"]` (the existing marketing scroll, untouched) vs `body[data-shell="app"]` (fixed left rail + routed panes). Resolves the collision the brief never named: a persistent sidebar cannot coexist with the hero/how-it-works/founder/newsletter page that is 100% of organic acquisition. Cost is one ~150-line router.
+- **§3 Navigation model.** Left rail (`--rail-w: 236px`, z-index 1200, no width animation), five destinations (Today / Library / Boards / Write / Chat) plus pinned boards. Full authoritative route table: `#/today`, `#/library[/words[/map]|/episodes]`, `#/c/{id}`, `#/w/{word}`, `#/boards`, `#/board/{id}`, `#/write[/compose|/practice]`, `#/chat`. `#home` and `#canvas-{id}` permanently aliased; `?import=` untouched. Mobile: three nav modes via `body[data-nav]` (tabs / drawer / immersive), reusing the existing `.mobile-tab-bar` DOM.
+- **§4 Discover — decided.** It is all three of the brief's options, which is exactly why it gets no nav slot: it becomes the lower two-thirds of Today, as seven algorithmic rails (Because you saved X, Your blind spot, Finish the episode, Editor's picks, New this week, Words from concepts you know, Revisit) with a cold-start fallback ladder so rails never render empty.
+- **§5 Vocab — decided.** Options A + C + a new D. Library gains a `Concepts · Words · Episodes` lens switch; Boards keep the vocab canvas element; Practice moves to Write. Option B (vocab on the concept card) rejected on data-integrity grounds — vocab is episode-scoped in `episode_meta.json`, so concept-scoped vocab would be a lie rendered in the UI.
+- **§6 Surface-by-surface IA.** Today (ritual block of max 3 elements), Library (three lenses, filters as URL query params, 40 tiles per rAF frame), Concept detail (480px right pane not a modal, action bar 7 → 4 + overflow, inline always-visible note, related chips always visible, breadcrumb depth 3 → 5), Boards (mini canvas previews, viewport persistence, typed connections).
+- **§7 Write — the new pillar.** Three modes: **Capture** (zero-friction, no AI, `⌘Enter`, `@` picker, every entry point pre-links), **Compose** (six formats — four private/thinking, two public — with mandatory visible provenance, attribution default-on, five anti-slop rules including a banned-strings list), **Practice** (absorbs Lexi practice, adds the new `feynman-grade` "Explain the concept" exercise). Contains the containment rule: *Compose is a rewriting tool, not a writing tool* — public formats require a user-written seed of ~40 words; private formats do not. Plus the three-layer AI voice architecture and the `api/compose.js` contract.
+- **§8 Chat.** Ships last, capped hard: required context selector, max 8 concepts (~1,000 tokens), 20 turns, 20 threads. Removable context chips are the feature. Real RAG explicitly deferred to ≥1,000 concepts with a one-function swap path.
+- **§9 Data model.** The atomic-unit rule (everything references `concept.id`), what changes in every existing key, the evolved board schema (six new optional fields + `schema: 3` migration marker), seven new `lll_*` keys (`lll_user_id`, `lll_captures_v1`, `lll_drafts_v1`, `lll_voice_v1`, `lll_tags_v1`, `lll_chat_v1`, `lll_route_v1`, `lll_onboard_v1`, `lll_storage_v1`), the **four-axis taxonomy** (category / source / mastery / tag, each in its own lane, intersecting only in Library filters), a storage budget table, and a numbered idempotent migration ledger.
+- **§10 Surface state machines.** Router, Library, Concept detail, Board canvas, Write (Capture / Compose / Practice), Chat — written in the same notation as the existing CS modal state machine in `architecture.md`.
+- **§11 Retire / merge / restructure ledger.** 17 rows: every existing surface mapped to its fate, destination and shipping version. Includes the literal answer to "what does a Lexi user see the day the panel disappears" (`lll_lexicon_v1` is never modified; one dismissible row; the pull tab is deleted, not hidden).
+- **§12 Eden — adopt / skip / invert.** 13 patterns with reasoning. Notably: **skip Spaces→Boards** (premature hierarchy over 3 boards), **skip publishing/clipper/extension permanently** (they kill the editorial moat), **adopt related-content suggestion aggressively** (our pre-computed `related_ids` is the one asset Eden cannot match), **invert library-grounded AI** (they ground to help you publish, we ground to help you understand).
+- **§13 Phased build order.** 11 phases, v3.58 → v3.68, each independently shippable. During phases 2–6 the rail launches the existing drawer/overlays unchanged before replacing them — that is what makes a single-file migration safe. Smallest meaningful V3 = v3.59 + v3.60.
+- **§14 What is not being thought about.** Ten items, ordered by expected damage: browser-clear data loss (export/import must ship in phase 2, not phase 11), missing onboarding, concept quality debt becoming a public-embarrassment risk once Compose quotes cards into posts (proposed `qa` flag as a shipping gate), zero-auth API cost and abuse, the 5 MB `QuotaExceededError` silent-failure mode (mandatory `_lsSet()` helper), 1.58 MB payload, SEO cannibalisation, cheap perceived-quality wins (⌘K, keyboard nav, PWA), where the free/Pro line should fall, and shared boards as the only zero-cost distribution loop.
+- **§15 Design language.** The one conceptual shift: overlay → place. New component patterns (rail item, pane, context chip, provenance line, empty state), animation grammar (pane enter .18s / exit .12s — exit always faster), density tokens. No new colours, fonts, radii or spacing values.
+- **§16 Risks.** 12 rows with likelihood, impact and mitigation. Highest: the phase-2 shell split breaking the marketing page.
+- **§17 Open decisions — [ACTION].** Three calls needed: (1) split `app.css` / `app.js` out of `index.html` for new V3 code only (still vanilla, no bundler — one-way door, needs a yes before phase 2); (2) resolve the model-string conflict; (3) confirm Chat ships in V3.
+
+### docs/ai-voice.md (NEW, 293 lines)
+- The single source of truth for every AI-generated word in the product. Mirrored as the `HOUSE_VOICE` constant in `api/compose.js` — sync note at the top of both.
+- **Layer 1 — House Voice:** the full static prompt (~400 tokens), derived from `quality-rules.md` and the four style guides so runtime output and the curated library sound like the same product. Includes the banned-strings list, the em-dash ban (inherited from `hook-style-guide.md` v2.2), and the straight-quotes-only rule (production bug vector per `engineering-standards.md`).
+- **Layer 2 — User Voice Profile:** five dials with literal string values, the **first-language** field that makes the non-native positioning functional rather than decorative, plus the `voice-extract` and `voice-update` prompts. Learn-from-edits is opt-in and never silent.
+- **Layer 3 — Grounding:** the concept/capture/vocab serialization format used identically by Compose, Chat and Practice grading. RAG-lite at ~1,200 tokens in / 400 out, with no embeddings or vector store, which only works because the content is already chunked into concept objects.
+- Per-mode task instructions for all six Compose formats plus `feynman-grade`, `caption` and `chat`. A five-check quality bar (banned strings, em-dash/curly-quote strip, length, provenance, sampled logging). A "what this voice is not" section: not a personality, not a coach, not a summarizer, not a growth tool.
+
+### docs/architecture.md
+- **Drift fixed:** `lll_folders_v1` was still documented with `vocabWords: string[]`. Corrected to objects `{ word, definition, category, colId }` (v3.56), with the mandatory `typeof w === 'object'` reader guard and a note on why v3.57a needed three fixes. Added `emoji` and `canvasItems` to the documented shape and a pointer to the V3 extensions.
+- **Added:** an explicit note that `lll_saved_v1` does not exist and must never be introduced — saved concepts are `lll_mastered_ts_v1`.
+
+### docs/roadmap.md
+- Next Up restructured around the V3 phase plan.
+
+---
+
 ## v3.57a — 2026-08-11 · Bug fixes — vocab folder integration
 
 ### index.html

@@ -1,6 +1,6 @@
 # Roadmap — Epistemic.
 
-**Last updated:** 2026-08-08
+**Last updated:** 2026-08-11
 **Purpose:** Phased build plan so every decision and feature fits into the bigger picture. Claude references this to avoid building things that will conflict with future phases.
 **Parking lot:** Ideas discussed but deferred live in `docs/ideas-parking-lot.md` — not here. Keeps Next Up clean.
 
@@ -11,6 +11,41 @@
 - **Home build ✅ v3.17–v3.23** — "My Library" rearchitected into "Home": compact pinned dashboard (6 buckets, Wk/Mo/All range toggle, count-up, fingerprint line, scroll-collapse strip), 4 tabs (Episodes favs+recents, Concepts composable filters, Vocab segment, Practice cards), nav badge, `#home` deep link, JSON export. All in `index.html`. 7 phases shipped 2026-08-08.
 
 ## Next up
+
+### V3 — the current build track (plan: `docs/v3-architecture.md`, v3.58)
+
+V3 rebuilds Epistemic around a persistent left rail, real routes, a unified Library, first-class Boards, and a new **Write** pillar. Full IA, data model, state machines, retire ledger, risks and design language are in `docs/v3-architecture.md`. Each phase is independently shippable; do not start a phase before the previous one has shipped.
+
+| Phase | Version | Ships |
+|---|---|---|
+| 1 ✅ | v3.58 | `v3-architecture.md` + `ai-voice.md` + doc updates. No code. |
+| 2 | **v3.59** | Two shells (`body[data-shell]`), hash router, left rail, mobile nav modes, migrations 1–2. Rail launches the **existing** drawer/overlays unchanged. **Highest-risk phase** — scope every rule under `body[data-shell="app"]`, ship behind `?v3=1` for one commit. |
+| 3 | v3.60 | Library unified: Concepts / Words / Episodes lenses, filters in the URL, `#/c/{id}` + `#/w/{word}` routes. **Retires the Read panel (`#gvOverlay`)** and three Home drawer tabs. |
+| 4 | v3.61 | Boards index, viewport persistence, typed connections, board covers. **Retires the Home drawer.** |
+| 5 | v3.62 | Spark as a right pane, action bar 7→4, inline note, related chips always visible. **Retires the Lexi pull tab.** |
+| 6 | v3.63 | Write → Capture inbox, `@` picker, Practice re-homed. |
+| 7 | v3.64 | Write → Compose, `api/compose.js`, voice dials, provenance, seed rule. |
+| 8 | v3.65 | Today: ritual block + Discover rails. |
+| 9 | v3.66 | Chat + `api/chat.js`, context chips. Cut this first if time runs short. |
+| 10 | v3.67 | ⌘K universal search, tags, keyboard nav, PWA manifest, storage monitor. |
+| 11 | v3.68 | Onboarding, export/import identity. |
+
+**Smallest meaningful V3:** phases 2 + 3. If the track has to stop, stop on a phase boundary.
+
+### V3 blockers — **[ACTION — Gergely]**
+
+- **Split `app.css` / `app.js` out of `index.html`?** Needed before phase 2 starts; it is a one-way door. Recommendation: yes, but for new V3 code only — legacy stays inline. Still vanilla, no bundler, no npm. Contradicts the stated single-file constraint, so it needs an explicit yes. (`v3-architecture.md` §17.1)
+- **`claude-sonnet-4-6` vs `claude-sonnet-4-5`.** `engineering-standards.md` mandates 4-6 and says 4-5 is deprecated and 500s; the repo has six call sites on 4-5 and two on `claude-haiku-4-5-20251001`. One of these is wrong. Resolve and fix all call sites in one commit before phase 7. (§17.2)
+- **Does Chat ship in V3 or V4?** Decide at the phase 8 boundary, deliberately. (§17.3)
+
+### V3 prerequisites worth starting now (parallel, different files)
+
+- **Concept `qa` flag.** Compose will quote concepts verbatim into text users post under their own name, which turns the outstanding ~500 plain / ~487 hook rewrites into a public-embarrassment risk. Add an optional `qa: true` to the concept schema via Airtable → `publish-batch`; Compose's public formats only offer `qa`-flagged concepts. Gives the rewrite backlog a concrete finish line. (§14.3)
+- **Per-IP rate limiting on `/api/*`.** Required before phase 7. Write + Chat are high-volume by design and the endpoints have no auth. Plus a monthly spend alert on the Anthropic account. (§14.4)
+- **Keep publishing concepts during V3.** An architecture project that freezes content production for a month is a net loss for a product whose moat is content. Editorial work touches different files entirely. (§16, risk 12)
+
+### Pre-V3 items (still valid, unscheduled)
+
 
 - **SEO Session 1 ✅ v2.68** — `tools/generate-static-pages.js` generates `/concepts/[id]-[slug].html` for all concepts. `vercel.json` SPA fallback added. GSC tag + deep-link hash handler in `index.html`. Run `node tools/generate-static-pages.js` then commit the `/concepts/` folder to deploy pages. Install pre-push hook via `tools/setup-hooks.sh` (one-time manual **[ACTION]**).
 - **SEO Session 2 ✅ v2.72** — 710 branded OG images (1200×630 PNG) generated via `tools/generate-og-images.js` using Satori + Sharp. One image per concept at `/og/[id].png`. Each static concept page now references its own OG image. Hosted in repo, served by Vercel. When someone shares a concept URL on WhatsApp/Twitter/Slack, the branded preview card appears automatically.
