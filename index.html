@@ -32831,13 +32831,19 @@ body.corner-mode .sp-eyebrow-kicker { opacity: 0; pointer-events: none; transiti
 }
 
 /* ── Pull quote — fixed, right side, appears after scroll, fades before library ── */
-.sp-pull-quote {
+/* ── Pull quotes DISABLED — v3.57b (re-enable before next demo) ── */
+.sp-pull-quote,
+.sp-pull-quote-left {
+  display: none !important;
+}
+/* ----- original pull-quote rules preserved below, inactive ----- */
+.sp-pull-quote-DISABLED {
   display: none;
   pointer-events: none;
   margin: 0;
 }
 @media (min-width: 1440px) {
-  .sp-pull-quote {
+  .sp-pull-quote-DISABLED {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
@@ -32853,14 +32859,14 @@ body.corner-mode .sp-eyebrow-kicker { opacity: 0; pointer-events: none; transiti
     transition: opacity 1.4s ease;
     z-index: 10;
   }
-  .sp-pull-quote.pq-visible  { opacity: 0.45; }
-  .sp-pull-quote.pq-hidden   { opacity: 0 !important; transition: opacity 0.5s ease !important; }
+  .sp-pull-quote-DISABLED.pq-visible  { opacity: 0.45; }
+  .sp-pull-quote-DISABLED.pq-hidden   { opacity: 0 !important; transition: opacity 0.5s ease !important; }
   /* Text crossfade during stat swap */
-  .sp-pull-quote.pq-swapping {
+  .sp-pull-quote-DISABLED.pq-swapping {
     opacity: 0 !important;
     transition: opacity 0.3s ease !important;
   }
-  .sp-pull-quote strong {
+  .sp-pull-quote-DISABLED strong {
     font-family: 'Playfair Display', serif;
     font-size: 1.8rem;
     font-weight: 400;
@@ -32882,7 +32888,7 @@ body.corner-mode .sp-eyebrow-kicker { opacity: 0; pointer-events: none; transiti
 }
 /* ── Left-side mirrored pull quote ── */
 @media (min-width: 1440px) {
-  .sp-pull-quote-left {
+  .sp-pull-quote-left-DISABLED {
     left: 9.35rem;
     right: auto;
     align-items: flex-start;
@@ -32894,13 +32900,10 @@ body.corner-mode .sp-eyebrow-kicker { opacity: 0; pointer-events: none; transiti
   }
 }
 
-/* Hide when panels open or corner mode active */
-body.corner-mode .sp-pull-quote,
-body.cs-panel-open .sp-pull-quote,
-body.sp2-panel-open .sp-pull-quote,
-body.corner-mode .sp-pull-quote-left,
-body.cs-panel-open .sp-pull-quote-left,
-body.sp2-panel-open .sp-pull-quote-left { opacity: 0 !important; transition: opacity 0.3s ease; }
+/* Hide when panels open or corner mode active — inactive while pull quotes disabled */
+/* body.corner-mode .sp-pull-quote, body.cs-panel-open .sp-pull-quote, body.sp2-panel-open .sp-pull-quote,
+body.corner-mode .sp-pull-quote-left, body.cs-panel-open .sp-pull-quote-left,
+body.sp2-panel-open .sp-pull-quote-left { opacity: 0 !important; transition: opacity 0.3s ease; } */
 
 /* ── Word swap — "die" → "live" crossfade ──
    #spHW1 gets position:relative; JS appends .sp-word-live span absolutely on top */
