@@ -6,11 +6,14 @@
 
 ---
 
-## v3.57d — 2026-08-19 · Fix: unified dark background, newsletter grey strip
+## v3.57d — 2026-08-19 · Fix: thumbnail placeholder grey strips + FOUC
 
-**Bug fix.** Two remaining grey strips eliminated:
-1. **Newsletter section** had `background: var(--surface)` (`#141414`), making it a full-width grey band across the "Why Epistemic exists" area. Changed to `var(--bg)`.
-2. **`--bg` color** changed from `#0d0d0d` to `#0f0f0f` — a slightly lighter shade to ensure the body background propagates uniformly everywhere, confirming no element overrides it with an older hardcoded value.
+**Bug fix.** Root cause of the grey horizontal strips on desktop identified and eliminated:
+
+1. **`.episode-thumb { background: transparent }`** (was `var(--surface2)` = `#1c1c1c`). The thumbnail container had a grey placeholder background shown while YouTube images lazy-load. On desktop with multiple cards side-by-side, all 170px thumb containers align at the same Y position, creating a continuous grey band. Making it transparent blends it into the card background.
+2. **`<body style="background:#0d0d0d">`** inline style added to prevent FOUC — browser applies the dark background immediately before the stylesheet parses, eliminating the flash-of-grey during initial page load.
+3. **Newsletter** `.newsletter { background: var(--bg) }` (was `var(--surface)`) — eliminates the grey band in the "Why Epistemic exists" section.
+4. **`--bg` reverted** to `#0d0d0d` (unchanged from design intent).
 
 ---
 
