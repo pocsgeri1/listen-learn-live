@@ -6,6 +6,12 @@
 
 ---
 
+## v3.57c — 2026-08-19 · Fix: episode card grey strip on dark theme
+
+**Bug fix.** Episode cards had `background: var(--surface)` (`#141414`), which is slightly lighter than the body background (`#0d0d0d`). On Retina displays with higher contrast rendering, all cards in a horizontal row show their text-info area at the same vertical position, creating a visible grey horizontal band ("grey strip") cutting across the dark page background. Fixed by setting `episode-card` background to `var(--bg)` in dark mode — card border still defines the card shape; only the surface fill was removed. Light theme card background (`#ede6d8`) unchanged.
+
+---
+
 ## v3.58 — 2026-08-11 · Docs: V3 architecture + AI voice system
 
 **Documentation only. Zero code changes.** This version is the complete V3 build plan — the strategy session output that v3.59 onward executes against.
