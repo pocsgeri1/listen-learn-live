@@ -6,23 +6,6 @@
 
 ---
 
-## v3.57d — 2026-08-19 · Fix: thumbnail placeholder grey strips + FOUC
-
-**Bug fix.** Root cause of the grey horizontal strips on desktop identified and eliminated:
-
-1. **`.episode-thumb { background: transparent }`** (was `var(--surface2)` = `#1c1c1c`). The thumbnail container had a grey placeholder background shown while YouTube images lazy-load. On desktop with multiple cards side-by-side, all 170px thumb containers align at the same Y position, creating a continuous grey band. Making it transparent blends it into the card background.
-2. **`<body style="background:#0d0d0d">`** inline style added to prevent FOUC — browser applies the dark background immediately before the stylesheet parses, eliminating the flash-of-grey during initial page load.
-3. **Newsletter** `.newsletter { background: var(--bg) }` (was `var(--surface)`) — eliminates the grey band in the "Why Epistemic exists" section.
-4. **`--bg` reverted** to `#0d0d0d` (unchanged from design intent).
-
----
-
-## v3.57c — 2026-08-19 · Fix: episode card grey strip on dark theme
-
-**Bug fix.** Episode cards had `background: var(--surface)` (`#141414`), which is slightly lighter than the body background (`#0d0d0d`). On Retina displays with higher contrast rendering, all cards in a horizontal row show their text-info area at the same vertical position, creating a visible grey horizontal band ("grey strip") cutting across the dark page background. Fixed by setting `episode-card` background to `var(--bg)` in dark mode — card border still defines the card shape; only the surface fill was removed. Light theme card background (`#ede6d8`) unchanged.
-
----
-
 ## v3.58 — 2026-08-11 · Docs: V3 architecture + AI voice system
 
 **Documentation only. Zero code changes.** This version is the complete V3 build plan — the strategy session output that v3.59 onward executes against.
