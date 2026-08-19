@@ -6,6 +6,14 @@
 
 ---
 
+## v3.57d — 2026-08-19 · Fix: unified dark background, newsletter grey strip
+
+**Bug fix.** Two remaining grey strips eliminated:
+1. **Newsletter section** had `background: var(--surface)` (`#141414`), making it a full-width grey band across the "Why Epistemic exists" area. Changed to `var(--bg)`.
+2. **`--bg` color** changed from `#0d0d0d` to `#0f0f0f` — a slightly lighter shade to ensure the body background propagates uniformly everywhere, confirming no element overrides it with an older hardcoded value.
+
+---
+
 ## v3.57c — 2026-08-19 · Fix: episode card grey strip on dark theme
 
 **Bug fix.** Episode cards had `background: var(--surface)` (`#141414`), which is slightly lighter than the body background (`#0d0d0d`). On Retina displays with higher contrast rendering, all cards in a horizontal row show their text-info area at the same vertical position, creating a visible grey horizontal band ("grey strip") cutting across the dark page background. Fixed by setting `episode-card` background to `var(--bg)` in dark mode — card border still defines the card shape; only the surface fill was removed. Light theme card background (`#ede6d8`) unchanged.
