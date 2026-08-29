@@ -181,7 +181,7 @@ function _routeGo(path, opts) {
   var pathname = qIdx !== -1 ? full.slice(0, qIdx) : full;
   var segments = pathname.split('/').filter(Boolean);
   var top = segments[0] || 'today';
-  var validTop = ['today', 'library', 'c', 'w', 'boards', 'write', 'chat'];
+  var validTop = ['today', 'library', 'c', 'w', 'boards', 'board', 'write', 'chat'];
   if (validTop.indexOf(top) === -1) { segments = ['today']; top = 'today'; }
 
   var normalizedPath = '/' + segments.join('/');
@@ -203,9 +203,19 @@ function _routeGo(path, opts) {
     return;
   }
 
+  if (top === 'board' && segments[1]) {
+    // Canvas overlay owns its own full-screen display and nav mode
+    // (see _cvOpen's V3 hooks) — just keep the rail's active state in sync.
+    _setActiveRailItem('/boards');
+    var alreadyOpenForThisBoard = typeof _CV !== 'undefined' && _CV.folderId === segments[1] &&
+      document.getElementById('canvasOverlay') && document.getElementById('canvasOverlay').classList.contains('cv-open');
+    if (!alreadyOpenForThisBoard) _boardOpenWhenReady(segments[1]);
+    return;
+  }
+
   _renderAppPane(segments, query);
   _setActiveRailItem('/' + top);
-  _setNavMode(top === 'boards' && segments[1] ? 'immersive' : 'tabs');
+  _setNavMode('tabs');
 }
 
 window.addEventListener('hashchange', function () {
@@ -225,8 +235,7 @@ function _renderAppPane(segments, query) {
   } else if (top === 'library') {
     _renderLibraryPane(main, segments, query);
   } else if (top === 'boards') {
-    main.innerHTML = '<div class="app-pane"><div class="app-pane-title">Boards</div><div class="app-pane-sub">Opening your boards…</div></div>';
-    if (typeof openLibrary === 'function') openLibrary('folders');
+    _renderBoardsIndex(main);
   } else if (top === 'write') {
     main.innerHTML = '<div class="app-pane"><div class="app-pane-title">Write</div><div class="app-pane-sub">Opening…</div></div>';
     if (typeof openLexiconPanel === 'function') openLexiconPanel();
@@ -244,6 +253,33 @@ function _railChat() { _routeGo('/chat'); }
 function _railLibrary() { _routeGo('/library'); }
 function _railBoards() { _routeGo('/boards'); }
 function _railWrite() { _routeGo('/write'); }
+
+/* ---- Board route (#/board/{id}) -----------------------------------------
+   Reuses the existing _cvOpen()/_cvClose() canvas overlay unchanged — it
+   already covers the full viewport at z-index 8000, which is functionally
+   the "immersive" experience the doc asks for. _cvOpen/_cvClose gained a
+   few surgical hooks (viewport restore/save, data-nav toggle) — see the
+   phase 4 commit. This route does not attempt to convert the overlay into
+   a true SPA pane; that would be a much larger, riskier rewrite of
+   well-tested canvas interaction code for the same practical result. */
+function _boardOpen(folderId) {
+  _routeGo('/board/' + folderId);
+}
+
+/* _cvBuildStage() silently skips any card whose concept isn't in CONCEPTS
+   yet (pre-existing behavior, harmless before — _cvOpen was previously
+   only ever reached after the app had been open and loaded for a while).
+   The router makes #/board/{id} reachable on a cold deep-link boot, which
+   can race concepts.json — so this route waits for data readiness the
+   same way the Library pane does, instead of silently opening an empty
+   canvas. */
+function _boardOpenWhenReady(folderId) {
+  if (!_libDataReady()) {
+    setTimeout(function () { _boardOpenWhenReady(folderId); }, 200);
+    return;
+  }
+  if (typeof _cvOpen === 'function') _cvOpen(folderId);
+}
 
 function _setActiveRailItem(route) {
   document.querySelectorAll('.app-rail-item[data-route], .app-tab-item[data-route]').forEach(function (el) {
@@ -604,6 +640,277 @@ function _libRenderEpisodesLens(params, token) {
       '<div class="lib-tile-hook">' + (col.podcast || '').replace(/[<>&]/g, '') + '</div>' +
       '</button>';
   });
+}
+
+/* ---- Boards (Phase 4, v3.61) ---------------------------------------------
+   Boards index (grid of board cards) + viewport persistence + board covers
+   + user-drawn connections. Retires the Home drawer entirely — its two
+   remaining "open folders tab" call sites in index.html now redirect to
+   _routeGo('/boards') (see _folderPickerGoCreate, _importBoard).
+
+   Viewport debounce: the architecture doc gives two different numbers for
+   this (400ms in §6.4, 800ms in §10.4). §10.4 reasons about it explicitly
+   ("debounced separately and more slowly than layout... the single
+   heaviest write in the app") so 800ms — the deliberate, reasoned number —
+   is what's implemented; §6.4's 400ms looks like it was copied from the
+   layout-save debounce by mistake. */
+
+var _cvViewportSaveTimer = null;
+function _cvScheduleSaveViewport() {
+  if (_cvViewportSaveTimer) clearTimeout(_cvViewportSaveTimer);
+  _cvViewportSaveTimer = setTimeout(_cvSaveViewport, 800);
+}
+function _cvSaveViewport() {
+  if (typeof _CV === 'undefined' || !_CV.folderId || typeof _foldersGet !== 'function') return;
+  var folders = _foldersGet();
+  var f = folders.find(function (x) { return x.id === _CV.folderId; });
+  if (!f) return;
+  f.viewport = { x: _CV.panX, y: _CV.panY, z: _CV.zoom };
+  f.updatedAt = Date.now();
+  _foldersSet(folders);
+}
+
+function _folderCounts(f) {
+  return {
+    concepts: (f.conceptIds || []).length,
+    words: (f.vocabWords || []).length,
+    notes: (f.noteIds || []).length
+  };
+}
+
+/* Board cover: up to 4 concepts (coverIds, falling back to the first 4
+   conceptIds) shown as small category-coloured dots. No spatial mini-
+   render of canvasLayout — that's a materially bigger feature (a scaled
+   SVG re-render of the whole canvas) than the schema's own coverIds field
+   implies, and coverIds is what V3's data model actually shipped for
+   this (§9.3). */
+function _boardCoverHTML(f) {
+  var ids = (f.coverIds && f.coverIds.length) ? f.coverIds : (f.conceptIds || []).slice(0, 4);
+  if (!ids.length) return '<div class="board-cover board-cover-empty">' + (f.icon || '📚') + '</div>';
+  var dots = ids.slice(0, 4).map(function (id) {
+    var c = (window.CONCEPTS || []).find(function (x) { return x.id === id; });
+    var cat = c && typeof CATEGORIES !== 'undefined' ? CATEGORIES.find(function (x) { return x.id === c.category; }) : null;
+    return '<div class="board-cover-dot" style="background:' + (cat ? cat.color : 'var(--accent)') + '" title="' + (c ? c.term.replace(/"/g, '') : '') + '"></div>';
+  }).join('');
+  return '<div class="board-cover">' + dots + '</div>';
+}
+
+function _renderBoardsIndex(main) {
+  main.innerHTML =
+    '<div class="lib-pane">' +
+      '<div class="lib-header"><div class="app-pane-title" style="font-size:1.1rem;">Boards</div></div>' +
+      '<div class="boards-grid" id="boardsGrid"></div>' +
+    '</div>';
+  _boardsRenderGrid();
+}
+
+function _boardsRenderGrid() {
+  var host = document.getElementById('boardsGrid');
+  if (!host) return;
+  var folders = (typeof _foldersGet === 'function') ? _foldersGet() : [];
+  folders = folders.slice().sort(function (a, b) {
+    if (!!b.pinned !== !!a.pinned) return b.pinned ? 1 : -1;
+    return (b.updatedAt || 0) - (a.updatedAt || 0);
+  });
+
+  var cardsHtml = folders.map(function (f) {
+    var counts = _folderCounts(f);
+    return '<div class="board-card" data-board-id="' + f.id + '">' +
+      '<div onclick="_boardOpen(\'' + f.id + '\')" style="cursor:pointer;">' +
+        _boardCoverHTML(f) +
+        '<div class="board-card-title"><span>' + (f.icon || '📚') + '</span>' + (f.name || '').replace(/[<>&]/g, '') + (f.pinned ? ' ★' : '') + '</div>' +
+        '<div class="board-card-meta">' + counts.concepts + ' concepts · ' + counts.words + ' words · ' + counts.notes + ' notes</div>' +
+      '</div>' +
+      '<div class="board-card-actions">' +
+        '<button onclick="_boardsEditPrompt(\'' + f.id + '\')" title="Edit">✎</button>' +
+        '<button onclick="_folderDuplicate(\'' + f.id + '\');_boardsRenderGrid();" title="Duplicate">⧉</button>' +
+        '<button onclick="_boardsShare(\'' + f.id + '\')" title="Share">↗</button>' +
+        '<button onclick="_boardsDelete(\'' + f.id + '\')" title="Delete">🗑</button>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+
+  host.innerHTML =
+    '<button class="board-card board-card-new" onclick="_boardsNewPrompt()"><div class="board-cover board-cover-empty">＋</div><div class="board-card-title">New board</div></button>' +
+    cardsHtml;
+}
+
+function _boardsNewPrompt() {
+  var name = prompt('Name your new board:');
+  if (!name || !name.trim()) return;
+  if (typeof _folderCreate !== 'function') return;
+  var f = _folderCreate(name.trim(), '📚', '#7aaf8a');
+  _boardsRenderGrid();
+  _boardOpen(f.id);
+}
+
+function _boardsEditPrompt(folderId) {
+  var folders = _foldersGet();
+  var f = folders.find(function (x) { return x.id === folderId; });
+  if (!f) return;
+  var name = prompt('Rename board:', f.name);
+  if (name === null) return;
+  if (name.trim()) f.name = name.trim();
+  f.updatedAt = Date.now();
+  _foldersSet(folders);
+  _boardsRenderGrid();
+}
+
+function _folderDuplicate(folderId) {
+  var folders = _foldersGet();
+  var f = folders.find(function (x) { return x.id === folderId; });
+  if (!f) return;
+  var copy = JSON.parse(JSON.stringify(f));
+  copy.id = 'f_' + Date.now();
+  copy.name = (f.name || 'Board') + ' copy';
+  copy.pinned = false;
+  copy.createdAt = copy.updatedAt = Date.now();
+  folders.push(copy);
+  _foldersSet(folders);
+}
+
+function _boardsShare(folderId) {
+  var folders = _foldersGet();
+  var f = folders.find(function (x) { return x.id === folderId; });
+  if (!f) return;
+  try {
+    var data = btoa(unescape(encodeURIComponent(JSON.stringify(f))));
+    var url = location.origin + location.pathname + '?import=' + data;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url);
+      alert('Share link copied to clipboard.');
+    } else {
+      prompt('Copy this share link:', url);
+    }
+  } catch (e) {
+    alert('Could not create a share link for this board.');
+  }
+}
+
+function _boardsDelete(folderId) {
+  var folders = _foldersGet();
+  var f = folders.find(function (x) { return x.id === folderId; });
+  if (!f) return;
+  if (!confirm('Delete "' + f.name + '"? This cannot be undone.')) return;
+  if (typeof _folderDelete === 'function') _folderDelete(folderId);
+  _boardsRenderGrid();
+}
+
+/* ---- Connections (user-drawn, §9.3) ---------------------------------
+   Distinct from the existing automatic related_ids arrow layer (kept,
+   unchanged) — these are deliberate user-drawn links between canvas
+   items, one of four kinds, persisted to folder.connections[]. */
+
+var _cvConnectMode = false;
+var _cvConnectFrom = null;
+
+function _cvToggleConnectMode() {
+  _cvConnectMode = !_cvConnectMode;
+  _cvConnectFrom = null;
+  var btn = document.getElementById('cvConnectToggle');
+  if (btn) btn.classList.toggle('cv-btn-off', !_cvConnectMode);
+  var container = document.getElementById('canvasContainer');
+  if (container) container.classList.toggle('cv-connecting', _cvConnectMode);
+}
+
+/* Scoped to concept cards only for this phase (not notes/labels/vocab/
+   links) — those item types have their own element ids that would need
+   the same treatment, a reasonable follow-on rather than blocking this.
+   Called from cvCard-{id}'s pointerdown (see the one-line interception
+   added there) when connect mode is armed. */
+function _cvConceptRef(conceptId) { return 'c:' + conceptId; }
+function _cvRefEl(ref) {
+  var m = /^c:(.+)$/.exec(ref);
+  return m ? document.getElementById('cvCard-' + m[1]) : null;
+}
+function _cvConnectPick(conceptId) {
+  if (!_cvConnectMode) return false;
+  var ref = _cvConceptRef(conceptId);
+  if (!_cvConnectFrom) {
+    _cvConnectFrom = ref;
+    var el = _cvRefEl(ref);
+    if (el) el.classList.add('cv-connect-from');
+    return true;
+  }
+  if (_cvConnectFrom === ref) return true;
+  _cvAddConnection(_cvConnectFrom, ref, 'plain');
+  var fromEl = _cvRefEl(_cvConnectFrom);
+  if (fromEl) fromEl.classList.remove('cv-connect-from');
+  _cvConnectFrom = null;
+  _cvToggleConnectMode();
+  return true;
+}
+
+function _cvAddConnection(from, to, kind) {
+  if (typeof _CV === 'undefined' || !_CV.folderId) return;
+  var folders = _foldersGet();
+  var f = folders.find(function (x) { return x.id === _CV.folderId; });
+  if (!f) return;
+  f.connections = f.connections || [];
+  f.connections.push({ from: from, to: to, kind: kind || 'plain', label: '' });
+  f.updatedAt = Date.now();
+  _foldersSet(folders);
+  if (typeof _cvScheduleArrows === 'function') _cvScheduleArrows();
+}
+
+function _cvRemoveConnection(index) {
+  if (typeof _CV === 'undefined' || !_CV.folderId) return;
+  var folders = _foldersGet();
+  var f = folders.find(function (x) { return x.id === _CV.folderId; });
+  if (!f || !f.connections) return;
+  f.connections.splice(index, 1);
+  f.updatedAt = Date.now();
+  _foldersSet(folders);
+  if (typeof _cvScheduleArrows === 'function') _cvScheduleArrows();
+}
+
+var _CV_CONNECTION_STROKE = { plain: '', causes: 'cv-conn-causes', contrasts: 'cv-conn-contrasts', supports: 'cv-conn-supports' };
+
+/* Draws user connections into the SAME svg as the automatic related_ids
+   arrows, appended after _cvDrawArrows() runs, using its exact centre-
+   point math so both layers line up. Ref format 'c:{id}' matches the
+   canvas item ref namespace already defined in the data model (§9.3). */
+function _cvDrawConnections() {
+  if (typeof _CV === 'undefined') return;
+  var svg = document.getElementById('canvasArrowLayer');
+  var folders = (typeof _foldersGet === 'function') ? _foldersGet() : [];
+  var f = folders.find(function (x) { return x.id === _CV.folderId; });
+  if (!svg || !f || !f.connections || !f.connections.length) return;
+
+  function centerOf(ref) {
+    var el = _cvRefEl(ref);
+    if (!el) return null;
+    return {
+      x: (parseFloat(el.style.left) || 0) + el.offsetWidth / 2 + 2000,
+      y: (parseFloat(el.style.top) || 0) + el.offsetHeight / 2 + 2000
+    };
+  }
+
+  f.connections.forEach(function (conn, i) {
+    var from = centerOf(conn.from);
+    var to = centerOf(conn.to);
+    if (!from || !to) return;
+    var line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', from.x); line.setAttribute('y1', from.y);
+    line.setAttribute('x2', to.x); line.setAttribute('y2', to.y);
+    line.setAttribute('class', 'cv-connection ' + (_CV_CONNECTION_STROKE[conn.kind] || ''));
+    line.setAttribute('data-conn-index', i);
+    line.addEventListener('dblclick', function () {
+      if (confirm('Remove this connection?')) _cvRemoveConnection(i);
+    });
+    svg.appendChild(line);
+  });
+}
+
+/* Hook into the existing arrow-scheduling loop so user connections
+   redraw whenever the automatic related_ids arrows do (same rAF batch,
+   same trigger points — no new listeners needed on drag/pan/zoom). */
+if (typeof _cvDrawArrows === 'function') {
+  var _cvDrawArrowsOriginal = _cvDrawArrows;
+  _cvDrawArrows = function () {
+    _cvDrawArrowsOriginal();
+    _cvDrawConnections();
+  };
 }
 
 /* ---- Boot ---------------------------------------------------------------

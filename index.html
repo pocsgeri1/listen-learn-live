@@ -27359,6 +27359,12 @@ function _folderPickerToggle(conceptId, folderId) {
 
 function _folderPickerGoCreate() {
   _folderPickerClose();
+  // V3 phase 4: Folders tab retired in favour of the Boards index.
+  if (typeof _routeGo === 'function' && typeof _boardsNewPrompt === 'function') {
+    _routeGo('/boards');
+    setTimeout(function() { _boardsNewPrompt(); }, 120);
+    return;
+  }
   // Open library to folders tab + trigger create form
   if (typeof openLibrary === 'function') openLibrary();
   setTimeout(function() {
@@ -27475,7 +27481,11 @@ function _cvOpen(folderId) {
   if (!f) return;
 
   _CV.folderId = folderId;
-  _CV.panX = 0; _CV.panY = 0; _CV.zoom = 1;
+  // V3 phase 4: restore persisted viewport instead of always resetting.
+  var _cvVp = f.viewport;
+  _CV.panX = (_cvVp && typeof _cvVp.x === 'number') ? _cvVp.x : 0;
+  _CV.panY = (_cvVp && typeof _cvVp.y === 'number') ? _cvVp.y : 0;
+  _CV.zoom = (_cvVp && typeof _cvVp.z === 'number') ? _cvVp.z : 1;
   _CV.layout = (f.canvasLayout && typeof f.canvasLayout === 'object') ? JSON.parse(JSON.stringify(f.canvasLayout)) : {};
   _CV.extraItems = (f.canvasItems && Array.isArray(f.canvasItems)) ? JSON.parse(JSON.stringify(f.canvasItems)) : [];
 
@@ -27495,6 +27505,8 @@ function _cvOpen(folderId) {
   requestAnimationFrame(function() {
     requestAnimationFrame(function() { overlay.classList.add('cv-visible'); });
   });
+  // V3 phase 4: immersive mobile nav while the canvas is open (app shell only).
+  if (document.body.getAttribute('data-shell') === 'app' && typeof _setNavMode === 'function') _setNavMode('immersive');
 
   // Lock body scroll
   if (typeof _spLockBodyScroll === 'function') _spLockBodyScroll();
@@ -27521,6 +27533,8 @@ function _cvClose() {
   if (typeof _spUnlockBodyScroll === 'function') _spUnlockBodyScroll();
   _cvUnbindEvents();
   if (_CV.arrowRafId) { cancelAnimationFrame(_CV.arrowRafId); _CV.arrowRafId = null; }
+  // V3 phase 4: leave immersive mode (app shell only).
+  if (document.body.getAttribute('data-shell') === 'app' && typeof _setNavMode === 'function') _setNavMode('tabs');
   // Clear URL hash
   history.replaceState(null, '', window.location.pathname + window.location.search);
 }
@@ -27639,6 +27653,11 @@ function _importBoard() {
   if (typeof _libUpdateAllTabCounts === 'function') _libUpdateAllTabCounts();
   _cvShareToast('\u2713 Board imported!');
   window._pendingImportFolder = null;
+  // V3 phase 4: Folders tab retired in favour of the Boards index.
+  if (typeof _routeGo === 'function') {
+    _routeGo('/boards');
+    return;
+  }
   // Open library folders tab
   if (typeof openLibrary === 'function') openLibrary();
   setTimeout(function() {
@@ -27709,6 +27728,12 @@ function _cvBuildStage() {
     card.addEventListener('pointerdown', function(e) {
       if (e.button !== 0) return;
       if (e.target.closest('.cv-card-btn')) return;
+      // V3 phase 4: connect mode intercepts the click instead of dragging.
+      if (typeof _cvConnectMode !== 'undefined' && _cvConnectMode) {
+        e.stopPropagation(); e.preventDefault();
+        _cvConnectPick(cid);
+        return;
+      }
       e.stopPropagation();
       e.preventDefault();
       card.setPointerCapture(e.pointerId);
@@ -27750,12 +27775,14 @@ function _cvZoom(delta) {
   _CV.zoom = newZoom;
   _cvApplyTransform();
   _cvUpdateZoomLabel();
+  if (typeof _cvScheduleSaveViewport === 'function') _cvScheduleSaveViewport();
 }
 
 function _cvZoomReset() {
   _CV.zoom = 1; _CV.panX = 0; _CV.panY = 0;
   _cvApplyTransform();
   _cvUpdateZoomLabel();
+  if (typeof _cvScheduleSaveViewport === 'function') _cvScheduleSaveViewport();
 }
 
 // ── Events ────────────────────────────────────────────────────────────
@@ -27815,6 +27842,7 @@ function _cvBindEvents() {
     if (_CV.panning) {
       _CV.panning = false;
       container.classList.remove('cv-panning');
+      if (typeof _cvScheduleSaveViewport === 'function') _cvScheduleSaveViewport();
     }
   };
 
@@ -27831,6 +27859,7 @@ function _cvBindEvents() {
     _CV.zoom = newZoom;
     _cvApplyTransform();
     _cvUpdateZoomLabel();
+    if (typeof _cvScheduleSaveViewport === 'function') _cvScheduleSaveViewport();
   };
 
   _cvBoundKeyDown = function(e) {
@@ -27886,6 +27915,7 @@ function _cvBindEvents() {
       _cvPinchDist = newDist;
       _cvApplyTransform();
       _cvUpdateZoomLabel();
+      if (typeof _cvScheduleSaveViewport === 'function') _cvScheduleSaveViewport();
     }
   }, { passive: false });
   container.addEventListener('touchend', function(e) {
@@ -41120,6 +41150,12 @@ function _wcRenderMobileGrid(words) {
     </button>
     <button class="cv-tb-btn" onclick="_cvAutoArrange()" title="Auto-arrange all concept cards">
       <span class="cv-tb-icon">⊞</span><span class="cv-tb-label">Arrange</span>
+    </button>
+    <!-- V3 phase 4: user-drawn connections (folder.connections[], §9.3) —
+         distinct from the "⌁ Connections" button above, which only shows
+         or hides the automatic related_ids arrows. -->
+    <button class="cv-tb-btn" id="cvConnectToggle" onclick="if(typeof _cvToggleConnectMode==='function')_cvToggleConnectMode()" title="Draw a link between two cards">
+      <span class="cv-tb-icon">⚭</span><span class="cv-tb-label">Draw link</span>
     </button>
   </div>
   <!-- Mini picker popover for vocab / yt / link -->

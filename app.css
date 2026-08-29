@@ -509,6 +509,98 @@ body[data-shell="app"][data-nav="immersive"] .app-immersive-back {
   cursor: pointer;
 }
 
+/* ---- Boards (Phase 4) --------------------------------------------------- */
+
+.boards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+  padding: 0 24px 24px;
+  overflow-y: auto;
+}
+.board-card {
+  border: 0.5px solid var(--border);
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text);
+  position: relative;
+}
+.board-card-new {
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-style: dashed;
+  background: none;
+  min-height: 140px;
+}
+.board-cover {
+  display: flex;
+  gap: 4px;
+  height: 28px;
+  align-items: center;
+}
+.board-cover-dot {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+}
+.board-cover-empty {
+  font-size: 1.4rem;
+  opacity: 0.5;
+}
+.board-card-title {
+  font-size: 0.88rem;
+  font-weight: 500;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.board-card-meta {
+  font-size: 0.72rem;
+  color: color-mix(in srgb, var(--text) 50%, transparent);
+}
+.board-card-actions {
+  display: flex;
+  gap: 4px;
+  justify-content: flex-end;
+}
+.board-card-actions button {
+  background: none;
+  border: none;
+  color: color-mix(in srgb, var(--text) 55%, transparent);
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 4px;
+}
+.board-card-actions button:hover {
+  color: var(--text);
+}
+
+/* ---- Connections (Phase 4) — distinct from the automatic .cv-arrow
+   related_ids layer (dashed, low-opacity, non-interactive). ---- */
+
+.cv-connection {
+  stroke: var(--accent);
+  stroke-width: 1.6;
+  opacity: 0.7;
+  pointer-events: stroke;
+  cursor: pointer;
+}
+.cv-conn-causes { stroke: #d4715a; }
+.cv-conn-contrasts { stroke-dasharray: 2 3; }
+.cv-conn-supports { stroke: #8ab87a; }
+.cv-connect-from {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+#canvasContainer.cv-connecting {
+  cursor: crosshair;
+}
+
 /* ---- Reduced motion ---------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
   .app-rail-item, .app-rail-item-label { transition: none !important; }
