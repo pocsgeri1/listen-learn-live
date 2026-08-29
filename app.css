@@ -784,6 +784,66 @@ body[data-shell="app"][data-nav="immersive"] .app-immersive-back {
   cursor: not-allowed;
 }
 
+/* ---- Today (Phase 8) ------------------------------------------------- */
+
+.today-pane {
+  height: 100%;
+  overflow-y: auto;
+  padding: 24px;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text);
+  max-width: 720px;
+  margin: 0 auto;
+}
+.today-cotd {
+  border: 0.5px solid var(--border);
+  background: var(--surface);
+  border-radius: 14px;
+  padding: 18px;
+  cursor: pointer;
+  margin-bottom: 16px;
+}
+.today-streak {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.today-streak-dots {
+  display: flex;
+  gap: 4px;
+}
+.today-streak-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--border);
+}
+.today-streak-dot.filled {
+  background: var(--accent);
+}
+.today-resume {
+  border: 0.5px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  margin-bottom: 24px;
+}
+.today-rail {
+  margin-bottom: 20px;
+}
+.today-rail-title {
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+.today-rail-scroll {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
 /* ---- Reduced motion ---------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
   .app-rail-item, .app-rail-item-label { transition: none !important; }

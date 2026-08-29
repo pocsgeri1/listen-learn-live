@@ -290,7 +290,7 @@ function _renderAppPane(segments, query) {
   if (!main) return;
   var top = segments[0];
   if (top === 'today') {
-    main.innerHTML = '<div class="app-pane"><div class="app-pane-title">Today</div><div class="app-pane-sub">The daily ritual and discovery rails ship in phase 8. For now, use the rail to open your library, boards, and writing tools.</div></div>';
+    _renderTodayPane(main);
   } else if (top === 'chat') {
     main.innerHTML = '<div class="app-pane"><div class="app-pane-title">Chat</div><div class="app-pane-sub">Grounded chat ships in phase 9, pending the phase 8 go/no-go decision (§17.3).</div></div>';
   } else if (top === 'library') {
@@ -324,6 +324,15 @@ function _railWrite() { _routeGo('/write'); }
    well-tested canvas interaction code for the same practical result. */
 function _boardOpen(folderId) {
   _routeGo('/board/' + folderId);
+  _logLastBoard(folderId);
+}
+
+/* lll_last_board_v1 — genuinely new, no existing "resume" tracking of any
+   kind exists in the codebase (checked). Same dedupe/cap idiom as the
+   existing _epLogRecent() for recent episodes, just a new key since that
+   one tracks episode-drawer views, not boards. */
+function _logLastBoard(folderId) {
+  _lsSet('lll_last_board_v1', { folderId: folderId, ts: Date.now() });
 }
 
 /* _cvBuildStage() silently skips any card whose concept isn't in CONCEPTS
@@ -1046,6 +1055,7 @@ if (typeof _renderCSShell === 'function') {
   _renderCSShell = function (concept) {
     _renderCSShellOriginal(concept);
     _spSyncSaveBtn();
+    if (concept && concept.id != null) _markSeen(concept.id);
   };
 }
 
@@ -1072,6 +1082,7 @@ function _captureCreate(text, opts) {
   };
   captures.unshift(cap);
   _lsSet('lll_captures_v1', captures);
+  if (typeof _v3TriggerStreak === 'function') _v3TriggerStreak();
   return cap;
 }
 
@@ -1613,6 +1624,254 @@ function _voiceSetFirstLanguage(val) {
   var v = _lsGet('lll_voice_v1', { dials: {}, firstLanguage: '' });
   v.firstLanguage = val;
   _lsSet('lll_voice_v1', v);
+}
+
+/* ---- Today + Discover (Phase 8, v3.65) -----------------------------------
+   Reuses the existing pickTodaysConcept()/renderCotd() internals rather
+   than rebuilding COTD selection — only the pool passed in changes. The
+   existing streak system (checkAndUpdateStreak) has different semantics
+   than this phase needs (gated on 5 concept-opens/day, not "saved a
+   concept OR wrote a capture OR completed practice" per §6.1) — rather
+   than touch that gate, this adds a parallel, idempotent-per-day trigger
+   to the SAME lll_streak_v1 key from the three actions the doc actually
+   wants counted. Both systems are safe to coexist: whichever fires first
+   on a given day sets lastDate=today, and the other becomes a no-op for
+   that day (same date-comparison guard in both). */
+
+function _v3TriggerStreak() {
+  if (typeof loadStreak !== 'function' || typeof saveStreak !== 'function') return;
+  var today = new Date().toISOString().slice(0, 10);
+  var s = loadStreak();
+  if (s.lastDate === today) return;
+  var yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+  var newCount = (s.lastDate === yesterday) ? s.count + 1 : 1;
+  saveStreak(newCount, today);
+}
+
+if (typeof toggleMaster === 'function') {
+  var _toggleMasterOriginal = toggleMaster;
+  toggleMaster = function (e, id) { _toggleMasterOriginal(e, id); _v3TriggerStreak(); };
+}
+if (typeof _lexiEndSession === 'function') {
+  var _lexiEndSessionOriginal = _lexiEndSession;
+  _lexiEndSession = function () { _v3TriggerStreak(); _lexiEndSessionOriginal(); };
+}
+// _captureCreate is this build's own function — streak call added inline
+// there instead of a wrap; see its definition in the phase 6 section.
+
+/* lll_seen_v1 — confirmed genuinely new (no reads or writes anywhere in
+   the codebase). Capped at 500, newest-excluded-from-cap-loss (oldest
+   trimmed first) — mirrors the existing _epLogRecent cap pattern. */
+function _markSeen(conceptId) {
+  var seen = _lsGet('lll_seen_v1', []);
+  if (seen.indexOf(conceptId) !== -1) return;
+  seen.push(conceptId);
+  if (seen.length > 500) seen = seen.slice(seen.length - 500);
+  _lsSet('lll_seen_v1', seen);
+}
+
+function _renderTodayPane(main) {
+  if (!_libDataReady()) {
+    main.innerHTML = '<div class="app-pane"><div class="lib-loading">Loading…</div></div>';
+    setTimeout(function () { if (_APP_ROUTE === '/today') _renderTodayPane(main); }, 200);
+    return;
+  }
+  main.innerHTML = '<div class="today-pane" id="todayPane"></div>';
+  var host = document.getElementById('todayPane');
+
+  host.innerHTML =
+    '<div class="today-ritual" id="todayRitual"></div>' +
+    '<div class="today-rails" id="todayRails"></div>';
+
+  _todayRenderRitual();
+  _todayRenderRails();
+}
+
+/* ---- Ritual block (above the fold, max 3 elements per §6.1) ---- */
+
+function _todayRenderRitual() {
+  var host = document.getElementById('todayRitual');
+  if (!host) return;
+  var masteredTs = _lsGet('lll_mastered_ts_v1', {});
+  var seen = _lsGet('lll_seen_v1', []);
+  var seenSet = {}; seen.forEach(function (id) { seenSet[id] = true; });
+
+  // COTD pool: editors_pick, not mastered, not seen — fall back to all
+  // editor's picks, then all concepts, per §6.1's exact fallback rule.
+  var pool = (window.CONCEPTS || []).filter(function (c) { return c.editors_pick === true && !masteredTs[c.id] && !seenSet[c.id]; });
+  if (!pool.length) pool = (window.CONCEPTS || []).filter(function (c) { return c.editors_pick === true; });
+  if (!pool.length) pool = window.CONCEPTS || [];
+  var cotd = (typeof pickTodaysConcept === 'function') ? pickTodaysConcept(pool) : pool[0];
+
+  var streak = (typeof loadStreak === 'function') ? loadStreak() : { count: 0, lastDate: null };
+  var streakActive = streak.lastDate === new Date().toISOString().slice(0, 10) ||
+    streak.lastDate === new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+  var dots = '';
+  for (var i = 0; i < 7; i++) dots += '<span class="today-streak-dot' + (i < Math.min(streak.count, 7) ? ' filled' : '') + '"></span>';
+
+  var resume = _todayResumeRow();
+
+  host.innerHTML =
+    (cotd ? '<div class="today-cotd" onclick="_routeGo(\'/c/' + cotd.id + '\')">' +
+      '<div class="app-pane-sub" style="text-align:left;">Concept of the Day</div>' +
+      '<div class="lib-tile-term" style="font-size:1.15rem;margin:4px 0;">' + cotd.term.replace(/[<>&]/g, '') + '</div>' +
+      '<div class="lib-tile-hook">' + (cotd.hook || '').replace(/[<>&]/g, '') + '</div>' +
+      '<div style="display:flex;gap:8px;margin-top:10px;">' +
+        '<button class="sp-primary-btn" style="max-width:120px;" onclick="event.stopPropagation();toggleMaster(event,' + cotd.id + ')">✦ Save</button>' +
+        '<button class="sp-primary-btn" style="max-width:160px;" onclick="event.stopPropagation();_routeGo(\'/write?c=' + cotd.id + '\')">✎ Write one line</button>' +
+      '</div>' +
+    '</div>' : '') +
+    '<div class="today-streak">' +
+      '<div class="today-streak-dots">' + dots + '</div>' +
+      '<div class="app-pane-sub">' + streak.count + '-day streak' + (streakActive ? '' : ' — save, write, or practice today to keep it going') + '</div>' +
+    '</div>' +
+    (resume ? resume : '');
+}
+
+function _todayResumeRow() {
+  var lastBoard = _lsGet('lll_last_board_v1', null);
+  var drafts = _lsGet('lll_drafts_v1', []);
+  var lastDraft = drafts.length ? drafts.slice().sort(function (a, b) { return (b.updatedAt || 0) - (a.updatedAt || 0); })[0] : null;
+  var boardTs = lastBoard ? lastBoard.ts : 0;
+  var draftTs = lastDraft ? (lastDraft.updatedAt || 0) : 0;
+  if (!boardTs && !draftTs) return '';
+  if (boardTs >= draftTs) {
+    var folders = (typeof _foldersGet === 'function') ? _foldersGet() : [];
+    var f = folders.find(function (x) { return x.id === lastBoard.folderId; });
+    if (!f) return '';
+    return '<div class="today-resume" onclick="_boardOpen(\'' + f.id + '\')">↩ Back to <strong>' + (f.name || 'your board').replace(/[<>&]/g, '') + '</strong></div>';
+  }
+  return '<div class="today-resume" onclick="_routeGo(\'/write/compose\')">↩ Finish your draft: <strong>' + (lastDraft.body || '').slice(0, 40).replace(/[<>&]/g, '') + '…</strong></div>';
+}
+
+/* ---- Discover rails (§4) — never rendered below their stated minimum,
+   never rendered empty. Cold start (no rails qualify) still shows the
+   COTD + ritual block above, which is a complete, dignified page on its
+   own per §4's fallback ladder. ---- */
+
+function _todayRenderRails() {
+  var host = document.getElementById('todayRails');
+  if (!host) return;
+  var masteredTs = _lsGet('lll_mastered_ts_v1', {});
+  var savedIds = Object.keys(masteredTs).map(Number);
+  var rails = [];
+
+  if (savedIds.length >= 3) rails.push(_railBecauseYouSaved(savedIds, masteredTs));
+  if (savedIds.length >= 10) rails.push(_railBlindSpot(savedIds));
+  rails.push(_railFinishEpisode(savedIds));
+  rails.push(_railEditorsPicks(masteredTs));
+  rails.push(_railNewThisWeek());
+  rails.push(_railWordsFromKnown(savedIds));
+  if (savedIds.length >= 5) rails.push(_railRevisit(savedIds, masteredTs));
+
+  rails = rails.filter(Boolean).slice(0, 6);
+  if (!rails.length) { host.innerHTML = ''; return; }
+  host.innerHTML = rails.map(_todayRailHTML).join('');
+}
+
+function _todayRailHTML(rail) {
+  return '<div class="today-rail">' +
+    '<div class="today-rail-title">' + rail.title.replace(/[<>&]/g, '') + '</div>' +
+    '<div class="today-rail-scroll">' + rail.items.map(function (c) {
+      return '<button class="lib-tile" style="min-width:160px;" onclick="_routeGo(\'/c/' + c.id + '\')">' +
+        '<div class="lib-tile-term">' + c.term.replace(/[<>&]/g, '') + '</div>' +
+        '<div class="lib-tile-hook">' + (c.hook || '').replace(/[<>&]/g, '') + '</div>' +
+        '</button>';
+    }).join('') + '</div>' +
+  '</div>';
+}
+
+function _railBecauseYouSaved(savedIds, masteredTs) {
+  var recent5 = savedIds.slice().sort(function (a, b) { return masteredTs[b] - masteredTs[a]; }).slice(0, 5);
+  var savedSet = {}; savedIds.forEach(function (id) { savedSet[id] = true; });
+  var coCitation = {};
+  recent5.forEach(function (id) {
+    var c = (window.CONCEPTS || []).find(function (x) { return x.id === id; });
+    (c && c.related_ids || []).forEach(function (rid) {
+      if (savedSet[rid]) return;
+      coCitation[rid] = (coCitation[rid] || 0) + 1;
+    });
+  });
+  var ranked = Object.keys(coCitation).map(Number).sort(function (a, b) { return coCitation[b] - coCitation[a]; }).slice(0, 8);
+  if (!ranked.length) return null;
+  var seedTerm = (window.CONCEPTS || []).find(function (c) { return c.id === recent5[0]; });
+  var items = ranked.map(function (id) { return (window.CONCEPTS || []).find(function (c) { return c.id === id; }); }).filter(Boolean);
+  return { title: 'Because you saved ' + (seedTerm ? seedTerm.term : 'that'), items: items };
+}
+
+function _railBlindSpot(savedIds) {
+  var savedByCategory = {};
+  savedIds.forEach(function (id) {
+    var c = (window.CONCEPTS || []).find(function (x) { return x.id === id; });
+    if (c) savedByCategory[c.category] = (savedByCategory[c.category] || 0) + 1;
+  });
+  var cats = (typeof CATEGORIES !== 'undefined' ? CATEGORIES : []).filter(function (c) { return c.id !== 'all'; });
+  if (!cats.length) return null;
+  var weakest = cats.slice().sort(function (a, b) { return (savedByCategory[a.id] || 0) - (savedByCategory[b.id] || 0); })[0];
+  var items = (window.CONCEPTS || []).filter(function (c) { return c.category === weakest.id && c.editors_pick === true; }).slice(0, 4);
+  if (!items.length) return null;
+  return { title: 'Your blind spot: ' + weakest.name, items: items };
+}
+
+function _railFinishEpisode(savedIds) {
+  var savedSet = {}; savedIds.forEach(function (id) { savedSet[id] = true; });
+  var byCol = {};
+  (window.CONCEPTS || []).forEach(function (c) {
+    if (c.collection_id == null) return;
+    byCol[c.collection_id] = byCol[c.collection_id] || { total: [], saved: [] };
+    byCol[c.collection_id].total.push(c);
+    if (savedSet[c.id]) byCol[c.collection_id].saved.push(c);
+  });
+  var candidate = Object.keys(byCol).map(Number).find(function (colId) {
+    var g = byCol[colId];
+    return g.saved.length >= 1 && g.saved.length / g.total.length < 0.5;
+  });
+  if (candidate == null) return null;
+  var g = byCol[candidate];
+  var unsaved = g.total.filter(function (c) { return !savedSet[c.id]; }).slice(0, 8);
+  if (!unsaved.length) return null;
+  var col = (typeof COLLECTIONS_BY_ID !== 'undefined') ? COLLECTIONS_BY_ID[candidate] : null;
+  return { title: 'Finish ' + (col ? col.title : 'the episode'), items: unsaved };
+}
+
+function _railEditorsPicks(masteredTs) {
+  var seen = _lsGet('lll_seen_v1', []);
+  var seenSet = {}; seen.forEach(function (id) { seenSet[id] = true; });
+  var pool = (window.CONCEPTS || []).filter(function (c) { return c.editors_pick === true && !masteredTs[c.id] && !seenSet[c.id]; });
+  if (!pool.length) return null;
+  var seed = parseInt(new Date().toISOString().slice(0, 10).replace(/-/g, ''), 10) % 997;
+  var shuffled = pool.slice().sort(function (a, b) { return ((a.id + seed) % 997) - ((b.id + seed) % 997); });
+  return { title: "Editor's picks you haven't seen", items: shuffled.slice(0, 8) };
+}
+
+function _railNewThisWeek() {
+  var cutoff = Date.now() - 14 * 24 * 60 * 60 * 1000;
+  var recentColIds = {};
+  Object.values((typeof COLLECTIONS_BY_ID !== 'undefined') ? COLLECTIONS_BY_ID : {}).forEach(function (col) {
+    var d = col.created_date || col.aired_date;
+    if (d && new Date(d).getTime() >= cutoff) recentColIds[col.id] = true;
+  });
+  var items = (window.CONCEPTS || []).filter(function (c) { return recentColIds[c.collection_id]; }).slice(0, 8);
+  if (!items.length) return null;
+  return { title: 'New this week', items: items };
+}
+
+function _railWordsFromKnown(savedIds) {
+  // Words rail links to the Words lens rather than rendering word tiles
+  // in the same concept-tile format as the other rails (a word isn't a
+  // concept and the tile template assumes concept fields).
+  return null; // deferred — see phase 8 commit note
+}
+
+function _railRevisit(savedIds, masteredTs) {
+  var cutoff = Date.now() - 21 * 24 * 60 * 60 * 1000;
+  var captureConceptIds = {};
+  _lsGet('lll_captures_v1', []).forEach(function (cap) { (cap.conceptIds || []).forEach(function (id) { captureConceptIds[id] = true; }); });
+  var candidates = savedIds.filter(function (id) { return masteredTs[id] <= cutoff && !captureConceptIds[id]; });
+  if (candidates.length < 1) return null;
+  var items = candidates.map(function (id) { return (window.CONCEPTS || []).find(function (c) { return c.id === id; }); }).filter(Boolean).slice(0, 8);
+  if (!items.length) return null;
+  return { title: 'Revisit', items: items };
 }
 
 /* ---- Boot ---------------------------------------------------------------
