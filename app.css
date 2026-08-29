@@ -764,6 +764,26 @@ body[data-shell="app"][data-nav="immersive"] .app-immersive-back {
   font-size: 0.75rem;
 }
 
+/* ---- Compose (Phase 7) --------------------------------------------------- */
+
+.compose-source-section {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: color-mix(in srgb, var(--text) 45%, transparent);
+  margin: 12px 0 6px;
+}
+.compose-source-grid, .compose-format-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.sp-primary-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 /* ---- Reduced motion ---------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
   .app-rail-item, .app-rail-item-label { transition: none !important; }

@@ -1193,17 +1193,286 @@ function _renderWritePane(main, segments, query) {
           '<button class="lib-lens-btn' + (mode === 'compose' ? ' active' : '') + '" onclick="_routeGo(\'/write/compose\')">Compose</button>' +
           '<button class="lib-lens-btn" onclick="_routeGo(\'/write/practice\')">Practice</button>' +
         '</div>' +
+        '<button class="lib-chip" style="margin-left:auto;" onclick="_voiceOpenSettings()">🎛 Your voice</button>' +
       '</div>' +
       '<div id="writeModeHost" class="write-mode-host"></div>' +
     '</div>';
 
   if (mode === 'compose') {
-    document.getElementById('writeModeHost').innerHTML =
-      '<div class="app-pane"><div class="app-pane-title">Compose</div><div class="app-pane-sub">AI-assisted drafting ships in phase 7 (api/compose.js) — a public endpoint that needs rate limits and a spend cap before it goes live, per §14.4.</div></div>';
+    _renderComposeMode();
     return;
   }
 
   _renderCaptureMode(params);
+}
+
+/* ---- Compose (Phase 7, v3.64) ------------------------------------------
+   Per §10.5: PICK_SOURCE -> PICK_FORMAT -> SEED -> GENERATING -> EDITING
+   -> (FINAL). Calls the new /api/compose endpoint built this phase. Per
+   this build's own decision with the user: the endpoint and this UI are
+   fully built and syntax-verified, but no live Anthropic call has been
+   made — api/compose.js's rate limiter is a documented best-effort
+   single-instance stand-in, not the real persistent limiter §14.4 calls
+   for, and there's no Anthropic spend alert configured yet. Both are the
+   user's to set up before this reaches real traffic. */
+
+var _composeState = { step: 'source', concepts: [], captures: [], format: 'note', regenCount: 0, draft: null };
+const BANNED_STRINGS_CLIENT = [
+  'unlock', 'leverage', 'game-changer', 'deep dive', 'needle-mover', '10x',
+  'hot take', 'at the end of the day', "in today's fast-paced world",
+  "here's the thing", 'let that sink in', 'the truth is',
+  "most people don't realize", 'a thread', 'buckle up',
+  "i'll say it louder for the people in the back"
+];
+const COMPOSE_FORMATS = [
+  { id: 'note', label: 'Note to self', seedRequired: false },
+  { id: 'explain', label: 'Explain it simply', seedRequired: false },
+  { id: 'talking-point', label: 'Talking point', seedRequired: false },
+  { id: 'email', label: 'Email / newsletter', seedRequired: false },
+  { id: 'linkedin', label: 'LinkedIn post', seedRequired: true },
+  { id: 'thread', label: 'X thread', seedRequired: true }
+];
+
+function _renderComposeMode() {
+  var host = document.getElementById('writeModeHost');
+  if (!host) return;
+  if (!_libDataReady() && _composeState.step === 'source') {
+    host.innerHTML = '<div class="lib-loading">Loading…</div>';
+    setTimeout(_renderComposeMode, 200);
+    return;
+  }
+  if (_composeState.step === 'source') _composeRenderSource(host);
+  else if (_composeState.step === 'format') _composeRenderFormat(host);
+  else if (_composeState.step === 'seed') _composeRenderSeed(host);
+  else if (_composeState.step === 'generating') _composeRenderGenerating(host);
+  else if (_composeState.step === 'editing') _composeRenderEditing(host);
+  else if (_composeState.step === 'error') _composeRenderError(host);
+}
+
+function _composeRenderError(host) {
+  host.innerHTML =
+    '<div class="app-pane"><div class="app-pane-title">Couldn\'t generate that</div>' +
+    '<div class="app-pane-sub">' + (_composeState.errorMessage || 'Something went wrong.').replace(/[<>&]/g, '') + '</div>' +
+    '<button class="sp-primary-btn" style="max-width:140px;margin-top:12px;" onclick="_composeState.step=\'format\';_renderComposeMode()">← Try again</button></div>';
+}
+
+function _composeRenderSource(host) {
+  var masteredTs = _lsGet('lll_mastered_ts_v1', {});
+  var recentConceptIds = Object.keys(masteredTs).map(Number).sort(function (a, b) { return masteredTs[b] - masteredTs[a]; }).slice(0, 12);
+  var recentConcepts = recentConceptIds.map(function (id) { return (window.CONCEPTS || []).find(function (c) { return c.id === id; }); }).filter(Boolean);
+  var captures = _lsGet('lll_captures_v1', []).slice(0, 12);
+
+  host.innerHTML =
+    '<div class="app-pane-title" style="text-align:left;margin-bottom:12px;">Compose — pick a source</div>' +
+    '<div class="app-pane-sub" style="text-align:left;margin-bottom:12px;">Requires at least one saved concept or capture. Max 3 concepts, 5 captures.</div>' +
+    '<div class="compose-source-section">Concepts</div>' +
+    '<div class="compose-source-grid">' + recentConcepts.map(function (c) {
+      var active = _composeState.concepts.indexOf(c.id) !== -1;
+      return '<button class="lib-chip' + (active ? ' active' : '') + '" onclick="_composeToggleConcept(' + c.id + ')">' + c.term.replace(/[<>&]/g, '') + '</button>';
+    }).join('') + (!recentConcepts.length ? '<span class="app-pane-sub">Save some concepts first.</span>' : '') + '</div>' +
+    '<div class="compose-source-section">Captures</div>' +
+    '<div class="compose-source-grid">' + captures.map(function (c) {
+      var active = _composeState.captures.indexOf(c.id) !== -1;
+      return '<button class="lib-chip' + (active ? ' active' : '') + '" onclick="_composeToggleCapture(\'' + c.id + '\')">' + (c.text || '').slice(0, 40).replace(/[<>&]/g, '') + '</button>';
+    }).join('') + (!captures.length ? '<span class="app-pane-sub">Nothing captured yet.</span>' : '') + '</div>' +
+    '<button class="sp-primary-btn" style="margin-top:16px;max-width:200px;" onclick="_composeGoFormat()"' +
+      ((_composeState.concepts.length + _composeState.captures.length) === 0 ? ' disabled' : '') + '>Next: pick a format →</button>';
+}
+
+function _composeToggleConcept(id) {
+  var i = _composeState.concepts.indexOf(id);
+  if (i !== -1) _composeState.concepts.splice(i, 1);
+  else if (_composeState.concepts.length < 3) _composeState.concepts.push(id);
+  _renderComposeMode();
+}
+function _composeToggleCapture(id) {
+  var i = _composeState.captures.indexOf(id);
+  if (i !== -1) _composeState.captures.splice(i, 1);
+  else if (_composeState.captures.length < 5) _composeState.captures.push(id);
+  _renderComposeMode();
+}
+function _composeGoFormat() {
+  if (_composeState.concepts.length + _composeState.captures.length === 0) return;
+  _composeState.step = 'format';
+  _renderComposeMode();
+}
+
+function _composeRenderFormat(host) {
+  host.innerHTML =
+    '<div class="app-pane-title" style="text-align:left;margin-bottom:12px;">Pick a format</div>' +
+    '<div class="compose-format-grid">' + COMPOSE_FORMATS.map(function (f) {
+      return '<button class="lib-chip' + (_composeState.format === f.id ? ' active' : '') + '" onclick="_composeState.format=\'' + f.id + '\';_renderComposeMode()">' + f.label + (f.seedRequired ? ' *' : '') + '</button>';
+    }).join('') + '</div>' +
+    '<div class="app-pane-sub" style="text-align:left;margin:8px 0;">* requires a written seed of at least 40 words — Compose rewrites your thinking, it does not invent it (§7.6).</div>' +
+    '<div style="display:flex;gap:8px;margin-top:12px;">' +
+      '<button class="sp-primary-btn" style="max-width:100px;" onclick="_composeState.step=\'source\';_renderComposeMode()">← Back</button>' +
+      '<button class="sp-primary-btn" style="max-width:200px;" onclick="_composeGoSeed()">Next →</button>' +
+    '</div>';
+}
+
+function _composeGoSeed() {
+  var format = COMPOSE_FORMATS.find(function (f) { return f.id === _composeState.format; });
+  if (format && format.seedRequired) { _composeState.step = 'seed'; _renderComposeMode(); return; }
+  _composeGenerate();
+}
+
+function _composeRenderSeed(host) {
+  host.innerHTML =
+    '<div class="app-pane-title" style="text-align:left;margin-bottom:12px;">Write your seed (40+ words)</div>' +
+    '<textarea class="write-capture-ta" id="composeSeedTa" style="width:100%;min-height:120px;border:0.5px solid var(--border);border-radius:8px;padding:12px;" placeholder="What do you actually think? Compose sharpens this, it doesn\'t replace it."></textarea>' +
+    '<div class="app-pane-sub" id="composeSeedCount" style="text-align:left;margin:6px 0;">0 words</div>' +
+    '<div style="display:flex;gap:8px;">' +
+      '<button class="sp-primary-btn" style="max-width:100px;" onclick="_composeState.step=\'format\';_renderComposeMode()">← Back</button>' +
+      '<button class="sp-primary-btn" style="max-width:200px;" onclick="_composeSubmitSeed()">Generate →</button>' +
+    '</div>';
+  document.getElementById('composeSeedTa').addEventListener('input', function () {
+    var n = this.value.trim().split(/\s+/).filter(Boolean).length;
+    document.getElementById('composeSeedCount').textContent = n + ' words' + (n < 40 ? ' — need at least 40' : '');
+  });
+}
+
+function _composeSubmitSeed() {
+  var ta = document.getElementById('composeSeedTa');
+  var n = ta.value.trim().split(/\s+/).filter(Boolean).length;
+  if (n < 40) {
+    // Blocked with an explanatory message, never a silently disabled
+    // button (§7.3).
+    document.getElementById('composeSeedCount').textContent = n + ' words — need at least 40 before this format can generate.';
+    document.getElementById('composeSeedCount').style.color = 'var(--accent)';
+    return;
+  }
+  _composeState.seedText = ta.value.trim();
+  _composeGenerate();
+}
+
+function _composeGenerate() {
+  _composeState.step = 'generating';
+  _renderComposeMode();
+  var concepts = _composeState.concepts.map(function (id) { return (window.CONCEPTS || []).find(function (c) { return c.id === id; }); }).filter(Boolean)
+    .map(function (c) { return { id: c.id, term: c.term, category: c.category, hook: c.hook, plain: c.plain, analogy: c.analogy, prompt: c.prompt }; });
+  var allCaptures = _lsGet('lll_captures_v1', []);
+  var captures = _composeState.captures.map(function (id) { return allCaptures.find(function (c) { return c.id === id; }); }).filter(Boolean)
+    .map(function (c) { return { text: c.text }; });
+  var voice = _lsGet('lll_voice_v1', null);
+
+  var controller = new AbortController();
+  var timeout = setTimeout(function () { controller.abort(); }, 25000);
+
+  fetch('/api/compose', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    signal: controller.signal,
+    body: JSON.stringify({
+      mode: 'draft',
+      format: _composeState.format,
+      concepts: concepts,
+      captures: captures,
+      words: [],
+      voice: voice,
+      userText: _composeState.seedText || ''
+    })
+  }).then(function (r) {
+    clearTimeout(timeout);
+    if (!r.ok) return r.json().then(function (e) { throw new Error(e.error || 'Generation failed'); });
+    return r.json();
+  }).then(function (data) {
+    _composeApplyAntiSlop(data);
+  }).catch(function (e) {
+    _composeState.step = 'error';
+    _composeState.errorMessage = e.message || 'Something went wrong.';
+    _renderComposeMode();
+  });
+}
+
+/* Client-side quality gate (docs/ai-voice.md §6) — banned strings (one
+   silent retry, then ship+log), em-dash/curly-quote strip (always, no
+   retry), provenance check (empty sourceIds is discarded as an error,
+   never shipped silently). Not exercised against a live response in
+   this build pass — see the phase 7 commit note. */
+function _composeApplyAntiSlop(data, isRetry) {
+  if (!data.sourceIds || !data.sourceIds.length) {
+    _composeState.step = 'error';
+    _composeState.errorMessage = 'Draft had no traceable source — discarded rather than shown without provenance.';
+    _renderComposeMode();
+    return;
+  }
+  var body = data.body || '';
+  var hasBanned = BANNED_STRINGS_CLIENT.some(function (s) { return body.toLowerCase().indexOf(s) !== -1; });
+  if (hasBanned && !isRetry) {
+    console.log('[compose] banned string detected, retrying once (logged per ai-voice.md §6)');
+    _composeGenerate();
+    return;
+  }
+  body = body.replace(/—/g, ', ').replace(/[‘’]/g, "'").replace(/[“”]/g, '"');
+  _composeState.draft = { body: body, sourceIds: data.sourceIds, wordCount: data.wordCount, attribution: true, status: 'draft' };
+  _composeState.step = 'editing';
+  _renderComposeMode();
+}
+
+function _composeRenderGenerating(host) {
+  host.innerHTML = '<div class="app-pane"><div class="app-pane-title">Generating…</div><div class="app-pane-sub">One draft, in your voice, grounded in what you selected.</div></div>';
+}
+
+function _composeRenderEditing(host) {
+  var d = _composeState.draft;
+  if (!d) { _composeState.step = 'source'; _renderComposeMode(); return; }
+  var sourceTerms = d.sourceIds.map(function (id) {
+    var c = (window.CONCEPTS || []).find(function (x) { return x.id === id; });
+    return c ? c.term : id;
+  }).join(', ');
+
+  host.innerHTML =
+    '<textarea class="write-capture-ta" id="composeDraftTa" style="width:100%;min-height:180px;border:0.5px solid var(--border);border-radius:8px;padding:12px;">' + d.body.replace(/</g, '&lt;') + '</textarea>' +
+    '<div class="app-pane-sub" style="text-align:left;margin:8px 0;font-family:\'DM Mono\',monospace;">Built from ' + d.sourceIds.length + ' concept' + (d.sourceIds.length !== 1 ? 's' : '') + ' · ' + sourceTerms.replace(/[<>&]/g, '') + '</div>' +
+    '<label class="app-pane-sub" style="display:flex;align-items:center;gap:6px;text-align:left;"><input type="checkbox" id="composeAttribution" ' + (d.attribution ? 'checked' : '') + '> Include attribution line when copying</label>' +
+    '<div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">' +
+      '<button class="sp-primary-btn" style="max-width:140px;" onclick="_composeCopy()">Copy</button>' +
+      '<button class="sp-primary-btn" style="max-width:160px;" onclick="_composeRegenerate()"' + (_composeState.regenCount >= 3 ? ' disabled title="Edit it yourself"' : '') + '>' + (_composeState.regenCount >= 3 ? 'Edit it yourself' : 'Regenerate (' + (3 - _composeState.regenCount) + ' left)') + '</button>' +
+      '<button class="sp-primary-btn" style="max-width:140px;" onclick="_composeMarkFinal()">Mark final</button>' +
+      '<button class="sp-primary-btn" style="max-width:100px;" onclick="_composeState.step=\'source\';_composeState.draft=null;_composeState.regenCount=0;_renderComposeMode()">New</button>' +
+    '</div>';
+}
+
+function _composeRegenerate() {
+  if (_composeState.regenCount >= 3) return;
+  _composeState.regenCount++;
+  _composeGenerate();
+}
+
+function _composeCopy() {
+  var ta = document.getElementById('composeDraftTa');
+  var attrChecked = document.getElementById('composeAttribution')?.checked;
+  var text = ta ? ta.value : '';
+  if (attrChecked) {
+    var sourceTerms = _composeState.draft.sourceIds.map(function (id) {
+      var c = (window.CONCEPTS || []).find(function (x) { return x.id === id; });
+      return c ? c.term : id;
+    }).join(', ');
+    text += '\n\n(Built with Epistemic, from: ' + sourceTerms + ')';
+  }
+  if (navigator.clipboard) navigator.clipboard.writeText(text);
+}
+
+function _composeMarkFinal() {
+  var ta = document.getElementById('composeDraftTa');
+  var drafts = _lsGet('lll_drafts_v1', []);
+  drafts.unshift({
+    id: 'dr_' + Date.now(),
+    format: _composeState.format,
+    seed: _composeState.seedText || '',
+    sourceIds: _composeState.draft.sourceIds,
+    captureIds: _composeState.captures.slice(),
+    body: ta ? ta.value : _composeState.draft.body,
+    aiBody: _composeState.draft.body,
+    attribution: document.getElementById('composeAttribution')?.checked !== false,
+    boardId: null,
+    status: 'final',
+    createdAt: Date.now(),
+    updatedAt: Date.now()
+  });
+  _lsSet('lll_drafts_v1', drafts);
+  _composeState = { step: 'source', concepts: [], captures: [], format: 'note', regenCount: 0, draft: null };
+  _renderComposeMode();
 }
 
 function _renderCaptureMode(params) {
@@ -1295,6 +1564,55 @@ function _writeRenderCaptureList() {
     }).join('');
     return '<div class="write-capture-day">' + day + '</div>' + rows;
   }).join('');
+}
+
+/* ---- Voice profile settings (§7.4 Layer 2, dials only — sample-based
+   extraction and edit-learning are voice-extract/voice-update API calls,
+   deferred alongside the rest of live-API testing this phase). --------- */
+
+var _VOICE_DIALS = {
+  register: ['formal', 'neutral', 'casual'],
+  stance: ['observational', 'personal'],
+  edge: ['warm', 'direct', 'sharp'],
+  length: ['short', 'mixed', 'flowing'],
+  humour: ['off', 'dry', 'on']
+};
+
+function _voiceOpenSettings() {
+  if (document.getElementById('voiceSettingsModal')) return;
+  var v = _lsGet('lll_voice_v1', { dials: { register: 'neutral', stance: 'personal', edge: 'direct', length: 'mixed', humour: 'dry' }, firstLanguage: '' });
+  var modal = document.createElement('div');
+  modal.id = 'voiceSettingsModal';
+  modal.className = 'lib-word-sheet';
+  modal.innerHTML =
+    '<div class="lib-word-sheet-inner">' +
+      '<button class="lib-sheet-close" onclick="document.getElementById(\'voiceSettingsModal\').remove()">×</button>' +
+      '<div class="lib-tile-term" style="font-size:1.1rem;margin-bottom:12px;">Your voice</div>' +
+      Object.keys(_VOICE_DIALS).map(function (dial) {
+        return '<div class="app-pane-sub" style="text-align:left;margin-top:10px;text-transform:capitalize;">' + dial + '</div>' +
+          '<div class="lib-filter-row" style="padding:4px 0;">' + _VOICE_DIALS[dial].map(function (val) {
+            return '<button class="lib-chip' + (v.dials[dial] === val ? ' active' : '') + '" onclick="_voiceSetDial(\'' + dial + '\',\'' + val + '\')">' + val + '</button>';
+          }).join('') + '</div>';
+      }).join('') +
+      '<div class="app-pane-sub" style="text-align:left;margin-top:10px;">First language (optional)</div>' +
+      '<input class="lib-search-input" id="voiceFirstLang" value="' + (v.firstLanguage || '').replace(/"/g, '') + '" placeholder="e.g. Hungarian" style="margin-top:4px;" onchange="_voiceSetFirstLanguage(this.value)">' +
+    '</div>';
+  document.body.appendChild(modal);
+}
+
+function _voiceSetDial(dial, val) {
+  var v = _lsGet('lll_voice_v1', { dials: {}, firstLanguage: '' });
+  v.dials = v.dials || {};
+  v.dials[dial] = val;
+  _lsSet('lll_voice_v1', v);
+  document.getElementById('voiceSettingsModal').remove();
+  _voiceOpenSettings();
+}
+
+function _voiceSetFirstLanguage(val) {
+  var v = _lsGet('lll_voice_v1', { dials: {}, firstLanguage: '' });
+  v.firstLanguage = val;
+  _lsSet('lll_voice_v1', v);
 }
 
 /* ---- Boot ---------------------------------------------------------------
