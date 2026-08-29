@@ -1,6 +1,6 @@
 # Epistemic V3 — Information Architecture & Build Plan
 
-**Status:** APPROVED FOR BUILD (pending 3 flagged decisions in §16)
+**Status:** APPROVED FOR BUILD (§17.1 and §17.2 resolved 2026-08-29; §17.3 deliberately deferred to the phase 8 boundary)
 **Written:** 2026-08-11 · Strategy session (Opus 5)
 **Current live version:** v3.57a · **First V3 commit:** v3.58 (docs only) · **First V3 code commit:** v3.59
 **Supersedes:** `docs/feature-plan-concept-folders.md` (Phases 1–7 all shipped; that doc is now historical)
@@ -1240,7 +1240,7 @@ Every new surface ships with its `html[data-theme="light"]` rules in the same co
 | 7 | Router and existing deep links (`#home`, `#canvas-{id}`, `?import=`) collide | medium | high | permanent aliases in the router; `?import=` handled before routing; regression-test both every phase |
 | 8 | Scope creep — Chat becomes a month | high | medium | it ships last and is capped hard (§8); if phase 9 exceeds its budget, cut it to V4 without touching anything else |
 | 9 | Feature parity gaps during phases 3–5 (something in the old drawer has no new home) | medium | medium | §11 is the checklist; nothing is deleted until its replacement has shipped and been used |
-| 10 | Model-string inconsistency causes 500s on new endpoints | medium | medium | resolve §17.2 before writing `api/compose.js` |
+| 10 | Model-string inconsistency causes 500s on new endpoints | — | — | **resolved 2026-08-29** — all 8 call sites fixed to `claude-sonnet-4-6` (§17.2) |
 | 11 | Platform risk: Spotify/Apple ship this natively | low-medium | severe | unchanged strategic answer — the moat is editorial taste plus the user's personal layer, neither of which a platform will build for non-native speakers |
 | 12 | Building V3 stalls the concept pipeline for weeks | high | medium | phases are 1–3 days each by design; editorial work (the ~500 rewrites) continues in parallel because it touches different files entirely |
 
@@ -1252,17 +1252,17 @@ Risk 12 is the quiet one. An architecture project that freezes content productio
 
 Three things need a call before the relevant phase starts. Everything else in this document is decided.
 
-### 17.1 Split `app.css` / `app.js` out of `index.html`?
+### 17.1 Split `app.css` / `app.js` out of `index.html`? — **RESOLVED: yes**
 
 The stated constraint is a single `index.html` with all CSS and JS inline. V3 adds roughly 6,000–9,000 lines to a file already at 41,052. Splitting into `app.css` + `app.js`, referenced by plain `<link>` and `<script src>`, keeps everything vanilla — no bundler, no npm, no build step, no framework — and makes the file editable again while letting the browser cache the app layer separately from the HTML.
 
-Recommendation: **yes, but only for new V3 code.** Legacy stays inline and untouched. New rail/router/pane/Write/Chat code goes into the new files from phase 2. This is a one-way door, so it needs an explicit yes before phase 2 starts. If the answer is no, the plan still works — it just gets progressively harder to edit.
+**Decision (2026-08-29): split, for new V3 code only.** Legacy stays inline and untouched. New rail/router/pane/Write/Chat code goes into `app.css` + `app.js` from phase 2 onward. Rationale: the file is already flagged as a mobile first-paint risk in §14.6, and inline-everything means every deploy re-downloads the full 1.58 MB for returning users; a plain-tag split lets the browser cache the app layer independently of HTML edits, at zero build-tooling cost. Reversing this later is cheap (re-inline both files) since legacy code is never touched, so the "one-way door" framing was more conservative than the actual risk.
 
-### 17.2 `claude-sonnet-4-6` vs `claude-sonnet-4-5`
+### 17.2 `claude-sonnet-4-6` vs `claude-sonnet-4-5` — **RESOLVED: `claude-sonnet-4-6` is correct, fixed 2026-08-29**
 
-`engineering-standards.md` states `cs-generate.js` must always use `claude-sonnet-4-6` and must never revert to `claude-sonnet-4-5` because it is deprecated and causes 500 errors. The live repo has six call sites on `claude-sonnet-4-5` and two on `claude-haiku-4-5-20251001`. One of these is wrong, and V3 adds two more endpoints that will inherit whichever is chosen.
+`engineering-standards.md` states `cs-generate.js` must always use `claude-sonnet-4-6` and must never revert to `claude-sonnet-4-5` because it is deprecated and causes 500 errors. This was not actually an open decision — `changelog.md` already root-caused it once (the `cs-generate.js` fix entry: *"model was `claude-sonnet-4-5` — this model ID no longer valid. Fixed to `claude-sonnet-4-6`"*) but the fix had regressed: 8 call sites across 5 files (`cs-generate.js` ×4, `curate-batch.js`, `feynman-batch.js`, `extract-concepts.js`, `plain-batch.js`) were still on the deprecated string, live, on `main`.
 
-Needed: confirm the correct current string, update all call sites in one commit, and fix whichever document is stale. Do this before phase 7.
+**Fixed directly on `main`, independent of the V3 branch**, since this was an active production bug (500s on those endpoints) unrelated to the V3 rebuild. All 8 call sites now read `claude-sonnet-4-6`. The two `claude-haiku-4-5-20251001` call sites were already correct and untouched.
 
 ### 17.3 Does Chat ship in V3?
 

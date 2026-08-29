@@ -314,7 +314,7 @@ alone, set "flagForReview": true alongside changed:false.
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-5',
+        model: 'claude-sonnet-4-6',
         max_tokens: 8000,
         messages: [{ role: 'user', content: prompt }]
       })

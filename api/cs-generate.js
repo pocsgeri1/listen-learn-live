@@ -79,7 +79,7 @@ Respond ONLY with valid JSON:
           'anthropic-version': '2023-06-01',
         },
         body: JSON.stringify({
-          model: 'claude-sonnet-4-5',
+          model: 'claude-sonnet-4-6',
           max_tokens: 900,
           system: situationSystemPrompt,
           messages: [{ role: 'user', content: situationPrompt }],
@@ -131,7 +131,7 @@ Respond ONLY with valid JSON:
       const r = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'x-api-key': ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
-        body: JSON.stringify({ model: 'claude-sonnet-4-5', max_tokens: 500, system: 'Output only valid JSON. No markdown, no preamble.', messages: [{ role: 'user', content: sparPrompt }] }),
+        body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 500, system: 'Output only valid JSON. No markdown, no preamble.', messages: [{ role: 'user', content: sparPrompt }] }),
       });
       const d = await r.json();
       const raw = d?.content?.[0]?.text || '';
@@ -358,7 +358,7 @@ Respond ONLY with this JSON (no extra fields):
           'anthropic-version': '2023-06-01',
         },
         body: JSON.stringify({
-          model: 'claude-sonnet-4-5',
+          model: 'claude-sonnet-4-6',
           max_tokens: 700,
           system: systemPrompt,
           messages: [{ role: 'user', content: userPrompt }],
@@ -427,7 +427,7 @@ Respond ONLY with this JSON structure:
         'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-5',
+        model: 'claude-sonnet-4-6',
         max_tokens: 1200,
         system: systemPrompt,
         messages: [{ role: 'user', content: userPrompt }],

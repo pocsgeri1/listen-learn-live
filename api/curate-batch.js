@@ -48,7 +48,7 @@ OUTPUT FORMAT: Return ONLY a valid JSON array, one object per concept, in the sa
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-5',
+        model: 'claude-sonnet-4-6',
         max_tokens: 4000,
         messages: [{ role: 'user', content: prompt }]
       })
