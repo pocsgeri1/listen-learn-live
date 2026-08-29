@@ -323,6 +323,192 @@ body[data-shell="app"][data-nav="immersive"] .app-immersive-back {
   color: var(--accent);
 }
 
+/* ---- Library (Phase 3) ------------------------------------------------- */
+
+.lib-pane {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text);
+}
+.lib-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 24px 12px;
+  flex-wrap: wrap;
+}
+.lib-lens-switch {
+  display: flex;
+  gap: 2px;
+  background: var(--surface);
+  border-radius: 999px;
+  padding: 3px;
+}
+.lib-lens-btn {
+  border: none;
+  background: none;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  color: color-mix(in srgb, var(--text) 60%, transparent);
+  cursor: pointer;
+}
+.lib-lens-btn.active {
+  background: var(--bg);
+  color: var(--text);
+}
+.lib-search-input {
+  flex: 1;
+  min-width: 160px;
+  max-width: 320px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 0.5px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.82rem;
+}
+.lib-filter-row {
+  display: flex;
+  gap: 8px;
+  padding: 0 24px 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.lib-filter-row select {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 0.5px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.78rem;
+}
+.lib-chip {
+  border: 0.5px solid var(--border);
+  background: var(--surface);
+  color: color-mix(in srgb, var(--text) 65%, transparent);
+  border-radius: 999px;
+  padding: 5px 12px;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+.lib-chip.active {
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+  border-color: var(--accent);
+  color: var(--text);
+}
+.lib-map-link {
+  font-size: 0.78rem;
+  color: var(--accent);
+  text-decoration: none;
+  margin-left: auto;
+}
+.lib-count {
+  padding: 0 24px 8px;
+  font-size: 0.7rem;
+  font-family: 'DM Mono', monospace;
+  color: color-mix(in srgb, var(--text) 45%, transparent);
+}
+.lib-results {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 0 24px 24px;
+}
+.lib-loading, .lib-empty {
+  padding: 60px 0;
+  text-align: center;
+  color: color-mix(in srgb, var(--text) 50%, transparent);
+  font-size: 0.85rem;
+}
+.lib-clear-btn {
+  background: none;
+  border: none;
+  color: var(--accent);
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: 0.85rem;
+}
+.lib-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+}
+.lib-tile {
+  text-align: left;
+  border: 0.5px solid var(--border);
+  border-left: 3px solid var(--cat-color, var(--border));
+  background: var(--surface);
+  border-radius: 10px;
+  padding: 12px 14px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-family: inherit;
+  color: var(--text);
+}
+.lib-tile:hover {
+  background: color-mix(in srgb, var(--text) 4%, var(--surface));
+}
+.lib-tile-cat {
+  font-size: 0.85rem;
+  opacity: 0.6;
+}
+.lib-tile-term {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+.lib-tile-hook {
+  font-size: 0.75rem;
+  color: color-mix(in srgb, var(--text) 55%, transparent);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.lib-word-sheet {
+  position: fixed;
+  inset: 0;
+  z-index: calc(var(--app-z-rail) + 4);
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+@media (min-width: 769px) {
+  .lib-word-sheet { align-items: center; }
+}
+.lib-word-sheet-inner {
+  position: relative;
+  background: var(--bg);
+  border: 0.5px solid var(--border);
+  border-radius: 16px 16px 0 0;
+  padding: 24px;
+  width: 100%;
+  max-width: 420px;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text);
+}
+@media (min-width: 769px) {
+  .lib-word-sheet-inner { border-radius: 16px; }
+}
+.lib-sheet-close {
+  position: absolute;
+  top: 12px; right: 12px;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: var(--text);
+  cursor: pointer;
+}
+
 /* ---- Reduced motion ---------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
   .app-rail-item, .app-rail-item-label { transition: none !important; }
