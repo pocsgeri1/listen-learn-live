@@ -26,8 +26,8 @@ One row per phase. **Ships** = what lands. **Retires** = what gets removed *from
 | 7 | v3.64 | Write → Compose, `api/compose.js` (all 5 modes), voice dials, anti-slop gate, provenance, seed rule. | — | — | medium | ✅ shipped, **not live-tested** — built and verified up to the live-API boundary per user decision; needs a real persistent rate limiter (Vercel KV) and an Anthropic spend alert before production traffic, both flagged in the file header |
 | 8 | v3.65 | Today: COTD (reused), streak (new trigger, same key), resume row, 6 of 7 Discover rails. | — | — | low | ✅ shipped — "Words from concepts you know" rail deferred, needs its own tile template |
 | 9 | v3.66 | ~~Chat + `api/chat.js`~~ | — | — | — | ❌ **cut to V4** — decided at the phase 8 boundary per §17.3, deliberately, not by drift |
-| 10 | v3.67 | ⌘K search, tags, keyboard nav, PWA manifest, storage monitor. | — | — | low | ⬜ not started |
-| 11 | v3.68 | Onboarding (§14.2). Export/import already shipped in phase 2, pulled forward per §14.1's own recommendation. | — | — | low | ⬜ not started |
+| 10 | v3.67 | ⌘K search, tags, keyboard nav, PWA manifest (network-first service worker), storage monitor. | — | — | low | ✅ shipped |
+| 11 | v3.68 | Onboarding (§14.2). Export/import already shipped in phase 2, pulled forward per §14.1's own recommendation. | — | — | low | ✅ shipped — **V3 build complete** (phases 1-8, 10-11; phase 9/Chat cut to V4) |
 
 **Minimum meaningful V3 = phases 2 + 3.** If the plan has to stop, stop at a phase boundary, never inside one.
 
