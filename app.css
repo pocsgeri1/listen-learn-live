@@ -1,0 +1,329 @@
+/* ==========================================================================
+   Epistemic V3 — app shell stylesheet
+   New code only. Legacy (site shell) styles stay inline in index.html,
+   untouched — see docs/v3-architecture.md §17.1.
+
+   Approach: the app shell (.app-rail + .app-main) is a fixed, full-viewport
+   layer that covers the existing marketing scroll page rather than hiding
+   or rewrapping it — the marketing DOM is never touched, so there is zero
+   risk of breaking an existing selector. See docs/v3-build-checklist.md.
+   ========================================================================== */
+
+:root {
+  --rail-w: 236px;
+  --rail-w-collapsed: 64px;
+  --app-z-main: 1100;
+  --app-z-rail: 1150;
+}
+
+/* ---- Shell switch -------------------------------------------------- */
+
+body[data-shell="app"] {
+  overflow: hidden;
+  height: 100vh;
+  height: 100dvh;
+}
+
+body[data-shell="app"] #mainNav,
+body[data-shell="app"] #mobileTabBar {
+  display: none !important;
+}
+
+/* ---- App main (routed pane host) ------------------------------------ */
+
+.app-main {
+  display: none;
+}
+body[data-shell="app"] .app-main {
+  display: block;
+  position: fixed;
+  top: 0; right: 0; bottom: 0;
+  left: var(--rail-w);
+  z-index: var(--app-z-main);
+  background: var(--bg);
+  overflow: hidden;
+}
+body[data-shell="app"][data-rail="collapsed"] .app-main {
+  left: var(--rail-w-collapsed);
+}
+@media (max-width: 768px) {
+  body[data-shell="app"] .app-main {
+    left: 0;
+    bottom: calc(52px + env(safe-area-inset-bottom)); /* clears the app tab bar */
+  }
+  body[data-shell="app"][data-nav="immersive"] .app-main {
+    bottom: 0;
+  }
+}
+
+.app-pane {
+  height: 100%;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 8px;
+  color: color-mix(in srgb, var(--text) 55%, transparent);
+  font-family: 'DM Sans', sans-serif;
+  text-align: center;
+  padding: 24px;
+}
+.app-pane-title {
+  font-size: 1.1rem;
+  color: var(--text);
+}
+.app-pane-sub {
+  font-size: 0.85rem;
+  max-width: 320px;
+}
+
+/* ---- Desktop rail ---------------------------------------------------- */
+
+.app-rail {
+  display: none;
+}
+body[data-shell="app"] .app-rail {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  left: 0; top: 0; bottom: 0;
+  width: var(--rail-w);
+  z-index: var(--app-z-rail);
+  background: var(--bg);
+  border-right: 0.5px solid var(--border);
+  padding-bottom: env(safe-area-inset-bottom);
+  font-family: 'DM Sans', sans-serif;
+}
+body[data-shell="app"][data-rail="collapsed"] .app-rail {
+  width: var(--rail-w-collapsed);
+}
+@media (max-width: 768px) {
+  body[data-shell="app"] .app-rail {
+    display: none;
+  }
+}
+
+.app-rail-logo {
+  padding: 18px 16px 8px;
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  color: var(--text);
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+}
+body[data-shell="app"][data-rail="collapsed"] .app-rail-logo { opacity: 0; }
+
+.app-rail-items {
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  gap: 2px;
+}
+
+.app-rail-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 400;
+  color: color-mix(in srgb, var(--text) 62%, transparent);
+  transition: background .15s ease, color .15s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-align: left;
+  width: 100%;
+}
+.app-rail-item:hover {
+  background: color-mix(in srgb, var(--text) 6%, transparent);
+}
+.app-rail-item.active {
+  background: var(--surface);
+  color: var(--text);
+  position: relative;
+}
+.app-rail-item.active::before {
+  content: '';
+  position: absolute;
+  left: -8px;
+  top: 8px; bottom: 8px;
+  width: 2px;
+  border-radius: 999px;
+  background: var(--accent);
+}
+.app-rail-item-glyph {
+  font-family: 'DM Mono', monospace;
+  font-size: 1rem;
+  width: 18px;
+  flex-shrink: 0;
+  text-align: center;
+}
+body[data-shell="app"][data-rail="collapsed"] .app-rail-item-label { display: none; }
+
+.app-rail-section-label {
+  padding: 14px 16px 4px;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: color-mix(in srgb, var(--text) 40%, transparent);
+}
+body[data-shell="app"][data-rail="collapsed"] .app-rail-section-label { display: none; }
+
+.app-rail-boards {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0 8px;
+  overflow-y: auto;
+}
+
+.app-rail-footer {
+  margin-top: auto;
+  padding: 8px;
+  border-top: 0.5px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* ---- Mobile tab bar (app shell) --------------------------------------
+   The element carries BOTH "mobile-tab-bar" (existing class — reused for
+   its fixed-position/z-index mechanics, see build-journal.md) and
+   "app-tab-bar" (this file, for the bottom-pinned + app-shell overrides
+   below). It is a distinct element/id from the legacy #mobileTabBar,
+   which stays hidden in the app shell and untouched otherwise. */
+
+body[data-shell="app"] .app-tab-bar {
+  display: none; /* .mobile-tab-bar's own media query sets flex; this
+                     gates it to data-nav="tabs" below */
+}
+@media (max-width: 768px) {
+  body[data-shell="app"][data-nav="tabs"] .app-tab-bar {
+    display: flex;
+    top: auto;
+    bottom: 0;
+    z-index: calc(var(--app-z-rail) + 1); /* above .app-main (1100) and the rail (1150) */
+    border-bottom: none;
+    border-top: 0.5px solid var(--border);
+    padding-bottom: env(safe-area-inset-bottom);
+    height: calc(52px + env(safe-area-inset-bottom));
+  }
+}
+body[data-shell="app"][data-nav="immersive"] .app-tab-bar {
+  display: none !important;
+}
+.app-tab-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  background: none;
+  border: none;
+  color: color-mix(in srgb, var(--text) 55%, transparent);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.62rem;
+  padding: 4px 0;
+}
+.app-tab-item-glyph {
+  font-family: 'DM Mono', monospace;
+  font-size: 1.05rem;
+}
+.app-tab-item.active {
+  color: var(--accent);
+}
+
+/* ---- Mobile drawer (app shell "More") -------------------------------- */
+
+.app-drawer-backdrop {
+  display: none;
+}
+body[data-nav="drawer"] .app-drawer-backdrop {
+  display: block;
+  position: fixed; inset: 0;
+  z-index: calc(var(--app-z-rail) + 1);
+  background: rgba(0,0,0,0.4);
+}
+.app-drawer {
+  display: none;
+}
+body[data-nav="drawer"] .app-drawer {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  left: 0; top: 0; bottom: 0;
+  width: 280px;
+  z-index: calc(var(--app-z-rail) + 2);
+  background: var(--bg);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* ---- Immersive back chevron ------------------------------------------ */
+
+.app-immersive-back {
+  display: none;
+}
+body[data-shell="app"][data-nav="immersive"] .app-immersive-back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  left: 12px;
+  bottom: calc(12px + env(safe-area-inset-bottom));
+  width: 48px; height: 48px;
+  border-radius: 999px;
+  z-index: calc(var(--app-z-rail) + 3);
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  color: var(--text);
+  font-size: 1.1rem;
+}
+
+/* ---- Escape hatches ---------------------------------------------------- */
+
+.nav-open-app-btn {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.8rem;
+  color: var(--text);
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: 999px;
+  padding: 6px 14px;
+  cursor: pointer;
+}
+
+/* ---- Pin toggle on the legacy folder list (Home drawer) ---------------
+   New V3 affordance: without a way to pin a board, the rail's pinned-
+   boards section (its highest-value part, per §3.1) would always be
+   empty. Injected into the existing folder-item template — see
+   _folderBuildItem() in index.html. */
+
+.folder-item-pin-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+  opacity: 0.45;
+  padding: 4px;
+  line-height: 1;
+}
+.folder-item-pin-btn.pinned {
+  opacity: 1;
+  color: var(--accent);
+}
+
+/* ---- Reduced motion ---------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .app-rail-item, .app-rail-item-label { transition: none !important; }
+}

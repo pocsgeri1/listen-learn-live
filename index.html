@@ -42,8 +42,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=block" rel="stylesheet">
+<!-- V3 app shell — new code only, see docs/v3-architecture.md §17.1 -->
+<link rel="stylesheet" href="app.css">
 <script defer src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js"></script>
 <script defer src="https://cloud.umami.is/script.js" data-website-id="0bb07ad6-a205-4d9d-ae92-b7e184e7fa4f"></script>
+<script defer src="app.js"></script>
 <style>
   /* ── Nav entrance animation — v3.34 ─────────────────────────────────────── */
   /* Logo gets a premium ease-out with a brief accent glow at the peak */
@@ -13860,6 +13863,83 @@
 </style>
 </head>
 <body>
+<!-- V3 shell detection — synchronous, before <nav>, to avoid a flash.
+     See docs/v3-architecture.md §10.1 BOOT state machine. -->
+<script>
+(function () {
+  var hasData = false;
+  try {
+    for (var i = 0; i < localStorage.length; i++) {
+      if (localStorage.key(i).indexOf('lll_') === 0) { hasData = true; break; }
+    }
+  } catch (e) {}
+  var hash = location.hash || '';
+  var isAppHash = hash.indexOf('#/') === 0 || hash.indexOf('#home') === 0 ||
+    hash.indexOf('#canvas-') === 0 || hash.indexOf('#open=') === 0;
+  document.body.setAttribute('data-shell', (hasData || isAppHash) ? 'app' : 'site');
+})();
+</script>
+
+<!-- V3 app shell — desktop rail + app pane host. New DOM only; the
+     marketing shell below is untouched. See docs/v3-build-checklist.md. -->
+<div class="app-rail" id="appRail">
+  <div class="app-rail-logo" onclick="_appReturnToSite()"><em>Epistemic.</em></div>
+  <div class="app-rail-items">
+    <button class="app-rail-item" data-route="/today" onclick="_railToday()">
+      <span class="app-rail-item-glyph">◐</span><span class="app-rail-item-label">Today</span>
+    </button>
+    <button class="app-rail-item" data-route="/library" onclick="_railLibrary()">
+      <span class="app-rail-item-glyph">◱</span><span class="app-rail-item-label">Library</span>
+    </button>
+    <button class="app-rail-item" data-route="/boards" onclick="_railBoards()">
+      <span class="app-rail-item-glyph">⬡</span><span class="app-rail-item-label">Boards</span>
+    </button>
+    <button class="app-rail-item" data-route="/write" onclick="_railWrite()">
+      <span class="app-rail-item-glyph">✎</span><span class="app-rail-item-label">Write</span>
+    </button>
+    <button class="app-rail-item" data-route="/chat" onclick="_railChat()">
+      <span class="app-rail-item-glyph">✦</span><span class="app-rail-item-label">Chat</span>
+    </button>
+  </div>
+  <div class="app-rail-section-label">Your stuff</div>
+  <div class="app-rail-boards" id="appRailBoards"></div>
+  <div class="app-rail-footer">
+    <button class="app-rail-item" onclick="toggleTheme()">
+      <span class="app-rail-item-glyph">☽</span><span class="app-rail-item-label">Theme</span>
+    </button>
+    <button class="app-rail-item" onclick="_lsExportAll()">
+      <span class="app-rail-item-glyph">⇩</span><span class="app-rail-item-label">Export data</span>
+    </button>
+    <button class="app-rail-item" onclick="_appReturnToSite()">
+      <span class="app-rail-item-glyph">←</span><span class="app-rail-item-label">About Epistemic</span>
+    </button>
+  </div>
+</div>
+<div class="app-main" id="appMain"></div>
+<div class="mobile-tab-bar app-tab-bar" id="appTabBar">
+  <button class="app-tab-item" data-route="/today" onclick="_railToday()"><span class="app-tab-item-glyph">◐</span>Today</button>
+  <button class="app-tab-item" data-route="/library" onclick="_railLibrary()"><span class="app-tab-item-glyph">◱</span>Library</button>
+  <button class="app-tab-item" data-route="/boards" onclick="_railBoards()"><span class="app-tab-item-glyph">⬡</span>Boards</button>
+  <button class="app-tab-item" data-route="/write" onclick="_railWrite()"><span class="app-tab-item-glyph">✎</span>Write</button>
+  <button class="app-tab-item" onclick="_appOpenDrawer()"><span class="app-tab-item-glyph">⋯</span>More</button>
+</div>
+<div class="app-drawer-backdrop" onclick="_appCloseDrawer()"></div>
+<div class="app-drawer">
+  <button class="app-rail-item" data-route="/chat" onclick="_railChat();_appCloseDrawer()">
+    <span class="app-rail-item-glyph">✦</span><span class="app-rail-item-label">Chat</span>
+  </button>
+  <div class="app-rail-section-label">Your stuff</div>
+  <div class="app-rail-boards" id="appDrawerBoards"></div>
+  <div class="app-rail-footer">
+    <button class="app-rail-item" onclick="toggleTheme()">
+      <span class="app-rail-item-glyph">☽</span><span class="app-rail-item-label">Theme</span>
+    </button>
+    <button class="app-rail-item" onclick="_appReturnToSite();_appCloseDrawer()">
+      <span class="app-rail-item-glyph">←</span><span class="app-rail-item-label">About Epistemic</span>
+    </button>
+  </div>
+</div>
+<div class="app-immersive-back" onclick="history.back()">←</div>
 
 <!-- NAV -->
 <nav id="mainNav">
@@ -13897,6 +13977,8 @@
     </button>
     <!-- Apply: hidden, accessible via ←→ sequence -->
     <button class="nav-mob-action" id="navMobApply" onclick="enterCornerMode();playNavSFX()" aria-label="Apply" style="display:none">🥊</button>
+    <!-- V3 escape hatch — enters the app shell. See docs/v3-architecture.md §2 -->
+    <button class="nav-open-app-btn" onclick="_appEnterFromSite()">Open Epistemic →</button>
     <!-- Theme toggle — pill style to match Home -->
     <button class="nav-theme-pill" id="themeToggle" aria-label="Toggle light/dark mode" onclick="toggleTheme()">
       <span class="nav-theme-pill-icon">☽</span>
@@ -26830,6 +26912,7 @@ function _folderBuildItem(folder, _esc) {
         '<div class="folder-item-meta">' + metaParts.join(' · ') + '</div>' +
         (previewChips ? '<div class="folder-item-preview">' + previewChips + '</div>' : '') +
       '</div>' +
+      '<button class="folder-item-pin-btn' + (folder.pinned ? ' pinned' : '') + '" data-folder-id="' + folder.id + '" onclick="event.stopPropagation();_folderTogglePin(\'' + folder.id + '\')" title="' + (folder.pinned ? 'Unpin from rail' : 'Pin to rail') + '">' + (folder.pinned ? '★' : '☆') + '</button>' +
       '<button class="folder-item-edit-btn" onclick="event.stopPropagation();_folderEdit(\'' + folder.id + '\')" title="Edit folder">✎</button>' +
       '<div class="folder-item-arrow">›</div>' +
     '</div>' +
