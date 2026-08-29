@@ -538,12 +538,14 @@ function _libRenderConceptsLens(params, token) {
     _libToggleChip('concepts', 'pick', params.pick, "Editor's pick") +
     _libToggleChip('concepts', 'saved', params.saved, 'Saved') +
     _libToggleChip('concepts', 'note', params.note, 'Has note') +
-    _libToggleChip('concepts', 'board', params.board, 'In a board');
+    _libToggleChip('concepts', 'board', params.board, 'In a board') +
+    _libTagFilterRowHTML(params.tag);
 
   var masteredTs = _lsGet('lll_mastered_ts_v1', {});
   var pinnedFolders = (typeof _foldersGet === 'function') ? _foldersGet() : [];
   var inAnyBoard = {};
   pinnedFolders.forEach(function (f) { (f.conceptIds || []).forEach(function (id) { inAnyBoard[id] = true; }); });
+  var tagMap = _tagsGetAll().map;
 
   var list = CONCEPTS.filter(function (c) {
     if (c.duplicate_of) return false;
@@ -552,6 +554,7 @@ function _libRenderConceptsLens(params, token) {
     if (params.saved && !masteredTs[c.id]) return false;
     if (params.note && !localStorage.getItem('cc_note_' + c.id)) return false;
     if (params.board && !inAnyBoard[c.id]) return false;
+    if (params.tag && (tagMap[c.id] || []).indexOf(params.tag) === -1) return false;
     if (params.q) {
       var hay = ((c.term || '') + ' ' + (c.hook || '')).toLowerCase();
       if (hay.indexOf(params.q.toLowerCase()) === -1) return false;
@@ -1056,6 +1059,7 @@ if (typeof _renderCSShell === 'function') {
     _renderCSShellOriginal(concept);
     _spSyncSaveBtn();
     if (concept && concept.id != null) _markSeen(concept.id);
+    if (concept && concept.id != null && typeof _spRenderTags === 'function') _spRenderTags(concept.id);
   };
 }
 
@@ -1874,6 +1878,203 @@ function _railRevisit(savedIds, masteredTs) {
   return { title: 'Revisit', items: items };
 }
 
+/* ---- Storage monitor (Phase 10, §14.5) ----------------------------------
+   "Silent QuotaExceededError on a user's board is the single worst
+   failure mode in a no-backend product." _lsSet() (phase 2) already
+   catches the hard failure; this adds the earlier warning before it
+   happens. */
+
+function _storageComputeUsage() {
+  var bytes = 0;
+  try {
+    for (var i = 0; i < localStorage.length; i++) {
+      var k = localStorage.key(i);
+      if (k && k.indexOf('lll_') === 0) bytes += (localStorage.getItem(k) || '').length;
+    }
+  } catch (e) {}
+  return bytes;
+}
+
+function _storageCheckMonitor() {
+  var bytes = _storageComputeUsage();
+  var state = _lsGet('lll_storage_v1', { lastCheck: 0, lastBytes: 0, warnedAt: 0 });
+  state.lastCheck = Date.now();
+  state.lastBytes = bytes;
+  _lsSet('lll_storage_v1', state);
+  if (bytes > 3.5 * 1024 * 1024 && !document.getElementById('storageWarnBanner')) {
+    var banner = document.createElement('div');
+    banner.id = 'storageWarnBanner';
+    banner.style.cssText = 'position:fixed;bottom:12px;left:12px;right:12px;max-width:400px;margin:0 auto;z-index:9998;background:var(--surface);border:1px solid var(--accent);border-radius:10px;padding:12px 16px;font-family:\'DM Sans\',sans-serif;font-size:0.82rem;color:var(--text);';
+    banner.innerHTML = 'Your local storage is getting full. <button style="background:none;border:none;color:var(--accent);cursor:pointer;text-decoration:underline;" onclick="_lsExportAll()">Export a backup</button> <button style="background:none;border:none;color:var(--text);opacity:.6;cursor:pointer;float:right;" onclick="this.closest(\'#storageWarnBanner\').remove()">×</button>';
+    document.body.appendChild(banner);
+  }
+  return bytes;
+}
+
+/* Above 4.5MB, block new canvas items / captures with a clear message —
+   never a silent QuotaExceededError. */
+function _storageBlockedIfFull() {
+  var bytes = _storageComputeUsage();
+  if (bytes > 4.5 * 1024 * 1024) {
+    alert('Storage is nearly full. Export a backup and free up space before adding more.');
+    return true;
+  }
+  return false;
+}
+
+if (typeof _cvAddNote === 'function') {
+  var _cvAddNoteOriginal = _cvAddNote;
+  _cvAddNote = function () {
+    if (_storageBlockedIfFull()) return;
+    _cvAddNoteOriginal();
+  };
+}
+
+/* ---- Tags (§9.5) — the only user-defined taxonomy. Applies to concepts
+   and boards, never words. Colors come from the existing category
+   palette to keep the visual system closed, per §9.5 rule 2. ---- */
+
+function _tagsGetAll() {
+  return _lsGet('lll_tags_v1', { tags: [], map: {} });
+}
+function _tagCreate(label) {
+  label = (label || '').trim().slice(0, 24);
+  if (!label) return null;
+  var store = _tagsGetAll();
+  if (store.tags.length >= 30) { alert('Max 30 tags.'); return null; }
+  var existing = store.tags.find(function (t) { return t.label.toLowerCase() === label.toLowerCase(); });
+  if (existing) return existing;
+  var palette = (typeof CATEGORIES !== 'undefined' ? CATEGORIES : []).map(function (c) { return c.color; }).filter(Boolean);
+  var color = palette.length ? palette[store.tags.length % palette.length] : '#e8d5a3';
+  var tag = { id: 't_' + Date.now(), label: label, color: color, createdAt: Date.now() };
+  store.tags.push(tag);
+  _lsSet('lll_tags_v1', store);
+  return tag;
+}
+function _tagToggleOnConcept(conceptId, tagId) {
+  var store = _tagsGetAll();
+  var list = store.map[conceptId] || [];
+  var i = list.indexOf(tagId);
+  if (i !== -1) list.splice(i, 1); else list.push(tagId);
+  store.map[conceptId] = list;
+  _lsSet('lll_tags_v1', store);
+}
+function _tagToggleOnBoard(folderId, tagId) {
+  var folders = _foldersGet();
+  var f = folders.find(function (x) { return x.id === folderId; });
+  if (!f) return;
+  f.tagIds = f.tagIds || [];
+  var i = f.tagIds.indexOf(tagId);
+  if (i !== -1) f.tagIds.splice(i, 1); else f.tagIds.push(tagId);
+  _foldersSet(folders);
+}
+
+function _spRenderTags(conceptId) {
+  var host = document.getElementById('spTagsRow');
+  if (!host) return;
+  var store = _tagsGetAll();
+  var applied = store.map[conceptId] || [];
+  host.innerHTML = store.tags.map(function (t) {
+    return '<button class="lib-chip' + (applied.indexOf(t.id) !== -1 ? ' active' : '') + '" style="--cat-color:' + t.color + '" onclick="_tagToggleOnConcept(' + conceptId + ',\'' + t.id + '\');_spRenderTags(' + conceptId + ')">' + t.label.replace(/[<>&]/g, '') + '</button>';
+  }).join('') + '<button class="lib-chip" onclick="var l=prompt(\'New tag:\');if(l){var t=_tagCreate(l);if(t)_tagToggleOnConcept(' + conceptId + ',t.id);_spRenderTags(' + conceptId + ');}">+ Tag</button>';
+}
+
+/* Library concepts-lens tag filter — extends phase 3's filter row. */
+function _libTagFilterRowHTML(activeTagId) {
+  var store = _tagsGetAll();
+  if (!store.tags.length) return '';
+  return '<select onchange="_libSetFilter(\'concepts\',\'tag\',this.value)"><option value="">All tags</option>' +
+    store.tags.map(function (t) { return '<option value="' + t.id + '"' + (activeTagId === t.id ? ' selected' : '') + '>' + t.label.replace(/[<>&"]/g, '') + '</option>'; }).join('') +
+    '</select>';
+}
+
+/* ---- Keyboard navigation (§14.8) -----------------------------------------
+   j/k between related concepts, Esc to close, ⌘Enter to capture — active
+   only while a concept detail pane is open and no text input has focus. */
+
+document.addEventListener('keydown', function (e) {
+  var tag = (document.activeElement && document.activeElement.tagName) || '';
+  var typing = tag === 'INPUT' || tag === 'TEXTAREA' || (document.activeElement && document.activeElement.isContentEditable);
+
+  // ⌘K — universal search, works everywhere in the app shell.
+  if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k' && document.body.getAttribute('data-shell') === 'app') {
+    e.preventDefault();
+    _searchOpen();
+    return;
+  }
+
+  var convOpen = document.getElementById('convOverlay') && document.getElementById('convOverlay').classList.contains('active');
+  if (!convOpen || typing) return;
+  var id = _spCurrentConceptId();
+  if (id == null) return;
+  var concept = (window.CONCEPTS || []).find(function (c) { return c.id === id; });
+  if (!concept) return;
+  var related = concept.related_ids || [];
+  if ((e.key === 'j' || e.key === 'k') && related.length) {
+    e.preventDefault();
+    var idx = related.indexOf(id); // won't be in its own related list; -1 is fine, just start at 0
+    var next = e.key === 'j' ? (idx + 1 + related.length) % related.length : (idx - 1 + related.length) % related.length;
+    _routeGo('/c/' + related[Math.max(next, 0) % related.length]);
+  } else if (e.key === 'Escape') {
+    history.back();
+  } else if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+    e.preventDefault();
+    var input = document.getElementById('spCaptureInput');
+    if (input) input.focus();
+  }
+});
+
+/* ---- ⌘K universal search (§14.8) — concepts, words, boards, captures --- */
+
+function _searchOpen() {
+  if (document.getElementById('searchModal')) { document.getElementById('searchInput').focus(); return; }
+  var modal = document.createElement('div');
+  modal.id = 'searchModal';
+  modal.className = 'lib-word-sheet';
+  modal.style.alignItems = 'flex-start';
+  modal.onclick = function (e) { if (e.target === modal) _searchClose(); };
+  modal.innerHTML =
+    '<div class="lib-word-sheet-inner" style="margin-top:10vh;max-width:520px;border-radius:12px;">' +
+      '<input id="searchInput" class="lib-search-input" style="width:100%;" placeholder="Search concepts, words, boards, captures…" oninput="_searchRun(this.value)" onkeydown="if(event.key===\'Escape\')_searchClose()">' +
+      '<div id="searchResults" style="margin-top:10px;max-height:50vh;overflow-y:auto;"></div>' +
+    '</div>';
+  document.body.appendChild(modal);
+  document.getElementById('searchInput').focus();
+}
+function _searchClose() {
+  var m = document.getElementById('searchModal');
+  if (m) m.remove();
+}
+function _searchRun(q) {
+  q = (q || '').trim().toLowerCase();
+  var host = document.getElementById('searchResults');
+  if (!host) return;
+  if (!q) { host.innerHTML = ''; return; }
+  var rows = [];
+  (window.CONCEPTS || []).filter(function (c) { return c.term.toLowerCase().indexOf(q) !== -1; }).slice(0, 5).forEach(function (c) {
+    rows.push('<div class="at-picker-item" onclick="_searchClose();_routeGo(\'/c/' + c.id + '\')">◎ ' + c.term.replace(/[<>&]/g, '') + '</div>');
+  });
+  if (typeof _buildGlobalVocabIndex === 'function' && typeof EPISODE_META !== 'undefined' && EPISODE_META) {
+    _buildGlobalVocabIndex().filter(function (w) { return w.word.toLowerCase().indexOf(q) !== -1; }).slice(0, 5).forEach(function (w) {
+      rows.push('<div class="at-picker-item" onclick="_searchClose();_routeGo(\'/w/' + encodeURIComponent(w.word) + '\')">◇ ' + w.word.replace(/[<>&]/g, '') + '</div>');
+    });
+  }
+  (typeof _foldersGet === 'function' ? _foldersGet() : []).filter(function (f) { return (f.name || '').toLowerCase().indexOf(q) !== -1; }).slice(0, 5).forEach(function (f) {
+    rows.push('<div class="at-picker-item" onclick="_searchClose();_boardOpen(\'' + f.id + '\')">⬡ ' + (f.name || '').replace(/[<>&]/g, '') + '</div>');
+  });
+  _lsGet('lll_captures_v1', []).filter(function (c) { return (c.text || '').toLowerCase().indexOf(q) !== -1; }).slice(0, 5).forEach(function (c) {
+    rows.push('<div class="at-picker-item" onclick="_searchClose();_routeGo(\'/write\')">✎ ' + (c.text || '').slice(0, 50).replace(/[<>&]/g, '') + '</div>');
+  });
+  host.innerHTML = rows.length ? rows.join('') : '<div class="app-pane-sub">No results.</div>';
+}
+
+/* ---- Service worker registration (Phase 10) ------------------------------ */
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('/sw.js').catch(function () {});
+  });
+}
+
 /* ---- Boot ---------------------------------------------------------------
    The initial data-shell attribute is already set synchronously inline
    (before <nav>) to avoid a flash — this just brings the rest of the app
@@ -1882,6 +2083,7 @@ function _railRevisit(savedIds, masteredTs) {
 (function _appBoot() {
   _runMigrations();
   if (document.body.getAttribute('data-shell') !== 'app') return;
+  _storageCheckMonitor();
   _renderPinnedBoards();
   var hash = location.hash || '';
   var initial = (hash.indexOf('#/') === 0) ? hash.slice(1) : '/today';

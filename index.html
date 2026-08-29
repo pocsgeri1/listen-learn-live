@@ -10,6 +10,8 @@
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<!-- V3 phase 10: PWA manifest — see docs/v3-architecture.md §14.8 -->
+<link rel="manifest" href="/manifest.json">
 <link rel="shortcut icon" href="/favicon.ico">
 <!-- Canonical + Open Graph -->
 <link rel="canonical" href="https://epistemic.live/" />
@@ -14817,6 +14819,8 @@
         onkeydown="if(event.key==='Enter'&&typeof _spCaptureSend==='function'){_spCaptureSend();}">
       <button class="sp-capture-send" onclick="if(typeof _spCaptureSend==='function')_spCaptureSend()">→</button>
     </div>
+    <!-- V3 phase 10: tags (§9.5) — the only user-defined taxonomy -->
+    <div class="sp-tags-row" id="spTagsRow"></div>
 
     <!-- Actions: Copy · New concept · Prev/Next -->
     <div class="cs-actions cs-post-prompt cs-hidden" id="csActions">
