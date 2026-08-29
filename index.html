@@ -14809,6 +14809,14 @@
       <button class="sp-primary-btn" onclick="if(typeof _spBoardAction==='function')_spBoardAction(this)">⬡ Board</button>
       <button class="sp-primary-btn" id="spSaveBtn" onclick="if(typeof _spSaveAction==='function')_spSaveAction(event)">✦ Save</button>
     </div>
+    <!-- V3 phase 6: always-visible capture input — the North Star loop
+         (§7.3). Unblocked now that lll_captures_v1 exists; was deferred
+         in phase 5 pending this. -->
+    <div class="sp-capture-row" id="spCaptureRow">
+      <input class="sp-capture-input" id="spCaptureInput" type="text" placeholder="Add a thought…"
+        onkeydown="if(event.key==='Enter'&&typeof _spCaptureSend==='function'){_spCaptureSend();}">
+      <button class="sp-capture-send" onclick="if(typeof _spCaptureSend==='function')_spCaptureSend()">→</button>
+    </div>
 
     <!-- Actions: Copy · New concept · Prev/Next -->
     <div class="cs-actions cs-post-prompt cs-hidden" id="csActions">
@@ -37441,6 +37449,12 @@ function _lexiEndSession() {
   overlay.classList.remove('open');
   overlay.setAttribute('aria-hidden', 'true');
   _spUnlockBodyScroll();
+  // V3 phase 6: re-homed under #/write/practice — return there instead of
+  // the legacy Lexi panel when that's where the session was started from.
+  if (document.body.getAttribute('data-shell') === 'app') {
+    setTimeout(function() { if (typeof _routeGo === 'function') _routeGo('/write'); }, 260);
+    return;
+  }
   // Open Lexi panel and refresh
   setTimeout(function() { openLexiPanel(); }, 260);
 }

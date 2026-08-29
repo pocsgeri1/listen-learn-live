@@ -144,6 +144,40 @@ var _MIGRATIONS = [
       });
       if (changed) _lsSet('lll_folders_v1', folders);
     }
+  },
+  {
+    n: 5,
+    run: function () {
+      // Seed lll_captures_v1 from existing cc_note_* keys AS COPIES, not
+      // moves — cc_note_* stays exactly where it is, zero risk of data
+      // loss. Enumeration pattern matches the existing _libExportNotes.
+      var captures = _lsGet('lll_captures_v1', []);
+      var keys = [];
+      try {
+        for (var i = 0; i < localStorage.length; i++) {
+          var k = localStorage.key(i);
+          if (k && k.indexOf('cc_note_') === 0 && k.indexOf('cc_note_meta_') !== 0) keys.push(k);
+        }
+      } catch (e) {}
+      keys.forEach(function (k) {
+        var text = (localStorage.getItem(k) || '').trim();
+        if (!text) return;
+        var conceptId = parseInt(k.replace('cc_note_', ''), 10);
+        if (isNaN(conceptId)) return;
+        var meta = _lsGet('cc_note_meta_' + conceptId, {});
+        captures.push({
+          id: 'cap_' + (meta.ts || Date.now()) + '_' + conceptId,
+          text: text,
+          conceptIds: [conceptId],
+          words: [],
+          boardId: null,
+          source: 'concept',
+          createdAt: meta.ts || Date.now(),
+          usedInDrafts: []
+        });
+      });
+      if (keys.length) _lsSet('lll_captures_v1', captures);
+    }
   }
 ];
 
@@ -221,6 +255,15 @@ function _routeGo(path, opts) {
     return;
   }
 
+  if (top === 'write' && segments[1] === 'practice') {
+    // Reuses the existing Lexi practice overlay wholesale (§7.3 Mode C) —
+    // same "trigger the legacy overlay via the router" pattern as boards.
+    _setActiveRailItem('/write');
+    var practiceWord = _libParseQueryString(query).w || undefined;
+    if (typeof _lexiStartSession === 'function') _lexiStartSession(practiceWord);
+    return;
+  }
+
   if (top === 'board' && segments[1]) {
     // Canvas overlay owns its own full-screen display and nav mode
     // (see _cvOpen's V3 hooks) — just keep the rail's active state in sync.
@@ -255,8 +298,7 @@ function _renderAppPane(segments, query) {
   } else if (top === 'boards') {
     _renderBoardsIndex(main);
   } else if (top === 'write') {
-    main.innerHTML = '<div class="app-pane"><div class="app-pane-title">Write</div><div class="app-pane-sub">Opening…</div></div>';
-    if (typeof openLexiconPanel === 'function') openLexiconPanel();
+    _renderWritePane(main, segments, query);
   } else {
     main.innerHTML = '<div class="app-pane"><div class="app-pane-title">Opening…</div></div>';
   }
@@ -606,6 +648,7 @@ function _libOpenWordSheet(word) {
         (w.podcast ? '<div class="app-pane-sub">From ' + w.podcast.replace(/[<>&]/g, '') + '</div>' : '') +
         '<div style="margin-top:16px;display:flex;gap:8px;">' +
           '<button class="app-rail-item" style="width:auto;" onclick="if(typeof _gvAddWordToLexi===\'function\')_gvAddWordToLexi(' + JSON.stringify(w.word) + ');">✦ Add to Lexi</button>' +
+          '<button class="app-rail-item" style="width:auto;" onclick="_routeGo(\'/write?w=' + encodeURIComponent(w.word) + '\')">✎ Write</button>' +
         '</div>' +
       '</div>';
   }
@@ -1004,6 +1047,254 @@ if (typeof _renderCSShell === 'function') {
     _renderCSShellOriginal(concept);
     _spSyncSaveBtn();
   };
+}
+
+/* ---- Write (Phase 6, v3.63) — Capture mode + Practice re-homing --------
+   Compose (Mode B) ships in phase 7; the segmented control below already
+   shows all three per §7.3 ("one surface, three modes"), with Compose as
+   a placeholder until then — same forward-visible-nav pattern used for
+   Today/Chat in phase 2. Practice reuses the existing Lexi session
+   overlay wholesale (see the router's /write/practice handling and the
+   _lexiEndSession patch above). */
+
+function _captureCreate(text, opts) {
+  opts = opts || {};
+  var captures = _lsGet('lll_captures_v1', []);
+  var cap = {
+    id: 'cap_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+    text: text,
+    conceptIds: opts.conceptIds || [],
+    words: opts.words || [],
+    boardId: opts.boardId || null,
+    source: opts.source || 'quick',
+    createdAt: Date.now(),
+    usedInDrafts: []
+  };
+  captures.unshift(cap);
+  _lsSet('lll_captures_v1', captures);
+  return cap;
+}
+
+function _captureDelete(id) {
+  var captures = _lsGet('lll_captures_v1', []).filter(function (c) { return c.id !== id; });
+  _lsSet('lll_captures_v1', captures);
+}
+
+/* Always-visible capture input on the concept detail pane (§7.3 North
+   Star loop). */
+function _spCaptureSend() {
+  var input = document.getElementById('spCaptureInput');
+  if (!input || !input.value.trim()) return;
+  var id = _spCurrentConceptId();
+  _captureCreate(input.value.trim(), { conceptIds: id != null ? [id] : [], source: 'concept' });
+  input.value = '';
+  var row = document.getElementById('spCaptureRow');
+  if (row) {
+    row.classList.add('sp-capture-sent');
+    setTimeout(function () { row.classList.remove('sp-capture-sent'); }, 600);
+  }
+}
+
+/* ---- @ picker ------------------------------------------------------------
+   No existing "@ mention" pattern anywhere in the codebase (checked) —
+   built from scratch. Pattern-matches the trimmed-candidate shape
+   _cornerGetCandidates already uses elsewhere, but implemented
+   independently rather than reusing that function (it's specific to
+   Corner's own throwaway Fuse instance and query tuning). */
+
+var _atPicker = { open: false, targetInput: null, results: [], activeIndex: 0, atPos: -1 };
+
+function _atPickerCheck(inputEl) {
+  var val = inputEl.value;
+  var caret = inputEl.selectionStart;
+  var upToCaret = val.slice(0, caret);
+  var m = /@([\w-]{0,30})$/.exec(upToCaret);
+  if (!m) { _atPickerClose(); return; }
+  var query = m[1];
+  if (query.length < 1) { _atPickerClose(); return; }
+  var results = (window.CONCEPTS || []).filter(function (c) {
+    return c.term && c.term.toLowerCase().indexOf(query.toLowerCase()) !== -1;
+  }).slice(0, 8);
+  if (!results.length) { _atPickerClose(); return; }
+  _atPicker.open = true;
+  _atPicker.targetInput = inputEl;
+  _atPicker.results = results;
+  _atPicker.activeIndex = 0;
+  _atPicker.atPos = caret - m[0].length;
+  _atPickerRender();
+}
+
+function _atPickerRender() {
+  var host = document.getElementById('atPickerHost');
+  if (!host) {
+    host = document.createElement('div');
+    host.id = 'atPickerHost';
+    host.className = 'at-picker';
+    document.body.appendChild(host);
+  }
+  var input = _atPicker.targetInput;
+  var r = input.getBoundingClientRect();
+  host.style.left = r.left + 'px';
+  host.style.top = (r.bottom + 4) + 'px';
+  host.style.width = Math.min(r.width, 280) + 'px';
+  host.innerHTML = _atPicker.results.map(function (c, i) {
+    return '<div class="at-picker-item' + (i === _atPicker.activeIndex ? ' active' : '') + '" onmousedown="event.preventDefault();_atPickerSelect(' + i + ')">' +
+      (c.term || '').replace(/[<>&]/g, '') + '</div>';
+  }).join('');
+  host.style.display = 'block';
+}
+
+function _atPickerClose() {
+  _atPicker.open = false;
+  var host = document.getElementById('atPickerHost');
+  if (host) host.style.display = 'none';
+}
+
+function _atPickerKeydown(e) {
+  if (!_atPicker.open) return false;
+  if (e.key === 'ArrowDown') { e.preventDefault(); _atPicker.activeIndex = Math.min(_atPicker.activeIndex + 1, _atPicker.results.length - 1); _atPickerRender(); return true; }
+  if (e.key === 'ArrowUp') { e.preventDefault(); _atPicker.activeIndex = Math.max(_atPicker.activeIndex - 1, 0); _atPickerRender(); return true; }
+  if (e.key === 'Enter' || e.key === 'Tab') { e.preventDefault(); _atPickerSelect(_atPicker.activeIndex); return true; }
+  if (e.key === 'Escape') { _atPickerClose(); return true; }
+  return false;
+}
+
+function _atPickerSelect(i) {
+  var c = _atPicker.results[i];
+  var input = _atPicker.targetInput;
+  if (!c || !input) { _atPickerClose(); return; }
+  var val = input.value;
+  var caret = input.selectionStart;
+  var before = val.slice(0, _atPicker.atPos);
+  var after = val.slice(caret);
+  var inserted = '@' + c.term + ' ';
+  input.value = before + inserted + after;
+  var newCaret = (before + inserted).length;
+  input.setSelectionRange(newCaret, newCaret);
+  input.focus();
+  var linked = input._linkedConceptIds || (input._linkedConceptIds = []);
+  if (linked.indexOf(c.id) === -1) linked.push(c.id);
+  _atPickerClose();
+  if (typeof _writeRenderPendingLinks === 'function') _writeRenderPendingLinks();
+}
+
+/* ---- Write pane ----------------------------------------------------- */
+
+function _renderWritePane(main, segments, query) {
+  var mode = segments[1] || 'capture';
+  if (['capture', 'compose'].indexOf(mode) === -1) mode = 'capture';
+  var params = _libParseQueryString(query);
+
+  main.innerHTML =
+    '<div class="lib-pane">' +
+      '<div class="lib-header">' +
+        '<div class="lib-lens-switch">' +
+          '<button class="lib-lens-btn' + (mode === 'capture' ? ' active' : '') + '" onclick="_routeGo(\'/write\')">Capture</button>' +
+          '<button class="lib-lens-btn' + (mode === 'compose' ? ' active' : '') + '" onclick="_routeGo(\'/write/compose\')">Compose</button>' +
+          '<button class="lib-lens-btn" onclick="_routeGo(\'/write/practice\')">Practice</button>' +
+        '</div>' +
+      '</div>' +
+      '<div id="writeModeHost" class="write-mode-host"></div>' +
+    '</div>';
+
+  if (mode === 'compose') {
+    document.getElementById('writeModeHost').innerHTML =
+      '<div class="app-pane"><div class="app-pane-title">Compose</div><div class="app-pane-sub">AI-assisted drafting ships in phase 7 (api/compose.js) — a public endpoint that needs rate limits and a spend cap before it goes live, per §14.4.</div></div>';
+    return;
+  }
+
+  _renderCaptureMode(params);
+}
+
+function _renderCaptureMode(params) {
+  var host = document.getElementById('writeModeHost');
+  if (!host) return;
+  if (!_libDataReady()) {
+    // Never clobber text the user may have already started typing while
+    // this was retrying — only render the loading state pre-first-paint.
+    var existingTa = document.getElementById('writeCaptureTa');
+    if (existingTa && existingTa.value.trim()) { setTimeout(function () { _renderCaptureMode(params); }, 200); return; }
+    host.innerHTML = '<div class="lib-loading">Loading…</div>';
+    setTimeout(function () { _renderCaptureMode(params); }, 200);
+    return;
+  }
+  var preConceptId = params.c != null ? parseInt(params.c, 10) : null;
+  var preWord = params.w || null;
+  var preConcept = preConceptId != null ? (window.CONCEPTS || []).find(function (c) { return c.id === preConceptId; }) : null;
+
+  host.innerHTML =
+    '<div class="write-capture-box">' +
+      (preConcept || preWord ? '<div class="write-prelink-chip">Linked to: ' + (preConcept ? preConcept.term : preWord).replace(/[<>&]/g, '') + '</div>' : '') +
+      '<textarea class="write-capture-ta" id="writeCaptureTa" placeholder="What do you want to remember? Type @ to link a concept." ' +
+        'oninput="if(typeof _atPickerCheck===\'function\')_atPickerCheck(this)" ' +
+        'onkeydown="if(typeof _atPickerKeydown===\'function\'&&_atPickerKeydown(event))return; if((event.metaKey||event.ctrlKey)&&event.key===\'Enter\'){event.preventDefault();_writeCaptureSubmit();}"></textarea>' +
+      '<div class="write-pending-links" id="writePendingLinks"></div>' +
+      '<div class="write-capture-hint">⌘Enter to save</div>' +
+    '</div>' +
+    '<div class="write-capture-list" id="writeCaptureList"></div>';
+
+  if (preConceptId != null) document.getElementById('writeCaptureTa')._linkedConceptIds = [preConceptId];
+  document.getElementById('writeCaptureTa')._linkedWords = preWord ? [preWord] : [];
+  document.getElementById('writeCaptureTa').focus();
+  _writeRenderCaptureList();
+}
+
+function _writeRenderPendingLinks() {
+  var ta = document.getElementById('writeCaptureTa');
+  var host = document.getElementById('writePendingLinks');
+  if (!ta || !host) return;
+  var ids = ta._linkedConceptIds || [];
+  host.innerHTML = ids.map(function (id) {
+    var c = (window.CONCEPTS || []).find(function (x) { return x.id === id; });
+    return '<span class="lib-chip active">' + (c ? c.term.replace(/[<>&]/g, '') : id) + '</span>';
+  }).join('');
+}
+
+function _writeCaptureSubmit() {
+  var ta = document.getElementById('writeCaptureTa');
+  if (!ta || !ta.value.trim()) return;
+  _captureCreate(ta.value.trim(), {
+    conceptIds: ta._linkedConceptIds || [],
+    words: ta._linkedWords || [],
+    source: (ta._linkedConceptIds || []).length ? 'concept' : 'quick'
+  });
+  ta.value = '';
+  ta._linkedConceptIds = [];
+  ta._linkedWords = [];
+  _writeRenderPendingLinks();
+  _writeRenderCaptureList();
+  ta.focus();
+}
+
+function _writeRenderCaptureList() {
+  var host = document.getElementById('writeCaptureList');
+  if (!host) return;
+  var captures = _lsGet('lll_captures_v1', []).slice().sort(function (a, b) { return (b.createdAt || 0) - (a.createdAt || 0); });
+  if (!captures.length) {
+    host.innerHTML = '<div class="lib-empty">Nothing captured yet.</div>';
+    return;
+  }
+  var groups = {};
+  var order = [];
+  captures.forEach(function (c) {
+    var day = new Date(c.createdAt || 0).toDateString();
+    if (!groups[day]) { groups[day] = []; order.push(day); }
+    groups[day].push(c);
+  });
+  host.innerHTML = order.map(function (day) {
+    var rows = groups[day].map(function (c) {
+      var chips = (c.conceptIds || []).map(function (id) {
+        var concept = (window.CONCEPTS || []).find(function (x) { return x.id === id; });
+        return concept ? '<span class="lib-chip">' + concept.term.replace(/[<>&]/g, '') + '</span>' : '';
+      }).join('');
+      return '<div class="write-capture-row">' +
+        '<div class="write-capture-text">' + (c.text || '').replace(/[<>&]/g, '') + '</div>' +
+        (chips ? '<div class="write-capture-chips">' + chips + '</div>' : '') +
+        '<button class="write-capture-del" onclick="_captureDelete(\'' + c.id + '\');_writeRenderCaptureList();" title="Delete">✕</button>' +
+      '</div>';
+    }).join('');
+    return '<div class="write-capture-day">' + day + '</div>' + rows;
+  }).join('');
 }
 
 /* ---- Boot ---------------------------------------------------------------
