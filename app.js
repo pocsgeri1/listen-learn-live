@@ -197,9 +197,27 @@ function _routeGo(path, opts) {
 
   if (top === 'c' || top === 'w') {
     // Modal routes (§10.1): stack over whatever pane is already showing —
-    // do not re-render appMain underneath.
-    if (top === 'c' && typeof openSparkPanel === 'function') openSparkPanel(parseInt(segments[1], 10));
-    if (top === 'w') _libOpenWordSheet(decodeURIComponent(segments[1] || ''));
+    // do not re-render appMain underneath. Both wait for their data
+    // source, same as the Library/Boards panes — openSparkPanel silently
+    // no-ops on an empty CONCEPTS array, and _buildGlobalVocabIndex
+    // returns [] before episode_meta.json has loaded, so a cold
+    // #/c/{id} or #/w/{word} deep-link can otherwise open nothing.
+    if (top === 'c') {
+      var conceptId = parseInt(segments[1], 10);
+      (function openWhenReady() {
+        if (!_libDataReady()) { setTimeout(openWhenReady, 200); return; }
+        if (typeof openSparkPanel === 'function') openSparkPanel(conceptId);
+      })();
+    }
+    if (top === 'w') {
+      var word = decodeURIComponent(segments[1] || '');
+      (function openWhenReady() {
+        if (typeof EPISODE_META === 'undefined' || !EPISODE_META) {
+          if (typeof _loadEpisodeMeta === 'function') { _loadEpisodeMeta().then(openWhenReady); return; }
+        }
+        _libOpenWordSheet(word);
+      })();
+    }
     return;
   }
 
@@ -910,6 +928,81 @@ if (typeof _cvDrawArrows === 'function') {
   _cvDrawArrows = function () {
     _cvDrawArrowsOriginal();
     _cvDrawConnections();
+  };
+}
+
+/* ---- Concept detail / Spark — Phase 5, v3.62 (scoped) --------------------
+   The architecture doc's §6.3/§10.3 assume the in-place-swap breadcrumb,
+   inline note, and Corner all already live inside the Spark panel, and
+   that it needs converting from a modal to a pane. Investigation before
+   writing any code found all three assumptions wrong: the real
+   breadcrumb/swap behavior lives entirely in the Library's inline detail
+   row (a different DOM subtree), Corner is a structurally separate
+   homepage feature (not a Spark sub-state), and the panel is already
+   right-side-sliding (position:fixed, width:min(520px,100vw)) rather
+   than a true full-screen modal — its z-index (1100) already sits below
+   the app rail (1150), so the rail already stays visually on top and
+   interactive with no changes needed.
+
+   Given that, merging breadcrumb+note+Corner into this surface in one
+   unattended pass would be a much larger, riskier multi-subsystem
+   migration than "Phase 5" as scoped — not a presentational refactor.
+   This phase ships only the safe, verifiable part: three new primary
+   actions (Write/Board/Save) that didn't exist in the panel before. The
+   existing Copy/New/Prev-Next actions are left exactly as they are,
+   including their existing cs-post-prompt/cs-hidden visibility gate,
+   rather than restructured into a hidden overflow menu — that gate is
+   tied to an AI-reveal flow this pass didn't audit closely enough to
+   safely alter.
+
+   DEFERRED, and should be its own dedicated, carefully-tested pass:
+   porting the Library's breadcrumb/in-place-swap into Spark, inline
+   note-taking inside Spark, and embedding Corner as a true sub-state
+   (with the scroll-lock ref-counting §10.3 calls for, which doesn't
+   exist anywhere in the codebase yet and needs designing from scratch,
+   not converting). */
+
+function _spCurrentConceptId() {
+  if (typeof _csConceptStack === 'undefined' || typeof _csStackIdx === 'undefined') return null;
+  return _csConceptStack[_csStackIdx];
+}
+
+function _spWriteAction() {
+  var id = _spCurrentConceptId();
+  _routeGo('/write' + (id != null ? '?c=' + id : ''));
+}
+
+function _spBoardAction(anchorEl) {
+  var id = _spCurrentConceptId();
+  if (id == null) return;
+  if (typeof _folderPickerOpen === 'function') _folderPickerOpen(anchorEl, id);
+}
+
+function _spSaveAction(e) {
+  if (e) e.stopPropagation();
+  var id = _spCurrentConceptId();
+  if (id == null || typeof toggleMaster !== 'function') return;
+  toggleMaster(e, id);
+  _spSyncSaveBtn();
+}
+
+function _spSyncSaveBtn() {
+  var btn = document.getElementById('spSaveBtn');
+  var id = _spCurrentConceptId();
+  if (!btn || id == null || typeof mastered === 'undefined') return;
+  var isSaved = mastered.has(id);
+  btn.classList.toggle('active', isSaved);
+  btn.textContent = isSaved ? '✓ Saved' : '✦ Save';
+}
+
+/* _renderCSShell runs on every concept load and swap — wrap it (same
+   pattern as the _cvDrawArrows hook in phase 4) to keep the Save button
+   in sync without touching its internals. */
+if (typeof _renderCSShell === 'function') {
+  var _renderCSShellOriginal = _renderCSShell;
+  _renderCSShell = function (concept) {
+    _renderCSShellOriginal(concept);
+    _spSyncSaveBtn();
   };
 }
 

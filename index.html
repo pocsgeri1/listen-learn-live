@@ -14800,6 +14800,16 @@
     </div>
     <div class="cs-feedback-msg" id="csFeedbackMsg" style="display:none;font-family:'DM Sans',sans-serif;font-size:0.82rem;color:var(--accent);line-height:1.5;margin-bottom:0.75rem;font-style:italic"></div>
 
+    <!-- V3 phase 5: new primary actions (§6.3). Deliberately independent
+         of #csActions below, which is gated by the existing AI-reveal
+         state machine (cs-post-prompt/cs-hidden) — these three don't
+         depend on that and stay visible as soon as a concept is loaded. -->
+    <div class="sp-primary-actions" id="spPrimaryActions">
+      <button class="sp-primary-btn" onclick="if(typeof _spWriteAction==='function')_spWriteAction()">✎ Write</button>
+      <button class="sp-primary-btn" onclick="if(typeof _spBoardAction==='function')_spBoardAction(this)">⬡ Board</button>
+      <button class="sp-primary-btn" id="spSaveBtn" onclick="if(typeof _spSaveAction==='function')_spSaveAction(event)">✦ Save</button>
+    </div>
+
     <!-- Actions: Copy · New concept · Prev/Next -->
     <div class="cs-actions cs-post-prompt cs-hidden" id="csActions">
       <button class="cs-btn cs-btn--primary" id="csShareBtn">↑ Copy</button>
