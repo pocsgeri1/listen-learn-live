@@ -7,7 +7,7 @@
 **Resolved prerequisites (see `v3-architecture.md` §17):**
 - §17.1 — new V3 code goes into `app.css` + `app.js` (plain `<link>`/`<script src>`, no bundler); legacy stays inline in `index.html`.
 - §17.2 — model string bug (`claude-sonnet-4-5` → `claude-sonnet-4-6`) was fixed directly on `main`, independent of this branch.
-- §17.3 — "does Chat ship in V3" stays open by design; decide it at the phase 8 boundary, not before.
+- §17.3 — **resolved 2026-08-29: Chat is cut to V4.** V3 ends at phase 8. Decided at the phase 8 boundary as this section required, not before.
 
 ---
 
@@ -15,19 +15,19 @@
 
 One row per phase. **Ships** = what lands. **Retires** = what gets removed *from the old surface* in that same commit (per the retire ledger below — nothing is removed before this table says so). **Migrations** = which numbered migration functions (see ledger below) ship in that phase. **Risk** carries over from §16.
 
-| Phase | Version | Ships (full detail in `v3-architecture.md`) | Retires | Migrations | Risk |
-|---|---|---|---|---|---|
-| 1 | v3.58 | Docs only (this doc + `ai-voice.md` + updates). **Already shipped to `main`.** | — | — | none |
-| 2 | v3.59 | Two shells (§2), router (§3), left rail (desktop + mobile nav modes). Rail items open **existing** drawer/overlays unchanged. `_lsSet()` helper (§14.5) ships here so every later phase inherits safe writes. Nav bar mode buttons restructured into rail/tab bar. | Nav bar mode buttons | 1, 2 | **highest** — touches global CSS, visible on marketing page |
-| 3 | v3.60 | Library unified: concepts + words + episodes lenses, `#/c/{id}` and `#/w/{word}` routes, URL filters. | Home drawer (Episodes/Concepts/Vocab tabs), Read panel (`#gvOverlay`) | 3 | medium |
-| 4 | v3.61 | Boards index, viewport persistence, connections, board covers. Home drawer fully retired (rail replaces the drawer metaphor). | Home drawer shell entirely (incl. Folders tab → promoted to `#/boards`) | — | medium |
-| 5 | v3.62 | Spark as a right pane (`#/c/{id}`), action bar 7→4, inline note, related always visible. | Lexi panel (pull tab) — see "Lexi day-one" note below | 4 (no-op for data) | medium |
-| 6 | v3.63 | Write → Capture inbox, `@` picker, Practice re-homed. | Home drawer Practice tab, Lexi practice overlay re-homed (kept, not retired) | 5 (copies `cc_note_*` → `lll_captures_v1`, does not move) | low |
-| 7 | v3.64 | Write → Compose, `api/compose.js`, voice dials, provenance, seed rule. **New API surface — apply §14.4 rate limits/caps before this ships.** | — | — | medium |
-| 8 | v3.65 | Today: ritual block + Discover rails (§4). **Decide §17.3 (Chat in/out) at this boundary**, not before. | — | — | low |
-| 9 | v3.66 | Chat + `api/chat.js`, context chips — only if §17.3 said yes. Hard-capped scope (§8). | — | — | medium |
-| 10 | v3.67 | ⌘K search, tags, keyboard nav, PWA manifest, storage monitor. | — | — | low |
-| 11 | v3.68 | Onboarding (§14.2), export/import identity (§14.1). | — | — | low |
+| Phase | Version | Ships (full detail in `v3-architecture.md`) | Retires | Migrations | Risk | Status |
+|---|---|---|---|---|---|---|
+| 1 | v3.58 | Docs only. | — | — | none | ✅ shipped to `main` |
+| 2 | v3.59 | Two shells, router, rail (desktop + mobile). Rail items open **existing** overlays unchanged. `_lsSet()` helper. | Nav bar (hidden in app shell) | 1, 2 | highest | ✅ shipped — 83 pure insertions to `index.html`, zero legacy edits |
+| 3 | v3.60 | Library unified: concepts (789) + words (403) + episodes (57) lenses, `#/c/{id}` and `#/w/{word}` routes, URL filters. | Home drawer tabs, Read panel — unlinked from rail, not deleted (see below) | 3 | medium | ✅ shipped — found these tabs only ever showed saved/favourited subsets, never a full browse; this phase is a genuine new capability, not a re-skin |
+| 4 | v3.61 | Boards index, viewport persistence, user-drawn connections, board covers (`coverIds`-based). | Home drawer Folders tab → `#/boards` | — | medium | ✅ shipped |
+| 5 | v3.62 | Concept-detail primary actions (Write/Board/Save). | — | 4 (no-op) | medium | ✅ shipped, **scoped down** — investigation found the doc's premise (breadcrumb/swap and Corner already living in Spark) was wrong; full pane conversion deferred as its own pass, see phase 5 commit |
+| 6 | v3.63 | Write → Capture inbox, `@` picker (built from scratch, no prior pattern existed), Practice re-homed to `#/write/practice`. | Lexi practice overlay re-homed (kept) | 5 | low | ✅ shipped |
+| 7 | v3.64 | Write → Compose, `api/compose.js` (all 5 modes), voice dials, anti-slop gate, provenance, seed rule. | — | — | medium | ✅ shipped, **not live-tested** — built and verified up to the live-API boundary per user decision; needs a real persistent rate limiter (Vercel KV) and an Anthropic spend alert before production traffic, both flagged in the file header |
+| 8 | v3.65 | Today: COTD (reused), streak (new trigger, same key), resume row, 6 of 7 Discover rails. | — | — | low | ✅ shipped — "Words from concepts you know" rail deferred, needs its own tile template |
+| 9 | v3.66 | ~~Chat + `api/chat.js`~~ | — | — | — | ❌ **cut to V4** — decided at the phase 8 boundary per §17.3, deliberately, not by drift |
+| 10 | v3.67 | ⌘K search, tags, keyboard nav, PWA manifest, storage monitor. | — | — | low | ⬜ not started |
+| 11 | v3.68 | Onboarding (§14.2). Export/import already shipped in phase 2, pulled forward per §14.1's own recommendation. | — | — | low | ⬜ not started |
 
 **Minimum meaningful V3 = phases 2 + 3.** If the plan has to stop, stop at a phase boundary, never inside one.
 

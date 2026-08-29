@@ -1264,11 +1264,11 @@ The stated constraint is a single `index.html` with all CSS and JS inline. V3 ad
 
 **Fixed directly on `main`, independent of the V3 branch**, since this was an active production bug (500s on those endpoints) unrelated to the V3 rebuild. All 8 call sites now read `claude-sonnet-4-6`. The two `claude-haiku-4-5-20251001` call sites were already correct and untouched.
 
-### 17.3 Does Chat ship in V3?
+### 17.3 Does Chat ship in V3? — **RESOLVED: no, cut to V4 (2026-08-29)**
 
-This plan says yes, last, hard-capped (§8, phase 9). The alternative is deferring it to V4 and ending V3 at phase 8 (Today + Discover), which is a clean, coherent product on its own. Chat is the highest-effort, lowest-certainty item in the plan; the Write pillar is the differentiated one. If time is constrained, cut Chat, not Compose.
+This plan said yes, last, hard-capped (§8, phase 9). The alternative was deferring it to V4 and ending V3 at phase 8 (Today + Discover), which is a clean, coherent product on its own.
 
-No answer needed now — but the decision should be made at the phase 8 boundary, deliberately, rather than by drift.
+**Decision, made deliberately at the phase 8 boundary as this section asked**: cut Chat to V4. V3 ends at phase 8. The shipped product is: two shells + router (phase 2), unified Library (phase 3), Boards with viewport persistence and connections (phase 4), concept-detail primary actions (phase 5, scoped down after investigation found the doc's premise for it was wrong in three ways — see that phase's commit), Write → Capture with an @ picker (phase 6), Write → Compose with a full but not-yet-live-tested api/compose.js (phase 7), and Today + Discover (phase 8). Phases 10 (search, keyboard nav, PWA, storage monitor) and 11 (onboarding, export/import — though export was already pulled forward into phase 2) continue as polish on this scope.
 
 ---
 
