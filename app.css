@@ -853,6 +853,57 @@ body[data-shell="app"][data-nav="immersive"] .app-immersive-back {
   margin-bottom: 0.75rem;
 }
 
+/* ---- Onboarding (Phase 11) ------------------------------------------- */
+
+.onboard-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.onboard-card {
+  max-width: 480px;
+  width: 100%;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text);
+  text-align: center;
+}
+.onboard-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  margin-bottom: 4px;
+}
+.onboard-sub {
+  font-size: 0.85rem;
+  opacity: 0.6;
+  margin-bottom: 16px;
+}
+.onboard-tile-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 8px;
+  margin: 16px 0 24px;
+}
+.onboard-tile {
+  border: 0.5px solid var(--border);
+  border-top: 3px solid var(--cat-color, var(--border));
+  background: var(--surface);
+  border-radius: 10px;
+  padding: 14px 10px;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+.onboard-tile.active {
+  background: color-mix(in srgb, var(--accent) 15%, transparent);
+  border-color: var(--accent);
+}
+
 /* ---- Reduced motion ---------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
   .app-rail-item, .app-rail-item-label { transition: none !important; }

@@ -412,6 +412,7 @@ function _appCloseDrawer() { _setNavMode('tabs'); }
 function _appEnterFromSite() {
   document.body.setAttribute('data-shell', 'app');
   _routeGo('/today', { replace: true });
+  if (typeof _onboardCheck === 'function') _onboardCheck();
 }
 
 function _appReturnToSite() {
@@ -2075,6 +2076,131 @@ if ('serviceWorker' in navigator) {
   });
 }
 
+/* ---- Onboarding (Phase 11, v3.68, §14.2) --------------------------------
+   A 90-second first-run, once, gated on lll_onboard_v1.done. Reached the
+   moment a brand-new user first enters the app shell (via the phase-2
+   "Open Epistemic ->" escape hatch, which needs no prior lll_* key) —
+   exactly the "returning user lands on a rail with 600 concepts and no
+   onboarding" paralysis problem this section names. */
+
+var _onboardState = { step: 1, categories: [], goal: '' };
+var _ONBOARD_GOALS = [
+  { id: 'speak', label: 'Speak more confidently' },
+  { id: 'write', label: 'Write better' },
+  { id: 'think', label: 'Think more clearly' }
+];
+
+function _onboardCheck() {
+  var state = _lsGet('lll_onboard_v1', { done: false, categories: [], goal: '', seededBoardId: null, completedAt: 0 });
+  if (state.done) return false;
+  // lll_onboard_v1 is new in V3 — every existing real user (with real
+  // mastered concepts, folders, or captures from before this phase) also
+  // has done:undefined on it. Only trigger for genuinely new users with
+  // no prior data, never retroactively interrupt an existing user's next
+  // visit. Caught by the phase 11 regression suite before shipping: every
+  // earlier phase's test seeds only lll_theme, and all of them hit this
+  // modal blocking their page until this guard was added.
+  var hasData = Object.keys(_lsGet('lll_mastered_ts_v1', {})).length > 0 ||
+    (typeof _foldersGet === 'function' && _foldersGet().length > 0) ||
+    _lsGet('lll_captures_v1', []).length > 0;
+  if (hasData) return false;
+  _onboardRender();
+  return true;
+}
+
+function _onboardRender() {
+  var host = document.getElementById('onboardModal');
+  if (!host) {
+    host = document.createElement('div');
+    host.id = 'onboardModal';
+    host.className = 'onboard-modal';
+    document.body.appendChild(host);
+  }
+  if (_onboardState.step === 1) _onboardRenderCategories(host);
+  else if (_onboardState.step === 2) _onboardRenderGoal(host);
+  else _onboardRenderFinishing(host);
+}
+
+function _onboardRenderCategories(host) {
+  var cats = (typeof CATEGORIES !== 'undefined' ? CATEGORIES : []).filter(function (c) { return c.id !== 'all'; });
+  host.innerHTML =
+    '<div class="onboard-card">' +
+      '<div class="onboard-title">What are you here to get better at?</div>' +
+      '<div class="onboard-sub">Pick 3.</div>' +
+      '<div class="onboard-tile-grid">' + cats.map(function (c) {
+        var active = _onboardState.categories.indexOf(c.id) !== -1;
+        return '<button class="onboard-tile' + (active ? ' active' : '') + '" style="--cat-color:' + c.color + '" onclick="_onboardToggleCategory(\'' + c.id + '\')">' + c.icon + ' ' + c.name + '</button>';
+      }).join('') + '</div>' +
+      '<button class="sp-primary-btn" style="max-width:160px;" onclick="_onboardGoStep2()"' + (_onboardState.categories.length !== 3 ? ' disabled' : '') + '>Next →</button>' +
+    '</div>';
+}
+
+function _onboardToggleCategory(id) {
+  var i = _onboardState.categories.indexOf(id);
+  if (i !== -1) _onboardState.categories.splice(i, 1);
+  else if (_onboardState.categories.length < 3) _onboardState.categories.push(id);
+  _onboardRender();
+}
+function _onboardGoStep2() {
+  if (_onboardState.categories.length !== 3) return;
+  _onboardState.step = 2;
+  _onboardRender();
+}
+
+function _onboardRenderGoal(host) {
+  host.innerHTML =
+    '<div class="onboard-card">' +
+      '<div class="onboard-title">What do you want to do with it?</div>' +
+      '<div class="onboard-tile-grid">' + _ONBOARD_GOALS.map(function (g) {
+        return '<button class="onboard-tile' + (_onboardState.goal === g.id ? ' active' : '') + '" onclick="_onboardState.goal=\'' + g.id + '\';_onboardRender()">' + g.label + '</button>';
+      }).join('') + '</div>' +
+      '<button class="sp-primary-btn" style="max-width:160px;" onclick="_onboardFinish()"' + (!_onboardState.goal ? ' disabled' : '') + '>Start →</button>' +
+    '</div>';
+}
+
+function _onboardRenderFinishing(host) {
+  host.innerHTML = '<div class="onboard-card"><div class="onboard-title">Setting up your first board…</div></div>';
+}
+
+/* Step 3+4: auto-create a first board named from the goal, seeded with 6
+   concepts from the chosen categories (editor's picks first), dropped
+   straight into it — "the important one," per §14.2, solving the empty-
+   second-brain problem on day one. */
+function _onboardFinish() {
+  _onboardState.step = 3;
+  _onboardRender();
+
+  var goalLabel = (_ONBOARD_GOALS.find(function (g) { return g.id === _onboardState.goal; }) || {}).label || 'Getting started';
+  var pool = (window.CONCEPTS || []).filter(function (c) { return _onboardState.categories.indexOf(c.category) !== -1; });
+  var picks = pool.filter(function (c) { return c.editors_pick === true; }).concat(pool.filter(function (c) { return c.editors_pick !== true; })).slice(0, 6);
+
+  var board = _folderCreate(goalLabel, '🌱', '#7aaf8a');
+  var folders = _foldersGet();
+  var f = folders.find(function (x) { return x.id === board.id; });
+  if (f) {
+    f.conceptIds = picks.map(function (c) { return c.id; });
+    f.canvasLayout = {};
+    picks.forEach(function (c, i) {
+      f.canvasLayout[c.id] = { x: 60 + (i % 3) * 220, y: 60 + Math.floor(i / 3) * 160 };
+    });
+    _foldersSet(folders);
+  }
+
+  _lsSet('lll_onboard_v1', {
+    done: true,
+    categories: _onboardState.categories,
+    goal: _onboardState.goal,
+    seededBoardId: board.id,
+    completedAt: Date.now()
+  });
+
+  setTimeout(function () {
+    var modal = document.getElementById('onboardModal');
+    if (modal) modal.remove();
+    _boardOpen(board.id);
+  }, 600);
+}
+
 /* ---- Boot ---------------------------------------------------------------
    The initial data-shell attribute is already set synchronously inline
    (before <nav>) to avoid a flash — this just brings the rest of the app
@@ -2084,6 +2210,7 @@ if ('serviceWorker' in navigator) {
   _runMigrations();
   if (document.body.getAttribute('data-shell') !== 'app') return;
   _storageCheckMonitor();
+  _onboardCheck();
   _renderPinnedBoards();
   var hash = location.hash || '';
   var initial = (hash.indexOf('#/') === 0) ? hash.slice(1) : '/today';
